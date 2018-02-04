@@ -235,31 +235,6 @@ Map_HCZWaterSplash2:		include "Levels/HCZ/Misc Object Data/Map - Water Splash 2.
 Map_S3EndingGraphics:		include "General/Ending/Map - S3 Ending Graphics.asm"
 ArtNem_S3EndingGraphics:		binclude "General/Title/Nemesis Art/S3 Ending Graphics.bin"
 	even
-SStageLayoutPtrs:
-		dc.l SStage1_Layout
-		dc.l SStage2_Layout
-		dc.l SStage3_Layout
-		dc.l SStage4_Layout
-		dc.l SStage5_Layout
-		dc.l SStage6_Layout
-		dc.l SStage7_Layout
-		dc.l SStage8_Layout
-SStage1_Layout:		binclude "General/Special Stage/Layout/S3 1.bin"
-	even
-SStage2_Layout:		binclude "General/Special Stage/Layout/S3 2.bin"
-	even
-SStage3_Layout:		binclude "General/Special Stage/Layout/S3 3.bin"
-	even
-SStage4_Layout:		binclude "General/Special Stage/Layout/S3 4.bin"
-	even
-SStage5_Layout:		binclude "General/Special Stage/Layout/S3 5.bin"
-	even
-SStage6_Layout:		binclude "General/Special Stage/Layout/S3 6.bin"
-	even
-SStage7_Layout:		binclude "General/Special Stage/Layout/S3 7.bin"
-	even
-SStage8_Layout:		binclude "General/Special Stage/Layout/S3 8.bin"
-	even
 
 HCZ_WaterlineScroll_Data:		binclude "Levels/HCZ/Misc/HCZ Waterline Scroll Data.bin"
 	even
