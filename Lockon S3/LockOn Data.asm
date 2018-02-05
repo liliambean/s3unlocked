@@ -677,7 +677,7 @@ Map_ICZWallAndColumn:		include "Levels/ICZ/Misc Object Data/Map - Wall and Colum
 Map_ICZPlatforms:		include "Levels/ICZ/Misc Object Data/Map - Platforms.asm"
 
 Map_LBZKnuxBomb:		include "Levels/LBZ/Misc Object Data/Map - Knuckles Bomb.asm"
-Map_CutsceneKnux:		include "General/Sprites/Knuckles/Cutscene/Map - Cutscene Knuckles.asm"
+
 DPLC_CutsceneKnux:		include "General/Sprites/Knuckles/Cutscene/DPLC - Cutscene Knuckles.asm"
 Map_AIZIntroPlane:		include "Levels/AIZ/Misc Object Data/Map - Intro Plane.asm"
 
@@ -805,8 +805,6 @@ ArtKosM_LBZ2DeathEgg2_8x8:		binclude "Levels/LBZ/Tiles/Act 2 Death Egg 2.bin"
 ArtNem_AIZBossFire:		binclude "Levels/AIZ/Nemesis Art/Miniboss Fire.bin"
 	even
 ArtKosM_AIZIntroPlane:		binclude "Levels/AIZ/KosinskiM Art/Intro Plane.bin"
-	even
-ArtUnc_CutsceneKnux:		binclude "General/Sprites/Knuckles/Cutscene/Cutscene Main.bin"
 	even
 ArtKosM_AIZIntroEmeralds:		binclude "Levels/AIZ/KosinskiM Art/Intro Emeralds.bin"
 	even
