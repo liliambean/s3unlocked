@@ -1,14 +1,12 @@
 @ECHO OFF
 
-pushd "%~dp0\.."
-
-REM // make sure we can write to the file skbuilt.bin
-REM // also make a backup to skbuilt.prev.bin
-IF NOT EXIST skbuilt.bin goto LABLNOCOPY
-IF EXIST skbuilt.prev.bin del skbuilt.prev.bin
-IF EXIST skbuilt.prev.bin goto LABLNOCOPY
-move /Y skbuilt.bin skbuilt.prev.bin
-IF EXIST skbuilt.bin goto LABLERROR2
+REM // make sure we can write to the file s3unlocked.bin
+REM // also make a backup to s3unlocked.prev.bin
+IF NOT EXIST s3unlocked.bin goto LABLNOCOPY
+IF EXIST s3unlocked.prev.bin del s3unlocked.prev.bin
+IF EXIST s3unlocked.prev.bin goto LABLNOCOPY
+move /Y s3unlocked.bin s3unlocked.prev.bin
+IF EXIST s3unlocked.bin goto LABLERROR2
 
 :LABLNOCOPY
 REM // delete some intermediate assembler output just in case
@@ -26,17 +24,17 @@ set AS_MSGPATH=AS\Win32
 set USEANSI=n
 
 REM // allow the user to choose to output error messages to file by supplying the -logerrors parameter
-IF "%1"=="-logerrors" ( "AS\Win32\asw.exe" -xx -q -c -D Sonic3_Complete=0 -E -A -L sonic3k.asm ) ELSE "AS\Win32\asw.exe" -xx -q -c -D Sonic3_Complete=0 -A -L sonic3k.asm
+IF "%1"=="-logerrors" ( "AS\Win32\asw.exe" -xx -q -c -E -A -L sonic3k.asm ) ELSE "AS\Win32\asw.exe" -xx -q -c -A -L sonic3k.asm
 
 REM // if there were errors, a log file is produced
 IF "%1"=="-logerrors" ( IF EXIST sonic3k.log goto LABLERROR3 )
 
 REM // combine the assembler output into a rom
-IF EXIST sonic3k.p "AS\Win32\s3p2bin" sonic3k.p skbuilt.bin sonic3k.h
+IF EXIST sonic3k.p "AS\Win32\s3p2bin" sonic3k.p s3unlocked.bin sonic3k.h
 
 REM // done -- pause if we seem to have failed, then exit
 IF NOT EXIST sonic3k.p goto LABLPAUSE
-IF EXIST skbuilt.bin goto LABLEXIT
+IF EXIST s3unlocked.bin goto LABLEXIT
 
 :LABLPAUSE
 pause
@@ -48,7 +46,7 @@ pause
 goto LABLEXIT
 
 :LABLERROR2
-echo Failed to build because write access to skbuilt.bin was denied.
+echo Failed to build because write access to s3unlocked.bin was denied.
 pause
 goto LABLEXIT
 
@@ -64,5 +62,4 @@ echo.
 pause
 
 :LABLEXIT
-popd
 exit /b
