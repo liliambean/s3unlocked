@@ -230,8 +230,6 @@ Map_HCZWaterSplash:			include "Levels/HCZ/Misc Object Data/Map - Water Splash.as
 
 Map_HCZWaterSplash2:		include "Levels/HCZ/Misc Object Data/Map - Water Splash 2.asm"
 
-	include "Lockon S3/Screen Events.asm"
-
 Map_S3EndingGraphics:		include "General/Ending/Map - S3 Ending Graphics.asm"
 ArtNem_S3EndingGraphics:		binclude "General/Title/Nemesis Art/S3 Ending Graphics.bin"
 	even
