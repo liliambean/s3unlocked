@@ -1,5 +1,5 @@
 ; Knuckles mappings
-Map_14A8D6:		dc.w word_14AACC-Map_14A8D6; 0
+Map_14A8D6:	dc.w word_14AACC-Map_14A8D6; 0
 		dc.w word_14AACE-Map_14A8D6; 1
 		dc.w word_14AAE8-Map_14A8D6; 2
 		dc.w word_14AAFC-Map_14A8D6; 3
@@ -180,8 +180,8 @@ Map_14A8D6:		dc.w word_14AACC-Map_14A8D6; 0
 		dc.w word_14B7CA-Map_14A8D6; 178
 		dc.w word_14B7DE-Map_14A8D6; 179
 		dc.w word_14B7CA-Map_14A8D6; 180
-		dc.w word_14B800-Map_14A8D6; 181
-		dc.w word_14B800-Map_14A8D6; 182
+		dc.w word_14B7CA-Map_14A8D6; 181
+		dc.w word_14B7CA-Map_14A8D6; 182
 		dc.w word_14B828-Map_14A8D6; 183
 		dc.w word_14B836-Map_14A8D6; 184
 		dc.w word_14B83E-Map_14A8D6; 185
@@ -250,11 +250,7 @@ Map_14A8D6:		dc.w word_14AACC-Map_14A8D6; 0
 		dc.w word_14BCCE-Map_14A8D6; 248
 		dc.w word_14BCE2-Map_14A8D6; 249
 		dc.w word_14BCFC-Map_14A8D6; 250
-Map_MHZKnuxPullSwitch:		dc.w word_66AD8-Map_MHZKnuxPullSwitch
-		dc.w word_66AE6-Map_MHZKnuxPullSwitch
-		dc.w word_66AF4-Map_MHZKnuxPullSwitch
-		dc.w word_66AD8-Map_MHZKnuxPullSwitch
-Map_CutsceneKnux:		dc.w word_14AACC-Map_CutsceneKnux
+Map_CutsceneKnux:dc.w word_14AACC-Map_CutsceneKnux
 		dc.w word_14B6E4-Map_CutsceneKnux
 		dc.w word_14B6FE-Map_CutsceneKnux
 		dc.w word_14B718-Map_CutsceneKnux
@@ -276,7 +272,7 @@ Map_CutsceneKnux:		dc.w word_14AACC-Map_CutsceneKnux
 		dc.w word_14AD7A-Map_CutsceneKnux
 		dc.w word_14AD6C-Map_CutsceneKnux
 		dc.w word_14AD7A-Map_CutsceneKnux
-		dc.w word_66AD8-Map_CutsceneKnux
+		dc.w Frame_3641DC-Map_CutsceneKnux
 		dc.w Frame_3641EA-Map_CutsceneKnux
 		dc.w Frame_364204-Map_CutsceneKnux
 		dc.w Frame_364218-Map_CutsceneKnux
@@ -554,10 +550,9 @@ word_14B002:	dc.w 2
 word_14B010:	dc.w 2
 		dc.b $ED,   9,   0,   0, $FF, $F3
 		dc.b $FD,  $E,   0,   6, $FF, $F3
-word_14B01E:	dc.w 3
+word_14B01E:	dc.w 2
 		dc.b $EC,   9,   0,   0, $FF, $F3
-		dc.b $FC,  $D,   0,   6, $FF, $F3
-		dc.b  $C,   8,   0,  $E, $FF, $F5
+		dc.b $FC,  $E,   0,   6, $FF, $F3
 word_14B02C:	dc.w 3
 		dc.b $ED,  $F,   0,   0, $FF, $F1
 		dc.b $F5,   2,   0, $10, $FF, $E9
@@ -875,10 +870,10 @@ word_14B6FE:	dc.w 4
 		dc.b $F4,  $F,   0,  $A, $FF, $F1
 		dc.b   4,   0,   0, $1A, $FF, $E9
 word_14B718:	dc.w 4
-		dc.b $E4,   4,   0,   0,   0,   2
-		dc.b $EC,  $F,   0,   2, $FF, $FA
-		dc.b $FC,   5,   0, $12, $FF, $EA
-		dc.b  $C,   4,   0, $16, $FF, $F6
+		dc.b $E4,   0,   0,   0,   0,   6
+		dc.b $EC,  $F,   0,   1, $FF, $F6
+		dc.b $FC,   5,   0, $11, $FF, $E6
+		dc.b  $C,   4,   0, $15, $FF, $F6
 word_14B732:	dc.w 4
 		dc.b $EE,  $D,   0,   0, $FF, $EB
 		dc.b $EE,   1,   0,   8,   0,  $B
@@ -906,10 +901,6 @@ word_14B7DE:	dc.w 3
 		dc.b $EC,   4,   0,   0, $FF, $FC
 		dc.b $F4,  $E,   0,   2, $FF, $F4
 		dc.b  $C,  $C,   0,  $E, $FF, $F4
-word_14B800:	dc.w 3
-		dc.b $E6,   8,   0,   0, $FF, $F4
-		dc.b $EE,  $B,   0,   3, $FF, $F4
-		dc.b  $E,   5,   0,  $F, $FF, $F4
 word_14B828:	dc.w 2
 		dc.b $EE,  $F,   0,   0, $FF, $EB
 		dc.b  $E,   0,   0, $10,   0,   3
@@ -998,38 +989,35 @@ word_14B9C0:	dc.w 4
 		dc.b $FC,   5,   0,   7,   0,   4
 		dc.b $FC,  $A,   0,  $B, $FF, $EC
 word_14BA14:	dc.w 2
-		dc.b $EC,  $B,   0,   0, $FF, $F2
-		dc.b  $C,   8,   0,  $C, $FF, $F6
-word_14BA5A:	dc.w 3
+		dc.b $EC,  $B,   0,   0, $FF, $F1
+		dc.b  $C,  $C,   0,  $C, $FF, $F1
+word_14BA5A:	dc.w 2
 		dc.b $EC,   9,   0,   0, $FF, $F4
-		dc.b $FC,  $C,   0,   6, $FF, $F4
-		dc.b   4,   9,   0,  $A, $FF, $F6
+		dc.b $FC,  $E,   0,   6, $FF, $F4
 word_14BA68:	dc.w 4
 		dc.b $EC,   8,   0,   0, $FF, $F4
 		dc.b $F4,  $D,   0,   3, $FF, $F4
 		dc.b   4,   8,   0,  $B, $FF, $F4
-		dc.b  $C,   8,   0,  $E, $FF, $F6
+		dc.b  $C,  $C,   0,  $E, $FF, $F4
 word_14BA82:	dc.w 5
 		dc.b $EC,   8,   0,   0, $FF, $F5
 		dc.b $F4,  $C,   0,   3, $FF, $F4
 		dc.b $FC,  $C,   0,   7, $FF, $F4
 		dc.b   4,   8,   0,  $B, $FF, $F4
-		dc.b  $C,   8,   0,  $E, $FF, $F6
+		dc.b  $C,  $C,   0,  $E, $FF, $F4
 word_14BAA2:	dc.w 4
 		dc.b $EC,   8,   0,   0, $FF, $F5
 		dc.b $F4,  $D,   0,   3, $FF, $F4
 		dc.b   4,   8,   0,  $B, $FF, $F4
-		dc.b  $C,   8,   0,  $E, $FF, $F6
-word_14BAD6:	dc.w 4
+		dc.b  $C,  $C,   0,  $E, $FF, $F4
+word_14BAD6:	dc.w 3
 		dc.b $EC,   8,   0,   0, $FF, $F6
 		dc.b $F4,  $D,   0,   3, $FF, $F6
-		dc.b   4,   8,   0,  $B, $FF, $F6
-		dc.b  $C,   8,   0,  $E, $FF, $F6
-word_14BAEA:	dc.w 4
+		dc.b   4,   9,   0,  $B, $FF, $F6
+word_14BAEA:	dc.w 3
 		dc.b $EC,  $A,   0,   0, $FF, $F6
 		dc.b $FA,   4,   0,   9,   0,  $E
-		dc.b   4,   8,   0,  $B, $FF, $F6
-		dc.b  $C,   8,   0,  $E, $FF, $F6
+		dc.b   4,   9,   0,  $B, $FF, $F6
 word_14BAFE:	dc.w 4
 		dc.b $EC,  $E,   0,   0, $FF, $F4
 		dc.b $F7,   0,   0,  $C,   0, $14
@@ -1060,9 +1048,9 @@ word_14BB7E:	dc.w 2
 		dc.b $E8,  $B,   0,   0, $FF, $F4
 		dc.b   8,   9,   0,  $C, $FF, $FC
 word_14BB8C:	dc.w 3
-		dc.b $E8,  $B,   0,   0, $FF, $F4
-		dc.b   8,   8,   0,  $C, $FF, $F8
-		dc.b $10,   4,   0,  $F,   0,   0
+		dc.b $E8,  $F,   0,   0, $FF, $F0
+		dc.b   8,   8,   0, $10, $FF, $F8
+		dc.b $10,   4,   0, $13,   0,   0
 word_14BBA0:	dc.w 3
 		dc.b $E8,  $B,   0,   0, $FF, $F4
 		dc.b   8,   4,   0,  $C, $FF, $FC
@@ -1074,8 +1062,8 @@ word_14BBB4:	dc.w 4
 		dc.b   8,   9,   0,  $D, $FF, $EE
 word_14BBCE:	dc.w 3
 		dc.b $E8,   9,   0,   0, $FF, $F3
-		dc.b $F8,   9,   0,   6, $FF, $F5
-		dc.b   8,   9,   0,  $C, $FF, $F3
+		dc.b $F8,  $D,   0,   6, $FF, $F3
+		dc.b   8,   9,   0,  $E, $FF, $F3
 word_14BBE2:	dc.w 2
 		dc.b $E8,  $B,   0,   0, $FF, $F4
 		dc.b   8,   9,   0,  $C, $FF, $F4
@@ -1129,7 +1117,7 @@ word_14BCCE:	dc.w 4
 		dc.b $EC,   9,   0,   0, $FF, $F4
 		dc.b $FC,   8,   0,   6, $FF, $F4
 		dc.b   4,   4,   0,   9, $FF, $FC
-		dc.b  $C,   0,   0,  $B, $FF, $FC
+		dc.b  $C,   4,   0,  $B, $FF, $F4
 word_14BCE2:	dc.w 4
 		dc.b $EB,   8,   8,   0, $FF, $F7
 		dc.b $F3,  $D,   8,   3, $FF, $F7
@@ -1138,23 +1126,14 @@ word_14BCE2:	dc.w 4
 word_14BCFC:	dc.w 2
 		dc.b $EB,  $E,   0,   0, $FF, $F0
 		dc.b   3,   9,   0,  $C, $FF, $F0
-word_66AD8:	dc.w 3
+Frame_3641DC:	dc.w 2
 		dc.b $EC,   9,   8,   0, $FF, $F5
-		dc.b $FC,  $D,   8,   6, $FF, $ED
-		dc.b  $C,   8,   8,  $E, $FF, $F3
-word_66AE6:	dc.w 3
-		dc.b $EC,   8,   0,   0, $FF, $F5
-		dc.b $F4,  $E,   8,   3, $FF, $ED
-		dc.b  $C,   8,   8,  $F, $FF, $F3
-word_66AF4:	dc.w 3
-		dc.b $EC,   4,   0,   0, $FF, $F5
-		dc.b $F4,  $E,   8,   2, $FF, $ED
-		dc.b  $C,   8,   8,  $E, $FF, $F3
+		dc.b $FC,  $E,   8,   6, $FF, $ED
 Frame_3641EA:	dc.w 4
 		dc.b $EC,   8,   8,   0, $FF, $F5
 		dc.b $F4,  $D,   8,   3, $FF, $ED
 		dc.b   4,   8,   8,  $B, $FF, $F5
-		dc.b  $C,   8,   8,  $E, $FF, $F3
+		dc.b  $C,  $C,   8,  $E, $FF, $ED
 Frame_364204:	dc.w 3
 		dc.b $EC,   8,   8,   0, $FF, $ED
 		dc.b $F4,  $D,   8,   3, $FF, $EB
@@ -1175,4 +1154,4 @@ Frame_36424C:	dc.w 2
 Frame_36425A:	dc.w 3
 		dc.b $EC,  $A,   8,   0, $FF, $F7
 		dc.b   4,   4,   8,   9, $FF, $F7
-		dc.b  $C,   8,   8,  $B, $FF, $F3
+		dc.b  $C,  $C,   8,  $B, $FF, $EF
