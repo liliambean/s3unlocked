@@ -620,16 +620,14 @@ Level_music =			ramaddr( $FFFFFF90 ) ; word
 Saved2_status_secondary =	ramaddr( $FFFFFF96 ) ; byte
 Saved_apparent_zone_and_act =	ramaddr( $FFFFFF9A ) ; word
 Saved2_apparent_zone_and_act =	ramaddr( $FFFFFF9C ) ; word
-Blue_spheres_header_flag =	ramaddr( $FFFFFF9F ) ; byte ; 0 = SEGA GENESIS, 1 = SEGA MEGA DRIVE
-Blue_spheres_mode =		ramaddr( $FFFFFFA0 ) ; byte ; 0 = single stage, 1 = full game
-Blue_spheres_menu_flag = 	ramaddr( $FFFFFFA1 ) ; byte ; 0 = NO WAY!, 1 = normal, bit 7 set = entering a code
+
 Blue_spheres_current_stage =	ramaddr( $FFFFFFA2 ) ; 4 bytes ; the layout parts that make up the current stage
 Blue_spheres_current_level =	ramaddr( $FFFFFFA6 ) ; long ; number shown at the top of the full game menu
 Blue_spheres_option =		ramaddr( $FFFFFFAA ) ; byte ; 0 = level, 1 = start, 2 = code
-Blue_spheres_progress_flag =	ramaddr( $FFFFFFAB ) ; byte ; 0 = normal, -1 = disabled (single stage mode or using a code from single stage mode)
+Blue_spheres_menu_flag =	ramaddr( $FFFFFFAB ) ; byte ; 0 = single stage, 1 = normal, bit 7 set = entering a code
 Blue_spheres_difficulty =	ramaddr( $FFFFFFAC ) ; byte ; value currently displayed
 Blue_spheres_target_difficulty = ramaddr( $FFFFFFAD ) ; byte ; value read from the layout
-SK_alone_flag =			ramaddr( $FFFFFFAE ) ; word ; -1 if Sonic 3 isn't locked on
+
 Emerald_count =			ramaddr( $FFFFFFB0 ) ; word ; both chaos and super emeralds
 Chaos_emerald_count =		ramaddr( $FFFFFFB0 ) ; byte
 Super_emerald_count =		ramaddr( $FFFFFFB1 ) ; byte
