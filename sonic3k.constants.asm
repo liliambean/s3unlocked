@@ -374,6 +374,7 @@ Layout_row_index_mask =		ramaddr( $FFFFEEAE ) ; word ; either $3C or $7C
 
 Not_ghost_flag =		ramaddr( $FFFFEE49 ) ; byte ; set if Player 2 in competition mode isn't a ghost of player 1
 Demo_data_addr =		ramaddr( $FFFFEE52 ) ; long ; keeps getting incremented as the demo progresses
+SStage_results_object_addr =	ramaddr( $FFFFEEE0 ) ; word ; RAM address of the special stage results object
 Use_normal_sprite_table =	ramaddr( $FFFFEF3C ) ; word ; if this is set Sprite_table_buffer and Sprite_table_buffer_P2 will be DMAed instead of Sprite_table_buffer_2 and Sprite_table_buffer_P2_2
 SRAM_mask_interrupts_flag =	ramaddr( $FFFFEF56 ) ; word ; if this is set SRAM routines will mask all interrupts (by setting the SR to $2700)
 Object_index_addr =		ramaddr( $FFFFEF5A ) ; long ; points to either the object index for S3 levels or that for S&K levels
@@ -384,7 +385,6 @@ Demo_number =			ramaddr( $FFFFEF7A ) ; byte ; the currently running demo
 Ring_consumption_table =	ramaddr( $FFFFEF80 ) ; $80 bytes ; stores the addresses of all rings currently being consumed
 Ring_consumption_count =	ramaddr( $FFFFEF80 ) ; word ; the number of rings being consumed currently
 Ring_consumption_list =		ramaddr( $FFFFEF82 ) ; $7E bytes ; the remaining part of the ring consumption table
-SStage_results_object_addr =	ramaddr( $FFFFEEE0 ) ; word ; RAM address of the special stage results object
 
 Target_water_palette =		ramaddr( $FFFFF000 ) ; $80 bytes ; used by palette fading routines
 Water_palette =			ramaddr( $FFFFF080 ) ; $80 bytes ; this is what actually gets displayed
@@ -627,6 +627,7 @@ Blue_spheres_option =		ramaddr( $FFFFFFAA ) ; byte ; 0 = level, 1 = start, 2 = c
 Blue_spheres_menu_flag =	ramaddr( $FFFFFFAB ) ; byte ; 0 = single stage, 1 = normal, bit 7 set = entering a code
 Blue_spheres_difficulty =	ramaddr( $FFFFFFAC ) ; byte ; value currently displayed
 Blue_spheres_target_difficulty = ramaddr( $FFFFFFAD ) ; byte ; value read from the layout
+Encore_mode =			ramaddr( $FFFFFFAE) ; byte
 
 Emerald_count =			ramaddr( $FFFFFFB0 ) ; word ; both chaos and super emeralds
 Chaos_emerald_count =		ramaddr( $FFFFFFB0 ) ; byte
@@ -638,7 +639,7 @@ Next_extra_life_score_P2 =	ramaddr( $FFFFFFC4 ) ; long ; left over from Sonic 2
 
 Demo_mode_flag =		ramaddr( $FFFFFFD0 ) ; word
 Next_demo_number =		ramaddr( $FFFFFFD2 ) ; word
-Blue_spheres_stage_flag =	ramaddr( $FFFFFFD4 ) ; byte ; set if a Blue Sphere special stage is being run
+Blue_spheres_stage_flag =	ramaddr( $FFFFFFD4 ) ; byte ; set if a Blue Spheres special stage is being run
 V_blank_cycles =		ramaddr( $FFFFFFD6 ) ; word ; the number of cycles between V-blanks
 Graphics_flags =		ramaddr( $FFFFFFD8 ) ; byte ; bit 7 set = English system, bit 6 set = PAL system
 Debug_mode_flag =		ramaddr( $FFFFFFDA ) ; word

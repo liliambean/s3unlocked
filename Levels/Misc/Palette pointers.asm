@@ -6,9 +6,9 @@
 		dc.l Pal_Unknown2
 		dc.w $FC20
 		dc.w 7
-		dc.l Pal_Unknown3
-		dc.w $FC00
-		dc.w $1F
+		dc.l Pal_EncoreMode			; Fred - Encore Mode palette
+		dc.w $FC00				;
+		dc.w 7					;
 		dc.l Pal_SonicTails
 		dc.w $FC00
 		dc.w 7
