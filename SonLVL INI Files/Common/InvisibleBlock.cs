@@ -38,13 +38,38 @@ namespace S3KObjectDefinitions.Common
 		}
 	}
 
-	class InvisibleBlock : ObjectDefinition
+	class InvisibleSolidBlock : InvisibleBlock
+	{
+		public override string Name
+		{
+			get { return "Invisible Solid Block"; }
+		}
+
+		public override void Init(ObjectData data)
+		{
+			BuildSprites(0x80);
+		}
+	}
+
+	abstract class InvisibleBlock : ObjectDefinition
 	{
 		private Sprite[] img;
 
 		public override void Init(ObjectData data)
 		{
-			var artfile = ObjectHelper.OpenArtFile("../General/Sprites/Ring/Ring.bin", CompressionType.Nemesis);
+			BuildSprites(0);
+		}
+
+		protected void BuildSprites(int offset)
+		{
+			var artfile = ObjectHelper.OpenArtFile("../General/Sprites/Monitors/Monitors.bin", CompressionType.Nemesis);
+			if (offset != 0)
+			{
+				var indexer = new MultiFileIndexer<byte>();
+				indexer.AddFile(new List<byte>(artfile), offset);
+				artfile = indexer.ToArray();
+			}
+
 			var sprite = ObjectHelper.MapASMToBmp(artfile, "../General/Sprites/Level Misc/Map - Invisible Block.asm", 0, 0);
 			sprite.InvertPriority();
 
@@ -60,11 +85,6 @@ namespace S3KObjectDefinitions.Common
 		public override ReadOnlyCollection<byte> Subtypes
 		{
 			get { return new ReadOnlyCollection<byte>(new byte[] { 0 }); }
-		}
-
-		public override string Name
-		{
-			get { return "Invisible Solid Block"; }
 		}
 
 		public override string SubtypeName(byte subtype)
