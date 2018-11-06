@@ -696,7 +696,7 @@ ArtTile_CutsceneKnux                  = $04DA
 ArtTile_Player_1                      = $0680
 ArtTile_Player_2                      = $06A0
 ArtTile_Player_2_Tail                 = $06B0
-ArtTile_Ring                          = $06BC
+ArtTile_Ring                          = $06C6		; Fred - relocate HUD
 ArtTile_Shield                        = $079C
 ArtTile_Shield_Sparks                 = $07BB
 
