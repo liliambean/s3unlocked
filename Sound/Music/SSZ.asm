@@ -6,10 +6,12 @@ Snd_SSZ_Header:
 
 	smpsHeaderDAC       Snd_SSZ_DAC
 	smpsHeaderFM        Snd_SSZ_FM1,	$E8, $0D
+	smpsHeaderFM        Snd_SSZ_FM5,	$00, $15	; Fred: reorder channels to improve ring SFX interaction
+	smpsHeaderFM        Snd_SSZ_FM4,	$00, $1C	;
 	smpsHeaderFM        Snd_SSZ_FM2,	$00, $17
 	smpsHeaderFM        Snd_SSZ_FM3,	$00, $17
-	smpsHeaderFM        Snd_SSZ_FM4,	$00, $1C
-	smpsHeaderFM        Snd_SSZ_FM5,	$00, $15
+;	smpsHeaderFM        Snd_SSZ_FM4,	$00, $1C	;
+;	smpsHeaderFM        Snd_SSZ_FM5,	$00, $15	;
 	smpsHeaderPSG       Snd_SSZ_PSG1,	$F4, $05, $00, $00
 	smpsHeaderPSG       Snd_SSZ_PSG2,	$F4, $05, $00, $00
 	smpsHeaderPSG       Snd_SSZ_PSG3,	$00, $02, $00, $00

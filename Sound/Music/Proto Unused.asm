@@ -5,11 +5,15 @@ ProtoUnused_Header:
 	smpsHeaderTempo     $01, $00
 
 	smpsHeaderDAC       ProtoUnused_DAC
-	smpsHeaderFM        ProtoUnused_FM1,	$00, $0D
-	smpsHeaderFM        ProtoUnused_FM2,	$0C, $09
+	smpsHeaderFM        ProtoUnused_FM1,	$00, $09	; Fred: improve pitch, volume levels and channel order
+	smpsHeaderFM        ProtoUnused_FM2,	$00, $09	;
+	smpsHeaderFM        ProtoUnused_FM5,	$00, $09	;
+	smpsHeaderFM        ProtoUnused_FM4,	$00, $0B	;
+;	smpsHeaderFM        ProtoUnused_FM1,	$00, $0D	;
+;	smpsHeaderFM        ProtoUnused_FM2,	$0C, $09	;
 	smpsHeaderFM        ProtoUnused_FM3,	$00, $11
-	smpsHeaderFM        ProtoUnused_FM4,	$00, $11
-	smpsHeaderFM        ProtoUnused_FM5,	$00, $11
+;	smpsHeaderFM        ProtoUnused_FM4,	$00, $11	;
+;	smpsHeaderFM        ProtoUnused_FM5,	$00, $11	;
 	smpsHeaderPSG       ProtoUnused_PSG1,	$00, $02, $00, $00
 	smpsHeaderPSG       ProtoUnused_PSG2,	$00, $02, $00, $00
 	smpsHeaderPSG       ProtoUnused_PSG3,	$00, $02, $00, $00

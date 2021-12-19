@@ -16,7 +16,8 @@ ProtoMenu_Header:
 
 ; DAC Data
 ProtoMenu_DAC:
-	dc.b	nRst, $30, dSnareS3, $02, dSnareS3, dSnareS3, dSnareS3, $06, dSnareS3, dSnareS3, dSnareS3, dSnareS3
+;	dc.b	nRst, $30	; Fred: remove leading pause from proto competition music
+	dc.b	dSnareS3, $02, dSnareS3, dSnareS3, dSnareS3, $06, dSnareS3, dSnareS3, dSnareS3, dSnareS3
 	dc.b	dSnareS3, dSnareS3
 
 ProtoMenu_Jump00:
@@ -52,7 +53,8 @@ ProtoMenu_FM1:
 	smpsSetvoice        $15
 	smpsDetune          $00
 	smpsModSet          $0F, $01, $06, $06
-	dc.b	nRst, $60
+	dc.b	nRst, $30	; Fred: remove leading pause from proto competition music
+;	dc.b	nRst, $60	;
 
 ProtoMenu_Jump04:
 	dc.b	nC1, $06, nRst, $12, nC2, nG1, $06, nRst, nBb1, $04, nRst, $02
@@ -114,7 +116,8 @@ ProtoMenu_FM2:
 	smpsSetvoice        $0D
 	smpsDetune          $03
 	smpsModSet          $0F, $01, $06, $06
-	dc.b	nRst, $60
+	dc.b	nRst, $30	; Fred: remove leading pause from proto competition music
+;	dc.b	nRst, $60	;
 
 ProtoMenu_Jump03:
 	dc.b	nRst, $1E, nBb4, $0A, nRst, $02, nA4, $04, nRst, $50, nA4, $0A
@@ -173,7 +176,8 @@ ProtoMenu_Jump03:
 ; FM3 Data
 ProtoMenu_FM3:
 	smpsSetvoice        $18
-	dc.b	nRst, $60
+	dc.b	nRst, $30	; Fred: remove leading pause from proto competition music
+;	dc.b	nRst, $60	;
 
 ProtoMenu_Jump02:
 	dc.b	nF3, $04, nRst, $08, nEb3, $06, nF3, $04, nRst, $26, nG3, $04
@@ -229,7 +233,8 @@ ProtoMenu_Jump02:
 ; FM4 Data
 ProtoMenu_FM4:
 	smpsSetvoice        $19
-	dc.b	nRst, $60
+	dc.b	nRst, $30	; Fred: remove leading pause from proto competition music
+;	dc.b	nRst, $60	;
 
 ProtoMenu_Jump01:
 	dc.b	nD3, $04, nRst, $08, nC3, $06, nD3, $04, nRst, $08
@@ -307,7 +312,8 @@ ProtoMenu_Jump01:
 
 ; PSG1 Data
 ProtoMenu_PSG1:
-	dc.b	nRst, $60
+	dc.b	nRst, $30	; Fred: remove leading pause from proto competition music
+;	dc.b	nRst, $60	;
 
 ProtoMenu_Jump06:
 	dc.b	nC4, $06, nRst, nC5, nC4, nRst, $1E, nC4, $06, nRst, nC5, nC4
@@ -380,14 +386,17 @@ ProtoMenu_Jump06:
 ; PSG2 Data
 ProtoMenu_PSG2:
 	dc.b	nRst, $7F, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst
-	dc.b	nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst, $72
+	dc.b	nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst
+	dc.b	$42		; Fred: remove leading pause from proto competition music
+;	dc.b	$72		;
 	smpsJump            ProtoMenu_Jump06
 
 ; PSG3 Data
 ProtoMenu_PSG3:
 	smpsPSGvoice        sTone_02
 	smpsPSGform         $E7
-	dc.b	nRst, $60
+	dc.b	nRst, $30	; Fred: remove leading pause from proto competition music
+;	dc.b	nRst, $60	;
 
 ProtoMenu_Jump05:
 	dc.b	nMaxPSG1, $06, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1
