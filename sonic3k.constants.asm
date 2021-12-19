@@ -1033,28 +1033,35 @@ ArtTile_DashDust                      = $07E0
 ArtTile_DashDust_P2                   = $07F0
 
 ; ---------------------------------------------------------------------------
-; Sound commands list.
-
-	phase $E1
-mus__FirstCmd =			*		; ID of the first sound command
-mus_FadeOut			ds.b 1		; $E1 - fade out music
-mus_Stop			ds.b 1		; $E2 - stop music and sound effects
-mus_MutePSG			ds.b 1		; $E3 - mute all PSG channels
-mus_StopSFX			ds.b 1		; $E4 - stop all sound effects
-mus_FadeOut2			ds.b 1		; $E5 - fade out music (duplicate)
-mus__EndCmd =			*		; next ID after last sound command
-; ---------------------------------------------------------------------------
 ; Fred: add extra music tracks
 
-mus_TitleScreenK		ds.b 1		; $E6
-mus_KnucklesK			ds.b 1		; $E7
-mus_ExtraLifeK			ds.b 1		; $E8
-mus_InvincibilityK		ds.b 1		; $E9
-mus_EndingSK			ds.b 1		; $EA
-mus_CreditsK			ds.b 1		; $EB
-mus__EndExtra =			*
+	phase $EA
+mus__FirstExtra =		*
+mus_ExtraLifeK			ds.b 1		; $EA
+mus_KnucklesK			ds.b 1		; $EB
+mus_CreditsK			ds.b 1		; $EC
+mus_InvincibilityK		ds.b 1		; $ED
+mus_HyperTheme			ds.b 1		; $EE
+mus_Boss1			ds.b 1		; $EF
+mus_Boss2			ds.b 1		; $F0
+mus_Menu_Proto			ds.b 1		; $F1
+mus_Knuckles_Proto		ds.b 1		; $F2
+mus_CNZ1_Proto			ds.b 1		; $F3
+mus_CNZ2_Proto			ds.b 1		; $F4
+mus_ICZ1_Proto			ds.b 1		; $F5
+mus_ICZ2_Proto			ds.b 1		; $F6
+mus_LBZ1_Proto			ds.b 1		; $F7
+mus_LBZ2_Proto			ds.b 1		; $F8
+mus_Credits_Proto		ds.b 1		; $F9
+; ---------------------------------------------------------------------------
+; Sound commands list.
 
-mus_S2SEGA =			$FA		; $FA - SEGA sound ID in Sonic 2
+;	phase $E1
+mus__FirstCmd =			*		; ID of the first sound command
+mus_FadeOut			ds.b 1		; $FA - fade out music
+mus_Stop			ds.b 1		; $FB - stop music and sound effects
+mus_MutePSG			ds.b 1		; $FC - mute all PSG channels
+mus_StopSFX			ds.b 1		; $FD - stop all sound effects
 mus_StopSEGA =			$FE		; $FE - Stop SEGA sound
 mus_SEGA =			$FF		; $FF - Play SEGA sound
 	dephase

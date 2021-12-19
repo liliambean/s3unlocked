@@ -1683,12 +1683,12 @@ zPlaySoundByIndex:
 		jp	z, zPlaySegaSound				; Branch if yes
 		cp	MusID__End						; Is this a music?
 		jp	c, zPlayMusic					; Branch if yes
-		cp	mus__EndExtra			; Fred: add extra music tracks
-		jp	nc, zMusicFade			;
+		cp	mus__FirstExtra			; Fred: add extra music tracks
+		jp	c, zMusicFade			;
 		cp	FadeID__First					; Is it before the first fade effect?
-		jp	c, zMusicFade					; Branch if yes
-		cp	FadeID__End						; Is this after the last fade effect?
-		jp	nc, zPlayExtraMusic		; Fred: add extra music tracks
+		jp	c, zPlayExtraMusic		; Fred: add extra music tracks
+;		jp	c, zMusicFade			;
+;		cp	FadeID__End			;
 ;		jp	nc, zMusicFade			;
 		sub	FadeID__First					; If none of the checks passed, do fade effects.
 		ld	hl, zFadeEffects				; hl = switch table pointer
@@ -1698,11 +1698,12 @@ zPlaySoundByIndex:
 ; ---------------------------------------------------------------------------
 ;loc_524
 zFadeEffects:
-		dw	zFadeOutMusic					; E1h
-		dw	zMusicFade						; E2h
-		dw	zPSGSilenceAll					; E3h
-		dw	zStopSFX						; E4h
-		dw	zFadeOutMusic					; E5h
+		dw	zFadeOutMusic					; FAh
+		dw	zMusicFade						; FBh
+		dw	zPSGSilenceAll					; FCh
+		dw	zStopSFX						; FDh
+		dw	zMusicFade			; Fred: add extra music tracks
+;		dw	zFadeOutMusic			;
 ; ---------------------------------------------------------------------------
 ;sub_52E
 zStopSFX:
@@ -1735,7 +1736,7 @@ zSilenceStopTrack:
 
 ;loc_552
 zPlayExtraMusic:
-		sub	a, MusID__First-MusID__End+FadeID__End		; Fred: remap from E6h-FDh to 33h-4Ah
+		sub	a, MusID__First-MusID__End+mus__FirstExtra	; Fred: remap from EAh-F9h to 33h-42h
 ;		ld	a, 32h						;
 		push	af							; Save af
 		jp	zPlayMusic_DoFade				; Continue as music
@@ -4604,13 +4605,24 @@ z80_MusicBanks:
 	db zmake68kBank(MusData_Menu)
 	db zmake68kBank(MusData_FinalBoss)
 	db zmake68kBank(MusData_Drown)
-	db zmake68kBank(MusData_PresSega)
-	db zmake68kBank(MusData_Title_SK)		;
-	db zmake68kBank(MusData_Knux_SK)		;
-	db zmake68kBank(MusData_1UP_SK)			;
-	db zmake68kBank(MusData_Invic_SK)		;
-	db zmake68kBank(MusData_PresSega_SK)		;
+	db zmake68kBank(MusData_3CCredits)		;
+;	db zmake68kBank(MusData_PresSega)		;
+	db zmake68kBank(MusData_SK1UP)			;
+	db zmake68kBank(MusData_SKKnux)			;
 	db zmake68kBank(MusData_SKCredits)
+	db zmake68kBank(MusData_SKInvic)		;
+	db zmake68kBank(MusData_Unused)			;
+	db zmake68kBank(MusData_S1Boss)			;
+	db zmake68kBank(MusData_S2Boss)			;
+	db zmake68kBank(MusData_ProtoMenu)		;
+	db zmake68kBank(MusData_ProtoKnux)		;
+	db zmake68kBank(MusData_ProtoCNZ1)		;
+	db zmake68kBank(MusData_ProtoCNZ2)		;
+	db zmake68kBank(MusData_ProtoICZ1)		;
+	db zmake68kBank(MusData_ProtoICZ2)		;
+	db zmake68kBank(MusData_ProtoLBZ1)		;
+	db zmake68kBank(MusData_ProtoLBZ2)		;
+	db zmake68kBank(MusData_ProtoCredits)		;
 ; ---------------------------------------------------------------------------
 	if $ > z80_stack_top
 		fatal "Your Z80 tables won't fit before the z80 stack. It's \{$-z80_stack_top}h bytes past the start of the bottom of the stack, at \{z80_stack_top}h"
@@ -4845,13 +4857,24 @@ MusicPointers label *
 	declsong MusData_Menu
 	declsong MusData_FinalBoss
 	declsong MusData_Drown
-	declsong MusData_PresSega
-	declsong MusData_Title_SK			;
-	declsong MusData_Knux_SK			;
-	declsong MusData_1UP_SK				;
-	declsong MusData_Invic_SK			;
-	declsong MusData_PresSega_SK			;
+	declsong MusData_3CCredits			;
+;	declsong MusData_PresSega			;
+	declsong MusData_SK1UP				;
+	declsong MusData_SKKnux				;
 	declsong MusData_SKCredits
+	declsong MusData_SKInvic			;
+	declsong MusData_Unused				;
+	declsong MusData_S1Boss				;
+	declsong MusData_S2Boss				;
+	declsong MusData_ProtoMenu			;
+	declsong MusData_ProtoKnux			;
+	declsong MusData_ProtoCNZ1			;
+	declsong MusData_ProtoCNZ2			;
+	declsong MusData_ProtoICZ1			;
+	declsong MusData_ProtoICZ2			;
+	declsong MusData_ProtoLBZ1			;
+	declsong MusData_ProtoLBZ2			;
+	declsong MusData_ProtoCredits			;
 	ifndef zMusIDPtr__End
 zMusIDPtr__End label *
 	endif
@@ -5342,8 +5365,31 @@ Sound_DB:	include "Sound/SFX/DB.asm"
 Mus_Bank1_Start:	startBank
 	Music_Master_Table
 z80_UniVoiceBank:	include "Sound/UniBank.asm"
+MusData_Title:			include	"Sound/Music/Sonic 3 Title.asm"
+MusData_AIZ1:			include	"Sound/Music/AIZ1.asm"
+MusData_AIZ2:			include	"Sound/Music/AIZ2.asm"
+MusData_HCZ1:			include	"Sound/Music/HCZ1.asm"
+MusData_HCZ2:			include	"Sound/Music/HCZ2.asm"
+MusData_MGZ1:			include	"Sound/Music/MGZ1.asm"
+MusData_MGZ2:			include	"Sound/Music/MGZ2.asm"
+MusData_CNZ1:			include	"Sound/Music/CNZ1.asm"
+MusData_CNZ2:			include	"Sound/Music/CNZ2.asm"
 MusData_FBZ1:			include	"Sound/Music/FBZ1.asm"
 MusData_FBZ2:			include	"Sound/Music/FBZ2.asm"
+MusData_Results:		include	"Sound/Music/Level Outro.asm"
+
+	finishBank
+
+; ---------------------------------------------------------------------------
+; Music Bank 2
+; ---------------------------------------------------------------------------
+Mus_Bank2_Start:	startBank
+	Music_Master_Table
+					include "Sound/UniBank.asm"
+MusData_ICZ1:			include	"Sound/Music/ICZ1.asm"
+MusData_ICZ2:			include	"Sound/Music/ICZ2.asm"
+MusData_LBZ1:			include	"Sound/Music/LBZ1.asm"
+MusData_LBZ2:			include	"Sound/Music/LBZ2.asm"
 MusData_MHZ1:			include	"Sound/Music/MHZ1.asm"
 MusData_MHZ2:			include	"Sound/Music/MHZ2.asm"
 MusData_SOZ1:			include	"Sound/Music/SOZ1.asm"
@@ -5355,31 +5401,10 @@ MusData_DEZ1:			include	"Sound/Music/DEZ1.asm"
 MusData_DEZ2:			include	"Sound/Music/DEZ2.asm"
 MusData_Minib_SK:		include	"Sound/Music/Miniboss.asm"
 MusData_Boss:			include	"Sound/Music/Zone Boss.asm"
+MusData_FinalBoss:		include	"Sound/Music/Final Boss.asm"
 MusData_DDZ:			include	"Sound/Music/DDZ.asm"
 MusData_PachBonus:		include	"Sound/Music/Pachinko.asm"
 MusData_SpecialS:		include	"Sound/Music/Special Stage.asm"
-MusData_SlotBonus:		include	"Sound/Music/Slots.asm"
-MusData_Knux_SK:		include	"Sound/Music/Knuckles.asm"
-
-	finishBank
-
-; ---------------------------------------------------------------------------
-; Music Bank 2
-; ---------------------------------------------------------------------------
-Mus_Bank2_Start:	startBank
-	Music_Master_Table
-					include "Sound/UniBank.asm"
-MusData_Title_SK:		include	"Sound/Music/Title.asm"
-MusData_1UP_SK:			include	"Sound/Music/1UP.asm"
-MusData_Emerald:		include	"Sound/Music/Chaos Emerald.asm"
-MusData_AIZ1:			include	"Sound/Music/AIZ1.asm"
-MusData_AIZ2:			include	"Sound/Music/AIZ2.asm"
-MusData_HCZ1:			include	"Sound/Music/HCZ1.asm"
-MusData_HCZ2:			include	"Sound/Music/HCZ2.asm"
-MusData_MGZ1:			include	"Sound/Music/MGZ1.asm"
-MusData_MGZ2:			include	"Sound/Music/MGZ2.asm"
-MusData_CNZ2:			include	"Sound/Music/CNZ2.asm"
-MusData_CNZ1:			include	"Sound/Music/CNZ1.asm"
 
 	finishBank
 
@@ -5389,18 +5414,20 @@ MusData_CNZ1:			include	"Sound/Music/CNZ1.asm"
 Mus_Bank3_Start:	startBank
 	Music_Master_Table
 					include "Sound/UniBank.asm"
-MusData_ICZ2:			include	"Sound/Music/ICZ2.asm"
-MusData_ICZ1:			include	"Sound/Music/ICZ1.asm"
-MusData_LBZ2:			include	"Sound/Music/LBZ2.asm"
-MusData_LBZ1:			include	"Sound/Music/LBZ1.asm"
-MusData_SKCredits:		include	"Sound/Music/Credits.asm"
+MusData_SlotBonus:		include	"Sound/Music/Slots.asm"
+MusData_GumBonus:		include	"Sound/Music/Gum Ball Machine.asm"
+MusData_Knux:			include	"Sound/Music/Sonic 3 Knuckles.asm"
+MusData_ALZ:			include	"Sound/Music/Azure Lake.asm"
+MusData_BPZ:			include	"Sound/Music/Balloon Park.asm"
+MusData_DPZ:			include	"Sound/Music/Desert Palace.asm"
+MusData_CGZ:			include	"Sound/Music/Chrome Gadget.asm"
+MusData_EMZ:			include	"Sound/Music/Endless Mine.asm"
 MusData_GameOver:		include	"Sound/Music/Game Over.asm"
-MusData_Continue:		include	"Sound/Music/Continue.asm"
-MusData_Results:		include	"Sound/Music/Level Outro.asm"
-MusData_Invic_SK:		include	"Sound/Music/Invincible.asm"
+MusData_Emerald:		include	"Sound/Music/Chaos Emerald.asm"
+MusData_Invic:			include	"Sound/Music/Sonic 3 Invincible.asm"
+MusData_2PMenu:			include	"Sound/Music/Competition Menu.asm"
 MusData_Menu:			include	"Sound/Music/Menu.asm"
-MusData_FinalBoss:		include	"Sound/Music/Final Boss.asm"
-MusData_PresSega_SK:		include	"Sound/Music/Game Complete.asm"
+MusData_Drown:			include	"Sound/Music/Countdown.asm"
 
 	finishBank
 
@@ -5410,29 +5437,38 @@ MusData_PresSega_SK:		include	"Sound/Music/Game Complete.asm"
 Mus_Bank4_Start:	startBank
 	Music_Master_Table
 					include "Sound/UniBank.asm"
-MusData_GumBonus:		include	"Sound/Music/Gum Ball Machine.asm"
-MusData_ALZ:			include	"Sound/Music/Azure Lake.asm"
-MusData_BPZ:			include	"Sound/Music/Balloon Park.asm"
-MusData_DPZ:			include	"Sound/Music/Desert Palace.asm"
-MusData_CGZ:			include	"Sound/Music/Chrome Gadget.asm"
-MusData_EMZ:			include	"Sound/Music/Endless Mine.asm"
 MusData_S3Credits:		include	"Sound/Music/Sonic 3 Credits.asm"
-MusData_2PMenu:			include	"Sound/Music/Competition Menu.asm"
-MusData_Drown:			include	"Sound/Music/Countdown.asm"
+MusData_Continue:		include	"Sound/Music/Continue.asm"
+MusData_1UP:			include	"Sound/Music/Sonic 3 1UP.asm"
+MusData_Minib:			include	"Sound/Music/Sonic 3 Miniboss.asm"
+;MusData_PresSega:		include	"Sound/Music/Sonic 3 Game Complete.asm"
+MusData_3CCredits:		include	"Sound/Music/Sonic 3C Credits.asm"
+;MusData_SKTitle:		include	"Sound/Music/Title.asm"
+MusData_SK1UP:			include	"Sound/Music/1UP.asm"
+MusData_SKKnux:			include	"Sound/Music/Knuckles.asm"
+;MusData_SKPresSega:		include	"Sound/Music/Game Complete.asm"
+MusData_SKCredits:		include	"Sound/Music/Credits.asm"
+MusData_SKInvic:		include	"Sound/Music/Invincible.asm"
+MusData_Unused:			include	"Sound/Music/Proto Unused.asm"
+MusData_S1Boss:			include	"Sound/Music/Sonic 1 Boss.asm"
+MusData_S2Boss:			include	"Sound/Music/Sonic 2 Boss.asm"
+MusData_ProtoMenu:		include	"Sound/Music/Proto Competition.asm"
+MusData_ProtoCredits:		include	"Sound/Music/Proto Credits.asm"
 
 	finishBank
 
 ; ---------------------------------------------------------------------------
-; Fred: add extra music tracks
+; Fred: add extra music tracks (credit: Clownacy)
 ; ---------------------------------------------------------------------------
 Mus_Bank5_Start:	startBank
 	Music_Master_Table
 					include "Sound/UniBank.asm"
-MusData_Title:			include	"Sound/Music/Sonic 3 Title.asm"
-MusData_Knux:			include	"Sound/Music/Sonic 3 Knuckles.asm"
-MusData_1UP:			include	"Sound/Music/Sonic 3 1UP.asm"
-MusData_Invic:			include	"Sound/Music/Sonic 3 Invincible.asm"
-MusData_PresSega:		include	"Sound/Music/Sonic 3 Game Complete.asm"
-MusData_Minib:			include	"Sound/Music/Sonic 3 Miniboss.asm"
+MusData_ProtoKnux:		include	"Sound/Music/Proto Knuckles.asm"
+MusData_ProtoCNZ1:		include	"Sound/Music/Proto CNZ1.asm"
+MusData_ProtoCNZ2:		include	"Sound/Music/Proto CNZ2.asm"
+MusData_ProtoICZ1:		include	"Sound/Music/Proto ICZ1.asm"
+MusData_ProtoICZ2:		include	"Sound/Music/Proto ICZ2.asm"
+MusData_ProtoLBZ1:		include	"Sound/Music/Proto LBZ1.asm"
+MusData_ProtoLBZ2:		include	"Sound/Music/Proto LBZ2.asm"
 
 	finishBank
