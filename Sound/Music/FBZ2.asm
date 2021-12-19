@@ -45,9 +45,6 @@ Snd_FBZ2_Loop07:
 	dc.b	nE5, $7F, smpsNoAttack, nE5, $05, nRst, $30
 	smpsJump            Snd_FBZ2_Loop07
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_FBZ2_FM2:
 	smpsSetvoice        $01
@@ -85,9 +82,6 @@ Snd_FBZ2_Loop06:
 	dc.b	$02, nRst, $04, nA1, $02, nRst, $04
 	smpsJump            Snd_FBZ2_Loop06
 
-; Unreachable
-	smpsStop
-
 ; FM3 Data
 Snd_FBZ2_FM3:
 	smpsModSet          $0D, $01, $02, $06
@@ -112,9 +106,6 @@ Snd_FBZ2_Loop05:
 	dc.b	$18, nE4, $7F, smpsNoAttack, nE4, $11, nRst, $30
 	smpsJump            Snd_FBZ2_Loop05
 
-; Unreachable
-	smpsStop
-
 ; FM4 Data
 Snd_FBZ2_FM4:
 	smpsModSet          $0D, $01, $02, $06
@@ -138,9 +129,6 @@ Snd_FBZ2_Loop04:
 	dc.b	nA3, $30, nA3, nD4, $18, nC4, nB3, $30, nB3, $18, nA3, nAb3
 	dc.b	$30, nC4, $7F, smpsNoAttack, nC4, $11, nRst, $30
 	smpsJump            Snd_FBZ2_Loop04
-
-; Unreachable
-	smpsStop
 
 ; FM5 Data
 Snd_FBZ2_FM5:
@@ -174,9 +162,6 @@ Snd_FBZ2_Loop03:
 	dc.b	nE5, nD5, nE5, $7F, smpsNoAttack, nE5, $05, nRst, $30
 	smpsJump            Snd_FBZ2_Loop03
 
-; Unreachable
-	smpsStop
-
 ; DAC Data
 Snd_FBZ2_DAC:
 	dc.b	nRst, $48, dSnareS3, $06, dSnareS3, dSnareS3, dSnareS3
@@ -203,18 +188,12 @@ Snd_FBZ2_Loop02:
 	dc.b	dKickS3, $0C, dSnareS3, dSnareS3, dSnareS3, $06, dSnareS3, dSnareS3, $30
 	smpsJump            Snd_FBZ2_Loop00
 
-; Unreachable
-	smpsStop
-
 ; PSG1 Data
 Snd_FBZ2_PSG1:
 	smpsStop
 
 ; PSG2 Data
 Snd_FBZ2_PSG2:
-	smpsStop
-
-; Unreachable
 	smpsStop
 
 ; PSG3 Data

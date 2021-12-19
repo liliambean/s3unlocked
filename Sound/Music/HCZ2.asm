@@ -14,10 +14,6 @@ Snd_HCZ2_Header:
 	smpsHeaderPSG       Snd_HCZ2_PSG2,	$F4, $04, $00, sTone_0C
 	smpsHeaderPSG       Snd_HCZ2_PSG3,	$00, $03, $00, sTone_0C
 
-; Unreachable
-	smpsStop
-	smpsStop
-
 ; DAC Data
 Snd_HCZ2_DAC:
 	dc.b	dKickS3, $06
@@ -64,9 +60,6 @@ Snd_HCZ2_Loop03:
 	dc.b	dKickS3, $12, $06, dSnareS3, $1E, dKickS3, $06, $0C, dSnareS3, $1E, $0C, $0C
 	dc.b	$06, $0C, $18, $02, $02, $02, $06, $06, $06
 	smpsJump            Snd_HCZ2_DAC
-
-; Unreachable
-	smpsStop
 
 Snd_HCZ2_Call00:
 	dc.b	dKickS3, $18, dSnareS3, $06, dKickS3, $0C, dKickS3, $1E, dSnareS3, $0C, dKickS3, dKickS3
@@ -158,9 +151,6 @@ Snd_HCZ2_Call04:
 	dc.b	$0A, nRst, $02, nB4, $04, nRst, $2C
 	smpsReturn
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_HCZ2_FM2:
 	smpsSetvoice        $15
@@ -231,9 +221,6 @@ Snd_HCZ2_FM2:
 	dc.b	$02, nG0, $04, nRst, $02, nBb0, $04, nRst, $02
 	smpsJump            Snd_HCZ2_FM2
 
-; Unreachable
-	smpsStop
-
 ; FM3 Data
 Snd_HCZ2_FM3:
 	dc.b	nRst, $07
@@ -252,9 +239,6 @@ Snd_HCZ2_Jump00:
 	smpsModSet          $0F, $01, $06, $06
 	smpsCall            Snd_HCZ2_Call04
 	smpsJump            Snd_HCZ2_Jump00
-
-; Unreachable
-	smpsStop
 
 ; FM4 Data
 Snd_HCZ2_FM4:
@@ -338,9 +322,6 @@ Snd_HCZ2_FM4:
 	dc.b	$04, nRst, $2C
 	smpsJump            Snd_HCZ2_FM4
 
-; Unreachable
-	smpsStop
-
 ; FM5 Data
 Snd_HCZ2_FM5:
 	smpsSetvoice        $06
@@ -419,9 +400,6 @@ Snd_HCZ2_FM5:
 	dc.b	nRst, $2C
 	smpsJump            Snd_HCZ2_FM5
 
-; Unreachable
-	smpsStop
-
 ; PSG1 Data
 Snd_HCZ2_PSG1:
 	smpsPSGvoice        sTone_0A
@@ -477,9 +455,6 @@ Snd_HCZ2_Jump02:
 	dc.b	nEb5, $04, nRst, $02, nEb5, $0A, nRst, $02, nD5, $04, nRst, $2C
 	smpsJump            Snd_HCZ2_Jump02
 
-; Unreachable
-	smpsStop
-
 ; PSG2 Data
 Snd_HCZ2_PSG2:
 	smpsPSGvoice        sTone_08
@@ -488,10 +463,6 @@ Snd_HCZ2_PSG2:
 
 Snd_HCZ2_Jump03:
 	smpsJump            Snd_HCZ2_Jump02
-
-; Unreachable
-	smpsJump            Snd_HCZ2_Jump03
-	smpsStop
 
 ; PSG3 Data
 Snd_HCZ2_PSG3:
@@ -667,5 +638,3 @@ Snd_HCZ2_Loop06:
 	dc.b	nMaxPSG1, $06, smpsNoAttack, $18, smpsNoAttack, $18, smpsNoAttack, $18, smpsNoAttack, $18
 	smpsJump            Snd_HCZ2_Jump01
 
-; Unreachable
-	smpsStop

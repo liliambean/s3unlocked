@@ -34,9 +34,6 @@ Snd_Invic_SK_Jump05:
 	dc.b	$06, smpsNoAttack, nB4, $24, nRst, $0C
 	smpsJump            Snd_Invic_SK_Jump05
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_Invic_SK_FM2:
 	dc.b	nRst, $18
@@ -51,9 +48,6 @@ Snd_Invic_SK_Jump04:
 	dc.b	nRst, nE1, nRst, nE2, smpsNoAttack, nE2, nE1, nE1, nE1
 	smpsJump            Snd_Invic_SK_Jump04
 
-; Unreachable
-	smpsStop
-
 ; FM3 Data
 Snd_Invic_SK_FM3:
 	dc.b	nRst, $0B
@@ -61,9 +55,6 @@ Snd_Invic_SK_FM3:
 	smpsModSet          $14, $01, $05, $06
 	smpsPan             panLeft, $00
 	smpsJump            Snd_Invic_SK_Jump03
-
-; Unreachable
-	smpsStop
 
 ; FM4 Data
 Snd_Invic_SK_FM4:
@@ -82,9 +73,6 @@ Snd_Invic_SK_Jump02:
 	dc.b	nG5, $0C, nE5, $18, nRst, $06
 	smpsJump            Snd_Invic_SK_Jump02
 
-; Unreachable
-	smpsStop
-
 ; FM5 Data
 Snd_Invic_SK_FM5:
 	smpsPan             panLeft, $00
@@ -102,9 +90,6 @@ Snd_Invic_SK_Jump01:
 	dc.b	nD5, $0C, nB4, $18, nRst, $06
 	smpsJump            Snd_Invic_SK_Jump01
 
-; Unreachable
-	smpsStop
-
 ; PSG1 Data
 Snd_Invic_SK_PSG1:
 	dc.b	nRst, $18
@@ -118,9 +103,6 @@ Snd_Invic_SK_Jump07:
 	dc.b	nB3, nE4, nB3, nE4, $06, nB3, nE4, nB3, nE4, nB3, nE4, nB3
 	dc.b	nE3, nG3, nFs3, nA3, nAb3, nB3, nB3, nD4
 	smpsJump            Snd_Invic_SK_Jump07
-
-; Unreachable
-	smpsStop
 
 ; PSG2 Data
 Snd_Invic_SK_PSG2:
@@ -137,18 +119,12 @@ Snd_Invic_SK_Jump06:
 	dc.b	nFs3, nA3, nG3, nB3, nA3, nCs4, nCs4, nE4
 	smpsJump            Snd_Invic_SK_Jump06
 
-; Unreachable
-	smpsStop
-
 ; PSG3 Data
 Snd_Invic_SK_PSG3:
 	smpsPSGvoice        sTone_0A
 	smpsModSet          $14, $01, $02, $06
 	dc.b	nRst, $18
 	smpsJump            Snd_Invic_SK_Jump05
-
-; Unreachable
-	smpsStop
 
 ; DAC Data
 Snd_Invic_SK_DAC:
@@ -160,9 +136,6 @@ Snd_Invic_SK_Jump00:
 	dc.b	dSnareS3, nRst, dKickS3, $0C, dSnareS3, $09, $03, dKickS3, $06, dKickS3, dSnareS3, $03
 	dc.b	nRst, dSnareS3, dSnareS3
 	smpsJump            Snd_Invic_SK_Jump00
-
-; Unreachable
-	smpsStop
 
 Snd_Invic_SK_Voices:
 ;	Voice $00

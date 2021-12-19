@@ -45,9 +45,6 @@ Snd_MHZ2_Loop08:
 	dc.b	$06, nRst, nBb4, nC5, nRst, nBb4, nRst, $60
 	smpsJump            Snd_MHZ2_Jump05
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_MHZ2_FM2:
 	dc.b	nRst, $60
@@ -76,9 +73,6 @@ Snd_MHZ2_Loop07:
 	dc.b	nAb2, nRst, nBb2, $12, nBb2, $06, nRst, $12, nBb2, $06, nAb2, nA2
 	dc.b	nBb2, nRst, $18
 	smpsJump            Snd_MHZ2_Jump04
-
-; Unreachable
-	smpsStop
 
 ; FM3 Data
 Snd_MHZ2_FM3:
@@ -123,9 +117,6 @@ Snd_MHZ2_Loop05:
 	dc.b	nAb4, nRst, nF4, nRst, $60
 	smpsJump            Snd_MHZ2_Jump03
 
-; Unreachable
-	smpsStop
-
 ; FM4 Data
 Snd_MHZ2_FM4:
 	dc.b	nRst, $60
@@ -169,9 +160,6 @@ Snd_MHZ2_Loop03:
 	dc.b	nEb4, nRst, nD4, nRst, $60
 	smpsJump            Snd_MHZ2_Jump02
 
-; Unreachable
-	smpsStop
-
 ; FM5 Data
 Snd_MHZ2_FM5:
 	dc.b	nRst, $60, nRst, $0E
@@ -203,9 +191,6 @@ Snd_MHZ2_Loop01:
 	dc.b	$06, nRst, nBb4, nC5, nRst, nBb4, nRst, $60
 	smpsJump            Snd_MHZ2_Jump01
 
-; Unreachable
-	smpsStop
-
 ; DAC Data
 Snd_MHZ2_DAC:
 	dc.b	dKickS3, $0C, dSnareS3, dKickS3, dSnareS3, dKickS3, $04, dKickS3, dKickS3, dSnareS3, $0C, dSnareS3
@@ -235,18 +220,12 @@ Snd_MHZ2_Loop00:
 	dc.b	dSnareS3, $18, dSnareS3, $0C, dKickS3, $04, dKickS3, dKickS3, dSnareS3, $18
 	smpsJump            Snd_MHZ2_Jump00
 
-; Unreachable
-	smpsStop
-
 ; PSG1 Data
 Snd_MHZ2_PSG1:
 	smpsStop
 
 ; PSG2 Data
 Snd_MHZ2_PSG2:
-	smpsStop
-
-; Unreachable
 	smpsStop
 
 ; PSG3 Data

@@ -20,9 +20,9 @@ Snd_SSZ_FM1:
 	smpsAlterNote       $FE
 
 Snd_SSZ_Jump01:
-	dc.b	nG2, $07, nRst, $04, nG2, $08, nRst, $04, $24, nG3, nG2, nG2
+	dc.b	nG2, $07, nRst, $04, nG2, $08, nRst, $04, nG2, $24, nG3, nG2, nG2
 	dc.b	$0C, nRst, nC3, $14, nB2, $10, nG2, $08, nRst, $04, nG2, $08
-	dc.b	nRst, $04, $24, nG3, nG2, nG2, $0C, nRst, $30
+	dc.b	nRst, $04, nG2, $24, nG3, nG2, nG2, $0C, nRst, $30
 
 Snd_SSZ_Loop08:
 	dc.b	nC3, $60, nC4, $24, nC3, nC4, $18, nBb2, $06, nRst, $06, nBb2
@@ -39,9 +39,6 @@ Snd_SSZ_Loop08:
 	dc.b	nBb3, $24, nBb2, nBb3, $18, nRst, $01
 	smpsJump            Snd_SSZ_Jump01
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_SSZ_FM2:
 	dc.b	nRst, $60, nRst, nRst, nRst
@@ -54,9 +51,6 @@ Snd_SSZ_Loop07:
 	dc.b	nG3, smpsNoAttack, $60, nAb3, smpsNoAttack, $60, nG3, smpsNoAttack, $60, nAb3, nBb3, nC4
 	dc.b	smpsNoAttack, $60, nBb3, smpsNoAttack, $60, nA3, smpsNoAttack, $60, nAb3, nBb3
 	smpsJump            Snd_SSZ_FM2
-
-; Unreachable
-	smpsStop
 
 ; FM3 Data
 Snd_SSZ_FM3:
@@ -92,9 +86,6 @@ Snd_SSZ_Loop06:
 	dc.b	nE3, nBb1, nF3, nBb1, nE3, nBb1, nD3, nBb1, nE3, nBb1
 	smpsCall            Snd_SSZ_Call00
 	smpsJump            Snd_SSZ_FM3
-
-; Unreachable
-	smpsStop
 
 Snd_SSZ_Call00:
 	smpsSetvoice        $02
@@ -152,9 +143,9 @@ Snd_SSZ_Loop02:
 	dc.b	nA4, $24, nA4, $18, nRst, $24, nAb4, $0C, nC5, nBb4, nAb4, nEb5
 	dc.b	$18, nC5, $0C, nD5, nEb5, $18, nD5, $0C, nF5, $18
 	smpsFMAlterVol      $FF
-	dc.b	nG5, $24, nEb6, nD6, $07, nRst, $05, $18, nG5, $54, nAb5, $24
-	dc.b	nEb6, nD6, $07, nRst, $05, $18, nF6, $24, nEb6, $18, nD6, nG5
-	dc.b	$24, nEb6, nD6, $07, nRst, $05, $18, nG5, $54, nAb5, $24, nC6
+	dc.b	nG5, $24, nEb6, nD6, $07, nRst, $05, nD6, $18, nG5, $54, nAb5, $24
+	dc.b	nEb6, nD6, $07, nRst, $05, nD6, $18, nF6, $24, nEb6, $18, nD6, nG5
+	dc.b	$24, nEb6, nD6, $07, nRst, $05, nD6, $18, nG5, $54, nAb5, $24, nC6
 	dc.b	nEb6, $18, nG6, nF6, $0C, nEb6, $18, nF6, $24, nC6, $54, nC5
 	dc.b	$06, nE5, nF5, $24, nE5, $18, nC5, $24
 	smpsFMAlterVol      $FF
@@ -167,9 +158,6 @@ Snd_SSZ_Loop02:
 	smpsFMAlterVol      $07
 	smpsJump            Snd_SSZ_Jump00
 
-; Unreachable
-	smpsStop
-
 ; FM4 Data
 Snd_SSZ_FM4:
 	smpsModSet          $24, $01, $04, $07
@@ -177,9 +165,6 @@ Snd_SSZ_FM4:
 	smpsSetvoice        $01
 	dc.b	nRst, $0E
 	smpsJump            Snd_SSZ_Jump00
-
-; Unreachable
-	smpsStop
 
 ; PSG1 Data
 Snd_SSZ_PSG1:
@@ -207,9 +192,6 @@ Snd_SSZ_Loop0B:
 	smpsLoop            $00, $04, Snd_SSZ_Loop0B
 	smpsJump            Snd_SSZ_Loop09
 
-; Unreachable
-	smpsStop
-
 Snd_SSZ_Call01:
 	dc.b	nC5, $06, nC4, nC5, nC4, nC5, nC4, nC5, nC4, nC6, nC4, nC6
 	dc.b	nC4, nC5, nC4, nC5, nC4
@@ -230,9 +212,6 @@ Snd_SSZ_Jump02:
 	smpsPSGvoice        sTone_04
 	dc.b	nMaxPSG2, $0C
 	smpsJump            Snd_SSZ_Jump02
-
-; Unreachable
-	smpsStop
 
 ; DAC Data
 Snd_SSZ_DAC:
@@ -256,9 +235,6 @@ Snd_SSZ_Loop00:
 	smpsLoop            $00, $08, Snd_SSZ_Loop00
 	dc.b	nRst, $01
 	smpsJump            Snd_SSZ_DAC
-
-; Unreachable
-	smpsStop
 
 Snd_SSZ_Voices:
 ;	Voice $00

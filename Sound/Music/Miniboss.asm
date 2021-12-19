@@ -32,9 +32,6 @@ Snd_Minib_SK_Loop0E:
 	dc.b	nA5, $54, nRst, $18
 	smpsJump            Snd_Minib_SK_Loop0E
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_Minib_SK_FM2:
 	smpsSetvoice        $01
@@ -61,9 +58,6 @@ Snd_Minib_SK_Loop0D:
 	dc.b	nA2, nA2, $0C, nRst, $24
 	smpsJump            Snd_Minib_SK_Loop0D
 
-; Unreachable
-	smpsStop
-
 ; FM3 Data
 Snd_Minib_SK_FM3:
 	smpsSetvoice        $00
@@ -79,9 +73,6 @@ Snd_Minib_SK_Loop0C:
 	dc.b	nC5, $54, nB4, $3C, nD5, $24, nE5, $7F, smpsNoAttack, nE5, $1D, nD5
 	dc.b	$30, nC5, $54, nB4, $3C, nD5, $24, nE5, $6C, nRst, $60
 	smpsJump            Snd_Minib_SK_Loop0C
-
-; Unreachable
-	smpsStop
 
 ; FM4 Data
 Snd_Minib_SK_FM4:
@@ -127,9 +118,6 @@ Snd_Minib_SK_Loop0B:
 	dc.b	nG5, $3C, nA4, $0C, nC5, nE5, nA5, $3C, nRst, $60
 	smpsJump            Snd_Minib_SK_Loop04
 
-; Unreachable
-	smpsStop
-
 ; FM5 Data
 Snd_Minib_SK_FM5:
 	dc.b	nRst, $10
@@ -150,9 +138,6 @@ Snd_Minib_SK_Loop03:
 	dc.b	nG5, nF5, $0C, nE5, $24, nD5, $18, nF5, nE5, $0C, nC5, $60
 	dc.b	nA5, $54, nRst, $18
 	smpsJump            Snd_Minib_SK_Loop03
-
-; Unreachable
-	smpsStop
 
 ; DAC Data
 Snd_Minib_SK_DAC:
@@ -175,18 +160,12 @@ Snd_Minib_SK_Loop02:
 	dc.b	dSnareS3, $06, dSnareS3, dSnareS3, dSnareS3
 	smpsJump            Snd_Minib_SK_Loop00
 
-; Unreachable
-	smpsStop
-
 ; PSG1 Data
 Snd_Minib_SK_PSG1:
 	smpsStop
 
 ; PSG2 Data
 Snd_Minib_SK_PSG2:
-	smpsStop
-
-; Unreachable
 	smpsStop
 
 ; PSG3 Data

@@ -14,10 +14,6 @@ Snd_DPZ_Header:
 	smpsHeaderPSG       Snd_DPZ_PSG2,	$F4, $04, $00, sTone_0C
 	smpsHeaderPSG       Snd_DPZ_PSG3,	$00, $00, $00, sTone_0C
 
-; Unreachable
-	smpsStop
-	smpsStop
-
 ; DAC Data
 Snd_DPZ_DAC:
 	dc.b	dSnareS3, $18, dSnareS3, $18, dSnareS3, $18, dSnareS3, $18, dKickS3, $12, dKickS3, $06
@@ -48,9 +44,6 @@ Snd_DPZ_DAC:
 	dc.b	dSnareS3, $0C, nRst, $0C, dSnareS3, $06, dSnareS3, $06, dSnareS3, $06, dSnareS3, $06
 	dc.b	dSnareS3, $02, nRst, $08
 	smpsJump            Snd_DPZ_DAC
-
-; Unreachable
-	smpsStop
 
 ; FM1 Data
 Snd_DPZ_FM1:
@@ -126,9 +119,6 @@ Snd_DPZ_FM1:
 	dc.b	nRst, $02, nE1, $0C, smpsNoAttack, $12, nRst, $04
 	smpsJump            Snd_DPZ_FM1
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_DPZ_FM2:
 	smpsPan             panLeft, $00
@@ -201,9 +191,6 @@ Snd_DPZ_Call01:
 	smpsFMAlterVol      $02
 	smpsReturn
 
-; Unreachable
-	smpsStop
-
 ; FM3 Data
 Snd_DPZ_FM3:
 	dc.b	nRst, $02
@@ -219,9 +206,6 @@ Snd_DPZ_Jump00:
 	smpsModSet          $0F, $01, $06, $06
 	smpsCall            Snd_DPZ_Call01
 	smpsJump            Snd_DPZ_Jump00
-
-; Unreachable
-	smpsStop
 
 ; FM4 Data
 Snd_DPZ_FM4:
@@ -291,9 +275,6 @@ Snd_DPZ_FM4:
 	smpsAlterPitch      $F4
 	smpsJump            Snd_DPZ_FM4
 
-; Unreachable
-	smpsStop
-
 ; FM5 Data
 Snd_DPZ_FM5:
 	smpsSetvoice        $1B
@@ -349,9 +330,6 @@ Snd_DPZ_FM5:
 	dc.b	nRst, $18, nRst, $18, nRst, $16
 	smpsAlterPitch      $F4
 	smpsJump            Snd_DPZ_FM5
-
-; Unreachable
-	smpsStop
 
 ; PSG1 Data
 Snd_DPZ_PSG1:
@@ -446,9 +424,6 @@ Snd_DPZ_Jump02:
 	dc.b	nFs4, $04, nRst, $02, nG4, $04, nRst, $02, nAb4, $04, nRst, $02
 	dc.b	nA4, $04, nRst, $02, nBb4, $04, nRst, $02, nB4, $04
 	smpsJump            Snd_DPZ_PSG2
-
-; Unreachable
-	smpsStop
 
 ; PSG3 Data
 Snd_DPZ_PSG3:
@@ -603,7 +578,4 @@ Snd_DPZ_Jump01:
 	dc.b	nMaxPSG1, $04, smpsNoAttack, $02, smpsNoAttack, $18, smpsNoAttack, $18, smpsNoAttack, $18, smpsNoAttack, $18
 	dc.b	smpsNoAttack, $18, smpsNoAttack, $18, smpsNoAttack, $18, smpsNoAttack, $16
 	smpsJump            Snd_DPZ_Jump01
-
-; Unreachable
-	smpsStop
 

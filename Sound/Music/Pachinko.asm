@@ -55,9 +55,6 @@ Snd_PachBonus_Loop06:
 	dc.b	nG4, $08, nG4, $04, nRst, $30, nFs4, $24
 	smpsJump            Snd_PachBonus_Jump02
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_PachBonus_FM2:
 	smpsSetvoice        $01
@@ -92,9 +89,6 @@ Snd_PachBonus_Loop05:
 	dc.b	nRst, $0A, nB2, $1E, nRst, $06
 	smpsJump            Snd_PachBonus_Jump01
 
-; Unreachable
-	smpsStop
-
 ; FM3 Data
 Snd_PachBonus_FM3:
 	smpsSetvoice        $02
@@ -118,9 +112,6 @@ Snd_PachBonus_Loop04:
 	dc.b	nC6, $06, nRst, nEb5, $08, nEb5, $06, nRst, $2E, nEb5, $24
 	smpsJump            Snd_PachBonus_Loop04
 
-; Unreachable
-	smpsStop
-
 ; FM4 Data
 Snd_PachBonus_FM4:
 	smpsSetvoice        $02
@@ -141,9 +132,6 @@ Snd_PachBonus_Loop03:
 	dc.b	nCs5, nE5, nCs5, nA4, nFs4, nEb5, nAb4, nB4, nEb5, nAb5, nAb4, nB4
 	dc.b	nEb5, nC5, nA4, nC5, nE5, nG5, nE5, nC5, nE5, nRst, $60
 	smpsJump            Snd_PachBonus_Loop03
-
-; Unreachable
-	smpsStop
 
 ; FM5 Data
 Snd_PachBonus_FM5:
@@ -187,9 +175,6 @@ Snd_PachBonus_Loop02:
 	dc.b	nG4, $08, nG4, $04, nRst, $30, nFs4, $24
 	smpsJump            Snd_PachBonus_Jump00
 
-; Unreachable
-	smpsStop
-
 ; DAC Data
 Snd_PachBonus_DAC:
 	dc.b	nRst, $60, nRst, $30, dSnareS3, $0C, dSnareS3, dSnareS3, dSnareS3, $08, dSnareS3, $04
@@ -211,9 +196,6 @@ Snd_PachBonus_Loop01:
 	dc.b	dSnareS3, $0C, dKickS3, $04, dSnareS3, dSnareS3, dSnareS3, dSnareS3, dSnareS3, dSnareS3
 	smpsJump            Snd_PachBonus_Loop00
 
-; Unreachable
-	smpsStop
-
 ; PSG1 Data
 Snd_PachBonus_PSG1:
 	smpsModSet          $0D, $01, $01, $06
@@ -232,14 +214,8 @@ Snd_PachBonus_Loop08:
 	smpsLoop            $00, $0A, Snd_PachBonus_Loop08
 	smpsJump            Snd_PachBonus_Loop07
 
-; Unreachable
-	smpsStop
-
 ; PSG2 Data
 Snd_PachBonus_PSG2:
-	smpsStop
-
-; Unreachable
 	smpsStop
 
 ; PSG3 Data

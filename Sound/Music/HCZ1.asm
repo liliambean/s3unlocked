@@ -14,10 +14,6 @@ Snd_HCZ1_Header:
 	smpsHeaderPSG       Snd_HCZ1_PSG2,	$E8, $04, $00, sTone_0C
 	smpsHeaderPSG       Snd_HCZ1_PSG3,	$00, $03, $00, sTone_0C
 
-; Unreachable
-	smpsStop
-	smpsStop
-
 ; DAC Data
 Snd_HCZ1_DAC:
 	dc.b	dKickS3, $14, $04, dSnareS3, $20, dKickS3, $10, dSnareS3, $14, dKickS3, $18, $04
@@ -48,9 +44,6 @@ Snd_HCZ1_Loop00:
 	dc.b	dKickS3, $14, dKickS3, $04, dSnareS3, $08, dKickS3, $18, dKickS3, $10, dSnareS3, $20
 	dc.b	dSnareS3, $0C, dSnareS3, dSnareS3, $04, dSnareS3, $0C, dSnareS3, $18, dSnareS3, $0C, dSnareS3
 	smpsJump            Snd_HCZ1_DAC
-
-; Unreachable
-	smpsStop
 
 Snd_HCZ1_Call00:
 	dc.b	dKickS3, $18, dSnareS3, $14, dKickS3, $0C, dKickS3, $04, dKickS3, $0C, dSnareS3, $18
@@ -228,9 +221,6 @@ Snd_HCZ1_Call03:
 	dc.b	$04, nRst, $2C
 	smpsReturn
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_HCZ1_FM2:
 	smpsSetvoice        $00
@@ -350,9 +340,6 @@ Snd_HCZ1_FM2:
 	dc.b	nF0, $04, nRst, nFs0, $02, nRst, nG0, $06, nRst, $02, nBb0, nRst
 	smpsJump            Snd_HCZ1_FM2
 
-; Unreachable
-	smpsStop
-
 ; FM3 Data
 Snd_HCZ1_FM3:
 	smpsPan             panLeft, $00
@@ -372,9 +359,6 @@ Snd_HCZ1_Jump00:
 	smpsModSet          $0F, $01, $06, $06
 	smpsCall            Snd_HCZ1_Call03
 	smpsJump            Snd_HCZ1_Jump00
-
-; Unreachable
-	smpsStop
 
 ; FM4 Data
 Snd_HCZ1_FM4:
@@ -486,9 +470,6 @@ Snd_HCZ1_FM4:
 	dc.b	$02, nRst, $0A, nG4, $02, nRst, nG4, $0A, nRst, $02, nG4, nRst
 	dc.b	$2E
 	smpsJump            Snd_HCZ1_FM4
-
-; Unreachable
-	smpsStop
 
 ; FM5 Data
 Snd_HCZ1_FM5:
@@ -607,9 +588,6 @@ Snd_HCZ1_FM5:
 	dc.b	nRst, $0A, nD4, $02, nRst, nD4, $0A, nRst, $02, nD4, nRst, $2E
 	smpsJump            Snd_HCZ1_FM5
 
-; Unreachable
-	smpsStop
-
 ; PSG1 Data
 Snd_HCZ1_PSG1:
 	smpsPSGvoice        sTone_0A
@@ -674,9 +652,6 @@ Snd_HCZ1_Jump02:
 	dc.b	$2E
 	smpsJump            Snd_HCZ1_Jump02
 
-; Unreachable
-	smpsStop
-
 ; PSG2 Data
 Snd_HCZ1_PSG2:
 	smpsPSGvoice        sTone_0A
@@ -685,10 +660,6 @@ Snd_HCZ1_PSG2:
 
 Snd_HCZ1_Jump03:
 	smpsJump            Snd_HCZ1_Jump02
-
-; Unreachable
-	smpsJump            Snd_HCZ1_Jump03
-	smpsStop
 
 ; PSG3 Data
 Snd_HCZ1_PSG3:
@@ -750,5 +721,3 @@ Snd_HCZ1_Loop04:
 	dc.b	nRst, $60
 	smpsJump            Snd_HCZ1_Loop01
 
-; Unreachable
-	smpsStop

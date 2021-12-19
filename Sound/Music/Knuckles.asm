@@ -29,9 +29,6 @@ Snd_Knux_SK_Jump01:
 	dc.b	nC2, nD2, nE2, nF2, nG2, nA2, nB2, nC3, nD3, nE3, nF3, nG3
 	smpsJump            Snd_Knux_SK_Jump01
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_Knux_SK_FM2:
 	smpsModSet          $01, $01, $F0, $00
@@ -47,17 +44,11 @@ Snd_Knux_SK_Loop01:
 	smpsLoop            $00, $10, Snd_Knux_SK_Loop01
 	smpsJump            Snd_Knux_SK_Jump00
 
-; Unreachable
-	smpsStop
-
 ; FM3 Data
 Snd_Knux_SK_FM3:
 	dc.b	nRst, $0C
 	smpsAlterNote       $FE
 	smpsJump            Snd_Knux_SK_FM1
-
-; Unreachable
-	smpsStop
 
 ; FM4 Data
 Snd_Knux_SK_FM4:
@@ -73,19 +64,11 @@ Snd_Knux_SK_FM4:
 	dc.b	nRst, $18, nA5, $0C, nG5, nA5, nRst, $24
 	smpsJump            Snd_Knux_SK_FM4
 
-; Unreachable
-	smpsStop
-
 ; FM5 Data
 Snd_Knux_SK_FM5:
 	smpsAlterNote       $FE
 	smpsAlterPitch      $E8
 	smpsJump            Snd_Knux_SK_FM4
-
-; Unreachable
-	smpsSetvoice        $03
-	smpsAlterNote       $02
-	smpsStop
 
 ; PSG1 Data
 Snd_Knux_SK_PSG1:
@@ -112,9 +95,6 @@ Snd_Knux_SK_Jump04:
 	dc.b	smpsNoAttack, nC4, $09, nA3, $0C, nA3, nG3, nA3, nRst, nA4, nG4, nA4
 	dc.b	nRst, nRst, nRst
 	smpsJump            Snd_Knux_SK_Jump04
-
-; Unreachable
-	smpsStop
 
 ; PSG2 Data
 Snd_Knux_SK_PSG2:
@@ -146,9 +126,6 @@ Snd_Knux_SK_Jump03:
 	dc.b	nRst
 	smpsJump            Snd_Knux_SK_Jump03
 
-; Unreachable
-	smpsStop
-
 ; PSG3 Data
 Snd_Knux_SK_PSG3:
 	smpsPSGform         $E7
@@ -164,9 +141,6 @@ Snd_Knux_SK_Loop02:
 	smpsLoop            $00, $08, Snd_Knux_SK_Loop02
 	smpsJump            Snd_Knux_SK_Jump02
 
-; Unreachable
-	smpsStop
-
 ; DAC Data
 Snd_Knux_SK_DAC:
 	dc.b	dCrashCymbal, $3C, dEchoedClapHit, $06, dEchoedClapHit, nRst, dEchoedClapHit, dEchoedClapHit, nRst
@@ -175,9 +149,6 @@ Snd_Knux_SK_Loop00:
 	dc.b	dLooserSnare, $18, dElectricFloorTom, dElectricFloorTom, $0C, dEchoedClapHit, $06, dEchoedClapHit, dElectricFloorTom, dEchoedClapHit, dEchoedClapHit, nRst
 	smpsLoop            $00, $08, Snd_Knux_SK_Loop00
 	smpsJump            Snd_Knux_SK_DAC
-
-; Unreachable
-	smpsStop
 
 Snd_Knux_SK_Voices:
 ;	Voice $00

@@ -22,7 +22,7 @@ Snd_SKCredits_FM1:
 	smpsSetvoice        $20
 	dc.b	nD2, $10, $07, nRst, $06, nRst, $05, nD2, $07, nRst, $06, nRst
 	dc.b	$05, nD3, $06, nD2, nRst, $07, nD3, $06, nRst, nC2, $0C, smpsNoAttack
-	dc.b	$0C, $0C, nRst, $06, nC3, nRst, $0C, $18, $18, nD2, $11, $07
+	dc.b	$0C, $0C, nRst, $06, nC3, nRst, $0C, nC3, $18, $18, nD2, $11, $07
 	dc.b	nRst, $06, nRst, $05, nD2, $07, nRst, $06, nRst, $05, nD3, $06
 	dc.b	nD2, nRst, $07, nD3, $06, nRst, nC2, $0C, smpsNoAttack, $06, nRst, nC3
 	dc.b	nRst, nC2, nC3, nC2, nRst, nC2, nRst, nG1, nRst, nB1, nRst, nBb1
@@ -96,9 +96,9 @@ Snd_SKCredits_Loop1B:
 	smpsSetVol          $72
 	smpsSetvoice        $0F
 	smpsAlterNote       $FE
-	dc.b	nG2, $07, nRst, $04, nG2, $08, nRst, $04, $24, nG3, nG2, nG2
+	dc.b	nG2, $07, nRst, $04, nG2, $08, nRst, $04, nG2, $24, nG3, nG2, nG2
 	dc.b	$0C, nRst, nC3, $14, nB2, $10, nG2, $08, nRst, $04, nG2, $08
-	dc.b	nRst, $04, $24, nG3, nG2, nG2, $0C, nRst, $30
+	dc.b	nRst, $04, nG2, $24, nG3, nG2, nG2, $0C, nRst, $30
 
 Snd_SKCredits_Loop1C:
 	dc.b	nC3, $60, nC4, $24, nC3, nC4, $18, nBb2, $06, nRst, $06, nBb2
@@ -188,28 +188,6 @@ Snd_SKCredits_Call01:
 	dc.b	nRst, $36, nD5, $06, nE5, nG5, nB4, nC5, nA4, $0C
 	smpsReturn
 
-; Unreachable
-	dc.b	nEb4, $0C, nD4, $02, nC4, nBb3, nAb3, nG3, nF3, nC4, $0A, nRst
-	dc.b	$02, nEb4, $04, nRst, $02, nE4, nF4, nRst, $08, nD4, $10, nRst
-	dc.b	$02, nC4, $04, nRst, $08, nBb3, $04, nRst, $08, nFs3, $02, nG3
-	dc.b	$14, nRst, $02, nFs3, nG3, $08, nRst, $02, nF3, $04, nRst, $02
-	dc.b	nFs3, nG3, $28, nC4, $04, nRst, $02, nD4, $04, nRst, $02, nEb4
-	dc.b	$0C, nD4, $02, nC4, nBb3, nAb3, nG3, nF3, nC4, $0A, nRst, $02
-	dc.b	nEb4, $04, nRst, $02, nE4, nF4, nRst, $08, nD4, $10, nRst, $02
-	dc.b	nC4, $04, nRst, $08, nB3, $04, nRst, $08, nC4, $10, nRst, $02
-	dc.b	nC4, $04, nRst, $02, nD4, $0A, nRst, $02, nC4, $04, nRst, $02
-	dc.b	nD4, $04, nRst, $08, nEb4, $10, nRst, $02, nF4, $0A, nRst, $02
-	dc.b	nC4, $04, nRst, $02, nD4, $04, nRst, $02, nEb4, $0C, nD4, $02
-	dc.b	nC4, nBb3, nAb3, nG3, nF3, nC4, $0A, nRst, $02, nEb4, $04, nRst
-	dc.b	$02, nE4, nF4, nRst, $08, nD4, $10, nRst, $02, nC4, $04, nRst
-	dc.b	$08, nBb3, $04, nRst, $08, nFs3, $02, nG3, $14, nRst, $02, nFs3
-	dc.b	nG3, $08, nRst, $02, nF3, $04, nRst, $02, nFs3, nG3, $28, nC4
-	dc.b	$04, nRst, $02, nD4, $04, nRst, $02, nEb4, $10, nRst, $02, nEb4
-	dc.b	$04, nRst, $08, nD4, $04, nRst, $02, nEb4, $10, nRst, $02, nEb4
-	dc.b	$04, nRst, $02, nF4, $0A, nRst, $02, nEb4, $04, nRst, $08, nAb4
-	dc.b	$04, nRst, $0E, nC5, $04, nRst, $08, nC5, $04, nRst, $08, nC5
-	dc.b	$04, nRst, $02, nC5, $0A, nRst, $02, nB4, $04, $F9
-	
 ; FM2 Data
 Snd_SKCredits_FM2:
 	smpsSetvoice        $1F
@@ -339,25 +317,6 @@ Snd_SKCredits_Call05:
 	smpsModSet          $0C, $02, $01, $0E
 	smpsReturn
 
-; Unreachable
-Snd_SKCredits_Loop32:
-	dc.b	nF2, $0C, nBb2, $0C, nF3, $0C, nE3, $05, nRst, $0D, nC3, $05
-	dc.b	nRst, $0D, nBb2, $3B, nRst, $3D, nF2, $0C, nBb2, $0C, nF3, $0C
-	dc.b	nE3, $05, nRst, $0D, nC3, $05, nRst, $0D, nD3, $3B, nRst, $3D
-	smpsLoop            $00, $02, Snd_SKCredits_Loop32
-	smpsReturn
-
-; Unreachable
-	dc.b	nC2, $06, nRst, nC2, $0C, nBb1, $12, nA1, $06, nRst, $2A, nA1
-	dc.b	$06, nF1, nRst, nF1, $0C, nFs1, $12, nG1, $06, nRst, $18, nD2
-	dc.b	$0C, nG2, $06, nD2
-	smpsReturn
-
-; Unreachable
-	dc.b	nC2, nRst, nC2, $0C, nBb1, $12, nA1, $06, nRst, $2A, nA1, $06
-	dc.b	nF1, nRst, nF1, $0C, nFs1, $12, nG1, $06, nRst, $18, nD2
-	smpsReturn
-
 ; FM3 Data
 Snd_SKCredits_FM3:
 	smpsModSet          $0C, $01, $01, $0F
@@ -414,7 +373,7 @@ Snd_SKCredits_Loop13:
 	dc.b	nC5, $32, nRst, $0A, nE5, $0C, nA4, $04, nRst, $02, nE5, $06
 	dc.b	nRst, $0C, nA4, $22, nRst, $02, nC5, $14, nRst, $04, nB4, $06
 	dc.b	nRst, $06, nB4, $04, nRst, $02, nD5, $06, nRst, $06, nB4, $04
-	dc.b	nRst, $02, nC5, $26, nRst, $14, $30
+	dc.b	nRst, $02, nC5, $26, nRst, $14, nC5, $30
 	smpsPan             panLeft, $00
 	smpsSetNote         $40
 	smpsSetVol          $74
@@ -654,22 +613,6 @@ Snd_SKCredits_Call00:
 	dc.b	$3C
 	smpsReturn
 
-; Unreachable
-Snd_SKCredits_Loop33:
-	dc.b	nRst, $0C, nD3, $02, nRst, $0A, nE3, $02, nRst, $16, nD3, $11
-	dc.b	nRst, $01, nE3, $02, nRst, $28, nA4, $05, nRst, $01, nBb4, $05
-	dc.b	nRst, $07, nBb4, $02, nRst, $04, nBb4, $02, nRst, $04, nBb4, $02
-	dc.b	nRst, $04, nBb4, $02, nRst, $0A, nA4, $23, nRst, $01, nRst, $0C
-	dc.b	nD3, $02, nRst, $0A, nE3, $02, nRst, $16, nD3, $11, nRst, $01
-	dc.b	nE3, $02, nRst, $28, nA4, $05, nRst, $01, nBb4, $05, nRst, $07
-	dc.b	nBb4, $02, nRst, $04, nBb4, $02, nRst, $04, nBb4, $02, nRst, $04
-	dc.b	nBb4, $02, nRst, $0A, nC5, $05, nRst, $01, nBb4, $1D, nRst, $01
-	smpsLoop            $00, $02, Snd_SKCredits_Loop33
-	smpsReturn
-
-; Unreachable
-	smpsStop
-
 ; FM5 Data
 Snd_SKCredits_FM5:
 	smpsAlterNote       $03
@@ -885,9 +828,6 @@ Snd_SKCredits_Call06:
 	dc.b	nF4, nE4, nD4, nC4, nG4, nF4, nE4, nD4, nE4, nD4, nC4, nG3
 	smpsReturn
 
-; Unreachable
-	smpsStop
-
 ; PSG2 Data
 Snd_SKCredits_PSG2:
 	smpsSetNote         $40
@@ -1061,30 +1001,6 @@ Snd_SKCredits_Loop20:
 	dc.b	nMaxPSG2, $06, nMaxPSG2
 	smpsLoop            $00, $08, Snd_SKCredits_Loop20
 	smpsStop
-
-; Unreachable
-	smpsPSGvoice        sTone_01
-	dc.b	nMaxPSG1, $06, $06
-	smpsPSGvoice        sTone_08
-	dc.b	$0C
-	smpsPSGvoice        sTone_01
-	dc.b	nMaxPSG1, $06, $06
-	smpsPSGvoice        sTone_08
-	dc.b	$0C
-	smpsPSGvoice        sTone_01
-	dc.b	nMaxPSG1, $06, $06, $06, $06
-	smpsPSGvoice        sTone_01
-	dc.b	nMaxPSG1, $06, $06
-	smpsPSGvoice        sTone_08
-	dc.b	$0C
-	smpsReturn
-
-; Unreachable
-Snd_SKCredits_Loop34:
-	smpsPSGvoice        sTone_01
-	dc.b	nMaxPSG1, $06, $06, $06, $06
-	smpsLoop            $02, $03, Snd_SKCredits_Loop34
-	smpsReturn
 
 ; DAC Data
 Snd_SKCredits_DAC:

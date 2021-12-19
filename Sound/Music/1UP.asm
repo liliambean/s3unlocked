@@ -50,9 +50,6 @@ Snd_1UP_SK_FM5:
 	dc.b	nRst, $0A
 	smpsJump            Snd_1UP_SK_FM1
 
-; Unreachable
-	smpsStop
-
 ; PSG1 Data
 Snd_1UP_SK_PSG1:
 	smpsPSGvoice        sTone_0A

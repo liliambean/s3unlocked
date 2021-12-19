@@ -36,9 +36,6 @@ Snd_SpecialS_Jump03:
 	smpsFMAlterVol      $FA
 	smpsJump            Snd_SpecialS_Jump03
 
-; Unreachable
-	smpsStop
-
 Snd_SpecialS_Call00:
 	dc.b	nA5, $0C, nE5, $06, nA5, nRst, nB5, nRst, nC6, $02, smpsNoAttack, nCs6
 	dc.b	smpsNoAttack, nD6, $08, nCs6, $06, nB5, nRst, nA5, $0C, nB5, nA5, $0C
@@ -125,9 +122,6 @@ Snd_SpecialS_Loop11:
 	dc.b	nA2, $12, nE3, nA2, $0C, nG2, $06, $0C, nG3, $12, nA3, $0C
 	smpsJump            Snd_SpecialS_Loop0D
 
-; Unreachable
-	smpsStop
-
 ; FM3 Data
 Snd_SpecialS_FM3:
 	smpsSetvoice        $01
@@ -179,9 +173,6 @@ Snd_SpecialS_Loop0C:
 	dc.b	nG4, $0C, $12, nA4, $0C
 	smpsFMAlterVol      $05
 	smpsJump            Snd_SpecialS_Jump02
-
-; Unreachable
-	smpsStop
 
 ; FM4 Data
 Snd_SpecialS_FM4:
@@ -235,9 +226,6 @@ Snd_SpecialS_Loop08:
 	smpsFMAlterVol      $05
 	smpsJump            Snd_SpecialS_Jump01
 
-; Unreachable
-	smpsStop
-
 ; FM5 Data
 Snd_SpecialS_FM5:
 	smpsSetvoice        $02
@@ -262,9 +250,6 @@ Snd_SpecialS_Jump00:
 	smpsCall            Snd_SpecialS_Call03
 	smpsFMAlterVol      $FB
 	smpsJump            Snd_SpecialS_Jump00
-
-; Unreachable
-	smpsStop
 
 ; PSG1 Data
 Snd_SpecialS_PSG1:
@@ -306,9 +291,6 @@ Snd_SpecialS_Loop21:
 	dc.b	$12, nA2, $0C
 	smpsJump            Snd_SpecialS_Loop1E
 
-; Unreachable
-	smpsStop
-
 ; PSG2 Data
 Snd_SpecialS_PSG2:
 	dc.b	nRst, $12, nA1, $06, nE1, nRst, nA1, nRst, nB1, nRst, nCs2, nRst
@@ -349,9 +331,6 @@ Snd_SpecialS_Loop1D:
 	dc.b	nCs2, $0C, nA1, $06, nE1, nRst, nA1, nRst, nB1, $0C, nD2, $0C
 	dc.b	$12, nCs2, $0C
 	smpsJump            Snd_SpecialS_Loop1A
-
-; Unreachable
-	smpsStop
 
 Snd_SpecialS_Call04:
 	dc.b	nD2, $24, $06, $06, $12, nCs2, nB1, $0C, nCs2, $60, nA1, $24
@@ -466,9 +445,6 @@ Snd_SpecialS_Loop19:
 	smpsLoop            $01, $08, Snd_SpecialS_Loop19
 	smpsJump            Snd_SpecialS_Loop14
 
-; Unreachable
-	smpsStop
-
 ; DAC Data
 Snd_SpecialS_DAC:
 	dc.b	dQuickLooseSnare, $06, dKickS3, $0C, dQuickLooseSnare, $06, dKickS3, $0C, dKickS3, dKickS3, dKickS3, dQuickLooseSnare
@@ -510,9 +486,6 @@ Snd_SpecialS_Loop04:
 	dc.b	dKickS3, $06, dKickS3, dQuickLooseSnare, dKickS3, dKickS3, dQuickLooseSnare, $0C, dQuickLooseSnare, $06, dKickS3, dElectricHighTom
 	dc.b	$03, dElectricHighTom, dElectricHighTom, $06, dElectricHighTom, dElectricMidTom, dElectricMidTom, dElectricLowTom, dElectricLowTom
 	smpsJump            Snd_SpecialS_Loop00
-
-; Unreachable
-	smpsStop
 
 Snd_SpecialS_Voices:
 ;	Voice $00

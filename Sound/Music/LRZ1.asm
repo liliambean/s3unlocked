@@ -14,10 +14,6 @@ Snd_LRZ1_Header:
 	smpsHeaderPSG       Snd_LRZ1_PSG2,	$F4, $04, $00, sTone_0C
 	smpsHeaderPSG       Snd_LRZ1_PSG3,	$F4, $01, $00, sTone_0C
 
-; Unreachable
-	smpsStop
-	smpsStop
-
 Snd_LRZ1_Call00:
 	dc.b	dKickS3, $0C, dElectricFloorTom, $06, dElectricFloorTom, dSnareS3, $30, dSnareS3, $18, dKickS3, $0C, dElectricFloorTom
 	dc.b	$06, dElectricFloorTom, dSnareS3, $30, dSnareS3, $06, dElectricFloorTom, $06, dMidpitchSnare, $0C
@@ -50,10 +46,6 @@ Snd_LRZ1_Loop01:
 	smpsCall            Snd_LRZ1_Call02
 	smpsLoop            $01, $02, Snd_LRZ1_Loop01
 	smpsJump            Snd_LRZ1_DAC
-
-; Unreachable
-	smpsStop
-	smpsStop
 
 ; FM1 Data
 Snd_LRZ1_FM1:
@@ -95,9 +87,6 @@ Snd_LRZ1_Jump02:
 	dc.b	nRst, $0E, nD2, $02, nRst, $04, nC2, $06, nA1, $04, nRst, $08
 	dc.b	nG1, $06, nRst, $0C, nG1, $06, nRst, $0C, nA1, $36, nRst, $06
 	smpsJump            Snd_LRZ1_Jump02
-
-; Unreachable
-	smpsStop
 
 ; FM2 Data
 Snd_LRZ1_FM2:
@@ -149,9 +138,6 @@ Snd_LRZ1_Call05:
 	dc.b	nRst, $16
 	smpsReturn
 
-; Unreachable
-	smpsStop
-
 ; FM3 Data
 Snd_LRZ1_FM3:
 	dc.b	nRst, $02
@@ -173,9 +159,6 @@ Snd_LRZ1_Jump00:
 	smpsPan             panRight, $00
 	smpsCall            Snd_LRZ1_Call05
 	smpsJump            Snd_LRZ1_Jump00
-
-; Unreachable
-	smpsStop
 
 ; FM4 Data
 Snd_LRZ1_FM4:
@@ -236,9 +219,6 @@ Snd_LRZ1_FM4:
 	smpsFMAlterVol      $FC
 	smpsJump            Snd_LRZ1_FM4
 
-; Unreachable
-	smpsStop
-
 ; FM5 Data
 Snd_LRZ1_FM5:
 	smpsSetvoice        $0B
@@ -296,9 +276,6 @@ Snd_LRZ1_FM5:
 	smpsFMAlterVol      $FC
 	smpsJump            Snd_LRZ1_FM5
 
-; Unreachable
-	smpsStop
-
 ; PSG1 Data
 Snd_LRZ1_PSG1:
 	dc.b	nRst, $01
@@ -313,9 +290,6 @@ Snd_LRZ1_Jump05:
 	dc.b	nA3, nA3, $0C, nC4, $06, nC4, nC4, nC4, $12, nD4, $06, nC4
 	dc.b	nB3, $0C, nG3, $12, nG3, nA3, $3C
 	smpsJump            Snd_LRZ1_Jump05
-
-; Unreachable
-	smpsStop
 
 Snd_LRZ1_Call06:
 	dc.b	nA3, $06, nA4, $0C, nA3, $06, nA4, $0C, nA3, $06, nA4, $0C
@@ -356,9 +330,6 @@ Snd_LRZ1_Jump04:
 	dc.b	nE5, nD5, nC5, nA4, $0C, nB3, nB3, $06, nB4, $0C, nB3, $06
 	dc.b	nE4, nE5, $0C, nE4, $06, nE4, nE4, $1E
 	smpsJump            Snd_LRZ1_Jump04
-
-; Unreachable
-	smpsStop
 
 ; PSG3 Data
 Snd_LRZ1_PSG3:
@@ -413,5 +384,3 @@ Snd_LRZ1_Jump03:
 	dc.b	nBb6, $60, $0C
 	smpsJump            Snd_LRZ1_Jump03
 
-; Unreachable
-	smpsStop

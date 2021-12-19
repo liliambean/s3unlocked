@@ -357,13 +357,6 @@ Snd_LBZ2_Call00:
 	dc.b	dPowerTom, dSnareGo, nRst, dLowWoodBlock, dLowWoodBlock
 	smpsReturn
 
-; Unreachable
-	dc.b	dModLooseKick, $0C, dSnareGo, $12, dModLooseKick, $06, dPowerTom, $12, dSnareGo, $06, dSnareGo, $18
-	smpsReturn
-	dc.b	nRst, nRst, dSnareGo, nRst, nRst, nRst, dSnareGo, nRst, nRst, nRst, dSnareGo, nRst
-	dc.b	nRst, nRst, dSnareGo, nRst, dModLooseKick, $06, nRst, dSnareGo, nRst, dModLooseKick, nRst, dSnareGo
-	dc.b	dModLooseKick, nRst, nRst, dSnareGo, nRst, nRst, nRst, dSnareGo, dModLooseKick
-
 Snd_LBZ_Voices:
 ;	Voice $00
 ;	$03
@@ -436,23 +429,4 @@ Snd_LBZ_Voices:
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
 	smpsVcTotalLevel    $82, $17, $28, $18
-
-; Unused voice
-;	Voice $04
-;	$F5
-;	$24, $30, $10, $32, 	$1F, $1F, $1F, $1F, 	$05, $18, $09, $02
-;	$06, $0F, $06, $02, 	$1F, $2F, $4F, $2F, 	$0F, $0E, $0E, $80
-	smpsVcAlgorithm     $05
-	smpsVcFeedback      $06
-	smpsVcUnusedBits    $03
-	smpsVcDetune        $03, $01, $03, $02
-	smpsVcCoarseFreq    $02, $00, $00, $04
-	smpsVcRateScale     $00, $00, $00, $00
-	smpsVcAttackRate    $1F, $1F, $1F, $1F
-	smpsVcAmpMod        $00, $00, $00, $00
-	smpsVcDecayRate1    $02, $09, $18, $05
-	smpsVcDecayRate2    $02, $06, $0F, $06
-	smpsVcDecayLevel    $02, $04, $02, $01
-	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $80, $0E, $0E, $0F
 

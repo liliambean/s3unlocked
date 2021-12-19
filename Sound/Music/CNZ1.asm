@@ -18,7 +18,7 @@ Snd_CNZ1_Header:
 Snd_CNZ1_FM1:
 	smpsModSet          $02, $01, $05, $04
 	smpsSetvoice        $03
-	dc.b	nRst, $60, smpsNoAttack, $60
+	dc.b	nRst, $60, smpsNoAttack, nRst
 	smpsCall            Snd_CNZ1_Call06
 	dc.b	nRst, $48
 
@@ -410,9 +410,6 @@ Snd_CNZ1_Loop01:
 	smpsLoop            $00, $0D, Snd_CNZ1_Loop01
 	dc.b	dGlassCrashSnare, $60, dGlassCrash
 	smpsJump            Snd_CNZ1_DAC
-
-; Unreachable
-	smpsStop
 
 Snd_CNZ1_Call02:
 	smpsSetvoice        $05

@@ -14,10 +14,6 @@ Snd_AIZ2_Header:
 	smpsHeaderPSG       Snd_AIZ2_PSG2,	$F4, $04, $00, sTone_0C
 	smpsHeaderPSG       Snd_AIZ2_PSG3,	$00, $03, $00, sTone_0C
 
-; Unreachable
-	smpsStop
-	smpsStop
-
 Snd_AIZ2_Call00:
 	dc.b	dKickS3, $0C, dKickS3, dSnareS3, dKickS3, $06, dSnareS3, $0C, dSnareS3, $06, dKickS3, $0C
 	dc.b	dSnareS3, dKickS3, dKickS3, dKickS3, dSnareS3, dKickS3, $06, dSnareS3, $0C, dSnareS3, $06, dKickS3
@@ -69,9 +65,6 @@ Snd_AIZ2_Loop01:
 	dc.b	dKickS3, dKickS3, dSnareS3, $06, dKickS3, $0C, dKickS3, $06, dHighTom, dMidTomS3, $0C, dFloorTomS3
 	dc.b	$06, dSnareS3, dSnareS3, dMidTomS3, $0C
 	smpsJump            Snd_AIZ2_DAC
-
-; Unreachable
-	smpsStop
 
 ; FM1 Data
 Snd_AIZ2_FM1:
@@ -296,9 +289,6 @@ Snd_AIZ2_FM1:
 	dc.b	nD1, $0C, nEb1, nF1
 	smpsJump            Snd_AIZ2_FM1
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_AIZ2_FM2:
 	dc.b	nRst, $0C
@@ -462,9 +452,6 @@ Snd_AIZ2_Loop13:
 	dc.b	nC5, $05, nRst, $01, nEb5, $05, nRst, $01, nAb5, $05, nRst, $01
 	dc.b	nRst, $60
 	smpsJump            Snd_AIZ2_FM2
-
-; Unreachable
-	smpsStop
 
 ; FM3 Data
 Snd_AIZ2_FM3:
@@ -636,9 +623,6 @@ Snd_AIZ2_Loop0A:
 	dc.b	nG5, $60
 	smpsJump            Snd_AIZ2_FM3
 
-; Unreachable
-	smpsStop
-
 ; FM4 Data
 Snd_AIZ2_FM4:
 	smpsSetvoice        $16
@@ -756,9 +740,6 @@ Snd_AIZ2_FM4:
 	dc.b	nF4, $17, nRst, $01
 	smpsJump            Snd_AIZ2_FM4
 
-; Unreachable
-	smpsStop
-
 Snd_AIZ2_Call02:
 	dc.b	nRst, $54, nEb4, $05, nRst, $01, nF4, $05, nRst, $01
 	smpsReturn
@@ -853,7 +834,7 @@ Snd_AIZ2_FM5:
 	dc.b	nC5, nD5, $0C, nEb5, $30, nD5, nC5, nG4, $3C, nAb4, $0C, nC5
 	dc.b	nG5, nF5, $12, nEb5, nD5, $0C, nB4, $24, nG4, $0C, nB4, $12
 	dc.b	nC5, nD5, $0C, nEb5, $24, nD5, $06, nEb5, nF5, $24, nEb5, $06
-	dc.b	nF5, nRst, $60, $60
+	dc.b	nF5, nRst, $60, nF5, $60
 	smpsAlterPitch      $0C
 	smpsSetvoice        $06
 	smpsAlterNote       $FD
@@ -862,9 +843,6 @@ Snd_AIZ2_FM5:
 	dc.b	nD3, $24, nD3, $06, nEb3, nF3, $12, nEb3, nD3, $0C, nEb3, $30
 	dc.b	nC3, nG3, $18, nF3, nG3, nAb3
 	smpsJump            Snd_AIZ2_FM5
-
-; Unreachable
-	smpsStop
 
 ; PSG1 Data
 Snd_AIZ2_PSG1:
@@ -957,9 +935,6 @@ Snd_AIZ2_Loop1B:
 	dc.b	nRst, $01, nD4, $17, nRst, $01, nEb4, $17, nRst, $01, nF4, $17
 	dc.b	nRst, $01
 	smpsJump            Snd_AIZ2_PSG1
-
-; Unreachable
-	smpsStop
 
 Snd_AIZ2_Call04:
 	smpsPSGvoice        sTone_05
@@ -1067,9 +1042,6 @@ Snd_AIZ2_Loop19:
 	dc.b	nRst, $01
 	smpsJump            Snd_AIZ2_PSG2
 
-; Unreachable
-	smpsStop
-
 ; PSG3 Data
 Snd_AIZ2_PSG3:
 	smpsPSGvoice        sTone_02
@@ -1114,5 +1086,3 @@ Snd_AIZ2_Loop17:
 	dc.b	nMaxPSG1, nMaxPSG1, $0C, nMaxPSG1, $06, nMaxPSG1, nMaxPSG1, $60, $0C
 	smpsJump            Snd_AIZ2_Loop14
 
-; Unreachable
-	smpsStop

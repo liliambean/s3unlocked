@@ -14,10 +14,6 @@ Snd_CGZ_Header:
 	smpsHeaderPSG       Snd_CGZ_PSG2,	$F4, $04, $00, sTone_0C
 	smpsHeaderPSG       Snd_CGZ_PSG3,	$00, $02, $00, sTone_0C
 
-; Unreachable
-	smpsStop
-	smpsStop
-
 Snd_CGZ_Call00:
 	dc.b	dKickS3, $12, dKickS3, $06, dSnareS3, $0C, dKickS3, $06, dKickS3, $06, dKickS3, $12
 	dc.b	dKickS3, $06, dSnareS3, $18
@@ -89,9 +85,6 @@ Snd_CGZ_Loop04:
 	dc.b	dSnareS3, $06, dSnareS3, $06, dSnareS3, $06, dKickS3, $12, dKickS3, $06, dSnareS3, $02
 	dc.b	dSnareS3, $04, dSnareS3, $06, dSnareS3, $06, dSnareS3, $06
 	smpsJump            Snd_CGZ_DAC
-
-; Unreachable
-	smpsStop
 
 ; FM1 Data
 Snd_CGZ_FM1:
@@ -217,9 +210,6 @@ Snd_CGZ_Jump03:
 	dc.b	nC1, $04, nRst, $02, nG1, $04, nRst, $02, nC2, $04, nRst, $02
 	smpsJump            Snd_CGZ_Jump03
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_CGZ_FM2:
 	smpsSetvoice        $0C
@@ -292,9 +282,6 @@ Snd_CGZ_Jump02:
 	dc.b	$02, nC4, $0A, nRst, $02
 	smpsJump            Snd_CGZ_Jump02
 
-; Unreachable
-	smpsStop
-
 ; FM3 Data
 Snd_CGZ_FM3:
 	dc.b	nRst, $08
@@ -304,10 +291,6 @@ Snd_CGZ_FM3:
 
 Snd_CGZ_Jump06:
 	smpsJump            Snd_CGZ_Jump02
-
-; Unreachable
-	smpsJump            Snd_CGZ_Jump06
-	smpsStop
 
 ; FM4 Data
 Snd_CGZ_FM4:
@@ -382,9 +365,6 @@ Snd_CGZ_Jump01:
 	smpsModSet          $0A, $01, $03, $06
 	smpsJump            Snd_CGZ_Jump01
 
-; Unreachable
-	smpsStop
-
 ; FM5 Data
 Snd_CGZ_FM5:
 	smpsPan             panRight, $00
@@ -456,9 +436,6 @@ Snd_CGZ_Jump00:
 	dc.b	nRst, $07, nE3, $05, nRst, $07, nG3, $05, nRst, $01, nG3, $0B
 	dc.b	nRst, $01
 	smpsJump            Snd_CGZ_Jump00
-
-; Unreachable
-	smpsStop
 
 ; PSG1 Data
 Snd_CGZ_PSG1:
@@ -552,9 +529,6 @@ Snd_CGZ_Jump05:
 	dc.b	nE5, $04, nRst, $02, nE4, $04, nRst, $32
 	smpsJump            Snd_CGZ_Jump05
 
-; Unreachable
-	smpsStop
-
 ; PSG2 Data
 Snd_CGZ_PSG2:
 	smpsPSGvoice        sTone_04
@@ -622,9 +596,6 @@ Snd_CGZ_Jump04:
 	dc.b	$02, nG3, $04, nRst, $02, nC4, $04, nRst, $32
 	smpsJump            Snd_CGZ_Jump04
 
-; Unreachable
-	smpsStop
-
 ; PSG3 Data
 Snd_CGZ_PSG3:
 	smpsPSGvoice        sTone_02
@@ -670,9 +641,6 @@ Snd_CGZ_Loop08:
 	smpsPSGvoice        sTone_01
 	dc.b	nMaxPSG1, $36
 	smpsJump            Snd_CGZ_Loop05
-
-; Unreachable
-	smpsStop
 
 Snd_CGZ_Call04:
 	smpsPSGvoice        sTone_01

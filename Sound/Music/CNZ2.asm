@@ -18,7 +18,7 @@ Snd_CNZ2_Header:
 Snd_CNZ2_FM1:
 	smpsModSet          $02, $01, $05, $04
 	smpsSetvoice        $03
-	dc.b	nRst, $60, smpsNoAttack, $60, nRst, $60, nRst, $48
+	dc.b	nRst, $60, smpsNoAttack, nRst, nRst, nRst, $48
 	smpsSetvoice        $00
 	smpsModSet          $0B, $01, $0C, $04
 	dc.b	nC5, $13, nB4, $05
@@ -79,11 +79,6 @@ Snd_CNZ2_Call06:
 Snd_CNZ2_Call00:
 	dc.b	nD5, $06, nRst, nC5, nRst, nB4, nRst, nC5, nRst, nG4, nRst, nA4
 	dc.b	$05, nRst, $07, nC5, $0C, nB4, nG4, nRst
-	smpsReturn
-
-; Unreachable
-	dc.b	nF5, $07, nE5, $05, nEb5, nRst, $07, nD5, $05, nRst, $07, nCs5
-	dc.b	nD5, $05, nCs5, $07, nC5, $05
 	smpsReturn
 
 ; FM2 Data
@@ -370,9 +365,6 @@ Snd_CNZ2_Loop01:
 	smpsLoop            $00, $0D, Snd_CNZ2_Loop01
 	dc.b	dGlassCrashSnare, $60, dGlassCrash
 	smpsJump            Snd_CNZ2_DAC
-
-; Unreachable
-	smpsStop
 
 Snd_CNZ2_Call02:
 	smpsSetvoice        $05

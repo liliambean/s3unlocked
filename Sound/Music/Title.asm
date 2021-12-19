@@ -44,9 +44,6 @@ Snd_Title_SK_Jump00:
 	dc.b	nG4, $18, nA4, $09
 	smpsStop
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_Title_SK_FM2:
 	smpsSetvoice        $01
@@ -267,9 +264,6 @@ Snd_Title_SK_PSG3:
 	smpsModSet          $15, $01, $03, $06
 	smpsPSGAlterVol     $FF
 	smpsJump            Snd_Title_SK_Jump00
-
-; Unreachable
-	smpsStop
 
 ; DAC Data
 Snd_Title_SK_DAC:

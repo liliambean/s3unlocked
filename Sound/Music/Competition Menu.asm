@@ -6,7 +6,7 @@ Snd_2PMenu_Header:
 
 	smpsHeaderDAC       Snd_2PMenu_DAC
 	smpsHeaderFM        Snd_2PMenu_FM1,	$00, $03
-	smpsHeaderFM        Snd_2PMenu_FM2,	$F4, $00
+	smpsHeaderFM        Snd_2PMenu_FM2,	$00, $00 ; Previously this transpose was -$C, causing a note to underflow
 	smpsHeaderFM        Snd_2PMenu_FM3,	$00, $05
 	smpsHeaderFM        Snd_2PMenu_FM4,	$00, $05
 	smpsHeaderFM        Snd_2PMenu_FM5,	$00, $05
@@ -37,55 +37,49 @@ Snd_2PMenu_Loop04:
 	smpsLoop            $00, $08, Snd_2PMenu_Loop04
 	smpsJump            Snd_2PMenu_Loop03
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_2PMenu_FM2:
 	smpsCall            Snd_2PMenu_Call03
 	smpsSetvoice        $06
-	dc.b	nG0, $60, nRst
+	dc.b	nG7, $60, nRst
 	smpsSetvoice        $07
-	dc.b	nE5, $0D
+	dc.b	nE4, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE5, $0B, nRst, $48
+	dc.b	nE4, $0B, nRst, $48
 	smpsFMAlterVol      $F8
-	dc.b	nE5, $0D
+	dc.b	nE4, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE5, $0B, nRst, $48
+	dc.b	nE4, $0B, nRst, $48
 	smpsFMAlterVol      $F8
 	smpsSetvoice        $06
-	dc.b	nG0, $60, nRst
+	dc.b	nG7, $60, nRst
 	smpsSetvoice        $07
-	dc.b	nE5, $0D
+	dc.b	nE4, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE5, $0B, nRst, $48
+	dc.b	nE4, $0B, nRst, $48
 	smpsFMAlterVol      $F8
-	dc.b	nE5, $0D
+	dc.b	nE4, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE5, $0B, nRst, $48
+	dc.b	nE4, $0B, nRst, $48
 	smpsFMAlterVol      $F8
 	smpsCall            Snd_2PMenu_Call03
 	smpsJump            Snd_2PMenu_FM2
 
-; Unreachable
-	smpsStop
-
 Snd_2PMenu_Call03:
 	smpsSetvoice        $06
-	dc.b	nC4, $60, nRst
+	dc.b	nC3, $60, nRst
 	smpsSetvoice        $07
-	dc.b	nE5, $0D
+	dc.b	nE4, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE5, $0B, nRst, $48
+	dc.b	nE4, $0B, nRst, $48
 	smpsFMAlterVol      $F8
 	dc.b	nRst, $60
 	smpsSetvoice        $06
-	dc.b	nRst, $06, nC4, $5A, nRst, $60
+	dc.b	nRst, $06, nC3, $5A, nRst, $60
 	smpsSetvoice        $07
-	dc.b	nE5, $0D
+	dc.b	nE4, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE5, $0B, nRst, $48
+	dc.b	nE4, $0B, nRst, $48
 	smpsFMAlterVol      $F8
 	dc.b	nRst, $60
 	smpsReturn
@@ -102,9 +96,6 @@ Snd_2PMenu_Jump01:
 	dc.b	$24, nE3, $3C, nA3, $60, nA3, $48, nCs4, $18
 	smpsCall            Snd_2PMenu_Call02
 	smpsJump            Snd_2PMenu_Jump01
-
-; Unreachable
-	smpsStop
 
 Snd_2PMenu_Call02:
 	smpsSetvoice        $03
@@ -149,9 +140,6 @@ Snd_2PMenu_Jump00:
 	smpsCall            Snd_2PMenu_Call01
 	smpsJump            Snd_2PMenu_Jump00
 
-; Unreachable
-	smpsStop
-
 Snd_2PMenu_Call01:
 	smpsSetvoice        $03
 	dc.b	nRst, $24, nB3, $3C, smpsNoAttack, $3C
@@ -192,9 +180,6 @@ Snd_2PMenu_FM5:
 	smpsCall            Snd_2PMenu_Call00
 	smpsJump            Snd_2PMenu_FM5
 
-; Unreachable
-	smpsStop
-
 Snd_2PMenu_Call00:
 	smpsSetvoice        $03
 	dc.b	nRst, $24, nD4, $3C, smpsNoAttack, $60, nE4, smpsNoAttack, nE4
@@ -225,9 +210,6 @@ Snd_2PMenu_Loop05:
 	dc.b	nRst, $18, nE5, $0C, nB4, $06, nRst, nG4, $0C, nB4, $06, nRst
 	dc.b	nE5, $0C, nB4, $06, nRst, nRst, $60
 	smpsJump            Snd_2PMenu_Jump03
-
-; Unreachable
-	smpsStop
 
 Snd_2PMenu_Call08:
 	dc.b	nRst, $18, nD5, $0C, nB4, $06, nRst, nG4, $0C, nB4, $06, nRst
@@ -271,9 +253,6 @@ Snd_2PMenu_Jump02:
 	smpsCall            Snd_2PMenu_Call04
 	smpsCall            Snd_2PMenu_Call07
 	smpsJump            Snd_2PMenu_Jump02
-
-; Unreachable
-	smpsStop
 
 Snd_2PMenu_Call04:
 	smpsPSGvoice        sTone_1E
@@ -374,9 +353,6 @@ Snd_2PMenu_Loop02:
 	dc.b	dSnareS3, nRst, dSnareS3, dSnareS3
 	smpsLoop            $01, $02, Snd_2PMenu_Loop02
 	smpsJump            Snd_2PMenu_DAC
-
-; Unreachable
-	smpsStop
 
 Snd_2PMenu_Voices:
 ;	Voice $00

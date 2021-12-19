@@ -14,9 +14,6 @@ Snd_AIZ1_Header:
 	smpsHeaderPSG       Snd_AIZ1_PSG2,	$F4, $04, $00, sTone_0C
 	smpsHeaderPSG       Snd_AIZ1_PSG3,	$00, $04, $00, sTone_0C
 
-; Unreachable
-	smpsStop
-
 ; DAC Data
 Snd_AIZ1_DAC:
 	smpsCall            Snd_AIZ1_Call00
@@ -68,9 +65,6 @@ Snd_AIZ1_Loop04:
 	dc.b	$06, dHigherMetalHit, $0C, dHigherMetalHit, dLowTomS3, $06, dSnareS3, $06, dKickS3, $0C, dKickS3, dKickS3
 	dc.b	$03, dKickS3, dSnareS3, $06, nRst, $12
 	smpsJump            Snd_AIZ1_DAC
-
-; Unreachable
-	smpsStop
 
 Snd_AIZ1_Call00:
 	dc.b	dKickS3, $0C, dHighMetalHit, $06, dLowTomS3, dKickS3, $0C, dMidTomS3, $06, dLowMetalHit, dKickS3, $0C
@@ -227,9 +221,6 @@ Snd_AIZ1_FM1:
 	dc.b	nD1, $0A, nRst, $02
 	smpsJump            Snd_AIZ1_FM1
 
-; Unreachable
-	smpsStop
-
 ; FM2 Data
 Snd_AIZ1_FM2:
 	smpsSetvoice        $18
@@ -338,9 +329,6 @@ Snd_AIZ1_FM2:
 	dc.b	nD4
 	smpsFMAlterVol      $02
 	smpsJump            Snd_AIZ1_FM2
-
-; Unreachable
-	smpsStop
 
 ; FM3 Data
 Snd_AIZ1_FM3:
@@ -637,9 +625,6 @@ Snd_AIZ1_Call0B:
 	dc.b	smpsNoAttack, nG2, $01, smpsNoAttack, nA2, $0D
 	smpsReturn
 
-; Unreachable
-	smpsStop
-
 ; FM4 Data
 Snd_AIZ1_FM4:
 	smpsSetvoice        $16
@@ -839,9 +824,6 @@ Snd_AIZ1_Loop0A:
 	smpsFMAlterVol      $08
 	smpsJump            Snd_AIZ1_FM4
 
-; Unreachable
-	smpsStop
-
 ; FM5 Data
 Snd_AIZ1_FM5:
 	smpsSetvoice        $16
@@ -1024,9 +1006,6 @@ Snd_AIZ1_FM5:
 	dc.b	nD5, $24, nD5, $06, nE5, nF5, $12, nE5, nD5, $0C, nG5, $60
 	smpsJump            Snd_AIZ1_FM5
 
-; Unreachable
-	smpsStop
-
 ; PSG1 Data
 Snd_AIZ1_PSG1:
 	dc.b	nG3, $05, nRst, $0D, nG3, $05, nRst, $19, nG3, $05, nRst, $0D
@@ -1103,9 +1082,6 @@ Snd_AIZ1_PSG1:
 	dc.b	nRst, $01
 	smpsJump            Snd_AIZ1_PSG1
 
-; Unreachable
-	smpsStop
-
 ; PSG2 Data
 Snd_AIZ1_PSG2:
 	dc.b	nE3, $05, nRst, $0D, nE3, $05, nRst, $19, nE3, $05, nRst, $0D
@@ -1158,12 +1134,12 @@ Snd_AIZ1_PSG2:
 	dc.b	nF4, nRst, nD4, nRst, nB3, nRst, nA3, nRst, nF3, nRst, nD3, nRst
 	dc.b	$15
 	smpsFMAlterVol      $0A, $AC
-	dc.b	$0B, nRst, $01, nD4, $0B, nRst, $01, nG4, $0B, nRst, $01, nF4
+	dc.b	nD3, $0B, nRst, $01, nD4, $0B, nRst, $01, nG4, $0B, nRst, $01, nF4
 	dc.b	$05, nRst, $0D, nE4, $05, nRst, $0D, nC4, $05, nRst, $07, nA3
 	dc.b	$2F, nRst, $01, nD4, $05, nRst, $0D, nC4, $05, nRst, $0D, nB3
 	dc.b	$05, nRst, $01
 	smpsFMAlterVol      $F6, $BF
-	dc.b	$03, nRst, nB4, nRst, nG4, nRst, nE4, nRst, nD4, nRst, nB3, nRst
+	dc.b	nB3, $03, nRst, nB4, nRst, nG4, nRst, nE4, nRst, nD4, nRst, nB3, nRst
 	dc.b	nG3, nRst, nE3, nRst, nC5, nRst, nB4, nRst, nG4, nRst, nE4, nRst
 	dc.b	nC4, nRst, nB3, nRst, nG3, nRst, nE3, nRst, nC5, nRst, nA4, nRst
 	dc.b	nF4, nRst, nD4, nRst, nC4, nRst, nA3, nRst, nF3, nRst, nD3, nRst
@@ -1184,9 +1160,6 @@ Snd_AIZ1_PSG2:
 	dc.b	$05, nRst, $01, nC4, $17, nRst, $01, nB3, $17, nRst, $01, nC4
 	dc.b	$17, nRst, $01, nD4, $17, nRst, $01
 	smpsJump            Snd_AIZ1_PSG2
-
-; Unreachable
-	smpsStop
 
 ; PSG3 Data
 Snd_AIZ1_PSG3:
