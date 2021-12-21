@@ -1119,7 +1119,7 @@ mus_Miniboss			ds.b 1		; $2E
 mus_DataSelect			ds.b 1		; $2F
 mus_FinalBoss			ds.b 1		; $30
 mus_Drowning			ds.b 1		; $31
-mus_Ending			ds.b 1		; $32
+mus_Credits			ds.b 1		; $32
 mus__End =			*		; next ID after last music
 	dephase
 
