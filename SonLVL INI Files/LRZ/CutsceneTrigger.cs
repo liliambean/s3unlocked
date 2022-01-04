@@ -62,10 +62,10 @@ namespace S3KObjectDefinitions.LRZ
 		{
 			subtypes = new ReadOnlyCollection<byte>(new byte[0]);
 			unknownSprite = BuildFlippedSprites(ObjectHelper.UnknownObject);
-			sprite = ObjectHelper.MapDPLCToBmp(LevelData.ReadFile(
-				"../General/Sprites/Knuckles/Art/Knuckles.bin", CompressionType.Uncompressed), LevelData.ASMToBin(
-				"../General/Sprites/Knuckles/Map - Knuckles.asm", EngineVersion.S3K), EngineVersion.S3K, LevelData.ASMToBin(
-				"../General/Sprites/Knuckles/Knuckles pattern load cues.asm", EngineVersion.S2), EngineVersion.S2, 0x56, 7, true);
+			sprite = ObjectHelper.MapASMDPLCToBmp(LevelData.ReadFile(
+				"../General/Sprites/Knuckles/Art/Knuckles.bin", CompressionType.Uncompressed),
+				"../General/Sprites/Knuckles/Map - Knuckles.asm", "word_14B01E", EngineVersion.S3K,
+				"../General/Sprites/Knuckles/Knuckles pattern load cues.asm", "word_14C126", EngineVersion.S2, 4, true);
 
 			sprite.Flip(true, false);
 			sprite.Offset(48, 10);

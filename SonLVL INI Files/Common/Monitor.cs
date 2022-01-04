@@ -89,13 +89,9 @@ namespace S3KObjectDefinitions.Common
 			};
 
 			var subtypes = new byte[subtypeNames.Length];
-			subtypes[1] = 1;
-
 			sprites = new Sprite[subtypeNames.Length][];
-			sprites[0] = BuildFlippedSprites(ObjectHelper.MapToBmp(art, map, 0, 0));
-			sprites[1] = BuildFlippedSprites(ObjectHelper.MapToBmp(art, map, 2, 0));
 
-			var index = 2;
+			var index = 0;
 			while (index < subtypeNames.Length)
 			{
 				subtypes[index] = (byte)index;

@@ -72,7 +72,7 @@ namespace S3KObjectDefinitions.SSZ
 				"../General/Sprites/Robotnik/Map - Robotnik Ship.asm", 10, 0, true);
 
 			var head = ObjectHelper.MapASMToBmp(LevelData.ReadFile(
-				"../General/Sprites/Robotnik/Egg Robo Head.bin", CompressionType.Kosinski),
+				"../General/Sprites/Robotnik/Egg Robo Head.bin", CompressionType.Nemesis),
 				"../General/Sprites/Robotnik/Map - Egg Robo Head.asm", 0, 0, true);
 
 			var mecha = ObjectHelper.MapASMToBmp(LevelData.ReadFile(
@@ -80,7 +80,7 @@ namespace S3KObjectDefinitions.SSZ
 				"../General/Sprites/Mecha Sonic/Map - Mecha Sonic.asm", 0, 1, true);
 
 			var emerald = ObjectHelper.MapASMToBmp(LevelData.ReadFile(
-				"../General/Ending/KosinskiM Art/Master Emerald.bin", CompressionType.KosinskiM),
+				"../General/Ending/Nemesis Art/Master Emerald.bin", CompressionType.Nemesis),
 				"../Levels/SSZ/Misc Object Data/Map - Master Emerald.asm", 0, 0, true);
 
 			subtypes = new ReadOnlyCollection<byte>(new byte[0]);

@@ -49,7 +49,7 @@
 	dbglistobj Obj_HCZWaterSplash,			Map_HCZWaterSplash,		   0,   0, make_art_tile($3B2,2,0)
 	dbglistobj Obj_StillSprite,			Map_StillSprites,		 $13, $13, make_art_tile($038,2,0)
 	dbglistobj Obj_TensionBridge,			Map_TensionBridge,		 $90,   0, make_art_tile($038,2,0)
-	dbglistobj Obj_InvisibleHurtBlockHorizontal,	Map_InvisibleBlock,		   0,   0, make_art_tile(ArtTile_Ring,0,1)
-	dbglistobj Obj_InvisibleHurtBlockVertical,	Map_InvisibleBlock,		   0,   0, make_art_tile(ArtTile_Ring,0,1)
+	dbglistobj Obj_InvisibleHurtBlockHorizontal,	Map_InvisibleBlock,		   0,   0, make_art_tile(ArtTile_Monitors,0,1)			; Fred - use -Eggman icon for hurt blocks
+	dbglistobj Obj_InvisibleHurtBlockVertical,	Map_InvisibleBlock,		   0,   0, make_art_tile(ArtTile_Monitors,0,1)			; Fred - use -Eggman icon for hurt blocks
 	dbglistobj Obj_BreakableWall,			Map_HCZBreakableWall,		   0,   0, make_art_tile($001,3,0)
 	dbglistobj Obj_BreakableWall,			Map_HCZBreakableWall,		   2,   2, make_art_tile($350,2,0)

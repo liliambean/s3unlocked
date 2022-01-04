@@ -1,5 +1,5 @@
 ; Knuckles pattern load cues
-PLC_14BD0A:		dc.w word_14BF00-PLC_14BD0A; 0
+PLC_14BD0A:	dc.w word_14BF00-PLC_14BD0A; 0
 		dc.w word_14BF02-PLC_14BD0A; 1
 		dc.w word_14BF0C-PLC_14BD0A; 2
 		dc.w word_14BF14-PLC_14BD0A; 3
@@ -85,7 +85,7 @@ PLC_14BD0A:		dc.w word_14BF00-PLC_14BD0A; 0
 		dc.w word_14C172-PLC_14BD0A; 83
 		dc.w word_14C17A-PLC_14BD0A; 84
 		dc.w word_14C180-PLC_14BD0A; 85
-		dc.w word_14C188-PLC_14BD0A; 86
+		dc.w word_14C126-PLC_14BD0A; 86
 		dc.w word_14C18E-PLC_14BD0A; 87
 		dc.w word_14C194-PLC_14BD0A; 88
 		dc.w word_14C19A-PLC_14BD0A; 89
@@ -123,10 +123,10 @@ PLC_14BD0A:		dc.w word_14BF00-PLC_14BD0A; 0
 		dc.w word_14C264-PLC_14BD0A; 121
 		dc.w word_14C26E-PLC_14BD0A; 122
 		dc.w word_14C276-PLC_14BD0A; 123
-		dc.w word_14C280-PLC_14BD0A; 124
-		dc.w word_14C288-PLC_14BD0A; 125
-		dc.w word_14C292-PLC_14BD0A; 126
-		dc.w word_14C29A-PLC_14BD0A; 127
+		dc.w word_14C25C-PLC_14BD0A; 124
+		dc.w word_14C264-PLC_14BD0A; 125
+		dc.w word_14C26E-PLC_14BD0A; 126
+		dc.w word_14C276-PLC_14BD0A; 127
 		dc.w word_14C2A4-PLC_14BD0A; 128
 		dc.w word_14C2AC-PLC_14BD0A; 129
 		dc.w word_14C2B6-PLC_14BD0A; 130
@@ -148,7 +148,7 @@ PLC_14BD0A:		dc.w word_14BF00-PLC_14BD0A; 0
 		dc.w word_14C33A-PLC_14BD0A; 146
 		dc.w word_14C342-PLC_14BD0A; 147
 		dc.w word_14C34A-PLC_14BD0A; 148
-		dc.w word_14C354-PLC_14BD0A; 149
+		dc.w word_14C1D6-PLC_14BD0A; 149
 		dc.w word_14C35E-PLC_14BD0A; 150
 		dc.w word_14C362-PLC_14BD0A; 151
 		dc.w word_14C366-PLC_14BD0A; 152
@@ -171,7 +171,7 @@ PLC_14BD0A:		dc.w word_14BF00-PLC_14BD0A; 0
 		dc.w word_14C3F2-PLC_14BD0A; 169
 		dc.w word_14C3FC-PLC_14BD0A; 170
 		dc.w word_14C406-PLC_14BD0A; 171
-		dc.w word_14C410-PLC_14BD0A; 172
+		dc.w word_14C406-PLC_14BD0A; 172
 		dc.w word_14C41A-PLC_14BD0A; 173
 		dc.w word_14C424-PLC_14BD0A; 174
 		dc.w word_14C42C-PLC_14BD0A; 175
@@ -180,8 +180,8 @@ PLC_14BD0A:		dc.w word_14BF00-PLC_14BD0A; 0
 		dc.w word_14C442-PLC_14BD0A; 178
 		dc.w word_14C44A-PLC_14BD0A; 179
 		dc.w word_14C450-PLC_14BD0A; 180
-		dc.w word_14C458-PLC_14BD0A; 181
-		dc.w word_14C460-PLC_14BD0A; 182
+		dc.w word_14C450-PLC_14BD0A; 181
+		dc.w word_14C450-PLC_14BD0A; 182
 		dc.w word_14C468-PLC_14BD0A; 183
 		dc.w word_14C46E-PLC_14BD0A; 184
 		dc.w word_14C472-PLC_14BD0A; 185
@@ -194,13 +194,13 @@ PLC_14BD0A:		dc.w word_14BF00-PLC_14BD0A; 0
 		dc.w word_14C4A0-PLC_14BD0A; 192
 		dc.w word_14C4A8-PLC_14BD0A; 193
 		dc.w word_14C4AE-PLC_14BD0A; 194
-		dc.w word_14C4B2-PLC_14BD0A; 195
-		dc.w word_14C4B8-PLC_14BD0A; 196
+		dc.w word_14C4A8-PLC_14BD0A; 195
+		dc.w word_14C4A0-PLC_14BD0A; 196
 		dc.w word_14C4C0-PLC_14BD0A; 197
 		dc.w word_14C4C6-PLC_14BD0A; 198
 		dc.w word_14C4CE-PLC_14BD0A; 199
-		dc.w word_14C4D2-PLC_14BD0A; 200
-		dc.w word_14C4DA-PLC_14BD0A; 201
+		dc.w word_14C4C6-PLC_14BD0A; 200
+		dc.w word_14C4C0-PLC_14BD0A; 201
 		dc.w word_14C4E0-PLC_14BD0A; 202
 		dc.w word_14C4EA-PLC_14BD0A; 203
 		dc.w word_14C4F4-PLC_14BD0A; 204
@@ -228,7 +228,7 @@ PLC_14BD0A:		dc.w word_14BF00-PLC_14BD0A; 0
 		dc.w word_14C5AC-PLC_14BD0A; 226
 		dc.w word_14C5B2-PLC_14BD0A; 227
 		dc.w word_14C5B8-PLC_14BD0A; 228
-		dc.w word_14C5C2-PLC_14BD0A; 229
+		dc.w word_14C334-PLC_14BD0A; 229
 		dc.w word_14C5C8-PLC_14BD0A; 230
 		dc.w word_14C5D0-PLC_14BD0A; 231
 		dc.w word_14C5D8-PLC_14BD0A; 232
@@ -250,940 +250,891 @@ PLC_14BD0A:		dc.w word_14BF00-PLC_14BD0A; 0
 		dc.w word_14C644-PLC_14BD0A; 248
 		dc.w word_14C63A-PLC_14BD0A; 249
 		dc.w word_14C64C-PLC_14BD0A; 250
-word_14BF00:	dc.w 0			; DATA XREF: ROM:0014BD0Ao
-word_14BF02:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
+word_14BF00:	dc.w 0
+word_14BF02:	dc.w 4
 		dc.w $2000
 		dc.w $B003
 		dc.w $200F
 		dc.w $1012
-word_14BF0C:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BF0C:	dc.w 3
 		dc.w $1014
 		dc.w $F016
 		dc.w $2026
-word_14BF14:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BF14:	dc.w 3
 		dc.w $5029
 		dc.w $702F
 		dc.w $1037
-word_14BF1C:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
+word_14BF1C:	dc.w 2
 		dc.w $5039
 		dc.w $B03F
-word_14BF22:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
+word_14BF22:	dc.w 4
 		dc.w $204B
 		dc.w $B04E
 		dc.w $105A
 		dc.w $305C
-word_14BF2C:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
+word_14BF2C:	dc.w 4
 		dc.w $1060
 		dc.w $2062
 		dc.w $B065
 		dc.w $1071
-word_14BF36:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BF36:	dc.w 3
 		dc.w $1073
 		dc.w $B075
 		dc.w $2081
-word_14BF3E:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
+word_14BF3E:	dc.w 4
 		dc.w $2084
 		dc.w $2087
 		dc.w $B08A
 		dc.w $96
-word_14BF48:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BF48:	dc.w 3
 		dc.w $B097
 		dc.w $20A3
 		dc.w $30A6
-word_14BF50:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BF50:	dc.w 3
 		dc.w $F0AA
 		dc.w $20BA
 		dc.w $10BD
-word_14BF58:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BF58:	dc.w 3
 		dc.w $20BF
 		dc.w $B0C2
 		dc.w $CE
-word_14BF60:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
+word_14BF60:	dc.w 4
 		dc.w $20CF
 		dc.w $70D2
 		dc.w $20DA
 		dc.w $10DD
-word_14BF6A:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BF6A:	dc.w 3
 		dc.w $F0DF
 		dc.w $10EF
 		dc.w $10F1
-word_14BF72:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
+word_14BF72:	dc.w 2
 		dc.w $B0F3
 		dc.w $30FF
-word_14BF78:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BF78:	dc.w 3
 		dc.w $2103
 		dc.w $B106
 		dc.w $112
-word_14BF80:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BF80:	dc.w 3
 		dc.w $2113
 		dc.w $B116
 		dc.w $1122
-word_14BF88:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
+word_14BF88:	dc.w 4
 		dc.w $3124
 		dc.w $B128
 		dc.w $134
 		dc.w $2135
-word_14BF92:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
+word_14BF92:	dc.w 4
 		dc.w $3138
 		dc.w $713C
 		dc.w $144
 		dc.w $7145
-word_14BF9C:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BF9C:	dc.w 3
 		dc.w $B14D
 		dc.w $1159
 		dc.w $115B
-word_14BFA4:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
+word_14BFA4:	dc.w 2
 		dc.w $515D
 		dc.w $B163
-word_14BFAA:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
+word_14BFAA:	dc.w 4
 		dc.w $216F
 		dc.w $B172
 		dc.w $17E
 		dc.w $217F
-word_14BFB4:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
+word_14BFB4:	dc.w 4
 		dc.w $2182
 		dc.w $B185
 		dc.w $1191
 		dc.w $1193
-word_14BFBE:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BFBE:	dc.w 3
 		dc.w $2195
 		dc.w $B198
 		dc.w $11A4
-word_14BFC6:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
+word_14BFC6:	dc.w 4
 		dc.w $11A6
 		dc.w $B1A8
 		dc.w $21B4
 		dc.w $1B7
-word_14BFD0:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BFD0:	dc.w 3
 		dc.w $21B8
 		dc.w $B1BB
 		dc.w $31C7
-word_14BFD8:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BFD8:	dc.w 3
 		dc.w $21CB
 		dc.w $F1CE
 		dc.w $11DE
-word_14BFE0:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BFE0:	dc.w 3
 		dc.w $21E0
 		dc.w $B1E3
 		dc.w $1EF
-word_14BFE8:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BFE8:	dc.w 3
 		dc.w $11F0
 		dc.w $B1F2
 		dc.w $11FE
-word_14BFF0:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
+word_14BFF0:	dc.w 2
 		dc.w $F200
 		dc.w $5210
-word_14BFF6:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
+word_14BFF6:	dc.w 2
 		dc.w $B216
 		dc.w $3222
-word_14BFFC:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14BFFC:	dc.w 3
 		dc.w $2226
 		dc.w $B229
 		dc.w $235
-word_14C004:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14C004:	dc.w 3
 		dc.w $2236
 		dc.w $B239
 		dc.w $1245
-word_14C00C:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
+word_14C00C:	dc.w 2
 		dc.w $2247
 		dc.w $F24A
-word_14C012:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
+word_14C012:	dc.w 2
 		dc.w $225A
 		dc.w $F25D
-word_14C018:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
+word_14C018:	dc.w 2
 		dc.w $2247
 		dc.w $F26D
-word_14C01E:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
+word_14C01E:	dc.w 2
 		dc.w $227D
 		dc.w $F280
-word_14C024:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2293
-		dc.w $B296
-		dc.w $12A2
-		dc.w $22A4
-word_14C02E:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $22A7
-		dc.w $B2AA
-		dc.w $12B6
-		dc.w $22B8
-word_14C038:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $22BB
-		dc.w $72BE
-		dc.w $52C6
-word_14C040:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $22CC
-		dc.w $F2CF
-		dc.w $12DF
-word_14C048:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $22E1
-		dc.w $F2E4
-word_14C04E:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $22F4
-		dc.w $F2F7
-word_14C054:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2307
-		dc.w $F30A
-word_14C05A:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $231A
-		dc.w $F31D
-word_14C060:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $132D
-		dc.w $B32F
-		dc.w $133B
-		dc.w $333D
-word_14C06A:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $3341
-		dc.w $B345
-		dc.w $1351
-		dc.w $1353
-word_14C074:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B355
-		dc.w $1361
-		dc.w $2363
-word_14C07C:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F366
+word_14C024:	dc.w 4
+		dc.w $2290
+		dc.w $B293
+		dc.w $29F
+		dc.w $22A0
+word_14C02E:	dc.w 4
+		dc.w $22A3
+		dc.w $B2A6
+		dc.w $12B2
+		dc.w $22B4
+word_14C038:	dc.w 3
+		dc.w $22B7
+		dc.w $72BA
+		dc.w $52C2
+word_14C040:	dc.w 3
+		dc.w $22C8
+		dc.w $F2CB
+		dc.w $12DB
+word_14C048:	dc.w 2
+		dc.w $22DD
+		dc.w $F2E0
+word_14C04E:	dc.w 2
+		dc.w $22F0
+		dc.w $F2F3
+word_14C054:	dc.w 2
+		dc.w $2303
+		dc.w $F306
+word_14C05A:	dc.w 2
+		dc.w $2316
+		dc.w $F319
+word_14C060:	dc.w 4
+		dc.w $329
+		dc.w $B32A
+		dc.w $1336
+		dc.w $3338
+word_14C06A:	dc.w 4
+		dc.w $333C
+		dc.w $B340
+		dc.w $134C
+		dc.w $134E
+word_14C074:	dc.w 3
+		dc.w $B350
+		dc.w $135C
+		dc.w $235E
+word_14C07C:	dc.w 3
+		dc.w $F361
+		dc.w $2371
+		dc.w $1374
+word_14C084:	dc.w 4
 		dc.w $2376
-		dc.w $1379
-word_14C084:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $237B
-		dc.w $737E
-		dc.w $2386
-		dc.w $1389
-word_14C08E:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $138B
-		dc.w $F38D
-word_14C094:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $539D
-		dc.w $33A3
-		dc.w $23A7
-word_14C09C:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $23AA
-		dc.w $B3AD
-		dc.w $3B9
-word_14C0A4:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $23BA
-		dc.w $73BD
-		dc.w $23C5
-word_14C0AC:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $13C8
-		dc.w $73CA
-		dc.w $53D2
-word_14C0B4:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F3D8
-		dc.w $23E8
-word_14C0BA:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $33EB
-		dc.w $33EF
-		dc.w $53F3
-word_14C0C2:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B3F9
-		dc.w $2405
-word_14C0C8:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $7408
-		dc.w $2410
-word_14C0CE:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $7413
-		dc.w $241B
-		dc.w $341E
-word_14C0D6:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $8422
-		dc.w $742B
-word_14C0DC:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B433
-		dc.w $243F
-word_14C0E2:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2442
-		dc.w $7445
-		dc.w $144D
-word_14C0EA:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $744F
-		dc.w $2457
-word_14C0F0:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $245A
-		dc.w $745D
-		dc.w $1465
-word_14C0F8:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B467
-		dc.w $5473
-word_14C0FE:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $3479
-		dc.w $247D
-		dc.w $3480
-		dc.w $5484
-word_14C108:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B48A
-		dc.w $2496
-word_14C10E:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F499
-word_14C112:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $24A9
-		dc.w $74AC
-		dc.w $4B4
-word_14C11A:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $54B5
-		dc.w $74BB
-word_14C120:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $54C3
-		dc.w $B4C9
-word_14C126:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5D69
-		dc.w $BD6F
-word_14C12C:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F4D5
-		dc.w $24E5
-		dc.w $14E8
-word_14C134:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B4EA
-		dc.w $24F6
-		dc.w $4F9
-word_14C13C:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $84FA
-		dc.w $1503
-word_14C142:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B505
-		dc.w $3511
-word_14C148:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B515
-word_14C14C:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2521
-		dc.w $B524
-		dc.w $1530
-word_14C154:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $3532
-		dc.w $B536
-word_14C15A:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $542
-		dc.w $B543
-		dc.w $154F
-word_14C162:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1551
-		dc.w $8553
-		dc.w $355C
-word_14C16A:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1560
-		dc.w $7562
-		dc.w $156A
-word_14C172:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $256C
-		dc.w $756F
-		dc.w $2577
-word_14C17A:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B57A
-		dc.w $2586
-word_14C180:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $258A
-		dc.w $358D
-		dc.w $8591
-word_14C188:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5D69
-		dc.w $BD6F
-word_14C18E:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $559A
-		dc.w $B5A0
-word_14C194:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B5AC
-		dc.w $25B8
-word_14C19A:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $25BB
-		dc.w $75BE
-		dc.w $55C6
-word_14C1A2:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B5CC
-		dc.w $25D8
-word_14C1A8:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B5DB
-		dc.w $25E7
-word_14C1AE:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B5EA
-		dc.w $85F6
-word_14C1B4:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B5FF
-		dc.w $260B
-word_14C1BA:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B60E
-		dc.w $261A
-word_14C1C0:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B61D
-		dc.w $8629
-word_14C1C6:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B632
-word_14C1CA:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B63E
-word_14C1CE:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $364A
-		dc.w $764E
-		dc.w $3656
-word_14C1D6:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B65A
-		dc.w $8666
-word_14C1DC:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B66F
-		dc.w $267B
-word_14C1E2:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B67E
-		dc.w $268A
-word_14C1E8:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B68D
-		dc.w $8699
-word_14C1EE:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B6A2
-word_14C1F2:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B6AE
-word_14C1F6:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $16BA
-		dc.w $56BC
-		dc.w $76C2
-word_14C1FE:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $86CA
-		dc.w $16D3
-word_14C204:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $26D5
-		dc.w $76D8
-word_14C20A:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $16E0
-		dc.w $B6E2
-		dc.w $16EE
-word_14C212:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F6F0
-		dc.w $2700
-word_14C218:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $703
-		dc.w $8704
-		dc.w $370D
-word_14C220:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2711
-		dc.w $3714
-		dc.w $2718
-		dc.w $371B
-word_14C22A:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $171F
-		dc.w $8721
-word_14C230:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F72A
-word_14C234:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $773A
-		dc.w $8742
-word_14C23A:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $174B
-		dc.w $174D
-		dc.w $B74F
-word_14C242:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F75B
-		dc.w $176B
-word_14C248:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $76D
-		dc.w $B76E
-word_14C24E:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $277A
-		dc.w $B77D
-		dc.w $789
-word_14C256:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $178A
-		dc.w $B78C
-word_14C25C:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $3798
-		dc.w $879C
-		dc.w $77A5
-word_14C264:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $27AD
-		dc.w $77B0
-		dc.w $57B8
-		dc.w $27BE
-word_14C26E:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $7C1
-		dc.w $B7C2
-		dc.w $77CE
-word_14C276:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $27D6
-		dc.w $17D9
-		dc.w $27DB
-		dc.w $B7DE
-word_14C280:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $3798
-		dc.w $879C
-		dc.w $77A5
-word_14C288:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $27AD
-		dc.w $77B0
-		dc.w $57B8
-		dc.w $27BE
-word_14C292:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $7C1
-		dc.w $B7C2
-		dc.w $77CE
-word_14C29A:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $27D6
-		dc.w $17D9
-		dc.w $27DB
-		dc.w $B7DE
-word_14C2A4:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F800
-		dc.w $810
-		dc.w $5811
-word_14C2AC:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $817
-		dc.w $3818
-		dc.w $B81C
-		dc.w $2828
-word_14C2B6:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $182B
-		dc.w $B82D
-		dc.w $8839
-word_14C2BE:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F842
-		dc.w $5852
-word_14C2C4:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1858
-		dc.w $585A
-		dc.w $3860
-		dc.w $8864
-word_14C2CE:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $186D
-		dc.w $386F
-		dc.w $8873
-		dc.w $387C
-word_14C2D8:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2880
-		dc.w $7883
-		dc.w $288B
-word_14C2E0:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $288E
-		dc.w $7891
-		dc.w $2899
-word_14C2E8:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $289C
-		dc.w $789F
-		dc.w $2899
-word_14C2F0:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $28A7
+		dc.w $7379
+		dc.w $2381
+		dc.w $1384
+word_14C08E:	dc.w 2
+		dc.w $1386
+		dc.w $F388
+word_14C094:	dc.w 3
+		dc.w $5398
+		dc.w $339E
+		dc.w $23A2
+word_14C09C:	dc.w 3
+		dc.w $23A5
+		dc.w $B3A8
+		dc.w $3B4
+word_14C0A4:	dc.w 3
+		dc.w $23B5
+		dc.w $73B8
+		dc.w $23C0
+word_14C0AC:	dc.w 3
+		dc.w $13C3
+		dc.w $73C5
+		dc.w $53CD
+word_14C0B4:	dc.w 2
+		dc.w $F3D3
+		dc.w $23E3
+word_14C0BA:	dc.w 3
+		dc.w $33E6
+		dc.w $33EA
+		dc.w $53EE
+word_14C0C2:	dc.w 2
+		dc.w $B3F4
+		dc.w $2400
+word_14C0C8:	dc.w 2
+		dc.w $7403
+		dc.w $240B
+word_14C0CE:	dc.w 3
+		dc.w $740E
+		dc.w $2416
+		dc.w $3419
+word_14C0D6:	dc.w 2
+		dc.w $841D
+		dc.w $7426
+word_14C0DC:	dc.w 2
+		dc.w $B42E
+		dc.w $243A
+word_14C0E2:	dc.w 3
+		dc.w $243D
+		dc.w $7440
+		dc.w $1448
+word_14C0EA:	dc.w 2
+		dc.w $744A
+		dc.w $2452
+word_14C0F0:	dc.w 3
+		dc.w $2455
+		dc.w $7458
+		dc.w $1460
+word_14C0F8:	dc.w 2
+		dc.w $B462
+		dc.w $546E
+word_14C0FE:	dc.w 4
+		dc.w $3474
+		dc.w $2478
+		dc.w $347B
+		dc.w $547F
+word_14C108:	dc.w 2
+		dc.w $B485
+		dc.w $2491
+word_14C10E:	dc.w 1
+		dc.w $F494
+word_14C112:	dc.w 3
+		dc.w $24A4
+		dc.w $74A7
+		dc.w $4AF
+word_14C11A:	dc.w 2
+		dc.w $54B0
+		dc.w $74B6
+word_14C120:	dc.w 2
+		dc.w $54BE
+		dc.w $B4C4
+word_14C126:	dc.w 2
+		dc.w $54D0
+		dc.w $B4D6
+word_14C12C:	dc.w 3
+		dc.w $F5DB
+		dc.w $25EB
+		dc.w $15EE
+word_14C134:	dc.w 3
+		dc.w $B5F0
+		dc.w $25FC
+		dc.w $5FF
+word_14C13C:	dc.w 2
+		dc.w $8600
+		dc.w $1609
+word_14C142:	dc.w 2
+		dc.w $B60B
+		dc.w $3617
+word_14C148:	dc.w 1
+		dc.w $B61B
+word_14C14C:	dc.w 3
+		dc.w $2627
+		dc.w $B62A
+		dc.w $1636
+word_14C154:	dc.w 2
+		dc.w $3638
+		dc.w $B63C
+word_14C15A:	dc.w 3
+		dc.w $648
+		dc.w $B649
+		dc.w $1655
+word_14C162:	dc.w 3
+		dc.w $1657
+		dc.w $8659
+		dc.w $3662
+word_14C16A:	dc.w 3
+		dc.w $1666
+		dc.w $7668
+		dc.w $1670
+word_14C172:	dc.w 3
+		dc.w $2672
+		dc.w $7675
+		dc.w $267D
+word_14C17A:	dc.w 2
+		dc.w $B680
+		dc.w $268C
+word_14C180:	dc.w 3
+		dc.w $268F
+		dc.w $3692
+		dc.w $8696
+word_14C18E:	dc.w 3
+		dc.w $269F
+		dc.w $26A2
+		dc.w $B6A5
+word_14C194:	dc.w 2
+		dc.w $56B1
+		dc.w $86B7
+word_14C19A:	dc.w 3
+		dc.w $26C0
+		dc.w $76C3
+		dc.w $56CB
+word_14C1A2:	dc.w 2
+		dc.w $B6D1
+		dc.w $26DD
+word_14C1A8:	dc.w 2
+		dc.w $56E0
+		dc.w $86E6
+word_14C1AE:	dc.w 2
+		dc.w $B6EF
+		dc.w $86FB
+word_14C1B4:	dc.w 2
+		dc.w $B704
+		dc.w $2710
+word_14C1BA:	dc.w 2
+		dc.w $B713
+		dc.w $271F
+word_14C1C0:	dc.w 2
+		dc.w $B722
+		dc.w $872E
+word_14C1C6:	dc.w 1
+		dc.w $B737
+word_14C1CA:	dc.w 1
+		dc.w $B743
+word_14C1CE:	dc.w 3
+		dc.w $374F
+		dc.w $7753
+		dc.w $375B
+word_14C1D6:	dc.w 3
+		dc.w $575F
+		dc.w $5765
+		dc.w $876B
+word_14C1DC:	dc.w 2
+		dc.w $B774
+		dc.w $2780
+word_14C1E2:	dc.w 2
+		dc.w $B783
+		dc.w $278F
+word_14C1E8:	dc.w 2
+		dc.w $B792
+		dc.w $879E
+word_14C1EE:	dc.w 1
+		dc.w $B7A7
+word_14C1F2:	dc.w 1
+		dc.w $B7B3
+word_14C1F6:	dc.w 3
+		dc.w $17BF
+		dc.w $57C1
+		dc.w $77C7
+word_14C1FE:	dc.w 2
+		dc.w $87CF
+		dc.w $17D8
+word_14C204:	dc.w 2
+		dc.w $27DA
+		dc.w $77DD
+word_14C20A:	dc.w 3
+		dc.w $17E5
+		dc.w $B7E7
+		dc.w $17F3
+word_14C212:	dc.w 2
+		dc.w $F7F5
+		dc.w $2805
+word_14C218:	dc.w 3
+		dc.w $808
+		dc.w $8809
+		dc.w $3812
+word_14C220:	dc.w 4
+		dc.w $2816
+		dc.w $3819
+		dc.w $281D
+		dc.w $3820
+word_14C22A:	dc.w 2
+		dc.w $1824
+		dc.w $8826
+word_14C230:	dc.w 1
+		dc.w $F82F
+word_14C234:	dc.w 2
+		dc.w $783F
+		dc.w $8847
+word_14C23A:	dc.w 3
+		dc.w $1850
+		dc.w $1852
+		dc.w $B854
+word_14C242:	dc.w 2
+		dc.w $F860
+		dc.w $1870
+word_14C248:	dc.w 2
+		dc.w $872
+		dc.w $B873
+word_14C24E:	dc.w 3
+		dc.w $287F
+		dc.w $B882
+		dc.w $88E
+word_14C256:	dc.w 2
+		dc.w $188F
+		dc.w $B891
+word_14C25C:	dc.w 3
+		dc.w $389D
+		dc.w $88A1
 		dc.w $78AA
-		dc.w $2899
-word_14C2F8:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
+word_14C264:	dc.w 4
 		dc.w $28B2
 		dc.w $78B5
-		dc.w $2899
-word_14C300:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $288E
-		dc.w $78BD
-		dc.w $2899
-word_14C308:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B8C5
-		dc.w $58D1
-		dc.w $18D7
-word_14C310:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $88D9
-		dc.w $38E2
-		dc.w $78E6
-		dc.w $8EE
-word_14C31A:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $18EF
-		dc.w $88F1
-		dc.w $38FA
-word_14C322:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $18FE
-		dc.w $B900
-		dc.w $190C
-word_14C32A:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $190E
-		dc.w $8910
-		dc.w $5919
-		dc.w $191F
-word_14C334:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B921
-		dc.w $592D
-word_14C33A:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $8933
-		dc.w $393C
-		dc.w $3940
-word_14C342:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $8933
-		dc.w $3944
-		dc.w $1948
-word_14C34A:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $795B
-		dc.w $194A
-		dc.w $B94C
-		dc.w $2958
-word_14C354:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5963
-		dc.w $194A
-		dc.w $B94C
-		dc.w $2958
-word_14C35E:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F969
-word_14C362:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F979
-word_14C366:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F989
-word_14C36A:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F999
-word_14C36E:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $F9A9
-word_14C372:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $29B9
-		dc.w $B9BC
-word_14C378:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $29C8
-		dc.w $79CB
-word_14C37E:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $19D3
-		dc.w $F9D5
-word_14C384:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $29E5
-		dc.w $F9E8
-		dc.w $9F8
-		dc.w $39F9
-word_14C38E:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $29FD
-		dc.w $BA00
-		dc.w $1A0C
-		dc.w $2A0E
-word_14C398:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2A11
-		dc.w $BA14
-		dc.w $5A20
-		dc.w $2A26
-word_14C3A2:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $A29
-		dc.w $BA2A
-		dc.w $7A36
-		dc.w $5A3E
-word_14C3AC:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BA44
-		dc.w $1A50
-		dc.w $1A52
-		dc.w $5A54
-word_14C3B6:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $A5A
-		dc.w $BA5B
-		dc.w $3A67
-		dc.w $5A6B
-word_14C3C0:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BA71
-		dc.w $1A7D
-		dc.w $2A7F
-		dc.w $1A82
-word_14C3CA:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1A84
-		dc.w $1A86
-		dc.w $BA88
-		dc.w $5A94
-word_14C3D4:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5A9A
-		dc.w $BAA0
-		dc.w $2AAC
-		dc.w $2AAF
-word_14C3DE:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BAB2
-		dc.w $1ABE
-		dc.w $5AC0
-		dc.w $1AC6
-word_14C3E8:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1AC8
-		dc.w $7ACA
-		dc.w $8AD2
-		dc.w $3ADB
-word_14C3F2:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5ADF
-		dc.w $1AE5
-		dc.w $BAE7
-		dc.w $8AF3
-word_14C3FC:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1AFC
-		dc.w $1AFE
-		dc.w $FB00
-		dc.w $5B10
-word_14C406:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $7B16
-		dc.w $1B1E
-		dc.w $5B20
-		dc.w $3B26
-word_14C410:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $7B2A
-		dc.w $1B1C
+		dc.w $58BD
+		dc.w $28C3
+word_14C26E:	dc.w 3
+		dc.w $8C6
+		dc.w $B8C7
+		dc.w $78D3
+word_14C276:	dc.w 4
+		dc.w $28DB
+		dc.w $18DE
+		dc.w $28E0
+		dc.w $B8E3
+word_14C2A4:	dc.w 3
+		dc.w $F8EF
+		dc.w $8FF
+		dc.w $5900
+word_14C2AC:	dc.w 4
+		dc.w $906
+		dc.w $3907
+		dc.w $B90B
+		dc.w $2917
+word_14C2B6:	dc.w 3
+		dc.w $191A
+		dc.w $B91C
+		dc.w $8928
+word_14C2BE:	dc.w 2
+		dc.w $F931
+		dc.w $5941
+word_14C2C4:	dc.w 4
+		dc.w $1947
+		dc.w $5949
+		dc.w $394F
+		dc.w $8953
+word_14C2CE:	dc.w 4
+		dc.w $195C
+		dc.w $395E
+		dc.w $8962
+		dc.w $396B
+word_14C2D8:	dc.w 3
+		dc.w $296F
+		dc.w $7972
+		dc.w $297A
+word_14C2E0:	dc.w 3
+		dc.w $297D
+		dc.w $7980
+		dc.w $2988
+word_14C2E8:	dc.w 3
+		dc.w $298B
+		dc.w $798E
+		dc.w $2988
+word_14C2F0:	dc.w 3
+		dc.w $2996
+		dc.w $7999
+		dc.w $2988
+word_14C2F8:	dc.w 3
+		dc.w $29A1
+		dc.w $79A4
+		dc.w $2988
+word_14C300:	dc.w 3
+		dc.w $297D
+		dc.w $79AC
+		dc.w $2988
+word_14C308:	dc.w 3
+		dc.w $B9B4
+		dc.w $59C0
+		dc.w $19C6
+word_14C310:	dc.w 4
+		dc.w $85C5
+		dc.w $35CE
+		dc.w $75D2
+		dc.w $5DA
+word_14C31A:	dc.w 3
+		dc.w $19C8
+		dc.w $89CA
+		dc.w $39D3
+word_14C322:	dc.w 3
+		dc.w $19D7
+		dc.w $B9D9
+		dc.w $19E5
+word_14C32A:	dc.w 4
+		dc.w $19E7
+		dc.w $89E9
+		dc.w $59F2
+		dc.w $19F8
+word_14C334:	dc.w 2
+		dc.w $B9FA
+		dc.w $5A06
+word_14C33A:	dc.w 3
+		dc.w $8A0C
+		dc.w $3A15
+		dc.w $3A19
+word_14C342:	dc.w 3
+		dc.w $8A0C
+		dc.w $3A1D
+		dc.w $1A21
+word_14C34A:	dc.w 3
+		dc.w $7A23
+		dc.w $5765
+		dc.w $876B
+word_14C35E:	dc.w 1
+		dc.w $F52F
+word_14C362:	dc.w 1
+		dc.w $F53F
+word_14C366:	dc.w 1
+		dc.w $F54F
+word_14C36A:	dc.w 1
+		dc.w $F55F
+word_14C36E:	dc.w 1
+		dc.w $F56F
+word_14C372:	dc.w 2
+		dc.w $2A2B
+		dc.w $BA2E
+word_14C378:	dc.w 2
+		dc.w $2A3A
+		dc.w $7A3D
+word_14C37E:	dc.w 2
+		dc.w $1A45
+		dc.w $FA47
+word_14C384:	dc.w 4
+		dc.w $2A57
+		dc.w $FA5A
+		dc.w $A6A
+		dc.w $3A6B
+word_14C38E:	dc.w 4
+		dc.w $2A6F
+		dc.w $BA72
+		dc.w $1A7E
+		dc.w $2A80
+word_14C398:	dc.w 4
+		dc.w $2A83
+		dc.w $BA86
+		dc.w $5A92
+		dc.w $2A98
+word_14C3A2:	dc.w 4
+		dc.w $A9B
+		dc.w $BA9C
+		dc.w $7AA8
+		dc.w $5AB0
+word_14C3AC:	dc.w 4
+		dc.w $BAB6
+		dc.w $1AC2
+		dc.w $1AC4
+		dc.w $5AC6
+word_14C3B6:	dc.w 4
+		dc.w $ACC
+		dc.w $BACD
+		dc.w $3AD9
+		dc.w $5ADD
+word_14C3C0:	dc.w 4
+		dc.w $BAE3
+		dc.w $1AEF
+		dc.w $2AF1
+		dc.w $1AF4
+word_14C3CA:	dc.w 4
+		dc.w $1AF6
+		dc.w $1AF8
+		dc.w $BAFA
+		dc.w $5B06
+word_14C3D4:	dc.w 4
+		dc.w $5B0C
+		dc.w $BB12
+		dc.w $2B1E
+		dc.w $2B21
+word_14C3DE:	dc.w 4
+		dc.w $BB24
+		dc.w $1B30
 		dc.w $5B32
-		dc.w $3B38
-word_14C41A:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $7B3C
-		dc.w $1B1C
+		dc.w $1B38
+word_14C3E8:	dc.w 4
+		dc.w $157F
+		dc.w $F581
+		dc.w $1591
+		dc.w $1593
+word_14C3F2:	dc.w 4
+		dc.w $5595
+		dc.w $359B
+		dc.w $F59F
+		dc.w $5AF
+word_14C3FC:	dc.w 4
+		dc.w $5B0
+		dc.w $F5B1
+		dc.w $35C1
+		dc.w $1593
+word_14C406:	dc.w 4
+		dc.w $7B3A
+		dc.w $1B42
 		dc.w $5B44
-		dc.w $3B26
-word_14C424:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BB4A
-		dc.w $B56
-		dc.w $5B57
-word_14C42C:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BB5D
-		dc.w $B69
-		dc.w $5B6A
-word_14C434:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $37EA
-		dc.w $F7EE
-		dc.w $7FE
-word_14C43C:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2B70
-		dc.w $FB73
-word_14C442:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2B83
-		dc.w $FB86
-		dc.w $2B96
-word_14C44A:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1B99
-		dc.w $FB9B
-word_14C450:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2BAB
-		dc.w $FBAE
-		dc.w $1BBE
-word_14C458:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BBC0
-		dc.w $2BCC
-		dc.w $3BCF
-word_14C460:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BBD3
-		dc.w $2BDF
-		dc.w $3BE2
-word_14C468:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $FBE6
-		dc.w $BF6
-word_14C46E:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $FBF7
-word_14C472:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $FC07
-		dc.w $1C17
-word_14C478:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2C19
-		dc.w $BC1C
-		dc.w $1C28
-word_14C480:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $FC2A
-word_14C484:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $FC3A
-word_14C488:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $7C4A
-		dc.w $2C52
-		dc.w $1C55
-		dc.w $C57
-word_14C492:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BC58
-		dc.w $3C64
-word_14C498:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1C68
-		dc.w $FC6A
-		dc.w $C7A
-word_14C4A0:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $3C7B
-		dc.w $7C7F
-		dc.w $3C87
-word_14C4A8:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BC8B
-		dc.w $1C97
-word_14C4AE:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BC99
-word_14C4B2:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BC8B
-		dc.w $1C97
-word_14C4B8:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $3C7B
-		dc.w $7C7F
-		dc.w $3C87
-word_14C4C0:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BCA5
-		dc.w $5CB1
-word_14C4C6:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $3CB7
-		dc.w $7CBB
-		dc.w $3CC3
-word_14C4CE:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BCC7
-word_14C4D2:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $3CB7
-		dc.w $7CBB
-		dc.w $3CC3
-word_14C4DA:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BCA5
-		dc.w $5CB1
-word_14C4E0:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $7CD3
-		dc.w $7CDB
-		dc.w $3CE3
-		dc.w $2CE7
-word_14C4EA:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BCEA
-		dc.w $CF6
-		dc.w $3CF7
-		dc.w $3CFB
-word_14C4F4:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1CFF
-		dc.w $3D01
-		dc.w $3D05
-		dc.w $2D09
-word_14C4FE:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2D0C
-		dc.w $BD0F
-		dc.w $1D1B
-word_14C506:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2D1D
-		dc.w $3D20
-		dc.w $BD24
-		dc.w $D30
-word_14C510:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2D31
-		dc.w $BD34
-		dc.w $1D40
-		dc.w $2D42
-word_14C51A:	dc.w 5			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2D45
-		dc.w $3D48
-		dc.w $D4C
-		dc.w $3D4D
-		dc.w $7D51
-word_14C526:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2D31
-		dc.w $BD59
-		dc.w $D65
-		dc.w $2D66
-word_14C530:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BD7B
-		dc.w $3D87
-word_14C536:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BD7B
-		dc.w $3D8B
-word_14C53C:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BD8F
-		dc.w $3D87
-word_14C542:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5D9B
-		dc.w $BDA1
-word_14C548:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5DAD
-		dc.w $BDB3
-word_14C54E:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5DBF
-		dc.w $BDC5
-word_14C554:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2DD1
-		dc.w $7DD4
+		dc.w $3B4A
+word_14C41A:	dc.w 4
+		dc.w $7B4E
+		dc.w $1B42
+		dc.w $5B56
+		dc.w $3B4A
+word_14C424:	dc.w 3
+		dc.w $2B5C
+		dc.w $BB5F
+		dc.w $3B6B
+word_14C42C:	dc.w 3
+		dc.w $2B5C
+		dc.w $BB6F
+		dc.w $3B7B
+word_14C434:	dc.w 3
+		dc.w $3B7F
+		dc.w $FB83
+		dc.w $B93
+word_14C43C:	dc.w 4
+		dc.w $2B94
+		dc.w $3B97
+		dc.w $5B9B
+		dc.w $3BA1
+word_14C442:	dc.w 4
+		dc.w $2BA5
+		dc.w $BBA8
+		dc.w $1BB4
+		dc.w $3BB6
+word_14C44A:	dc.w 3
+		dc.w $1BBA
+		dc.w $BBBC
+		dc.w $3BB6
+word_14C450:	dc.w 4
+		dc.w $2BC8
+		dc.w $BBCB
+		dc.w $1BD7
+		dc.w $3BB6
+word_14C468:	dc.w 2
+		dc.w $FBD9
+		dc.w $BE9
+word_14C46E:	dc.w 1
+		dc.w $FBEA
+word_14C472:	dc.w 2
+		dc.w $FBFA
+		dc.w $1C0A
+word_14C478:	dc.w 3
+		dc.w $2C0C
+		dc.w $BC0F
+		dc.w $1C1B
+word_14C480:	dc.w 1
+		dc.w $FC1D
+word_14C484:	dc.w 1
+		dc.w $FC2D
+word_14C488:	dc.w 4
+		dc.w $7C3D
+		dc.w $2C45
+		dc.w $1C48
+		dc.w $C4A
+word_14C492:	dc.w 2
+		dc.w $BC4B
+		dc.w $3C57
+word_14C498:	dc.w 3
+		dc.w $1C5B
+		dc.w $FC5D
+		dc.w $C6D
+word_14C4A0:	dc.w 3
+		dc.w $3C6E
+		dc.w $7C72
+		dc.w $3C7A
+word_14C4A8:	dc.w 2
+		dc.w $BC7E
+		dc.w $1C8A
+word_14C4AE:	dc.w 1
+		dc.w $BC8C
+word_14C4C0:	dc.w 2
+		dc.w $BC98
+		dc.w $5CA4
+word_14C4C6:	dc.w 3
+		dc.w $3CAA
+		dc.w $7CAE
+		dc.w $3CB6
+word_14C4CE:	dc.w 1
+		dc.w $BCBA
+word_14C4E0:	dc.w 4
+		dc.w $7CC6
+		dc.w $7CCE
+		dc.w $3CD6
+		dc.w $2CDA
+word_14C4EA:	dc.w 4
+		dc.w $BCDD
+		dc.w $CE9
+		dc.w $3CEA
+		dc.w $3CEE
+word_14C4F4:	dc.w 4
+		dc.w $1CF2
+		dc.w $3CF4
+		dc.w $3CF8
+		dc.w $2CFC
+word_14C4FE:	dc.w 3
+		dc.w $2CFF
+		dc.w $BD02
+		dc.w $1D0E
+word_14C506:	dc.w 4
+		dc.w $2D10
+		dc.w $3D13
+		dc.w $BD17
+		dc.w $D23
+word_14C510:	dc.w 4
+		dc.w $2D24
+		dc.w $3D27
+		dc.w $3D2B
+		dc.w $8D2F
+word_14C51A:	dc.w 4
+		dc.w $2D38
+		dc.w $3D3B
+		dc.w $BD3F
+		dc.w $D4B
+word_14C526:	dc.w 4
+		dc.w $2D24
+		dc.w $3D27
+		dc.w $3D2B
+		dc.w $8D4C
+word_14C530:	dc.w 2
+		dc.w $BD55
+		dc.w $34E2
+word_14C536:	dc.w 2
+		dc.w $BD55
+		dc.w $3D61
+word_14C53C:	dc.w 2
+		dc.w $BD65
+		dc.w $34E2
+word_14C542:	dc.w 2
+		dc.w $5D71
+		dc.w $BD77
+word_14C548:	dc.w 2
+		dc.w $5D83
+		dc.w $BD89
+word_14C54E:	dc.w 2
+		dc.w $54E6
+		dc.w $B4EC
+word_14C554:	dc.w 4
+		dc.w $24F8
+		dc.w $74FB
+		dc.w $2503
+		dc.w $3506
+word_14C55E:	dc.w 5
+		dc.w $24F8
+		dc.w $3D95
+		dc.w $3D99
+		dc.w $2D9D
+		dc.w $3506
+word_14C56A:	dc.w 4
+		dc.w $2DA0
+		dc.w $7DA3
+		dc.w $2DAB
+		dc.w $3DAE
+word_14C574:	dc.w 4
+		dc.w $2DA0
+		dc.w $7DB2
+		dc.w $2DBA
+		dc.w $3DBD
+word_14C57E:	dc.w 3
+		dc.w $250A
+		dc.w $750D
+		dc.w $5515
+word_14C586:	dc.w 3
+		dc.w $8DC1
+		dc.w $1DCA
+		dc.w $5515
+word_14C58E:	dc.w 4
+		dc.w $B51B
+		dc.w $527
+		dc.w $2528
+		dc.w $352B
+word_14C598:	dc.w 3
+		dc.w $5DCC
+		dc.w $7DD2
+		dc.w $1DDA
+word_14C5A0:	dc.w 3
 		dc.w $2DDC
-		dc.w $3DDF
-word_14C55E:	dc.w 5			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2DE3
-		dc.w $3DE6
-		dc.w $3DEA
-		dc.w $2DEE
-		dc.w $3DDF
-word_14C56A:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2DF1
-		dc.w $7DF4
-		dc.w $2DFC
-		dc.w $3DFF
-word_14C574:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2E03
-		dc.w $7E06
-		dc.w $2E0E
-		dc.w $3E11
-word_14C57E:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2E15
-		dc.w $7E18
-		dc.w $5E20
-word_14C586:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $8E26
-		dc.w $3E2F
-		dc.w $5E33
-word_14C58E:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BE39
-		dc.w $1E45
-		dc.w $2E47
-		dc.w $3E4A
-word_14C598:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5E4E
-		dc.w $7E54
-		dc.w $1E5C
-word_14C5A0:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2E5E
-		dc.w $7E61
-		dc.w $1E69
-word_14C5A8:	dc.w 1			; DATA XREF: ROM:0014BD0Ao
-		dc.w $FE6B
-word_14C5AC:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BE7B
-		dc.w $1E87
-word_14C5B2:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $8E89
-		dc.w $7E92
-word_14C5B8:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1E9A
-		dc.w $2E9C
-		dc.w $7E9F
-		dc.w $5EA7
-word_14C5C2:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $B921
-		dc.w $592D
-word_14C5C8:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $FEAD
-		dc.w $2EBD
-		dc.w $1EC0
-word_14C5D0:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BEC2
-		dc.w $1ECE
-		dc.w $2ED0
-word_14C5D8:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5ED3
-		dc.w $3ED9
-		dc.w $2EDD
-		dc.w $5EE0
-word_14C5E2:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5EE6
-		dc.w $7EEC
-		dc.w $5EF4
-word_14C5EA:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BEFA
-		dc.w $5F06
-word_14C5F0:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $5F0C
-		dc.w $3F12
-		dc.w $5F16
-word_14C5F8:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $3F1C
-		dc.w $2F20
-		dc.w $FF23
-word_14C600:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $3F33
-		dc.w $FF37
-		dc.w $3F47
-word_14C608:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1F4B
-		dc.w $BF4D
-		dc.w $2F59
-word_14C610:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $1F5C
-		dc.w $BF5E
-		dc.w $1F6A
-word_14C618:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BF6C
-		dc.w $2F78
-word_14C61E:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BF7B
-		dc.w $F87
-word_14C624:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2F88
-		dc.w $BF8B
-		dc.w $1F97
-word_14C62C:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2F99
-		dc.w $BF9C
-		dc.w $2FA8
-word_14C634:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $FFAB
-		dc.w $1FBB
-word_14C63A:	dc.w 4			; DATA XREF: ROM:0014BD0Ao
-		dc.w $2FBD
-		dc.w $7FC0
-		dc.w $2FC8
-		dc.w $1FCB
-word_14C644:	dc.w 3			; DATA XREF: ROM:0014BD0Ao
-		dc.w $8FCD
-		dc.w $1FD6
-		dc.w $1FD8
-word_14C64C:	dc.w 2			; DATA XREF: ROM:0014BD0Ao
-		dc.w $BFDA
-		dc.w $5FE6
+		dc.w $7DDF
+		dc.w $1DE7
+word_14C5A8:	dc.w 1
+		dc.w $FDE9
+word_14C5AC:	dc.w 2
+		dc.w $BDF9
+		dc.w $1E05
+word_14C5B2:	dc.w 2
+		dc.w $8E07
+		dc.w $7E10
+word_14C5B8:	dc.w 4
+		dc.w $1E18
+		dc.w $2E1A
+		dc.w $7E1D
+		dc.w $5E25
+word_14C5C8:	dc.w 3
+		dc.w $FE2B
+		dc.w $2E3B
+		dc.w $1E3E
+word_14C5D0:	dc.w 3
+		dc.w $BE40
+		dc.w $1E4C
+		dc.w $2E4E
+word_14C5D8:	dc.w 4
+		dc.w $5E51
+		dc.w $3E57
+		dc.w $2E5B
+		dc.w $5E5E
+word_14C5E2:	dc.w 3
+		dc.w $5E64
+		dc.w $7E6A
+		dc.w $5E72
+word_14C5EA:	dc.w 2
+		dc.w $BE78
+		dc.w $5E84
+word_14C5F0:	dc.w 3
+		dc.w $5F19
+		dc.w $3F1F
+		dc.w $5F23
+word_14C5F8:	dc.w 3
+		dc.w $3F29
+		dc.w $2F2D
+		dc.w $FF30
+word_14C600:	dc.w 3
+		dc.w $3F40
+		dc.w $FF44
+		dc.w $3F54
+word_14C608:	dc.w 3
+		dc.w $1E8A
+		dc.w $BE8C
+		dc.w $2E98
+word_14C610:	dc.w 3
+		dc.w $1E9B
+		dc.w $BE9D
+		dc.w $1EA9
+word_14C618:	dc.w 2
+		dc.w $269F
+		dc.w $BEAB
+word_14C61E:	dc.w 3
+		dc.w $56B1
+		dc.w $5EB7
+		dc.w $EBD
+word_14C624:	dc.w 3
+		dc.w $2EBE
+		dc.w $BEC1
+		dc.w $1ECD
+word_14C62C:	dc.w 3
+		dc.w $1E8A
+		dc.w $BECF
+		dc.w $2EDB
+word_14C634:	dc.w 2
+		dc.w $FEDE
+		dc.w $1EEE
+word_14C63A:	dc.w 4
+		dc.w $2EF0
+		dc.w $7EF3
+		dc.w $2EFB
+		dc.w $1EFE
+word_14C644:	dc.w 4
+		dc.w $56E0
+		dc.w $2F00
+		dc.w $1F03
+		dc.w $1F05
+word_14C64C:	dc.w 2
+		dc.w $BF07
+		dc.w $5F13

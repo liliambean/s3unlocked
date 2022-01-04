@@ -289,13 +289,11 @@ Pos_table_P2			ds.b $100		; used by Player 2 in competition mode
 Pos_table 			ds.b $100		;
 Competition_saved_data		ds.b $54		; saved data from Competition Mode
 			ds.b $C				; unused
-Save_pointer :=			*		; S3 uses a different address
-				ds.l 1			; pointer to the active save slot in 1 player mode
+Save_pointer			ds.l 1			; pointer to the active save slot in 1 player mode
 			ds.w 1				; unused
 Emerald_flicker_flag		ds.w 1			; controls the emerald flicker in save screen and special stage results.
 			ds.b $44			; unused
-Saved_data :=			*		; S3 uses a different address
-				ds.b $54		; saved data from 1 player mode
+Saved_data			ds.b $54		; saved data from 1 player mode
 Ring_status_table		ds.b $400		; 1 word per ring
 Object_respawn_table		ds.b $300		; 1 byte per object, every object in the level gets an entry
 
@@ -732,7 +730,8 @@ Debug_object			ds.b 1			; the current position in the debug mode object list
 			ds.b 1				; unused
 Debug_placement_mode =		*			; both routine and type
 Debug_placement_routine		ds.b 1
-Debug_placement_type		ds.b 1			; 0 = normal gameplay, 1 = normal object placement, 2 = frame cycling
+;Debug_placement_type
+				ds.b 1			; Fred: move debug frame cycling mode to negative
 Debug_camera_delay		ds.b 1
 Debug_camera_speed		ds.b 1
 V_int_run_count			ds.l 1			; the number of times V-int has run
@@ -878,18 +877,20 @@ Respawn_table_keep		ds.b 1			; if set, respawn table is not reset during level l
 _tempFF98		ds.w 1				; this is used in Sonic 3 Alone, but unused in Sonic & Knuckles and Sonic 3 Complete
 Saved_apparent_zone_and_act	ds.w 1
 Saved2_apparent_zone_and_act	ds.w 1
-			ds.b 1				; unused
 
-Blue_spheres_header_flag	ds.b 1			; 0 = SEGA GENESIS, 1 = SEGA MEGA DRIVE
-Blue_spheres_mode		ds.b 1			; 0 = single stage, 1 = full game
-Blue_spheres_menu_flag		ds.b 1			; 0 = NO WAY!, 1 = normal, bit 7 set = entering a code
+;Blue_spheres_header_flag
+;Blue_spheres_mode
+;Blue_spheres_menu_flag
+Blue_spheres_saved_level	ds.l 1			; Fred: blue sphere - load saved level on startup
 Blue_spheres_current_stage	ds.b 4			; the layout parts that make up the current stage
 Blue_spheres_current_level	ds.l 1			; number shown at the top of the full game menu
 Blue_spheres_option		ds.b 1			; 0 = level, 1 = start, 2 = code
-Blue_spheres_progress_flag	ds.b 1			; 0 = normal, -1 = disabled (single stage mode or using a code from single stage mode)
+;Blue_spheres_progress_flag
+Blue_spheres_menu_flag		ds.b 1			; 0 = single stage, 1 = normal, bit 7 set = entering a code
 Blue_spheres_difficulty		ds.b 1			; value currently displayed
 Blue_spheres_target_difficulty	ds.b 1			; value read from the layout
-SK_alone_flag			ds.w 1			; -1 if Sonic 3 isn't locked on
+;SK_alone_flag
+			ds.w 1				; Fred: removed S&K alone mode
 Emerald_counts =		*			; both chaos and super emeralds
 Chaos_emerald_count		ds.b 1
 Super_emerald_count		ds.b 1
@@ -907,48 +908,33 @@ Next_extra_life_score_P2	ds.l 1			; left over from Sonic 2
 			ds.w 1				; unused
 Debug_saved_mappings		ds.l 1			; player 1 mappings before entering debug mode
 Debug_saved_art_tile		ds.w 1			; player 1 art_tile before entering debug mode
-Demo_mode_flag :=		*		; S3 uses a different address
-				ds.w 1
-Next_demo_number :=		*		; S3 uses a different address
-				ds.w 1
-Blue_spheres_stage_flag :=	*		; S3 uses a different address
-				ds.b 1			; set if a Blue Sphere special stage is being run
+Demo_mode_flag			ds.w 1
+Next_demo_number		ds.w 1
+Blue_spheres_stage_flag		ds.b 1			; set if a Blue Sphere special stage is being run
 			ds.b 1				; unused
-V_blank_cycles :=		*		; S3 uses a different address
-				ds.w 1			; the number of cycles between V-blanks
-Graphics_flags :=		*		; S3 uses a different address
-				ds.b 1			; bit 7 set = English system, bit 6 set = PAL system
+V_blank_cycles			ds.w 1			; the number of cycles between V-blanks
+Graphics_flags			ds.b 1			; bit 7 set = English system, bit 6 set = PAL system
 			ds.b 1				; unused
-Debug_mode_flag :=		*		; S3 uses a different address
-				ds.w 1
+Debug_mode_flag			ds.w 1
 			ds.l 1				; unused
-Level_select_flag :=		*		; S3 uses a different address
-				ds.b 1
-Slow_motion_flag :=		*		; S3 uses a different address
-				ds.b 1
-Debug_cheat_flag :=		*		; S3 uses a different address
-				ds.w 1			; set if the debug cheat's been entered
-Level_select_cheat_counter :=	*		; S3 uses a different address
-				ds.w 1			; progress entering level select cheat, unused
-Debug_mode_cheat_counter :=	*		; S3 uses a different address
-				ds.w 1			; progress entering debug mode cheat, unused
-Competition_mode :=		*		; S3 uses a different address
-				ds.w 1
-P1_character :=			*		; S3 uses a different address
-				ds.b 1			; 0 := Sonic, 1 := Tails, 2 := Knuckles
-P2_character :=			*		; S3 uses a different address
-				ds.b 1
-			ds.l 1				; unused
+Level_select_flag		ds.b 1
+Slow_motion_flag		ds.b 1
+Debug_cheat_flag		ds.w 1			; set if the debug cheat's been entered
+Level_select_cheat_counter	ds.w 1			; progress entering level select cheat, unused
+Debug_mode_cheat_counter	ds.w 1			; progress entering debug mode cheat, unused
+Competition_mode		ds.w 1
+P1_character			ds.b 1			; 0 = Sonic, 1 = Tails, 2 = Knuckles
+P2_character			ds.b 1
+Encore_stocks			ds.w 1			; Fred: Encore mode
+Encore_mode			ds.b 1			; Fred: Encore mode
+			ds.b 1				; unused
 
-V_int_jump :=			*		; S3 uses a different address
-				ds.b 6			; contains an instruction to jump to the V-int handler
+V_int_jump			ds.b 6			; contains an instruction to jump to the V-int handler
 V_int_addr :=			V_int_jump+2		; long
-H_int_jump :=			*		; S3 uses a different address
-				ds.b 6			; contains an instruction to jump to the H-int handler
+H_int_jump			ds.b 6			; contains an instruction to jump to the H-int handler
 H_int_addr :=			H_int_jump+2		; long
-Checksum_string :=		*		; S3 uses a different address
-				ds.l 1			; set to Ref_Checksum_String once the checksum routine has run
-Ref_Checksum_String := 'SM&K'
+Checksum_string			ds.l 1			; set to Ref_Checksum_String once the checksum routine has run
+Ref_Checksum_String := 'Fred'
 
 .check =	(*)&$FFFFFF
 	if (.check>0)&(.check<$FF0000)
@@ -970,7 +956,7 @@ Special_stage_anim_frame	ds.w 1			; special stage globe's current animation fram
 Special_stage_X_pos		ds.w 1
 Special_stage_Y_pos		ds.w 1
 Special_stage_angle		ds.b 1			; $00 = north, $40 = west, $80 = south, $C0 = east
-			ds.b 1				; unused
+Special_stage_green_spheres	ds.b 1			; Fred: special stage - add green spheres
 Special_stage_velocity		ds.w 1			; player's movement speed, negative when going backwards
 Special_stage_turning		ds.b 1			; direction of next turn, 4 = left, -4 = right
 Special_stage_bumper_lock	ds.b 1			; if set, the player can't start advancing by pressing up
@@ -999,8 +985,7 @@ Special_stage_emerald_timer	ds.b 1			; counts down when the emerald appears, whe
 Special_stage_interact		ds.w 1			; address of the last bumper touched, or the emerald at the end of the stage
 Special_stage_started		ds.b 1			; set when the player begins moving at the start of the stage
 			ds.b $2F			; unused
-SStage_extra_sprites :=		*		; S3 uses a different address
-				ds.b $70		; some extra sprite info for special stages
+SStage_extra_sprites		ds.b $70		; some extra sprite info for special stages
 	dephase
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
@@ -1040,9 +1025,10 @@ ArtTile_CutsceneKnux                  = $04DA
 ArtTile_Player_1                      = $0680
 ArtTile_Player_2                      = $06A0
 ArtTile_Player_2_Tail                 = $06B0
-ArtTile_Ring                          = $06BC
+ArtTile_Ring                          = $06C6		; Fred: HUD - relocate VRAM
 ArtTile_Shield                        = $079C
 ArtTile_Shield_Sparks                 = $07BB
+ArtTile_LifeIcon                      = $07D4
 ArtTile_DashDust                      = $07E0
 ArtTile_DashDust_P2                   = $07F0
 
@@ -1295,9 +1281,12 @@ sfx_UnknownSaw			ds.b 1		; $D8
 sfx_MagneticSpike		ds.b 1		; $D9
 sfx_LeafBlower			ds.b 1		; $DA
 sfx_WaterSkid			ds.b 1		; $DB
-mus_CreditsK			ds.b 1		; $DC - Can also be treated as SFX?
-				ds.b 3		; unused SFX slots, the driver will happily play them though
 sfx__End =			*		; next ID after the last sound effect
+mus_CreditsK			ds.b 1		; $DC
+mus_TitleScreenK		ds.b 1		; $DD
+mus_InvincibilityK		ds.b 1		; $DE
+mus_ExtraLifeK			ds.b 1		; $DF
+mus_KnucklesK			ds.b 1		; $E0
 
 	dephase
 	!org 0				; make sure we reset the ROM position to 0

@@ -10,7 +10,7 @@ namespace S3KObjectDefinitions.HPZ
 	{
 		public override void Init(ObjectData data)
 		{
-			BuildSpritesSubtypes(1, false);
+			BuildSpritesSubtypes(4, false);
 		}
 	}
 }
@@ -21,7 +21,7 @@ namespace S3KObjectDefinitions.LBZ
 	{
 		public override void Init(ObjectData data)
 		{
-			BuildSpritesSubtypes(7, true, "../Levels/LBZ/Tiles/Act 2 Death Egg 2.bin");
+			BuildSpritesSubtypes(4, true, "../Levels/LBZ/Tiles/Act 2 Death Egg 2.bin");
 		}
 	}
 
@@ -29,7 +29,7 @@ namespace S3KObjectDefinitions.LBZ
 	{
 		public override void Init(ObjectData data)
 		{
-			BuildSpritesSubtypes(7, false, "../Levels/LBZ/Tiles/Act 2 Death Egg 2.bin");
+			BuildSpritesSubtypes(4, false, "../Levels/LBZ/Tiles/Act 2 Death Egg 2.bin");
 		}
 	}
 }
@@ -40,7 +40,7 @@ namespace S3KObjectDefinitions.Common
 	{
 		public override void Init(ObjectData data)
 		{
-			BuildSpritesSubtypes(7, true);
+			BuildSpritesSubtypes(4, true);
 		}
 	}
 
@@ -104,12 +104,12 @@ namespace S3KObjectDefinitions.Common
 
 		public override void Init(ObjectData data)
 		{
-			BuildSpritesSubtypes(7, false);
+			BuildSpritesSubtypes(4, false);
 		}
 
 		protected void BuildSpritesSubtypes(int startpal, bool s3, string girderart = "../General/Sprites/SS Entry/Badnik Explosion.bin")
 		{
-			var bytes = new byte[s3 ? 7 : 13];
+			var bytes = new byte[s3 ? 7 : 12];
 			for (var i = 0; i < bytes.Length; i++)
 				bytes[i] = (byte)(i << 2);
 
@@ -121,23 +121,23 @@ namespace S3KObjectDefinitions.Common
 
 			sprites[0] = BuildFlippedSprites(ObjectHelper.UnknownObject, false);
 
-			var art = LevelData.ReadFile("../General/Sprites/Knuckles/Cutscene/Cutscene Main.bin", CompressionType.Uncompressed);
-			var map = LevelData.ASMToBin("../General/Sprites/Knuckles/Cutscene/Map - Cutscene Knuckles.asm", EngineVersion.S3K);
-			var plc = LevelData.ASMToBin("../General/Sprites/Knuckles/Cutscene/DPLC - Cutscene Knuckles.asm", EngineVersion.S3K);
-
-			var idle = ObjectHelper.MapDPLCToBmp(art, map, plc, 0x16, startpal, true);
+			var art = LevelData.ReadFile("../General/Sprites/Knuckles/Art/Knuckles.bin", CompressionType.Uncompressed);
+			var mapfile = "../General/Sprites/Knuckles/Map - Knuckles.asm";
+			var plcfile = "../General/Sprites/Knuckles/Knuckles pattern load cues.asm";
 
 			subtypeNames[0] = "Angel Island 1";
-			sprites[1] = BuildFlippedSprites(ObjectHelper.MapDPLCToBmp(art, map, plc, 0x08, startpal), false);
+			sprites[1] = BuildFlippedSprites(ObjectHelper.MapASMDPLCToBmp(
+				art, mapfile, "word_14B58E", EngineVersion.S3K, plcfile, "word_14C36E", EngineVersion.S2, startpal), false);
 
 			subtypeNames[1] = "Angel Island 2";
-			sprites[2] = BuildFlippedSprites(new Sprite(idle), false);
+			sprites[2] = BuildFlippedSprites(ObjectHelper.MapASMDPLCToBmp(
+				art, mapfile, "word_14B01E", EngineVersion.S3K, plcfile, "word_14C126", EngineVersion.S2, startpal, true), true);
 
 			subtypeNames[2] = "Hydrocity 2";
 			if (s3) sprites[3] = sprites[2];
 			else
 			{
-				sprites[3] = BuildFlippedSprites(new Sprite(idle), false);
+				sprites[3] = BuildFlippedSprites(new Sprite(sprites[2][0]), false);
 				foreach (var sprite in sprites[3]) sprite.Offset(158, 0);
 
 				extraSprites[3] = ObjectHelper.MapASMToBmp(LevelData.ReadFile(
@@ -156,7 +156,7 @@ namespace S3KObjectDefinitions.Common
 			sprites[6] = sprites[2];
 
 			subtypeNames[6] = "Launch Base 2";
-			sprites[7] = BuildFlippedSprites(ObjectHelper.MapDPLCToBmp(art, map, plc, 0x20, startpal, true), true);
+			sprites[7] = sprites[2];
 
 			var tmp = ObjectHelper.MapASMToBmp(LevelData.ReadFile(girderart, CompressionType.KosinskiM),
 				"../Levels/LBZ/Misc Object Data/Map - Knuckles Pillar.asm", 0, 2);
@@ -165,34 +165,28 @@ namespace S3KObjectDefinitions.Common
 
 			if (s3) return;
 
-			subtypeNames[7] = "Mushroom Hill 1";
+			var idle = new Sprite(sprites[2][0]);
 			idle.InvertPriority();
+			subtypeNames[7] = "Mushroom Hill 1";
 			sprites[8] = BuildFlippedSprites(idle, false);
 
 			subtypeNames[8] = "Mushroom Hill 2";
-			sprites[9] = BuildFlippedSprites(ObjectHelper.MapASMDPLCToBmp(LevelData.ReadFile(
-				"../General/Sprites/Knuckles/Cutscene/MHZ2 Press.bin", CompressionType.Uncompressed),
-				"../General/Sprites/Knuckles/Cutscene/Map - MHZ2 Press.asm",
-				"../General/Sprites/Knuckles/Cutscene/DPLC - MHZ Press.asm", 3, startpal, true), false);
+			sprites[9] = sprites[2];
 
-			extraSprites[9] = ObjectHelper.MapASMToBmp(LevelData.ReadFile(
-				"../General/Sprites/Knuckles/Cutscene/Knuckles MHZ Switch.bin", CompressionType.KosinskiM),
+			var indexer = new MultiFileIndexer<byte>();
+			indexer.AddFile(new List<byte>(LevelData.ReadFile(
+				"../Levels/MHZ/Nemesis Art/Misc Art.bin", CompressionType.Nemesis)), -5856);
+			extraSprites[9] = ObjectHelper.MapASMToBmp(indexer.ToArray(),
 				"../Levels/MHZ/Misc Object Data/Map - Act 2 Knuckles Switch.asm", 0, startpal, true);
 			extraSprites[9].Offset(-8, 0);
 
-			art = LevelData.ReadFile("../General/Sprites/Knuckles/Art/Knuckles.bin", CompressionType.Uncompressed);
-			map = LevelData.ASMToBin("../General/Sprites/Knuckles/Map - Knuckles.asm", EngineVersion.S3K);
-			plc = LevelData.ASMToBin("../General/Sprites/Knuckles/Knuckles pattern load cues.asm", EngineVersion.S2);
-
 			subtypeNames[9] = "Lava Reef 2";
-			sprites[10] = BuildFlippedSprites(ObjectHelper.MapDPLCToBmp(
-				art, map, EngineVersion.S3K, plc, EngineVersion.S2, 0x56, startpal, true), true);
+			sprites[10] = sprites[2];
 
 			subtypeNames[10] = "Hidden Palace";
-			sprites[11] = BuildFlippedSprites(ObjectHelper.MapDPLCToBmp(
-				art, map, EngineVersion.S3K, plc, EngineVersion.S2, 0xD8, startpal), true);
+			sprites[11] = BuildFlippedSprites(ObjectHelper.MapASMDPLCToBmp(
+				art, mapfile, "word_14BA68", EngineVersion.S3K, plcfile, "word_14C554", EngineVersion.S2, startpal), true);
 
-			var indexer = new MultiFileIndexer<byte>();
 			indexer.AddFile(new List<byte>(LevelData.ReadFile("LevelArt", 0)), -32);
 			extraSprites[11] = ObjectHelper.MapASMToBmp(indexer.ToArray(),
 				"../Levels/LRZ/Misc Object Data/Map - Act 3 Platform.asm", 6, 2, true);
@@ -203,12 +197,6 @@ namespace S3KObjectDefinitions.Common
 				"../General/Sprites/Knuckles/Cutscene/SSZ Tired.bin", CompressionType.Uncompressed),
 				"../General/Sprites/Knuckles/Cutscene/Map - SSZ Tired.asm",
 				"../General/Sprites/Knuckles/Cutscene/DPLC - SSZ Tired.asm", 1, startpal, true), true);
-
-			subtypeNames[12] = "S&K Intro";
-			sprites[13] = BuildFlippedSprites(ObjectHelper.MapASMDPLCToBmp(LevelData.ReadFile(
-				"../General/Sprites/Knuckles/Cutscene/Intro Laying.bin", CompressionType.Uncompressed),
-				"../General/Sprites/Knuckles/Cutscene/Map - Intro Laying.asm",
-				"../General/Sprites/Knuckles/Cutscene/DPLC - Intro Laying.asm", 0, 4), false);
 		}
 
 		private Sprite[] BuildFlippedSprites(Sprite sprite, bool flip)

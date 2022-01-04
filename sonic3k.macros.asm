@@ -137,11 +137,8 @@ levselstr macro str
 	codepage LEVELSELECT
 	charset '0','9', 16
 	charset 'A','Z', 30
-	charset 'a','z', 30
-	charset '*', 26
-	charset $A9, 27	; '?'
-	charset ':', 28
-	charset '.', 29
+	charset '<', 56
+	charset '>', 57
 	charset ' ',  0
 	restore
 
