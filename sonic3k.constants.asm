@@ -1043,6 +1043,16 @@ mus_MutePSG			ds.b 1		; $E3 - mute all PSG channels
 mus_StopSFX			ds.b 1		; $E4 - stop all sound effects
 mus_FadeOut2			ds.b 1		; $E5 - fade out music (duplicate)
 mus__EndCmd =			*		; next ID after last sound command
+; ---------------------------------------------------------------------------
+; Fred: add extra music tracks
+
+mus_TitleScreenK		ds.b 1		; $E6
+mus_KnucklesK			ds.b 1		; $E7
+mus_ExtraLifeK			ds.b 1		; $E8
+mus_InvincibilityK		ds.b 1		; $E9
+mus_EndingSK			ds.b 1		; $EA
+mus_CreditsK			ds.b 1		; $EB
+mus__EndExtra =			*
 
 mus_S2SEGA =			$FA		; $FA - SEGA sound ID in Sonic 2
 mus_StopSEGA =			$FE		; $FE - Stop SEGA sound
@@ -1281,12 +1291,8 @@ sfx_UnknownSaw			ds.b 1		; $D8
 sfx_MagneticSpike		ds.b 1		; $D9
 sfx_LeafBlower			ds.b 1		; $DA
 sfx_WaterSkid			ds.b 1		; $DB
+;mus_CreditsK					; Fred: add extra music tracks
 sfx__End =			*		; next ID after the last sound effect
-mus_CreditsK			ds.b 1		; $DC
-mus_TitleScreenK		ds.b 1		; $DD
-mus_InvincibilityK		ds.b 1		; $DE
-mus_ExtraLifeK			ds.b 1		; $DF
-mus_KnucklesK			ds.b 1		; $E0
 
 	dephase
 	!org 0				; make sure we reset the ROM position to 0
