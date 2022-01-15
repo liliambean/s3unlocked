@@ -727,7 +727,7 @@ System_stack =			*			; this is the top of the stack, it grows downwards
 Restart_level_flag		ds.w 1
 Level_frame_counter		ds.w 1			; the number of frames which have elapsed since the level started
 Debug_object			ds.b 1			; the current position in the debug mode object list
-			ds.b 1				; unused
+Debug_monitor_subtype		ds.b 1			; Fred: allow selection of debug monitor contents
 Debug_placement_mode =		*			; both routine and type
 Debug_placement_routine		ds.b 1
 ;Debug_placement_type

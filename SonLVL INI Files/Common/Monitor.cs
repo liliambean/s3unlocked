@@ -76,7 +76,7 @@ namespace S3KObjectDefinitions.Common
 
 			subtypeNames = new[]
 			{
-				"Static",
+				"Super",
 				"1-Up",
 				"Eggman",
 				"Rings",
@@ -85,7 +85,7 @@ namespace S3KObjectDefinitions.Common
 				"Thunder Barrier",
 				"Aqua Barrier",
 				"Invincibility",
-				"Super"
+				"Barrier"
 			};
 
 			var subtypes = new byte[subtypeNames.Length];
