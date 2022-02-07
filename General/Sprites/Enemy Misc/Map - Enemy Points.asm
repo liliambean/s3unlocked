@@ -13,12 +13,12 @@ word_2CF6E:	dc.w 1
 		dc.b  $FC,   4,	  0,   4, $FF, $F8
 word_2CF76:	dc.w 2			
 		dc.b  $FC,   0,	  0,   0, $FF, $F8
-		dc.b  $FC,   4,	  0,   6,   0,	 0
+		dc.b  $FC,   4,	  0,   0, $FF, $FD
 word_2CF84:	dc.w 1			
 		dc.b  $FC,   0,	  0,   0, $FF, $FC
 word_2CF8C:	dc.w 2			
 		dc.b  $FC,   4,	  0,   0, $FF, $F8
-		dc.b  $FC,   4,	  0,   6,   0,	 5
+		dc.b  $FC,   4,	  0,   0,   0,	 2
 word_2CF9A:	dc.w 2			
 		dc.b  $FC,   4,	  0,   4, $FF, $F8
-		dc.b  $FC,   4,	  0,   6,   0,	 7
+		dc.b  $FC,   4,	  0,   0,   0,	 4
