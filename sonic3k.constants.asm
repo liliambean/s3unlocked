@@ -988,6 +988,14 @@ Special_stage_started		ds.b 1			; set when the player begins moving at the start
 SStage_extra_sprites		ds.b $70		; some extra sprite info for special stages
 	dephase
 ; ---------------------------------------------------------------------------
+; Fred: HUD - Encore mode HUD
+Encore_cursor_timer =		Reserved_object_3+$18
+Encore_HUD_player_frame =	Reserved_object_3+$1A
+Encore_HUD_stocks_timer =	Reserved_object_3+$1C
+Encore_HUD_stocks_frame =	Reserved_object_3+$1E
+Encore_stock_count =		Reserved_object_3+$21
+
+; ---------------------------------------------------------------------------
 ; Art tile stuff
 palette_line_0      =      (0<<13)
 palette_line_1      =      (1<<13)
