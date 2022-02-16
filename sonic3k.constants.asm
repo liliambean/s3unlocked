@@ -993,7 +993,7 @@ Encore_cursor_timer =		Reserved_object_3+$18
 Encore_HUD_player_frame =	Reserved_object_3+$1A
 Encore_HUD_stocks_timer =	Reserved_object_3+$1C
 Encore_HUD_stocks_frame =	Reserved_object_3+$1E
-Encore_stock_count =		Reserved_object_3+$21
+Encore_stock_count =		Reserved_object_3+$1F
 
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
@@ -1035,7 +1035,7 @@ ArtTile_Player_2                      = $06A0
 ArtTile_Player_2_Tail                 = $06B0
 ArtTile_Ring                          = $06C4			; Fred: HUD - animate rings via DMA
 ArtTile_Shield                        = $079C
-ArtTile_Shield_Sparks                 = $07BB
+ArtTile_Shield_Sparks                 = $07B8			; Fred: HUD - Encore mode HUD
 ArtTile_LifeIcon                      = $07D4
 ArtTile_DashDust                      = $07E0
 ArtTile_DashDust_P2                   = $07F0

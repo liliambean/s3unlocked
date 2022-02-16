@@ -39,7 +39,6 @@ word_1A0C0:	dc.w 3			; DATA XREF: ROM:0001A076o
 		dc.w $704C
 		dc.w $5054
 		dc.w $B05A
-word_1A0C8:	dc.w 3			; DATA XREF: ROM:0001A076o
+word_1A0C8:	dc.w 2			; DATA XREF: ROM:0001A076o
 		dc.w $F066
-		dc.w $3076
-		dc.w $F07A
+		dc.w $B076

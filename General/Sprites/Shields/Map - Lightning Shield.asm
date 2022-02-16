@@ -71,7 +71,7 @@ word_19ECE:	dc.w 4			; DATA XREF: ROM:00019DC8o
 		dc.b	0,  $A,	$10,   0, $FF, $E8
 		dc.b	0,  $A,	$18,   0,   0,	 0
 word_19EE8:	dc.w 1			; DATA XREF: ROM:00019DC8o
-		dc.b  $FC,   0,	  0, $1F, $FF, $FC
+		dc.b  $FC,   0,	  0, $1C, $FF, $FC
 word_19EF0:	dc.w 1			; DATA XREF: ROM:00019DC8o
-		dc.b  $F8,   5,	  0, $20, $FF, $F8
+		dc.b  $F8,   5,	  0, $1D, $FF, $F8
 word_19EF8:	dc.w 0			; DATA XREF: ROM:00019DC8o

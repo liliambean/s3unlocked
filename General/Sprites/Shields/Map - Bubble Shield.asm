@@ -54,5 +54,5 @@ word_1A048:	dc.w 4			; DATA XREF: ROM:00019F82o
 		dc.b  $FC,  $A,	  8,  $E,   0,	 4
 word_1A062:	dc.w 3			; DATA XREF: ROM:00019F82o
 		dc.b  $F0,  $F,	  0,   0, $FF, $DC
-		dc.b  $F0,   3,	  0, $10, $FF, $FC
-		dc.b  $F0,  $F,	  0, $14,   0,	 4
+		dc.b  $F0,  $B,	  0, $10, $FF, $FC
+		dc.b  $F0,   7,	  8,   0,   0, $14
