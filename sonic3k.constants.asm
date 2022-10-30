@@ -925,9 +925,9 @@ Debug_mode_cheat_counter	ds.w 1			; progress entering debug mode cheat, unused
 Competition_mode		ds.w 1
 P1_character			ds.b 1			; 0 = Sonic, 1 = Tails, 2 = Knuckles
 P2_character			ds.b 1
-Encore_stocks			ds.w 1			; Fred: Encore mode
+Encore_stocks_packed		ds.w 1			; Fred: Encore mode
+Encore_available_chars		ds.b 1			; Fred: Encore mode
 Encore_mode			ds.b 1			; Fred: Encore mode
-			ds.b 1				; unused
 
 V_int_jump			ds.b 6			; contains an instruction to jump to the V-int handler
 V_int_addr :=			V_int_jump+2		; long
@@ -989,11 +989,11 @@ SStage_extra_sprites		ds.b $70		; some extra sprite info for special stages
 	dephase
 ; ---------------------------------------------------------------------------
 ; Fred: HUD - Encore mode HUD
-Encore_cursor_timer =		Reserved_object_3+$18
-Encore_HUD_player_frame =	Reserved_object_3+$1A
-Encore_HUD_stocks_timer =	Reserved_object_3+$1C
-Encore_HUD_stocks_frame =	Reserved_object_3+$1E
-Encore_stock_count =		Reserved_object_3+$1F
+Encore_HUD_player_frame =	Reserved_object_3+$18
+Encore_cursor_timer =		Reserved_object_3+$1A
+Encore_stocks =			Reserved_object_3+$1C
+Encore_HUD_stocks_frame =	Reserved_object_3+$24
+Encore_HUD_stocks_timer =	Reserved_object_3+$26
 
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
