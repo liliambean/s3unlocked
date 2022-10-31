@@ -592,7 +592,7 @@ Ctrl_1_pressed_title		ds.b 1
 _unkF74A			ds.b 1
 _unkF74B			ds.b 1
 _unkF74C			ds.w 1
-_unkF74E			ds.b 1
+Gliding_collision_flags		ds.b 1
 Disable_wall_grab		ds.b 1			; if set, disables Knuckles wall grab
 			ds.b $10			; unused
 Max_speed			ds.w 1
@@ -807,8 +807,7 @@ Slot_machine_peppermint_frame_timer			ds.b 1
 Slot_machine_peppermint_frame			ds.b 1
 Ring_spill_anim_counter		ds.b 1
 Ring_spill_anim_frame		ds.b 1
-Ring_spill_anim_accum		ds.b 1
-			ds.b 1				; unused
+Ring_spill_anim_accum		ds.w 1
 AIZ_vine_angle			ds.w 1			; controls the angle of AIZ giant vines
 			ds.w 1				; unused
 _unkFEBE			ds.b 1			; unused
@@ -817,7 +816,7 @@ Max_speed_P2			ds.w 1
 Acceleration_P2			ds.w 1
 Deceleration_P2			ds.w 1
 Life_count_P2			ds.b 1			; left over from Sonic 2
-Update_HUD_timer_P2			ds.b 1			; used in competition mode
+Update_HUD_timer_P2		ds.b 1			; used in competition mode
 Total_ring_count		ds.w 1			; left over from Sonic 2
 Total_ring_count_P2		ds.w 1			; left over from Sonic 2
 Monitors_broken			ds.w 1			; left over from Sonic 2. Apparently Sonic 3 developers liked copypasting, since gaining a life from rings also increments this counter
@@ -1030,6 +1029,8 @@ ArtTile_ArtKos_Save_Extra             = $0454
 ; Universal (used on all standard levels).
 ArtTile_Monitors                      = $04C4
 ArtTile_CutsceneKnux                  = $04DA
+ArtTile_Explosion                     = $05A0
+ArtTile_StarPost                      = $05E4
 ArtTile_Player_1                      = $0680
 ArtTile_Player_2                      = $06A0
 ArtTile_Player_2_Tail                 = $06B0
@@ -1169,7 +1170,7 @@ sfx_BossActivate		ds.b 1		; $50
 sfx_MissileThrow		ds.b 1		; $51
 sfx_SpikeMove			ds.b 1		; $52
 sfx_Charging			ds.b 1		; $53
-sfx_BossLazer			ds.b 1		; $54
+sfx_BossLaser			ds.b 1		; $54
 sfx_BlockConveyor		ds.b 1		; $55
 sfx_FlipBridge			ds.b 1		; $56
 sfx_Geyser			ds.b 1		; $57
@@ -1179,7 +1180,7 @@ sfx_UnknownCharge		ds.b 1		; $5A
 sfx_Switch			ds.b 1		; $5B
 sfx_MechaSpark			ds.b 1		; $5C
 sfx_FloorThump			ds.b 1		; $5D
-sfx_Lazer			ds.b 1		; $5E
+sfx_Laser			ds.b 1		; $5E
 sfx_Crash			ds.b 1		; $5F
 sfx_BossZoom			ds.b 1		; $60
 sfx_BossHitFloor		ds.b 1		; $61

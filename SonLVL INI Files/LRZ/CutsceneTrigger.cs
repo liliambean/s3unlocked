@@ -65,7 +65,7 @@ namespace S3KObjectDefinitions.LRZ
 			sprite = ObjectHelper.MapASMDPLCToBmp(LevelData.ReadFile(
 				"../General/Sprites/Knuckles/Art/Knuckles.bin", CompressionType.Uncompressed),
 				"../General/Sprites/Knuckles/Map - Knuckles.asm", "word_14B01E", EngineVersion.S3K,
-				"../General/Sprites/Knuckles/Knuckles pattern load cues.asm", "word_14C126", EngineVersion.S2, 4, true);
+				"../General/Sprites/Knuckles/DPLC - Knuckles.asm", "word_14C126", EngineVersion.S2, 4, true);
 
 			sprite.Flip(true, false);
 			sprite.Offset(48, 10);

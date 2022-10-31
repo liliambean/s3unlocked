@@ -123,7 +123,7 @@ namespace S3KObjectDefinitions.Common
 
 			var art = LevelData.ReadFile("../General/Sprites/Knuckles/Art/Knuckles.bin", CompressionType.Uncompressed);
 			var mapfile = "../General/Sprites/Knuckles/Map - Knuckles.asm";
-			var plcfile = "../General/Sprites/Knuckles/Knuckles pattern load cues.asm";
+			var plcfile = "../General/Sprites/Knuckles/DPLC - Knuckles.asm";
 
 			subtypeNames[0] = "Angel Island 1";
 			sprites[1] = BuildFlippedSprites(ObjectHelper.MapASMDPLCToBmp(
