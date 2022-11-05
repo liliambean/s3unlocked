@@ -993,6 +993,7 @@ Encore_cursor_timer =		Reserved_object_3+$1A
 Encore_stocks =			Reserved_object_3+$1C
 Encore_HUD_stocks_frame =	Reserved_object_3+$24
 Encore_HUD_stocks_timer =	Reserved_object_3+$26
+Encore_HUD_stocks_scroll =	Reserved_object_3+$28
 
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
