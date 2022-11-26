@@ -4,10 +4,11 @@ Map_83B9E:	dc.w word_83BAC-Map_83B9E
 		dc.w word_83BAC-Map_83B9E
 		dc.w word_83BAC-Map_83B9E
 		dc.w word_83BAC-Map_83B9E
-		dc.w word_83BD6-Map_83B9E
+		dc.w word_83BAC-Map_83B9E
 		dc.w word_83BE4-Map_83B9E
 		dc.w word_83BEC-Map_83B9E
 		dc.w word_83BF4-Map_83B9E
+		dc.w word_83BD6-Map_83B9E
 		dc.w word_83BAC-Map_83B9E
 word_83BAC:	dc.w 2
 		dc.b  $F0,  $B,   0,   0, $FF, $E8

@@ -1,30 +1,30 @@
 ; Palette pointers
 
-;		dc.l Pal_S2Sega
-;		dc.w Normal_palette&$FFFF
-;		dc.w $1F
-;		dc.l Pal_S2Title
-;		dc.w Normal_palette_line_2&$FFFF
-;		dc.w 7
-;		dc.l Pal_S2LevSel
-;		dc.w Normal_palette&$FFFF
-;		dc.w $1F
-		dc.l Pal_SonicTails
-		dc.w Normal_palette&$FFFF
-		dc.w 7
 		dc.l Pal_SonicTails			; Fred: simplify player palette selection
 		dc.w Normal_palette&$FFFF		;
 		dc.w 7					;
+;		dc.l Pal_S2Sega				;
+;		dc.w Normal_palette&$FFFF		;
+;		dc.w $1F				;
+;		dc.l Pal_S2Title			;
+;		dc.w Normal_palette_line_2&$FFFF	;
+;		dc.w 7					;
+;		dc.l Pal_S2LevSel			;
+;		dc.w Normal_palette&$FFFF		;
+;		dc.w $1F				;
+		dc.l Pal_SonicTails
+		dc.w Normal_palette&$FFFF
+		dc.w 7
 		dc.l Pal_SonicTails			;
 		dc.w Normal_palette&$FFFF		;
 		dc.w 7					;
-;		dc.l Pal_S2Menu
-;		dc.w Normal_palette&$FFFF
-;		dc.w $1F
+;		dc.l Pal_S2Menu				;
+;		dc.w Normal_palette&$FFFF		;
+;		dc.w $1F				;
 		dc.l Pal_Knuckles
 		dc.w Normal_palette&$FFFF
 		dc.w 7
-		dc.l Pal_MightyRay			; Fred: add extra characters
+		dc.l Pal_Amy				; Fred: add extra characters
 		dc.w Normal_palette&$FFFF		;
 		dc.w 7					;
 		dc.l Pal_MightyRay			;
@@ -36,24 +36,24 @@
 		dc.l Pal_MetalSonic			;
 		dc.w Normal_palette&$FFFF		;
 		dc.w 7					;
-;		dc.l Pal_S2Sega
-;		dc.w Normal_palette&$FFFF
-;		dc.w $1F
-;		dc.l Pal_S2Sega
-;		dc.w Normal_palette&$FFFF
-;		dc.w $1F
+;		dc.l Pal_S2Sega				;
+;		dc.w Normal_palette&$FFFF		;
+;		dc.w $1F				;
+;		dc.l Pal_S2Sega				;
+;		dc.w Normal_palette&$FFFF		;
+;		dc.w $1F				;
 		dc.l Pal_EncoreMode			; Fred: Encore mode palette
 		dc.w Normal_palette&$FFFF		;
 		dc.w 7					;
-;		dc.l Pal_S2Sega
-;		dc.w Normal_palette&$FFFF
-;		dc.w $1F
-;		dc.l Pal_S2Sega
-;		dc.w Normal_palette&$FFFF
-;		dc.w $1F
 		dc.l Pal_LevelSelect			; Fred: level select - use data select background
 		dc.w Normal_palette&$FFFF		;
 		dc.w $1F				;
+;		dc.l Pal_S2Sega				;
+;		dc.w Normal_palette&$FFFF		;
+;		dc.w $1F				;
+;		dc.l Pal_S2Sega				;
+;		dc.w Normal_palette&$FFFF		;
+;		dc.w $1F				;
 		dc.l Pal_AIZIntro
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17

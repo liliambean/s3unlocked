@@ -57,6 +57,7 @@ Map_2F26A:		dc.w word_2F2E0-Map_2F26A
 		dc.w word_2F754-Map_2F26A
 		dc.w word_2F768-Map_2F26A
 		dc.w word_2F588-Map_2F26A
+		dc.w Map_Results_AMY-Map_2F26A
 		dc.w Map_Results_MIGHTY-Map_2F26A
 		dc.w Map_Results_RAY-Map_2F26A
 		dc.w Map_Results_METAL-Map_2F26A
@@ -298,6 +299,9 @@ word_2F768:	dc.w 3
 		dc.b	0,  $D,	$85, $8D,   0,	 0
 		dc.b	0,  $D,	$85, $95,   0, $20
 		dc.b  $F6,   6,	$85, $CC,   0, $3C
+Map_Results_AMY:dc.w 2			
+		dc.b	0,  $D,	$85, $78,   0,  $F
+		dc.b	0,   9,	$85, $80,   0, $2F
 Map_Results_MIGHTY:dc.w 3		
 		dc.b	0,  $D,	$85, $78, $FF, $F1
 		dc.b	0,  $D,	$85, $80,   0, $11
