@@ -57,10 +57,6 @@ Map_2F26A:		dc.w word_2F2E0-Map_2F26A
 		dc.w word_2F754-Map_2F26A
 		dc.w word_2F768-Map_2F26A
 		dc.w word_2F588-Map_2F26A
-		dc.w Map_Results_AMY-Map_2F26A
-		dc.w Map_Results_MIGHTY-Map_2F26A
-		dc.w Map_Results_RAY-Map_2F26A
-		dc.w Map_Results_METAL-Map_2F26A
 word_2F2E0:	dc.w 0			
 word_2F2E2:	dc.w 1			
 		dc.b	0,   1,	$A5, $20,   0,	 0
@@ -280,36 +276,17 @@ word_2F6F8:	dc.w 3
 word_2F70C:	dc.w 2			
 		dc.b	0,   5,	$85, $27,   0,	 0
 		dc.b	0,   5,	$85, $33,   0,	$F
-word_2F71A:	dc.w 5			
-		dc.b	0,  $D,	$86, $CC, $FF, $A0
-		dc.b	0,   1,	$86, $E0, $FF, $C0
-		dc.b	0,   9,	$86, $E4,   0, $28
-		dc.b	0,  $D,	$86, $EA,   0, $40
-		dc.b  $F6,   6,	$85, $CC, $FF, $C4
-word_2F73A:	dc.w 4			
-		dc.b	0,  $D,	$86, $D2,   0,	 0
-		dc.b	0,  $D,	$85, $D2,   0, $27
-		dc.b	0,   1,	  6, $CC,   0, $48
-		dc.b  $F6,   6,	$85, $CC,   0, $4C
-word_2F754:	dc.w 3			
-		dc.b	0,  $D,	$85, $7F,   0,	 0
-		dc.b	0,   9,	$85, $87,   0, $20
-		dc.b  $F6,   6,	$85, $CC,   0, $34
-word_2F768:	dc.w 3			
-		dc.b	0,  $D,	$85, $8D,   0,	 0
-		dc.b	0,  $D,	$85, $95,   0, $20
-		dc.b  $F6,   6,	$85, $CC,   0, $3C
-Map_Results_AMY:dc.w 2			
+word_2F71A:		dc.w 2		
 		dc.b	0,  $D,	$85, $78,   0,  $F
 		dc.b	0,   9,	$85, $80,   0, $2F
-Map_Results_MIGHTY:dc.w 3		
+word_2F73A:		dc.w 3		
 		dc.b	0,  $D,	$85, $78, $FF, $F1
 		dc.b	0,  $D,	$85, $80,   0, $11
 		dc.b	0,   9,	$85, $88,   0, $31
-Map_Results_RAY:dc.w 2			
+word_2F754:		dc.w 2		
 		dc.b	0,  $D,	$85, $78,   0, $17
 		dc.b	0,   5,	$85, $80,   0, $37
-Map_Results_METAL:dc.w 4		
+word_2F768:		dc.w 4		
 		dc.b	0,  $D,	$85, $78, $FF, $C0
 		dc.b	0,  $D,	$85, $80, $FF, $E0
 		dc.b	0,  $D,	$85, $88,   0,   8
