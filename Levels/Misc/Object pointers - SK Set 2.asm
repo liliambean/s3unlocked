@@ -157,7 +157,7 @@
 		dc.l Obj_LRZRockCrusher			; 156
 		dc.l Obj_LRZMiniboss			; 157
 		dc.l Obj_LRZ3Autoscroll			; 158
-		dc.l Obj_Ring				; 159
+		dc.l Obj_SSZ2Ring			; 159
 		dc.l Obj_EggRobo			; 160
 		dc.l Obj_SSZGHZBoss			; 161
 		dc.l Obj_SSZMTZBoss			; 162
