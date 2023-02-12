@@ -10,10 +10,10 @@ Map_607E6:	dc.w word_607F0-Map_607E6
 		dc.w Map_EndingPoses_Mighty2-Map_607E6
 		dc.w Map_EndingPoses_Ray1-Map_607E6
 		dc.w Map_EndingPoses_Ray2-Map_607E6
-		dc.w word_607F0-Map_607E6
-		dc.w word_60816-Map_607E6
-		dc.w word_60A52-Map_607E6
+		dc.w Map_EndingPoses_MetalSonic1-Map_607E6
+		dc.w Map_EndingPoses_MetalSonic2-Map_607E6
 		dc.w word_60866-Map_607E6
+		dc.w word_60A52-Map_607E6
 word_607F0:	dc.w 6			
 		dc.b  $DC,  $F,	  0,   0, $FF, $F0
 		dc.b  $E4,   1,	  0, $10,   0, $10
@@ -153,6 +153,42 @@ Map_EndingPoses_Ray2:
 		dc.b  $34,   0,	  0, $C0,   0, $19
 		dc.b  $24,   0,	  0, $C1, $FF, $E9
 		dc.b  $2C,  $B,	  0, $C2, $FF, $E7
+Map_EndingPoses_MetalSonic1:
+		dc.w $10		
+		dc.b  $B8,  $E,   0,   0, $FF, $D6
+		dc.b  $B0,  $F,   0,  $C, $FF, $F6
+		dc.b  $D0,  $F,   0, $1C, $FF, $D6
+		dc.b  $D0,  $F,   0, $2C, $FF, $F6
+		dc.b  $E0,   5,   0, $3C,   0, $16
+		dc.b  $F0,  $D,   0, $40, $FF, $CC
+		dc.b  $F0,  $F,   0, $48, $FF, $EC
+		dc.b  $F0,  $F,   0, $58,   0,  $C
+		dc.b  $10,  $F,   0, $68, $FF, $F4
+		dc.b  $10,  $F,   0, $78,   0, $14
+		dc.b  $30,   6,   0, $88, $FF, $FC
+		dc.b  $30,  $F,   0, $8E,   0,  $C
+		dc.b  $DF,  $F,   0, $9E,   0,   3
+		dc.b  $DF,  $F,   8, $9E,   0, $23
+		dc.b  $FF,  $F, $10, $9E,   0,   3
+		dc.b  $FF,  $F, $18, $9E,   0, $23
+Map_EndingPoses_MetalSonic2:
+		dc.w $10		
+		dc.b  $B8,  $E,   0,   0, $FF, $D6
+		dc.b  $B0,  $F,   0,  $C, $FF, $F6
+		dc.b  $D0,  $F,   0, $1C, $FF, $D6
+		dc.b  $D0,  $F,   0, $2C, $FF, $F6
+		dc.b  $E0,   5,   0, $3C,   0, $16
+		dc.b  $F0,  $D,   0, $40, $FF, $CC
+		dc.b  $F0,  $F,   0, $48, $FF, $EC
+		dc.b  $F0,  $F,   0, $58,   0,  $C
+		dc.b  $10,  $F,   0, $68, $FF, $F4
+		dc.b  $10,  $F,   0, $78,   0, $14
+		dc.b  $30,   6,   0, $88, $FF, $FC
+		dc.b  $30,  $F,   0, $8E,   0,  $C
+		dc.b  $E7,  $A,   0, $AE,   0,  $B
+		dc.b  $E7,  $A,   8, $AE,   0, $23
+		dc.b  $FF,  $A, $10, $AE,   0,  $B
+		dc.b  $FF,  $A, $18, $AE,   0, $23
 word_60A52:	dc.w 1			
 		dc.b  $F8,   5,	  0,   0, $FF, $F8
 word_60A5A:	dc.w 2			
