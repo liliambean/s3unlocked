@@ -2,23 +2,23 @@
 <ObjDef xmlns="http://www.sonicretro.org" Name="Boss" Image="main" Depth="4">
   <Images>
     <ImageFromMappings id="main">
-      <ArtFile filename="../Levels/DDZ/KosinskiM Art/Misc Art.bin" compression="KosinskiM" />
+      <ArtFile filename="LevelArt" offset="-10880" />
       <MapFile type="ASM" filename="../Levels/DDZ/Misc Object Data/Map - Missile Asteroid.asm" frame="0" startpal="2" />
     </ImageFromMappings>
     <ImageFromMappings id="jet">
-      <ArtFile filename="../Levels/DDZ/KosinskiM Art/Misc Art.bin" compression="KosinskiM" />
+      <ArtFile filename="LevelArt" offset="-10880" />
       <MapFile type="ASM" filename="../Levels/DDZ/Misc Object Data/Map - Missile Asteroid.asm" frame="1" startpal="2" />
     </ImageFromMappings>
     <ImageFromMappings id="fire">
-      <ArtFile filename="../Levels/DDZ/KosinskiM Art/Misc Art.bin" compression="KosinskiM" />
+      <ArtFile filename="LevelArt" offset="-10880" />
       <MapFile type="ASM" filename="../Levels/DDZ/Misc Object Data/Map - Missile Asteroid.asm" frame="6" startpal="2" />
     </ImageFromMappings>
     <ImageFromMappings id="arm">
-      <ArtFile filename="../Levels/DDZ/KosinskiM Art/Misc Art.bin" compression="KosinskiM" />
+      <ArtFile filename="LevelArt" offset="-10880" />
       <MapFile type="ASM" filename="../Levels/DDZ/Misc Object Data/Map - Missile Asteroid.asm" frame="58" startpal="2" />
     </ImageFromMappings>
     <ImageFromMappings id="leg">
-      <ArtFile filename="../Levels/DDZ/KosinskiM Art/Misc Art.bin" compression="KosinskiM" />
+      <ArtFile filename="LevelArt" offset="-10880" />
       <MapFile type="ASM" filename="../Levels/DDZ/Misc Object Data/Map - Missile Asteroid.asm" frame="61" startpal="2" />
     </ImageFromMappings>
     <ImageFromMappings id="emerald">

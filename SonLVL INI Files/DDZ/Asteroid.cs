@@ -67,11 +67,11 @@ namespace S3KObjectDefinitions.DDZ
 
 		public override void Init(ObjectData data)
 		{
-			var version = LevelData.Game.MappingsVersion;
-			var art = LevelData.ReadFile(
-				"../Levels/DDZ/KosinskiM Art/Misc Art.bin", CompressionType.KosinskiM);
+			var indexer = new MultiFileIndexer<byte>();
+			indexer.AddFile(new List<byte>(LevelData.ReadFile("LevelArt", 0)), -10880);
+			var art = indexer.ToArray();
 			var map = LevelData.ASMToBin(
-				"../Levels/DDZ/Misc Object Data/Map - Missile Asteroid.asm", version);
+				"../Levels/DDZ/Misc Object Data/Map - Missile Asteroid.asm", LevelData.Game.MappingsVersion);
 
 			properties = new PropertySpec[2];
 			subtypes = new ReadOnlyCollection<byte>(new byte[0]);
