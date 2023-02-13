@@ -490,7 +490,7 @@
 #split	0x001715F2,0x00172214,Levels\LRZ\KosinskiM Art\End Boss.bin
 #split	0x00172214,0x00172406,Levels\LRZ\KosinskiM Art\Knuckles Boulder.bin
 #split	0x00174A86,0x00174B28,Levels\HPZ\KosinskiM Art\Knuckles Dizzy Stars.bin
-#split	0x0017588A,0x001759AC,General\Sprites\Teleporter\Teleporter.bin
+#split	0x0017588A,0x001759AC,Levels\HPZ\KosinskiM Art\Teleporter.bin
 #split	0x001759AC,0x00175A9E,Levels\HPZ\KosinskiM Art\Special Stage Emeralds.bin
 #split	0x0017B17E,0x0017B6E0,General\Sprites\Egg Robo\Egg Robo Badnik.bin
 #split	0x0017C6E0,0x0017C802,General\Sprites\Mecha Sonic\Mecha Sonic Head.bin
