@@ -44,9 +44,9 @@ namespace S3KObjectDefinitions.HPZMini
 
 			sprite = ObjectHelper.MapASMToBmp(LevelData.ReadFile(
 				"../General/Sprites/Teleporter/Teleporter.bin", CompressionType.KosinskiM),
-				"../Levels/SSZ/Misc Object Data/Map - (&HPZ) Teleporter.asm", 10, 4);
+				"../Levels/SSZ/Misc Object Data/Map - (&HPZ) Teleporter.asm", 10, 0);
 
-			var emeralds = BuildEmeraldSprites(7);
+			var emeralds = BuildEmeraldSprites();
 
 			emeralds[0].Offset(0x1640, 0x368);
 			emeralds[1].Offset(0x15E0, 0x3A0);
@@ -66,7 +66,7 @@ namespace S3KObjectDefinitions.HPZMini
 	{
 		public override void Init(ObjectData data)
 		{
-			BuildMasterEmeraldSprites(7);
+			BuildMasterEmeraldSprites();
 		}
 	}
 }
@@ -99,16 +99,16 @@ namespace S3KObjectDefinitions.HPZ
 
 		public override void Init(ObjectData data)
 		{
-			BuildMasterEmeraldSprites(5);
+			BuildMasterEmeraldSprites();
 		}
 
-		protected void BuildMasterEmeraldSprites(int startpal)
+		protected void BuildMasterEmeraldSprites()
 		{
 			subtypes = new ReadOnlyCollection<byte>(new byte[0]);
 
 			sprite = BuildFlippedSprites(ObjectHelper.MapASMToBmp(LevelData.ReadFile(
 				"../Levels/HPZ/Nemesis Art/Emerald Misc Art.bin", CompressionType.Nemesis),
-				"../Levels/HPZ/Misc Object Data/Map - Emerald Misc Art.asm", 11, startpal));
+				"../Levels/HPZ/Misc Object Data/Map - Emerald Misc Art.asm", 11, 3));
 		}
 
 		private Sprite[] BuildFlippedSprites(Sprite sprite)
@@ -172,7 +172,7 @@ namespace S3KObjectDefinitions.HPZ
 
 			sprites = new Sprite[subtypeNames.Length][];
 			var subtypes = new byte[subtypeNames.Length];
-			var emeralds = BuildEmeraldSprites(5);
+			var emeralds = BuildEmeraldSprites();
 
 			for (var index = 0; index < sprites.Length; index++)
 			{
@@ -220,7 +220,7 @@ namespace S3KObjectDefinitions.HPZ
 			return 4;
 		}
 
-		protected Sprite[] BuildEmeraldSprites(int startpal)
+		protected Sprite[] BuildEmeraldSprites()
 		{
 			var version = LevelData.Game.MappingsVersion;
 			var art = LevelData.ReadFile(
@@ -230,14 +230,14 @@ namespace S3KObjectDefinitions.HPZ
 
 			var sprites = new Sprite[8];
 
-			sprites[0] = ObjectHelper.MapToBmp(art, map, 0, 2, true);
+			sprites[0] = ObjectHelper.MapToBmp(art, map, 0, 0, true);
 			sprites[1] = ObjectHelper.MapToBmp(art, map, 1, 0, true);
-			sprites[2] = ObjectHelper.MapToBmp(art, map, 2, 2, true);
+			sprites[2] = ObjectHelper.MapToBmp(art, map, 2, 0, true);
 			sprites[3] = ObjectHelper.MapToBmp(art, map, 3, 0, true);
 			sprites[4] = ObjectHelper.MapToBmp(art, map, 4, 0, true);
-			sprites[5] = ObjectHelper.MapToBmp(art, map, 5, 4, true);
-			sprites[6] = ObjectHelper.MapToBmp(art, map, 6, 3, true);
-			sprites[7] = ObjectHelper.MapToBmp(art, map, 11, startpal);
+			sprites[5] = ObjectHelper.MapToBmp(art, map, 5, 0, true);
+			sprites[6] = ObjectHelper.MapToBmp(art, map, 6, 0, true);
+			sprites[7] = ObjectHelper.MapToBmp(art, map, 11, 3);
 
 			return sprites;
 		}

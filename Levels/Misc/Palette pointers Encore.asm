@@ -165,6 +165,6 @@
 		dc.l Pal_DEZBoss_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_DEZBoss_Encore
+		dc.l Pal_HPZ_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
