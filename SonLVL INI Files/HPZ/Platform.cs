@@ -104,7 +104,7 @@ namespace S3KObjectDefinitions.HPZ
 			{
 				ObjectHelper.MapToBmp(art, map, 1, 3),
 				ObjectHelper.MapToBmp(art, map, 2, 2),
-				ObjectHelper.MapToBmp(art, map, 4, 3)
+				ObjectHelper.MapToBmp(art, map, 4, 2)
 			};
 
 			sprites[1] = new Sprite(sprites[0], sprites[1]);
