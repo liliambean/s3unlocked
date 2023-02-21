@@ -11,6 +11,7 @@ Map_6820C:		dc.w word_68226-Map_6820C
 		dc.w word_68306-Map_6820C
 		dc.w word_68332-Map_6820C
 		dc.w word_68358-Map_6820C
+		dc.w Map_DEZRobotnikShip-Map_6820C
 		dc.w Map_HPZRobotnikShip-Map_6820C
 word_68226:	dc.w 1			; DATA XREF: ROM:0006820Co
 		dc.b  $F8,  $D,	  0,   0, $FF, $F0
@@ -39,18 +40,18 @@ word_68254:	dc.w $C			; DATA XREF: ROM:0006820Co
 word_6829E:	dc.w 1			; DATA XREF: ROM:0006820Co
 		dc.b  $FC,   4,	  0, $4C, $FF, $F8
 word_682A6:	dc.w $C			; DATA XREF: ROM:0006820Co
-		dc.b  $EC,  $C,	$20, $22, $FF, $E4
-		dc.b  $EC,   8,	$20, $26,   0,	 4
-		dc.b  $F4,  $E,	$20, $29, $FF, $E4
-		dc.b  $F4,  $A,	$20, $35,   0,	 4
-		dc.b   $C,   8,	$20, $3E, $FF, $EC
-		dc.b   $C,   4,	$20, $41,   0,	 4
+		dc.b  $EC,  $C,	$40, $22, $FF, $E4
+		dc.b  $EC,   8,	$40, $26,   0,	 4
+		dc.b  $F4,  $E,	$40, $29, $FF, $E4
+		dc.b  $F4,  $A,	$40, $35,   0,	 4
+		dc.b   $C,   8,	$40, $3E, $FF, $EC
+		dc.b   $C,   4,	$40, $41,   0,	 4
 		dc.b  $D4,   5,	  0, $45, $FF, $F0
 		dc.b  $DC,   1,	  0, $49, $FF, $E8
 		dc.b  $D4,   5,	  8, $45,   0,	 0
 		dc.b  $DC,   1,	  8, $49,   0, $10
 		dc.b  $DA,   0,	  0, $4B, $FF, $FE
-		dc.b  $E4,   4,	$20, $43, $FF, $EC
+		dc.b  $E4,   4,	$40, $43, $FF, $EC
 word_682C0:	dc.w 8			; DATA XREF: ROM:0006820Co
 		dc.b  $EC,  $C,	  0, $22, $FF, $E4
 		dc.b  $EC,   8,	  0, $26,   0,	 4
@@ -86,6 +87,20 @@ word_68358:	dc.w 6			; DATA XREF: ROM:0006820Co
 		dc.b  $DC,   1,	  8, $49,   0, $10
 		dc.b  $DA,   0,	  0, $4B, $FF, $FE
 		dc.b  $E4,   4,	  0, $43, $FF, $EC
+Map_DEZRobotnikShip:
+		dc.w $C
+		dc.b  $EC,  $C,	$20, $22, $FF, $E4
+		dc.b  $EC,   8,	$20, $26,   0,	 4
+		dc.b  $F4,  $E,	$20, $29, $FF, $E4
+		dc.b  $F4,  $A,	$20, $35,   0,	 4
+		dc.b   $C,   8,	$20, $3E, $FF, $EC
+		dc.b   $C,   4,	$20, $41,   0,	 4
+		dc.b  $D4,   5,	  0, $45, $FF, $F0
+		dc.b  $DC,   1,	  0, $49, $FF, $E8
+		dc.b  $D4,   5,	  8, $45,   0,	 0
+		dc.b  $DC,   1,	  8, $49,   0, $10
+		dc.b  $DA,   0,	  0, $4B, $FF, $FE
+		dc.b  $E4,   4,	$20, $43, $FF, $EC
 Map_HPZRobotnikShip:
 		dc.w 7
 		dc.b  $EC,  $C,	$20, $22, $FF, $E4
