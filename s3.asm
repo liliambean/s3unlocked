@@ -13794,7 +13794,7 @@ loc_B8EC:
 loc_B9D4:
 		move.l	(a0)+,(a1)+
 		dbf	d0,loc_B9D4
-		lea	Pal_Save_Chars(pc),a0
+		lea	Pal_SaveScreen(pc),a0
 		moveq	#$F,d0
 
 loc_B9E0:
@@ -13853,7 +13853,7 @@ SaveScreen_MainLoop:
 		moveq	#$E,d0
 		btst	#0,(Level_frame_counter+1).w
 		beq.s	loc_BAC8
-		lea	Pal_Save_Emeralds(pc),a1
+		lea	Pal_SaveScreen+$22(pc),a1
 
 loc_BAC0:
 		move.w	(a1)+,(a0)+
@@ -13976,10 +13976,7 @@ byte_BBAE:	dc.b 1
 		dc.b 5
 		dc.b 6
 		dc.b 0
-Pal_Save_Chars:	binclude "General/Save Menu/Palettes/Chars.bin"
-		even
-Pal_Save_Emeralds:
-		binclude "General/Save Menu/Palettes/Emeralds.bin"
+Pal_SaveScreen:	binclude "General/Save Menu/Palettes/Main.bin"
 		even
 Pal_Save_FinishCard1:
 		binclude "General/Save Menu/Palettes/Finish Card 1.bin"

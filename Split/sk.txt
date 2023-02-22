@@ -56,8 +56,7 @@
 #split	0x00008C12,0x00008C38,General\Special Stage\Palettes\K-7.bin
 #split	0x00008C38,0x00008C5E,General\Special Stage\Palettes\K-8.bin
 #split	0x00009D1E,0x00009D5E,General\Special Stage\Palettes\Emeralds.bin
-#split	0x0000CA78,0x0000CA9A,General\Save Menu\Palettes\Chars.bin
-#split	0x0000CA9A,0x0000CAB8,General\Save Menu\Palettes\Emeralds.bin
+#split	0x0000CA78,0x0000CAB8,General\Save Menu\Palettes\Main.bin
 #split	0x0000CAB8,0x0000CAD8,General\Save Menu\Palettes\Finish Card 1.bin
 #split	0x0000CAD8,0x0000CAF8,General\Save Menu\Palettes\Finish Card 2.bin
 #split	0x0000CAF8,0x0000CB18,General\Save Menu\Palettes\Finish Card 3.bin
