@@ -268,7 +268,7 @@
 #split	0x00190900,0x00190C02,Levels\HCZ\KosinskiM Art\Large Fan.bin
 #split	0x00190C02,0x00191394,Levels\HCZ\KosinskiM Art\Geyser Horizontal.bin
 #split	0x00191394,0x00191B36,Levels\HCZ\KosinskiM Art\Geyser Vertical.bin
-#split	0x00199CC4,0x0019A786,Levels\AIZ\Tiles\Act 2 Bombership 2.bin
+#split	0x00199CC4,0x0019A786,Levels\AIZ\KosinskiM Art\Act 2 Bombership.bin
 #split	0x0019A786,0x0019AA18,General\Sprites\Results\Results SONIC S3.bin
 #split	0x0019AA18,0x0019AB6A,General\Sprites\Results\Results MILES.bin
 #split	0x0019AB6A,0x0019ACAC,General\Sprites\Results\Results TAILS.bin

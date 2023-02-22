@@ -31738,7 +31738,7 @@ AIZ2_Resize4:
 		lea	(AIZ2_8x8_BomberShip_KosM).l,a1
 		move.w	#$3F80,d2
 		jsr	(Queue_Kos_Module).l
-		lea	(ArtKosM_AIZ2Bombership2_8x8).l,a1
+		lea	(ArtKosM_AIZ2Bombership).l,a1
 		move.w	#$A000,d2
 		jsr	(Queue_Kos_Module).l
 		moveq	#$30,d0
@@ -119685,8 +119685,8 @@ ArtNem_CGZMisc:	binclude "Levels/CGZ/Nemesis Art/Platform.bin"
 		even
 ArtNem_EMZMisc:	binclude "Levels/EMZ/Nemesis Art/Misc Art.bin"
 		even
-ArtKosM_AIZ2Bombership2_8x8:
-		binclude "Levels/AIZ/Tiles/Act 2 Bombership 2.bin"
+ArtKosM_AIZ2Bombership:
+		binclude "Levels/AIZ/KosinskiM Art/Act 2 Bombership.bin"
 		even
 ArtKosM_ResultsSONIC:
 		binclude "General/Sprites/Results/Results SONIC S3.bin"

@@ -583,7 +583,7 @@ ArtNem_BPZMisc:				ds.b $84A
 ArtNem_DPZMisc:				ds.b $D16
 ArtNem_CGZMisc:				ds.b $374
 ArtNem_EMZMisc:				ds.b $292
-ArtKosM_AIZ2Bombership2_8x8:		ds.b $D54
+ArtKosM_AIZ2Bombership:			ds.b $D54
 ArtKosM_ResultsMILES:			ds.b $152
 ArtKosM_ResultsTAILS:			ds.b $125E
 ArtKosM_AIZTitleCard:			ds.b $112

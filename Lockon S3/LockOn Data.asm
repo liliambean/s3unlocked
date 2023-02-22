@@ -1124,8 +1124,8 @@ ArtNem_CGZMisc:
 ArtNem_EMZMisc:
 		binclude "Levels/EMZ/Nemesis Art/Misc Art.bin"
 		even
-ArtKosM_AIZ2Bombership2_8x8:
-		binclude "Levels/AIZ/Tiles/Act 2 Bombership 2.bin"
+ArtKosM_AIZ2Bombership:
+		binclude "Levels/AIZ/KosinskiM Art/Act 2 Bombership.bin"
 		even
 ArtKosM_ResultsMILES:
 		binclude "General/Sprites/Results/Results MILES.bin"
