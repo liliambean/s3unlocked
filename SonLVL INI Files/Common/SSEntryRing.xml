@@ -4,7 +4,7 @@
     <ImageFromMappings id="img">
       <ArtFile filename="../General/Sprites/SS Entry/Entry Ring.bin" compression="Uncompressed" />
       <MapFile type="ASM" filename="../General/Sprites/SS Entry/Map - Entry Ring.asm"
-        dplcfile="../General/Sprites/SS Entry/DPLC - Special Stage Entry Ring.asm" frame="8" startpal="1" />
+        dplcfile="../General/Sprites/SS Entry/DPLC - Special Stage Entry Ring.asm" frame="14" startpal="1" />
     </ImageFromMappings>
   </Images>
   <Properties>
