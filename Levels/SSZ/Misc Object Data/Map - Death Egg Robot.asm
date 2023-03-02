@@ -132,8 +132,7 @@ Map_DeathEggRobot_1E8:
 		dc.w 1
 		dc.b  $F8,   5,   1, $40, $FF, $F8
 Map_DeathEggRobot_1F0:
-		dc.w 1
-		dc.b    0,   0,   0,   4,   0,   0
+		dc.w 0
 Map_DeathEggRobot_1F8:
 		dc.w 8
 		dc.b  $F0,   5, $21, $3C, $FF, $F0

@@ -1,6 +1,6 @@
 		dc.w Map_MechaSonicIntroFire1-Map_SSZ2Extra
-		dc.w Map_MechaSonicIntroFire2-Map_SSZ2Extra
 		dc.w Map_SSZ2EggRoboPanel-Map_SSZ2Extra
+		dc.w Map_MechaSonicIntroFire2-Map_SSZ2Extra
 Map_MechaSonicIntroFire1:
 		dc.w 2
 		dc.b  $F4,   2, $20,   0, $FF, $F7
