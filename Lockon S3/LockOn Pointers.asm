@@ -306,7 +306,7 @@ ArtUnc_AniBPZ__3:			ds.b $40
 ArtUnc_AniDPZ:				ds.b $780
 ArtUnc_AniDPZ__BG:			ds.b $2000
 ArtUnc_AniGumball:			ds.b $100
-ArtUnc_SplashDrown:			ds.b $274C
+ArtUnc_LBZSnowSplash:			ds.b $274C
 ArtNem_Title_SonicSprites:		ds.b $C58
 DemoDat_AIZ:				ds.b $780
 DemoDat_HCZ:				ds.b $780

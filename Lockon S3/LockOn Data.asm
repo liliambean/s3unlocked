@@ -552,8 +552,8 @@ ArtUnc_AniDPZ__BG:
 ArtUnc_AniGumball:
 		binclude "Levels/Gumball/Animated Tiles/0.bin"
 		even
-ArtUnc_SplashDrown:
-		binclude "General/Sprites/Dash Dust/Splash Drown.bin"
+ArtUnc_LBZSnowSplash:
+		binclude "General/Sprites/Dash Dust/Launch Base Snow.bin"
 		even
 ArtNem_Title_SonicSprites:
 		binclude "General/Title/Nemesis Art/S3 Sonic Sprites.bin"

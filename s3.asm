@@ -27583,9 +27583,9 @@ loc_1796C:
 		andi.w	#$7FFF,$A(a0)
 
 loc_17984:
-		lea	(Ani_DashSplashDrown).l,a1
+		lea	(Ani_DashDust).l,a1
 		jsr	(Animate_Sprite).l
-		move.l	#ArtUnc_SplashDrown,d6
+		move.l	#ArtUnc_LBZSnowSplash,d6
 		bsr.w	SplashDrown_Load_DPLC
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -27620,7 +27620,7 @@ loc_179F6:
 		bcs.s	loc_17A14
 
 loc_179FE:
-		lea	(Ani_DashSplashDrown).l,a1
+		lea	(Ani_DashDust).l,a1
 		jsr	(Animate_Sprite).l
 		bsr.w	DashDust_Load_DPLC
 		jmp	(Draw_Sprite).l
@@ -27689,7 +27689,7 @@ SplashDrown_Load_DPLC:
 		cmp.b	$34(a0),d0
 		beq.s	locret_17B0A
 		move.b	d0,$34(a0)
-		lea	(DPLC_DashSplashDrown).l,a2
+		lea	(DPLC_DashDust).l,a2
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d5
@@ -27718,11 +27718,11 @@ locret_17B0A:
 ; End of function DashDust_Load_DPLC
 
 ; ---------------------------------------------------------------------------
-Ani_DashSplashDrown:
+Ani_DashDust:
 		include "General/Sprites/Dash Dust/Anim - Dash Dust.asm"
 Map_DashDust:
 		include "General/Sprites/Dash Dust/Map - Dash Dust.asm"
-DPLC_DashSplashDrown:
+DPLC_DashDust:
 		include "General/Sprites/Dash Dust/DPLC - Dash Dust.asm"
 ; ---------------------------------------------------------------------------
 
@@ -118049,8 +118049,8 @@ ArtUnc_AniDPZ__BG:
 ArtUnc_AniGumball:
 		binclude "Levels/Gumball/Animated Tiles/0.bin"
 		even
-ArtUnc_SplashDrown:
-		binclude "General/Sprites/Dash Dust/Splash Drown.bin"
+ArtUnc_LBZSnowSplash:
+		binclude "General/Sprites/Dash Dust/Launch Base Snow.bin"
 		even
 ArtNem_S22POptions:
 		binclude "General/S2Menu/Nemesis Art/2P Options.bin"
