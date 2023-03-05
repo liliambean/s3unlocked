@@ -28,12 +28,11 @@
 		dc.w word_18F7A-DPLC_DashSplashDrown
 		dc.w word_18F7E-DPLC_DashSplashDrown
 		dc.w word_18F82-DPLC_DashSplashDrown
-		dc.w DPLC_InstaShield_2P_0-DPLC_DashSplashDrown
-		dc.w DPLC_InstaShield_2P_1-DPLC_DashSplashDrown
-		dc.w DPLC_InstaShield_2P_2-DPLC_DashSplashDrown
-		dc.w DPLC_InstaShield_2P_3-DPLC_DashSplashDrown
-		dc.w DPLC_InstaShield_2P_4-DPLC_DashSplashDrown
-		dc.w word_18F1E-DPLC_DashSplashDrown
+		dc.w DPLC_InstaShield_P2_0-DPLC_DashSplashDrown
+		dc.w DPLC_InstaShield_P2_1-DPLC_DashSplashDrown
+		dc.w DPLC_InstaShield_P2_2-DPLC_DashSplashDrown
+		dc.w DPLC_InstaShield_P2_3-DPLC_DashSplashDrown
+		dc.w DPLC_InstaShield_P2_4-DPLC_DashSplashDrown
 		dc.w word_18F1E-DPLC_DashSplashDrown
 word_18F1E:	dc.w	0		; DATA XREF: ROM:00018EE2o
 word_18F20:	dc.w	1		; DATA XREF: ROM:00018EE2o
@@ -87,13 +86,13 @@ word_18F7E:	dc.w	1		; DATA XREF: ROM:00018EE2o
 		dc.w $F05C
 word_18F82:	dc.w	1		; DATA XREF: ROM:00018EE2o
 		dc.w $F06C
-DPLC_InstaShield_2P_0:dc.w	1
+DPLC_InstaShield_P2_0:dc.w	1
 		dc.w $5000
-DPLC_InstaShield_2P_1:dc.w	1
+DPLC_InstaShield_P2_1:dc.w	1
 		dc.w $6006
-DPLC_InstaShield_2P_2:dc.w	1
+DPLC_InstaShield_P2_2:dc.w	1
 		dc.w $900D
-DPLC_InstaShield_2P_3:dc.w	1
+DPLC_InstaShield_P2_3:dc.w	1
 		dc.w $C017
-DPLC_InstaShield_2P_4:dc.w	1
+DPLC_InstaShield_P2_4:dc.w	1
 		dc.w $F024
