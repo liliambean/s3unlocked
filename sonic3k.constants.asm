@@ -695,7 +695,7 @@ _unkFAC4			ds.w 1
 _unkFAC8			ds.w 1
 			ds.w 1				; unused
 _unkFACC			ds.b 1
-_unkFACD			ds.b 1
+			ds.b 1				; unused
 Pal_fade_delay2			ds.w 1			; timer for palette fade from white routine
 			ds.b $A				; unused
 Palette_rotation_custom		ds.l 1			; custom routine for palette rotation scripts
