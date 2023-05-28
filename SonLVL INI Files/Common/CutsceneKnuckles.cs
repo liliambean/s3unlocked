@@ -177,7 +177,7 @@ namespace S3KObjectDefinitions.Common
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
 				"../Levels/MHZ/Nemesis Art/Misc Art.bin", CompressionType.Nemesis)), -5856);
 			extraSprites[9] = ObjectHelper.MapASMToBmp(indexer.ToArray(),
-				"../Levels/MHZ/Misc Object Data/Map - Act 2 Knuckles Switch.asm", 0, startpal, true);
+				"../General/Sprites/Knuckles/Cutscene/Map - Act 2 Knuckles Switch.asm", 0, startpal, true);
 			extraSprites[9].Offset(-8, 0);
 
 			subtypeNames[9] = "Lava Reef 2";

@@ -44,7 +44,7 @@ namespace S3KObjectDefinitions.HPZMini
 
 			sprite = ObjectHelper.MapASMToBmp(LevelData.ReadFile(
 				"../General/Sprites/Teleporter/Teleporter.bin", CompressionType.KosinskiM),
-				"../Levels/SSZ/Misc Object Data/Map - (&HPZ) Teleporter.asm", 10, 0);
+				"../General/Sprites/Teleporter/Map - Teleporter.asm", 10, 0);
 
 			var emeralds = BuildEmeraldSprites();
 
