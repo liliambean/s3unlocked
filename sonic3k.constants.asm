@@ -472,7 +472,7 @@ Plane_buffer			ds.b $480		; used by level drawing routines
 VRAM_buffer			ds.b $80		; used to temporarily hold data while it is being transferred from one VRAM location to another
 
 Game_mode			ds.b 1
-			ds.b 1				; unused
+Alternate_player_start_flag	ds.b 1			; Fred: Encore mode - player starts
 Ctrl_1_logical =		*			; both held and pressed
 Ctrl_1_held_logical		ds.b 1
 Ctrl_1_pressed_logical		ds.b 1
@@ -584,8 +584,7 @@ Flying_picking_Sonic_timer	ds.b 1			; until this is 0 Tails can't pick Sonic up
 _unkF740			ds.w 1
 			ds.w 1				; unused
 _unkF744			ds.w 1
-Tails_CPU_star_post_flag	ds.b 1			; copy of Last_star_post_hit, sets Tails' starting behavior in a Sonic and Tails game
-			ds.b 1				; unused
+			ds.w 1				; unused
 Ctrl_1_title =			*			; copy of Ctrl_1, used on the title screen
 Ctrl_1_held_title		ds.b 1
 Ctrl_1_pressed_title		ds.b 1
