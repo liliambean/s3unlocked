@@ -35,7 +35,7 @@
 		dc.l Obj_LBZAlarm			; 34
 		dc.l Obj_LBZUnusedForceFall		; 35
 		dc.l Obj_AutomaticTunnel		; 36
-		dc.l Obj_Ring				; 37
+		dc.l Obj_ICZTeleporter			; 37	; Fred: move ICZ1 intro teleporter to layout
 		dc.l Obj_AutoSpin			; 38
 		dc.l Obj_S2LavaMarker			; 39
 		dc.l Obj_InvisibleBlock			; 40
@@ -197,7 +197,7 @@
 		dc.l Obj_LBZMinibossBox			; 196
 		dc.l Obj_LBZMinibossBoxKnux		; 197
 		dc.l Obj_LBZ2RobotnikShip		; 198
-		dc.l Obj_Ring				; 199
+		dc.l Obj_LBZ2EndRobotnik		; 199	; Fred: restore unused LBZ2 Eggman
 		dc.l Obj_LBZKnuxPillar			; 200
 		dc.l Obj_LBZMiniboss			; 201
 		dc.l Obj_LBZFinalBoss1			; 202

@@ -104,11 +104,11 @@ Frame_363DA2:	dc.w 1
 Frame_363DAA:	dc.w 1
 		dc.b $F4, $A,  0,$97,$FF,$F4
 Frame_363DB2:	dc.w 5
-		dc.b $F0,  1,  0,  0,$FF,$E8
-		dc.b $F0,  5,  0,  2,$FF,$F8
-		dc.b $F0,  1,  8,  0,  0,$10
-		dc.b   0, $D,  0,  6,$FF,$E0
-		dc.b   0, $D,  8,  6,  0,  0
+		dc.b $E8,  1,  0,  0,$FF,$E8
+		dc.b $E8,  5,  0,  2,$FF,$F8
+		dc.b $E8,  1,  8,  0,  0,$10
+		dc.b $F8, $D,  0,  6,$FF,$E0
+		dc.b $F8, $D,  8,  6,  0,  0
 Frame_363DD2:	dc.w $A
 		dc.b $D0, $F,  0, $E,$FF,$D8
 		dc.b $D0, $F,  0,$1E,$FF,$F8
