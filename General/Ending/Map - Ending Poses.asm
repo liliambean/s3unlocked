@@ -74,56 +74,60 @@ word_608EE:	dc.w $C
 		dc.b	8,   5,	  8, $78, $FF, $D0
 Map_EndingPoses_Amy1:
 		dc.w 5			
-		dc.b  $E0,  $F,	  0,   0, $FF, $F0
-		dc.b  $E0,   2,	  0, $10,   0, $10
-		dc.b  $EC,   2,	  0, $13, $FF, $E8
-		dc.b	0,  $D,	  0, $16, $FF, $F0
-		dc.b  $10,   5,	  0, $1E, $FF, $F0
+		dc.b  $DC,  $C,	  0,   0, $FF, $F6
+		dc.b  $E4,  $B,	  0,   4, $FF, $DC
+		dc.b  $E4,  $F,	  0, $10, $FF, $F4
+		dc.b  $E4,   6,	  0, $20,   0, $14
+		dc.b	4,  $F,	  0, $26, $FF, $F4
 Map_EndingPoses_Amy2:
-		dc.w 9			
-		dc.b  $CC,  $E,	  0, $22, $FF, $E6
-		dc.b  $CC,  $E,	  0, $2E,   0,	 6
-		dc.b  $E4,  $F,	  0, $3A, $FF, $DA
-		dc.b  $E4,  $F,	  0, $4A, $FF, $FA
-		dc.b  $E4,   1,	  0, $5A,   0, $1A
-		dc.b	4,   9,	  0, $5C, $FF, $DE
-		dc.b	4,  $D,	  0, $62, $FF, $F6
-		dc.b  $14,   7,	  0, $6A, $FF, $E2
-		dc.b  $14,  $E,	  0, $72, $FF, $F2
+		dc.w $12		
+		dc.b  $B8,  $D,	  0, $36, $FF, $F0
+		dc.b  $B8,  $D,	  0, $3E,   0, $10
+		dc.b  $C0,   0,	  0, $46,   0, $30
+		dc.b  $C0,   8,	  0, $47, $FF, $C8
+		dc.b  $C8,  $F,	  0, $4A, $FF, $C0
+		dc.b  $C8,  $F,	  0, $5A, $FF, $E0
+		dc.b  $C8,  $F,	  0, $6A,   0,	 0
+		dc.b  $C8,  $F,	  0, $7A,   0, $20
+		dc.b  $E8,   0,	  0, $8A, $FF, $C2
+		dc.b  $F8,   1,	  0, $8B, $FF, $E2
+		dc.b  $E8,  $D,	  0, $8D, $FF, $CA
+		dc.b  $E8,  $F,	  0, $95, $FF, $EA
+		dc.b  $E8,  $F,	  0, $A5,   0, $A
+		dc.b	8,  $F,	  0, $B5, $FF, $D0
+		dc.b	8,  $F,	  0, $C5, $FF, $F0
+		dc.b	8,  $B,	  0, $D5,   0, $10
+		dc.b  $28,  $F,	  0, $E1, $FF, $E6
+		dc.b  $28,   2,	  0, $F1,   0,	 6
 Map_EndingPoses_Mighty1:
-		dc.w $A			
-		dc.b  $D8,   0,	  0,   0, $FF, $FA
-		dc.b  $E0,  $C,	  0,   1, $FF, $F6
-		dc.b  $E8,   4,	  0,   5,   0,	$E
-		dc.b  $F0,   0,	  0,   7,   0,	$E
-		dc.b  $E8,  $D,	  0,   8, $FF, $EE
-		dc.b  $F8,  $C,	  0, $10, $FF, $F6
-		dc.b  $F8,   4,	  0, $14, $FF, $E6
-		dc.b	0,  $D,	  0, $16, $FF, $FA
-		dc.b	0,  $B,	  0, $1E, $FF, $E2
-		dc.b  $20,   0,	  0, $2A, $FF, $F2
+		dc.w 5			
+		dc.b  $D8,   9,	  0,   0, $FF, $F9
+		dc.b  $E8,  $B,	  0,   6, $FF, $E6
+		dc.b  $E8,  $F,	  0, $12, $FF, $FE
+		dc.b	8,  $B,	  0, $22, $FF, $E3
+		dc.b	8,  $C,	  0, $2E, $FF, $FB
 Map_EndingPoses_Mighty2:
 		dc.w $14		
-		dc.b  $C4,   8,	  0, $2B,   0, $24
-		dc.b  $CC,  $F,	  0, $2E,   0, $1C
-		dc.b  $DC,   1,	  0, $3E,   0, $3C
-		dc.b  $CC,  $F,	  0, $40, $FF, $FC
-		dc.b  $CC,   0,	  0, $50, $FF, $F4
-		dc.b  $BC,   5,	  0, $51,   0,	 0
-		dc.b  $D4,  $E,	  0, $55, $FF, $DC
-		dc.b  $E4,   0,	  0, $61, $FF, $D4
-		dc.b  $CC,  $E,	  0, $62, $FF, $BC
-		dc.b  $C4,   0,	  0, $6E, $FF, $C4
-		dc.b  $EC,  $F,	  0, $6F,   0,	$E
-		dc.b  $EC,  $F,	  0, $7F, $FF, $EE
-		dc.b  $EC,   7,	  0, $8F, $FF, $DE
-		dc.b   $C,  $F,	  0, $97, $FF, $C6
-		dc.b  $24,   0,	  0, $A7, $FF, $E6
-		dc.b   $C,  $E,	  0, $A8, $FF, $E6
-		dc.b   $C,   1,	  0, $B4,   0,	 6
-		dc.b  $1C,   4,	  0, $B6,   0,	 6
-		dc.b  $24,  $F,	  0, $B8,   0,	 4
-		dc.b  $24,   6,	  0, $C8,   0, $24
+		dc.b  $C4,   8,	  0, $32,   0, $24
+		dc.b  $CC,  $F,	  0, $35,   0, $1C
+		dc.b  $DC,   1,	  0, $45,   0, $3C
+		dc.b  $CC,  $F,	  0, $47, $FF, $FC
+		dc.b  $CC,   0,	  0, $57, $FF, $F4
+		dc.b  $BC,   5,	  0, $58,   0,	 0
+		dc.b  $D4,  $E,	  0, $5C, $FF, $DC
+		dc.b  $E4,   0,	  0, $68, $FF, $D4
+		dc.b  $CC,  $E,	  0, $69, $FF, $BC
+		dc.b  $C4,   0,	  0, $75, $FF, $C4
+		dc.b  $EC,  $F,	  0, $76,   0, $E
+		dc.b  $EC,  $F,	  0, $86, $FF, $EE
+		dc.b  $EC,   7,	  0, $96, $FF, $DE
+		dc.b   $C,  $F,	  0, $9E, $FF, $C6
+		dc.b  $24,   0,	  0, $AE, $FF, $E6
+		dc.b   $C,  $E,	  0, $AF, $FF, $E6
+		dc.b   $C,   1,	  0, $BB,   0,	 6
+		dc.b  $1C,   4,	  0, $BD,   0,	 6
+		dc.b  $24,  $F,	  0, $BF,   0,	 4
+		dc.b  $24,   6,	  0, $CF,   0, $24
 Map_EndingPoses_Ray1:
 		dc.w 6			
 		dc.b  $D8,  $F,	  0,   0, $FF, $F0
@@ -133,26 +137,21 @@ Map_EndingPoses_Ray1:
 		dc.b  $10,   5,	  0, $24, $FF, $F8
 		dc.b  $20,   0,	  0, $28, $FF, $F8
 Map_EndingPoses_Ray2:
-		dc.w $13		
-		dc.b  $B4,   8,	  0, $29, $FF, $F1
-		dc.b  $B4,   4,	  0, $2C,   0,	 9
-		dc.b  $BC,  $D,	  0, $2E, $FF, $E9
-		dc.b  $BC,   9,	  0, $36,   0,	 9
-		dc.b  $CC,  $F,	  0, $3C, $FF, $E9
-		dc.b  $CC,  $F,	  0, $4C,   0,	 9
-		dc.b  $CC,   7,	  0, $5C,   0, $29
-		dc.b  $EC,  $C,	  0, $64, $FF, $F2
-		dc.b  $EC,  $C,	  0, $68,   0, $12
-		dc.b  $F4,  $F,	  0, $6C,   0,	$F
-		dc.b  $F4,  $F,	  0, $7C, $FF, $EF
-		dc.b  $F4,  $F,	  0, $8C, $FF, $CF
-		dc.b  $D4,  $B,	  0, $9C, $FF, $C6
-		dc.b  $14,  $C,	  0, $A8, $FF, $D1
-		dc.b  $14,  $E,	  0, $AC, $FF, $F1
-		dc.b  $14,   7,	  0, $B8,   0, $11
-		dc.b  $34,   0,	  0, $C0,   0, $19
-		dc.b  $24,   0,	  0, $C1, $FF, $E9
-		dc.b  $2C,  $B,	  0, $C2, $FF, $E7
+		dc.w $E			
+		dc.b  $B4,  $F,	  0, $29, $FF, $E9
+		dc.b  $B4,  $B,	  0, $39,   0,	 9
+		dc.b  $CC,   8,	  0, $45,   0, $21
+		dc.b  $D4,  $F,	  0, $48, $FF, $E9
+		dc.b  $D4,  $B,	  0, $58,   0,	 9
+		dc.b  $D4,  $B,	  0, $64,   0, $21
+		dc.b  $D4,  $B,	  0, $70, $FF, $C6
+		dc.b  $F4,  $F,	  0, $7C, $FF, $CF
+		dc.b  $F4,  $F,	  0, $8C, $FF, $EF
+		dc.b  $F4,  $F,	  0, $9C,   0,	$F
+		dc.b  $14,   8,	  0, $AC, $FF, $D1
+		dc.b  $14,  $B,	  0, $AF, $FF, $E9
+		dc.b  $14,  $F,	  0, $BB,   0,	 1
+		dc.b  $34,  $A,	  0, $CB, $FF, $E7
 Map_EndingPoses_MetalSonic1:
 		dc.w $10		
 		dc.b  $B8,  $E,   0,   0, $FF, $D6
