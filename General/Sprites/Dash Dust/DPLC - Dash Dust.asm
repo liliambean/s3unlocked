@@ -1,39 +1,39 @@
-		dc.w word_18F1E-DPLC_DashSplashDrown
-		dc.w word_18F20-DPLC_DashSplashDrown
-		dc.w word_18F24-DPLC_DashSplashDrown
-		dc.w word_18F28-DPLC_DashSplashDrown
-		dc.w word_18F2C-DPLC_DashSplashDrown
-		dc.w word_18F30-DPLC_DashSplashDrown
-		dc.w word_18F34-DPLC_DashSplashDrown
-		dc.w word_18F38-DPLC_DashSplashDrown
-		dc.w word_18F3C-DPLC_DashSplashDrown
-		dc.w word_18F40-DPLC_DashSplashDrown
-		dc.w word_18F44-DPLC_DashSplashDrown
-		dc.w word_18F48-DPLC_DashSplashDrown
-		dc.w word_18F4C-DPLC_DashSplashDrown
-		dc.w word_18F50-DPLC_DashSplashDrown
-		dc.w word_18F54-DPLC_DashSplashDrown
-		dc.w word_18F58-DPLC_DashSplashDrown
-		dc.w word_18F5C-DPLC_DashSplashDrown
-		dc.w word_18F60-DPLC_DashSplashDrown
-		dc.w word_18F60-DPLC_DashSplashDrown
-		dc.w word_18F60-DPLC_DashSplashDrown
-		dc.w word_18F60-DPLC_DashSplashDrown
-		dc.w word_18F62-DPLC_DashSplashDrown
-		dc.w word_18F66-DPLC_DashSplashDrown
-		dc.w word_18F6A-DPLC_DashSplashDrown
-		dc.w word_18F6E-DPLC_DashSplashDrown
-		dc.w word_18F72-DPLC_DashSplashDrown
-		dc.w word_18F76-DPLC_DashSplashDrown
-		dc.w word_18F7A-DPLC_DashSplashDrown
-		dc.w word_18F7E-DPLC_DashSplashDrown
-		dc.w word_18F82-DPLC_DashSplashDrown
-		dc.w DPLC_InstaShield_P2_0-DPLC_DashSplashDrown
-		dc.w DPLC_InstaShield_P2_1-DPLC_DashSplashDrown
-		dc.w DPLC_InstaShield_P2_2-DPLC_DashSplashDrown
-		dc.w DPLC_InstaShield_P2_3-DPLC_DashSplashDrown
-		dc.w DPLC_InstaShield_P2_4-DPLC_DashSplashDrown
-		dc.w word_18F1E-DPLC_DashSplashDrown
+		dc.w word_18F1E-DPLC_DashDust
+		dc.w word_18F20-DPLC_DashDust
+		dc.w word_18F24-DPLC_DashDust
+		dc.w word_18F28-DPLC_DashDust
+		dc.w word_18F2C-DPLC_DashDust
+		dc.w word_18F30-DPLC_DashDust
+		dc.w word_18F34-DPLC_DashDust
+		dc.w word_18F38-DPLC_DashDust
+		dc.w word_18F3C-DPLC_DashDust
+		dc.w word_18F40-DPLC_DashDust
+		dc.w word_18F44-DPLC_DashDust
+		dc.w word_18F48-DPLC_DashDust
+		dc.w word_18F4C-DPLC_DashDust
+		dc.w word_18F50-DPLC_DashDust
+		dc.w word_18F54-DPLC_DashDust
+		dc.w word_18F58-DPLC_DashDust
+		dc.w word_18F5C-DPLC_DashDust
+		dc.w word_18F60-DPLC_DashDust
+		dc.w word_18F60-DPLC_DashDust
+		dc.w word_18F60-DPLC_DashDust
+		dc.w word_18F60-DPLC_DashDust
+		dc.w word_18F62-DPLC_DashDust
+		dc.w word_18F66-DPLC_DashDust
+		dc.w word_18F6A-DPLC_DashDust
+		dc.w word_18F6E-DPLC_DashDust
+		dc.w word_18F72-DPLC_DashDust
+		dc.w word_18F76-DPLC_DashDust
+		dc.w word_18F7A-DPLC_DashDust
+		dc.w word_18F7E-DPLC_DashDust
+		dc.w word_18F82-DPLC_DashDust
+		dc.w DPLC_InstaShield_P2_0-DPLC_DashDust
+		dc.w DPLC_InstaShield_P2_1-DPLC_DashDust
+		dc.w DPLC_InstaShield_P2_2-DPLC_DashDust
+		dc.w DPLC_InstaShield_P2_3-DPLC_DashDust
+		dc.w DPLC_InstaShield_P2_4-DPLC_DashDust
+		dc.w word_18F1E-DPLC_DashDust
 word_18F1E:	dc.w	0		; DATA XREF: ROM:00018EE2o
 word_18F20:	dc.w	1		; DATA XREF: ROM:00018EE2o
 		dc.w $5000
@@ -86,13 +86,18 @@ word_18F7E:	dc.w	1		; DATA XREF: ROM:00018EE2o
 		dc.w $F05C
 word_18F82:	dc.w	1		; DATA XREF: ROM:00018EE2o
 		dc.w $F06C
-DPLC_InstaShield_P2_0:dc.w	1
+DPLC_InstaShield_P2_0:
+		dc.w 1
 		dc.w $5000
-DPLC_InstaShield_P2_1:dc.w	1
+DPLC_InstaShield_P2_1:
+		dc.w 1
 		dc.w $6006
-DPLC_InstaShield_P2_2:dc.w	1
+DPLC_InstaShield_P2_2:
+		dc.w 1
 		dc.w $900D
-DPLC_InstaShield_P2_3:dc.w	1
+DPLC_InstaShield_P2_3:
+		dc.w 1
 		dc.w $C017
-DPLC_InstaShield_P2_4:dc.w	1
+DPLC_InstaShield_P2_4:
+		dc.w 1
 		dc.w $F024

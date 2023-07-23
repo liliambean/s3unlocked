@@ -1,9 +1,9 @@
-		dc.w byte_18DCA-Ani_DashSplashDrown
-		dc.w byte_18DCD-Ani_DashSplashDrown
-		dc.w byte_18DD9-Ani_DashSplashDrown
-		dc.w byte_18DE2-Ani_DashSplashDrown
-		dc.w byte_18DE8-Ani_DashSplashDrown
-		dc.w Ani_InstaShield_P2-Ani_DashSplashDrown
+		dc.w byte_18DCA-Ani_DashDust
+		dc.w byte_18DCD-Ani_DashDust
+		dc.w byte_18DD9-Ani_DashDust
+		dc.w byte_18DE2-Ani_DashDust
+		dc.w byte_18DE8-Ani_DashDust
+		dc.w Ani_InstaShield_P2-Ani_DashDust
 byte_18DCA:	dc.b  $1F,   0,	$FF
 byte_18DCD:	dc.b	3,   1,	  2,   3,   4,	 5,   6,   7,	8,   9,	$FD,   0
 byte_18DD9:	dc.b	1,  $A,	 $B,  $C,  $D,	$E,  $F, $10, $FF 

@@ -40,7 +40,7 @@ use_sk_samples			= 1
 
 ; ---------------------------------------------------------------------------
 
-z80_SoundDriverStart:
+Z80_SoundDriverStart:
 
 ; ---------------------------------------------------------------------------
 zTrack STRUCT DOTS
@@ -149,7 +149,7 @@ zNextSound:			ds.b 1
 zMusicNumber:		ds.b 1	; Play_Sound
 zSFXNumber0:		ds.b 1	; Play_Sound_2
 zSFXNumber1:		ds.b 1	; Play_Sound_2
-	shared zQueueVariables,zMusicNumber,zSFXNumber0,zSFXNumber1
+;	shared zQueueVariables,zMusicNumber,zSFXNumber0,zSFXNumber1
 	if (zQueueVariables&1)<>0
 		fatal "zQueueVariables must be at an even address."
 	endif
@@ -239,8 +239,10 @@ zNumMusicPSGTracks = (zTracksEnd-zSongPSG1)/zTrack.len
 zNumSFXTracks = (zTracksSFXEnd-zTracksSFXStart)/zTrack.len
 zNumSaveTracks = (zTracksSaveEnd-zTracksSaveStart)/zTrack.len
 ; ---------------------------------------------------------------------------
-		!org z80_SoundDriverStart
-z80_SoundDriver:
+		!org Z80_SoundDriverStart
+Z80_SoundDriver:
+		org		Z80_SoundDriver+Size_of_Snd_driver_guess	; This 'org' inserts some padding that we can paste the compressed sound driver over later (see the 's3p2bin' tool)
+
 		save
 		!org	0							; z80 Align, handled by the build process
 		CPU Z80
@@ -555,7 +557,7 @@ zmake68kBank function addr,(((addr&7F8000h)>>15))
 ; sub_8
 	align	8
 GetPointerTable:	rsttarget
-		ld	hl,z80_SoundDriverPointers		; Load pointer table
+		ld	hl,Z80_SoundDriverPointers		; Load pointer table
 		ld	b, 0							; b = 0
 		add	hl, bc							; Add offset into pointer table
 		ex	af, af'							; Back up af
@@ -4419,7 +4421,7 @@ DAC_Banks:
 ; ===========================================================================
 ; Pointers
 ; ===========================================================================
-z80_SoundDriverPointers:
+Z80_SoundDriverPointers:
 		dw	zmake68kPtr(MusicPointers)
 		dw	zmake68kPtr(SFXPointers)
 		dw	z80_ModEnvPointers
@@ -4630,14 +4632,14 @@ z80_MusicBanks:
 		message "Z80 free space before stack: \{z80_stack_top-$}h bytes"
 	endif
 
-z80_SoundDriverPointersEnd:
+Z80_SoundDriverPointersEnd:
 ; ---------------------------------------------------------------------------
 ; ===========================================================================
 ; END OF SOUND DRIVER
 ; ===========================================================================
 		restore
 		padding off
-		!org		z80_SoundDriver+Size_of_Snd_driver_guess
+		!org		Z80_SoundDriver+Size_of_Snd_driver_guess
 
 Z80_Snd_Driver_End:
 

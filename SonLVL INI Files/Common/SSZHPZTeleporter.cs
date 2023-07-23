@@ -26,7 +26,7 @@ namespace S3KObjectDefinitions.HPZ
 		public override void Init(ObjectData data)
 		{
 			var art = LevelData.ReadFile(
-				"../General/Sprites/Teleporter/Teleporter.bin", CompressionType.KosinskiM);
+				"../Levels/HPZ/KosinskiM Art/Teleporter.bin", CompressionType.KosinskiM);
 
 			BuildSpritesProperties(art, 10, 4);
 		}
@@ -104,7 +104,7 @@ namespace S3KObjectDefinitions.Common
 			properties = new PropertySpec[2];
 			subtypes = new ReadOnlyCollection<byte>(new byte[0]);
 			sprite = BuildFlippedSprites(ObjectHelper.MapASMToBmp(art,
-				"../General/Sprites/Teleporter/Map - Teleporter.asm", frame, startpal));
+				"../Levels/SSZ/Misc Object Data/Map - (&HPZ) Teleporter.asm", frame, startpal));
 
 			properties[0] = new PropertySpec("Distance", typeof(int), "Extended",
 				"Vertical distance the player will travel, in pixels.", null,
