@@ -79659,7 +79659,7 @@ loc_44790:
 ; ---------------------------------------------------------------------------
 
 loc_447B2:
-		lea	word_4577B(pc),a1
+		lea	AniRaw_4577B(pc),a1
 		jsr	(Animate_RawNoSST).l
 		jsr	(MoveSprite).l
 		tst.l	d0
@@ -79688,7 +79688,7 @@ loc_447F2:
 loc_447F8:
 		move.b	#8,5(a0)
 		bchg	#0,4(a0)
-		move.l	#word_45775,$30(a0)
+		move.l	#AniRaw_45775,$30(a0)
 		move.w	#-$600,$18(a0)
 		clr.w	$1A(a0)
 		move.w	#$29,$2E(a0)
@@ -79723,7 +79723,7 @@ loc_4486E:
 
 loc_4487A:
 		move.b	#$C,5(a0)
-		move.l	#word_45775,$30(a0)
+		move.l	#AniRaw_45775,$30(a0)
 		move.w	#$600,$18(a0)
 		jsr	(Create_New_Sprite).l
 		bne.s	locret_4489C
@@ -79829,7 +79829,7 @@ loc_449B0:
 		cmpi.w	#$4B3C,d0
 		bcs.s	loc_449CA
 		move.w	d0,$10(a0)
-		lea	byte_4576B(pc),a1
+		lea	AniRaw_4576B(pc),a1
 		jmp	(Animate_RawNoSST).l
 ; ---------------------------------------------------------------------------
 
@@ -79840,7 +79840,7 @@ loc_449CA:
 		move.l	#loc_44A08,$34(a0)
 
 loc_449E4:
-		move.l	#word_45785,$30(a0)
+		move.l	#AniRaw_45785,$30(a0)
 		clr.b	$24(a0)
 		clr.b	$23(a0)
 		move.b	#$1C,$22(a0)
@@ -79862,7 +79862,7 @@ loc_44A0E:
 		move.w	#-$400,$1A(a0)
 
 loc_44A1A:
-		move.l	#word_4577B,$30(a0)
+		move.l	#AniRaw_4577B,$30(a0)
 		clr.b	$24(a0)
 		clr.b	$23(a0)
 		move.b	#8,$22(a0)
@@ -79981,7 +79981,7 @@ loc_44B42:
 
 loc_44B6C:
 		subq.w	#4,$10(a0)
-		lea	(byte_4576B).l,a1
+		lea	(AniRaw_4576B).l,a1
 		jsr	(Animate_RawNoSST).l
 		jmp	(Obj_Wait).l
 ; ---------------------------------------------------------------------------
@@ -80050,7 +80050,7 @@ word_44C2E:	dc.w $176
 loc_44C36:
 		lea	ObjDat4_456DC(pc),a1
 		jsr	(SetUp_ObjAttributesSlotted).l
-		move.l	#word_4578B,$30(a0)
+		move.l	#AniRaw_4578B,$30(a0)
 		moveq	#signextendB(mus_FadeOut),d0
 		jsr	(Play_Music).l
 		move.w	#$78,$2E(a0)
@@ -80322,7 +80322,7 @@ loc_44F44:
 		move.b	#$C,5(a0)
 		clr.b	$23(a0)
 		clr.b	$24(a0)
-		move.l	#byte_4576B,$30(a0)
+		move.l	#AniRaw_4576B,$30(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -80411,7 +80411,7 @@ loc_4502C:
 
 loc_45046:
 		move.b	#6,5(a0)
-		move.l	#byte_4578F,$30(a0)
+		move.l	#AniRaw_4578F,$30(a0)
 		move.l	#loc_45064,$34(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -80450,7 +80450,7 @@ loc_450AE:
 
 loc_450D0:
 		move.b	#$E,5(a0)
-		move.l	#byte_4576B,$30(a0)
+		move.l	#AniRaw_4576B,$30(a0)
 		clr.b	$24(a0)
 		clr.b	$23(a0)
 		rts
@@ -80602,7 +80602,7 @@ loc_4527A:
 ; ---------------------------------------------------------------------------
 
 loc_4528A:
-		lea	byte_4579E(pc),a1
+		lea	AniRaw_4579E(pc),a1
 		jmp	(Animate_RawNoSSTMultiDelay).l
 ; ---------------------------------------------------------------------------
 
@@ -80616,7 +80616,7 @@ loc_452A4:
 		tst.b	(Screen_shake_flag).w
 		beq.s	loc_452C0
 		move.b	#8,5(a0)
-		move.l	#byte_45766,$30(a0)
+		move.l	#AniRaw_45766,$30(a0)
 		clr.b	$24(a0)
 		clr.b	$23(a0)
 
@@ -81037,50 +81037,15 @@ ChildObjDat_45756:
 DPLCPtr_CutsceneKnux:
 		dc.l ArtUnc_CutsceneKnux
 		dc.l DPLC_CutsceneKnux
-byte_45766:	dc.b 7
-		dc.b 1
-		dc.b 2
-		dc.b 3
-		dc.b $FC
-byte_4576B:	dc.b 5
-		dc.b $A
-		dc.b $B
-		dc.b $C
-		dc.b $D
-		dc.b $E
-		dc.b $F
-		dc.b $10
-		dc.b $11
-		dc.b $FC
-word_45775:	dc.w $112
-		dc.w $1314
-		dc.w $15FC
-word_4577B:	dc.w $108
-		dc.w $408
-		dc.w $508
-		dc.w $608
-		dc.w $7FC
-word_45785:	dc.w $71C
-		dc.w $1C1D
-		dc.w $F806
-word_4578B:	dc.w $71E
-		dc.w $1FFC
-byte_4578F:	dc.b  $16,   7
-		dc.b  $16,   7
-		dc.b  $17,   7
-		dc.b  $18,   7
-		dc.b  $19, $13
-		dc.b  $1A,   7
-		dc.b  $1B,   0
-		dc.b  $F4
-byte_4579E:	dc.b  $20,   5
-		dc.b  $21,   5
-		dc.b  $22, $14
-		dc.b  $23,   3
-		dc.b  $24,  $F
-		dc.b  $21,   5
-		dc.b  $20,   5
-		dc.b  $F4,   0
+AniRaw_45766:	dc.b    7,   1,   2,   3, $FC
+AniRaw_4576B:	dc.b    5,  $A,  $B,  $C,  $D,  $E,  $F, $10, $11, $FC
+AniRaw_45775:	dc.b    1, $12, $13, $14, $15, $FC
+AniRaw_4577B:	dc.b    1,   8,   4,   8,   5,   8,   6,   8,   7, $FC
+AniRaw_45785:	dc.b    7, $1C, $1C, $1D, $F8,   6
+AniRaw_4578B:	dc.b    7, $1E, $1F, $FC
+AniRaw_4578F:	dc.b  $16,   7, $16,   7, $17,   7, $18,   7, $19, $13, $1A,   7, $1B,   0, $F4
+AniRaw_4579E:	dc.b  $20,   5, $21,   5, $22, $14, $23,   3, $24,  $F, $21,   5, $20,   5, $F4
+		even
 Pal_CutsceneKnux:
 		binclude "General/Sprites/Knuckles/Cutscene/Pal.bin"
 		even
