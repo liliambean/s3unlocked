@@ -28,13 +28,6 @@ AniSonic:
 		dc.w Ani_PlayerHurt-AniSonic		; 1A
 		dc.w Ani_PlayerFall-AniSonic		; 1B
 		dc.w Ani_PlayerBlank-AniSonic		; 1C
-		dc.w Ani_PlayerFloat-AniSonic		; 1D
-		dc.w Ani_PlayerFloat-AniSonic		; 1E
-		dc.w Ani_PlayerFloat-AniSonic		; 1F
-		dc.w Ani_PlayerFloat-AniSonic		; 20
-		dc.w Ani_PlayerFloat-AniSonic		; 21
-		dc.w Ani_PlayerFloat-AniSonic		; 22
-		dc.w Ani_PlayerFloat-AniSonic		; 23
 AniSuperSonic:
 		dc.w Ani_PlayerWalk-AniSuperSonic	; 00
 		dc.w Ani_PlayerRun-AniSuperSonic	; 01
@@ -65,13 +58,6 @@ AniSuperSonic:
 		dc.w Ani_PlayerHurt-AniSuperSonic	; 1A
 		dc.w Ani_PlayerFall-AniSuperSonic	; 1B
 		dc.w Ani_PlayerBlank-AniSuperSonic	; 1C
-		dc.w Ani_PlayerFloat-AniSuperSonic	; 1D
-		dc.w Ani_PlayerFloat-AniSuperSonic	; 1E
-		dc.w Ani_PlayerFloat-AniSuperSonic	; 1F
-		dc.w Ani_PlayerFloat-AniSuperSonic	; 20
-		dc.w Ani_PlayerFloat-AniSuperSonic	; 21
-		dc.w Ani_PlayerFloat-AniSuperSonic	; 22
-		dc.w Ani_PlayerFloat-AniSuperSonic	; 23
 AniTails:
 		dc.w Ani_PlayerWalk-AniTails		; 00
 		dc.w Ani_PlayerRun-AniTails		; 01
@@ -145,10 +131,6 @@ AniKnuckles:
 		dc.w Ani_KnucklesGlideFall-AniKnuckles	; 1D
 		dc.w Ani_KnucklesGlideLand-AniKnuckles	; 1E
 		dc.w Ani_KnucklesGlideSlide-AniKnuckles	; 1F
-		dc.w Ani_KnucklesGlide-AniKnuckles	; 20
-		dc.w Ani_KnucklesGlide-AniKnuckles	; 21
-		dc.w Ani_KnucklesGlide-AniKnuckles	; 22
-		dc.w Ani_KnucklesGlide-AniKnuckles	; 23
 Ani_PlayerWalk:		dc.b  $FF,   1,   2,   3,   4,   5,   6,   7,   8, $FF
 Ani_PlayerRun:		dc.b  $FF, $21, $22, $23, $24, $FF, $FF, $FF, $FF, $FF
 Ani_PlayerSpin:		dc.b  $FE, $E0, $E1, $E0, $E2, $E0, $E3, $E0, $E4, $FF

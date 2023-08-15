@@ -263,7 +263,7 @@ Reserved_object_3		ds.b object_size	; during a level, an object whose sole purpo
 Dynamic_object_RAM		ds.b object_size*90	; $1A04 bytes ; 90 objects
 Dynamic_object_RAM_end =	*
 Level_object_RAM =		Dynamic_object_RAM_end	; $4EA bytes ; various fixed in-level objects
-		ds.b object_size			; unknown
+			ds.b object_size		; unknown
 Breathing_bubbles		ds.b object_size	; for the main character
 Breathing_bubbles_P2		ds.b object_size	; for Tails in a Sonic and Tails game
 Super_stars =			*			; for Super Sonic and Super Knuckles
@@ -341,18 +341,18 @@ Apparent_zone_and_act =		*
 Apparent_zone			ds.b 1			; always equal to actual zone
 Apparent_act			ds.b 1			; for example, after AIZ gets burnt, this indicates act 1 even though it's actually act 2
 Palette_fade_timer		ds.w 1			; the palette gets faded in until this timer expires
-Competition_time_record		ds.l 1		; player 1's recorded time for the current run, to be displayed in menus and the result screen 
-Competition_time_record_minute =			Competition_time_record+1
-Competition_time_record_second =			Competition_time_record+2
-Competition_time_record_frame =			Competition_time_record+3
-Competition_time_record_P2	ds.l 1		; player 2's recorded time for the current run, to be displayed in menus and the result screen 
-Competition_time_record_minute_P2 =		Competition_time_record_P2+1
-Competition_time_record_second_P2 =		Competition_time_record_P2+2
-Competition_time_record_frame_P2 =		Competition_time_record_P2+3
-Competition_time_attack_new_top_record			ds.b 1		; signifies new time records in time attack mode. set: no new records, clear: 1st place, $1: 2nd place, $2: 3rd place record.
+Competition_time_record			ds.l 1		; player 1's recorded time for the current run, to be displayed in menus and the result screen 
+Competition_time_record_minute =	Competition_time_record+1
+Competition_time_record_second =	Competition_time_record+2
+Competition_time_record_frame =		Competition_time_record+3
+Competition_time_record_P2		ds.l 1		; player 2's recorded time for the current run, to be displayed in menus and the result screen 
+Competition_time_record_minute_P2 =	Competition_time_record_P2+1
+Competition_time_record_second_P2 =	Competition_time_record_P2+2
+Competition_time_record_frame_P2 =	Competition_time_record_P2+3
+Competition_time_attack_new_top_record	ds.b 1		; signifies new time records in time attack mode. set: no new records, clear: 1st place, $1: 2nd place, $2: 3rd place record.
 			ds.b 1				; unused
-Competition_lap_count			ds.b 1			; number of laps that player 1 has completed
-Competition_lap_count_2P			ds.b 1		; number of laps that player 2 has completed
+Competition_lap_count		ds.b 1			; number of laps that player 1 has completed
+Competition_lap_count_2P	ds.b 1			; number of laps that player 2 has completed
 Act3_flag			ds.b 1			; set when entering LRZ 3 or DEZ 3 directly from previous act. Prevents title card from loading
 			ds.b 1				; unused
 Camera_X_pos_P2			ds.l 1
@@ -472,7 +472,7 @@ Plane_buffer			ds.b $480		; used by level drawing routines
 VRAM_buffer			ds.b $80		; used to temporarily hold data while it is being transferred from one VRAM location to another
 
 Game_mode			ds.b 1
-Alternate_player_start_flag	ds.b 1			; Fred: Encore mode - player starts
+Alternate_player_start_flag	ds.b 1		; Fred: Encore mode - player starts
 Ctrl_1_logical =		*			; both held and pressed
 Ctrl_1_held_logical		ds.b 1
 Ctrl_1_pressed_logical		ds.b 1
@@ -566,12 +566,13 @@ Nem_frame_patterns_left		ds.w 1			; the number of patterns remaining to be decom
 Tails_CPU_interact		ds.w 1			; RAM address of the last object Tails stood on while controlled by AI
 Tails_CPU_idle_timer		ds.w 1			; counts down while controller 2 is idle, when it reaches 0 the AI takes over
 Tails_CPU_flight_timer		ds.w 1			; counts up while Tails is respawning, when it reaches 300 he drops into the level
-			ds.w 1				; unused
+Tails_CPU_pos_table_offset	ds.b 1		; Fred: Tails AI - track live position
+			ds.b 1				; unused
 Tails_CPU_routine		ds.w 1			; Tails' current AI routine in a Sonic and Tails game
 Tails_CPU_target_X		ds.w 1			; Tails' target x-position
 Tails_CPU_target_Y		ds.w 1			; Tails' target y-position
-Tails_CPU_auto_fly_timer	ds.b 1		; counts up until AI Tails automatically flies up to maintain altitude, while grabbing Sonic in Marble Garden Act 2's boss
-Tails_CPU_auto_jump_flag	ds.b 1		; set to #1 when AI Tails needs to jump of his own accord, regardless of whether Sonic jumped or not
+Tails_CPU_auto_fly_timer	ds.b 1			; counts up until AI Tails automatically flies up to maintain altitude, while grabbing Sonic in Marble Garden Act 2's boss
+Tails_CPU_auto_jump_flag	ds.b 1			; set to #1 when AI Tails needs to jump of his own accord, regardless of whether Sonic jumped or not
 Rings_manager_routine		ds.b 1
 Level_started_flag		ds.b 1
 _unkF712			ds.b $1C		; ??? ; unknown object respawn table
@@ -600,9 +601,9 @@ Deceleration			ds.w 1
 Player_prev_frame		ds.b 1			; used by DPLC routines to detect whether a DMA transfer is required
 			ds.b 1				; unused
 Primary_Angle			ds.b 1
-Primary_Angle_save		ds.b 1	; Used in FindFloor/FindWall
+Primary_Angle_save		ds.b 1			; Used in FindFloor/FindWall
 Secondary_Angle			ds.b 1
-Secondary_Angle_save	ds.b 1	; Used in FindFloor/FindWall
+Secondary_Angle_save		ds.b 1			; Used in FindFloor/FindWall
 
 Object_load_routine		ds.b 1			; routine counter for the object loading manager
 			ds.b 1				; unused
@@ -699,13 +700,13 @@ Pal_fade_delay2			ds.w 1			; timer for palette fade from white routine
 			ds.b $A				; unused
 Palette_rotation_custom		ds.l 1			; custom routine for palette rotation scripts
 Palette_rotation_data		ds.w 9			; data used by palette rotation scripts. Last word must always be 0
-SSZ_MTZ_boss_X_pos			ds.w 1			; horizontal position of the Metropolis Zone boss in Sky Sanctuary
+SSZ_MTZ_boss_X_pos		ds.w 1			; horizontal position of the Metropolis Zone boss in Sky Sanctuary
 			ds.w 1				; unused
-SSZ_MTZ_boss_Y_pos			ds.w 1			; vertical position of the Metropolis Zone boss in Sky Sanctuary
+SSZ_MTZ_boss_Y_pos		ds.w 1			; vertical position of the Metropolis Zone boss in Sky Sanctuary
 			ds.w 1				; unused
-SSZ_MTZ_boss_X_vel			ds.w 1				; horizontal velocity of the Metropolis Zone boss in Sky Sanctuary
-SSZ_MTZ_boss_Y_vel			ds.w 1				; vertical velocity of the Metropolis Zone boss in Sky Sanctuary
-SSZ_MTZ_boss_laser_timer			ds.w 1	; counts down until a laser is fired in Sky Sanctuary's Metropolis boss fight
+SSZ_MTZ_boss_X_vel		ds.w 1			; horizontal velocity of the Metropolis Zone boss in Sky Sanctuary
+SSZ_MTZ_boss_Y_vel		ds.w 1			; vertical velocity of the Metropolis Zone boss in Sky Sanctuary
+SSZ_MTZ_boss_laser_timer	ds.w 1			; counts down until a laser is fired in Sky Sanctuary's Metropolis boss fight
 			ds.w 1				; unused
 
 DMA_queue			ds.w $12*7		; stores all the VDP commands necessary to initiate a DMA transfer
@@ -726,7 +727,7 @@ System_stack =			*			; this is the top of the stack, it grows downwards
 Restart_level_flag		ds.w 1
 Level_frame_counter		ds.w 1			; the number of frames which have elapsed since the level started
 Debug_object			ds.b 1			; the current position in the debug mode object list
-Debug_monitor_subtype		ds.b 1			; Fred: allow selection of debug monitor contents
+Debug_monitor_subtype		ds.b 1		; Fred: allow selection of debug monitor contents
 Debug_placement_mode =		*			; both routine and type
 Debug_placement_routine		ds.b 1
 ;Debug_placement_type
@@ -798,18 +799,18 @@ LRZ_rocks_addr_front		ds.l 1			; the address inside the lrz rocks data of the fi
 LRZ_rocks_addr_back		ds.l 1			; the address inside the lrz rocks data of the first rock whose X pos is >= Camera_X_pos_coarse - $80
 Oscillating_table		ds.b $42		; various oscillating variables
 Oscillating_table_end =		*			; end of oscillating data array
-Slot_machine_goal_frame_timer			ds.b 1
-Slot_machine_goal_frame			ds.b 1
+Slot_machine_goal_frame_timer	ds.b 1
+Slot_machine_goal_frame		ds.b 1
 Rings_frame_timer		ds.b 1
 Rings_frame			ds.b 1
-Slot_machine_peppermint_frame_timer			ds.b 1
-Slot_machine_peppermint_frame			ds.b 1
+Slot_machine_peppermint_frame_timer	ds.b 1
+Slot_machine_peppermint_frame		ds.b 1
 Ring_spill_anim_counter		ds.b 1
 Ring_spill_anim_frame		ds.b 1
 Ring_spill_anim_accum		ds.w 1
 AIZ_vine_angle			ds.w 1			; controls the angle of AIZ giant vines
 			ds.w 1				; unused
-_unkFEBE			ds.b 1			; unused
+_unkFEBE		ds.b 1				; unused
 Extra_life_flags_P2		ds.b 1
 Max_speed_P2			ds.w 1
 Acceleration_P2			ds.w 1
@@ -826,10 +827,10 @@ Timer_minute_P2 =		Timer_P2+1
 Timer_second_P2 =		Timer_P2+2
 Timer_frame_P2 =		Timer_P2+3		; the second gets incremented when this reaches 60
 Score_P2			ds.l 1			; left over from Sonic 2
-Competition_total_laps			ds.b 1		; total number of laps in competition mode (typically 5)
+Competition_total_laps		ds.b 1			; total number of laps in competition mode (typically 5)
 			ds.b 1				; unused
-Competition_current_lap			ds.b 1		; current lap number for player 1 in competition mode
-Competition_current_lap_2P		ds.b 1		; current lap number for player 2 in competition mode
+Competition_current_lap		ds.b 1			; current lap number for player 1 in competition mode
+Competition_current_lap_2P	ds.b 1			; current lap number for player 2 in competition mode
 Loser_time_left			ds.b 1			; left over from Sonic 2
 			ds.b $23			; unused
 Results_screen_2P		ds.w 1			; left over from Sonic 2
@@ -879,7 +880,7 @@ Saved2_apparent_zone_and_act	ds.w 1
 ;Blue_spheres_header_flag
 ;Blue_spheres_mode
 ;Blue_spheres_menu_flag
-Blue_spheres_saved_level	ds.l 1			; Fred: blue sphere - load saved level on startup
+Blue_spheres_saved_level	ds.l 1		; Fred: blue sphere - load saved level on startup
 Blue_spheres_current_stage	ds.b 4			; the layout parts that make up the current stage
 Blue_spheres_current_level	ds.l 1			; number shown at the top of the full game menu
 Blue_spheres_option		ds.b 1			; 0 = level, 1 = start, 2 = code
@@ -888,7 +889,7 @@ Blue_spheres_menu_flag		ds.b 1			; 0 = single stage, 1 = normal, bit 7 set = ent
 Blue_spheres_difficulty		ds.b 1			; value currently displayed
 Blue_spheres_target_difficulty	ds.b 1			; value read from the layout
 ;SK_alone_flag
-			ds.w 1				; Fred: removed S&K alone mode
+			ds.w 1			; Fred: removed S&K alone mode
 Emerald_counts =		*			; both chaos and super emeralds
 Chaos_emerald_count		ds.b 1
 Super_emerald_count		ds.b 1
@@ -923,9 +924,9 @@ Debug_mode_cheat_counter	ds.w 1			; progress entering debug mode cheat, unused
 Competition_mode		ds.w 1
 P1_character			ds.b 1			; 0 = Sonic, 1 = Tails, 2 = Knuckles
 P2_character			ds.b 1
-Encore_stocks_packed		ds.w 1			; Fred: Encore mode
-Encore_available_chars		ds.b 1			; Fred: Encore mode
-Encore_mode			ds.b 1			; Fred: Encore mode
+Encore_stocks_packed		ds.w 1		; Fred: Encore mode
+Encore_available_chars		ds.b 1		; Fred: Encore mode
+Encore_mode			ds.b 1		; Fred: Encore mode
 
 V_int_jump			ds.b 6			; contains an instruction to jump to the V-int handler
 V_int_addr :=			V_int_jump+2		; long
@@ -948,13 +949,13 @@ SStage_scalar_index_2		ds.w 1			; unknown scalar table index value
 SStage_scalar_result_0		ds.l 1			; unknown scalar table results values
 SStage_scalar_result_1		ds.l 1			; unknown scalar table results values
 SStage_scalar_result_2		ds.l 1			; unknown scalar table results values
-	ds.b $A
+			ds.b $A
 SStage_scalar_result_3		ds.l 1			; unknown scalar table results values
 Special_stage_anim_frame	ds.w 1			; special stage globe's current animation frame, $10 and higher is turning
 Special_stage_X_pos		ds.w 1
 Special_stage_Y_pos		ds.w 1
 Special_stage_angle		ds.b 1			; $00 = north, $40 = west, $80 = south, $C0 = east
-Special_stage_green_spheres	ds.b 1			; Fred: special stage - add green spheres
+Special_stage_green_spheres	ds.b 1		; Fred: special stage - add green spheres
 Special_stage_velocity		ds.w 1			; player's movement speed, negative when going backwards
 Special_stage_turning		ds.b 1			; direction of next turn, 4 = left, -4 = right
 Special_stage_bumper_lock	ds.b 1			; if set, the player can't start advancing by pressing up
@@ -1036,9 +1037,9 @@ ArtTile_StarPost                      = $05E4
 ArtTile_Player_1                      = $0680
 ArtTile_Player_2                      = $06A0
 ArtTile_Player_2_Tail                 = $06B0
-ArtTile_Ring                          = $06C4			; Fred: HUD - animate rings via DMA
+ArtTile_Ring                          = $06C4	; Fred: HUD - animate rings via DMA
 ArtTile_Shield                        = $079C
-ArtTile_Shield_Sparks                 = $07B8			; Fred: HUD - Encore mode HUD
+ArtTile_Shield_Sparks                 = $07B8	; Fred: HUD - Encore mode HUD
 ArtTile_LifeIcon                      = $07D4
 ArtTile_DashDust                      = $07E0
 ArtTile_DashDust_P2                   = $07F0
