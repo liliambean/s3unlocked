@@ -2,7 +2,7 @@
 <StartPosDef xmlns="http://www.sonicretro.org">
   <ImageFromMappings>
     <ArtFile filename="../General/Sprites/Sonic/Art/Sonic.bin" compression="Uncompressed" />
-    <MapFile type="ASM" filename="../General/Sprites/Sonic/Map - Sonic.asm"
-      dplcfile="../General/Sprites/Sonic/DPLC - Sonic.asm" dplcver="S2" frame="5" />
+    <MapFile type="ASM" filename="../General/Sprites/Sonic/Map - Sonic.asm" label="Map_Sonic_Walk2"
+      dplcfile="../General/Sprites/Sonic/DPLC - Sonic.asm" dplcver="S2" dplclabel="PLC_Sonic_Walk2" />
   </ImageFromMappings>
 </StartPosDef>

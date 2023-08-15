@@ -2,7 +2,7 @@
 <StartPosDef xmlns="http://www.sonicretro.org">
   <ImageFromMappings>
     <ArtFile filename="../General/Sprites/Knuckles/Art/Knuckles.bin" compression="Uncompressed" />
-    <MapFile type="ASM" filename="../General/Sprites/Knuckles/Map - Knuckles.asm" label="word_14B4B4"
-      dplcfile="../General/Sprites/Knuckles/DPLC - Knuckles.asm" dplcver="S2" dplclabel="word_14C308" startpal="4" />
+    <MapFile type="ASM" filename="../General/Sprites/Knuckles/Map - Knuckles.asm" label="Map_Knuckles_Fall"
+      dplcfile="../General/Sprites/Knuckles/DPLC - Knuckles.asm" dplcver="S2" dplclabel="PLC_Knuckles_Fall" startpal="4" />
   </ImageFromMappings>
 </StartPosDef>

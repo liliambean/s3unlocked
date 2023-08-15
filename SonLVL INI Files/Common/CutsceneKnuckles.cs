@@ -127,11 +127,11 @@ namespace S3KObjectDefinitions.Common
 
 			subtypeNames[0] = "Angel Island 1";
 			sprites[1] = BuildFlippedSprites(ObjectHelper.MapASMDPLCToBmp(
-				art, mapfile, "word_14B58E", EngineVersion.S3K, plcfile, "word_14C36E", EngineVersion.S2, startpal), false);
+				art, mapfile, "Map_Knuckles_Spin1", EngineVersion.S3K, plcfile, "PLC_Knuckles_Spin1", EngineVersion.S2, startpal), false);
 
 			subtypeNames[1] = "Angel Island 2";
 			sprites[2] = BuildFlippedSprites(ObjectHelper.MapASMDPLCToBmp(
-				art, mapfile, "word_14B01E", EngineVersion.S3K, plcfile, "word_14C126", EngineVersion.S2, startpal, true), true);
+				art, mapfile, "Map_Knuckles_CorkscrewStandC", EngineVersion.S3K, plcfile, "PLC_Knuckles_CorkscrewStandC", EngineVersion.S2, startpal, true), true);
 
 			subtypeNames[2] = "Hydrocity 2";
 			if (s3) sprites[3] = sprites[2];
@@ -185,7 +185,7 @@ namespace S3KObjectDefinitions.Common
 
 			subtypeNames[10] = "Hidden Palace";
 			sprites[11] = BuildFlippedSprites(ObjectHelper.MapASMDPLCToBmp(
-				art, mapfile, "word_14BA68", EngineVersion.S3K, plcfile, "word_14C554", EngineVersion.S2, startpal), true);
+				art, mapfile, "Map_Knuckles_Stand3", EngineVersion.S3K, plcfile, "PLC_Knuckles_Stand3", EngineVersion.S2, startpal), true);
 
 			indexer.AddFile(new List<byte>(LevelData.ReadFile("LevelArt", 0)), -32);
 			extraSprites[11] = ObjectHelper.MapASMToBmp(indexer.ToArray(),

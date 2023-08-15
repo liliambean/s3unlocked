@@ -1,1063 +1,1255 @@
-; Tails pattern load cues
-PLC_14A08A:		dc.w word_14A280-PLC_14A08A; 0
-		dc.w word_14A282-PLC_14A08A; 1
-		dc.w word_14A28C-PLC_14A08A; 2
-		dc.w word_14A296-PLC_14A08A; 3
-		dc.w word_14A29E-PLC_14A08A; 4
-		dc.w word_14A2A8-PLC_14A08A; 5
-		dc.w word_14A2B2-PLC_14A08A; 6
-		dc.w word_14A2BC-PLC_14A08A; 7
-		dc.w word_14A2C4-PLC_14A08A; 8
-		dc.w word_14A2CE-PLC_14A08A; 9
-		dc.w word_14A2D8-PLC_14A08A; 10
-		dc.w word_14A2E0-PLC_14A08A; 11
-		dc.w word_14A2EA-PLC_14A08A; 12
-		dc.w word_14A2F2-PLC_14A08A; 13
-		dc.w word_14A2FA-PLC_14A08A; 14
-		dc.w word_14A302-PLC_14A08A; 15
-		dc.w word_14A30A-PLC_14A08A; 16
-		dc.w word_14A314-PLC_14A08A; 17
-		dc.w word_14A31C-PLC_14A08A; 18
-		dc.w word_14A324-PLC_14A08A; 19
-		dc.w word_14A32C-PLC_14A08A; 20
-		dc.w word_14A332-PLC_14A08A; 21
-		dc.w word_14A33A-PLC_14A08A; 22
-		dc.w word_14A340-PLC_14A08A; 23
-		dc.w word_14A348-PLC_14A08A; 24
-		dc.w word_14A34E-PLC_14A08A; 25
-		dc.w word_14A356-PLC_14A08A; 26
-		dc.w word_14A360-PLC_14A08A; 27
-		dc.w word_14A36A-PLC_14A08A; 28
-		dc.w word_14A372-PLC_14A08A; 29
-		dc.w word_14A37A-PLC_14A08A; 30
-		dc.w word_14A384-PLC_14A08A; 31
-		dc.w word_14A38C-PLC_14A08A; 32
-		dc.w word_14A396-PLC_14A08A; 33
-		dc.w word_14A3A0-PLC_14A08A; 34
-		dc.w word_14A3AA-PLC_14A08A; 35
-		dc.w word_14A3B4-PLC_14A08A; 36
-		dc.w word_14A3BE-PLC_14A08A; 37
-		dc.w word_14A3C8-PLC_14A08A; 38
-		dc.w word_14A3D2-PLC_14A08A; 39
-		dc.w word_14A3DC-PLC_14A08A; 40
-		dc.w word_14A3E6-PLC_14A08A; 41
-		dc.w word_14A3F0-PLC_14A08A; 42
-		dc.w word_14A3FA-PLC_14A08A; 43
-		dc.w word_14A404-PLC_14A08A; 44
-		dc.w word_14A40E-PLC_14A08A; 45
-		dc.w word_14A418-PLC_14A08A; 46
-		dc.w word_14A422-PLC_14A08A; 47
-		dc.w word_14A42C-PLC_14A08A; 48
-		dc.w word_14A436-PLC_14A08A; 49
-		dc.w word_14A43A-PLC_14A08A; 50
-		dc.w word_14A440-PLC_14A08A; 51
-		dc.w word_14A444-PLC_14A08A; 52
-		dc.w word_14A448-PLC_14A08A; 53
-		dc.w word_14A44E-PLC_14A08A; 54
-		dc.w word_14A454-PLC_14A08A; 55
-		dc.w word_14A45A-PLC_14A08A; 56
-		dc.w word_14A460-PLC_14A08A; 57
-		dc.w word_14A466-PLC_14A08A; 58
-		dc.w word_14A46C-PLC_14A08A; 59
-		dc.w word_14A472-PLC_14A08A; 60
-		dc.w word_14A478-PLC_14A08A; 61
-		dc.w word_14A47E-PLC_14A08A; 62
-		dc.w word_14A484-PLC_14A08A; 63
-		dc.w word_14A488-PLC_14A08A; 64
-		dc.w word_14A490-PLC_14A08A; 65
-		dc.w word_14A494-PLC_14A08A; 66
-		dc.w word_14A498-PLC_14A08A; 67
-		dc.w word_14A4A0-PLC_14A08A; 68
-		dc.w word_14A4A6-PLC_14A08A; 69
-		dc.w word_14A4AC-PLC_14A08A; 70
-		dc.w word_14A4B2-PLC_14A08A; 71
-		dc.w word_14A4BA-PLC_14A08A; 72
-		dc.w word_14A4C0-PLC_14A08A; 73
-		dc.w word_14A4C8-PLC_14A08A; 74
-		dc.w word_14A4CE-PLC_14A08A; 75
-		dc.w word_14A4D6-PLC_14A08A; 76
-		dc.w word_14A4DC-PLC_14A08A; 77
-		dc.w word_14A4E4-PLC_14A08A; 78
-		dc.w word_14A4EE-PLC_14A08A; 79
-		dc.w word_14A4F8-PLC_14A08A; 80
-		dc.w word_14A502-PLC_14A08A; 81
-		dc.w word_14A50A-PLC_14A08A; 82
-		dc.w word_14A512-PLC_14A08A; 83
-		dc.w word_14A518-PLC_14A08A; 84
-		dc.w word_14A51E-PLC_14A08A; 85
-		dc.w word_14A526-PLC_14A08A; 86
-		dc.w word_14A52A-PLC_14A08A; 87
-		dc.w word_14A532-PLC_14A08A; 88
-		dc.w word_14A536-PLC_14A08A; 89
-		dc.w word_14A53A-PLC_14A08A; 90
-		dc.w word_14A542-PLC_14A08A; 91
-		dc.w word_14A546-PLC_14A08A; 92
-		dc.w word_14A550-PLC_14A08A; 93
-		dc.w word_14A554-PLC_14A08A; 94
-		dc.w word_14A55C-PLC_14A08A; 95
-		dc.w word_14A562-PLC_14A08A; 96
-		dc.w word_14A566-PLC_14A08A; 97
-		dc.w word_14A56A-PLC_14A08A; 98
-		dc.w word_14A572-PLC_14A08A; 99
-		dc.w word_14A57C-PLC_14A08A; 100
-		dc.w word_14A580-PLC_14A08A; 101
-		dc.w word_14A586-PLC_14A08A; 102
-		dc.w word_14A58C-PLC_14A08A; 103
-		dc.w word_14A590-PLC_14A08A; 104
-		dc.w word_14A594-PLC_14A08A; 105
-		dc.w word_14A59C-PLC_14A08A; 106
-		dc.w word_14A5A4-PLC_14A08A; 107
-		dc.w word_14A5AA-PLC_14A08A; 108
-		dc.w word_14A5B0-PLC_14A08A; 109
-		dc.w word_14A5B6-PLC_14A08A; 110
-		dc.w word_14A5BC-PLC_14A08A; 111
-		dc.w word_14A5C2-PLC_14A08A; 112
-		dc.w word_14A5C8-PLC_14A08A; 113
-		dc.w word_14A5CE-PLC_14A08A; 114
-		dc.w word_14A5D2-PLC_14A08A; 115
-		dc.w word_14A5D8-PLC_14A08A; 116
-		dc.w word_14A5DC-PLC_14A08A; 117
-		dc.w word_14A5E0-PLC_14A08A; 118
-		dc.w word_14A5E6-PLC_14A08A; 119
-		dc.w word_14A5EC-PLC_14A08A; 120
-		dc.w word_14A5F6-PLC_14A08A; 121
-		dc.w word_14A600-PLC_14A08A; 122
-		dc.w word_14A60A-PLC_14A08A; 123
-		dc.w word_14A614-PLC_14A08A; 124
-		dc.w word_14A61E-PLC_14A08A; 125
-		dc.w word_14A628-PLC_14A08A; 126
-		dc.w word_14A632-PLC_14A08A; 127
-		dc.w word_14A63C-PLC_14A08A; 128
-		dc.w word_14A642-PLC_14A08A; 129
-		dc.w word_14A64C-PLC_14A08A; 130
-		dc.w word_14A656-PLC_14A08A; 131
-		dc.w word_14A65E-PLC_14A08A; 132
-		dc.w word_14A666-PLC_14A08A; 133
-		dc.w word_14A670-PLC_14A08A; 134
-		dc.w word_14A676-PLC_14A08A; 135
-		dc.w word_14A67C-PLC_14A08A; 136
-		dc.w word_14A682-PLC_14A08A; 137
-		dc.w word_14A686-PLC_14A08A; 138
-		dc.w word_14A68A-PLC_14A08A; 139
-		dc.w word_14A690-PLC_14A08A; 140
-		dc.w word_14A696-PLC_14A08A; 141
-		dc.w word_14A69C-PLC_14A08A; 142
-		dc.w word_14A6A4-PLC_14A08A; 143
-		dc.w word_14A6AC-PLC_14A08A; 144
-		dc.w word_14A6B2-PLC_14A08A; 145
-		dc.w word_14A6B8-PLC_14A08A; 146
-		dc.w word_14A6BE-PLC_14A08A; 147
-		dc.w word_14A6C2-PLC_14A08A; 148
-		dc.w word_14A6CA-PLC_14A08A; 149
-		dc.w word_14A6D2-PLC_14A08A; 150
-		dc.w word_14A6D6-PLC_14A08A; 151
-		dc.w word_14A6DA-PLC_14A08A; 152
-		dc.w word_14A6DE-PLC_14A08A; 153
-		dc.w word_14A6E2-PLC_14A08A; 154
-		dc.w word_14A6EA-PLC_14A08A; 155
-		dc.w word_14A6F2-PLC_14A08A; 156
-		dc.w word_14A6F6-PLC_14A08A; 157
-		dc.w word_14A6FC-PLC_14A08A; 158
-		dc.w word_14A704-PLC_14A08A; 159
-		dc.w word_14A70C-PLC_14A08A; 160
-		dc.w word_14A712-PLC_14A08A; 161
-		dc.w word_14A718-PLC_14A08A; 162
-		dc.w word_14A71E-PLC_14A08A; 163
-		dc.w word_14A724-PLC_14A08A; 164
-		dc.w word_14A72A-PLC_14A08A; 165
-		dc.w word_14A72E-PLC_14A08A; 166
-		dc.w word_14A738-PLC_14A08A; 167
-		dc.w word_14A73E-PLC_14A08A; 168
-		dc.w word_14A746-PLC_14A08A; 169
-		dc.w word_14A74C-PLC_14A08A; 170
-		dc.w word_14A750-PLC_14A08A; 171
-		dc.w word_14A754-PLC_14A08A; 172
-		dc.w word_14A758-PLC_14A08A; 173
-		dc.w word_14A75C-PLC_14A08A; 174
-		dc.w word_14A760-PLC_14A08A; 175
-		dc.w word_14A764-PLC_14A08A; 176
-		dc.w word_14A768-PLC_14A08A; 177
-		dc.w word_14A76C-PLC_14A08A; 178
-		dc.w word_14A770-PLC_14A08A; 179
-		dc.w word_14A774-PLC_14A08A; 180
-		dc.w word_14A778-PLC_14A08A; 181
-		dc.w word_14A780-PLC_14A08A; 182
-		dc.w word_14A786-PLC_14A08A; 183
-		dc.w word_14A78A-PLC_14A08A; 184
-		dc.w word_14A778-PLC_14A08A; 185
-		dc.w word_14A790-PLC_14A08A; 186
-		dc.w word_14A798-PLC_14A08A; 187
-		dc.w word_14A790-PLC_14A08A; 188
-		dc.w word_14A79E-PLC_14A08A; 189
-		dc.w word_14A7A6-PLC_14A08A; 190
-		dc.w word_14A7AE-PLC_14A08A; 191
-		dc.w word_14A7B4-PLC_14A08A; 192
-		dc.w word_14A7BE-PLC_14A08A; 193
-		dc.w word_14A7C4-PLC_14A08A; 194
-		dc.w word_14A7CC-PLC_14A08A; 195
-		dc.w word_14A7D6-PLC_14A08A; 196
-		dc.w word_14A7E0-PLC_14A08A; 197
-		dc.w word_14A7EA-PLC_14A08A; 198
-		dc.w word_14A7F4-PLC_14A08A; 199
-		dc.w word_14A7FE-PLC_14A08A; 200
-		dc.w word_14A808-PLC_14A08A; 201
-		dc.w word_14A812-PLC_14A08A; 202
-		dc.w word_14A81C-PLC_14A08A; 203
-		dc.w word_14A820-PLC_14A08A; 204
-		dc.w word_14A824-PLC_14A08A; 205
-		dc.w word_14A82C-PLC_14A08A; 206
-		dc.w word_14A834-PLC_14A08A; 207
-		dc.w word_14A83A-PLC_14A08A; 208
-		dc.w word_14A840-PLC_14A08A; 209
-		dc.w word_14A840-PLC_14A08A; 210
-		dc.w word_14A840-PLC_14A08A; 211
-		dc.w word_14A840-PLC_14A08A; 212
-		dc.w word_14A840-PLC_14A08A; 213
-		dc.w word_14A840-PLC_14A08A; 214
-		dc.w word_14A840-PLC_14A08A; 215
-		dc.w word_14A840-PLC_14A08A; 216
-		dc.w word_14A840-PLC_14A08A; 217
-		dc.w word_14A840-PLC_14A08A; 218
-		dc.w word_14A840-PLC_14A08A; 219
-		dc.w word_14A840-PLC_14A08A; 220
-		dc.w word_14A840-PLC_14A08A; 221
-		dc.w word_14A840-PLC_14A08A; 222
-		dc.w word_14A840-PLC_14A08A; 223
-		dc.w word_14A848-PLC_14A08A; 224
-		dc.w word_14A84E-PLC_14A08A; 225
-		dc.w word_14A856-PLC_14A08A; 226
-		dc.w word_14A85C-PLC_14A08A; 227
-		dc.w word_14A866-PLC_14A08A; 228
-		dc.w word_14A870-PLC_14A08A; 229
-		dc.w word_14A878-PLC_14A08A; 230
-		dc.w word_14A87E-PLC_14A08A; 231
-		dc.w word_14A886-PLC_14A08A; 232
-		dc.w word_14A88C-PLC_14A08A; 233
-		dc.w word_14A894-PLC_14A08A; 234
-		dc.w word_14A89C-PLC_14A08A; 235
-		dc.w word_14A8A0-PLC_14A08A; 236
-		dc.w word_14A8A8-PLC_14A08A; 237
-		dc.w word_14A8A8-PLC_14A08A; 238
-		dc.w word_14A8B0-PLC_14A08A; 239
-		dc.w word_14A8B6-PLC_14A08A; 240
-		dc.w word_14A8BC-PLC_14A08A; 241
-		dc.w word_14A8C2-PLC_14A08A; 242
-		dc.w word_14A8BC-PLC_14A08A; 243
-		dc.w word_14A8B6-PLC_14A08A; 244
-		dc.w word_14A8B0-PLC_14A08A; 245
-		dc.w word_14A8C6-PLC_14A08A; 246
-		dc.w word_14A8CC-PLC_14A08A; 247
-		dc.w word_14A8D2-PLC_14A08A; 248
-		dc.w word_14A8CC-PLC_14A08A; 249
-		dc.w word_14A8C6-PLC_14A08A; 250
-word_14A280:	dc.w 0			; DATA XREF: ROM:0014A08Ao
-word_14A282:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $5062
-		dc.w $1000
-		dc.w $5002
-		dc.w $7008
-word_14A28C:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $5068
-		dc.w $7010
-		dc.w $2018
-		dc.w $301B
-word_14A296:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $506E
-		dc.w $801F
-		dc.w $2028
-word_14A29E:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $5074
-		dc.w $702B
-		dc.w $2033
-		dc.w $3036
-word_14A2A8:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $5062
-		dc.w $1000
-		dc.w $503A
-		dc.w $7040
-word_14A2B2:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $5068
-		dc.w $7010
-		dc.w $2048
-		dc.w $304B
-word_14A2BC:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $506E
-		dc.w $804F
-		dc.w $2058
-word_14A2C4:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $5074
-		dc.w $702B
-		dc.w $205B
-		dc.w $305E
-word_14A2CE:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $107A
-		dc.w $707C
-		dc.w $2084
-		dc.w $2087
-word_14A2D8:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $B08A
-		dc.w $5096
-		dc.w $209C
-word_14A2E0:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $109F
-		dc.w $70A1
-		dc.w $20A9
-		dc.w $70AC
-word_14A2EA:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $10B4
-		dc.w $F0B6
-		dc.w $C6
-word_14A2F2:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $20C7
-		dc.w $70CA
-		dc.w $50D2
-word_14A2FA:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $10D8
-		dc.w $B0DA
-		dc.w $30E6
-word_14A302:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $10EA
-		dc.w $20EC
-		dc.w $B0EF
-word_14A30A:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $FB
-		dc.w $50FC
-		dc.w $3102
-		dc.w $3106
-word_14A314:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $516D
-		dc.w $110A
-		dc.w $B10C
-word_14A31C:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $5173
-		dc.w $B118
-		dc.w $124
-word_14A324:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $5179
-		dc.w $2125
-		dc.w $7128
-word_14A32C:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $517F
-		dc.w $B130
-word_14A332:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $516D
-		dc.w $113C
-		dc.w $B13E
-word_14A33A:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $5173
-		dc.w $B14A
-word_14A340:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $5179
-		dc.w $2156
+		dc.w PLC_Tails_Blank-PLC_Tails
+		dc.w PLC_Tails_Walk1-PLC_Tails
+		dc.w PLC_Tails_Walk2-PLC_Tails
+		dc.w PLC_Tails_Walk3-PLC_Tails
+		dc.w PLC_Tails_Walk4-PLC_Tails
+		dc.w PLC_Tails_Walk5-PLC_Tails
+		dc.w PLC_Tails_Walk6-PLC_Tails
+		dc.w PLC_Tails_Walk7-PLC_Tails
+		dc.w PLC_Tails_Walk8-PLC_Tails
+		dc.w PLC_Tails_DiagWalk1-PLC_Tails
+		dc.w PLC_Tails_DiagWalk2-PLC_Tails
+		dc.w PLC_Tails_DiagWalk3-PLC_Tails
+		dc.w PLC_Tails_DiagWalk4-PLC_Tails
+		dc.w PLC_Tails_DiagWalk5-PLC_Tails
+		dc.w PLC_Tails_DiagWalk6-PLC_Tails
+		dc.w PLC_Tails_DiagWalk7-PLC_Tails
+		dc.w PLC_Tails_DiagWalk8-PLC_Tails
+		dc.w PLC_Tails_WallWalk1-PLC_Tails
+		dc.w PLC_Tails_WallWalk2-PLC_Tails
+		dc.w PLC_Tails_WallWalk3-PLC_Tails
+		dc.w PLC_Tails_WallWalk4-PLC_Tails
+		dc.w PLC_Tails_WallWalk5-PLC_Tails
+		dc.w PLC_Tails_WallWalk6-PLC_Tails
+		dc.w PLC_Tails_WallWalk7-PLC_Tails
+		dc.w PLC_Tails_WallWalk8-PLC_Tails
+		dc.w PLC_Tails_DiagWallWalk1-PLC_Tails
+		dc.w PLC_Tails_DiagWallWalk2-PLC_Tails
+		dc.w PLC_Tails_DiagWallWalk3-PLC_Tails
+		dc.w PLC_Tails_DiagWallWalk4-PLC_Tails
+		dc.w PLC_Tails_DiagWallWalk5-PLC_Tails
+		dc.w PLC_Tails_DiagWallWalk6-PLC_Tails
+		dc.w PLC_Tails_DiagWallWalk7-PLC_Tails
+		dc.w PLC_Tails_DiagWallWalk8-PLC_Tails
+		dc.w PLC_Tails_Run1-PLC_Tails
+		dc.w PLC_Tails_Run2-PLC_Tails
+		dc.w PLC_Tails_Run3-PLC_Tails
+		dc.w PLC_Tails_Run4-PLC_Tails
+		dc.w PLC_Tails_DiagRun1-PLC_Tails
+		dc.w PLC_Tails_DiagRun2-PLC_Tails
+		dc.w PLC_Tails_DiagRun3-PLC_Tails
+		dc.w PLC_Tails_DiagRun4-PLC_Tails
+		dc.w PLC_Tails_WallRun1-PLC_Tails
+		dc.w PLC_Tails_WallRun2-PLC_Tails
+		dc.w PLC_Tails_WallRun3-PLC_Tails
+		dc.w PLC_Tails_WallRun4-PLC_Tails
+		dc.w PLC_Tails_DiagWallRun1-PLC_Tails
+		dc.w PLC_Tails_DiagWallRun2-PLC_Tails
+		dc.w PLC_Tails_DiagWallRun3-PLC_Tails
+		dc.w PLC_Tails_DiagWallRun4-PLC_Tails
+		dc.w PLC_Tails_Corkscrew1-PLC_Tails
+		dc.w PLC_Tails_Corkscrew2-PLC_Tails
+		dc.w PLC_Tails_Corkscrew3-PLC_Tails
+		dc.w PLC_Tails_Corkscrew4-PLC_Tails
+		dc.w PLC_Tails_Corkscrew5-PLC_Tails
+		dc.w PLC_Tails_Corkscrew6-PLC_Tails
+		dc.w PLC_Tails_Corkscrew7-PLC_Tails
+		dc.w PLC_Tails_Corkscrew8-PLC_Tails
+		dc.w PLC_Tails_Corkscrew9-PLC_Tails
+		dc.w PLC_Tails_CorkscrewA-PLC_Tails
+		dc.w PLC_Tails_CorkscrewB-PLC_Tails
+		dc.w PLC_Tails_CorkscrewC-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStand1-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStand2-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStand3-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStand4-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStand5-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStand6-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStand7-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStand8-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStand9-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStandA-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStandB-PLC_Tails
+		dc.w PLC_Tails_CorkscrewStandC-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiag1-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiag2-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiag3-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiag4-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiag5-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiag6-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiag7-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiag8-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiag9-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiagA-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiagB-PLC_Tails
+		dc.w PLC_Tails_CorkscrewDiagC-PLC_Tails
+		dc.w PLC_Tails_360Stand1-PLC_Tails
+		dc.w PLC_Tails_360Stand2-PLC_Tails
+		dc.w PLC_Tails_360Stand3-PLC_Tails
+		dc.w PLC_Tails_360Stand4-PLC_Tails
+		dc.w PLC_Tails_360Stand5-PLC_Tails
+		dc.w PLC_Tails_360Stand6-PLC_Tails
+		dc.w PLC_Tails_360Stand7-PLC_Tails
+		dc.w PLC_Tails_PoleSwing1-PLC_Tails
+		dc.w PLC_Tails_PoleSwing2-PLC_Tails
+		dc.w PLC_Tails_PoleSwing3-PLC_Tails
+		dc.w PLC_Tails_PoleSwing4-PLC_Tails
+		dc.w PLC_Tails_PoleSwing5-PLC_Tails
+		dc.w PLC_Tails_PoleSwing6-PLC_Tails
+		dc.w PLC_Tails_BarWalk-PLC_Tails
+		dc.w PLC_Tails_BarSwing1-PLC_Tails
+		dc.w PLC_Tails_BarSwing2-PLC_Tails
+		dc.w PLC_Tails_BarSwing3-PLC_Tails
+		dc.w PLC_Tails_BarSwing4-PLC_Tails
+		dc.w PLC_Tails_BarSwing5-PLC_Tails
+		dc.w PLC_Tails_BarSwing6-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWallRide1-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWallRide2-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWallRide3-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWall1-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWall2-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWall3-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWall4-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWall5-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWall6-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWall7-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWall8-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWall9-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWallA-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWallB-PLC_Tails
+		dc.w PLC_Tails_CorkscrewWallC-PLC_Tails
+		dc.w PLC_Tails_HangSwing1-PLC_Tails
+		dc.w PLC_Tails_HangSwing2-PLC_Tails
+		dc.w PLC_Tails_HangSwing3-PLC_Tails
+		dc.w PLC_Tails_HangSwing4-PLC_Tails
+		dc.w PLC_Tails_HangSwing5-PLC_Tails
+		dc.w PLC_Tails_HangSwing6-PLC_Tails
+		dc.w PLC_Tails_HangSwing7-PLC_Tails
+		dc.w PLC_Tails_HangSwing8-PLC_Tails
+		dc.w PLC_Tails_HangWalk1-PLC_Tails
+		dc.w PLC_Tails_HangWalk2-PLC_Tails
+		dc.w PLC_Tails_HangWalk3-PLC_Tails
+		dc.w PLC_Tails_HangWalk4-PLC_Tails
+		dc.w PLC_Tails_HangWalk5-PLC_Tails
+		dc.w PLC_Tails_HangWalk6-PLC_Tails
+		dc.w PLC_Tails_Hang1-PLC_Tails
+		dc.w PLC_Tails_Hang2-PLC_Tails
+		dc.w PLC_Tails_Hang3-PLC_Tails
+		dc.w PLC_Tails_Hang4-PLC_Tails
+		dc.w PLC_Tails_360Hang1-PLC_Tails
+		dc.w PLC_Tails_360Hang2-PLC_Tails
+		dc.w PLC_Tails_360Hang3-PLC_Tails
+		dc.w PLC_Tails_360Hang4-PLC_Tails
+		dc.w PLC_Tails_360Hang5-PLC_Tails
+		dc.w PLC_Tails_360Hang6-PLC_Tails
+		dc.w PLC_Tails_360Hang7-PLC_Tails
+		dc.w PLC_Tails_WallRide1-PLC_Tails
+		dc.w PLC_Tails_WallRide2-PLC_Tails
+		dc.w PLC_Tails_WallRide3-PLC_Tails
+		dc.w PLC_Tails_WallRide4-PLC_Tails
+		dc.w PLC_Tails_WallRide5-PLC_Tails
+		dc.w PLC_Tails_360Run1-PLC_Tails
+		dc.w PLC_Tails_360Run2-PLC_Tails
+		dc.w PLC_Tails_360Run3-PLC_Tails
+		dc.w PLC_Tails_360Run4-PLC_Tails
+		dc.w PLC_Tails_360Run5-PLC_Tails
+		dc.w PLC_Tails_360Run6-PLC_Tails
+		dc.w PLC_Tails_360Run7-PLC_Tails
+		dc.w PLC_Tails_360Run8-PLC_Tails
+		dc.w PLC_Tails_360Run9-PLC_Tails
+		dc.w PLC_Tails_360RunA-PLC_Tails
+		dc.w PLC_Tails_360RunB-PLC_Tails
+		dc.w PLC_Tails_360RunC-PLC_Tails
+		dc.w PLC_Tails_PoleSwingRide-PLC_Tails
+		dc.w PLC_Tails_PoleCurrent1-PLC_Tails
+		dc.w PLC_Tails_PoleCurrent2-PLC_Tails
+		dc.w PLC_Tails_Pulley-PLC_Tails
+		dc.w PLC_Tails_BarCurrent1-PLC_Tails
+		dc.w PLC_Tails_BarCurrent2-PLC_Tails
+		dc.w PLC_Tails_Fly1-PLC_Tails
+		dc.w PLC_Tails_Fly2-PLC_Tails
+		dc.w PLC_Tails_Fly3-PLC_Tails
+		dc.w PLC_Tails_Fly4-PLC_Tails
+		dc.w PLC_Tails_Fly5-PLC_Tails
+		dc.w PLC_Tails_Fly6-PLC_Tails
+		dc.w PLC_Tails_Stand1-PLC_Tails
+		dc.w PLC_Tails_Stand2-PLC_Tails
+		dc.w PLC_Tails_Stand3-PLC_Tails
+		dc.w PLC_Tails_Stand4-PLC_Tails
+		dc.w PLC_Tails_Stand5-PLC_Tails
+		dc.w PLC_Tails_Stand6-PLC_Tails
+		dc.w PLC_Tails_Swim1-PLC_Tails
+		dc.w PLC_Tails_Swim2-PLC_Tails
+		dc.w PLC_Tails_Swim3-PLC_Tails
+		dc.w PLC_Tails_Swim4-PLC_Tails
+		dc.w PLC_Tails_Swim5-PLC_Tails
+		dc.w PLC_Tails_Swim6-PLC_Tails
+		dc.w PLC_Tails_Swim7-PLC_Tails
+		dc.w PLC_Tails_Swim8-PLC_Tails
+		dc.w PLC_Tails_Swim9-PLC_Tails
+		dc.w PLC_Tails_SwimA-PLC_Tails
+		dc.w PLC_Tails_Dash1-PLC_Tails
+		dc.w PLC_Tails_Dash2-PLC_Tails
+		dc.w PLC_Tails_DiagDash1-PLC_Tails
+		dc.w PLC_Tails_DiagDash2-PLC_Tails
+		dc.w PLC_Tails_WallDash1-PLC_Tails
+		dc.w PLC_Tails_WallDash2-PLC_Tails
+		dc.w PLC_Tails_DiagWallDash1-PLC_Tails
+		dc.w PLC_Tails_DiagWallDash2-PLC_Tails
+		dc.w PLC_Tails_Float1-PLC_Tails
+		dc.w PLC_Tails_Float2-PLC_Tails
+		dc.w PLC_Tails_Float3-PLC_Tails
+		dc.w PLC_Tails_Float4-PLC_Tails
+		dc.w PLC_Tails_Float5-PLC_Tails
+		dc.w PLC_Tails_Float6-PLC_Tails
+		dc.w PLC_Tails_Float7-PLC_Tails
+		dc.w PLC_Tails_Float8-PLC_Tails
+		dc.w PLC_Tails_Crane-PLC_Tails
+		dc.w PLC_Tails_Bubble-PLC_Tails
+		dc.w PLC_Tails_Push1-PLC_Tails
+		dc.w PLC_Tails_Push2-PLC_Tails
+		dc.w PLC_Tails_Push3-PLC_Tails
+		dc.w PLC_Tails_Push4-PLC_Tails
+		dc.w PLC_Tails_Death-PLC_Tails
+		dc.w PLC_Tails_Spring1-PLC_Tails
+		dc.w PLC_Tails_Spring2-PLC_Tails
+		dc.w PLC_Tails_LookUp-PLC_Tails
+		dc.w PLC_Tails_Stand0-PLC_Tails
+		dc.w PLC_Tails_SpinDash1-PLC_Tails
+		dc.w PLC_Tails_SpinDash2-PLC_Tails
+		dc.w PLC_Tails_SpinDash3-PLC_Tails
+		dc.w PLC_Tails_Spin1-PLC_Tails
+		dc.w PLC_Tails_Spin2-PLC_Tails
+		dc.w PLC_Tails_Spin3-PLC_Tails
+		dc.w PLC_Tails_Skid1-PLC_Tails
+		dc.w PLC_Tails_Skid2-PLC_Tails
+		dc.w PLC_Tails_Clear1-PLC_Tails
+		dc.w PLC_Tails_Clear2-PLC_Tails
+		dc.w PLC_Tails_Balance1-PLC_Tails
+		dc.w PLC_Tails_Balance2-PLC_Tails
+		dc.w PLC_Tails_Slide1-PLC_Tails
+		dc.w PLC_Tails_Slide2-PLC_Tails
+		dc.w PLC_Tails_Fall1-PLC_Tails
+		dc.w PLC_Tails_Fall2-PLC_Tails
+		dc.w PLC_Tails_Crouch-PLC_Tails
+		dc.w PLC_Tails_Transform1-PLC_Tails
+		dc.w PLC_Tails_Transform2-PLC_Tails
+		dc.w PLC_Tails_Transform3-PLC_Tails
+PLC_Tails_Blank:
+		dc.w 0
+PLC_Tails_Walk1:
+		dc.w 3
+		dc.w $80F5
+		dc.w $20FE
+		dc.w $500C
+PLC_Tails_Walk2:
+		dc.w 4
+		dc.w $7101
+		dc.w $2109
+		dc.w $310C
+		dc.w $5012
+PLC_Tails_Walk3:
+		dc.w 4
+		dc.w $1110
+		dc.w $5112
+		dc.w $7118
+		dc.w $5000
+PLC_Tails_Walk4:
+		dc.w 4
+		dc.w $7120
+		dc.w $2128
+		dc.w $312B
+		dc.w $5006
+PLC_Tails_Walk5:
+		dc.w 3
+		dc.w $812F
+		dc.w $2138
+		dc.w $500C
+PLC_Tails_Walk6:
+		dc.w 4
+		dc.w $7101
+		dc.w $213B
+		dc.w $313E
+		dc.w $5012
+PLC_Tails_Walk7:
+		dc.w 4
+		dc.w $1110
+		dc.w $5142
+		dc.w $7148
+		dc.w $5000
+PLC_Tails_Walk8:
+		dc.w 4
+		dc.w $7120
+		dc.w $2150
+		dc.w $3153
+		dc.w $5006
+PLC_Tails_DiagWalk1:
+		dc.w 4
+		dc.w $1157
 		dc.w $7159
-word_14A348:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $517F
-		dc.w $B161
-word_14A34E:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $2185
-		dc.w $B188
-		dc.w $1194
-word_14A356:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $1196
-		dc.w $2198
-		dc.w $B19B
-		dc.w $21A7
-word_14A360:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $31AA
-		dc.w $31AE
-		dc.w $51B2
-		dc.w $51B8
-word_14A36A:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $1BE
-		dc.w $F1BF
-		dc.w $11CF
-word_14A372:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $11D1
-		dc.w $B1D3
-		dc.w $21DF
-word_14A37A:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $1E2
-		dc.w $11E3
-		dc.w $B1E5
-		dc.w $11F1
-word_14A384:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $21F3
-		dc.w $B1F6
-		dc.w $1202
-word_14A38C:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $204
-		dc.w $B205
-		dc.w $211
-		dc.w $212
-word_14A396:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $722B
-		dc.w $5213
-		dc.w $3219
-		dc.w $121D
-word_14A3A0:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $1233
-		dc.w $521F
-		dc.w $3225
-		dc.w $1229
-word_14A3AA:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $3235
-		dc.w $5213
-		dc.w $3219
-		dc.w $121D
-word_14A3B4:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $7239
-		dc.w $521F
-		dc.w $3225
-		dc.w $1229
-word_14A3BE:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $B259
-		dc.w $1241
-		dc.w $5243
-		dc.w $3249
-word_14A3C8:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $5265
-		dc.w $124D
-		dc.w $524F
-		dc.w $3255
-word_14A3D2:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $326B
-		dc.w $1241
-		dc.w $5243
-		dc.w $3249
-word_14A3DC:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $526F
-		dc.w $124D
-		dc.w $524F
-		dc.w $3255
-word_14A3E6:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $729F
-		dc.w $5287
-		dc.w $328D
+		dc.w $2161
+		dc.w $7164
+PLC_Tails_DiagWalk2:
+		dc.w 3
+		dc.w $116C
+		dc.w $F16E
+		dc.w $17E
+PLC_Tails_DiagWalk3:
+		dc.w 3
+		dc.w $217F
+		dc.w $7182
+		dc.w $518A
+PLC_Tails_DiagWalk4:
+		dc.w 3
+		dc.w $1190
+		dc.w $B192
+		dc.w $319E
+PLC_Tails_DiagWalk5:
+		dc.w 3
+		dc.w $11A2
+		dc.w $21A4
+		dc.w $B1A7
+PLC_Tails_DiagWalk6:
+		dc.w 4
+		dc.w $1B3
+		dc.w $51B4
+		dc.w $31BA
+		dc.w $31BE
+PLC_Tails_DiagWalk7:
+		dc.w 4
+		dc.w $11C2
+		dc.w $71C4
+		dc.w $21CC
+		dc.w $21CF
+PLC_Tails_DiagWalk8:
+		dc.w 3
+		dc.w $B1D2
+		dc.w $51DE
+		dc.w $21E4
+PLC_Tails_WallWalk1:
+		dc.w 3
+		dc.w $21E7
+		dc.w $71EA
+		dc.w $5024
+PLC_Tails_WallWalk2:
+		dc.w 2
+		dc.w $B1F2
+		dc.w $502A
+PLC_Tails_WallWalk3:
+		dc.w 3
+		dc.w $11FE
+		dc.w $B200
+		dc.w $5018
+PLC_Tails_WallWalk4:
+		dc.w 2
+		dc.w $B20C
+		dc.w $501E
+PLC_Tails_WallWalk5:
+		dc.w 3
+		dc.w $2218
+		dc.w $721B
+		dc.w $5024
+PLC_Tails_WallWalk6:
+		dc.w 2
+		dc.w $B223
+		dc.w $502A
+PLC_Tails_WallWalk7:
+		dc.w 3
+		dc.w $122F
+		dc.w $B231
+		dc.w $5018
+PLC_Tails_WallWalk8:
+		dc.w 3
+		dc.w $B23D
+		dc.w $249
+		dc.w $501E
+PLC_Tails_DiagWallWalk1:
+		dc.w 4
+		dc.w $324A
+		dc.w $324E
+		dc.w $5252
+		dc.w $5258
+PLC_Tails_DiagWallWalk2:
+		dc.w 3
+		dc.w $25E
+		dc.w $F25F
+		dc.w $126F
+PLC_Tails_DiagWallWalk3:
+		dc.w 3
+		dc.w $1271
+		dc.w $B273
+		dc.w $227F
+PLC_Tails_DiagWallWalk4:
+		dc.w 4
+		dc.w $282
+		dc.w $1283
+		dc.w $B285
 		dc.w $1291
-word_14A3F0:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $12A7
-		dc.w $5293
-		dc.w $3299
-		dc.w $129D
-word_14A3FA:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $32A9
-		dc.w $5287
-		dc.w $328D
-		dc.w $1291
-word_14A404:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $72AD
-		dc.w $5293
-		dc.w $3299
-		dc.w $129D
-word_14A40E:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $B2CD
-		dc.w $72B5
-		dc.w $12BD
-		dc.w $12BF
-word_14A418:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $52D9
-		dc.w $72C1
-		dc.w $12C9
-		dc.w $12CB
-word_14A422:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $32DF
-		dc.w $72B5
-		dc.w $12BD
-		dc.w $12BF
-word_14A42C:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $52E3
-		dc.w $72C1
-		dc.w $12C9
-		dc.w $12CB
-word_14A436:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B2E9
-word_14A43A:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B2F5
-		dc.w $1301
-word_14A440:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B303
-word_14A444:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $830F
-word_14A448:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $8318
-		dc.w $321
-word_14A44E:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $1322
-		dc.w $8324
-word_14A454:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $132D
-		dc.w $832F
-word_14A45A:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $1338
-		dc.w $833A
-word_14A460:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $1343
-		dc.w $8345
-word_14A466:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $534E
-		dc.w $1354
-word_14A46C:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $8356
-		dc.w $35F
-word_14A472:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $5360
-		dc.w $3366
-word_14A478:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $83D8
-		dc.w $13E1
-word_14A47E:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $3CE
-		dc.w $83CF
-word_14A484:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $83C5
-word_14A488:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $13BB
-		dc.w $53BD
-		dc.w $13C3
-word_14A490:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B3AF
-word_14A494:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B3A3
-word_14A498:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $2398
-		dc.w $139B
+PLC_Tails_DiagWallWalk5:
+		dc.w 3
+		dc.w $2293
+		dc.w $B296
+		dc.w $12A2
+PLC_Tails_DiagWallWalk6:
+		dc.w 4
+		dc.w $2A4
+		dc.w $B2A5
+		dc.w $2B1
+		dc.w $2B2
+PLC_Tails_DiagWallWalk7:
+		dc.w 3
+		dc.w $22B3
+		dc.w $B2B6
+		dc.w $12C2
+PLC_Tails_DiagWallWalk8:
+		dc.w 4
+		dc.w $12C4
+		dc.w $22C6
+		dc.w $B2C9
+		dc.w $22D5
+PLC_Tails_Run1:
+		dc.w 4
+		dc.w $52D8
+		dc.w $32DE
+		dc.w $12E2
+		dc.w $708B
+PLC_Tails_Run2:
+PLC_Tails_Run4:
+		dc.w 4
+		dc.w $52E4
+		dc.w $32EA
+		dc.w $12EE
+		dc.w $3093
+PLC_Tails_Run3:
+		dc.w 4
+		dc.w $52D8
+		dc.w $32DE
+		dc.w $12E2
+		dc.w $1097
+PLC_Tails_DiagRun1:
+		dc.w 4
+		dc.w $12F0
+		dc.w $52F2
+		dc.w $32F8
+		dc.w $B0A7
+PLC_Tails_DiagRun2:
+		dc.w 4
+		dc.w $12FC
+		dc.w $52FE
+		dc.w $3304
+		dc.w $50B3
+PLC_Tails_DiagRun3:
+		dc.w 4
+		dc.w $12F0
+		dc.w $52F2
+		dc.w $32F8
+		dc.w $30B9
+PLC_Tails_DiagRun4:
+		dc.w 4
+		dc.w $12FC
+		dc.w $52FE
+		dc.w $3304
+		dc.w $50C9
+PLC_Tails_WallRun1:
+		dc.w 4
+		dc.w $5308
+		dc.w $330E
+		dc.w $1312
+		dc.w $7099
+PLC_Tails_WallRun2:
+PLC_Tails_WallRun4:
+		dc.w 4
+		dc.w $5314
+		dc.w $331A
+		dc.w $131E
+		dc.w $30A1
+PLC_Tails_WallRun3:
+		dc.w 4
+		dc.w $5308
+		dc.w $330E
+		dc.w $1312
+		dc.w $10A5
+PLC_Tails_DiagWallRun1:
+		dc.w 4
+		dc.w $7320
+		dc.w $1328
+		dc.w $132A
+		dc.w $B0BD
+PLC_Tails_DiagWallRun2:
+		dc.w 4
+		dc.w $732C
+		dc.w $1334
+		dc.w $1336
+		dc.w $50C9
+PLC_Tails_DiagWallRun3:
+		dc.w 4
+		dc.w $7320
+		dc.w $1328
+		dc.w $132A
+		dc.w $30CF
+PLC_Tails_DiagWallRun4:
+		dc.w 4
+		dc.w $732C
+		dc.w $1334
+		dc.w $1336
+		dc.w $50B3
+PLC_Tails_Corkscrew1:
+		dc.w 1
+		dc.w $B338
+PLC_Tails_Corkscrew2:
+		dc.w 2
+		dc.w $B344
+		dc.w $1350
+PLC_Tails_Corkscrew3:
+		dc.w 1
+		dc.w $B352
+PLC_Tails_Corkscrew4:
+		dc.w 1
+		dc.w $835E
+PLC_Tails_Corkscrew5:
+		dc.w 2
+		dc.w $8367
+		dc.w $370
+PLC_Tails_Corkscrew6:
+		dc.w 2
+		dc.w $1371
+		dc.w $8373
+PLC_Tails_Corkscrew7:
+		dc.w 2
+		dc.w $137C
+		dc.w $837E
+PLC_Tails_Corkscrew8:
+		dc.w 2
+		dc.w $1387
+		dc.w $8389
+PLC_Tails_Corkscrew9:
+		dc.w 2
+		dc.w $1392
+		dc.w $8394
+PLC_Tails_CorkscrewA:
+		dc.w 2
 		dc.w $539D
-word_14A4A0:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $38E
-		dc.w $838F
-word_14A4A6:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $5387
-		dc.w $38D
-word_14A4AC:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $137F
-		dc.w $5381
-word_14A4B2:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $1375
-		dc.w $5377
-		dc.w $137D
-word_14A4BA:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $836A
-		dc.w $1373
-word_14A4C0:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $23E3
-		dc.w $73E6
-		dc.w $3EE
-word_14A4C8:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $23EF
-		dc.w $73F2
-word_14A4CE:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $13FA
-		dc.w $23FC
-		dc.w $33FF
-word_14A4D6:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $1403
+		dc.w $13A3
+PLC_Tails_CorkscrewB:
+		dc.w 2
+		dc.w $83A5
+		dc.w $3AE
+PLC_Tails_CorkscrewC:
+		dc.w 2
+		dc.w $53AF
+		dc.w $33B5
+PLC_Tails_CorkscrewStand1:
+		dc.w 2
+		dc.w $83B9
+		dc.w $13C2
+PLC_Tails_CorkscrewStand2:
+		dc.w 2
+		dc.w $3C4
+		dc.w $83C5
+PLC_Tails_CorkscrewStand3:
+		dc.w 1
+		dc.w $83CE
+PLC_Tails_CorkscrewStand4:
+		dc.w 3
+		dc.w $13D7
+		dc.w $53D9
+		dc.w $13DF
+PLC_Tails_CorkscrewStand5:
+		dc.w 1
+		dc.w $B3E1
+PLC_Tails_CorkscrewStand6:
+		dc.w 1
+		dc.w $B3ED
+PLC_Tails_CorkscrewStand7:
+		dc.w 3
+		dc.w $23F9
+		dc.w $13FC
+		dc.w $53FE
+PLC_Tails_CorkscrewStand8:
+		dc.w 2
+		dc.w $404
 		dc.w $8405
-word_14A4DC:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $140E
-		dc.w $5410
-		dc.w $1416
-word_14A4E4:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $418
-		dc.w $1419
-		dc.w $341B
+PLC_Tails_CorkscrewStand9:
+		dc.w 2
+		dc.w $540E
+		dc.w $414
+PLC_Tails_CorkscrewStandA:
+		dc.w 2
+		dc.w $1415
+		dc.w $5417
+PLC_Tails_CorkscrewStandB:
+		dc.w 3
+		dc.w $141D
 		dc.w $541F
-word_14A4EE:	dc.w 4			; DATA XREF: ROM:0014A08Ao
 		dc.w $1425
-		dc.w $3427
-		dc.w $542B
-		dc.w $1431
-word_14A4F8:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $1433
-		dc.w $3435
-		dc.w $5439
-		dc.w $43F
-word_14A502:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $1440
-		dc.w $5442
-		dc.w $1448
-word_14A50A:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $144A
-		dc.w $344C
-		dc.w $1450
-word_14A512:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $7452
-		dc.w $245A
-word_14A518:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $245D
-		dc.w $7460
-word_14A51E:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $2468
-		dc.w $346B
-		dc.w $546F
-word_14A526:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B475
-word_14A52A:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $2481
+PLC_Tails_CorkscrewStandC:
+		dc.w 2
+		dc.w $8427
+		dc.w $1430
+PLC_Tails_CorkscrewDiag1:
+		dc.w 3
+		dc.w $2432
+		dc.w $7435
+		dc.w $43D
+PLC_Tails_CorkscrewDiag2:
+		dc.w 2
+		dc.w $243E
+		dc.w $7441
+PLC_Tails_CorkscrewDiag3:
+		dc.w 3
+		dc.w $1449
+		dc.w $244B
+		dc.w $344E
+PLC_Tails_CorkscrewDiag4:
+		dc.w 2
+		dc.w $1452
+		dc.w $8454
+PLC_Tails_CorkscrewDiag5:
+		dc.w 3
+		dc.w $145D
+		dc.w $545F
+		dc.w $1465
+PLC_Tails_CorkscrewDiag6:
+		dc.w 4
+		dc.w $467
+		dc.w $1468
+		dc.w $346A
+		dc.w $546E
+PLC_Tails_CorkscrewDiag7:
+		dc.w 4
+		dc.w $1474
+		dc.w $3476
+		dc.w $547A
+		dc.w $1480
+PLC_Tails_CorkscrewDiag8:
+		dc.w 4
+		dc.w $1482
 		dc.w $3484
-		dc.w $2488
-word_14A532:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B48B
-word_14A536:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B497
-word_14A53A:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $14A3
-		dc.w $54A5
-		dc.w $14AB
-word_14A542:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B4AD
-word_14A546:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $24B9
-		dc.w $14BC
-		dc.w $74BE
-		dc.w $34C6
-word_14A550:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B4CA
-word_14A554:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $B4D6
-		dc.w $4E2
-		dc.w $4E3
-word_14A55C:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B4E4
-		dc.w $54F0
-word_14A562:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B4F6
-word_14A566:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B502
-word_14A56A:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $250E
-		dc.w $7511
-		dc.w $1519
-word_14A572:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $851B
-		dc.w $1524
-		dc.w $2526
-		dc.w $2529
-word_14A57C:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B52C
-word_14A580:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B538
-		dc.w $2544
-word_14A586:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B547
-		dc.w $5553
-word_14A58C:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B559
-word_14A590:	dc.w 1			; DATA XREF: ROM:0014A08Ao
+		dc.w $5488
+		dc.w $48E
+PLC_Tails_CorkscrewDiag9:
+		dc.w 3
+		dc.w $148F
+		dc.w $5491
+		dc.w $1497
+PLC_Tails_CorkscrewDiagA:
+		dc.w 3
+		dc.w $1499
+		dc.w $349B
+		dc.w $149F
+PLC_Tails_CorkscrewDiagB:
+		dc.w 2
+		dc.w $74A1
+		dc.w $24A9
+PLC_Tails_CorkscrewDiagC:
+		dc.w 2
+		dc.w $24AC
+		dc.w $74AF
+PLC_Tails_360Stand1:
+		dc.w 3
+		dc.w $24B7
+		dc.w $34BA
+		dc.w $54BE
+PLC_Tails_360Stand2:
+		dc.w 1
+		dc.w $B4C4
+PLC_Tails_360Stand3:
+		dc.w 3
+		dc.w $24D0
+		dc.w $34D3
+		dc.w $24D7
+PLC_Tails_360Stand4:
+		dc.w 1
+		dc.w $B4DA
+PLC_Tails_360Stand5:
+		dc.w 1
+		dc.w $B4E6
+PLC_Tails_360Stand6:
+		dc.w 3
+		dc.w $14F2
+		dc.w $54F4
+		dc.w $14FA
+PLC_Tails_360Stand7:
+		dc.w 1
+		dc.w $B4FC
+PLC_Tails_PoleSwing1:
+		dc.w 4
+		dc.w $2508
+		dc.w $150B
+		dc.w $750D
+		dc.w $3515
+PLC_Tails_PoleSwing2:
+		dc.w 1
+		dc.w $B519
+PLC_Tails_PoleSwing3:
+		dc.w 3
+		dc.w $B525
+		dc.w $531
+		dc.w $532
+PLC_Tails_PoleSwing4:
+		dc.w 2
+		dc.w $B533
+		dc.w $553F
+PLC_Tails_PoleSwing5:
+		dc.w 1
+		dc.w $B545
+PLC_Tails_PoleSwing6:
+		dc.w 1
+		dc.w $B551
+PLC_Tails_BarWalk:
+		dc.w 3
+		dc.w $755D
 		dc.w $B565
-word_14A594:	dc.w 3			; DATA XREF: ROM:0014A08Ao
 		dc.w $2571
-		dc.w $B574
-		dc.w $580
-word_14A59C:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $1581
-		dc.w $7583
-		dc.w $258B
-word_14A5A4:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $158E
-		dc.w $8590
-word_14A5AA:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $2599
-		dc.w $759C
-word_14A5B0:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $25A4
-		dc.w $75A7
-word_14A5B6:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $75AF
-		dc.w $25B7
-word_14A5BC:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $55BA
-		dc.w $15C0
-word_14A5C2:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $55C2
-		dc.w $35C8
-word_14A5C8:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $75CC
-		dc.w $25D4
-word_14A5CE:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B5D7
-word_14A5D2:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B5E3
-		dc.w $15EF
-word_14A5D8:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B5F1
-word_14A5DC:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $85FD
-word_14A5E0:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $2606
-		dc.w $7609
-word_14A5E6:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $2611
-		dc.w $7614
-word_14A5EC:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $361C
-		dc.w $5620
-		dc.w $3626
-		dc.w $262A
-word_14A5F6:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $162D
-		dc.w $562F
-		dc.w $1635
-		dc.w $5637
-word_14A600:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $63D
-		dc.w $563E
-		dc.w $5644
-		dc.w $364A
-word_14A60A:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $164E
-		dc.w $5650
-		dc.w $5656
-		dc.w $165C
-word_14A614:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $361C
-		dc.w $5620
-		dc.w $3626
-		dc.w $262A
-word_14A61E:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $162D
-		dc.w $562F
-		dc.w $1635
-		dc.w $5637
-word_14A628:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $63D
-		dc.w $563E
-		dc.w $565E
-		dc.w $364A
-word_14A632:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $164E
-		dc.w $5650
-		dc.w $5656
-		dc.w $165C
-word_14A63C:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $7664
-		dc.w $866C
-word_14A642:	dc.w 4			; DATA XREF: ROM:0014A08Ao
+PLC_Tails_BarSwing1:
+		dc.w 4
+		dc.w $8574
+		dc.w $157D
+		dc.w $257F
+		dc.w $2582
+PLC_Tails_BarSwing2:
+		dc.w 1
+		dc.w $B585
+PLC_Tails_BarSwing3:
+		dc.w 2
+		dc.w $B591
+		dc.w $259D
+PLC_Tails_BarSwing4:
+		dc.w 2
+		dc.w $B5A0
+		dc.w $55AC
+PLC_Tails_BarSwing5:
+		dc.w 1
+		dc.w $B5B2
+PLC_Tails_BarSwing6:
+		dc.w 1
+		dc.w $B5BE
+PLC_Tails_CorkscrewWallRide1:
+		dc.w 3
+		dc.w $25CA
+		dc.w $B5CD
+		dc.w $5D9
+PLC_Tails_CorkscrewWallRide2:
+		dc.w 3
+		dc.w $15DA
+		dc.w $75DC
+		dc.w $25E4
+PLC_Tails_CorkscrewWallRide3:
+		dc.w 2
+		dc.w $15E7
+		dc.w $85E9
+PLC_Tails_CorkscrewWall1:
+		dc.w 2
+		dc.w $25F2
+		dc.w $75F5
+PLC_Tails_CorkscrewWall2:
+		dc.w 2
+		dc.w $25FD
+		dc.w $7600
+PLC_Tails_CorkscrewWall3:
+		dc.w 2
+		dc.w $7608
+		dc.w $2610
+PLC_Tails_CorkscrewWall4:
+		dc.w 2
+		dc.w $5613
+		dc.w $1619
+PLC_Tails_CorkscrewWall5:
+		dc.w 2
+		dc.w $561B
+		dc.w $3621
+PLC_Tails_CorkscrewWall6:
+		dc.w 2
+		dc.w $7625
+		dc.w $262D
+PLC_Tails_CorkscrewWall7:
+		dc.w 1
+		dc.w $B630
+PLC_Tails_CorkscrewWall8:
+		dc.w 2
+		dc.w $B63C
+		dc.w $1648
+PLC_Tails_CorkscrewWall9:
+		dc.w 1
+		dc.w $B64A
+PLC_Tails_CorkscrewWallA:
+		dc.w 1
+		dc.w $8656
+PLC_Tails_CorkscrewWallB:
+		dc.w 2
+		dc.w $265F
+		dc.w $7662
+PLC_Tails_CorkscrewWallC:
+		dc.w 2
+		dc.w $266A
+		dc.w $766D
+PLC_Tails_HangSwing1:
+PLC_Tails_HangSwing5:
+		dc.w 4
 		dc.w $3675
-		dc.w $2679
-		dc.w $B67C
-		dc.w $1688
-word_14A64C:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $868A
-		dc.w $1693
-		dc.w $3695
-		dc.w $3699
-word_14A656:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $F69D
-		dc.w $6AD
-		dc.w $26AE
-word_14A65E:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $56B1
-		dc.w $76B7
-		dc.w $36BF
-word_14A666:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $56C3
-		dc.w $36C9
-		dc.w $26CD
-		dc.w $36D0
-word_14A670:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $36D4
-		dc.w $56D8
-word_14A676:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $76DE
-		dc.w $26E6
-word_14A67C:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $36E9
-		dc.w $56ED
-word_14A682:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $F6F3
-word_14A686:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $F703
-word_14A68A:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $3713
-		dc.w $B717
-word_14A690:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $3713
-		dc.w $B723
-word_14A696:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $172F
-		dc.w $B731
-word_14A69C:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $5830
-		dc.w $3836
-		dc.w $283A
-word_14A6A4:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $583D
-		dc.w $3843
-		dc.w $2847
-word_14A6AC:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B73D
-		dc.w $1749
-word_14A6B2:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $574B
-		dc.w $7751
-word_14A6B8:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $5759
-		dc.w $775F
-word_14A6BE:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $8767
-word_14A6C2:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $7770
-		dc.w $B77E
-		dc.w $278A
-word_14A6CA:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $5778
-		dc.w $B77E
-		dc.w $278A
-word_14A6D2:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $F78D
-word_14A6D6:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $F79D
-word_14A6DA:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $F7AD
-word_14A6DE:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $8800
-word_14A6E2:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $2862
-		dc.w $7865
-		dc.w $186D
-word_14A6EA:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $586F
-		dc.w $3875
-		dc.w $2879
-word_14A6F2:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $F7ED
-word_14A6F6:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $787C
-		dc.w $8884
-word_14A6FC:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $188D
-		dc.w $B88F
-		dc.w $289B
-word_14A704:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $289E
-		dc.w $78A1
-		dc.w $28A9
-word_14A70C:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $28AC
-		dc.w $B8AF
-word_14A712:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $28BB
-		dc.w $B8BE
-word_14A718:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $28AC
+		dc.w $5679
+		dc.w $367F
+		dc.w $2683
+PLC_Tails_HangSwing2:
+PLC_Tails_HangSwing6:
+		dc.w 4
+		dc.w $1686
+		dc.w $5688
+		dc.w $168E
+		dc.w $5690
+PLC_Tails_HangSwing3:
+		dc.w 4
+		dc.w $696
+		dc.w $5697
+		dc.w $569D
+		dc.w $36A3
+PLC_Tails_HangSwing4:
+PLC_Tails_HangSwing8:
+		dc.w 4
+		dc.w $16A7
+		dc.w $56A9
+		dc.w $56AF
+		dc.w $16B5
+PLC_Tails_HangSwing7:
+		dc.w 4
+		dc.w $696
+		dc.w $5697
+		dc.w $56B7
+		dc.w $36A3
+PLC_Tails_HangWalk1:
+		dc.w 2
+		dc.w $76BD
+		dc.w $86C5
+PLC_Tails_HangWalk2:
+		dc.w 4
+		dc.w $36CE
+		dc.w $26D2
+		dc.w $B6D5
+		dc.w $16E1
+PLC_Tails_HangWalk3:
+		dc.w 4
+		dc.w $86E3
+		dc.w $16EC
+		dc.w $36EE
+		dc.w $36F2
+PLC_Tails_HangWalk4:
+		dc.w 3
+		dc.w $F6F6
+		dc.w $706
+		dc.w $2707
+PLC_Tails_HangWalk5:
+		dc.w 3
+		dc.w $570A
+		dc.w $7710
+		dc.w $3718
+PLC_Tails_HangWalk6:
+		dc.w 4
+		dc.w $571C
+		dc.w $3722
+		dc.w $2726
+		dc.w $3729
+PLC_Tails_Hang1:
+		dc.w 2
+		dc.w $B72D
+		dc.w $1739
+PLC_Tails_Hang2:
+		dc.w 2
+		dc.w $573B
+		dc.w $7741
+PLC_Tails_Hang3:
+		dc.w 2
+		dc.w $5749
+		dc.w $774F
+PLC_Tails_Hang4:
+		dc.w 1
+		dc.w $8757
+PLC_Tails_360Hang1:
+		dc.w 4
+		dc.w $2760
+		dc.w $7763
+		dc.w $276B
+		dc.w $176E
+PLC_Tails_360Hang2:
+		dc.w 3
+		dc.w $8770
+		dc.w $3779
+		dc.w $277D
+PLC_Tails_360Hang3:
+		dc.w 2
+		dc.w $8780
+		dc.w $3789
+PLC_Tails_360Hang4:
+		dc.w 3
+		dc.w $878D
+		dc.w $796
+		dc.w $1797
+PLC_Tails_360Hang5:
+		dc.w 2
+		dc.w $B799
+		dc.w $17A5
+PLC_Tails_360Hang6:
+		dc.w 3
+		dc.w $57A7
+		dc.w $37AD
+		dc.w $27B1
+PLC_Tails_360Hang7:
+		dc.w 3
+		dc.w $87B4
+		dc.w $7BD
+		dc.w $17BE
+PLC_Tails_WallRide1:
+		dc.w 3
+		dc.w $57C0
+		dc.w $37C6
+		dc.w $17CA
+PLC_Tails_WallRide2:
+		dc.w 2
+		dc.w $17CC
+		dc.w $87CE
+PLC_Tails_WallRide3:
+		dc.w 3
+		dc.w $17D7
+		dc.w $87D9
+		dc.w $17E2
+PLC_Tails_WallRide4:
+		dc.w 2
+		dc.w $B7E4
+		dc.w $106
+PLC_Tails_WallRide5:
+		dc.w 4
+		dc.w $27F0
+		dc.w $77F3
+		dc.w $27FB
+		dc.w $7FE
+PLC_Tails_360Run1:
+PLC_Tails_360Run7:
+		dc.w 2
+		dc.w $B7FF
+		dc.w $180B
+PLC_Tails_360Run2:
+PLC_Tails_360Run6:
+		dc.w 2
+		dc.w $B80D
+		dc.w $1819
+PLC_Tails_360Run3:
+PLC_Tails_360Run5:
+		dc.w 2
+		dc.w $B81B
+		dc.w $2827
+PLC_Tails_360Run4:
+		dc.w 1
+		dc.w $F82A
+PLC_Tails_360Run8:
+PLC_Tails_360RunC:
+		dc.w 2
+		dc.w $B83A
+		dc.w $2846
+PLC_Tails_360Run9:
+PLC_Tails_360RunB:
+		dc.w 2
+		dc.w $B849
+		dc.w $2855
+PLC_Tails_360RunA:
+		dc.w 1
+		dc.w $F858
+PLC_Tails_PoleSwingRide:
+		dc.w 3
+		dc.w $2868
+		dc.w $786B
+		dc.w $1873
+PLC_Tails_PoleCurrent1:
+		dc.w 2
+		dc.w $7875
+		dc.w $887D
+PLC_Tails_PoleCurrent2:
+		dc.w 3
+		dc.w $1886
+		dc.w $B888
+		dc.w $2894
+PLC_Tails_Pulley:
+		dc.w 2
+		dc.w $1897
+		dc.w $B899
+PLC_Tails_BarCurrent1:
+		dc.w 2
+		dc.w $78A5
+		dc.w $88AD
+PLC_Tails_BarCurrent2:
+		dc.w 3
+		dc.w $28B6
+		dc.w $78B9
+		dc.w $58C1
+PLC_Tails_Fly1:
+		dc.w 2
+		dc.w $28C7
 		dc.w $B8CA
-word_14A71E:	dc.w 2			; DATA XREF: ROM:0014A08Ao
+PLC_Tails_Fly2:
+		dc.w 2
 		dc.w $28D6
 		dc.w $B8D9
-word_14A724:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $28E5
-		dc.w $B8E8
-word_14A72A:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B8F8
-word_14A72E:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $904
-		dc.w $7905
-		dc.w $790D
-		dc.w $915
-word_14A738:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $7AD0
-		dc.w $8AD8
-word_14A73E:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $2AE1
-		dc.w $7AE4
-		dc.w $5AEC
-word_14A746:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $8916
-		dc.w $391F
-word_14A74C:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B923
-word_14A750:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B92F
-word_14A754:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B93B
-word_14A758:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B947
-word_14A75C:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B953
-word_14A760:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B95F
-word_14A764:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B96B
-word_14A768:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B977
-word_14A76C:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B983
-word_14A770:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B98F
-word_14A774:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B99B
-word_14A778:	dc.w 3			; DATA XREF: ROM:0014A08Ao
+PLC_Tails_Fly3:
+		dc.w 2
+		dc.w $28D6
+		dc.w $B8E5
+PLC_Tails_Fly4:
+		dc.w 2
+		dc.w $28C7
+		dc.w $B8F1
+PLC_Tails_Fly5:
+		dc.w 2
+		dc.w $28FD
+		dc.w $B900
+PLC_Tails_Fly6:
+		dc.w 2
+		dc.w $290C
+		dc.w $B90F
+PLC_Tails_Stand1:
+		dc.w 1
+		dc.w $B91B
+PLC_Tails_Stand2:
+		dc.w 1
+		dc.w $B927
+PLC_Tails_Stand3:
+		dc.w 1
+		dc.w $B933
+PLC_Tails_Stand4:
+		dc.w 1
+		dc.w $B93F
+PLC_Tails_Stand5:
+		dc.w 1
+		dc.w $B94B
+PLC_Tails_Stand6:
+		dc.w 1
+		dc.w $B957
+PLC_Tails_Swim1:
+		dc.w 3
+		dc.w $1963
+		dc.w $B965
+		dc.w $2971
+PLC_Tails_Swim2:
+		dc.w 3
+		dc.w $B974
+		dc.w $1980
+		dc.w $2982
+PLC_Tails_Swim3:
+		dc.w 2
+		dc.w $F985
+		dc.w $995
+PLC_Tails_Swim4:
+		dc.w 4
+		dc.w $7996
+		dc.w $99E
+		dc.w $799F
 		dc.w $9A7
-		dc.w $79A8
-		dc.w $39B0
-word_14A780:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $89B4
-		dc.w $39BD
-word_14A786:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $B9C1
-word_14A78A:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $89B4
-		dc.w $39BD
-word_14A790:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $19CD
-		dc.w $79CF
-		dc.w $19D7
-word_14A798:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $59D9
-		dc.w $39DF
-word_14A79E:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $19E3
-		dc.w $B9E5
-		dc.w $29F1
-word_14A7A6:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $B9F4
-		dc.w $1A00
-		dc.w $2A02
-word_14A7AE:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $FA05
-		dc.w $A15
-word_14A7B4:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $7A16
-		dc.w $A1E
-		dc.w $7A1F
-		dc.w $A27
-word_14A7BE:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $FA28
-		dc.w $1A38
-word_14A7C4:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $BA3A
-		dc.w $2A46
-		dc.w $1A49
-word_14A7CC:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $7239
-		dc.w $5213
-		dc.w $3219
-		dc.w $121D
-word_14A7D6:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $7239
-		dc.w $521F
-		dc.w $3225
-		dc.w $1229
-word_14A7E0:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $8275
-		dc.w $1241
-		dc.w $5243
-		dc.w $3249
-word_14A7EA:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $827E
-		dc.w $124D
-		dc.w $524F
-		dc.w $3255
-word_14A7F4:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $72AD
-		dc.w $5287
-		dc.w $328D
-		dc.w $1291
-word_14A7FE:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $72AD
-		dc.w $5293
-		dc.w $3299
-		dc.w $129D
-word_14A808:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $827E
-		dc.w $72B5
-		dc.w $12BD
-		dc.w $12BF
-word_14A812:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $8275
-		dc.w $72C1
-		dc.w $12C9
-		dc.w $12CB
-word_14A81C:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $F6F3
-word_14A820:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $F703
-word_14A824:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $1AF2
-		dc.w $BAF4
-		dc.w $A48
-word_14A82C:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $1B00
-		dc.w $BB02
-		dc.w $A48
-word_14A834:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $1B0E
-		dc.w $BB10
-word_14A83A:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $1B1C
-		dc.w $BB1E
-word_14A840:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $5000
-		dc.w $3006
-		dc.w $100A
-word_14A848:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $100C
-		dc.w $800E
-word_14A84E:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $1017
-		dc.w $8019
-		dc.w $1022
-word_14A856:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B024
-		dc.w $30
-word_14A85C:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $2031
-		dc.w $7034
-		dc.w $203C
-		dc.w $3F
-word_14A866:	dc.w 4			; DATA XREF: ROM:0014A08Ao
-		dc.w $2040
-		dc.w $7043
-		dc.w $204B
-		dc.w $104E
-word_14A870:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $8050
-		dc.w $3059
-		dc.w $205D
-word_14A878:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $8060
-		dc.w $3069
-word_14A87E:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $806D
-		dc.w $76
-		dc.w $1077
-word_14A886:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B079
-		dc.w $1085
-word_14A88C:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $5087
-		dc.w $308D
-		dc.w $2091
-word_14A894:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $8094
-		dc.w $9D
-		dc.w $109E
-word_14A89C:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $80A0
-word_14A8A0:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $20A9
-		dc.w $70AC
-		dc.w $50B4
-word_14A8A8:	dc.w 3			; DATA XREF: ROM:0014A08Ao
-		dc.w $20BA
-		dc.w $70BD
-		dc.w $50C5
-word_14A8B0:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B0E0
-		dc.w $10EC
-word_14A8B6:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B0EE
-		dc.w $20FA
-word_14A8BC:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B0FD
-		dc.w $2109
-word_14A8C2:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $F10C
-word_14A8C6:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B11C
-		dc.w $1128
-word_14A8CC:	dc.w 2			; DATA XREF: ROM:0014A08Ao
-		dc.w $B12A
-		dc.w $2136
-word_14A8D2:	dc.w 1			; DATA XREF: ROM:0014A08Ao
-		dc.w $F139
+PLC_Tails_Swim5:
+		dc.w 2
+		dc.w $F9A8
+		dc.w $19B8
+PLC_Tails_Swim6:
+		dc.w 3
+		dc.w $B9BA
+		dc.w $29C6
+		dc.w $19C9
+PLC_Tails_Swim7:
+		dc.w 3
+		dc.w $19CB
+		dc.w $B9CD
+		dc.w $9C8
+PLC_Tails_Swim8:
+		dc.w 3
+		dc.w $19D9
+		dc.w $B9DB
+		dc.w $9C8
+PLC_Tails_Swim9:
+		dc.w 2
+		dc.w $19E7
+		dc.w $B9E9
+PLC_Tails_SwimA:
+		dc.w 2
+		dc.w $19F5
+		dc.w $B9F7
+PLC_Tails_Dash1:
+		dc.w 4
+		dc.w $52D8
+		dc.w $32DE
+		dc.w $12E2
+		dc.w $70D3
+PLC_Tails_Dash2:
+		dc.w 4
+		dc.w $52E4
+		dc.w $32EA
+		dc.w $12EE
+		dc.w $70D3
+PLC_Tails_DiagDash1:
+		dc.w 4
+		dc.w $12F0
+		dc.w $52F2
+		dc.w $32F8
+		dc.w $80E3
+PLC_Tails_DiagDash2:
+		dc.w 4
+		dc.w $12FC
+		dc.w $52FE
+		dc.w $3304
+		dc.w $80E3
+PLC_Tails_WallDash1:
+		dc.w 4
+		dc.w $5308
+		dc.w $330E
+		dc.w $1312
+		dc.w $70DB
+PLC_Tails_WallDash2:
+		dc.w 4
+		dc.w $5314
+		dc.w $331A
+		dc.w $131E
+		dc.w $70DB
+PLC_Tails_DiagWallDash1:
+		dc.w 4
+		dc.w $7320
+		dc.w $1328
+		dc.w $132A
+		dc.w $80EC
+PLC_Tails_DiagWallDash2:
+		dc.w 4
+		dc.w $732C
+		dc.w $1334
+		dc.w $1336
+		dc.w $80EC
+PLC_Tails_Float1:
+PLC_Tails_Float3:
+		dc.w 2
+		dc.w $8A03
+		dc.w $3A0C
+PLC_Tails_Float2:
+		dc.w 1
+		dc.w $BA10
+PLC_Tails_Float4:
+PLC_Tails_Float8:
+		dc.w 3
+		dc.w $A1C
+		dc.w $7A1D
+		dc.w $3A25
+PLC_Tails_Float5:
+PLC_Tails_Float7:
+		dc.w 3
+		dc.w $1A29
+		dc.w $7A2B
+		dc.w $1A33
+PLC_Tails_Float6:
+		dc.w 2
+		dc.w $5A35
+		dc.w $3A3B
+PLC_Tails_Crane:
+		dc.w 2
+		dc.w $3A3F
+		dc.w $8A43
+PLC_Tails_Bubble:
+		dc.w 3
+		dc.w $2A4C
+		dc.w $7A4F
+		dc.w $2A57
+PLC_Tails_Push1:
+		dc.w 2
+		dc.w $8A5A
+		dc.w $3A63
+PLC_Tails_Push2:
+		dc.w 1
+		dc.w $BA67
+PLC_Tails_Push3:
+		dc.w 1
+		dc.w $BA73
+PLC_Tails_Push4:
+		dc.w 1
+		dc.w $BA7F
+PLC_Tails_Death:
+		dc.w 1
+		dc.w $FA8B
+PLC_Tails_Spring1:
+		dc.w 2
+		dc.w $3A9B
+		dc.w $BA9F
+PLC_Tails_Spring2:
+		dc.w 2
+		dc.w $3A9B
+		dc.w $BAAB
+PLC_Tails_LookUp:
+		dc.w 1
+		dc.w $BAB7
+PLC_Tails_Stand0:
+		dc.w 1
+		dc.w $BAC3
+PLC_Tails_SpinDash1:
+		dc.w 2
+		dc.w $3ACF
+		dc.w $5AD3
+PLC_Tails_SpinDash2:
+		dc.w 2
+		dc.w $7AD9
+		dc.w $2AE1
+PLC_Tails_SpinDash3:
+		dc.w 2
+		dc.w $3AE4
+		dc.w $5AE8
+PLC_Tails_Spin1:
+		dc.w 1
+		dc.w $FAEE
+PLC_Tails_Spin2:
+		dc.w 1
+		dc.w $FAFE
+PLC_Tails_Spin3:
+		dc.w 1
+		dc.w $FB0E
+PLC_Tails_Skid1:
+		dc.w 3
+		dc.w $5B1E
+		dc.w $3B24
+		dc.w $2B28
+PLC_Tails_Skid2:
+		dc.w 3
+		dc.w $5B2B
+		dc.w $3B31
+		dc.w $2B35
+PLC_Tails_Clear1:
+		dc.w 1
+		dc.w $BB38
+PLC_Tails_Clear2:
+		dc.w 4
+		dc.w $B44
+		dc.w $7B45
+		dc.w $7B4D
+		dc.w $B55
+PLC_Tails_Balance1:
+		dc.w 3
+		dc.w $2B56
+		dc.w $7B59
+		dc.w $1B61
+PLC_Tails_Balance2:
+		dc.w 3
+		dc.w $5B63
+		dc.w $3B69
+		dc.w $2B6D
+PLC_Tails_Fall1:
+PLC_Tails_Slide1:
+		dc.w 1
+		dc.w $FB70
+PLC_Tails_Fall2:
+PLC_Tails_Slide2:
+		dc.w 1
+		dc.w $FB80
+PLC_Tails_Crouch:
+		dc.w 1
+		dc.w $8B90
+PLC_Tails_Transform1:
+		dc.w 1
+		dc.w $8B99
+PLC_Tails_Transform2:
+		dc.w 3
+		dc.w $2BA2
+		dc.w $7BA5
+		dc.w $5BAD
+PLC_Tails_Transform3:
+		dc.w 3
+		dc.w $2BB3
+		dc.w $7BB6
+		dc.w $5BBE

@@ -29,7 +29,7 @@
 		dc.w AniSonic2P1C-AniSonic2P
 		dc.w AniSonic2P05-AniSonic2P
 		dc.w AniSonic2P05-AniSonic2P
-		dc.w AniSonic1F-AniSonic2P
+		dc.w AniSonic2P05-AniSonic2P
 		dc.w AniSonic2P20-AniSonic2P
 		dc.w AniSonic2P21-AniSonic2P
 		dc.w AniSonic2P22-AniSonic2P
@@ -65,7 +65,7 @@ AniKnuckles2P:	dc.w AniSonic2P00-AniKnuckles2P
 		dc.w AniSonic2P1C-AniKnuckles2P
 		dc.w AniSonic2P05-AniKnuckles2P
 		dc.w AniSonic2P05-AniKnuckles2P
-		dc.w AniSonic1F-AniKnuckles2P
+		dc.w AniSonic2P05-AniKnuckles2P
 		dc.w AniSonic2P20-AniKnuckles2P
 		dc.w AniSonic2P21-AniKnuckles2P
 		dc.w AniSonic2P22-AniKnuckles2P
