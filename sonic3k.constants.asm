@@ -970,7 +970,7 @@ Special_stage_prev_Y_pos	ds.w 1
 Special_stage_spheres_left	ds.w 1
 Special_stage_ring_count	ds.w 1
 Special_stage_sphere_HUD_flag	ds.b 1
-Special_stage_extra_life_flags	ds.b 1			; when bit 7 is set, the ring HUD is updated
+Special_stage_ring_HUD_flag	ds.b 1			; when bit 7 is set, the ring HUD is updated
 Special_stage_rate_timer	ds.w 1			; when this reaches 0, the special stage speeds up
 Special_stage_jumping_P2	ds.b 1			; $80 = normal jump, $81 = spring
 			ds.b 1				; unused

@@ -1,12 +1,20 @@
-Map_5CD00:		dc.w word_5CD12-Map_5CD00
+Map_5CD00:	dc.w word_5CD12-Map_5CD00
 		dc.w word_5CD20-Map_5CD00
 		dc.w word_5CD2E-Map_5CD00
 		dc.w word_5CD36-Map_5CD00
+		dc.w word_5CD56-Map_5CD00
+		dc.w word_5CD5E-Map_5CD00
+		dc.w Map_ContinueIconAmy1-Map_5CD00
+		dc.w Map_ContinueIconAmy2-Map_5CD00
+		dc.w word_5CD12-Map_5CD00
+		dc.w word_5CD20-Map_5CD00
+		dc.w word_5CD12-Map_5CD00
+		dc.w word_5CD20-Map_5CD00
+		dc.w word_5CD12-Map_5CD00
+		dc.w word_5CD20-Map_5CD00
 		dc.w word_5CD3E-Map_5CD00
 		dc.w word_5CD46-Map_5CD00
 		dc.w word_5CD4E-Map_5CD00
-		dc.w word_5CD56-Map_5CD00
-		dc.w word_5CD5E-Map_5CD00
 word_5CD12:	dc.w 2			
 		dc.b  $F4,   5,	  0,   0, $FF, $F4
 		dc.b	4,   8,	  0,   4, $FF, $F4
@@ -24,6 +32,12 @@ word_5CD46:	dc.w 1
 word_5CD4E:	dc.w 1			
 		dc.b  $FC,   5,	  0, $1E, $FF, $F2
 word_5CD56:	dc.w 1			
-		dc.b  $F4,   6,	  0, $22, $FF, $F8
+		dc.b  $F4,   6,	$40, $22, $FF, $F8
 word_5CD5E:	dc.w 1			
-		dc.b  $F4,   6,	  0, $28, $FF, $F8
+		dc.b  $F4,   6,	$40, $28, $FF, $F8
+Map_ContinueIconAmy1:
+		dc.w 1
+		dc.b  $F4,   6,   0, $2E, $FF, $F8
+Map_ContinueIconAmy2:
+		dc.w 1
+		dc.b  $F4,   6,   0, $34, $FF, $F8
