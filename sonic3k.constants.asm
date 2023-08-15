@@ -630,8 +630,8 @@ _unkF7C2			ds.b 1
 _unkF7C3			ds.b 1
 _unkF7C4			ds.w 1
 Reverse_gravity_flag		ds.b 1
-_unkF7C7			ds.b 1
 WindTunnel_flag			ds.b 1
+WindTunnel_disable_flags	ds.b 1		; Fred: Encore mode - pick RAM variables by SST
 WindTunnel_flag_P2		ds.b 1
 Ctrl_1_locked			ds.b 1
 Ctrl_2_locked			ds.b 1

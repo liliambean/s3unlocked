@@ -17,7 +17,7 @@ byte_186E2:	dc.b	5,   0,	  1,   2,   3,	 4,   9,  $D, $FC
 byte_186EB:	dc.b	5,   0,	  1,   2,   3,	 4,  $C, $12, $FC 
 byte_186F4:	dc.b	5,   0,	  1,   2,   3,	 4,  $C, $11, $FC 
 byte_186FD:	dc.b	5,   0,	  1,   2,   3,	 4,  $B, $10, $FC 
-byte_18706:	dc.b	5,   0,	  1,   2,   3,	 4,  $C,  $F, $FC 
+byte_18706:	dc.b	5,   0,	  1,   2,   3,	 4,   9,  $F, $FC 
 byte_1870F:	dc.b	5,   0,	  1,   2,   3,	 4,  $A,  $E, $FC 
 byte_18718:	dc.b   $E,   0,	  1,   2, $FC 
 byte_1871D:	dc.b	7, $16,	 $D, $16,  $D, $16,  $D, $FC 
