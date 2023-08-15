@@ -27,10 +27,10 @@
 		dc.l Pal_Amy				; Fred: add extra characters
 		dc.w Normal_palette&$FFFF		;
 		dc.w 7					;
-		dc.l Pal_MightyRay			;
+		dc.l Pal_SaveScreen+$20			;
 		dc.w Normal_palette&$FFFF		;
 		dc.w 7					;
-		dc.l Pal_MightyRay			;
+		dc.l Pal_SaveScreen+$20			;
 		dc.w Normal_palette&$FFFF		;
 		dc.w 7					;
 		dc.l Pal_MetalSonic			;

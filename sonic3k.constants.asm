@@ -1024,7 +1024,6 @@ ArtTile_ArtKos_Competition_CharSel    = $05C9
 
 ; Save screen.
 ArtTile_ArtKos_Save_Misc              = $029F
-ArtTile_ArtKos_Save_Extra             = $0454
 
 ; ---------------------------------------------------------------------------
 ; Universal locations.
