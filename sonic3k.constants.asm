@@ -987,12 +987,15 @@ SStage_extra_sprites		ds.b $70		; some extra sprite info for special stages
 	dephase
 ; ---------------------------------------------------------------------------
 ; Fred: HUD - Encore mode HUD
-Encore_HUD_player_frame =	Reserved_object_3+$18
-Encore_cursor_timer =		Reserved_object_3+$1A
-Encore_stocks =			Reserved_object_3+$1C
-Encore_HUD_stocks_frame =	Reserved_object_3+$26
-Encore_HUD_stocks_timer =	Reserved_object_3+$28
-Encore_HUD_stocks_scroll =	Reserved_object_3+$2A
+Encore_cursor_timer =		Reserved_object_3+$20
+Encore_stocks =			Reserved_object_3+$23
+Encore_HUD_player_frame =	Reserved_object_3+$2C
+Encore_HUD_stocks_frame =	Reserved_object_3+$2E
+Encore_HUD_stocks_timer =	Reserved_object_3+$30
+Encore_HUD_stocks_scroll =	Reserved_object_3+$32
+
+sfx_EncoreSwap =		sfx_PulleyGrab
+sfx_EncoreSwapBlock =		sfx_SmallBumpers
 
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
