@@ -506,28 +506,6 @@ Map_SuperSonic:
 		dc.w Map_Sonic_Blank-Map_SuperSonic
 		dc.w Map_Sonic_Blank-Map_SuperSonic
 Map_Sonic_Blank:
-Map_Sonic_Dash1:
-Map_Sonic_Dash2:
-Map_Sonic_Dash3:
-Map_Sonic_Dash4:
-Map_Sonic_DiagDash1:
-Map_Sonic_DiagDash2:
-Map_Sonic_DiagDash3:
-Map_Sonic_DiagDash4:
-Map_Sonic_DiagWallDash1:
-Map_Sonic_DiagWallDash2:
-Map_Sonic_DiagWallDash3:
-Map_Sonic_DiagWallDash4:
-Map_Sonic_DropDash1:
-Map_Sonic_DropDash2:
-Map_Sonic_DropDash3:
-Map_Sonic_DropDash4:
-Map_Sonic_DropDash5:
-Map_Sonic_DropDash6:
-Map_Sonic_WallDash1:
-Map_Sonic_WallDash2:
-Map_Sonic_WallDash3:
-Map_Sonic_WallDash4:
 		dc.w 0
 Map_Sonic_Walk1:
 		dc.w 2
@@ -1272,6 +1250,22 @@ Map_Sonic_BarCurrent2:
 		dc.b  $FE,  $B,   0,   0, $FF, $F5
 		dc.b  $F6,   8,   0,  $C, $FF, $F5
 		dc.b  $E6,   5,   0,  $F, $FF, $F5
+Map_Sonic_DropDash1:
+Map_Sonic_DropDash5:
+Map_Sonic_DropDash6:
+Map_Sonic_Spin1:
+Map_Sonic_Spin2:
+Map_Sonic_Spin3:
+Map_Sonic_Spin4:
+Map_Sonic_Spin5:
+		dc.w 1
+		dc.b  $F0,  $F,   0,   0, $FF, $F0
+Map_Sonic_DropDash2:
+Map_Sonic_DropDash3:
+Map_Sonic_DropDash4:
+		dc.w 2
+		dc.b  $F0,  $D,   0,   0, $FF, $F0
+		dc.b    0,  $D,   0,   8, $FF, $F0
 Map_Sonic_Stand1:
 		dc.w 3
 		dc.b  $ED,   8,   0,   0, $FF, $EE
@@ -1304,6 +1298,56 @@ Map_Sonic_Stand8:
 		dc.b  $FC,   0,   0,  $C,   0,   8
 		dc.b    4,  $C,   0,  $D, $FF, $F0
 		dc.b   $C,   8,   0, $11, $FF, $F8
+Map_Sonic_Dash1:
+Map_Sonic_Dash2:
+Map_Sonic_Dash3:
+Map_Sonic_Dash4:
+		dc.w 2
+		dc.b  $F4,  $F,   0,   0, $FF, $F7
+		dc.b  $FC,   2,   0, $10, $FF, $EF
+Map_Sonic_DiagDash1:
+		dc.w 3
+		dc.b  $EC,   8,   0,   0, $FF, $FB
+		dc.b  $F4,  $F,   0,   3, $FF, $F3
+		dc.b  $FC,   1,   0, $13,   0, $13
+Map_Sonic_DiagDash2:
+Map_Sonic_DiagDash4:
+		dc.w 4
+		dc.b  $EC,   8,   0,   0, $FF, $FB
+		dc.b  $F4,  $F,   0,   3, $FF, $F3
+		dc.b  $FA,   1,   0, $13,   0, $13
+		dc.b  $14,   4,   0, $15, $FF, $F7
+Map_Sonic_DiagDash3:
+		dc.w 4
+		dc.b  $EC,   8,   0,   0, $FF, $FB
+		dc.b  $F4,  $F,   0,   3, $FF, $F3
+		dc.b  $FC,   1,   0, $13,   0, $13
+		dc.b  $14,   0,   0, $15, $FF, $FB
+Map_Sonic_WallDash1:
+Map_Sonic_WallDash2:
+Map_Sonic_WallDash3:
+Map_Sonic_WallDash4:
+		dc.w 2
+		dc.b  $E9,  $F,   0,   0, $FF, $F4
+		dc.b    9,   8,   0, $10, $FF, $FC
+Map_Sonic_DiagWallDash1:
+		dc.w 3
+		dc.b  $ED,   2,   0,   0, $FF, $EB
+		dc.b  $ED,  $F,   0,   3, $FF, $F3
+		dc.b  $E5,   4,   0, $13, $FF, $FB
+Map_Sonic_DiagWallDash2:
+Map_Sonic_DiagWallDash4:
+		dc.w 4
+		dc.b  $ED,   2,   0,   0, $FF, $EB
+		dc.b  $ED,  $F,   0,   3, $FF, $F3
+		dc.b  $E5,   4,   0, $13, $FF, $F9
+		dc.b  $F9,   1,   0, $15,   0, $13
+Map_Sonic_DiagWallDash3:
+		dc.w 4
+		dc.b  $ED,   2,   0,   0, $FF, $EB
+		dc.b  $ED,  $F,   0,   3, $FF, $F3
+		dc.b  $E5,   4,   0, $13, $FF, $FB
+		dc.b  $FD,   0,   0, $15,   0, $13
 Map_Sonic_Float1:
 		dc.w 3
 		dc.b  $F4,   9,   0,   0, $FF, $F4
@@ -1332,12 +1376,16 @@ Map_Sonic_Float7:
 		dc.w 2
 		dc.b  $F4,  $E,   8,   0, $FF, $EF
 		dc.b    4,   0,   8,  $C,   0,  $F
-Map_Sonic_Crane:
 Map_Sonic_Float8:
 		dc.w 3
 		dc.b  $F4,  $A,   8,   0, $FF, $FB
 		dc.b  $FC,   4,   8,   9, $FF, $EB
 		dc.b    4,   8,   8,  $B, $FF, $E3
+Map_Sonic_Crane:
+		dc.w 3
+		dc.b  $FC,   5,   0,   0, $FF, $E8
+		dc.b  $F4,  $D,   0,   4, $FF, $F8
+		dc.b    4,   8,   0,  $C, $FF, $F8
 Map_Sonic_Bubble:
 		dc.w 4
 		dc.b  $EC,  $F,   0,   0, $FF, $EC
@@ -1361,15 +1409,17 @@ Map_Sonic_Push3:
 		dc.b  $F4,   9,   0,   2, $FF, $F5
 		dc.b    4,  $D,   0,   8, $FF, $ED
 Map_Sonic_Death:
-		dc.w 3
+		dc.w 4
 		dc.b  $EC,   8,   0,   0, $FF, $F8
-		dc.b  $F4,  $F,   0,   3, $FF, $F0
-		dc.b  $F4,   0,   0, $13,   0, $10
+		dc.b  $F4,  $D,   0,   3, $FF, $F0
+		dc.b  $F4,   0,   0,  $B,   0, $10
+		dc.b    4,  $D,   0,  $C, $FF, $F0
 Map_Sonic_Drown:
-		dc.w 3
+		dc.w 4
 		dc.b  $EC,   4,   0,   0, $FF, $F8
-		dc.b  $F4,  $F,   0,   2, $FF, $F0
-		dc.b  $F4,   0,   0, $12,   0, $10
+		dc.b  $F4,  $D,   0,   2, $FF, $F0
+		dc.b  $F4,   0,   0,  $A,   0, $10
+		dc.b    4,  $D,   0,  $B, $FF, $F0
 Map_Sonic_LookUp1:
 		dc.w 4
 		dc.b  $EC,   8,   0,   0, $FF, $ED
@@ -1403,13 +1453,6 @@ Map_Sonic_SpinDash6:
 		dc.w 2
 		dc.b  $F8,  $E,   0,   0, $FF, $F4
 		dc.b  $10,   8,   0,  $C, $FF, $F4
-Map_Sonic_Spin1:
-Map_Sonic_Spin2:
-Map_Sonic_Spin3:
-Map_Sonic_Spin4:
-Map_Sonic_Spin5:
-		dc.w 1
-		dc.b  $F0,  $F,   0,   0, $FF, $F0
 Map_Sonic_Slide1:
 		dc.w 3
 		dc.b  $F4,  $E,   0,   0, $FF, $E8
@@ -1440,13 +1483,10 @@ Map_Sonic_Transform2:
 		dc.b  $F8,  $D,   0,   6, $FF, $F3
 		dc.b    8,   9,   0,  $E, $FF, $F3
 Map_Sonic_Transform3:
-		dc.w 2
-		dc.b  $E8,  $F,   0,   0, $FF, $F0
-		dc.b    8,   9,   0, $10, $FF, $F0
 Map_Sonic_Transform4:
 Map_Sonic_Transform5:
 		dc.w 3
-		dc.b  $E8,  $A,   0,   0, $FF, $F0
+		dc.b  $E8,  $A,   0,   0, $FF, $F2
 		dc.b    0,  $C,   0,   9, $FF, $F0
 		dc.b    8,   9,   0,  $D, $FF, $F0
 Map_Sonic_Skid1:
@@ -1771,6 +1811,11 @@ Map_Sonic_Crouch2_SUPER:
 		dc.b    4,   0,   0, $10,   0, $10
 Map_Sonic_Balance1_SUPER:
 Map_Sonic_Balance2_SUPER:
+		dc.w 4
+		dc.b  $F5,   5,   0,   0,   0,   2
+		dc.b    5,   5,   0,   4, $FF, $F2
+		dc.b  $E5,  $D,   0,   8, $FF, $E8
+		dc.b  $F5,   9,   0, $10, $FF, $EA
 Map_Sonic_Balance3_SUPER:
 		dc.w 4
 		dc.b  $F5,   5,   0,   0,   0,   2

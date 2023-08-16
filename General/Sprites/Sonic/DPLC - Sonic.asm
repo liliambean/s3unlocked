@@ -506,28 +506,6 @@ PLC_SuperSonic:
 		dc.w PLC_Sonic_Blank-PLC_SuperSonic
 		dc.w PLC_Sonic_Blank-PLC_SuperSonic
 PLC_Sonic_Blank:
-PLC_Sonic_Dash1:
-PLC_Sonic_Dash2:
-PLC_Sonic_Dash3:
-PLC_Sonic_Dash4:
-PLC_Sonic_DiagDash1:
-PLC_Sonic_DiagDash2:
-PLC_Sonic_DiagDash3:
-PLC_Sonic_DiagDash4:
-PLC_Sonic_DiagWallDash1:
-PLC_Sonic_DiagWallDash2:
-PLC_Sonic_DiagWallDash3:
-PLC_Sonic_DiagWallDash4:
-PLC_Sonic_DropDash1:
-PLC_Sonic_DropDash2:
-PLC_Sonic_DropDash3:
-PLC_Sonic_DropDash4:
-PLC_Sonic_DropDash5:
-PLC_Sonic_DropDash6:
-PLC_Sonic_WallDash1:
-PLC_Sonic_WallDash2:
-PLC_Sonic_WallDash3:
-PLC_Sonic_WallDash4:
 		dc.w 0
 PLC_Sonic_Walk1:
 		dc.w 2
@@ -1331,288 +1309,394 @@ PLC_Sonic_BarCurrent2:
 		dc.w $BCEA
 		dc.w $2CF6
 		dc.w $3CF9
+PLC_Sonic_DropDash1:
+		dc.w 1
+		dc.w $FCFD
+PLC_Sonic_DropDash2:
+		dc.w 2
+		dc.w $7D0D
+		dc.w $7D15
+PLC_Sonic_DropDash3:
+		dc.w 2
+		dc.w $7D1D
+		dc.w $7D15
+PLC_Sonic_DropDash4:
+		dc.w 2
+		dc.w $7D25
+		dc.w $7D15
+PLC_Sonic_DropDash5:
+		dc.w 1
+		dc.w $FD2D
+PLC_Sonic_DropDash6:
+		dc.w 1
+		dc.w $FD3D
 PLC_Sonic_Stand1:
 		dc.w 3
-		dc.w $2CFD
-		dc.w $7D00
-		dc.w $5D08
+		dc.w $2D4D
+		dc.w $7D50
+		dc.w $5D58
 PLC_Sonic_Stand2:
 		dc.w 4
-		dc.w $2D1A
-		dc.w $7D1D
-		dc.w $2D25
-		dc.w $2D28
+		dc.w $2D6A
+		dc.w $7D6D
+		dc.w $2D75
+		dc.w $2D78
 PLC_Sonic_Stand3:
 		dc.w 4
-		dc.w $2D37
-		dc.w $7D3A
-		dc.w $2D25
-		dc.w $2D28
+		dc.w $2D87
+		dc.w $7D8A
+		dc.w $2D75
+		dc.w $2D78
 PLC_Sonic_Stand4:
 		dc.w 4
-		dc.w $2D37
-		dc.w $7D3A
-		dc.w $2D25
-		dc.w $2D4F
+		dc.w $2D87
+		dc.w $7D8A
+		dc.w $2D75
+		dc.w $2D9F
 PLC_Sonic_Stand5:
 		dc.w 4
-		dc.w $2D52
-		dc.w $7D55
-		dc.w $1D5D
-		dc.w $2D5F
+		dc.w $2DA2
+		dc.w $7DA5
+		dc.w $1DAD
+		dc.w $2DAF
 PLC_Sonic_Stand6:
 		dc.w 4
-		dc.w $2D52
-		dc.w $7D62
-		dc.w $1D5D
-		dc.w $2D5F
+		dc.w $2DA2
+		dc.w $7DB2
+		dc.w $1DAD
+		dc.w $2DAF
 PLC_Sonic_Stand7:
 		dc.w 4
-		dc.w $2D6A
-		dc.w $3D6D
-		dc.w $7D71
-		dc.w $2D5F
+		dc.w $2DBA
+		dc.w $3DBD
+		dc.w $7DC1
+		dc.w $2DAF
 PLC_Sonic_Stand8:
 		dc.w 4
-		dc.w $BD79
-		dc.w $D85
-		dc.w $3D86
-		dc.w $2D8A
+		dc.w $BDC9
+		dc.w $DD5
+		dc.w $3DD6
+		dc.w $2DDA
+PLC_Sonic_Dash1:
+		dc.w 2
+		dc.w $F000
+		dc.w $2010
+PLC_Sonic_Dash2:
+		dc.w 2
+		dc.w $F013
+		dc.w $2023
+PLC_Sonic_Dash3:
+		dc.w 2
+		dc.w $F026
+		dc.w $2036
+PLC_Sonic_Dash4:
+		dc.w 2
+		dc.w $F039
+		dc.w $2049
+PLC_Sonic_DiagDash1:
+		dc.w 3
+		dc.w $204C
+		dc.w $F04F
+		dc.w $105F
+PLC_Sonic_DiagDash2:
+		dc.w 4
+		dc.w $2061
+		dc.w $F064
+		dc.w $1074
+		dc.w $1076
+PLC_Sonic_DiagDash3:
+		dc.w 4
+		dc.w $204C
+		dc.w $F078
+		dc.w $1088
+		dc.w $8A
+PLC_Sonic_DiagDash4:
+		dc.w 4
+		dc.w $2061
+		dc.w $F08B
+		dc.w $109B
+		dc.w $109D
+PLC_Sonic_WallDash1:
+		dc.w 2
+		dc.w $F09F
+		dc.w $20AF
+PLC_Sonic_WallDash2:
+		dc.w 2
+		dc.w $F0B2
+		dc.w $20C2
+PLC_Sonic_WallDash3:
+		dc.w 2
+		dc.w $F0C5
+		dc.w $20D5
+PLC_Sonic_WallDash4:
+		dc.w 2
+		dc.w $F0D8
+		dc.w $20E8
+PLC_Sonic_DiagWallDash1:
+		dc.w 3
+		dc.w $20EB
+		dc.w $F0EE
+		dc.w $10FE
+PLC_Sonic_DiagWallDash2:
+		dc.w 4
+		dc.w $2100
+		dc.w $F103
+		dc.w $1113
+		dc.w $1115
+PLC_Sonic_DiagWallDash3:
+		dc.w 4
+		dc.w $20EB
+		dc.w $F117
+		dc.w $1127
+		dc.w $129
+PLC_Sonic_DiagWallDash4:
+		dc.w 4
+		dc.w $2100
+		dc.w $F12A
+		dc.w $113A
+		dc.w $113C
 PLC_Sonic_Float1:
 PLC_Sonic_Float3:
 		dc.w 3
-		dc.w $5000
-		dc.w $3006
-		dc.w $A
+		dc.w $513E
+		dc.w $3144
+		dc.w $148
 PLC_Sonic_Float2:
 		dc.w 2
-		dc.w $500B
-		dc.w $3011
-PLC_Sonic_Crane:
+		dc.w $5149
+		dc.w $314F
 PLC_Sonic_Float4:
 PLC_Sonic_Float8:
 		dc.w 3
-		dc.w $8015
-		dc.w $101E
-		dc.w $2020
+		dc.w $8153
+		dc.w $115C
+		dc.w $215E
 PLC_Sonic_Float5:
 PLC_Sonic_Float7:
 		dc.w 2
-		dc.w $B023
-		dc.w $2F
+		dc.w $B161
+		dc.w $16D
 PLC_Sonic_Float6:
 		dc.w 2
-		dc.w $5030
-		dc.w $3036
+		dc.w $516E
+		dc.w $3174
+PLC_Sonic_Crane:
+		dc.w 3
+		dc.w $3178
+		dc.w $717C
+		dc.w $2184
 PLC_Sonic_Bubble:
 		dc.w 4
-		dc.w $F03A
-		dc.w $4A
-		dc.w $104B
-		dc.w $104D
+		dc.w $F187
+		dc.w $197
+		dc.w $1198
+		dc.w $119A
 PLC_Sonic_Push1:
 		dc.w 3
-		dc.w $104F
-		dc.w $8051
-		dc.w $305A
+		dc.w $119C
+		dc.w $819E
+		dc.w $31A7
 PLC_Sonic_Push2:
 		dc.w 3
-		dc.w $104F
-		dc.w $8075
-		dc.w $107E
+		dc.w $119C
+		dc.w $81C2
+		dc.w $11CB
 PLC_Sonic_Push3:
 		dc.w 3
-		dc.w $104F
-		dc.w $5096
-		dc.w $709C
+		dc.w $119C
+		dc.w $51E3
+		dc.w $71E9
 PLC_Sonic_Push4:
 		dc.w 3
-		dc.w $104F
-		dc.w $80B9
-		dc.w $10C2
+		dc.w $119C
+		dc.w $8206
+		dc.w $120F
 PLC_Sonic_Death:
-		dc.w 3
-		dc.w $20D7
-		dc.w $F0DA
-		dc.w $EA
+		dc.w 4
+		dc.w $2224
+		dc.w $7227
+		dc.w $22F
+		dc.w $7230
 PLC_Sonic_Drown:
-		dc.w 3
-		dc.w $10EB
-		dc.w $F0ED
-		dc.w $EA
+		dc.w 4
+		dc.w $1238
+		dc.w $723A
+		dc.w $22F
+		dc.w $7230
 PLC_Sonic_LookUp1:
 		dc.w 4
-		dc.w $20FD
-		dc.w $7100
-		dc.w $2108
-		dc.w $210B
+		dc.w $2242
+		dc.w $7245
+		dc.w $224D
+		dc.w $2250
 PLC_Sonic_LookUp2:
 		dc.w 4
-		dc.w $210E
-		dc.w $3111
-		dc.w $3115
-		dc.w $5119
+		dc.w $2253
+		dc.w $3256
+		dc.w $325A
+		dc.w $525E
 PLC_Sonic_Crouch1:
 		dc.w 2
-		dc.w $11F
-		dc.w $B120
+		dc.w $264
+		dc.w $B265
 PLC_Sonic_Crouch2:
 		dc.w 2
-		dc.w $13D
-		dc.w $B13E
+		dc.w $282
+		dc.w $B283
 PLC_Sonic_SpinDash1:
 		dc.w 3
-		dc.w $214A
-		dc.w $714D
-		dc.w $2155
+		dc.w $228F
+		dc.w $7292
+		dc.w $229A
 PLC_Sonic_SpinDash2:
 		dc.w 2
-		dc.w $B158
-		dc.w $2164
+		dc.w $B29D
+		dc.w $22A9
 PLC_Sonic_SpinDash3:
 		dc.w 2
-		dc.w $B167
-		dc.w $2164
+		dc.w $B2AC
+		dc.w $22A9
 PLC_Sonic_SpinDash4:
 		dc.w 2
-		dc.w $B173
-		dc.w $2164
+		dc.w $B2B8
+		dc.w $22A9
 PLC_Sonic_SpinDash5:
 		dc.w 2
-		dc.w $B17F
-		dc.w $2164
+		dc.w $B2C4
+		dc.w $22A9
 PLC_Sonic_SpinDash6:
 		dc.w 2
-		dc.w $B18B
-		dc.w $2164
+		dc.w $B2D0
+		dc.w $22A9
 PLC_Sonic_Spin1:
 		dc.w 1
-		dc.w $F197
+		dc.w $F2DC
 PLC_Sonic_Spin2:
 		dc.w 1
-		dc.w $F1A7
+		dc.w $F2EC
 PLC_Sonic_Spin3:
 		dc.w 1
-		dc.w $F1B7
+		dc.w $F2FC
 PLC_Sonic_Spin4:
 		dc.w 1
-		dc.w $F1C7
+		dc.w $F30C
 PLC_Sonic_Spin5:
 		dc.w 1
-		dc.w $F1D7
+		dc.w $F31C
 PLC_Sonic_Fall1:
 PLC_Sonic_Slide1:
 		dc.w 3
-		dc.w $B1E7
-		dc.w $21F3
-		dc.w $21F6
+		dc.w $B32C
+		dc.w $2338
+		dc.w $233B
 PLC_Sonic_Fall2:
 PLC_Sonic_Slide2:
 		dc.w 3
-		dc.w $B1F9
-		dc.w $21F3
-		dc.w $21F6
+		dc.w $B33E
+		dc.w $2338
+		dc.w $233B
 PLC_Sonic_Spring:
 		dc.w 2
-		dc.w $B205
-		dc.w $3211
+		dc.w $B34A
+		dc.w $3356
 PLC_Sonic_Transform1:
 		dc.w 1
-		dc.w $B215
+		dc.w $B35A
 PLC_Sonic_Transform2:
 		dc.w 3
-		dc.w $5221
-		dc.w $7227
-		dc.w $522F
+		dc.w $5366
+		dc.w $736C
+		dc.w $5374
 PLC_Sonic_Transform3:
-		dc.w 2
-		dc.w $F235
-		dc.w $5245
+		dc.w 3
+		dc.w $837A
+		dc.w $3383
+		dc.w $5387
 PLC_Sonic_Transform4:
 		dc.w 3
-		dc.w $824B
-		dc.w $3254
-		dc.w $5258
+		dc.w $838D
+		dc.w $3396
+		dc.w $539A
 PLC_Sonic_Transform5:
 		dc.w 3
-		dc.w $825E
-		dc.w $3254
-		dc.w $5258
+		dc.w $83A0
+		dc.w $3396
+		dc.w $539A
 PLC_Sonic_Skid1:
 		dc.w 4
-		dc.w $8267
-		dc.w $1270
-		dc.w $3272
-		dc.w $2276
+		dc.w $83A9
+		dc.w $13B2
+		dc.w $33B4
+		dc.w $23B8
 PLC_Sonic_Skid2:
 		dc.w 4
-		dc.w $8267
-		dc.w $1279
-		dc.w $327B
-		dc.w $227F
+		dc.w $83A9
+		dc.w $13BB
+		dc.w $33BD
+		dc.w $23C1
 PLC_Sonic_Skid3:
 		dc.w 4
-		dc.w $2282
-		dc.w $7285
-		dc.w $228D
-		dc.w $1290
+		dc.w $23C4
+		dc.w $73C7
+		dc.w $23CF
+		dc.w $13D2
 PLC_Sonic_Skid4:
 		dc.w 3
-		dc.w $2292
-		dc.w $B295
-		dc.w $22A1
+		dc.w $23D4
+		dc.w $B3D7
+		dc.w $23E3
 PLC_Sonic_Clear1:
 		dc.w 2
-		dc.w $72A4
-		dc.w $82AC
+		dc.w $73E6
+		dc.w $83EE
 PLC_Sonic_Clear2:
 		dc.w 3
-		dc.w $22B5
-		dc.w $72B8
-		dc.w $52C0
+		dc.w $23F7
+		dc.w $73FA
+		dc.w $5402
 PLC_Sonic_Clear3:
 		dc.w 3
-		dc.w $22B5
-		dc.w $72C6
-		dc.w $52C0
+		dc.w $23F7
+		dc.w $7408
+		dc.w $5402
 PLC_Sonic_Clear4:
 		dc.w 3
-		dc.w $22B5
-		dc.w $72CE
-		dc.w $52C0
+		dc.w $23F7
+		dc.w $7410
+		dc.w $5402
 PLC_Sonic_Balance1:
 		dc.w 4
-		dc.w $22D6
-		dc.w $B2D9
-		dc.w $12E5
-		dc.w $22E7
+		dc.w $2418
+		dc.w $B41B
+		dc.w $1427
+		dc.w $2429
 PLC_Sonic_Balance2:
 		dc.w 3
-		dc.w $F300
-		dc.w $310
-		dc.w $2311
+		dc.w $F442
+		dc.w $452
+		dc.w $2453
 PLC_Sonic_Balance3:
 		dc.w 4
-		dc.w $22D6
-		dc.w $B322
-		dc.w $132E
-		dc.w $2330
+		dc.w $2418
+		dc.w $B464
+		dc.w $1470
+		dc.w $2472
 PLC_Sonic_Balance4:
 		dc.w 3
-		dc.w $7341
-		dc.w $349
-		dc.w $834A
+		dc.w $7483
+		dc.w $48B
+		dc.w $848C
 PLC_Sonic_Balance5:
 		dc.w 4
-		dc.w $353
-		dc.w $B354
-		dc.w $360
-		dc.w $5361
+		dc.w $495
+		dc.w $B496
+		dc.w $4A2
+		dc.w $54A3
 PLC_Sonic_Balance6:
 		dc.w 3
-		dc.w $367
-		dc.w $F368
-		dc.w $2378
+		dc.w $4A9
+		dc.w $F4AA
+		dc.w $24BA
 PLC_Sonic_Walk1_SUPER:
 		dc.w 3
 		dc.w $B000
@@ -1850,60 +1934,60 @@ PLC_Sonic_DiagWallRun4_SUPER:
 PLC_Sonic_Stand1_SUPER:
 		dc.w 4
 		dc.w $8725
-		dc.w $7D0E
-		dc.w $2D16
-		dc.w $D19
+		dc.w $7D5E
+		dc.w $2D66
+		dc.w $D69
 PLC_Sonic_Stand2_SUPER:
 		dc.w 4
 		dc.w $8725
-		dc.w $7D2B
-		dc.w $2D33
-		dc.w $D36
+		dc.w $7D7B
+		dc.w $2D83
+		dc.w $D86
 PLC_Sonic_Stand3_SUPER:
 		dc.w 3
 		dc.w $8725
-		dc.w $BD42
-		dc.w $D4E
+		dc.w $BD92
+		dc.w $D9E
 PLC_Sonic_Push1_SUPER:
 		dc.w 3
-		dc.w $205E
-		dc.w $F061
-		dc.w $3071
+		dc.w $21AB
+		dc.w $F1AE
+		dc.w $31BE
 PLC_Sonic_Push2_SUPER:
 		dc.w 3
-		dc.w $2080
-		dc.w $F083
-		dc.w $2093
+		dc.w $21CD
+		dc.w $F1D0
+		dc.w $21E0
 PLC_Sonic_Push3_SUPER:
 		dc.w 3
-		dc.w $A4
-		dc.w $F0A5
-		dc.w $30B5
+		dc.w $1F1
+		dc.w $F1F2
+		dc.w $3202
 PLC_Sonic_Push4_SUPER:
 		dc.w 3
-		dc.w $2080
-		dc.w $F0C4
-		dc.w $20D4
+		dc.w $21CD
+		dc.w $F211
+		dc.w $2221
 PLC_Sonic_Crouch1_SUPER:
 PLC_Sonic_Crouch2_SUPER:
 		dc.w 2
-		dc.w $F12C
-		dc.w $13C
+		dc.w $F271
+		dc.w $281
 PLC_Sonic_Balance1_SUPER:
 		dc.w 4
-		dc.w $32EA
-		dc.w $32EE
-		dc.w $72F2
-		dc.w $52FA
+		dc.w $342C
+		dc.w $3430
+		dc.w $7434
+		dc.w $543C
 PLC_Sonic_Balance2_SUPER:
 		dc.w 4
-		dc.w $32EA
-		dc.w $32EE
-		dc.w $7314
-		dc.w $531C
+		dc.w $342C
+		dc.w $3430
+		dc.w $7456
+		dc.w $545E
 PLC_Sonic_Balance3_SUPER:
 		dc.w 4
-		dc.w $32EA
-		dc.w $32EE
-		dc.w $7333
-		dc.w $533B
+		dc.w $342C
+		dc.w $3430
+		dc.w $7475
+		dc.w $547D
