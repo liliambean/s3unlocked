@@ -1790,20 +1790,20 @@ Map_Sonic_Stand3_SUPER:
 		dc.b  $FC,   0,   0, $15, $FF, $F0
 Map_Sonic_Push1_SUPER:
 		dc.w 3
-		dc.b  $E4,   8,   0,   0, $FF, $ED
-		dc.b  $EC,  $F,   0,   3, $FF, $ED
-		dc.b   $C,  $C,   0, $13, $FF, $ED
+		dc.b  $E4,   8,   0,   0, $FF, $EF
+		dc.b  $EC,  $F,   0,   3, $FF, $EF
+		dc.b   $C,  $C,   0, $13, $FF, $EF
 Map_Sonic_Push2_SUPER:
 Map_Sonic_Push4_SUPER:
 		dc.w 3
-		dc.b  $E5,   8,   0,   0, $FF, $ED
-		dc.b  $ED,  $F,   0,   3, $FF, $ED
-		dc.b   $D,   8,   0, $13, $FF, $ED
+		dc.b  $E4,   8,   0,   0, $FF, $EF
+		dc.b  $EC,  $F,   0,   3, $FF, $EF
+		dc.b   $C,   8,   0, $13, $FF, $EF
 Map_Sonic_Push3_SUPER:
 		dc.w 3
-		dc.b  $E4,   0,   0,   0, $FF, $FD
-		dc.b  $EC,  $F,   0,   1, $FF, $ED
-		dc.b   $C,  $C,   0, $11, $FF, $ED
+		dc.b  $E4,   0,   0,   0, $FF, $FF
+		dc.b  $EC,  $F,   0,   1, $FF, $EF
+		dc.b   $C,  $C,   0, $11, $FF, $EF
 Map_Sonic_Crouch1_SUPER:
 Map_Sonic_Crouch2_SUPER:
 		dc.w 2
