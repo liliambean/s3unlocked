@@ -472,7 +472,7 @@ Plane_buffer			ds.b $480		; used by level drawing routines
 VRAM_buffer			ds.b $80		; used to temporarily hold data while it is being transferred from one VRAM location to another
 
 Game_mode			ds.b 1
-Alternate_player_start_flag	ds.b 1		; Fred: Encore mode - player starts
+Alternate_start_flag		ds.b 1		; Fred: Encore mode - player starts
 Ctrl_1_logical =		*			; both held and pressed
 Ctrl_1_held_logical		ds.b 1
 Ctrl_1_pressed_logical		ds.b 1
@@ -584,14 +584,14 @@ Flying_carrying_Sonic_flag	ds.b 1			; set when Tails carries Sonic in a Sonic an
 Flying_picking_Sonic_timer	ds.b 1			; until this is 0 Tails can't pick Sonic up
 _unkF740			ds.w 1
 			ds.w 1				; unused
-_unkF744			ds.w 1
+Flying_saved_X_vel		ds.w 1
 			ds.w 1				; unused
 Ctrl_1_title =			*			; copy of Ctrl_1, used on the title screen
 Ctrl_1_held_title		ds.b 1
 Ctrl_1_pressed_title		ds.b 1
 _unkF74A			ds.b 1
 _unkF74B			ds.b 1
-_unkF74C			ds.w 1
+Flying_saved_Y_vel		ds.w 1
 Gliding_collision_flags		ds.b 1
 Disable_wall_grab		ds.b 1			; if set, disables Knuckles wall grab
 			ds.b $10			; unused
@@ -731,7 +731,7 @@ Debug_monitor_subtype		ds.b 1		; Fred: allow selection of debug monitor contents
 Debug_placement_mode =		*			; both routine and type
 Debug_placement_routine		ds.b 1
 ;Debug_placement_type
-				ds.b 1			; Fred: move debug frame cycling mode to negative
+				ds.b 1		; Fred: move debug frame cycling mode to negative
 Debug_camera_delay		ds.b 1
 Debug_camera_speed		ds.b 1
 V_int_run_count			ds.l 1			; the number of times V-int has run
@@ -913,7 +913,7 @@ Blue_spheres_stage_flag		ds.b 1			; set if a Blue Sphere special stage is being 
 			ds.b 1				; unused
 V_blank_cycles			ds.w 1			; the number of cycles between V-blanks
 Graphics_flags			ds.b 1			; bit 7 set = English system, bit 6 set = PAL system
-			ds.b 1				; unused
+Hidden_skill_flags		ds.b 1		; Fred: hidden skills
 Debug_mode_flag			ds.w 1
 			ds.l 1				; unused
 Level_select_flag		ds.b 1
@@ -987,7 +987,23 @@ Special_stage_started		ds.b 1			; set when the player begins moving at the start
 SStage_extra_sprites		ds.b $70		; some extra sprite info for special stages
 	dephase
 ; ---------------------------------------------------------------------------
+; Fred: hidden skills
+HiddenSkill_TailsAssist		= 0
+HiddenSkill_SonicDropDash	= 1
+HiddenSkill_TailsFlyBoost	= 2
+HiddenSkill_KnuxClimbDash	= 3
+HiddenSkill_AmyHammerSpin 	= 4
+HiddenSkill_MightyWallKick	= 5
+HiddenSkill_RayWallKick		= 6
+HiddenSkill_SonicPeelout	= 7
+
+; ---------------------------------------------------------------------------
 ; Fred: HUD - Encore mode HUD
+EncoreFlags_Enable		= 0
+EncoreFlags_Music		= 5
+EncoreFlags_Palette		= 6
+EncoreFlags_SwapHUD		= 7
+
 Encore_cursor_timer =		Reserved_object_3+$20
 Encore_stocks =			Reserved_object_3+$23
 Encore_HUD_player_frame =	Reserved_object_3+$2C
@@ -997,6 +1013,8 @@ Encore_HUD_stocks_scroll =	Reserved_object_3+$32
 
 sfx_EncoreSwap =		sfx_PulleyGrab
 sfx_EncoreSwapBlock =		sfx_SmallBumpers
+sfx_EncoreRotate =		sfx_Shield
+sfx_EncoreStock =		sfx_Whistle
 
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
