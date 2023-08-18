@@ -24,10 +24,10 @@
 		dc.l Pal_CNZ_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_FBZ1_Encore
+		dc.l Pal_FBZ_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_FBZ2_Encore
+		dc.l Pal_FBZ_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
 		dc.l Pal_ICZ1_Encore
