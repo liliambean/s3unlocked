@@ -10,6 +10,7 @@ Map_36036A:	dc.w Frame_360382-Map_36036A
 		dc.w Frame_3603E8-Map_36036A
 		dc.w Frame_3603F0-Map_36036A
 		dc.w Frame_3603F8-Map_36036A
+		dc.w Map_LBZMinibossBox_Open-Map_36036A
 Frame_360382:	dc.w 2
 		dc.b $F0,  2,  0,  0,$FF,$EC
 		dc.b $F0, $F,  0,  3,$FF,$F4
@@ -39,3 +40,7 @@ Frame_3603F0:	dc.w 1
 		dc.b $FC,  0,  0,$4B,$FF,$F8
 Frame_3603F8:	dc.w 1
 		dc.b $FC,  0,  0,$4D,$FF,$F8
+Map_LBZMinibossBox_Open:
+		dc.w 2
+		dc.b $F8, $D,  0,  0,$FF,$E0
+		dc.b $F8, $D,  0,  8,  0,  0

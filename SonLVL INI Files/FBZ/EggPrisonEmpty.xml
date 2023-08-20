@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Name="Egg Capsule (empty)" Image="main" Depth="4">
+  <Images>
+    <ImageFromMappings id="main">
+      <ArtFile filename="LevelArt" />
+      <ArtFile filename="../Levels/FBZ/Nemesis Art/Egg Capsule.bin" offset="27552" />
+      <MapFile type="ASM" filename="../Levels/FBZ/Misc Object Data/Map - Egg Capsule.asm" frame="1" />
+    </ImageFromMappings>
+    <ImageFromMappings id="button">
+      <ArtFile filename="../Levels/FBZ/Nemesis Art/Egg Capsule.bin" offset="27552" />
+      <MapFile type="ASM" filename="../Levels/FBZ/Misc Object Data/Map - Egg Capsule.asm" frame="5" />
+    </ImageFromMappings>
+  </Images>
+  <Display>
+    <DisplayOption>
+      <ImageRef image="button">
+        <Offset Y="-28" />
+      </ImageRef>
+      <ImageRef image="main" />
+    </DisplayOption>
+  </Display>
+</ObjDef>
