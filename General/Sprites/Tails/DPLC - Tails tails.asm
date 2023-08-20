@@ -92,6 +92,7 @@ PLC_Tails_TailDiagWall3:
 		dc.w $5054
 PLC_Tails_TailDiagWall4:
 		dc.w 1
+		dc.w $505A
 PLC_Tails_TailFlyTired1:
 		dc.w 1
 		dc.w $7099
