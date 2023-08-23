@@ -106,7 +106,6 @@ PLC_Tails_TailFlyTired3:
 PLC_Tails_TailFlyTired5:
 		dc.w 1
 		dc.w $70DB
-		dc.w $505A
 PLC_Tails_TailStand1:
 		dc.w 1
 		dc.w $5060
