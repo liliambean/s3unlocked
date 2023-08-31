@@ -1014,6 +1014,7 @@ Encore_HUD_stocks_scroll =	Reserved_object_3+$32
 sfx_EncoreSwap =		sfx_PulleyGrab
 sfx_EncoreSwapBlock =		sfx_SmallBumpers
 sfx_EncoreRotate =		sfx_Shield
+sfx_EncoreRespawn =		sfx_Signpost
 sfx_EncoreDrowning =		sfx_TunnelBooster
 
 ; ---------------------------------------------------------------------------
