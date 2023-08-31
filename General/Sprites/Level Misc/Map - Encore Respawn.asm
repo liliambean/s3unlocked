@@ -6,6 +6,15 @@
 		dc.w Map_EncoreRespawn2-Map_EncoreRespawn
 		dc.w Map_EncoreRespawn3-Map_EncoreRespawn
 		dc.w Map_EncoreRespawn4-Map_EncoreRespawn
+Map_EncoreRespawn_Tails:
+		dc.w Map_EncoreRespawn2-Map_EncoreRespawn_Tails
+		dc.w Map_EncoreRespawn2-Map_EncoreRespawn_Tails
+		dc.w Map_EncoreRespawn2-Map_EncoreRespawn_Tails
+		dc.w Map_EncoreRespawn3-Map_EncoreRespawn_Tails
+		dc.w Map_EncoreRespawn3-Map_EncoreRespawn_Tails
+		dc.w Map_EncoreRespawn4-Map_EncoreRespawn_Tails
+		dc.w Map_EncoreRespawn4-Map_EncoreRespawn_Tails
+		dc.w Map_EncoreRespawn4-Map_EncoreRespawn_Tails
 Map_EncoreRespawn_Amy:
 		dc.w Map_EncoreRespawn2-Map_EncoreRespawn_Amy
 		dc.w Map_EncoreRespawn3-Map_EncoreRespawn_Amy
