@@ -989,60 +989,59 @@ Map_Sonic_CorkscrewWallRide3:
 		dc.b    4,   8,   0,   9, $FF, $F3
 Map_Sonic_CorkscrewWall1:
 		dc.w 3
-		dc.b  $F0,   0,   0,   0,   0,   0
-		dc.b  $F8,  $D,   0,   1, $FF, $F0
-		dc.b    8,   8,   0,   9, $FF, $F0
+		dc.b  $EF,   4,   0,   0, $FF, $FA
+		dc.b  $F7,  $E,   0,   2, $FF, $EA
+		dc.b  $F7,   1,   0,  $E,   0,  $A
 Map_Sonic_CorkscrewWall2:
 		dc.w 2
-		dc.b  $F8,   6,   0,   0, $FF, $EC
-		dc.b  $F0,  $B,   0,   6, $FF, $FC
+		dc.b  $F8,   2,   0,   0, $FF, $E8
+		dc.b  $F0,  $F,   0,   3, $FF, $F0
 Map_Sonic_CorkscrewWall3:
-		dc.w 3
-		dc.b  $F0,   0,   0,   0, $FF, $FC
-		dc.b  $F8,  $A,   0,   1, $FF, $EC
-		dc.b  $F8,   5,   0,  $A,   0,   4
+		dc.w 2
+		dc.b  $FC,   0,   0,   0, $FF, $E6
+		dc.b  $F4,  $E,   0,   1, $FF, $EE
 Map_Sonic_CorkscrewWall4:
 		dc.w 3
 		dc.b  $F0,   4,   0,   0, $FF, $F8
-		dc.b  $F8,   9,   0,   2, $FF, $F0
-		dc.b    8,  $C,   0,   8, $FF, $F0
+		dc.b  $F8,   8,   0,   2, $FF, $F0
+		dc.b    0,  $D,   0,   5, $FF, $F0
 Map_Sonic_CorkscrewWall5:
 		dc.w 3
-		dc.b  $F0,   9,   0,   0, $FF, $F8
-		dc.b    0,  $C,   0,   6, $FF, $F0
-		dc.b    8,   4,   0,  $A,   0,   0
+		dc.b  $F3,   8,   0,   0, $FF, $F8
+		dc.b  $FB,  $D,   0,   3, $FF, $F0
+		dc.b   $B,   0,   0,  $B,   0,   0
 Map_Sonic_CorkscrewWall6:
 		dc.w 2
-		dc.b  $F0,   0,   0,   0,   0,   0
-		dc.b  $F8,  $E,   0,   1, $FF, $F0
+		dc.b  $F4,   5,   0,   0, $FF, $EE
+		dc.b  $F4,  $A,   0,   4, $FF, $FE
 Map_Sonic_CorkscrewWall7:
-		dc.w 4
-		dc.b  $F0,   4,   0,   0, $FF, $F4
-		dc.b  $F8,   0,   0,   2, $FF, $EC
-		dc.b    8,   0,   0,   3, $FF, $EC
-		dc.b  $F8,  $E,   0,   4, $FF, $F4
+		dc.w 2
+		dc.b  $F4,   6,   0,   0, $FF, $F0
+		dc.b  $F4,  $A,   0,   6,   0,   0
 Map_Sonic_CorkscrewWall8:
 		dc.w 3
-		dc.b  $F0,   4,   0,   0, $FF, $FC
-		dc.b  $F8,  $E,   0,   2, $FF, $EC
-		dc.b  $F8,   2,   0,  $E,   0,  $C
+		dc.b  $EE,   8,   0,   0, $FF, $F8
+		dc.b  $F6,   2,   0,   3, $FF, $F0
+		dc.b  $F6,  $E,   0,   6, $FF, $F8
 Map_Sonic_CorkscrewWall9:
 		dc.w 3
-		dc.b  $F0,   4,   0,   0, $FF, $F8
-		dc.b  $F8,  $D,   0,   2, $FF, $F0
-		dc.b    8,   8,   0,  $A, $FF, $F8
+		dc.b  $ED,   0,   0,   0,   0,   2
+		dc.b  $F5,   1,   0,   1, $FF, $F2
+		dc.b  $F5,  $E,   0,   3, $FF, $FA
 Map_Sonic_CorkscrewWallA:
-		dc.w 2
-		dc.b  $F0,   0,   0,   0, $FF, $F4
-		dc.b  $F8,  $A,   0,   1, $FF, $F4
-Map_Sonic_CorkscrewWallB:
 		dc.w 3
-		dc.b  $F0,   8,   0,   0, $FF, $F0
-		dc.b  $F8,  $D,   0,   3, $FF, $F0
-		dc.b    8,   8,   0,  $B, $FF, $F0
+		dc.b  $EF,   0,   0,   0, $FF, $FA
+		dc.b  $F7,  $D,   0,   1, $FF, $F2
+		dc.b    7,   4,   0,   9, $FF, $FA
+Map_Sonic_CorkscrewWallB:
+		dc.w 2
+		dc.b  $EF,  $E,   0,   0, $FF, $F1
+		dc.b    7,   8,   0,  $C, $FF, $F1
 Map_Sonic_CorkscrewWallC:
-		dc.w 1
-		dc.b  $F4,  $E,   0,   0, $FF, $F0
+		dc.w 3
+		dc.b  $EC,   0,   0,   0, $FF, $F7
+		dc.b  $F4,   8,   0,   1, $FF, $EF
+		dc.b  $FC,  $D,   0,   4, $FF, $EF
 Map_Sonic_HangSwing1:
 		dc.w 4
 		dc.b  $E7,  $C,   0,   0, $FF, $EE
@@ -1780,13 +1779,13 @@ Map_Sonic_Stand1_SUPER:
 Map_Sonic_Stand2_SUPER:
 		dc.w 4
 		dc.b  $FC,  $A,   0,   0, $FF, $F8
-		dc.b  $E4,  $D,   0,   9, $FF, $E8
-		dc.b  $F4,   8,   0, $11, $FF, $F0
+		dc.b  $E4,  $D,   0,   9, $FF, $E9
+		dc.b  $F4,   8,   0, $11, $FF, $F1
 		dc.b  $FC,   0,   0, $14, $FF, $F0
 Map_Sonic_Stand3_SUPER:
 		dc.w 3
 		dc.b  $FC,  $A,   0,   0, $FF, $F8
-		dc.b  $E4,  $E,   0,   9, $FF, $E8
+		dc.b  $E4,  $E,   0,   9, $FF, $E9
 		dc.b  $FC,   0,   0, $15, $FF, $F0
 Map_Sonic_Push1_SUPER:
 		dc.w 3
