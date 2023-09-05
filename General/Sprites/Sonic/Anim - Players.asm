@@ -159,7 +159,7 @@ Ani_KnucklesStand:	dc.b    5, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, 
 			dc.b  $B1, $B2, $B3, $B0, $B1, $B2, $B3, $B0, $B1, $B2, $B3, $B0, $B1, $B2, $B3, $B0, $B1, $B2, $B3, $B0
 			dc.b  $B1, $B2, $B3, $B4, $B5, $B4, $B5, $B6, $B6, $B0, $AF, $FF
 Ani_SonicBalance1:	dc.b    7, $F7, $F8, $F9, $FF
-Ani_SuperSonicBalance:	dc.b    7, $F7, $F8, $F9, $F8, $FF
+Ani_SuperSonicBalance:	dc.b    7, $F7, $F8, $F9, $F8, $FA, $FB, $FC, $FB, $FF
 Ani_TailsBalance:	dc.b  $13, $E3, $E4, $FF
 Ani_KnucklesBalance1:	dc.b    3, $F1, $F1, $F2, $F2, $F3, $F3, $F4, $F4, $F5, $F5, $F6, $F6, $F7, $F7, $F7, $F7, $F7, $F7, $F7
 			dc.b  $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F8, $F8, $F8, $F9, $F9, $F9, $FA, $FA, $FB, $FB, $FC, $FC

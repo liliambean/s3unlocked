@@ -502,9 +502,9 @@ Map_SuperSonic:
 		dc.w Map_Sonic_Balance1_SUPER-Map_SuperSonic
 		dc.w Map_Sonic_Balance2_SUPER-Map_SuperSonic
 		dc.w Map_Sonic_Balance3_SUPER-Map_SuperSonic
-		dc.w Map_Sonic_Blank-Map_SuperSonic
-		dc.w Map_Sonic_Blank-Map_SuperSonic
-		dc.w Map_Sonic_Blank-Map_SuperSonic
+		dc.w Map_Sonic_Balance4_SUPER-Map_SuperSonic
+		dc.w Map_Sonic_Balance5_SUPER-Map_SuperSonic
+		dc.w Map_Sonic_Balance6_SUPER-Map_SuperSonic
 Map_Sonic_Blank:
 		dc.w 0
 Map_Sonic_Walk1:
@@ -1804,20 +1804,26 @@ Map_Sonic_Push3_SUPER:
 		dc.b  $EC,  $F,   0,   1, $FF, $EF
 		dc.b   $C,  $C,   0, $11, $FF, $EF
 Map_Sonic_Crouch1_SUPER:
+		dc.w 2
+		dc.b  $ED,  $D,   0,   0, $FF, $F0
+		dc.b  $FD,  $E,   0,   8, $FF, $F0
 Map_Sonic_Crouch2_SUPER:
 		dc.w 2
 		dc.b  $F4,  $F,   0,   0, $FF, $F0
 		dc.b    4,   0,   0, $10,   0, $10
 Map_Sonic_Balance1_SUPER:
 Map_Sonic_Balance2_SUPER:
-		dc.w 4
-		dc.b  $F5,   5,   0,   0,   0,   2
-		dc.b    5,   5,   0,   4, $FF, $F2
-		dc.b  $E5,  $D,   0,   8, $FF, $E8
-		dc.b  $F5,   9,   0, $10, $FF, $EA
 Map_Sonic_Balance3_SUPER:
 		dc.w 4
-		dc.b  $F5,   5,   0,   0,   0,   2
-		dc.b    5,   5,   0,   4, $FF, $F2
-		dc.b  $E5,  $D,   0,   8, $FF, $EA
-		dc.b  $F5,   9,   0, $10, $FF, $EA
+		dc.b  $E5,  $D,   0,   0, $FF, $EA
+		dc.b  $F5,   5,   0,   8, $FF, $EE
+		dc.b  $F5,   5,   0,  $C, $FF, $FE
+		dc.b    5,   5,   0, $10, $FF, $F2
+Map_Sonic_Balance4_SUPER:
+Map_Sonic_Balance5_SUPER:
+Map_Sonic_Balance6_SUPER:
+		dc.w 4
+		dc.b  $E4,  $D,   0,   0, $FF, $E9
+		dc.b  $F4,   5,   0,   8, $FF, $ED
+		dc.b  $F4,   5,   0,  $C, $FF, $FD
+		dc.b    4,   5,   0, $10, $FF, $F1
