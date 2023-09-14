@@ -759,8 +759,12 @@ zUpdateMusic:
 		cp	MusID_ExtraLife-MusID__First			; Is it still 1-Up?
 		jr	nz, .check_fade_in				; Branch if not
 		ld	a, (zMusicNumber)				; Get next music to play
-		cp	MusID_ExtraLife					; Is it another 1-Up?
-		jr	z, .clr_queue					; Branch if yes
+		cp	FadeID__First-MusID__First	; Fred: add extra music tracks
+		jr	c, .clr_sfx			;
+		cp	mus__FirstExtra-MusID__First	;
+		jr	c, .clr_queue			;
+;		cp	MusID_ExtraLife			;
+;		jr	z, .clr_queue			;
 		cp	MusID__End-MusID__First					; Is it music?
 		jr	c, .clr_sfx						; Branch if not
 
@@ -1673,9 +1677,9 @@ zCycleMusicQueue:
 ; ===========================================================================
 ; Type Check
 ; ===========================================================================
-; 1-32, DC = Music
-; 33-DB, DD-DF = SFX
-; E1-E6 = Fade Effects
+; 1-32, EA-F9 = Music
+; 33-E9 = SFX
+; FA-FE = Fade Effects
 ; FF = SEGA Scream
 
 ; TypeCheck:
