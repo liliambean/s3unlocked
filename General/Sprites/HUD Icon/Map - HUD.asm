@@ -4,9 +4,17 @@
 		dc.w word_DC6A-Map_HUD
 		dc.w word_DC96-Map_HUD
 		dc.w word_DCB6-Map_HUD
+Map_HUD_Barrier:
+		dc.w Map_HUD_Blank-Map_HUD_Barrier
+		dc.w Map_HUD_FlameBarrier-Map_HUD_Barrier
+		dc.w Map_HUD_ThunderBarrier-Map_HUD_Barrier
+		dc.w Map_HUD_AquaBarrier-Map_HUD_Barrier
+		dc.w Map_HUD_BasicBarrier-Map_HUD_Barrier
+		dc.w Map_HUD_Super-Map_HUD_Barrier
+		dc.w Map_HUD_SuperReady-Map_HUD_Barrier
 Map_HUD_EncoreStocks:
 		dc.w Map_HUD_EncoreStocks0-Map_HUD_EncoreStocks
-		dc.w Map_HUD_EncoreStocks1-Map_HUD_EncoreStocks
+		dc.w Map_HUD_Blank-Map_HUD_EncoreStocks
 		dc.w Map_HUD_EncoreStocks2-Map_HUD_EncoreStocks
 		dc.w Map_HUD_EncoreStocks3-Map_HUD_EncoreStocks
 		dc.w Map_HUD_EncoreStocks4-Map_HUD_EncoreStocks
@@ -66,13 +74,31 @@ word_DC96:	dc.w 3
 		dc.b $80,  9,$20,$36,  0,$30
 word_DCB6:	dc.w 1
 		dc.b $80,  9,$20,$36,  0,$30
+Map_HUD_FlameBarrier:
+		dc.w 1
+		dc.b $80,  5,  0,$28,$FF,$F8
+Map_HUD_ThunderBarrier:
+		dc.w 1
+		dc.b $80,  5,  0,$2C,$FF,$F8
+Map_HUD_AquaBarrier:
+		dc.w 1
+		dc.b $80,  5,  0,$30,$FF,$F8
+Map_HUD_BasicBarrier:
+		dc.w 1
+		dc.b $80,  5,  0,$38,$FF,$F8
+Map_HUD_Super:	dc.w 1
+		dc.b $80,  5,  0,$18,$FF,$F8
+Map_HUD_SuperReady:
+		dc.w 2
+		dc.b $80,  5,  0,$18,$FF,$F8
+		dc.b $82,  1,$22, $A,$FF,$ED
 Map_HUD_Lives:	dc.w 2
 		dc.b $40,  5,  1,$10,  0,  0
 		dc.b $40, $D,$21,$14,  0,$11
 Map_HUD_EncoreStocks0:
 		dc.w 1
 		dc.b $40,  5,  1,$10,  0,  0
-Map_HUD_EncoreStocks1:
+Map_HUD_Blank:
 		dc.w 0
 Map_HUD_EncoreStocks2:
 		dc.w 1

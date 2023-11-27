@@ -739,9 +739,10 @@ Current_zone_and_act =		*
 Current_zone			ds.b 1
 Current_act			ds.b 1
 Life_count			ds.b 1
-			ds.b 3				; unused
+Barrier_HUD_disable_flag	ds.b 1		; Fred: HUD - barrier HUD
+Barrier_HUD_frame		ds.w 1		; Fred: HUD - barrier HUD
 Current_special_stage		ds.b 1
-			ds.b 1				; unused
+Super_ready_flag		ds.b 1		; Fred: HUD - barrier HUD
 Continue_count			ds.b 1
 Super_Sonic_Knux_flag		ds.b 1
 Time_over_flag			ds.b 1
