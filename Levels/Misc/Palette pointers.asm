@@ -204,10 +204,12 @@
 		dc.l Pal_AIZ
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_SOZ1_Clone
+		dc.l Pal_Encore_Special			; Fred: Encore mode - bonus stage
+;		dc.l Pal_SOZ1_Clone			;
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_SOZ2_Extra
+		dc.l Pal_Encore_Special			;
+;		dc.l Pal_SOZ2_Extra			;
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
 		dc.l Pal_LRZBoss

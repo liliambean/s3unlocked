@@ -123,7 +123,7 @@
 		dc.l Pal_HCZ2_Water_Encore
 		dc.w Normal_palette&$FFFF
 		dc.w $1F
-		dc.l Pal_Gumball_Special_Encore
+		dc.l Pal_Gumball_Special
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
 		dc.l Pal_DPZ_Encore
@@ -135,10 +135,10 @@
 		dc.l Pal_EMZ_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_Pachinko_Special_Encore
+		dc.l Pal_Pachinko_Special
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_Slot_Special_Encore
+		dc.l Pal_Slot_Special
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
 		dc.l Pal_ICZ2_Water_Encore
@@ -150,10 +150,10 @@
 		dc.l Pal_AIZ_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_SOZ1_Clone_Encore
+		dc.l Pal_Encore_Special
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_SOZ2_Extra_Encore
+		dc.l Pal_Encore_Special
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
 		dc.l Pal_LRZBoss_Encore
