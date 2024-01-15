@@ -1,133 +1,133 @@
-S1Boss_Header:
+Snd_S1Boss_Header:
 	smpsHeaderStartSong 1
-	smpsHeaderVoice     S1Boss_Voices
+	smpsHeaderVoice     Snd_S1Boss_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $02, $04
 
-	smpsHeaderDAC       S1Boss_DAC
-	smpsHeaderFM        S1Boss_FM1,	$F4, $12
-	smpsHeaderFM        S1Boss_FM2,	$E8, $08
-	smpsHeaderFM        S1Boss_FM3,	$F4, $0F
-	smpsHeaderFM        S1Boss_FM4,	$F4, $12
-	smpsHeaderFM        S1Boss_FM5,	$E8, $0F
-	smpsHeaderPSG       S1Boss_PSG1,	$D0, $03, $00, fTone_05
-	smpsHeaderPSG       S1Boss_PSG2,	$D0, $03, $00, fTone_05
-	smpsHeaderPSG       S1Boss_PSG3,	$DC, $01, $00, fTone_08
+	smpsHeaderDAC       Snd_S1Boss_DAC
+	smpsHeaderFM        Snd_S1Boss_FM1,	$F4, $12
+	smpsHeaderFM        Snd_S1Boss_FM2,	$E8, $08
+	smpsHeaderFM        Snd_S1Boss_FM3,	$F4, $0F
+	smpsHeaderFM        Snd_S1Boss_FM4,	$F4, $12
+	smpsHeaderFM        Snd_S1Boss_FM5,	$E8, $0F
+	smpsHeaderPSG       Snd_S1Boss_PSG1,	$D0, $03, $00, fTone_05
+	smpsHeaderPSG       Snd_S1Boss_PSG2,	$D0, $03, $00, fTone_05
+	smpsHeaderPSG       Snd_S1Boss_PSG3,	$DC, $01, $00, fTone_08
 
 ; FM5 Data
-S1Boss_FM5:
+Snd_S1Boss_FM5:
 	smpsSetvoice        $05
 
-S1Boss_Jump03:
+Snd_S1Boss_Jump03:
 	dc.b	nFs7, $0C, nFs7, nFs7, nFs7
 	smpsAlterVol        $02
-	smpsCall            S1Boss_Call03
+	smpsCall            Snd_S1Boss_Call03
 	dc.b	nA6, nFs6, nG6, nFs6, nE6, nFs6, nA6, nFs6, nG6, nFs6, nCs7, nFs6
 	dc.b	nE6, nFs6
-	smpsCall            S1Boss_Call03
+	smpsCall            Snd_S1Boss_Call03
 	dc.b	nB6, nFs6, nA6, nFs6, nG6, nFs6, nA6, nFs6, nB6, nFs6, nCs7, nB6
 	dc.b	nF7, nCs7
 	smpsAlterVol        $FE
 
-S1Boss_Loop01:
+Snd_S1Boss_Loop01:
 	dc.b	nFs7, $03, nD7, $03, nFs7, $03, nD7, $03
-	smpsLoop            $00, $04, S1Boss_Loop01
-	smpsJump            S1Boss_Jump03
+	smpsLoop            $00, $04, Snd_S1Boss_Loop01
+	smpsJump            Snd_S1Boss_Jump03
 
-S1Boss_Call03:
+Snd_S1Boss_Call03:
 	dc.b	nB6, $06, nFs6, nD7, nFs6, nB6, nFs6, nE6, nFs6, nB6, nFs6, nD7
 	dc.b	nFs6, nB6, nFs6, nA6, nFs6, nG6, nFs6
 	smpsReturn
 
 ; FM2 Data
-S1Boss_FM2:
+Snd_S1Boss_FM2:
 	smpsSetvoice        $00
 
-S1Boss_Jump02:
+Snd_S1Boss_Jump02:
 	smpsNop             $01
 	dc.b	nFs4, $06, nFs5, nFs4, nFs5, nFs4, nFs5, nFs4, nFs5
-	smpsCall            S1Boss_Call02
+	smpsCall            Snd_S1Boss_Call02
 	dc.b	nB3, $06, nE4, nE4, $0C, nB3, $06
-	smpsCall            S1Boss_Call02
+	smpsCall            Snd_S1Boss_Call02
 	dc.b	nE4, $06, nD4, nD4, $0C, nD4, $06, nCs4, $30
 	smpsNop             $01
-	smpsJump            S1Boss_Jump02
+	smpsJump            Snd_S1Boss_Jump02
 
-S1Boss_Call02:
+Snd_S1Boss_Call02:
 	dc.b	nB3, $06, nB3, nD4, nD4, nCs4, nCs4, nC4, nC4, nB3, $12, nFs4
 	dc.b	$06, nB4, $0C, nA4, nG4, $06, nG4, $0C, nD4, $06, nG4, nG4
 	dc.b	$0C, nFs4, $06, nE4, nE4, $0C
 	smpsReturn
 
 ; PSG2 Data
-S1Boss_PSG2:
+Snd_S1Boss_PSG2:
 	smpsAlterNote       $02
-	smpsJump            S1Boss_Jump01
+	smpsJump            Snd_S1Boss_Jump01
 
 ; FM3 Data
-S1Boss_FM3:
+Snd_S1Boss_FM3:
 	smpsSetvoice        $01
 	smpsPan             panLeft, $00
 
-S1Boss_Jump01:
+Snd_S1Boss_Jump01:
 	dc.b	nRst, $30
-	smpsCall            S1Boss_Call01
+	smpsCall            Snd_S1Boss_Call01
 	dc.b	nE5, $12, nRst, nD6, $03, nRst, nCs6, nRst, nA5, $12
-	smpsCall            S1Boss_Call01
+	smpsCall            Snd_S1Boss_Call01
 	dc.b	nE5, $0C, nB5, $03, nRst, nE6, nRst, nE6, $0C, nE6, $03, nRst
 	dc.b	nF6, nRst, nF6, $0C, nF6, $03, nRst, nFs6, $30
-	smpsJump            S1Boss_Jump01
+	smpsJump            Snd_S1Boss_Jump01
 
-S1Boss_Call01:
+Snd_S1Boss_Call01:
 	dc.b	nRst, $1E, nFs5, $03, nRst, nB5, nRst, nCs6, nRst, nD6, $30, nRst
 	dc.b	$12, nB5, $03, nRst, nG5, nRst
 	smpsReturn
 
 ; FM1 Data
-S1Boss_FM1:
+Snd_S1Boss_FM1:
 	smpsAlterNote       $03
-	smpsJump            S1Boss_Jump00
+	smpsJump            Snd_S1Boss_Jump00
 
 ; FM4 Data
-S1Boss_FM4:
+Snd_S1Boss_FM4:
 	smpsPan             panRight, $00
 
-S1Boss_Jump00:
+Snd_S1Boss_Jump00:
 	smpsSetvoice        $02
 	smpsModSet          $0C, $01, $04, $06
 
 ; PSG1 Data
-S1Boss_PSG1:
+Snd_S1Boss_PSG1:
 	dc.b	nRst, $30
-	smpsCall            S1Boss_Call00
+	smpsCall            Snd_S1Boss_Call00
 	dc.b	nE7
-	smpsCall            S1Boss_Call00
+	smpsCall            Snd_S1Boss_Call00
 	dc.b	nE7, $18, nF7, nFs7, $30
-	smpsJump            S1Boss_PSG1
+	smpsJump            Snd_S1Boss_PSG1
 
-S1Boss_Call00:
+Snd_S1Boss_Call00:
 	dc.b	nB6, $04, nA6, nC7, nB6, $24, nRst, $0C, nFs6, nB6, nCs7, nD7
 	dc.b	$30
 	smpsReturn
 
 ; PSG3 Data
-S1Boss_PSG3:
+Snd_S1Boss_PSG3:
 	smpsStop
 
 ; DAC Data
-S1Boss_DAC:
+Snd_S1Boss_DAC:
 	dc.b	dHiTimpaniS3, $06, dMidTimpaniS3, dHiTimpaniS3, dMidTimpaniS3, dHiTimpaniS3, dMidTimpaniS3, dHiTimpaniS3, dMidTimpaniS3
 
-S1Boss_Loop00:
+Snd_S1Boss_Loop00:
 	dc.b	dSnareS3, $0C, dSnareS3, $04, dSnareS3, dSnareS3, dSnareS3, $06, dSnareS3, $0C, dSnareS3, $06
 	dc.b	dSnareS3, $12, dSnareS3, $06, dSnareS3, $0C, dSnareS3, $0C
-	smpsLoop            $00, $03, S1Boss_Loop00
+	smpsLoop            $00, $03, Snd_S1Boss_Loop00
 	dc.b	dSnareS3, $0C, dSnareS3, $04, dSnareS3, dSnareS3, dSnareS3, $06, dSnareS3, $0C, dSnareS3, $06
 	dc.b	dSnareS3, $06, dSnareS3, $0C, dSnareS3, $06, dSnareS3, $06, dSnareS3, $0C, dSnareS3, $06
 	dc.b	dSnareS3, $01, dHiTimpaniS3, $05, dMidTimpaniS3, $06, dHiTimpaniS3, dMidTimpaniS3, dHiTimpaniS3, dMidTimpaniS3, dHiTimpaniS3, dMidTimpaniS3
-	smpsJump            S1Boss_DAC
+	smpsJump            Snd_S1Boss_DAC
 
-S1Boss_Voices:
+Snd_S1Boss_Voices:
 ;	Voice $00
 ;	$08
 ;	$0A, $70, $30, $00, 	$1F, $1F, $5F, $5F, 	$12, $0E, $0A, $0A

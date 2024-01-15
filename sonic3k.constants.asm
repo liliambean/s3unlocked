@@ -1068,24 +1068,25 @@ ArtTile_DashDust_P2                   = $07F0
 ; ---------------------------------------------------------------------------
 ; Fred: add extra music tracks
 
-	phase $EA
+	phase $E9
 mus__FirstExtra =		*
+mus_CreditsK			ds.b 1		; $E9
 mus_ExtraLifeK			ds.b 1		; $EA
 mus_KnucklesK			ds.b 1		; $EB
-mus_CreditsK			ds.b 1		; $EC
-mus_InvincibilityK		ds.b 1		; $ED
-mus_HyperTheme			ds.b 1		; $EE
-mus_Boss1			ds.b 1		; $EF
-mus_Boss2			ds.b 1		; $F0
-mus_Menu_Proto			ds.b 1		; $F1
-mus_Knuckles_Proto		ds.b 1		; $F2
-mus_CNZ1_Proto			ds.b 1		; $F3
-mus_CNZ2_Proto			ds.b 1		; $F4
-mus_ICZ1_Proto			ds.b 1		; $F5
-mus_ICZ2_Proto			ds.b 1		; $F6
-mus_LBZ1_Proto			ds.b 1		; $F7
-mus_LBZ2_Proto			ds.b 1		; $F8
-mus_Credits_Proto		ds.b 1		; $F9
+mus_InvincibilityK		ds.b 1		; $EC
+mus_HyperTheme			ds.b 1		; $ED
+mus_S1Boss			ds.b 1		; $EE
+mus_S2Boss			ds.b 1		; $EF
+mus_EncoreBonus			ds.b 1		; $F0
+mus_ProtoMenu			ds.b 1		; $F1
+mus_ProtoKnuckles		ds.b 1		; $F2
+mus_ProtoCNZ1			ds.b 1		; $F3
+mus_ProtoCNZ2			ds.b 1		; $F4
+mus_ProtoICZ1			ds.b 1		; $F5
+mus_ProtoICZ2			ds.b 1		; $F6
+mus_ProtoLBZ1			ds.b 1		; $F7
+mus_ProtoLBZ2			ds.b 1		; $F8
+mus_ProtoCredits		ds.b 1		; $F9
 ; ---------------------------------------------------------------------------
 ; Sound commands list.
 

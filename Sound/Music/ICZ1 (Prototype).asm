@@ -1,21 +1,21 @@
-ProtoICZ1_Header:
+Snd_ProtoICZ1_Header:
 	smpsHeaderStartSong 3, 1
-	smpsHeaderVoice     ProtoICZ1_Voices
+	smpsHeaderVoice     Snd_ProtoICZ1_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $19
 
-	smpsHeaderDAC       ProtoICZ1_DAC
-	smpsHeaderFM        ProtoICZ1_FM1,	$18, $18
-	smpsHeaderFM        ProtoICZ1_FM2,	$0C, $10
-	smpsHeaderFM        ProtoICZ1_FM3,	$0C, $1E
-	smpsHeaderFM        ProtoICZ1_FM4,	$0C, $1E
-	smpsHeaderFM        ProtoICZ1_FM5,	$18, $1B
-	smpsHeaderPSG       ProtoICZ1_PSG1,	$00, $03, $00, $00
-	smpsHeaderPSG       ProtoICZ1_PSG2,	$00, $05, $00, $00
-	smpsHeaderPSG       ProtoICZ1_PSG3,	$00, $01, $00, $00
+	smpsHeaderDAC       Snd_ProtoICZ1_DAC
+	smpsHeaderFM        Snd_ProtoICZ1_FM1,	$18, $18
+	smpsHeaderFM        Snd_ProtoICZ1_FM2,	$0C, $10
+	smpsHeaderFM        Snd_ProtoICZ1_FM3,	$0C, $1E
+	smpsHeaderFM        Snd_ProtoICZ1_FM4,	$0C, $1E
+	smpsHeaderFM        Snd_ProtoICZ1_FM5,	$18, $1B
+	smpsHeaderPSG       Snd_ProtoICZ1_PSG1,	$00, $03, $00, $00
+	smpsHeaderPSG       Snd_ProtoICZ1_PSG2,	$00, $05, $00, $00
+	smpsHeaderPSG       Snd_ProtoICZ1_PSG3,	$00, $01, $00, $00
 
 ; FM1 Data
-ProtoICZ1_FM1:
+Snd_ProtoICZ1_FM1:
 	smpsSetvoice        $02
 	smpsChangeTransposition $F4
 	smpsFMAlterVol      $05
@@ -26,7 +26,7 @@ ProtoICZ1_FM1:
 	smpsChangeTransposition $0C
 	smpsFMAlterVol      $F8
 
-ProtoICZ1_Jump00:
+Snd_ProtoICZ1_Jump00:
 	smpsSetvoice        $00
 	smpsModSet          $20, $01, $05, $05
 	dc.b	nBb4, $03, smpsNoAttack, nB4, $15, nG4, $06, nRst, nD4, $60, nRst, $0C
@@ -35,7 +35,7 @@ ProtoICZ1_Jump00:
 	dc.b	nRst, $18, nBb4, $02, smpsNoAttack, nB4, $16, nG4, $06, nRst, nD4, $60
 	dc.b	nRst, $0C, nCs5, $02, smpsNoAttack, nD5, $04, nRst, $06, nD5, $18, nC5
 	dc.b	nB4, $06, nRst, nA4, $60, smpsNoAttack, $48
-	smpsLoop            $00, $02, ProtoICZ1_Jump00
+	smpsLoop            $00, $02, Snd_ProtoICZ1_Jump00
 	smpsFMAlterVol      $03
 	smpsSetvoice        $02
 	smpsChangeTransposition $E8
@@ -56,10 +56,10 @@ ProtoICZ1_Jump00:
 	smpsChangeTransposition $18
 	dc.b	nRst, $60, nRst, nRst, nRst, nRst, nRst, nRst, nRst
 	smpsFMAlterVol      $FD
-	smpsJump            ProtoICZ1_Jump00
+	smpsJump            Snd_ProtoICZ1_Jump00
 
 ; FM2 Data
-ProtoICZ1_FM2:
+Snd_ProtoICZ1_FM2:
 	smpsSetvoice        $01
 	dc.b	nD2, $04, nRst, nD2, nRst, $08, nD2, $04, nD2, nRst, $08, nD2
 	dc.b	$04, nRst, nD2, nRst, $08, nD2, $04, nD2, nRst, $08, nD2, $04
@@ -67,7 +67,7 @@ ProtoICZ1_FM2:
 	dc.b	nRst, nD2, nRst, $08, nD2, $04, nRst, $08, nD2, $04, nD2, nRst
 	dc.b	$08
 
-ProtoICZ1_Jump03:
+Snd_ProtoICZ1_Jump03:
 	dc.b	nG2, $04, nRst, $08, nG2, $04, nRst, nG2, nRst, $08, nG2, $04
 	dc.b	nG2, nRst, $08, nG2, $05, nRst, $07, nD2, $05, nRst, $07, nG2
 	dc.b	$05, nRst, $07, nD2, $05, nRst, $07, nG2, $04, nRst, $08, nG2
@@ -89,10 +89,10 @@ ProtoICZ1_Jump03:
 	dc.b	$07, nF2, $04, nRst, $08, nF2, $04, nRst, nF2, nRst, $08, nF2
 	dc.b	$04, nF2, nRst, $08, nF2, $05, nRst, $07, nC2, $05, nRst, $07
 	dc.b	nA2, $05, nRst, $07, nF2, $05, nRst, $07
-	smpsJump            ProtoICZ1_Jump03
+	smpsJump            Snd_ProtoICZ1_Jump03
 
 ; FM3 Data
-ProtoICZ1_FM3:
+Snd_ProtoICZ1_FM3:
 	smpsPan             panLeft, $00
 	smpsSetvoice        $02
 	dc.b	nRst, $01, nC5, $06, nRst, $02, nC5, $06, nRst, nC5, $04, nC5
@@ -101,7 +101,7 @@ ProtoICZ1_FM3:
 	dc.b	nRst, $02, nA4, $06, nRst, nA4, nRst, nA4, $04, nA4, $06, nRst
 	dc.b	$05
 
-ProtoICZ1_Jump02:
+Snd_ProtoICZ1_Jump02:
 	dc.b	nG3, $04, nRst, $08, nD3, $04, nRst, $04, nG3, $04, nRst, $08
 	dc.b	nD3, $04, nG3, nRst, $08, nG3, $04, nRst, $20, nD3, $08, nRst
 	dc.b	$04, nG3, $04, nRst, $08, nD3, $04, nRst, $04, nG3, $04, nRst
@@ -111,10 +111,10 @@ ProtoICZ1_Jump02:
 	dc.b	nRst, $20, nD3, $08, nRst, $04, nF3, $04, nRst, $08, nD3, $04
 	dc.b	nRst, $04, nF3, $04, nRst, $08, nD3, $04, nF3, nRst, $08, nD3
 	dc.b	$08, nRst, $04, nA3, $04, nRst, $08, nA3, $0C, nD3
-	smpsJump            ProtoICZ1_Jump02
+	smpsJump            Snd_ProtoICZ1_Jump02
 
 ; FM4 Data
-ProtoICZ1_FM4:
+Snd_ProtoICZ1_FM4:
 	smpsPan             panRight, $00
 	smpsSetvoice        $02
 	dc.b	nRst, $02, nF4, $06, nRst, $02, nF4, $06, nRst, nF4, $04, nF4
@@ -123,7 +123,7 @@ ProtoICZ1_FM4:
 	dc.b	nRst, $02, nD4, $06, nRst, nD4, nRst, nD4, $04, nD4, $06, nRst
 	dc.b	$04
 
-ProtoICZ1_Jump01:
+Snd_ProtoICZ1_Jump01:
 	dc.b	nB3, $04, nRst, $08, nD3, $04, nRst, $04, nB3, $04, nRst, $08
 	dc.b	nD3, $04, nB3, nRst, $08, nB3, $04, nRst, $20, nD3, $08, nRst
 	dc.b	$04, nB3, $04, nRst, $08, nD3, $04, nRst, $04, nB3, $04, nRst
@@ -133,37 +133,37 @@ ProtoICZ1_Jump01:
 	dc.b	nRst, $20, nD3, $08, nRst, $04, nA3, $04, nRst, $08, nD3, $04
 	dc.b	nRst, $04, nA3, $04, nRst, $08, nD3, $04, nA3, nRst, $08, nD3
 	dc.b	$08, nRst, $04, nC4, $04, nRst, $08, nC4, $0C, nD3
-	smpsJump            ProtoICZ1_Jump01
+	smpsJump            Snd_ProtoICZ1_Jump01
 
 ; FM5 Data
-ProtoICZ1_FM5:
+Snd_ProtoICZ1_FM5:
 	dc.b	nRst, $60, nRst, nRst, $09
 	smpsDetune          $05
-	smpsJump            ProtoICZ1_Jump00
+	smpsJump            Snd_ProtoICZ1_Jump00
 
 ; DAC Data
-ProtoICZ1_DAC:
+Snd_ProtoICZ1_DAC:
 	dc.b	dKickS3, $18, dKickS3, dKickS3, dKickS3
-	smpsJump            ProtoICZ1_DAC
+	smpsJump            Snd_ProtoICZ1_DAC
 
 ; PSG1 Data
-ProtoICZ1_PSG1:
+Snd_ProtoICZ1_PSG1:
 	smpsPSGvoice        sTone_05
 	dc.b	nRst, $60, nRst
 
-ProtoICZ1_Loop01:
-	smpsCall            ProtoICZ1_Call00
-	smpsLoop            $00, $04, ProtoICZ1_Loop01
+Snd_ProtoICZ1_Loop01:
+	smpsCall            Snd_ProtoICZ1_Call00
+	smpsLoop            $00, $04, Snd_ProtoICZ1_Loop01
 
-ProtoICZ1_Jump04:
+Snd_ProtoICZ1_Jump04:
 	dc.b	nRst, $60, nRst, nRst, nRst, nRst, nRst, nRst, nRst
 
-ProtoICZ1_Loop02:
-	smpsCall            ProtoICZ1_Call00
-	smpsLoop            $00, $06, ProtoICZ1_Loop02
-	smpsJump            ProtoICZ1_Jump04
+Snd_ProtoICZ1_Loop02:
+	smpsCall            Snd_ProtoICZ1_Call00
+	smpsLoop            $00, $06, Snd_ProtoICZ1_Loop02
+	smpsJump            Snd_ProtoICZ1_Jump04
 
-ProtoICZ1_Call00:
+Snd_ProtoICZ1_Call00:
 	dc.b	nG3, $04, nRst, $08, nB3, $08, nD4, $04, nRst, $08, nC4, $04
 	dc.b	nB3, nRst, $08, nG3, $04, nRst, $20, nG3, $04, nRst, $08, nG3
 	dc.b	$04, nRst, $08, nB3, $08, nD4, $04, nRst, $08, nC4, $04, nB3
@@ -176,12 +176,12 @@ ProtoICZ1_Call00:
 	smpsReturn
 
 ; PSG2 Data
-ProtoICZ1_PSG2:
+Snd_ProtoICZ1_PSG2:
 	dc.b	nRst, $09
-	smpsJump            ProtoICZ1_PSG1
+	smpsJump            Snd_ProtoICZ1_PSG1
 
 ; PSG3 Data
-ProtoICZ1_PSG3:
+Snd_ProtoICZ1_PSG3:
 	smpsPSGform         $E7
 	smpsPSGvoice        sTone_02
 	dc.b	nMaxPSG2, $04, nRst, $08
@@ -206,7 +206,7 @@ ProtoICZ1_PSG3:
 	dc.b	nMaxPSG2, $08, nRst, $04
 	smpsPSGAlterVol     $02
 
-ProtoICZ1_Loop00:
+Snd_ProtoICZ1_Loop00:
 	dc.b	nMaxPSG2, $04, nRst, $08
 	smpsPSGAlterVol     $FF
 	dc.b	nMaxPSG2, $08, nRst, $04
@@ -224,7 +224,7 @@ ProtoICZ1_Loop00:
 	dc.b	nMaxPSG2, $08, nRst, $04
 	smpsPSGAlterVol     $01
 	dc.b	nMaxPSG2, $04, nRst, $08
-	smpsLoop            $00, $03, ProtoICZ1_Loop00
+	smpsLoop            $00, $03, Snd_ProtoICZ1_Loop00
 	dc.b	nMaxPSG2, $04, nRst, $08
 	smpsPSGAlterVol     $FF
 	dc.b	nMaxPSG2, $08, nRst, $04
@@ -246,9 +246,9 @@ ProtoICZ1_Loop00:
 	dc.b	nMaxPSG2, $08
 	smpsPSGAlterVol     $01
 	dc.b	nRst, $04
-	smpsJump            ProtoICZ1_Loop00
+	smpsJump            Snd_ProtoICZ1_Loop00
 
-ProtoICZ1_Voices:
+Snd_ProtoICZ1_Voices:
 ;	Voice $00
 ;	$3A
 ;	$01, $02, $01, $00, 	$53, $1C, $5D, $11, 	$02, $12, $14, $0F
