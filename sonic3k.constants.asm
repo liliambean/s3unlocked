@@ -1068,16 +1068,17 @@ ArtTile_DashDust_P2                   = $07F0
 ; ---------------------------------------------------------------------------
 ; Fred: add extra music tracks
 
-	phase $E9
+	phase $E8
 mus__FirstExtra =		*
-mus_CreditsK			ds.b 1		; $E9
+mus_CreditsK			ds.b 1		; $E8
+mus_KnucklesK			ds.b 1		; $E9
 mus_ExtraLifeK			ds.b 1		; $EA
-mus_KnucklesK			ds.b 1		; $EB
-mus_InvincibilityK		ds.b 1		; $EC
-mus_HyperTheme			ds.b 1		; $ED
-mus_S1Boss			ds.b 1		; $EE
-mus_S2Boss			ds.b 1		; $EF
-mus_EncoreBonus			ds.b 1		; $F0
+mus_InvincibilityK		ds.b 1		; $EB
+mus_HyperTheme			ds.b 1		; $EC
+mus_S1Boss			ds.b 1		; $ED
+mus_S2Boss			ds.b 1		; $EE
+mus_EncoreBonus			ds.b 1		; $EF
+mus_HighFive			ds.b 1		; $F0
 mus_ProtoMenu			ds.b 1		; $F1
 mus_ProtoKnuckles		ds.b 1		; $F2
 mus_ProtoCNZ1			ds.b 1		; $F3

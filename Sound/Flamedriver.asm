@@ -1677,8 +1677,8 @@ zCycleMusicQueue:
 ; ===========================================================================
 ; Type Check
 ; ===========================================================================
-; 1-32, E9-F9 = Music
-; 33-E8 = SFX
+; 1-32, E8-F9 = Music
+; 33-E7 = SFX
 ; FA-FE = Fade Effects
 ; FF = SEGA Scream
 
@@ -1742,7 +1742,7 @@ zSilenceStopTrack:
 
 ;loc_552
 zPlayExtraMusic:
-		sub	a, MusID__First-MusID__End+mus__FirstExtra	; Fred: remap from E9h-F9h to 33h-42h
+		sub	a, MusID__First-MusID__End+mus__FirstExtra	; Fred: remap from E8h-F9h to 33h-44h
 ;		ld	a, 32h						;
 		push	af							; Save af
 		jp	zPlayMusic_DoFade				; Continue as music
@@ -4614,13 +4614,14 @@ z80_MusicBanks:
 	db zmake68kBank(MusData_3CCredits)		;
 ;	db zmake68kBank(MusData_PresSega)		;
 	db zmake68kBank(MusData_SKCredits)
-	db zmake68kBank(MusData_SK1UP)			;
 	db zmake68kBank(MusData_SKKnux)			;
+	db zmake68kBank(MusData_SK1UP)			;
 	db zmake68kBank(MusData_SKInvic)		;
 	db zmake68kBank(MusData_Unused)			;
 	db zmake68kBank(MusData_S1Boss)			;
 	db zmake68kBank(MusData_S2Boss)			;
 	db zmake68kBank(MusData_EncoreBonus)		;
+	db zmake68kBank(MusData_HighFive)		;
 	db zmake68kBank(MusData_ProtoMenu)		;
 	db zmake68kBank(MusData_ProtoKnux)		;
 	db zmake68kBank(MusData_ProtoCNZ1)		;
@@ -4867,13 +4868,14 @@ MusicPointers label *
 	declsong MusData_3CCredits			;
 ;	declsong MusData_PresSega			;
 	declsong MusData_SKCredits
-	declsong MusData_SK1UP				;
 	declsong MusData_SKKnux				;
+	declsong MusData_SK1UP				;
 	declsong MusData_SKInvic			;
 	declsong MusData_Unused				;
 	declsong MusData_S1Boss				;
 	declsong MusData_S2Boss				;
 	declsong MusData_EncoreBonus			;
+	declsong MusData_HighFive			;
 	declsong MusData_ProtoMenu			;
 	declsong MusData_ProtoKnux			;
 	declsong MusData_ProtoCNZ1			;
@@ -5454,8 +5456,8 @@ MusData_3CCredits:		include	"Sound/Music/Credits (Sonic 3C).asm"
 ;MusData_SKTitle:		include	"Sound/Music/Title (Sonic & Knuckles).asm"
 ;MusData_SKPresSega:		include	"Sound/Music/Game Complete (Sonic & Knuckles).asm"
 MusData_SKCredits:		include	"Sound/Music/Credits (Sonic & Knuckles).asm"
-MusData_SK1UP:			include	"Sound/Music/1UP (Sonic & Knuckles).asm"
 MusData_SKKnux:			include	"Sound/Music/Knuckles (Sonic & Knuckles).asm"
+MusData_SK1UP:			include	"Sound/Music/1UP (Sonic & Knuckles).asm"
 MusData_SKInvic:		include	"Sound/Music/Invincible (Sonic & Knuckles).asm"
 MusData_Unused:			include	"Sound/Music/Unused (Prototype).asm"
 MusData_S1Boss:			include	"Sound/Music/Miniboss (Sonic 1).asm"
@@ -5472,6 +5474,7 @@ Mus_Bank5_Start:	startBank
 	Music_Master_Table
 				include "Sound/UniBank (Prototype).asm"
 MusData_EncoreBonus:		include	"Sound/Music/Encore Bonus.asm"
+MusData_HighFive:		include	"Sound/Music/High Five.asm"
 MusData_ProtoKnux:		include	"Sound/Music/Knuckles (Prototype).asm"
 MusData_ProtoCNZ1:		include	"Sound/Music/CNZ1 (Prototype).asm"
 MusData_ProtoCNZ2:		include	"Sound/Music/CNZ2 (Prototype).asm"

@@ -14,6 +14,10 @@ Snd_EncoreBonus_Header:
 	smpsHeaderPSG       Snd_EncoreBonus_PSG1,	$E8, $01, $00, $00
 	smpsHeaderPSG       Snd_EncoreBonus_PSG2,	$E8, $02, $00, $00
 	smpsHeaderPSG       Snd_EncoreBonus_PSG3,	$23, $02, $00, $00
+;	smpsHeaderPWM       Snd_EncoreBonus_PWM1,	$00, $FF
+;	smpsHeaderPWM       Snd_EncoreBonus_PWM2,	$00, $DD
+;	smpsHeaderPWM       Snd_EncoreBonus_PWM3,	$00, $BB
+;	smpsHeaderPWM       Snd_EncoreBonus_PWM4,	$00, $00
 
 Snd_EncoreBonus_FM1:
 	smpsSetvoice        $00
@@ -498,10 +502,10 @@ Snd_EncoreBonus_DAC:
 	smpsStop
 
 Snd_EncoreBonus_Voices:
-	; Voice $00
-	; $3D
-	; $01, $00, $01, $02,	$1F, $1F, $1F, $1F,	$0D, $0C, $0C, $0C
-	; $0D, $0A, $0A, $0A,	$F6, $97, $A7, $A7,	$1C, $80, $80, $85
+;	Voice $00
+;	$3D
+;	$01, $00, $01, $02, 	$1F, $1F, $1F, $1F, 	$0D, $0C, $0C, $0C
+;	$0D, $0A, $0A, $0A, 	$F6, $97, $A7, $A7, 	$1C, $80, $80, $85
 	smpsVcAlgorithm     $05
 	smpsVcFeedback      $07
 	smpsVcUnusedBits    $00
@@ -516,10 +520,10 @@ Snd_EncoreBonus_Voices:
 	smpsVcReleaseRate   $07, $07, $07, $06
 	smpsVcTotalLevel    $85, $80, $80, $1C
 
-	; Voice $01
-	; $3A
-	; $01, $02, $01, $01,	$14, $14, $17, $14,	$0A, $0C, $03, $07
-	; $02, $08, $08, $03,	$07, $E9, $A8, $18,	$1C, $2B, $28, $80
+;	Voice $01
+;	$3A
+;	$01, $02, $01, $01, 	$14, $14, $17, $14, 	$0A, $0C, $03, $07
+;	$02, $08, $08, $03, 	$07, $E9, $A8, $18, 	$1C, $2B, $28, $80
 	smpsVcAlgorithm     $02
 	smpsVcFeedback      $07
 	smpsVcUnusedBits    $00
@@ -534,10 +538,10 @@ Snd_EncoreBonus_Voices:
 	smpsVcReleaseRate   $08, $08, $09, $07
 	smpsVcTotalLevel    $80, $28, $2B, $1C
 
-	; Voice $02
-	; $3A
-	; $01, $0F, $01, $01,	$0F, $0F, $0F, $14,	$0A, $0A, $0A, $05
-	; $02, $02, $02, $08,	$56, $A6, $56, $17,	$19, $28, $28, $80
+;	Voice $02
+;	$3A
+;	$01, $0F, $01, $01, 	$0F, $0F, $0F, $14, 	$0A, $0A, $0A, $05
+;	$02, $02, $02, $08, 	$56, $A6, $56, $17, 	$19, $28, $28, $80
 	smpsVcAlgorithm     $02
 	smpsVcFeedback      $07
 	smpsVcUnusedBits    $00
@@ -552,10 +556,10 @@ Snd_EncoreBonus_Voices:
 	smpsVcReleaseRate   $07, $06, $06, $06
 	smpsVcTotalLevel    $80, $28, $28, $19
 
-	; Voice $03
-	; $3D
-	; $01, $22, $51, $01,	$0F, $0F, $0F, $4F,	$0A, $05, $05, $05
-	; $00, $00, $00, $00,	$56, $28, $28, $28,	$23, $80, $80, $80
+;	Voice $03
+;	$3D
+;	$01, $22, $51, $01, 	$0F, $0F, $0F, $4F, 	$0A, $05, $05, $05
+;	$00, $00, $00, $00, 	$56, $28, $28, $28, 	$23, $80, $80, $80
 	smpsVcAlgorithm     $05
 	smpsVcFeedback      $07
 	smpsVcUnusedBits    $00
@@ -570,10 +574,10 @@ Snd_EncoreBonus_Voices:
 	smpsVcReleaseRate   $08, $08, $08, $06
 	smpsVcTotalLevel    $80, $80, $80, $23
 
-	; Voice $04
-	; $39
-	; $02, $01, $02, $01,	$5F, $5F, $1F, $0F,	$00, $00, $00, $00
-	; $00, $00, $00, $00,	$0F, $0F, $0F, $76,	$1B, $32, $28, $80
+;	Voice $04
+;	$39
+;	$02, $01, $02, $01, 	$5F, $5F, $1F, $0F, 	$00, $00, $00, $00
+;	$00, $00, $00, $00, 	$0F, $0F, $0F, $76, 	$1B, $32, $28, $80
 	smpsVcAlgorithm     $01
 	smpsVcFeedback      $07
 	smpsVcUnusedBits    $00
