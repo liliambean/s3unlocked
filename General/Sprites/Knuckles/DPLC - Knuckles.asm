@@ -1,256 +1,257 @@
-		dc.w PLC_Knuckles_Blank-PLC_Knuckles
-		dc.w PLC_Knuckles_Walk1-PLC_Knuckles
-		dc.w PLC_Knuckles_Walk2-PLC_Knuckles
-		dc.w PLC_Knuckles_Walk3-PLC_Knuckles
-		dc.w PLC_Knuckles_Walk4-PLC_Knuckles
-		dc.w PLC_Knuckles_Walk5-PLC_Knuckles
-		dc.w PLC_Knuckles_Walk6-PLC_Knuckles
-		dc.w PLC_Knuckles_Walk7-PLC_Knuckles
-		dc.w PLC_Knuckles_Walk8-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWalk1-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWalk2-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWalk3-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWalk4-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWalk5-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWalk6-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWalk7-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWalk8-PLC_Knuckles
-		dc.w PLC_Knuckles_WallWalk1-PLC_Knuckles
-		dc.w PLC_Knuckles_WallWalk2-PLC_Knuckles
-		dc.w PLC_Knuckles_WallWalk3-PLC_Knuckles
-		dc.w PLC_Knuckles_WallWalk4-PLC_Knuckles
-		dc.w PLC_Knuckles_WallWalk5-PLC_Knuckles
-		dc.w PLC_Knuckles_WallWalk6-PLC_Knuckles
-		dc.w PLC_Knuckles_WallWalk7-PLC_Knuckles
-		dc.w PLC_Knuckles_WallWalk8-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallWalk1-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallWalk2-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallWalk3-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallWalk4-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallWalk5-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallWalk6-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallWalk7-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallWalk8-PLC_Knuckles
-		dc.w PLC_Knuckles_Run1-PLC_Knuckles
-		dc.w PLC_Knuckles_Run2-PLC_Knuckles
-		dc.w PLC_Knuckles_Run3-PLC_Knuckles
-		dc.w PLC_Knuckles_Run4-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagRun1-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagRun2-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagRun3-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagRun4-PLC_Knuckles
-		dc.w PLC_Knuckles_WallRun1-PLC_Knuckles
-		dc.w PLC_Knuckles_WallRun2-PLC_Knuckles
-		dc.w PLC_Knuckles_WallRun3-PLC_Knuckles
-		dc.w PLC_Knuckles_WallRun4-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallRun1-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallRun2-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallRun3-PLC_Knuckles
-		dc.w PLC_Knuckles_DiagWallRun4-PLC_Knuckles
-		dc.w PLC_Knuckles_Corkscrew1-PLC_Knuckles
-		dc.w PLC_Knuckles_Corkscrew2-PLC_Knuckles
-		dc.w PLC_Knuckles_Corkscrew3-PLC_Knuckles
-		dc.w PLC_Knuckles_Corkscrew4-PLC_Knuckles
-		dc.w PLC_Knuckles_Corkscrew5-PLC_Knuckles
-		dc.w PLC_Knuckles_Corkscrew6-PLC_Knuckles
-		dc.w PLC_Knuckles_Corkscrew7-PLC_Knuckles
-		dc.w PLC_Knuckles_Corkscrew8-PLC_Knuckles
-		dc.w PLC_Knuckles_Corkscrew9-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewA-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewB-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewC-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStand1-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStand2-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStand3-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStand4-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStand5-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStand6-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStand7-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStand8-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStand9-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStandA-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStandB-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewStandC-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiag1-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiag2-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiag3-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiag4-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiag5-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiag6-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiag7-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiag8-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiag9-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiagA-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiagB-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewDiagC-PLC_Knuckles
-		dc.w PLC_Knuckles_360Stand1-PLC_Knuckles
-		dc.w PLC_Knuckles_360Stand2-PLC_Knuckles
-		dc.w PLC_Knuckles_360Stand3-PLC_Knuckles
-		dc.w PLC_Knuckles_360Stand4-PLC_Knuckles
-		dc.w PLC_Knuckles_360Stand5-PLC_Knuckles
-		dc.w PLC_Knuckles_360Stand6-PLC_Knuckles
-		dc.w PLC_Knuckles_360Stand7-PLC_Knuckles
-		dc.w PLC_Knuckles_PoleSwing1-PLC_Knuckles
-		dc.w PLC_Knuckles_PoleSwing2-PLC_Knuckles
-		dc.w PLC_Knuckles_PoleSwing3-PLC_Knuckles
-		dc.w PLC_Knuckles_PoleSwing4-PLC_Knuckles
-		dc.w PLC_Knuckles_PoleSwing5-PLC_Knuckles
-		dc.w PLC_Knuckles_PoleSwing6-PLC_Knuckles
-		dc.w PLC_Knuckles_BarWalk-PLC_Knuckles
-		dc.w PLC_Knuckles_BarSwing1-PLC_Knuckles
-		dc.w PLC_Knuckles_BarSwing2-PLC_Knuckles
-		dc.w PLC_Knuckles_BarSwing3-PLC_Knuckles
-		dc.w PLC_Knuckles_BarSwing4-PLC_Knuckles
-		dc.w PLC_Knuckles_BarSwing5-PLC_Knuckles
-		dc.w PLC_Knuckles_BarSwing6-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWallRide1-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWallRide2-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWallRide3-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWall1-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWall2-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWall3-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWall4-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWall5-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWall6-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWall7-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWall8-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWall9-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWallA-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWallB-PLC_Knuckles
-		dc.w PLC_Knuckles_CorkscrewWallC-PLC_Knuckles
-		dc.w PLC_Knuckles_HangSwing1-PLC_Knuckles
-		dc.w PLC_Knuckles_HangSwing2-PLC_Knuckles
-		dc.w PLC_Knuckles_HangSwing3-PLC_Knuckles
-		dc.w PLC_Knuckles_HangSwing4-PLC_Knuckles
-		dc.w PLC_Knuckles_HangSwing5-PLC_Knuckles
-		dc.w PLC_Knuckles_HangSwing6-PLC_Knuckles
-		dc.w PLC_Knuckles_HangSwing7-PLC_Knuckles
-		dc.w PLC_Knuckles_HangSwing8-PLC_Knuckles
-		dc.w PLC_Knuckles_HangWalk1-PLC_Knuckles
-		dc.w PLC_Knuckles_HangWalk2-PLC_Knuckles
-		dc.w PLC_Knuckles_HangWalk3-PLC_Knuckles
-		dc.w PLC_Knuckles_HangWalk4-PLC_Knuckles
-		dc.w PLC_Knuckles_HangWalk5-PLC_Knuckles
-		dc.w PLC_Knuckles_HangWalk6-PLC_Knuckles
-		dc.w PLC_Knuckles_Hang1-PLC_Knuckles
-		dc.w PLC_Knuckles_Hang2-PLC_Knuckles
-		dc.w PLC_Knuckles_Hang3-PLC_Knuckles
-		dc.w PLC_Knuckles_Hang4-PLC_Knuckles
-		dc.w PLC_Knuckles_360Hang1-PLC_Knuckles
-		dc.w PLC_Knuckles_Fall-PLC_Knuckles
-		dc.w PLC_Knuckles_360Hang3-PLC_Knuckles
-		dc.w PLC_Knuckles_360Hang4-PLC_Knuckles
-		dc.w PLC_Knuckles_360Hang5-PLC_Knuckles
-		dc.w PLC_Knuckles_360Hang6-PLC_Knuckles
-		dc.w PLC_Knuckles_360Hang7-PLC_Knuckles
-		dc.w PLC_Knuckles_WallRide1-PLC_Knuckles
-		dc.w PLC_Knuckles_WallRide2-PLC_Knuckles
-		dc.w PLC_Knuckles_WallRide3-PLC_Knuckles
-		dc.w PLC_Knuckles_WallRide4-PLC_Knuckles
-		dc.w PLC_Knuckles_WallRide5-PLC_Knuckles
-		dc.w PLC_Knuckles_360Run1-PLC_Knuckles
-		dc.w PLC_Knuckles_360Run2-PLC_Knuckles
-		dc.w PLC_Knuckles_360Run3-PLC_Knuckles
-		dc.w PLC_Knuckles_360Run4-PLC_Knuckles
-		dc.w PLC_Knuckles_360Run5-PLC_Knuckles
-		dc.w PLC_Knuckles_360Run6-PLC_Knuckles
-		dc.w PLC_Knuckles_360Run7-PLC_Knuckles
-		dc.w PLC_Knuckles_360Run8-PLC_Knuckles
-		dc.w PLC_Knuckles_360Run9-PLC_Knuckles
-		dc.w PLC_Knuckles_360RunA-PLC_Knuckles
-		dc.w PLC_Knuckles_360RunB-PLC_Knuckles
-		dc.w PLC_Knuckles_360RunC-PLC_Knuckles
-		dc.w PLC_Knuckles_PoleSwingRide-PLC_Knuckles
-		dc.w PLC_Knuckles_PoleCurrent1-PLC_Knuckles
-		dc.w PLC_Knuckles_PoleCurrent2-PLC_Knuckles
-		dc.w PLC_Knuckles_Pulley-PLC_Knuckles
-		dc.w PLC_Knuckles_BarCurrent1-PLC_Knuckles
-		dc.w PLC_Knuckles_BarCurrent2-PLC_Knuckles
-		dc.w PLC_Knuckles_ClimbDash1-PLC_Knuckles
-		dc.w PLC_Knuckles_ClimbDash2-PLC_Knuckles
-		dc.w PLC_Knuckles_ClimbDash3-PLC_Knuckles
-		dc.w PLC_Knuckles_ClimbDash4-PLC_Knuckles
-		dc.w PLC_Knuckles_ClimbDash5-PLC_Knuckles
-		dc.w PLC_Knuckles_ClimbDash6-PLC_Knuckles
-		dc.w PLC_Knuckles_Stand1-PLC_Knuckles
-		dc.w PLC_Knuckles_Stand2-PLC_Knuckles
-		dc.w PLC_Knuckles_Stand3-PLC_Knuckles
-		dc.w PLC_Knuckles_Stand4-PLC_Knuckles
-		dc.w PLC_Knuckles_Stand5-PLC_Knuckles
-		dc.w PLC_Knuckles_Stand6-PLC_Knuckles
-		dc.w PLC_Knuckles_Stand7-PLC_Knuckles
-		dc.w PLC_Knuckles_Stand8-PLC_Knuckles
-		dc.w PLC_Knuckles_Stand9-PLC_Knuckles
-		dc.w PLC_Knuckles_Climb1-PLC_Knuckles
-		dc.w PLC_Knuckles_Climb2-PLC_Knuckles
-		dc.w PLC_Knuckles_Climb3-PLC_Knuckles
-		dc.w PLC_Knuckles_Climb4-PLC_Knuckles
-		dc.w PLC_Knuckles_Climb5-PLC_Knuckles
-		dc.w PLC_Knuckles_Climb6-PLC_Knuckles
-		dc.w PLC_Knuckles_Climb7-PLC_Knuckles
-		dc.w PLC_Knuckles_Climb8-PLC_Knuckles
-		dc.w PLC_Knuckles_Climb9-PLC_Knuckles
-		dc.w PLC_Knuckles_Glide1-PLC_Knuckles
-		dc.w PLC_Knuckles_Glide2-PLC_Knuckles
-		dc.w PLC_Knuckles_Glide3-PLC_Knuckles
-		dc.w PLC_Knuckles_Glide4-PLC_Knuckles
-		dc.w PLC_Knuckles_Glide5-PLC_Knuckles
-		dc.w PLC_Knuckles_Glide6-PLC_Knuckles
-		dc.w PLC_Knuckles_Glide7-PLC_Knuckles
-		dc.w PLC_Knuckles_Glide8-PLC_Knuckles
-		dc.w PLC_Knuckles_Glide9-PLC_Knuckles
-		dc.w PLC_Knuckles_GlideA-PLC_Knuckles
-		dc.w PLC_Knuckles_GlideB-PLC_Knuckles
-		dc.w PLC_Knuckles_GlideC-PLC_Knuckles
-		dc.w PLC_Knuckles_GlideD-PLC_Knuckles
-		dc.w PLC_Knuckles_GlideE-PLC_Knuckles
-		dc.w PLC_Knuckles_Hurt-PLC_Knuckles
-		dc.w PLC_Knuckles_Bubble-PLC_Knuckles
-		dc.w PLC_Knuckles_Push1-PLC_Knuckles
-		dc.w PLC_Knuckles_Push2-PLC_Knuckles
-		dc.w PLC_Knuckles_Push3-PLC_Knuckles
-		dc.w PLC_Knuckles_Push4-PLC_Knuckles
-		dc.w PLC_Knuckles_Death-PLC_Knuckles
-		dc.w PLC_Knuckles_Drown-PLC_Knuckles
-		dc.w PLC_Knuckles_LookUp1-PLC_Knuckles
-		dc.w PLC_Knuckles_LookUp2-PLC_Knuckles
-		dc.w PLC_Knuckles_Crouch1-PLC_Knuckles
-		dc.w PLC_Knuckles_Crouch2-PLC_Knuckles
-		dc.w PLC_Knuckles_SpinDash1-PLC_Knuckles
-		dc.w PLC_Knuckles_SpinDash2-PLC_Knuckles
-		dc.w PLC_Knuckles_SpinDash3-PLC_Knuckles
-		dc.w PLC_Knuckles_SpinDash4-PLC_Knuckles
-		dc.w PLC_Knuckles_SpinDash5-PLC_Knuckles
-		dc.w PLC_Knuckles_SpinDash6-PLC_Knuckles
-		dc.w PLC_Knuckles_Spin1-PLC_Knuckles
-		dc.w PLC_Knuckles_Spin2-PLC_Knuckles
-		dc.w PLC_Knuckles_Spin3-PLC_Knuckles
-		dc.w PLC_Knuckles_Spin4-PLC_Knuckles
-		dc.w PLC_Knuckles_Spin5-PLC_Knuckles
-		dc.w PLC_Knuckles_Clear1-PLC_Knuckles
-		dc.w PLC_Knuckles_Clear2-PLC_Knuckles
-		dc.w PLC_Knuckles_Clear3-PLC_Knuckles
-		dc.w PLC_Knuckles_Clear4-PLC_Knuckles
-		dc.w PLC_Knuckles_Spring-PLC_Knuckles
-		dc.w PLC_Knuckles_Transform1-PLC_Knuckles
-		dc.w PLC_Knuckles_Transform2-PLC_Knuckles
-		dc.w PLC_Knuckles_Transform3-PLC_Knuckles
-		dc.w PLC_Knuckles_Idle1-PLC_Knuckles
-		dc.w PLC_Knuckles_Idle2-PLC_Knuckles
-		dc.w PLC_Knuckles_Skid1-PLC_Knuckles
-		dc.w PLC_Knuckles_Skid2-PLC_Knuckles
-		dc.w PLC_Knuckles_Balance1-PLC_Knuckles
-		dc.w PLC_Knuckles_Balance2-PLC_Knuckles
-		dc.w PLC_Knuckles_Balance3-PLC_Knuckles
-		dc.w PLC_Knuckles_Balance4-PLC_Knuckles
-		dc.w PLC_Knuckles_Balance5-PLC_Knuckles
-		dc.w PLC_Knuckles_Balance6-PLC_Knuckles
-		dc.w PLC_Knuckles_Balance7-PLC_Knuckles
-		dc.w PLC_Knuckles_Balance8-PLC_Knuckles
-		dc.w PLC_Knuckles_Balance9-PLC_Knuckles
-		dc.w PLC_Knuckles_BalanceA-PLC_Knuckles
-		dc.w PLC_Knuckles_BalanceB-PLC_Knuckles
-		dc.w PLC_Knuckles_BalanceC-PLC_Knuckles
+PLC_Knuckles_:
+		dc.w PLC_Knuckles_Blank-PLC_Knuckles_
+		dc.w PLC_Knuckles_Walk1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Walk2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Walk3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Walk4-PLC_Knuckles_
+		dc.w PLC_Knuckles_Walk5-PLC_Knuckles_
+		dc.w PLC_Knuckles_Walk6-PLC_Knuckles_
+		dc.w PLC_Knuckles_Walk7-PLC_Knuckles_
+		dc.w PLC_Knuckles_Walk8-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWalk1-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWalk2-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWalk3-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWalk4-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWalk5-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWalk6-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWalk7-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWalk8-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallWalk1-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallWalk2-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallWalk3-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallWalk4-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallWalk5-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallWalk6-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallWalk7-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallWalk8-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallWalk1-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallWalk2-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallWalk3-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallWalk4-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallWalk5-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallWalk6-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallWalk7-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallWalk8-PLC_Knuckles_
+		dc.w PLC_Knuckles_Run1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Run2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Run3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Run4-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagRun1-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagRun2-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagRun3-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagRun4-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallRun1-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallRun2-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallRun3-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallRun4-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallRun1-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallRun2-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallRun3-PLC_Knuckles_
+		dc.w PLC_Knuckles_DiagWallRun4-PLC_Knuckles_
+		dc.w PLC_Knuckles_Corkscrew1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Corkscrew2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Corkscrew3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Corkscrew4-PLC_Knuckles_
+		dc.w PLC_Knuckles_Corkscrew5-PLC_Knuckles_
+		dc.w PLC_Knuckles_Corkscrew6-PLC_Knuckles_
+		dc.w PLC_Knuckles_Corkscrew7-PLC_Knuckles_
+		dc.w PLC_Knuckles_Corkscrew8-PLC_Knuckles_
+		dc.w PLC_Knuckles_Corkscrew9-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewA-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewB-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewC-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStand1-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStand2-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStand3-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStand4-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStand5-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStand6-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStand7-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStand8-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStand9-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStandA-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStandB-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewStandC-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiag1-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiag2-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiag3-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiag4-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiag5-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiag6-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiag7-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiag8-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiag9-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiagA-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiagB-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewDiagC-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Stand1-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Stand2-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Stand3-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Stand4-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Stand5-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Stand6-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Stand7-PLC_Knuckles_
+		dc.w PLC_Knuckles_PoleSwing1-PLC_Knuckles_
+		dc.w PLC_Knuckles_PoleSwing2-PLC_Knuckles_
+		dc.w PLC_Knuckles_PoleSwing3-PLC_Knuckles_
+		dc.w PLC_Knuckles_PoleSwing4-PLC_Knuckles_
+		dc.w PLC_Knuckles_PoleSwing5-PLC_Knuckles_
+		dc.w PLC_Knuckles_PoleSwing6-PLC_Knuckles_
+		dc.w PLC_Knuckles_BarWalk-PLC_Knuckles_
+		dc.w PLC_Knuckles_BarSwing1-PLC_Knuckles_
+		dc.w PLC_Knuckles_BarSwing2-PLC_Knuckles_
+		dc.w PLC_Knuckles_BarSwing3-PLC_Knuckles_
+		dc.w PLC_Knuckles_BarSwing4-PLC_Knuckles_
+		dc.w PLC_Knuckles_BarSwing5-PLC_Knuckles_
+		dc.w PLC_Knuckles_BarSwing6-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWallRide1-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWallRide2-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWallRide3-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWall1-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWall2-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWall3-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWall4-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWall5-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWall6-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWall7-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWall8-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWall9-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWallA-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWallB-PLC_Knuckles_
+		dc.w PLC_Knuckles_CorkscrewWallC-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangSwing1-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangSwing2-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangSwing3-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangSwing4-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangSwing5-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangSwing6-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangSwing7-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangSwing8-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangWalk1-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangWalk2-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangWalk3-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangWalk4-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangWalk5-PLC_Knuckles_
+		dc.w PLC_Knuckles_HangWalk6-PLC_Knuckles_
+		dc.w PLC_Knuckles_Hang1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Hang2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Hang3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Hang4-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Hang1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Fall-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Hang3-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Hang4-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Hang5-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Hang6-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Hang7-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallRide1-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallRide2-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallRide3-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallRide4-PLC_Knuckles_
+		dc.w PLC_Knuckles_WallRide5-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Run1-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Run2-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Run3-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Run4-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Run5-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Run6-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Run7-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Run8-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Run9-PLC_Knuckles_
+		dc.w PLC_Knuckles_360RunA-PLC_Knuckles_
+		dc.w PLC_Knuckles_360RunB-PLC_Knuckles_
+		dc.w PLC_Knuckles_360RunC-PLC_Knuckles_
+		dc.w PLC_Knuckles_PoleSwingRide-PLC_Knuckles_
+		dc.w PLC_Knuckles_PoleCurrent1-PLC_Knuckles_
+		dc.w PLC_Knuckles_PoleCurrent2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Pulley-PLC_Knuckles_
+		dc.w PLC_Knuckles_BarCurrent1-PLC_Knuckles_
+		dc.w PLC_Knuckles_BarCurrent2-PLC_Knuckles_
+		dc.w PLC_Knuckles_ClimbDash1-PLC_Knuckles_
+		dc.w PLC_Knuckles_ClimbDash2-PLC_Knuckles_
+		dc.w PLC_Knuckles_ClimbDash3-PLC_Knuckles_
+		dc.w PLC_Knuckles_ClimbDash4-PLC_Knuckles_
+		dc.w PLC_Knuckles_ClimbDash5-PLC_Knuckles_
+		dc.w PLC_Knuckles_ClimbDash6-PLC_Knuckles_
+		dc.w PLC_Knuckles_Stand1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Stand2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Stand3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Stand4-PLC_Knuckles_
+		dc.w PLC_Knuckles_Stand5-PLC_Knuckles_
+		dc.w PLC_Knuckles_Stand6-PLC_Knuckles_
+		dc.w PLC_Knuckles_Stand7-PLC_Knuckles_
+		dc.w PLC_Knuckles_Stand8-PLC_Knuckles_
+		dc.w PLC_Knuckles_Stand9-PLC_Knuckles_
+		dc.w PLC_Knuckles_Climb1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Climb2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Climb3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Climb4-PLC_Knuckles_
+		dc.w PLC_Knuckles_Climb5-PLC_Knuckles_
+		dc.w PLC_Knuckles_Climb6-PLC_Knuckles_
+		dc.w PLC_Knuckles_Climb7-PLC_Knuckles_
+		dc.w PLC_Knuckles_Climb8-PLC_Knuckles_
+		dc.w PLC_Knuckles_Climb9-PLC_Knuckles_
+		dc.w PLC_Knuckles_Glide1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Glide2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Glide3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Glide4-PLC_Knuckles_
+		dc.w PLC_Knuckles_Glide5-PLC_Knuckles_
+		dc.w PLC_Knuckles_Glide6-PLC_Knuckles_
+		dc.w PLC_Knuckles_Glide7-PLC_Knuckles_
+		dc.w PLC_Knuckles_Glide8-PLC_Knuckles_
+		dc.w PLC_Knuckles_Glide9-PLC_Knuckles_
+		dc.w PLC_Knuckles_GlideA-PLC_Knuckles_
+		dc.w PLC_Knuckles_GlideB-PLC_Knuckles_
+		dc.w PLC_Knuckles_GlideC-PLC_Knuckles_
+		dc.w PLC_Knuckles_GlideD-PLC_Knuckles_
+		dc.w PLC_Knuckles_GlideE-PLC_Knuckles_
+		dc.w PLC_Knuckles_Hurt-PLC_Knuckles_
+		dc.w PLC_Knuckles_Bubble-PLC_Knuckles_
+		dc.w PLC_Knuckles_Push1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Push2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Push3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Push4-PLC_Knuckles_
+		dc.w PLC_Knuckles_Death-PLC_Knuckles_
+		dc.w PLC_Knuckles_Drown-PLC_Knuckles_
+		dc.w PLC_Knuckles_LookUp1-PLC_Knuckles_
+		dc.w PLC_Knuckles_LookUp2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Crouch1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Crouch2-PLC_Knuckles_
+		dc.w PLC_Knuckles_SpinDash1-PLC_Knuckles_
+		dc.w PLC_Knuckles_SpinDash2-PLC_Knuckles_
+		dc.w PLC_Knuckles_SpinDash3-PLC_Knuckles_
+		dc.w PLC_Knuckles_SpinDash4-PLC_Knuckles_
+		dc.w PLC_Knuckles_SpinDash5-PLC_Knuckles_
+		dc.w PLC_Knuckles_SpinDash6-PLC_Knuckles_
+		dc.w PLC_Knuckles_Spin1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Spin2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Spin3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Spin4-PLC_Knuckles_
+		dc.w PLC_Knuckles_Spin5-PLC_Knuckles_
+		dc.w PLC_Knuckles_Clear1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Clear2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Clear3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Clear4-PLC_Knuckles_
+		dc.w PLC_Knuckles_Spring-PLC_Knuckles_
+		dc.w PLC_Knuckles_Transform1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Transform2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Transform3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Idle1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Idle2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Skid1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Skid2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Balance1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Balance2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Balance3-PLC_Knuckles_
+		dc.w PLC_Knuckles_Balance4-PLC_Knuckles_
+		dc.w PLC_Knuckles_Balance5-PLC_Knuckles_
+		dc.w PLC_Knuckles_Balance6-PLC_Knuckles_
+		dc.w PLC_Knuckles_Balance7-PLC_Knuckles_
+		dc.w PLC_Knuckles_Balance8-PLC_Knuckles_
+		dc.w PLC_Knuckles_Balance9-PLC_Knuckles_
+		dc.w PLC_Knuckles_BalanceA-PLC_Knuckles_
+		dc.w PLC_Knuckles_BalanceB-PLC_Knuckles_
+		dc.w PLC_Knuckles_BalanceC-PLC_Knuckles_
 PLC_Knuckles_Blank:
 		dc.w 0
 PLC_Knuckles_Walk1:
@@ -278,7 +279,7 @@ PLC_Knuckles_Walk5:
 		dc.w 4
 		dc.w $5159
 		dc.w $715F
-		dc.w $167
+		dc.w $0167
 		dc.w $2168
 PLC_Knuckles_Walk6:
 		dc.w 4
@@ -315,7 +316,7 @@ PLC_Knuckles_DiagWalk4:
 		dc.w 3
 		dc.w $2221
 		dc.w $B224
-		dc.w $230
+		dc.w $0230
 PLC_Knuckles_DiagWalk5:
 		dc.w 3
 		dc.w $2231
@@ -335,7 +336,7 @@ PLC_Knuckles_DiagWalk8:
 		dc.w 3
 		dc.w $226A
 		dc.w $B26D
-		dc.w $279
+		dc.w $0279
 PLC_Knuckles_WallWalk1:
 		dc.w 2
 		dc.w $527A
@@ -344,7 +345,7 @@ PLC_Knuckles_WallWalk2:
 		dc.w 4
 		dc.w $228C
 		dc.w $B28F
-		dc.w $29B
+		dc.w $029B
 		dc.w $229C
 PLC_Knuckles_WallWalk3:
 		dc.w 4
@@ -362,18 +363,18 @@ PLC_Knuckles_WallWalk5:
 		dc.w $12C3
 		dc.w $B2C5
 		dc.w $22D1
-		dc.w $2D4
+		dc.w $02D4
 PLC_Knuckles_WallWalk6:
 		dc.w 4
 		dc.w $32D5
 		dc.w $B2D9
-		dc.w $2E5
+		dc.w $02E5
 		dc.w $22E6
 PLC_Knuckles_WallWalk7:
 		dc.w 4
 		dc.w $32E9
 		dc.w $72ED
-		dc.w $2F5
+		dc.w $02F5
 		dc.w $72F6
 PLC_Knuckles_WallWalk8:
 		dc.w 3
@@ -397,7 +398,7 @@ PLC_Knuckles_DiagWallWalk4:
 		dc.w 3
 		dc.w $2344
 		dc.w $B347
-		dc.w $353
+		dc.w $0353
 PLC_Knuckles_DiagWallWalk5:
 		dc.w 3
 		dc.w $2354
@@ -417,7 +418,7 @@ PLC_Knuckles_DiagWallWalk8:
 		dc.w 3
 		dc.w $238D
 		dc.w $B390
-		dc.w $39C
+		dc.w $039C
 PLC_Knuckles_Run1:
 		dc.w 2
 		dc.w $21A4
@@ -439,7 +440,7 @@ PLC_Knuckles_DiagRun1:
 		dc.w $239D
 		dc.w $B3A0
 		dc.w $23AC
-		dc.w $3AF
+		dc.w $03AF
 PLC_Knuckles_DiagRun2:
 		dc.w 4
 		dc.w $23B0
@@ -475,7 +476,7 @@ PLC_Knuckles_WallRun4:
 		dc.w $F423
 PLC_Knuckles_DiagWallRun1:
 		dc.w 4
-		dc.w $433
+		dc.w $0433
 		dc.w $B434
 		dc.w $1440
 		dc.w $3442
@@ -515,7 +516,7 @@ PLC_Knuckles_Corkscrew4:
 		dc.w 3
 		dc.w $24AF
 		dc.w $B4B2
-		dc.w $4BE
+		dc.w $04BE
 PLC_Knuckles_Corkscrew5:
 		dc.w 3
 		dc.w $24BF
@@ -591,7 +592,7 @@ PLC_Knuckles_CorkscrewStand9:
 		dc.w 3
 		dc.w $25AE
 		dc.w $75B1
-		dc.w $5B9
+		dc.w $05B9
 PLC_Knuckles_CorkscrewStandA:
 		dc.w 2
 		dc.w $55BA
@@ -614,7 +615,7 @@ PLC_Knuckles_CorkscrewDiag2:
 		dc.w 3
 		dc.w $B5EF
 		dc.w $25FB
-		dc.w $5FE
+		dc.w $05FE
 PLC_Knuckles_CorkscrewDiag3:
 		dc.w 2
 		dc.w $85FF
@@ -637,7 +638,7 @@ PLC_Knuckles_CorkscrewDiag7:
 		dc.w $B63B
 PLC_Knuckles_CorkscrewDiag8:
 		dc.w 3
-		dc.w $647
+		dc.w $0647
 		dc.w $B648
 		dc.w $1654
 PLC_Knuckles_CorkscrewDiag9:
@@ -757,7 +758,7 @@ PLC_Knuckles_CorkscrewWall2:
 		dc.w $27FD
 PLC_Knuckles_CorkscrewWall3:
 		dc.w 3
-		dc.w $800
+		dc.w $0800
 		dc.w $8801
 		dc.w $380A
 PLC_Knuckles_CorkscrewWall4:
@@ -788,13 +789,13 @@ PLC_Knuckles_CorkscrewWall9:
 		dc.w $1868
 PLC_Knuckles_CorkscrewWallA:
 		dc.w 2
-		dc.w $86A
+		dc.w $086A
 		dc.w $B86B
 PLC_Knuckles_CorkscrewWallB:
 		dc.w 3
 		dc.w $2877
 		dc.w $B87A
-		dc.w $886
+		dc.w $0886
 PLC_Knuckles_CorkscrewWallC:
 		dc.w 2
 		dc.w $1887
@@ -815,7 +816,7 @@ PLC_Knuckles_HangSwing6:
 PLC_Knuckles_HangSwing3:
 PLC_Knuckles_HangSwing7:
 		dc.w 3
-		dc.w $8BE
+		dc.w $08BE
 		dc.w $B8BF
 		dc.w $78CB
 PLC_Knuckles_HangSwing4:
@@ -828,11 +829,11 @@ PLC_Knuckles_HangSwing8:
 PLC_Knuckles_HangWalk1:
 		dc.w 3
 		dc.w $F8E7
-		dc.w $8F7
+		dc.w $08F7
 		dc.w $58F8
 PLC_Knuckles_HangWalk2:
 		dc.w 4
-		dc.w $8FE
+		dc.w $08FE
 		dc.w $38FF
 		dc.w $B903
 		dc.w $290F
@@ -979,7 +980,7 @@ PLC_Knuckles_360RunB:
 PLC_Knuckles_360RunA:
 		dc.w 2
 		dc.w $BAEC
-		dc.w $AF8
+		dc.w $0AF8
 PLC_Knuckles_360RunC:
 		dc.w 3
 		dc.w $1AF9
@@ -1099,7 +1100,7 @@ PLC_Knuckles_Stand9:
 PLC_Knuckles_Climb1:
 		dc.w 2
 		dc.w $FBFA
-		dc.w $C0A
+		dc.w $0C0A
 PLC_Knuckles_Climb2:
 		dc.w 1
 		dc.w $FC0B
@@ -1123,7 +1124,7 @@ PLC_Knuckles_Climb7:
 		dc.w $7C5E
 		dc.w $2C66
 		dc.w $1C69
-		dc.w $C6B
+		dc.w $0C6B
 PLC_Knuckles_Climb8:
 		dc.w 2
 		dc.w $BC6C
@@ -1132,7 +1133,7 @@ PLC_Knuckles_Climb9:
 		dc.w 3
 		dc.w $1C7C
 		dc.w $FC7E
-		dc.w $C8E
+		dc.w $0C8E
 PLC_Knuckles_Glide1:
 PLC_Knuckles_Glide5:
 		dc.w 3
@@ -1170,7 +1171,7 @@ PLC_Knuckles_GlideB:
 PLC_Knuckles_GlideC:
 		dc.w 4
 		dc.w $BCFE
-		dc.w $D0A
+		dc.w $0D0A
 		dc.w $3D0B
 		dc.w $3D0F
 PLC_Knuckles_GlideD:
@@ -1189,18 +1190,18 @@ PLC_Knuckles_Hurt:
 		dc.w $80F8
 		dc.w $3101
 		dc.w $7105
-		dc.w $10D
+		dc.w $010D
 PLC_Knuckles_Bubble:
 		dc.w 3
 		dc.w $3D31
 		dc.w $FD35
-		dc.w $D45
+		dc.w $0D45
 PLC_Knuckles_Push1:
 		dc.w 4
 		dc.w $2D46
 		dc.w $3D49
 		dc.w $BD4D
-		dc.w $D59
+		dc.w $0D59
 PLC_Knuckles_Push2:
 		dc.w 4
 		dc.w $2D5A
@@ -1212,12 +1213,12 @@ PLC_Knuckles_Push3:
 		dc.w $2D6E
 		dc.w $3D71
 		dc.w $BD75
-		dc.w $D81
+		dc.w $0D81
 PLC_Knuckles_Push4:
 		dc.w 4
 		dc.w $2D5A
 		dc.w $BD82
-		dc.w $D8E
+		dc.w $0D8E
 		dc.w $2D8F
 PLC_Knuckles_Death:
 		dc.w 4
@@ -1357,7 +1358,7 @@ PLC_Knuckles_Skid2:
 		dc.w 4
 		dc.w $2E98
 		dc.w $FE9B
-		dc.w $EAB
+		dc.w $0EAB
 		dc.w $3EAC
 PLC_Knuckles_Balance1:
 		dc.w 4
@@ -1373,7 +1374,7 @@ PLC_Knuckles_Balance2:
 		dc.w $2ED9
 PLC_Knuckles_Balance3:
 		dc.w 4
-		dc.w $EDC
+		dc.w $0EDC
 		dc.w $BEDD
 		dc.w $7EE9
 		dc.w $5EF1
@@ -1385,7 +1386,7 @@ PLC_Knuckles_Balance4:
 		dc.w $5F07
 PLC_Knuckles_Balance5:
 		dc.w 4
-		dc.w $F0D
+		dc.w $0F0D
 		dc.w $BF0E
 		dc.w $3F1A
 		dc.w $5F1E
@@ -1423,11 +1424,11 @@ PLC_Knuckles_BalanceB:
 		dc.w 4
 		dc.w $5077
 		dc.w $307D
-		dc.w $81
+		dc.w $0081
 		dc.w $F082
 PLC_Knuckles_BalanceC:
 		dc.w 4
 		dc.w $F091
-		dc.w $A1
+		dc.w $00A1
 		dc.w $30A2
 		dc.w $10A6

@@ -1,11 +1,12 @@
-		dc.w word_1A0E0-Map_InstaShield
-		dc.w word_1A0F4-Map_InstaShield
-		dc.w word_1A108-Map_InstaShield
-		dc.w word_1A116-Map_InstaShield
-		dc.w word_1A12A-Map_InstaShield
-		dc.w word_1A13E-Map_InstaShield
-		dc.w word_1A152-Map_InstaShield
-		dc.w word_1A152-Map_InstaShield
+Map_InstaShield_:
+		dc.w word_1A0E0-Map_InstaShield_
+		dc.w word_1A0F4-Map_InstaShield_
+		dc.w word_1A108-Map_InstaShield_
+		dc.w word_1A116-Map_InstaShield_
+		dc.w word_1A12A-Map_InstaShield_
+		dc.w word_1A13E-Map_InstaShield_
+		dc.w word_1A152-Map_InstaShield_
+		dc.w word_1A152-Map_InstaShield_
 word_1A0E0:	dc.w 3
 		dc.b  $E8,   8,   0,   0, $FF, $F0
 		dc.b  $F0,   4,   0,   3, $FF, $F8
