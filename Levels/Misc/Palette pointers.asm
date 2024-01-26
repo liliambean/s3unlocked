@@ -132,7 +132,8 @@
 		dc.l Pal_DDZ
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_Ending1
+		dc.l Pal_Encore_Special			; Fred: Encore mode - bonus stage
+;		dc.l Pal_Ending1			;
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
 		dc.l Pal_Ending2
@@ -201,14 +202,15 @@
 		dc.l Pal_CNZ_Water
 		dc.w Normal_palette&$FFFF
 		dc.w $1F
-		dc.l Pal_AIZ
+		dc.l Pal_DPZ				; Fred: Encore mode - add extra levels
+;		dc.l Pal_AIZ				;
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_Encore_Special			; Fred: Encore mode - bonus stage
+		dc.l Pal_CGZ				;
 ;		dc.l Pal_SOZ1_Clone			;
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_Encore_Special			;
+		dc.l Pal_EMZ				;
 ;		dc.l Pal_SOZ2_Extra			;
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17

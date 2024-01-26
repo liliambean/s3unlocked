@@ -78,10 +78,10 @@
 		dc.l Pal_DDZ_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_Ending1_Encore
+		dc.l Pal_Encore_Special
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_Ending2_Encore
+		dc.l Pal_Ending_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
 		dc.l Pal_ALZ_Encore
@@ -147,13 +147,13 @@
 		dc.l Pal_CNZ_Water_Encore
 		dc.w Normal_palette&$FFFF
 		dc.w $1F
-		dc.l Pal_AIZ_Encore
+		dc.l Pal_DPZ_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_Encore_Special
+		dc.l Pal_CGZ_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_Encore_Special
+		dc.l Pal_EMZ_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
 		dc.l Pal_LRZBoss_Encore
