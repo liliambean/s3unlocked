@@ -810,7 +810,8 @@ Ring_spill_anim_counter		ds.b 1
 Ring_spill_anim_frame		ds.b 1
 Ring_spill_anim_accum		ds.w 1
 AIZ_vine_angle			ds.w 1			; controls the angle of AIZ giant vines
-			ds.w 1				; unused
+Slot_machine_wall_frame_timer	ds.b 1		; Fred: ported from S1 - restore full item set
+Slot_machine_wall_frame		ds.b 1		;
 _unkFEBE		ds.b 1				; unused
 Extra_life_flags_P2		ds.b 1
 Max_speed_P2			ds.w 1
