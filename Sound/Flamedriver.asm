@@ -1742,9 +1742,12 @@ zSilenceStopTrack:
 
 ;loc_552
 zPlayExtraMusic:
-		sub	a, MusID__First-MusID__End+mus__FirstExtra	; Fred: remap from E8h-F9h to 33h-44h
-;		ld	a, 32h						;
+		sub	a, mus__Gap			; Fred: add extra music tracks
+;		ld	a, 32h				;
 		push	af							; Save af
+		cp	mus_HighFive-mus__Gap		; Fred: kill SFX for High Five music
+		jp	nz, zPlayMusic_DoFade		;
+		call	zMusicFade			;
 		jp	zPlayMusic_DoFade				; Continue as music
 ; ---------------------------------------------------------------------------
 

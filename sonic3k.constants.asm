@@ -1157,6 +1157,7 @@ mus_FinalBoss			ds.b 1		; $30
 mus_Drowning			ds.b 1		; $31
 mus_Credits			ds.b 1		; $32
 mus__End =			*		; next ID after last music
+mus__Gap = mus__First-mus__End+mus__FirstExtra	; gap between last music and extra music
 	dephase
 
 ; ---------------------------------------------------------------------------
