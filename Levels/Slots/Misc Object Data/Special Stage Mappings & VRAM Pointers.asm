@@ -79,8 +79,8 @@
 	dc.w $2434
 	dc.l Map_SB_Goal			; 27  Goal
 	dc.w $487
-	dc.l Map_SB_Slot			; 28  Bonus Cage
-	dc.w $481
+	dc.l Map_SB_Bumper			; 28  Extra Life
+	dc.w ArtTile_Player_2
 	dc.l Map_SB_Up				; 29  Up
 	dc.w $4494
 	dc.l Map_SB_Down			; 2A  Down
