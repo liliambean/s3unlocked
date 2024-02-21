@@ -32,4 +32,4 @@
 	dbglistobj Obj_StillSprite,		Map_StillSprites,		 $1D, $1D, make_art_tile($41E,2,0)
 	dbglistobj Obj_StillSprite,		Map_StillSprites,		 $1E, $1E, make_art_tile($347,0,0)
 	dbglistobj Obj_BreakableWall,		Map_MHZBreakableWall,		   0,   0, make_art_tile($34B,2,0)
-	dbglistobj Obj_MHZSwingVine,		Map_AIZMHZRideVine,		   0, $23, make_art_tile($455,0,0)
+	dbglistobj Obj_MHZSwingVine,		Map_MHZRideVine,		   0, $21, make_art_tile($347,0,0)

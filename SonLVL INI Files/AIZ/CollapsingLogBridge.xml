@@ -7,10 +7,12 @@
     </ImageFromMappings>
     <ImageFromMappings id="left">
       <ArtFile filename="../Levels/AIZ/Nemesis Art/Misc Art 2.bin" />
+      <ArtFile filename="../Levels/AIZ/Nemesis Art/Act 2 Bridge Post.bin" offset="13280" />
       <MapFile type="ASM" filename="../Levels/AIZ/Misc Object Data/Map - Collapsing Log Bridge.asm" frame="1" startpal="2" />
     </ImageFromMappings>
     <ImageFromMappings id="right">
       <ArtFile filename="../Levels/AIZ/Nemesis Art/Misc Art 2.bin" />
+      <ArtFile filename="../Levels/AIZ/Nemesis Art/Act 2 Bridge Post.bin" offset="13280" />
       <MapFile type="ASM" filename="../Levels/AIZ/Misc Object Data/Map - Collapsing Log Bridge.asm" frame="2" startpal="2" />
     </ImageFromMappings>
     <ImageFromMappings id="drawmain" priority="true">
@@ -19,10 +21,12 @@
     </ImageFromMappings>
     <ImageFromMappings id="drawleft" priority="true">
       <ArtFile filename="../Levels/AIZ/Nemesis Art/Misc Art 2.bin" />
+      <ArtFile filename="../Levels/AIZ/Nemesis Art/Act 2 Bridge Post.bin" offset="13280" />
       <MapFile type="ASM" filename="../Levels/AIZ/Misc Object Data/Map - Draw Bridge Fire.asm" frame="1" startpal="2" />
     </ImageFromMappings>
     <ImageFromMappings id="drawright" priority="true">
       <ArtFile filename="../Levels/AIZ/Nemesis Art/Misc Art 2.bin" />
+      <ArtFile filename="../Levels/AIZ/Nemesis Art/Act 2 Bridge Post.bin" offset="13280" />
       <MapFile type="ASM" filename="../Levels/AIZ/Misc Object Data/Map - Draw Bridge Fire.asm" frame="2" startpal="2" />
     </ImageFromMappings>
   </Images>

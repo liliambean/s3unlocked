@@ -50,8 +50,8 @@
 		dc.w word_2BEF8-Map_StillSprites
 		dc.w word_2BF06-Map_StillSprites
 word_2BB00:	dc.w 2			; DATA XREF: ROM:0002BA9Ao
-		dc.b  $F4,   5,	  1, $26, $FF, $F4
-		dc.b	4,   8,	  1, $2A, $FF, $F4
+		dc.b  $F4,   5,	  0,   0, $FF, $F4
+		dc.b	4,   8,	  0,   4, $FF, $F4
 word_2BB0E:	dc.w 1			; DATA XREF: ROM:0002BA9Ao
 		dc.b  $F8,  $D,	  0,   0, $FF, $F0
 word_2BB16:	dc.w 1			; DATA XREF: ROM:0002BA9Ao

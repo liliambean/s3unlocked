@@ -82,15 +82,15 @@ namespace S3KObjectDefinitions.AIZ
 		{
 			var version = LevelData.Game.MappingsVersion;
 			var art = LevelData.ReadFile("../Levels/AIZ/Nemesis Art/Swing Vine.bin", CompressionType.Nemesis);
-			var map = LevelData.ASMToBin("../Levels/AIZ/Misc Object Data/Map - (&MHZ) Ride Vine.asm", version);
+			var map = LevelData.ASMToBin("../Levels/AIZ/Misc Object Data/Map - Ride Vine.asm", version);
 			var sprites = new[]
 			{
-				ObjectHelper.MapToBmp(art, map, 32, 0),
+				ObjectHelper.MapToBmp(art, map, 64, 0),
+				ObjectHelper.MapToBmp(art, map, 4, 0),
 				ObjectHelper.MapToBmp(art, map, 2, 0),
-				ObjectHelper.MapToBmp(art, map, 1, 0),
-				ObjectHelper.MapToBmp(art, map, 1, 0),
+				ObjectHelper.MapToBmp(art, map, 2, 0),
 				ObjectHelper.MapToBmp(art, map, 0, 0),
-				ObjectHelper.MapToBmp(art, map, 33, 0)
+				ObjectHelper.MapToBmp(art, map, 65, 0)
 			};
 
 			sprites[3].Offset(0, 16);

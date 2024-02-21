@@ -67,9 +67,9 @@ namespace S3KObjectDefinitions.AIZ
 		{
 			var version = LevelData.Game.MappingsVersion;
 			var art = LevelData.ReadFile("../Levels/AIZ/Nemesis Art/Swing Vine.bin", CompressionType.Nemesis);
-			var map = LevelData.ASMToBin("../Levels/AIZ/Misc Object Data/Map - (&MHZ) Ride Vine.asm", version);
+			var map = LevelData.ASMToBin("../Levels/AIZ/Misc Object Data/Map - Ride Vine.asm", version);
 
-			frames = new Sprite[34];
+			frames = new Sprite[66];
 			for (int frame = 0; frame < frames.Length; frame++)
 				frames[frame] = ObjectHelper.MapToBmp(art, map, frame, 0);
 
@@ -157,11 +157,12 @@ namespace S3KObjectDefinitions.AIZ
 			var spriteData = this.spriteData[angle];
 			var sprites = new Sprite[length + 2];
 
-			sprites[0] = new Sprite(frames[32]);
+			sprites[0] = new Sprite(frames[64]);
 			for (int dest = 0, src = length; src >= 0; src--)
 			{
+				var frame = spriteData[2][src];
 				sprites[dest++].Offset(spriteData[0][src], spriteData[1][src]);
-				sprites[dest] = new Sprite(frames[spriteData[2][src]]);
+				sprites[dest] = new Sprite(frames[frame == 33 ? 65 : frame << 1]);
 			}
 
 			return new Sprite(sprites);

@@ -10,6 +10,9 @@ namespace S3KObjectDefinitions.AIZ
 	{
 		public override void Init(ObjectData data)
 		{
+			var art0 = LevelData.ReadFile(
+				"../Levels/AIZ/Nemesis Art/Act 2 Bridge Post.bin", CompressionType.Nemesis);
+
 			var art1 = LevelData.ReadFile(
 				"../Levels/AIZ/Nemesis Art/Misc Art 2.bin", CompressionType.Nemesis);
 
@@ -18,12 +21,12 @@ namespace S3KObjectDefinitions.AIZ
 			var art2 = indexer.ToArray();
 
 			BuildSpritesSubtypes(
-				new StillSpriteData(art1, 0, 2, false, 6, "Bridge Post"),
+				new StillSpriteData(art0, 0, 2, false, 6, "Bridge Post"),
 				new StillSpriteData(art1, 1, 2, false, 6, "Large Rope Twist Tie"),
 				new StillSpriteData(art1, 2, 2, false, 6, "Rope Twist Tie"),
 				new StillSpriteData(art2, 3, 2, false, 6, "Tie Top Sprite"),
 				new StillSpriteData(art2, 4, 3, false, 6, "Waterfall Sprite"),
-				new StillSpriteData(art1, 5, 2, true, 6, "Bridge Post (high priority)"));
+				new StillSpriteData(art0, 5, 2, true, 6, "Bridge Post (high priority)"));
 		}
 	}
 

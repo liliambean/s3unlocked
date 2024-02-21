@@ -12,13 +12,13 @@ word_2B0A2:	dc.w 2
 word_2B0B0:	dc.w 4	
 		dc.b  $F8,   5,	  1, $22, $FF, $F0
 		dc.b  $F8,   5,	  1, $22,   0,	 0
-		dc.b	8,   8,	  9, $2D, $FF, $F0
-		dc.b  $10,   4,	  9, $30, $FF, $F0
+		dc.b	8,   8,	  9, $A6, $FF, $F0
+		dc.b  $10,   4,	  9, $A9, $FF, $F0
 word_2B0CA:	dc.w 4		
 		dc.b  $F8,   5,	  1, $22, $FF, $F0
 		dc.b  $F8,   5,	  1, $22,   0,	 0
-		dc.b	8,   8,	  1, $2D, $FF, $F8
-		dc.b  $10,   4,	  1, $30,   0,	 0
+		dc.b	8,   8,	  1, $A6, $FF, $F8
+		dc.b  $10,   4,	  1, $A9,   0,	 0
 word_2B0E4:	dc.w 2		
 		dc.b  $F0,   6,	$20, $EA, $FF, $F0
 		dc.b  $F0,   6,	$20, $EA,   0,	 0
