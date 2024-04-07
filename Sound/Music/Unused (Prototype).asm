@@ -5,7 +5,7 @@ Snd_Unused_Header:
 	smpsHeaderTempo     $01, $00
 
 	smpsHeaderDAC       Snd_Unused_DAC
-	smpsHeaderFM        Snd_Unused_FM1,	$00, $09	; Fred: improve pitch, volume levels and channel order
+	smpsHeaderFM        Snd_Unused_FM1,	$00, $09	; Liliam: improve pitch, volume levels and channel order
 	smpsHeaderFM        Snd_Unused_FM2,	$00, $09	;
 	smpsHeaderFM        Snd_Unused_FM5,	$00, $09	;
 	smpsHeaderFM        Snd_Unused_FM4,	$00, $0B	;

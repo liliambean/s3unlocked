@@ -1,6 +1,6 @@
 ; Palette pointers
 
-		dc.l Pal_SonicTails			; Fred: simplify player palette selection
+		dc.l Pal_SonicTails			; Liliam: simplify player palette selection
 		dc.w Normal_palette&$FFFF		;
 		dc.w 7					;
 		dc.l Pal_SonicTails			;
@@ -24,7 +24,7 @@
 		dc.l Pal_Knuckles
 		dc.w Normal_palette&$FFFF
 		dc.w 7
-		dc.l Pal_Amy				; Fred: add extra characters
+		dc.l Pal_Amy				; Liliam: add extra characters
 		dc.w Normal_palette&$FFFF		;
 		dc.w 7					;
 		dc.l Pal_SaveScreen+$20			;
@@ -48,10 +48,10 @@
 ;		dc.l Pal_S2Sega				;
 ;		dc.w Normal_palette&$FFFF		;
 ;		dc.w $1F				;
-		dc.l Pal_Encore				; Fred: Encore mode - palette
+		dc.l Pal_Encore				; Liliam: Encore mode - palette
 		dc.w Normal_palette&$FFFF		;
 		dc.w 7					;
-		dc.l Pal_LevelSelect			; Fred: level select - use data select background
+		dc.l Pal_LevelSelect			; Liliam: level select - use data select background
 		dc.w Normal_palette&$FFFF		;
 		dc.w $1F				;
 		dc.l Pal_AIZIntro
@@ -132,7 +132,7 @@
 		dc.l Pal_DDZ
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_Encore_Special			; Fred: Encore mode - bonus stage
+		dc.l Pal_Encore_Special			; Liliam: Encore mode - bonus stage
 ;		dc.l Pal_Ending1			;
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
@@ -202,7 +202,7 @@
 		dc.l Pal_CNZ_Water
 		dc.w Normal_palette&$FFFF
 		dc.w $1F
-		dc.l Pal_DPZ				; Fred: Encore mode - add extra levels
+		dc.l Pal_DPZ				; Liliam: Encore mode - add extra levels
 ;		dc.l Pal_AIZ				;
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
@@ -223,7 +223,7 @@
 		dc.l Pal_DEZBoss
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
-		dc.l Pal_CutsceneKnux			; Fred: bugfix - HPZ SS results palette screwery
+		dc.l Pal_CutsceneKnux			; Liliam: bugfix - HPZ SS results palette screwery
 ;		dc.l Pal_DEZBoss			;
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
