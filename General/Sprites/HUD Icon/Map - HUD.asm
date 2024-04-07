@@ -11,7 +11,7 @@ Map_HUD_Barrier:
 		dc.w Map_HUD_FlameBarrier-Map_HUD_Barrier
 		dc.w Map_HUD_ThunderBarrier-Map_HUD_Barrier
 		dc.w Map_HUD_AquaBarrier-Map_HUD_Barrier
-		dc.w Map_HUD_BasicBarrier-Map_HUD_Barrier
+		dc.w Map_HUD_CombineRing-Map_HUD_Barrier
 		dc.w Map_HUD_SuperReady1-Map_HUD_Barrier
 		dc.w Map_HUD_SuperReady2-Map_HUD_Barrier
 Map_HUD_EncoreStocks:
@@ -79,7 +79,7 @@ Map_HUD_ThunderBarrier:
 Map_HUD_AquaBarrier:
 		dc.w 1
 		dc.b $80,  5,  0,$30,$FF,$F8
-Map_HUD_BasicBarrier:
+Map_HUD_CombineRing:
 		dc.w 1
 		dc.b $80,  5,  0,$38,$FF,$F8
 Map_HUD_SuperReady1:
