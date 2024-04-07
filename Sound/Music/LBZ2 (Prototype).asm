@@ -48,7 +48,7 @@ Snd_ProtoLBZ2_DAC:
 	dc.b	$06, dKickS3, dSnareS3, $12, dSnareS3, $18, dKickS3, dSnareS3, dKickS3, dSnareS3, $0C, dSnareS3
 	dc.b	$06, dSnareS3, dKickS3, $18, dSnareS3, $12, dSnareS3, $06, dKickS3, dSnareS3, $12, dSnareS3
 	dc.b	$18, dKickS3, dSnareS3, dKickS3, $0C, dSnareS3, $06, dSnareS3, dSnareS3, dSnareS3, dSnareS3, dSnareS3
-	dc.b	$06		; Fred: remove trailing pause from proto LBZ2 music
+	dc.b	$06		; Liliam: remove trailing pause from proto LBZ2 music
 ;	dc.b	$08		;
 	smpsJump            Snd_ProtoLBZ2_DAC
 
@@ -189,7 +189,7 @@ Snd_ProtoLBZ2_Jump03:
 	dc.b	$02, nAb3, $04, nRst, $08, nC4, $04, nRst, $02, nC4, $04, nRst
 	dc.b	$02, nAb3, $04, nRst, $0E, nC5, $10, nRst, $02, nC5, $04, nRst
 	dc.b	$08, nC5, $04, nRst
-	dc.b	$08		; Fred: remove trailing pause from proto LBZ2 music
+	dc.b	$08		; Liliam: remove trailing pause from proto LBZ2 music
 ;	dc.b	$0A		;
 	smpsJump            Snd_ProtoLBZ2_Jump03
 
@@ -330,7 +330,7 @@ Snd_ProtoLBZ2_Jump02:
 	dc.b	$02, nEb3, $04, nRst, $08, nAb3, $04, nRst, $02, nAb3, $04, nRst
 	dc.b	$02, nEb3, $04, nRst, $0E, nAb4, $10, nRst, $02, nAb4, $04, nRst
 	dc.b	$08, nAb4, $04, nRst
-	dc.b	$08		; Fred: remove trailing pause from proto LBZ2 music
+	dc.b	$08		; Liliam: remove trailing pause from proto LBZ2 music
 ;	dc.b	$0A		;
 	smpsJump            Snd_ProtoLBZ2_Jump02
 
@@ -397,7 +397,7 @@ Snd_ProtoLBZ2_FM3:
 	dc.b	$02, nD4, $04, nRst, $02, nEb4, $20, nRst, $04, nBb3, $08, nRst
 	dc.b	$04, nBb3, $2C, nRst, $04, nC4, $08, nRst, $04, nC4, $08, nRst
 	dc.b	$04, nD4, $08, nRst, $04, nEb4, $08, nRst, $10, nF4, $18, nRst
-	dc.b	$0C		; Fred: remove trailing pause from proto LBZ2 music
+	dc.b	$0C		; Liliam: remove trailing pause from proto LBZ2 music
 ;	dc.b	$0E		;
 	smpsJump            Snd_ProtoLBZ2_FM3
 
@@ -467,7 +467,7 @@ Snd_ProtoLBZ2_Jump01:
 	dc.b	nEb0, $04, nRst, $14, nEb0, $0A, nRst, $0E, nEb0, $0A, nRst, $14
 	dc.b	nEb0, $04, nRst, $02, nEb0, $0A, nRst, $02, nEb0, $0A, nRst, $02
 	dc.b	nBb0, $0A, nRst
-	dc.b	$02		; Fred: remove trailing pause from proto LBZ2 music
+	dc.b	$02		; Liliam: remove trailing pause from proto LBZ2 music
 ;	dc.b	$04		;
 	smpsJump            Snd_ProtoLBZ2_Jump01
 
@@ -538,7 +538,7 @@ Snd_ProtoLBZ2_Jump00:
 	dc.b	$02, nD4, $04, nRst, $02, nEb4, $20, nRst, $04, nBb3, $08, nRst
 	dc.b	$04, nBb3, $2C, nRst, $04, nC4, $08, nRst, $04, nC4, $08, nRst
 	dc.b	$04, nD4, $08, nRst, $04, nEb4, $08, nRst, $10, nF4, $18, nRst
-	dc.b	$0C		; Fred: remove trailing pause from proto LBZ2 music
+	dc.b	$0C		; Liliam: remove trailing pause from proto LBZ2 music
 ;	dc.b	$0E		;
 	smpsJump            Snd_ProtoLBZ2_Jump00
 
@@ -643,7 +643,7 @@ Snd_ProtoLBZ2_PSG1:
 	dc.b	nG3, nEb3, nBb2, nG2, nEb2, nF2, nBb2, nEb3, nF3, nBb3, nEb4, nF4
 	dc.b	nBb4, nF4, nEb4, nBb3, nF3, nEb3, nBb2, nF2, nEb2, nAb2, nBb2, nEb3
 	dc.b	nAb3, nBb3, nEb4, nG4, nBb4, nG4, nEb4, nBb3, nG3, nEb3, nBb2, nG2
-;	dc.b	nRst, $02	; Fred: remove trailing pause from proto LBZ2 music
+;	dc.b	nRst, $02	; Liliam: remove trailing pause from proto LBZ2 music
 	smpsJump            Snd_ProtoLBZ2_PSG1
 
 ; PSG2 Data
@@ -747,7 +747,7 @@ Snd_ProtoLBZ2_PSG2:
 	dc.b	nG3, nEb3, nBb2, nG2, nEb2, nF2, nBb2, nEb3, nF3, nBb3, nEb4, nF4
 	dc.b	nBb4, nF4, nEb4, nBb3, nF3, nEb3, nBb2, nF2, nEb2, nAb2, nBb2, nEb3
 	dc.b	nAb3, nBb3, nEb4, nG4, nBb4, nG4, nEb4, nBb3, nG3, nEb3, nBb2, nG2
-;	dc.b	nRst, $02	; Fred: remove trailing pause from proto LBZ2 music
+;	dc.b	nRst, $02	; Liliam: remove trailing pause from proto LBZ2 music
 	smpsJump            Snd_ProtoLBZ2_PSG2
 
 ; PSG3 Data
@@ -814,6 +814,6 @@ Snd_ProtoLBZ2_Jump04:
 	dc.b	$06, nMaxPSG1, nMaxPSG1, $0C, nMaxPSG1, nMaxPSG1, nMaxPSG1, $06, nMaxPSG1, nMaxPSG1, $0C, nMaxPSG1
 	dc.b	$06, nMaxPSG1, nMaxPSG1, $0C, nMaxPSG1, $06, nMaxPSG1, nMaxPSG1, $0C, nMaxPSG1, $06, nMaxPSG1
 	dc.b	$02, nRst
-	dc.b	$04		; Fred: remove trailing pause from proto LBZ2 music
+	dc.b	$04		; Liliam: remove trailing pause from proto LBZ2 music
 ;	dc.b	$06		;
 	smpsJump            Snd_ProtoLBZ2_Jump04

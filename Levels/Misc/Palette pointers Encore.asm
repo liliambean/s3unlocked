@@ -1,4 +1,4 @@
-; Fred: Encore mode - palette
+; Liliam: Encore mode - palette
 
 		dc.l Pal_AIZIntro_Encore
 		dc.w Normal_palette_line_2&$FFFF

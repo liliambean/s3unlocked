@@ -759,7 +759,7 @@ zUpdateMusic:
 		cp	MusID_ExtraLife-MusID__First			; Is it still 1-Up?
 		jr	nz, .check_fade_in				; Branch if not
 		ld	a, (zMusicNumber)				; Get next music to play
-		cp	FadeID__First-MusID__First	; Fred: add extra music tracks
+		cp	FadeID__First-MusID__First	; Liliam: add extra music tracks
 		jr	c, .clr_sfx			;
 		cp	mus__FirstExtra-MusID__First	;
 		jr	c, .clr_queue			;
@@ -1689,10 +1689,10 @@ zPlaySoundByIndex:
 		jp	z, zPlaySegaSound				; Branch if yes
 		cp	MusID__End						; Is this a music?
 		jp	c, zPlayMusic					; Branch if yes
-		cp	mus__FirstExtra			; Fred: add extra music tracks
+		cp	mus__FirstExtra			; Liliam: add extra music tracks
 		jp	c, zMusicFade			;
 		cp	FadeID__First					; Is it before the first fade effect?
-		jp	c, zPlayExtraMusic		; Fred: add extra music tracks
+		jp	c, zPlayExtraMusic		; Liliam: add extra music tracks
 ;		jp	c, zMusicFade			;
 ;		cp	FadeID__End			;
 ;		jp	nc, zMusicFade			;
@@ -1708,7 +1708,7 @@ zFadeEffects:
 		dw	zMusicFade						; FBh
 		dw	zPSGSilenceAll					; FCh
 		dw	zStopSFX						; FDh
-		dw	zMusicFade			; Fred: add extra music tracks
+		dw	zMusicFade			; Liliam: add extra music tracks
 ;		dw	zFadeOutMusic			;
 ; ---------------------------------------------------------------------------
 ;sub_52E
@@ -1742,10 +1742,10 @@ zSilenceStopTrack:
 
 ;loc_552
 zPlayExtraMusic:
-		sub	a, mus__Gap			; Fred: add extra music tracks
+		sub	a, mus__Gap			; Liliam: add extra music tracks
 ;		ld	a, 32h				;
 		push	af							; Save af
-		cp	mus_HighFive-mus__Gap		; Fred: kill SFX for High Five music
+		cp	mus_HighFive-mus__Gap		; Liliam: kill SFX for High Five music
 		jp	nz, zPlayMusic_DoFade		;
 		call	zMusicFade			;
 		jp	zPlayMusic_DoFade				; Continue as music
@@ -4609,7 +4609,7 @@ z80_MusicBanks:
 	db zmake68kBank(MusData_Emerald)
 	db zmake68kBank(MusData_Invic)
 	db zmake68kBank(MusData_2PMenu)
-	db zmake68kBank(MusData_Minib)			; Fred: add extra music tracks
+	db zmake68kBank(MusData_Minib)			; Liliam: add extra music tracks
 ;	db zmake68kBank(MusData_Minib_SK)		;
 	db zmake68kBank(MusData_Menu)
 	db zmake68kBank(MusData_FinalBoss)
@@ -4863,7 +4863,7 @@ MusicPointers label *
 	declsong MusData_Emerald
 	declsong MusData_Invic
 	declsong MusData_2PMenu
-	declsong MusData_Minib				; Fred: add extra music tracks
+	declsong MusData_Minib				; Liliam: add extra music tracks
 ;	declsong MusData_Minib_SK			;
 	declsong MusData_Menu
 	declsong MusData_FinalBoss
@@ -5471,7 +5471,7 @@ MusData_ProtoCredits:		include	"Sound/Music/Credits (Prototype).asm"
 	finishBank
 
 ; ---------------------------------------------------------------------------
-; Fred: add extra music tracks (credit: Clownacy)
+; Liliam: add extra music tracks (credit: Clownacy)
 ; ---------------------------------------------------------------------------
 Mus_Bank5_Start:	startBank
 	Music_Master_Table

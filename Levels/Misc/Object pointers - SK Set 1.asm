@@ -26,7 +26,7 @@
 		dc.l Obj_LBZCupElevatorPole		; 25
 		dc.l Obj_LBZUnusedTiltingBridge		; 26
 		dc.l Obj_LBZPipePlug			; 27
-		dc.l Obj_LBZ2MinibossBox		; 28	; Fred: start from actual act 2 start
+		dc.l Obj_LBZ2MinibossBox		; 28	; Liliam: start from actual act 2 start
 		dc.l Obj_LBZUnusedBarPlatform		; 29
 		dc.l Obj_LBZSpinLauncher		; 30
 		dc.l Obj_LBZLoweringGrapple		; 31
@@ -35,7 +35,7 @@
 		dc.l Obj_LBZAlarm			; 34
 		dc.l Obj_LBZUnusedForceFall		; 35
 		dc.l Obj_AutomaticTunnel		; 36
-		dc.l Obj_ICZTeleporter			; 37	; Fred: move ICZ1 intro teleporter to layout
+		dc.l Obj_ICZTeleporter			; 37	; Liliam: move ICZ1 intro teleporter to layout
 		dc.l Obj_AutoSpin			; 38
 		dc.l Obj_S2LavaMarker			; 39
 		dc.l Obj_InvisibleBlock			; 40
@@ -197,7 +197,7 @@
 		dc.l Obj_LBZMinibossBox			; 196
 		dc.l Obj_LBZMinibossBoxKnux		; 197
 		dc.l Obj_LBZ2RobotnikShip		; 198
-		dc.l Obj_LBZ2EndRobotnik		; 199	; Fred: restore unused LBZ2 Eggman
+		dc.l Obj_LBZ2EndRobotnik		; 199	; Liliam: restore unused LBZ2 Eggman
 		dc.l Obj_LBZKnuxPillar			; 200
 		dc.l Obj_LBZMiniboss			; 201
 		dc.l Obj_LBZFinalBoss1			; 202
@@ -207,7 +207,7 @@
 		dc.l Obj_FBZExitDoor			; 206
 		dc.l Obj_FBZEggPrison			; 207
 		dc.l Obj_FBZSpringPlunger		; 208
-		dc.l Obj_FBZEggPrisonEmpty		; 209	; Fred: start from actual act 2 start
+		dc.l Obj_FBZEggPrisonEmpty		; 209	; Liliam: start from actual act 2 start
 		dc.l Obj_Ring				; 210
 		dc.l Obj_Ring				; 211
 		dc.l Obj_Ring				; 212

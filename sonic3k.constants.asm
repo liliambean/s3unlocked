@@ -472,7 +472,7 @@ Plane_buffer			ds.b $480		; used by level drawing routines
 VRAM_buffer			ds.b $80		; used to temporarily hold data while it is being transferred from one VRAM location to another
 
 Game_mode			ds.b 1
-Alternate_start_flag		ds.b 1		; Fred: Encore mode - player starts
+Alternate_start_flag		ds.b 1		; Liliam: Encore mode - player starts
 Ctrl_1_logical =		*			; both held and pressed
 Ctrl_1_held_logical		ds.b 1
 Ctrl_1_pressed_logical		ds.b 1
@@ -566,7 +566,7 @@ Nem_frame_patterns_left		ds.w 1			; the number of patterns remaining to be decom
 Tails_CPU_interact		ds.w 1			; RAM address of the last object Tails stood on while controlled by AI
 Tails_CPU_idle_timer		ds.w 1			; counts down while controller 2 is idle, when it reaches 0 the AI takes over
 Tails_CPU_flight_timer		ds.w 1			; counts up while Tails is respawning, when it reaches 300 he drops into the level
-Tails_CPU_pos_table_offset	ds.b 1		; Fred: Tails AI - track live position
+Tails_CPU_pos_table_offset	ds.b 1		; Liliam: Tails AI - track live position
 			ds.b 1				; unused
 Tails_CPU_routine		ds.w 1			; Tails' current AI routine in a Sonic and Tails game
 Tails_CPU_target_X		ds.w 1			; Tails' target x-position
@@ -631,7 +631,7 @@ _unkF7C3			ds.b 1
 _unkF7C4			ds.w 1
 Reverse_gravity_flag		ds.b 1
 WindTunnel_flag			ds.b 1
-WindTunnel_disable_flags	ds.b 1		; Fred: Encore mode - pick RAM variables by SST
+WindTunnel_disable_flags	ds.b 1		; Liliam: Encore mode - pick RAM variables by SST
 WindTunnel_flag_P2		ds.b 1
 Ctrl_1_locked			ds.b 1
 Ctrl_2_locked			ds.b 1
@@ -727,11 +727,11 @@ System_stack =			*			; this is the top of the stack, it grows downwards
 Restart_level_flag		ds.w 1
 Level_frame_counter		ds.w 1			; the number of frames which have elapsed since the level started
 Debug_object			ds.b 1			; the current position in the debug mode object list
-Debug_monitor_subtype		ds.b 1		; Fred: allow selection of debug monitor contents
+Debug_monitor_subtype		ds.b 1		; Liliam: allow selection of debug monitor contents
 Debug_placement_mode =		*			; both routine and type
 Debug_placement_routine		ds.b 1
 ;Debug_placement_type
-				ds.b 1		; Fred: move debug frame cycling mode to negative
+				ds.b 1		; Liliam: move debug frame cycling mode to negative
 Debug_camera_delay		ds.b 1
 Debug_camera_speed		ds.b 1
 V_int_run_count			ds.l 1			; the number of times V-int has run
@@ -739,10 +739,10 @@ Current_zone_and_act =		*
 Current_zone			ds.b 1
 Current_act			ds.b 1
 Life_count			ds.b 1
-Barrier_HUD_disable_flag	ds.b 1		; Fred: HUD - barrier HUD
-Barrier_HUD_frame		ds.w 1		; Fred: HUD - barrier HUD
+Barrier_HUD_disable_flag	ds.b 1		; Liliam: HUD - barrier HUD
+Barrier_HUD_frame		ds.w 1		; Liliam: HUD - barrier HUD
 Current_special_stage		ds.b 1
-Super_ready_flag		ds.b 1		; Fred: HUD - barrier HUD
+Super_ready_flag		ds.b 1		; Liliam: HUD - barrier HUD
 Continue_count			ds.b 1
 Super_Sonic_Knux_flag		ds.b 1
 Time_over_flag			ds.b 1
@@ -810,7 +810,7 @@ Ring_spill_anim_counter		ds.b 1
 Ring_spill_anim_frame		ds.b 1
 Ring_spill_anim_accum		ds.w 1
 AIZ_vine_angle			ds.w 1			; controls the angle of AIZ giant vines
-Slot_machine_wall_frame_timer	ds.b 1		; Fred: ported from S1 - restore full item set
+Slot_machine_wall_frame_timer	ds.b 1		; Liliam: ported from S1 - restore full item set
 Slot_machine_wall_frame		ds.b 1		;
 _unkFEBE		ds.b 1				; unused
 Extra_life_flags_P2		ds.b 1
@@ -882,7 +882,7 @@ Saved2_apparent_zone_and_act	ds.w 1
 ;Blue_spheres_header_flag
 ;Blue_spheres_mode
 ;Blue_spheres_menu_flag
-Blue_spheres_saved_level	ds.l 1		; Fred: blue sphere - load saved level on startup
+Blue_spheres_saved_level	ds.l 1		; Liliam: blue sphere - load saved level on startup
 Blue_spheres_current_stage	ds.b 4			; the layout parts that make up the current stage
 Blue_spheres_current_level	ds.l 1			; number shown at the top of the full game menu
 Blue_spheres_option		ds.b 1			; 0 = level, 1 = start, 2 = code
@@ -891,7 +891,7 @@ Blue_spheres_menu_flag		ds.b 1			; 0 = single stage, 1 = normal, bit 7 set = ent
 Blue_spheres_difficulty		ds.b 1			; value currently displayed
 Blue_spheres_target_difficulty	ds.b 1			; value read from the layout
 ;SK_alone_flag
-			ds.w 1			; Fred: removed S&K alone mode
+			ds.w 1			; Liliam: removed S&K alone mode
 Emerald_counts =		*			; both chaos and super emeralds
 Chaos_emerald_count		ds.b 1
 Super_emerald_count		ds.b 1
@@ -915,7 +915,7 @@ Blue_spheres_stage_flag		ds.b 1			; set if a Blue Sphere special stage is being 
 			ds.b 1				; unused
 V_blank_cycles			ds.w 1			; the number of cycles between V-blanks
 Graphics_flags			ds.b 1			; bit 7 set = English system, bit 6 set = PAL system
-Hidden_skill_flags		ds.b 1		; Fred: hidden skills
+Hidden_skill_flags		ds.b 1		; Liliam: hidden skills
 Debug_mode_flag			ds.w 1
 			ds.l 1				; unused
 Level_select_flag		ds.b 1
@@ -926,16 +926,16 @@ Debug_mode_cheat_counter	ds.w 1			; progress entering debug mode cheat, unused
 Competition_mode		ds.w 1
 P1_character			ds.b 1			; 0 = Sonic, 1 = Tails, 2 = Knuckles
 P2_character			ds.b 1
-Encore_stocks_packed		ds.w 1		; Fred: Encore mode
-Encore_available_chars		ds.b 1		; Fred: Encore mode
-Encore_mode			ds.b 1		; Fred: Encore mode
+Encore_stocks_packed		ds.w 1		; Liliam: Encore mode
+Encore_available_chars		ds.b 1		; Liliam: Encore mode
+Encore_mode			ds.b 1		; Liliam: Encore mode
 
 V_int_jump			ds.b 6			; contains an instruction to jump to the V-int handler
 V_int_addr :=			V_int_jump+2		; long
 H_int_jump			ds.b 6			; contains an instruction to jump to the H-int handler
 H_int_addr :=			H_int_jump+2		; long
 Checksum_string			ds.l 1			; set to Ref_Checksum_String once the checksum routine has run
-Ref_Checksum_String := 'Fred'
+Ref_Checksum_String := 'BEAN'
 
 .check =	(*)&$FFFFFF
 	if (.check>0)&(.check<$FF0000)
@@ -957,7 +957,7 @@ Special_stage_anim_frame	ds.w 1			; special stage globe's current animation fram
 Special_stage_X_pos		ds.w 1
 Special_stage_Y_pos		ds.w 1
 Special_stage_angle		ds.b 1			; $00 = north, $40 = west, $80 = south, $C0 = east
-Special_stage_green_spheres	ds.b 1		; Fred: special stage - add green spheres
+Special_stage_green_spheres	ds.b 1		; Liliam: special stage - add green spheres
 Special_stage_velocity		ds.w 1			; player's movement speed, negative when going backwards
 Special_stage_turning		ds.b 1			; direction of next turn, 4 = left, -4 = right
 Special_stage_bumper_lock	ds.b 1			; if set, the player can't start advancing by pressing up
@@ -989,7 +989,7 @@ Special_stage_started		ds.b 1			; set when the player begins moving at the start
 SStage_extra_sprites		ds.b $70		; some extra sprite info for special stages
 	dephase
 ; ---------------------------------------------------------------------------
-; Fred: hidden skills
+; Liliam: hidden skills
 HiddenSkill_TailsAssist		= 0
 HiddenSkill_SonicDropDash	= 1
 HiddenSkill_TailsFlyBoost	= 2
@@ -1000,7 +1000,7 @@ HiddenSkill_RayWallKick		= 6
 HiddenSkill_SonicPeelout	= 7
 
 ; ---------------------------------------------------------------------------
-; Fred: HUD - Encore mode HUD
+; Liliam: HUD - Encore mode HUD
 EncoreFlags_Enable		= 0
 EncoreFlags_Music		= 5
 EncoreFlags_Palette		= 6
@@ -1058,16 +1058,16 @@ ArtTile_StarPost                      = $05E4
 ArtTile_Player_1                      = $0680
 ArtTile_Player_2                      = $06A0
 ArtTile_TailsTail                     = $06B0
-ArtTile_TailsTail_Encore              = $06B7	; Fred: Encore mode - respawn partner character
-ArtTile_Ring                          = $06C4	; Fred: HUD - animate rings via DMA
+ArtTile_TailsTail_Encore              = $06B7	; Liliam: Encore mode - respawn partner character
+ArtTile_Ring                          = $06C4	; Liliam: HUD - animate rings via DMA
 ArtTile_Shield                        = $079C
-ArtTile_Shield_Sparks                 = $07B8	; Fred: HUD - Encore mode HUD
+ArtTile_Shield_Sparks                 = $07B8	; Liliam: HUD - Encore mode HUD
 ArtTile_LifeIcon                      = $07D4
 ArtTile_DashDust                      = $07E0
 ArtTile_DashDust_P2                   = $07F0
 
 ; ---------------------------------------------------------------------------
-; Fred: add extra music tracks
+; Liliam: add extra music tracks
 
 	phase $E8
 mus__FirstExtra =		*
@@ -1335,7 +1335,7 @@ sfx_UnknownSaw			ds.b 1		; $D8
 sfx_MagneticSpike		ds.b 1		; $D9
 sfx_LeafBlower			ds.b 1		; $DA
 sfx_WaterSkid			ds.b 1		; $DB
-;mus_CreditsK					; Fred: add extra music tracks
+;mus_CreditsK					; Liliam: add extra music tracks
 sfx__End =			*		; next ID after the last sound effect
 
 	dephase
