@@ -924,7 +924,7 @@ Snd_AIZ2_Loop1B:
 	dc.b	nBb2, nBb4, nF4, nD4, nBb3, nF3, nD3, nBb2
 	smpsNoteFill        $00
 	dc.b	nF2, $03, nRst, $60, nRst, nRst, $03
-	if FixBugs
+	if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol     $FE
 	else
 	; Bug: The PSG volume does not change with this command.
@@ -935,7 +935,7 @@ Snd_AIZ2_Loop1B:
 	smpsModSet          $0F, $01, $01, $06
 	dc.b	nEb4, $0B, nRst, $07, nEb4, $06, nRst, $48, nF4, $0B, nRst, $07
 	dc.b	nF4, $06
-	if FixBugs
+	if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol     $02
 	else
 	; Bug: The PSG volume does not change with this command.
@@ -1040,7 +1040,7 @@ Snd_AIZ2_Loop19:
 	dc.b	nBb2, nBb4, nF4, nD4, nBb3, nF3, nD3, nBb2
 	smpsNoteFill        $00
 	dc.b	nF2, $03, nRst, $60, nRst, nRst, $03
-	if FixBugs
+	if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol     $FE
 	else
 	; Bug: The PSG volume does not change with this command.
@@ -1051,7 +1051,7 @@ Snd_AIZ2_Loop19:
 	smpsModSet          $0F, $01, $01, $06
 	dc.b	nC4, $0B, nRst, $07, nC4, $02, nRst, $4C, nD4, $0B, nRst, $07
 	dc.b	nD4, $02
-	if FixBugs
+	if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol     $02
 	else
 	; Bug: The PSG volume does not change with this command.
