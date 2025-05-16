@@ -917,6 +917,7 @@ V_blank_cycles			ds.w 1			; the number of cycles between V-blanks
 Graphics_flags			ds.b 1			; bit 7 set = English system, bit 6 set = PAL system
 Hidden_skill_flags		ds.b 1		; Liliam: hidden skills
 Debug_mode_flag			ds.w 1
+Special_stage_override_flag = Debug_mode_flag+1	; Liliam: level select - access all special stages from act 1
 			ds.l 1				; unused
 Level_select_flag		ds.b 1
 Slow_motion_flag		ds.b 1

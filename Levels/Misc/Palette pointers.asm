@@ -53,7 +53,7 @@
 		dc.w 7					;
 		dc.l Pal_LevelSelect			; Liliam: level select - use data select background
 		dc.w Normal_palette&$FFFF		;
-		dc.w $1F				;
+		dc.w $17				;
 		dc.l Pal_AIZIntro
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
