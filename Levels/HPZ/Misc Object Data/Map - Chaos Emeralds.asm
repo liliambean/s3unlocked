@@ -17,7 +17,7 @@ word_914A6:	dc.w 1
 word_914AE:	dc.w 1			
 		dc.b  $FC,   0,	  0,   4, $FF, $FC
 word_914B6:	dc.w 1			
-		dc.b  $FC,   0,	$20,   5, $FF, $FC
+		dc.b  $FC,   0,	  0,   5, $FF, $FC
 word_914BE:	dc.w 1			
 		dc.b  $FC,   0,	$60,   6, $FF, $FC
 word_914C6:	dc.w 1			
