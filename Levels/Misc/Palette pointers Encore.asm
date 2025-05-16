@@ -79,8 +79,8 @@
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
 		dc.l Pal_Encore_Special
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w $17
+		dc.w Normal_palette&$FFFF
+		dc.w $1F
 		dc.l Pal_Ending_Encore
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
