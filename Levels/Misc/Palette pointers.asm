@@ -133,9 +133,11 @@
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
 		dc.l Pal_Encore_Special			; Liliam: Encore mode - bonus stage
+		dc.w Normal_palette&$FFFF		;
+		dc.w $1F				;
 ;		dc.l Pal_Ending1			;
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w $17
+;		dc.w Normal_palette_line_2&$FFFF	;
+;		dc.w $17				;
 		dc.l Pal_Ending2
 		dc.w Normal_palette_line_2&$FFFF
 		dc.w $17
