@@ -1,0 +1,214 @@
+{
+  "ConfirmMatches": [
+    {
+      "BlockAct1": "D7",
+      "BlockAct2": "D7",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "D8",
+      "BlockAct2": "D8",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "D9",
+      "BlockAct2": "D9",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "DA",
+      "BlockAct2": "DA",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "DB",
+      "BlockAct2": "DB",
+      "XFlip": false,
+      "YFlip": true
+    },
+    {
+      "BlockAct1": "DC",
+      "BlockAct2": "DF",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "DD",
+      "BlockAct2": "E0",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "DE",
+      "BlockAct2": "E1",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "DF",
+      "BlockAct2": "E2",
+      "XFlip": false,
+      "YFlip": true
+    },
+    {
+      "BlockAct1": "E0",
+      "BlockAct2": "E3",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "E1",
+      "BlockAct2": "E4",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "E2",
+      "BlockAct2": "E5",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "E3",
+      "BlockAct2": "E6",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "E4",
+      "BlockAct2": "E7",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "E5",
+      "BlockAct2": "E8",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "E6",
+      "BlockAct2": "E9",
+      "XFlip": false,
+      "YFlip": true
+    },
+    {
+      "BlockAct1": "E7",
+      "BlockAct2": "EA",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "E8",
+      "BlockAct2": "EB",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "E9",
+      "BlockAct2": "EC",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "EA",
+      "BlockAct2": "ED",
+      "XFlip": false,
+      "YFlip": true
+    },
+    {
+      "BlockAct1": "EB",
+      "BlockAct2": "EE",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "EC",
+      "BlockAct2": "EF",
+      "XFlip": false,
+      "YFlip": true
+    },
+    {
+      "BlockAct1": "ED",
+      "BlockAct2": "F0",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "EE",
+      "BlockAct2": "F1",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "EF",
+      "BlockAct2": "F2",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "F0",
+      "BlockAct2": "F3",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "F1",
+      "BlockAct2": "F4",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "F2",
+      "BlockAct2": "F5",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "F3",
+      "BlockAct2": "F6",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "F4",
+      "BlockAct2": "F7",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "119",
+      "BlockAct2": "1C0",
+      "XFlip": true,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "188",
+      "BlockAct2": "1BF",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "18B",
+      "BlockAct2": "1BC",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "18C",
+      "BlockAct2": "1BE",
+      "XFlip": false,
+      "YFlip": false
+    },
+    {
+      "BlockAct1": "191",
+      "BlockAct2": "1BD",
+      "XFlip": false,
+      "YFlip": false
+    }
+  ]
+}
