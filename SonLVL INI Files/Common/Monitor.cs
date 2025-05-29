@@ -66,7 +66,7 @@ namespace S3KObjectDefinitions.Common
 		{
 			var indexer = new MultiFileIndexer<byte>();
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
-				"../General/Sprites/Monitors/Monitors.bin", CompressionType.Nemesis)), 0);
+				"../General/Sprites/Monitors/Monitors Encore.bin", CompressionType.Nemesis)), 0);
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
 				"../General/Sprites/HUD Icon/Sonic Life Icon.bin", CompressionType.Nemesis)), 25088);
 
@@ -76,7 +76,7 @@ namespace S3KObjectDefinitions.Common
 
 			subtypeNames = new[]
 			{
-				"Super",
+				"Combine Ring",
 				"1-Up",
 				"Eggman",
 				"Rings",
@@ -85,7 +85,7 @@ namespace S3KObjectDefinitions.Common
 				"Thunder Barrier",
 				"Aqua Barrier",
 				"Invincibility",
-				"Barrier"
+				"Rotate Stocks"
 			};
 
 			var subtypes = new byte[subtypeNames.Length];
