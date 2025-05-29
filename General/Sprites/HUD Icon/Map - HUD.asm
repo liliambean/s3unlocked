@@ -81,15 +81,15 @@ Map_HUD_AquaBarrier:
 		dc.b $80,  5,  0,$30,$FF,$F8
 Map_HUD_CombineRing:
 		dc.w 1
-		dc.b $80,  5,  0,$38,$FF,$F8
+		dc.b $80,  5,  0,$18,$FF,$F8
 Map_HUD_SuperReady1:
 		dc.w 1
-		dc.b $80,  5,  0,$18,$FF,$F8
+		dc.b $80,  5,  0,$38,$FF,$F8
 Map_HUD_SuperReady2:
 		dc.w 3
 		dc.b $82,  1,$22, $A,$FF,$E8
 		dc.b $82,  1,$22,$30,$FF,$F0
-		dc.b $80,  5,  0,$18,$FF,$F8
+		dc.b $80,  5,  0,$38,$FF,$F8
 Map_HUD_EncoreStocks0:
 		dc.w 1
 		dc.b $40,  5,  1,$10,  0,  0
