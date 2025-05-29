@@ -2463,8 +2463,8 @@ zMusicFade:
 		ld	(hl), a							; Initial value of zero
 		ldir								; while (--length) *de++ = *hl++
 		ld	a, (zTempoSpeedupReq)			; Get flag indicating if tempo is to be kept
-		or	a								; Is it set?
-		jr	nz, .keep_tempo					; Branch if yes
+;		or	a				; Liliam: bugfix - keep correct tempo
+;		jr	nz, .keep_tempo			;
 		ld	(zTempoSpeedup), a				; Fade in normal speed
 
 .keep_tempo:
