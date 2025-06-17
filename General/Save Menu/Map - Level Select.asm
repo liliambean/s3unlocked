@@ -58,15 +58,15 @@ Map_LevelSelectBossIcon:
 		dc.b  $11,   0, $40, $30,   0, $19
 Map_LevelSelectPlayer_1P:
 		dc.w 2
-		dc.b  $F0,   0, $40, $11, $FF, $F8
-		dc.b  $F0,   0, $40, $2D,   0,   0
+		dc.b  $F1,   0, $40, $11, $FF, $F8
+		dc.b  $F1,   0, $40, $2D,   0,   0
 Map_LevelSelectPlayer_2P:
 		dc.w 2
-		dc.b  $F0,   0, $40, $12, $FF, $F8
-		dc.b  $F0,   0, $40, $2D,   0,   0
+		dc.b  $F1,   0, $40, $12, $FF, $F8
+		dc.b  $F1,   0, $40, $2D,   0,   0
 Map_LevelSelectArrow_LeftArrow:
 		dc.w 1
-		dc.b  $F8,   1,  $D, $E2, $FF, $FA
+		dc.b  $F9,   1,  $D, $E2, $FF, $FA
 Map_LevelSelectArrow_RightArrow:
 		dc.w 1
-		dc.b  $F8,   1,   5, $E2, $FF, $FC
+		dc.b  $F9,   1,   5, $E2, $FF, $FC
