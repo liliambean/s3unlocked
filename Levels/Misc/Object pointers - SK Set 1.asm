@@ -207,7 +207,7 @@
 		dc.l Obj_FBZExitDoor			; 206
 		dc.l Obj_FBZEggPrison			; 207
 		dc.l Obj_FBZSpringPlunger		; 208
-		dc.l Obj_FBZEggPrisonEmpty		; 209	; Liliam: start from actual act 2 start
+		dc.l Obj_FBZEmptyCapsule		; 209	; Liliam: start from actual act 2 start
 		dc.l Obj_Ring				; 210
 		dc.l Obj_Ring				; 211
 		dc.l Obj_Ring				; 212
