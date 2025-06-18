@@ -51,8 +51,8 @@
 		dc.l Obj_LRZTurbineSprites		; 50
 		dc.l Obj_Button				; 51
 		dc.l Obj_StarPost			; 52
-		dc.l Obj_AIZForegroundPlant		; 53
-		dc.l Obj_HCZBreakableBar		; 54
+		dc.l Obj_HPZStarPost			; 53	; Liliam: Knux HPZ
+		dc.l Obj_SSZ2Ring			; 54	; Liliam: Metal Sonic - final boss
 		dc.l Obj_LRZSpikeBallLauncher		; 55
 		dc.l Obj_SOZQuicksand			; 56
 		dc.l Obj_SOZSpawningSandBlocks		; 57
@@ -157,7 +157,7 @@
 		dc.l Obj_LRZRockCrusher			; 156
 		dc.l Obj_LRZMiniboss			; 157
 		dc.l Obj_LRZ3Autoscroll			; 158
-		dc.l Obj_SSZ2Ring			; 159	; Liliam: Metal Sonic - final boss
+		dc.l Obj_Ring				; 159
 		dc.l Obj_EggRobo			; 160
 		dc.l Obj_SSZGHZBoss			; 161
 		dc.l Obj_SSZMTZBoss			; 162
