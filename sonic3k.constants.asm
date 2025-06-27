@@ -354,7 +354,7 @@ Competition_time_attack_new_top_record	ds.b 1		; signifies new time records in t
 Competition_lap_count		ds.b 1			; number of laps that player 1 has completed
 Competition_lap_count_2P	ds.b 1			; number of laps that player 2 has completed
 Act3_flag			ds.b 1			; set when entering LRZ 3 or DEZ 3 directly from previous act. Prevents title card from loading
-			ds.b 1				; unused
+Alternate_start_flag		ds.b 1		; Liliam: Encore mode - player starts
 Camera_X_pos_P2			ds.l 1
 Camera_Y_pos_P2			ds.l 1
 Camera_X_pos_P2_copy		ds.w 1
@@ -472,7 +472,7 @@ Plane_buffer			ds.b $480		; used by level drawing routines
 VRAM_buffer			ds.b $80		; used to temporarily hold data while it is being transferred from one VRAM location to another
 
 Game_mode			ds.b 1
-Alternate_start_flag		ds.b 1		; Liliam: Encore mode - player starts
+			ds.b 1				; unused
 Ctrl_1_logical =		*			; both held and pressed
 Ctrl_1_held_logical		ds.b 1
 Ctrl_1_pressed_logical		ds.b 1
@@ -840,7 +840,8 @@ Perfect_rings_left		ds.w 1			; left over from Sonic 2
 _unkFF06			ds.w 1			; unknown
 Player_mode			ds.w 1			; 0 = Sonic and Tails, 1 = Sonic alone, 2 = Tails alone, 3 = Knuckles alone
 Player_option			ds.w 1			; option selected on level select, data select screen or Sonic & Knuckles title screen
-			ds.w 1				; unused
+Encore_mode			ds.b 1		; Liliam: Encore mode
+AIZ_skip_intro_flag		ds.b 1		; Liliam: continues - restart from act 1
 
 Kos_decomp_queue_count		ds.w 1			; the number of pieces of data on the queue. Sign bit set indicates a decompression is in progress
 Kos_decomp_stored_registers	ds.w 20			; allows decompression to be spread over multiple frames
@@ -929,7 +930,7 @@ P1_character			ds.b 1			; 0 = Sonic, 1 = Tails, 2 = Knuckles
 P2_character			ds.b 1
 Encore_stocks_packed		ds.w 1		; Liliam: Encore mode
 Encore_available_chars		ds.b 1		; Liliam: Encore mode
-Encore_mode			ds.b 1		; Liliam: Encore mode
+			ds.b 1				; unused
 
 V_int_jump			ds.b 6			; contains an instruction to jump to the V-int handler
 V_int_addr :=			V_int_jump+2		; long
