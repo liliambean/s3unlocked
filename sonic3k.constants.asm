@@ -182,7 +182,7 @@ Status_Underwater   = 6
 Status_Shield       = 0
 Status_Invincible   = 1
 Status_SpeedShoes   = 2
-
+Status_CombiRing    = 3				; Liliam: Encore mode - combine ring
 Status_FireShield   = 4
 Status_LtngShield   = 5
 Status_BublShield   = 6
@@ -1016,10 +1016,11 @@ Encore_HUD_stocks_timer =	Reserved_object_3+$30
 Encore_HUD_stocks_scroll =	Reserved_object_3+$32
 
 sfx_EncoreSwap =		sfx_PulleyGrab
-sfx_EncoreSwapBlock =		sfx_SmallBumpers
-sfx_EncoreRotate =		sfx_Shield
+sfx_EncoreSwapBlocked =		sfx_SmallBumpers
 sfx_EncoreRespawn =		sfx_Signpost
-sfx_EncoreDrowning =		sfx_TunnelBooster
+sfx_AirCountdown =		sfx_TunnelBooster
+sfx_CombineRing =		sfx_Shield
+sfx_RotateStocks =		sfx_Shield
 
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
