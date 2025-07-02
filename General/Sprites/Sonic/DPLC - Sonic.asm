@@ -1,510 +1,512 @@
-		dc.w PLC_Sonic_Blank-PLC_Sonic
-		dc.w PLC_Sonic_Walk1-PLC_Sonic
-		dc.w PLC_Sonic_Walk2-PLC_Sonic
-		dc.w PLC_Sonic_Walk3-PLC_Sonic
-		dc.w PLC_Sonic_Walk4-PLC_Sonic
-		dc.w PLC_Sonic_Walk5-PLC_Sonic
-		dc.w PLC_Sonic_Walk6-PLC_Sonic
-		dc.w PLC_Sonic_Walk7-PLC_Sonic
-		dc.w PLC_Sonic_Walk8-PLC_Sonic
-		dc.w PLC_Sonic_DiagWalk1-PLC_Sonic
-		dc.w PLC_Sonic_DiagWalk2-PLC_Sonic
-		dc.w PLC_Sonic_DiagWalk3-PLC_Sonic
-		dc.w PLC_Sonic_DiagWalk4-PLC_Sonic
-		dc.w PLC_Sonic_DiagWalk5-PLC_Sonic
-		dc.w PLC_Sonic_DiagWalk6-PLC_Sonic
-		dc.w PLC_Sonic_DiagWalk7-PLC_Sonic
-		dc.w PLC_Sonic_DiagWalk8-PLC_Sonic
-		dc.w PLC_Sonic_WallWalk1-PLC_Sonic
-		dc.w PLC_Sonic_WallWalk2-PLC_Sonic
-		dc.w PLC_Sonic_WallWalk3-PLC_Sonic
-		dc.w PLC_Sonic_WallWalk4-PLC_Sonic
-		dc.w PLC_Sonic_WallWalk5-PLC_Sonic
-		dc.w PLC_Sonic_WallWalk6-PLC_Sonic
-		dc.w PLC_Sonic_WallWalk7-PLC_Sonic
-		dc.w PLC_Sonic_WallWalk8-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallWalk1-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallWalk2-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallWalk3-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallWalk4-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallWalk5-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallWalk6-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallWalk7-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallWalk8-PLC_Sonic
-		dc.w PLC_Sonic_Run1-PLC_Sonic
-		dc.w PLC_Sonic_Run2-PLC_Sonic
-		dc.w PLC_Sonic_Run3-PLC_Sonic
-		dc.w PLC_Sonic_Run4-PLC_Sonic
-		dc.w PLC_Sonic_DiagRun1-PLC_Sonic
-		dc.w PLC_Sonic_DiagRun2-PLC_Sonic
-		dc.w PLC_Sonic_DiagRun3-PLC_Sonic
-		dc.w PLC_Sonic_DiagRun4-PLC_Sonic
-		dc.w PLC_Sonic_WallRun1-PLC_Sonic
-		dc.w PLC_Sonic_WallRun2-PLC_Sonic
-		dc.w PLC_Sonic_WallRun3-PLC_Sonic
-		dc.w PLC_Sonic_WallRun4-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallRun1-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallRun2-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallRun3-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallRun4-PLC_Sonic
-		dc.w PLC_Sonic_Corkscrew1-PLC_Sonic
-		dc.w PLC_Sonic_Corkscrew2-PLC_Sonic
-		dc.w PLC_Sonic_Corkscrew3-PLC_Sonic
-		dc.w PLC_Sonic_Corkscrew4-PLC_Sonic
-		dc.w PLC_Sonic_Corkscrew5-PLC_Sonic
-		dc.w PLC_Sonic_Corkscrew6-PLC_Sonic
-		dc.w PLC_Sonic_Corkscrew7-PLC_Sonic
-		dc.w PLC_Sonic_Corkscrew8-PLC_Sonic
-		dc.w PLC_Sonic_Corkscrew9-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewA-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewB-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewC-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStand1-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStand2-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStand3-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStand4-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStand5-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStand6-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStand7-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStand8-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStand9-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStandA-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStandB-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewStandC-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiag1-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiag2-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiag3-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiag4-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiag5-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiag6-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiag7-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiag8-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiag9-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiagA-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiagB-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewDiagC-PLC_Sonic
-		dc.w PLC_Sonic_360Stand1-PLC_Sonic
-		dc.w PLC_Sonic_360Stand2-PLC_Sonic
-		dc.w PLC_Sonic_360Stand3-PLC_Sonic
-		dc.w PLC_Sonic_360Stand4-PLC_Sonic
-		dc.w PLC_Sonic_360Stand5-PLC_Sonic
-		dc.w PLC_Sonic_360Stand6-PLC_Sonic
-		dc.w PLC_Sonic_360Stand7-PLC_Sonic
-		dc.w PLC_Sonic_PoleSwing1-PLC_Sonic
-		dc.w PLC_Sonic_PoleSwing2-PLC_Sonic
-		dc.w PLC_Sonic_PoleSwing3-PLC_Sonic
-		dc.w PLC_Sonic_PoleSwing4-PLC_Sonic
-		dc.w PLC_Sonic_PoleSwing5-PLC_Sonic
-		dc.w PLC_Sonic_PoleSwing6-PLC_Sonic
-		dc.w PLC_Sonic_BarWalk-PLC_Sonic
-		dc.w PLC_Sonic_BarSwing1-PLC_Sonic
-		dc.w PLC_Sonic_BarSwing2-PLC_Sonic
-		dc.w PLC_Sonic_BarSwing3-PLC_Sonic
-		dc.w PLC_Sonic_BarSwing4-PLC_Sonic
-		dc.w PLC_Sonic_BarSwing5-PLC_Sonic
-		dc.w PLC_Sonic_BarSwing6-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWallRide1-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWallRide2-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWallRide3-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWall1-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWall2-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWall3-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWall4-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWall5-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWall6-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWall7-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWall8-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWall9-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWallA-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWallB-PLC_Sonic
-		dc.w PLC_Sonic_CorkscrewWallC-PLC_Sonic
-		dc.w PLC_Sonic_HangSwing1-PLC_Sonic
-		dc.w PLC_Sonic_HangSwing2-PLC_Sonic
-		dc.w PLC_Sonic_HangSwing3-PLC_Sonic
-		dc.w PLC_Sonic_HangSwing4-PLC_Sonic
-		dc.w PLC_Sonic_HangSwing5-PLC_Sonic
-		dc.w PLC_Sonic_HangSwing6-PLC_Sonic
-		dc.w PLC_Sonic_HangSwing7-PLC_Sonic
-		dc.w PLC_Sonic_HangSwing8-PLC_Sonic
-		dc.w PLC_Sonic_HangWalk1-PLC_Sonic
-		dc.w PLC_Sonic_HangWalk2-PLC_Sonic
-		dc.w PLC_Sonic_HangWalk3-PLC_Sonic
-		dc.w PLC_Sonic_HangWalk4-PLC_Sonic
-		dc.w PLC_Sonic_HangWalk5-PLC_Sonic
-		dc.w PLC_Sonic_HangWalk6-PLC_Sonic
-		dc.w PLC_Sonic_Hang1-PLC_Sonic
-		dc.w PLC_Sonic_Hang2-PLC_Sonic
-		dc.w PLC_Sonic_Hang3-PLC_Sonic
-		dc.w PLC_Sonic_Hang4-PLC_Sonic
-		dc.w PLC_Sonic_360Hang1-PLC_Sonic
-		dc.w PLC_Sonic_360Hang2-PLC_Sonic
-		dc.w PLC_Sonic_360Hang3-PLC_Sonic
-		dc.w PLC_Sonic_360Hang4-PLC_Sonic
-		dc.w PLC_Sonic_360Hang5-PLC_Sonic
-		dc.w PLC_Sonic_360Hang6-PLC_Sonic
-		dc.w PLC_Sonic_360Hang7-PLC_Sonic
-		dc.w PLC_Sonic_WallRide1-PLC_Sonic
-		dc.w PLC_Sonic_WallRide2-PLC_Sonic
-		dc.w PLC_Sonic_WallRide3-PLC_Sonic
-		dc.w PLC_Sonic_WallRide4-PLC_Sonic
-		dc.w PLC_Sonic_WallRide5-PLC_Sonic
-		dc.w PLC_Sonic_360Run1-PLC_Sonic
-		dc.w PLC_Sonic_360Run2-PLC_Sonic
-		dc.w PLC_Sonic_360Run3-PLC_Sonic
-		dc.w PLC_Sonic_360Run4-PLC_Sonic
-		dc.w PLC_Sonic_360Run5-PLC_Sonic
-		dc.w PLC_Sonic_360Run6-PLC_Sonic
-		dc.w PLC_Sonic_360Run7-PLC_Sonic
-		dc.w PLC_Sonic_360Run8-PLC_Sonic
-		dc.w PLC_Sonic_360Run9-PLC_Sonic
-		dc.w PLC_Sonic_360RunA-PLC_Sonic
-		dc.w PLC_Sonic_360RunB-PLC_Sonic
-		dc.w PLC_Sonic_360RunC-PLC_Sonic
-		dc.w PLC_Sonic_PoleSwingRide-PLC_Sonic
-		dc.w PLC_Sonic_PoleCurrent1-PLC_Sonic
-		dc.w PLC_Sonic_PoleCurrent2-PLC_Sonic
-		dc.w PLC_Sonic_Pulley-PLC_Sonic
-		dc.w PLC_Sonic_BarCurrent1-PLC_Sonic
-		dc.w PLC_Sonic_BarCurrent2-PLC_Sonic
-		dc.w PLC_Sonic_DropDash1-PLC_Sonic
-		dc.w PLC_Sonic_DropDash2-PLC_Sonic
-		dc.w PLC_Sonic_DropDash3-PLC_Sonic
-		dc.w PLC_Sonic_DropDash4-PLC_Sonic
-		dc.w PLC_Sonic_DropDash5-PLC_Sonic
-		dc.w PLC_Sonic_DropDash6-PLC_Sonic
-		dc.w PLC_Sonic_Stand1-PLC_Sonic
-		dc.w PLC_Sonic_Stand2-PLC_Sonic
-		dc.w PLC_Sonic_Stand3-PLC_Sonic
-		dc.w PLC_Sonic_Stand4-PLC_Sonic
-		dc.w PLC_Sonic_Stand5-PLC_Sonic
-		dc.w PLC_Sonic_Stand6-PLC_Sonic
-		dc.w PLC_Sonic_Stand7-PLC_Sonic
-		dc.w PLC_Sonic_Stand8-PLC_Sonic
-		dc.w PLC_Sonic_Dash1-PLC_Sonic
-		dc.w PLC_Sonic_Dash2-PLC_Sonic
-		dc.w PLC_Sonic_Dash3-PLC_Sonic
-		dc.w PLC_Sonic_Dash4-PLC_Sonic
-		dc.w PLC_Sonic_DiagDash1-PLC_Sonic
-		dc.w PLC_Sonic_DiagDash2-PLC_Sonic
-		dc.w PLC_Sonic_DiagDash3-PLC_Sonic
-		dc.w PLC_Sonic_DiagDash4-PLC_Sonic
-		dc.w PLC_Sonic_WallDash1-PLC_Sonic
-		dc.w PLC_Sonic_WallDash2-PLC_Sonic
-		dc.w PLC_Sonic_WallDash3-PLC_Sonic
-		dc.w PLC_Sonic_WallDash4-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallDash1-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallDash2-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallDash3-PLC_Sonic
-		dc.w PLC_Sonic_DiagWallDash4-PLC_Sonic
-		dc.w PLC_Sonic_Float1-PLC_Sonic
-		dc.w PLC_Sonic_Float2-PLC_Sonic
-		dc.w PLC_Sonic_Float3-PLC_Sonic
-		dc.w PLC_Sonic_Float4-PLC_Sonic
-		dc.w PLC_Sonic_Float5-PLC_Sonic
-		dc.w PLC_Sonic_Float6-PLC_Sonic
-		dc.w PLC_Sonic_Float7-PLC_Sonic
-		dc.w PLC_Sonic_Float8-PLC_Sonic
-		dc.w PLC_Sonic_Crane-PLC_Sonic
-		dc.w PLC_Sonic_Bubble-PLC_Sonic
-		dc.w PLC_Sonic_Push1-PLC_Sonic
-		dc.w PLC_Sonic_Push2-PLC_Sonic
-		dc.w PLC_Sonic_Push3-PLC_Sonic
-		dc.w PLC_Sonic_Push4-PLC_Sonic
-		dc.w PLC_Sonic_Death-PLC_Sonic
-		dc.w PLC_Sonic_Drown-PLC_Sonic
-		dc.w PLC_Sonic_LookUp1-PLC_Sonic
-		dc.w PLC_Sonic_LookUp2-PLC_Sonic
-		dc.w PLC_Sonic_Crouch1-PLC_Sonic
-		dc.w PLC_Sonic_Crouch2-PLC_Sonic
-		dc.w PLC_Sonic_SpinDash1-PLC_Sonic
-		dc.w PLC_Sonic_SpinDash2-PLC_Sonic
-		dc.w PLC_Sonic_SpinDash3-PLC_Sonic
-		dc.w PLC_Sonic_SpinDash4-PLC_Sonic
-		dc.w PLC_Sonic_SpinDash5-PLC_Sonic
-		dc.w PLC_Sonic_SpinDash6-PLC_Sonic
-		dc.w PLC_Sonic_Spin1-PLC_Sonic
-		dc.w PLC_Sonic_Spin2-PLC_Sonic
-		dc.w PLC_Sonic_Spin3-PLC_Sonic
-		dc.w PLC_Sonic_Spin4-PLC_Sonic
-		dc.w PLC_Sonic_Spin5-PLC_Sonic
-		dc.w PLC_Sonic_Slide1-PLC_Sonic
-		dc.w PLC_Sonic_Slide2-PLC_Sonic
-		dc.w PLC_Sonic_Fall1-PLC_Sonic
-		dc.w PLC_Sonic_Fall2-PLC_Sonic
-		dc.w PLC_Sonic_Spring-PLC_Sonic
-		dc.w PLC_Sonic_Transform1-PLC_Sonic
-		dc.w PLC_Sonic_Transform2-PLC_Sonic
-		dc.w PLC_Sonic_Transform3-PLC_Sonic
-		dc.w PLC_Sonic_Transform4-PLC_Sonic
-		dc.w PLC_Sonic_Transform5-PLC_Sonic
-		dc.w PLC_Sonic_Skid1-PLC_Sonic
-		dc.w PLC_Sonic_Skid2-PLC_Sonic
-		dc.w PLC_Sonic_Skid3-PLC_Sonic
-		dc.w PLC_Sonic_Skid4-PLC_Sonic
-		dc.w PLC_Sonic_Clear1-PLC_Sonic
-		dc.w PLC_Sonic_Clear2-PLC_Sonic
-		dc.w PLC_Sonic_Clear3-PLC_Sonic
-		dc.w PLC_Sonic_Clear4-PLC_Sonic
-		dc.w PLC_Sonic_Balance1-PLC_Sonic
-		dc.w PLC_Sonic_Balance2-PLC_Sonic
-		dc.w PLC_Sonic_Balance3-PLC_Sonic
-		dc.w PLC_Sonic_Balance4-PLC_Sonic
-		dc.w PLC_Sonic_Balance5-PLC_Sonic
-		dc.w PLC_Sonic_Balance6-PLC_Sonic
+PLC_Sonic_:
+		dc.w PLC_Sonic_Blank-PLC_Sonic_
+		dc.w PLC_Sonic_Walk1-PLC_Sonic_
+		dc.w PLC_Sonic_Walk2-PLC_Sonic_
+		dc.w PLC_Sonic_Walk3-PLC_Sonic_
+		dc.w PLC_Sonic_Walk4-PLC_Sonic_
+		dc.w PLC_Sonic_Walk5-PLC_Sonic_
+		dc.w PLC_Sonic_Walk6-PLC_Sonic_
+		dc.w PLC_Sonic_Walk7-PLC_Sonic_
+		dc.w PLC_Sonic_Walk8-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWalk1-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWalk2-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWalk3-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWalk4-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWalk5-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWalk6-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWalk7-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWalk8-PLC_Sonic_
+		dc.w PLC_Sonic_WallWalk1-PLC_Sonic_
+		dc.w PLC_Sonic_WallWalk2-PLC_Sonic_
+		dc.w PLC_Sonic_WallWalk3-PLC_Sonic_
+		dc.w PLC_Sonic_WallWalk4-PLC_Sonic_
+		dc.w PLC_Sonic_WallWalk5-PLC_Sonic_
+		dc.w PLC_Sonic_WallWalk6-PLC_Sonic_
+		dc.w PLC_Sonic_WallWalk7-PLC_Sonic_
+		dc.w PLC_Sonic_WallWalk8-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallWalk1-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallWalk2-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallWalk3-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallWalk4-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallWalk5-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallWalk6-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallWalk7-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallWalk8-PLC_Sonic_
+		dc.w PLC_Sonic_Run1-PLC_Sonic_
+		dc.w PLC_Sonic_Run2-PLC_Sonic_
+		dc.w PLC_Sonic_Run3-PLC_Sonic_
+		dc.w PLC_Sonic_Run4-PLC_Sonic_
+		dc.w PLC_Sonic_DiagRun1-PLC_Sonic_
+		dc.w PLC_Sonic_DiagRun2-PLC_Sonic_
+		dc.w PLC_Sonic_DiagRun3-PLC_Sonic_
+		dc.w PLC_Sonic_DiagRun4-PLC_Sonic_
+		dc.w PLC_Sonic_WallRun1-PLC_Sonic_
+		dc.w PLC_Sonic_WallRun2-PLC_Sonic_
+		dc.w PLC_Sonic_WallRun3-PLC_Sonic_
+		dc.w PLC_Sonic_WallRun4-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallRun1-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallRun2-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallRun3-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallRun4-PLC_Sonic_
+		dc.w PLC_Sonic_Corkscrew1-PLC_Sonic_
+		dc.w PLC_Sonic_Corkscrew2-PLC_Sonic_
+		dc.w PLC_Sonic_Corkscrew3-PLC_Sonic_
+		dc.w PLC_Sonic_Corkscrew4-PLC_Sonic_
+		dc.w PLC_Sonic_Corkscrew5-PLC_Sonic_
+		dc.w PLC_Sonic_Corkscrew6-PLC_Sonic_
+		dc.w PLC_Sonic_Corkscrew7-PLC_Sonic_
+		dc.w PLC_Sonic_Corkscrew8-PLC_Sonic_
+		dc.w PLC_Sonic_Corkscrew9-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewA-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewB-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewC-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStand1-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStand2-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStand3-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStand4-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStand5-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStand6-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStand7-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStand8-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStand9-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStandA-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStandB-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewStandC-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiag1-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiag2-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiag3-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiag4-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiag5-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiag6-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiag7-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiag8-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiag9-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiagA-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiagB-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewDiagC-PLC_Sonic_
+		dc.w PLC_Sonic_360Stand1-PLC_Sonic_
+		dc.w PLC_Sonic_360Stand2-PLC_Sonic_
+		dc.w PLC_Sonic_360Stand3-PLC_Sonic_
+		dc.w PLC_Sonic_360Stand4-PLC_Sonic_
+		dc.w PLC_Sonic_360Stand5-PLC_Sonic_
+		dc.w PLC_Sonic_360Stand6-PLC_Sonic_
+		dc.w PLC_Sonic_360Stand7-PLC_Sonic_
+		dc.w PLC_Sonic_PoleSwing1-PLC_Sonic_
+		dc.w PLC_Sonic_PoleSwing2-PLC_Sonic_
+		dc.w PLC_Sonic_PoleSwing3-PLC_Sonic_
+		dc.w PLC_Sonic_PoleSwing4-PLC_Sonic_
+		dc.w PLC_Sonic_PoleSwing5-PLC_Sonic_
+		dc.w PLC_Sonic_PoleSwing6-PLC_Sonic_
+		dc.w PLC_Sonic_BarWalk-PLC_Sonic_
+		dc.w PLC_Sonic_BarSwing1-PLC_Sonic_
+		dc.w PLC_Sonic_BarSwing2-PLC_Sonic_
+		dc.w PLC_Sonic_BarSwing3-PLC_Sonic_
+		dc.w PLC_Sonic_BarSwing4-PLC_Sonic_
+		dc.w PLC_Sonic_BarSwing5-PLC_Sonic_
+		dc.w PLC_Sonic_BarSwing6-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWallRide1-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWallRide2-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWallRide3-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWall1-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWall2-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWall3-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWall4-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWall5-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWall6-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWall7-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWall8-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWall9-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWallA-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWallB-PLC_Sonic_
+		dc.w PLC_Sonic_CorkscrewWallC-PLC_Sonic_
+		dc.w PLC_Sonic_HangSwing1-PLC_Sonic_
+		dc.w PLC_Sonic_HangSwing2-PLC_Sonic_
+		dc.w PLC_Sonic_HangSwing3-PLC_Sonic_
+		dc.w PLC_Sonic_HangSwing4-PLC_Sonic_
+		dc.w PLC_Sonic_HangSwing5-PLC_Sonic_
+		dc.w PLC_Sonic_HangSwing6-PLC_Sonic_
+		dc.w PLC_Sonic_HangSwing7-PLC_Sonic_
+		dc.w PLC_Sonic_HangSwing8-PLC_Sonic_
+		dc.w PLC_Sonic_HangWalk1-PLC_Sonic_
+		dc.w PLC_Sonic_HangWalk2-PLC_Sonic_
+		dc.w PLC_Sonic_HangWalk3-PLC_Sonic_
+		dc.w PLC_Sonic_HangWalk4-PLC_Sonic_
+		dc.w PLC_Sonic_HangWalk5-PLC_Sonic_
+		dc.w PLC_Sonic_HangWalk6-PLC_Sonic_
+		dc.w PLC_Sonic_Hang1-PLC_Sonic_
+		dc.w PLC_Sonic_Hang2-PLC_Sonic_
+		dc.w PLC_Sonic_Hang3-PLC_Sonic_
+		dc.w PLC_Sonic_Hang4-PLC_Sonic_
+		dc.w PLC_Sonic_360Hang1-PLC_Sonic_
+		dc.w PLC_Sonic_360Hang2-PLC_Sonic_
+		dc.w PLC_Sonic_360Hang3-PLC_Sonic_
+		dc.w PLC_Sonic_360Hang4-PLC_Sonic_
+		dc.w PLC_Sonic_360Hang5-PLC_Sonic_
+		dc.w PLC_Sonic_360Hang6-PLC_Sonic_
+		dc.w PLC_Sonic_360Hang7-PLC_Sonic_
+		dc.w PLC_Sonic_WallRide1-PLC_Sonic_
+		dc.w PLC_Sonic_WallRide2-PLC_Sonic_
+		dc.w PLC_Sonic_WallRide3-PLC_Sonic_
+		dc.w PLC_Sonic_WallRide4-PLC_Sonic_
+		dc.w PLC_Sonic_WallRide5-PLC_Sonic_
+		dc.w PLC_Sonic_360Run1-PLC_Sonic_
+		dc.w PLC_Sonic_360Run2-PLC_Sonic_
+		dc.w PLC_Sonic_360Run3-PLC_Sonic_
+		dc.w PLC_Sonic_360Run4-PLC_Sonic_
+		dc.w PLC_Sonic_360Run5-PLC_Sonic_
+		dc.w PLC_Sonic_360Run6-PLC_Sonic_
+		dc.w PLC_Sonic_360Run7-PLC_Sonic_
+		dc.w PLC_Sonic_360Run8-PLC_Sonic_
+		dc.w PLC_Sonic_360Run9-PLC_Sonic_
+		dc.w PLC_Sonic_360RunA-PLC_Sonic_
+		dc.w PLC_Sonic_360RunB-PLC_Sonic_
+		dc.w PLC_Sonic_360RunC-PLC_Sonic_
+		dc.w PLC_Sonic_PoleSwingRide-PLC_Sonic_
+		dc.w PLC_Sonic_PoleCurrent1-PLC_Sonic_
+		dc.w PLC_Sonic_PoleCurrent2-PLC_Sonic_
+		dc.w PLC_Sonic_Pulley-PLC_Sonic_
+		dc.w PLC_Sonic_BarCurrent1-PLC_Sonic_
+		dc.w PLC_Sonic_BarCurrent2-PLC_Sonic_
+		dc.w PLC_Sonic_DropDash1-PLC_Sonic_
+		dc.w PLC_Sonic_DropDash2-PLC_Sonic_
+		dc.w PLC_Sonic_DropDash3-PLC_Sonic_
+		dc.w PLC_Sonic_DropDash4-PLC_Sonic_
+		dc.w PLC_Sonic_DropDash5-PLC_Sonic_
+		dc.w PLC_Sonic_DropDash6-PLC_Sonic_
+		dc.w PLC_Sonic_Stand1-PLC_Sonic_
+		dc.w PLC_Sonic_Stand2-PLC_Sonic_
+		dc.w PLC_Sonic_Stand3-PLC_Sonic_
+		dc.w PLC_Sonic_Stand4-PLC_Sonic_
+		dc.w PLC_Sonic_Stand5-PLC_Sonic_
+		dc.w PLC_Sonic_Stand6-PLC_Sonic_
+		dc.w PLC_Sonic_Stand7-PLC_Sonic_
+		dc.w PLC_Sonic_Stand8-PLC_Sonic_
+		dc.w PLC_Sonic_Dash1-PLC_Sonic_
+		dc.w PLC_Sonic_Dash2-PLC_Sonic_
+		dc.w PLC_Sonic_Dash3-PLC_Sonic_
+		dc.w PLC_Sonic_Dash4-PLC_Sonic_
+		dc.w PLC_Sonic_DiagDash1-PLC_Sonic_
+		dc.w PLC_Sonic_DiagDash2-PLC_Sonic_
+		dc.w PLC_Sonic_DiagDash3-PLC_Sonic_
+		dc.w PLC_Sonic_DiagDash4-PLC_Sonic_
+		dc.w PLC_Sonic_WallDash1-PLC_Sonic_
+		dc.w PLC_Sonic_WallDash2-PLC_Sonic_
+		dc.w PLC_Sonic_WallDash3-PLC_Sonic_
+		dc.w PLC_Sonic_WallDash4-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallDash1-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallDash2-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallDash3-PLC_Sonic_
+		dc.w PLC_Sonic_DiagWallDash4-PLC_Sonic_
+		dc.w PLC_Sonic_Float1-PLC_Sonic_
+		dc.w PLC_Sonic_Float2-PLC_Sonic_
+		dc.w PLC_Sonic_Float3-PLC_Sonic_
+		dc.w PLC_Sonic_Float4-PLC_Sonic_
+		dc.w PLC_Sonic_Float5-PLC_Sonic_
+		dc.w PLC_Sonic_Float6-PLC_Sonic_
+		dc.w PLC_Sonic_Float7-PLC_Sonic_
+		dc.w PLC_Sonic_Float8-PLC_Sonic_
+		dc.w PLC_Sonic_Crane-PLC_Sonic_
+		dc.w PLC_Sonic_Bubble-PLC_Sonic_
+		dc.w PLC_Sonic_Push1-PLC_Sonic_
+		dc.w PLC_Sonic_Push2-PLC_Sonic_
+		dc.w PLC_Sonic_Push3-PLC_Sonic_
+		dc.w PLC_Sonic_Push4-PLC_Sonic_
+		dc.w PLC_Sonic_Death-PLC_Sonic_
+		dc.w PLC_Sonic_Drown-PLC_Sonic_
+		dc.w PLC_Sonic_LookUp1-PLC_Sonic_
+		dc.w PLC_Sonic_LookUp2-PLC_Sonic_
+		dc.w PLC_Sonic_Crouch1-PLC_Sonic_
+		dc.w PLC_Sonic_Crouch2-PLC_Sonic_
+		dc.w PLC_Sonic_SpinDash1-PLC_Sonic_
+		dc.w PLC_Sonic_SpinDash2-PLC_Sonic_
+		dc.w PLC_Sonic_SpinDash3-PLC_Sonic_
+		dc.w PLC_Sonic_SpinDash4-PLC_Sonic_
+		dc.w PLC_Sonic_SpinDash5-PLC_Sonic_
+		dc.w PLC_Sonic_SpinDash6-PLC_Sonic_
+		dc.w PLC_Sonic_Spin1-PLC_Sonic_
+		dc.w PLC_Sonic_Spin2-PLC_Sonic_
+		dc.w PLC_Sonic_Spin3-PLC_Sonic_
+		dc.w PLC_Sonic_Spin4-PLC_Sonic_
+		dc.w PLC_Sonic_Spin5-PLC_Sonic_
+		dc.w PLC_Sonic_Slide1-PLC_Sonic_
+		dc.w PLC_Sonic_Slide2-PLC_Sonic_
+		dc.w PLC_Sonic_Fall1-PLC_Sonic_
+		dc.w PLC_Sonic_Fall2-PLC_Sonic_
+		dc.w PLC_Sonic_Spring-PLC_Sonic_
+		dc.w PLC_Sonic_Transform1-PLC_Sonic_
+		dc.w PLC_Sonic_Transform2-PLC_Sonic_
+		dc.w PLC_Sonic_Transform3-PLC_Sonic_
+		dc.w PLC_Sonic_Transform4-PLC_Sonic_
+		dc.w PLC_Sonic_Transform5-PLC_Sonic_
+		dc.w PLC_Sonic_Skid1-PLC_Sonic_
+		dc.w PLC_Sonic_Skid2-PLC_Sonic_
+		dc.w PLC_Sonic_Skid3-PLC_Sonic_
+		dc.w PLC_Sonic_Skid4-PLC_Sonic_
+		dc.w PLC_Sonic_Clear1-PLC_Sonic_
+		dc.w PLC_Sonic_Clear2-PLC_Sonic_
+		dc.w PLC_Sonic_Clear3-PLC_Sonic_
+		dc.w PLC_Sonic_Clear4-PLC_Sonic_
+		dc.w PLC_Sonic_Balance1-PLC_Sonic_
+		dc.w PLC_Sonic_Balance2-PLC_Sonic_
+		dc.w PLC_Sonic_Balance3-PLC_Sonic_
+		dc.w PLC_Sonic_Balance4-PLC_Sonic_
+		dc.w PLC_Sonic_Balance5-PLC_Sonic_
+		dc.w PLC_Sonic_Balance6-PLC_Sonic_
 PLC_SuperSonic:
-		dc.w PLC_Sonic_Blank-PLC_SuperSonic
-		dc.w PLC_Sonic_Walk1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Walk2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Walk3_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Walk4_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Walk5_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Walk6_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Walk7_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Walk8_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWalk1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWalk2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWalk3_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWalk4_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWalk5_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWalk6_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWalk7_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWalk8_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallWalk1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallWalk2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallWalk3_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallWalk4_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallWalk5_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallWalk6_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallWalk7_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallWalk8_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallWalk1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallWalk2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallWalk3_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallWalk4_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallWalk5_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallWalk6_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallWalk7_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallWalk8_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Run1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Run2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Run3_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Run4_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagRun1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagRun2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagRun3_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagRun4_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallRun1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallRun2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallRun3_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_WallRun4_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallRun1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallRun2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallRun3_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallRun4_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Corkscrew1-PLC_SuperSonic
-		dc.w PLC_Sonic_Corkscrew2-PLC_SuperSonic
-		dc.w PLC_Sonic_Corkscrew3-PLC_SuperSonic
-		dc.w PLC_Sonic_Corkscrew4-PLC_SuperSonic
-		dc.w PLC_Sonic_Corkscrew5-PLC_SuperSonic
-		dc.w PLC_Sonic_Corkscrew6-PLC_SuperSonic
-		dc.w PLC_Sonic_Corkscrew7-PLC_SuperSonic
-		dc.w PLC_Sonic_Corkscrew8-PLC_SuperSonic
-		dc.w PLC_Sonic_Corkscrew9-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewA-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewB-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewC-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStand1-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStand2-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStand3-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStand4-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStand5-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStand6-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStand7-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStand8-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStand9-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStandA-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStandB-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewStandC-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiag1-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiag2-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiag3-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiag4-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiag5-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiag6-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiag7-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiag8-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiag9-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiagA-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiagB-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewDiagC-PLC_SuperSonic
-		dc.w PLC_Sonic_360Stand1-PLC_SuperSonic
-		dc.w PLC_Sonic_360Stand2-PLC_SuperSonic
-		dc.w PLC_Sonic_360Stand3-PLC_SuperSonic
-		dc.w PLC_Sonic_360Stand4-PLC_SuperSonic
-		dc.w PLC_Sonic_360Stand5-PLC_SuperSonic
-		dc.w PLC_Sonic_360Stand6-PLC_SuperSonic
-		dc.w PLC_Sonic_360Stand7-PLC_SuperSonic
-		dc.w PLC_Sonic_PoleSwing1-PLC_SuperSonic
-		dc.w PLC_Sonic_PoleSwing2-PLC_SuperSonic
-		dc.w PLC_Sonic_PoleSwing3-PLC_SuperSonic
-		dc.w PLC_Sonic_PoleSwing4-PLC_SuperSonic
-		dc.w PLC_Sonic_PoleSwing5-PLC_SuperSonic
-		dc.w PLC_Sonic_PoleSwing6-PLC_SuperSonic
-		dc.w PLC_Sonic_BarWalk-PLC_SuperSonic
-		dc.w PLC_Sonic_BarSwing1-PLC_SuperSonic
-		dc.w PLC_Sonic_BarSwing2-PLC_SuperSonic
-		dc.w PLC_Sonic_BarSwing3-PLC_SuperSonic
-		dc.w PLC_Sonic_BarSwing4-PLC_SuperSonic
-		dc.w PLC_Sonic_BarSwing5-PLC_SuperSonic
-		dc.w PLC_Sonic_BarSwing6-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWallRide1-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWallRide2-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWallRide3-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWall1-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWall2-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWall3-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWall4-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWall5-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWall6-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWall7-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWall8-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWall9-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWallA-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWallB-PLC_SuperSonic
-		dc.w PLC_Sonic_CorkscrewWallC-PLC_SuperSonic
-		dc.w PLC_Sonic_HangSwing1-PLC_SuperSonic
-		dc.w PLC_Sonic_HangSwing2-PLC_SuperSonic
-		dc.w PLC_Sonic_HangSwing3-PLC_SuperSonic
-		dc.w PLC_Sonic_HangSwing4-PLC_SuperSonic
-		dc.w PLC_Sonic_HangSwing5-PLC_SuperSonic
-		dc.w PLC_Sonic_HangSwing6-PLC_SuperSonic
-		dc.w PLC_Sonic_HangSwing7-PLC_SuperSonic
-		dc.w PLC_Sonic_HangSwing8-PLC_SuperSonic
-		dc.w PLC_Sonic_HangWalk1-PLC_SuperSonic
-		dc.w PLC_Sonic_HangWalk2-PLC_SuperSonic
-		dc.w PLC_Sonic_HangWalk3-PLC_SuperSonic
-		dc.w PLC_Sonic_HangWalk4-PLC_SuperSonic
-		dc.w PLC_Sonic_HangWalk5-PLC_SuperSonic
-		dc.w PLC_Sonic_HangWalk6-PLC_SuperSonic
-		dc.w PLC_Sonic_Hang1-PLC_SuperSonic
-		dc.w PLC_Sonic_Hang2-PLC_SuperSonic
-		dc.w PLC_Sonic_Hang3-PLC_SuperSonic
-		dc.w PLC_Sonic_Hang4-PLC_SuperSonic
-		dc.w PLC_Sonic_360Hang1-PLC_SuperSonic
-		dc.w PLC_Sonic_360Hang2-PLC_SuperSonic
-		dc.w PLC_Sonic_360Hang3-PLC_SuperSonic
-		dc.w PLC_Sonic_360Hang4-PLC_SuperSonic
-		dc.w PLC_Sonic_360Hang5-PLC_SuperSonic
-		dc.w PLC_Sonic_360Hang6-PLC_SuperSonic
-		dc.w PLC_Sonic_360Hang7-PLC_SuperSonic
-		dc.w PLC_Sonic_WallRide1-PLC_SuperSonic
-		dc.w PLC_Sonic_WallRide2-PLC_SuperSonic
-		dc.w PLC_Sonic_WallRide3-PLC_SuperSonic
-		dc.w PLC_Sonic_WallRide4-PLC_SuperSonic
-		dc.w PLC_Sonic_WallRide5-PLC_SuperSonic
-		dc.w PLC_Sonic_360Run1-PLC_SuperSonic
-		dc.w PLC_Sonic_360Run2-PLC_SuperSonic
-		dc.w PLC_Sonic_360Run3-PLC_SuperSonic
-		dc.w PLC_Sonic_360Run4-PLC_SuperSonic
-		dc.w PLC_Sonic_360Run5-PLC_SuperSonic
-		dc.w PLC_Sonic_360Run6-PLC_SuperSonic
-		dc.w PLC_Sonic_360Run7-PLC_SuperSonic
-		dc.w PLC_Sonic_360Run8-PLC_SuperSonic
-		dc.w PLC_Sonic_360Run9-PLC_SuperSonic
-		dc.w PLC_Sonic_360RunA-PLC_SuperSonic
-		dc.w PLC_Sonic_360RunB-PLC_SuperSonic
-		dc.w PLC_Sonic_360RunC-PLC_SuperSonic
-		dc.w PLC_Sonic_PoleSwingRide-PLC_SuperSonic
-		dc.w PLC_Sonic_PoleCurrent1-PLC_SuperSonic
-		dc.w PLC_Sonic_PoleCurrent2-PLC_SuperSonic
-		dc.w PLC_Sonic_Pulley-PLC_SuperSonic
-		dc.w PLC_Sonic_BarCurrent1-PLC_SuperSonic
-		dc.w PLC_Sonic_BarCurrent2-PLC_SuperSonic
-		dc.w PLC_Sonic_DropDash1-PLC_SuperSonic
-		dc.w PLC_Sonic_DropDash2-PLC_SuperSonic
-		dc.w PLC_Sonic_DropDash3-PLC_SuperSonic
-		dc.w PLC_Sonic_DropDash4-PLC_SuperSonic
-		dc.w PLC_Sonic_DropDash5-PLC_SuperSonic
-		dc.w PLC_Sonic_DropDash6-PLC_SuperSonic
-		dc.w PLC_Sonic_Stand1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Stand2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Stand3_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Blank-PLC_SuperSonic
-		dc.w PLC_Sonic_Blank-PLC_SuperSonic
-		dc.w PLC_Sonic_Blank-PLC_SuperSonic
-		dc.w PLC_Sonic_Blank-PLC_SuperSonic
-		dc.w PLC_Sonic_Blank-PLC_SuperSonic
-		dc.w PLC_Sonic_Dash1-PLC_SuperSonic
-		dc.w PLC_Sonic_Dash2-PLC_SuperSonic
-		dc.w PLC_Sonic_Dash3-PLC_SuperSonic
-		dc.w PLC_Sonic_Dash4-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagDash1-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagDash2-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagDash3-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagDash4-PLC_SuperSonic
-		dc.w PLC_Sonic_WallDash1-PLC_SuperSonic
-		dc.w PLC_Sonic_WallDash2-PLC_SuperSonic
-		dc.w PLC_Sonic_WallDash3-PLC_SuperSonic
-		dc.w PLC_Sonic_WallDash4-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallDash1-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallDash2-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallDash3-PLC_SuperSonic
-		dc.w PLC_Sonic_DiagWallDash4-PLC_SuperSonic
-		dc.w PLC_Sonic_Float1-PLC_SuperSonic
-		dc.w PLC_Sonic_Float2-PLC_SuperSonic
-		dc.w PLC_Sonic_Float3-PLC_SuperSonic
-		dc.w PLC_Sonic_Float4-PLC_SuperSonic
-		dc.w PLC_Sonic_Float5-PLC_SuperSonic
-		dc.w PLC_Sonic_Float6-PLC_SuperSonic
-		dc.w PLC_Sonic_Float7-PLC_SuperSonic
-		dc.w PLC_Sonic_Float8-PLC_SuperSonic
-		dc.w PLC_Sonic_Crane-PLC_SuperSonic
-		dc.w PLC_Sonic_Bubble-PLC_SuperSonic
-		dc.w PLC_Sonic_Push1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Push2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Push3_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Push4_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Death-PLC_SuperSonic
-		dc.w PLC_Sonic_Drown-PLC_SuperSonic
-		dc.w PLC_Sonic_LookUp1-PLC_SuperSonic
-		dc.w PLC_Sonic_LookUp2-PLC_SuperSonic
-		dc.w PLC_Sonic_Crouch1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Crouch2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_SpinDash1-PLC_SuperSonic
-		dc.w PLC_Sonic_SpinDash2-PLC_SuperSonic
-		dc.w PLC_Sonic_SpinDash3-PLC_SuperSonic
-		dc.w PLC_Sonic_SpinDash4-PLC_SuperSonic
-		dc.w PLC_Sonic_SpinDash5-PLC_SuperSonic
-		dc.w PLC_Sonic_SpinDash6-PLC_SuperSonic
-		dc.w PLC_Sonic_Spin1-PLC_SuperSonic
-		dc.w PLC_Sonic_Spin2-PLC_SuperSonic
-		dc.w PLC_Sonic_Spin3-PLC_SuperSonic
-		dc.w PLC_Sonic_Spin4-PLC_SuperSonic
-		dc.w PLC_Sonic_Spin5-PLC_SuperSonic
-		dc.w PLC_Sonic_Slide1-PLC_SuperSonic
-		dc.w PLC_Sonic_Slide2-PLC_SuperSonic
-		dc.w PLC_Sonic_Fall1-PLC_SuperSonic
-		dc.w PLC_Sonic_Fall2-PLC_SuperSonic
-		dc.w PLC_Sonic_Spring-PLC_SuperSonic
-		dc.w PLC_Sonic_Transform1-PLC_SuperSonic
-		dc.w PLC_Sonic_Transform2-PLC_SuperSonic
-		dc.w PLC_Sonic_Transform3-PLC_SuperSonic
-		dc.w PLC_Sonic_Transform4-PLC_SuperSonic
-		dc.w PLC_Sonic_Transform5-PLC_SuperSonic
-		dc.w PLC_Sonic_Skid1-PLC_SuperSonic
-		dc.w PLC_Sonic_Skid2-PLC_SuperSonic
-		dc.w PLC_Sonic_Skid3-PLC_SuperSonic
-		dc.w PLC_Sonic_Skid4-PLC_SuperSonic
-		dc.w PLC_Sonic_Clear1-PLC_SuperSonic
-		dc.w PLC_Sonic_Clear2-PLC_SuperSonic
-		dc.w PLC_Sonic_Clear3-PLC_SuperSonic
-		dc.w PLC_Sonic_Clear4-PLC_SuperSonic
-		dc.w PLC_Sonic_Balance1_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Balance2_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Balance3_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Balance4_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Balance5_SUPER-PLC_SuperSonic
-		dc.w PLC_Sonic_Balance6_SUPER-PLC_SuperSonic
+PLC_SuperSonic_:
+		dc.w PLC_Sonic_Blank-PLC_SuperSonic_
+		dc.w PLC_Sonic_Walk1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Walk2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Walk3_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Walk4_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Walk5_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Walk6_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Walk7_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Walk8_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWalk1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWalk2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWalk3_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWalk4_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWalk5_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWalk6_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWalk7_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWalk8_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallWalk1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallWalk2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallWalk3_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallWalk4_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallWalk5_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallWalk6_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallWalk7_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallWalk8_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallWalk1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallWalk2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallWalk3_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallWalk4_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallWalk5_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallWalk6_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallWalk7_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallWalk8_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Run1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Run2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Run3_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Run4_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagRun1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagRun2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagRun3_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagRun4_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallRun1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallRun2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallRun3_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallRun4_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallRun1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallRun2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallRun3_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallRun4_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Corkscrew1-PLC_SuperSonic_
+		dc.w PLC_Sonic_Corkscrew2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Corkscrew3-PLC_SuperSonic_
+		dc.w PLC_Sonic_Corkscrew4-PLC_SuperSonic_
+		dc.w PLC_Sonic_Corkscrew5-PLC_SuperSonic_
+		dc.w PLC_Sonic_Corkscrew6-PLC_SuperSonic_
+		dc.w PLC_Sonic_Corkscrew7-PLC_SuperSonic_
+		dc.w PLC_Sonic_Corkscrew8-PLC_SuperSonic_
+		dc.w PLC_Sonic_Corkscrew9-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewA-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewB-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewC-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStand1-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStand2-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStand3-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStand4-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStand5-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStand6-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStand7-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStand8-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStand9-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStandA-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStandB-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewStandC-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiag1-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiag2-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiag3-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiag4-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiag5-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiag6-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiag7-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiag8-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiag9-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiagA-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiagB-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewDiagC-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Stand1-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Stand2-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Stand3-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Stand4-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Stand5-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Stand6-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Stand7-PLC_SuperSonic_
+		dc.w PLC_Sonic_PoleSwing1-PLC_SuperSonic_
+		dc.w PLC_Sonic_PoleSwing2-PLC_SuperSonic_
+		dc.w PLC_Sonic_PoleSwing3-PLC_SuperSonic_
+		dc.w PLC_Sonic_PoleSwing4-PLC_SuperSonic_
+		dc.w PLC_Sonic_PoleSwing5-PLC_SuperSonic_
+		dc.w PLC_Sonic_PoleSwing6-PLC_SuperSonic_
+		dc.w PLC_Sonic_BarWalk-PLC_SuperSonic_
+		dc.w PLC_Sonic_BarSwing1-PLC_SuperSonic_
+		dc.w PLC_Sonic_BarSwing2-PLC_SuperSonic_
+		dc.w PLC_Sonic_BarSwing3-PLC_SuperSonic_
+		dc.w PLC_Sonic_BarSwing4-PLC_SuperSonic_
+		dc.w PLC_Sonic_BarSwing5-PLC_SuperSonic_
+		dc.w PLC_Sonic_BarSwing6-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWallRide1-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWallRide2-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWallRide3-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWall1-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWall2-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWall3-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWall4-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWall5-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWall6-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWall7-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWall8-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWall9-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWallA-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWallB-PLC_SuperSonic_
+		dc.w PLC_Sonic_CorkscrewWallC-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangSwing1-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangSwing2-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangSwing3-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangSwing4-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangSwing5-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangSwing6-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangSwing7-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangSwing8-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangWalk1-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangWalk2-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangWalk3-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangWalk4-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangWalk5-PLC_SuperSonic_
+		dc.w PLC_Sonic_HangWalk6-PLC_SuperSonic_
+		dc.w PLC_Sonic_Hang1-PLC_SuperSonic_
+		dc.w PLC_Sonic_Hang2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Hang3-PLC_SuperSonic_
+		dc.w PLC_Sonic_Hang4-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Hang1-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Hang2-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Hang3-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Hang4-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Hang5-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Hang6-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Hang7-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallRide1-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallRide2-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallRide3-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallRide4-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallRide5-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Run1-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Run2-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Run3-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Run4-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Run5-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Run6-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Run7-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Run8-PLC_SuperSonic_
+		dc.w PLC_Sonic_360Run9-PLC_SuperSonic_
+		dc.w PLC_Sonic_360RunA-PLC_SuperSonic_
+		dc.w PLC_Sonic_360RunB-PLC_SuperSonic_
+		dc.w PLC_Sonic_360RunC-PLC_SuperSonic_
+		dc.w PLC_Sonic_PoleSwingRide-PLC_SuperSonic_
+		dc.w PLC_Sonic_PoleCurrent1-PLC_SuperSonic_
+		dc.w PLC_Sonic_PoleCurrent2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Pulley-PLC_SuperSonic_
+		dc.w PLC_Sonic_BarCurrent1-PLC_SuperSonic_
+		dc.w PLC_Sonic_BarCurrent2-PLC_SuperSonic_
+		dc.w PLC_Sonic_DropDash1-PLC_SuperSonic_
+		dc.w PLC_Sonic_DropDash2-PLC_SuperSonic_
+		dc.w PLC_Sonic_DropDash3-PLC_SuperSonic_
+		dc.w PLC_Sonic_DropDash4-PLC_SuperSonic_
+		dc.w PLC_Sonic_DropDash5-PLC_SuperSonic_
+		dc.w PLC_Sonic_DropDash6-PLC_SuperSonic_
+		dc.w PLC_Sonic_Stand1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Stand2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Stand3_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Blank-PLC_SuperSonic_
+		dc.w PLC_Sonic_Blank-PLC_SuperSonic_
+		dc.w PLC_Sonic_Blank-PLC_SuperSonic_
+		dc.w PLC_Sonic_Blank-PLC_SuperSonic_
+		dc.w PLC_Sonic_Blank-PLC_SuperSonic_
+		dc.w PLC_Sonic_Dash1-PLC_SuperSonic_
+		dc.w PLC_Sonic_Dash2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Dash3-PLC_SuperSonic_
+		dc.w PLC_Sonic_Dash4-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagDash1-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagDash2-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagDash3-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagDash4-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallDash1-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallDash2-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallDash3-PLC_SuperSonic_
+		dc.w PLC_Sonic_WallDash4-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallDash1-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallDash2-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallDash3-PLC_SuperSonic_
+		dc.w PLC_Sonic_DiagWallDash4-PLC_SuperSonic_
+		dc.w PLC_Sonic_Float1-PLC_SuperSonic_
+		dc.w PLC_Sonic_Float2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Float3-PLC_SuperSonic_
+		dc.w PLC_Sonic_Float4-PLC_SuperSonic_
+		dc.w PLC_Sonic_Float5-PLC_SuperSonic_
+		dc.w PLC_Sonic_Float6-PLC_SuperSonic_
+		dc.w PLC_Sonic_Float7-PLC_SuperSonic_
+		dc.w PLC_Sonic_Float8-PLC_SuperSonic_
+		dc.w PLC_Sonic_Crane-PLC_SuperSonic_
+		dc.w PLC_Sonic_Bubble-PLC_SuperSonic_
+		dc.w PLC_Sonic_Push1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Push2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Push3_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Push4_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Death-PLC_SuperSonic_
+		dc.w PLC_Sonic_Drown-PLC_SuperSonic_
+		dc.w PLC_Sonic_LookUp1-PLC_SuperSonic_
+		dc.w PLC_Sonic_LookUp2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Crouch1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Crouch2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_SpinDash1-PLC_SuperSonic_
+		dc.w PLC_Sonic_SpinDash2-PLC_SuperSonic_
+		dc.w PLC_Sonic_SpinDash3-PLC_SuperSonic_
+		dc.w PLC_Sonic_SpinDash4-PLC_SuperSonic_
+		dc.w PLC_Sonic_SpinDash5-PLC_SuperSonic_
+		dc.w PLC_Sonic_SpinDash6-PLC_SuperSonic_
+		dc.w PLC_Sonic_Spin1-PLC_SuperSonic_
+		dc.w PLC_Sonic_Spin2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Spin3-PLC_SuperSonic_
+		dc.w PLC_Sonic_Spin4-PLC_SuperSonic_
+		dc.w PLC_Sonic_Spin5-PLC_SuperSonic_
+		dc.w PLC_Sonic_Slide1-PLC_SuperSonic_
+		dc.w PLC_Sonic_Slide2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Fall1-PLC_SuperSonic_
+		dc.w PLC_Sonic_Fall2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Spring-PLC_SuperSonic_
+		dc.w PLC_Sonic_Transform1-PLC_SuperSonic_
+		dc.w PLC_Sonic_Transform2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Transform3-PLC_SuperSonic_
+		dc.w PLC_Sonic_Transform4-PLC_SuperSonic_
+		dc.w PLC_Sonic_Transform5-PLC_SuperSonic_
+		dc.w PLC_Sonic_Skid1-PLC_SuperSonic_
+		dc.w PLC_Sonic_Skid2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Skid3-PLC_SuperSonic_
+		dc.w PLC_Sonic_Skid4-PLC_SuperSonic_
+		dc.w PLC_Sonic_Clear1-PLC_SuperSonic_
+		dc.w PLC_Sonic_Clear2-PLC_SuperSonic_
+		dc.w PLC_Sonic_Clear3-PLC_SuperSonic_
+		dc.w PLC_Sonic_Clear4-PLC_SuperSonic_
+		dc.w PLC_Sonic_Balance1_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Balance2_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Balance3_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Balance4_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Balance5_SUPER-PLC_SuperSonic_
+		dc.w PLC_Sonic_Balance6_SUPER-PLC_SuperSonic_
 PLC_Sonic_Blank:
 		dc.w 0
 PLC_Sonic_Walk1:
@@ -550,7 +552,7 @@ PLC_Sonic_DiagWalk1:
 		dc.w $B0AF
 		dc.w $70BB
 		dc.w $10C3
-		dc.w $C5
+		dc.w $00C5
 PLC_Sonic_DiagWalk2:
 		dc.w 4
 		dc.w $B0D7
@@ -568,7 +570,7 @@ PLC_Sonic_DiagWalk4:
 		dc.w $8134
 		dc.w $713D
 		dc.w $1145
-		dc.w $147
+		dc.w $0147
 PLC_Sonic_DiagWalk5:
 		dc.w 4
 		dc.w $8159
@@ -579,7 +581,7 @@ PLC_Sonic_DiagWalk6:
 		dc.w 4
 		dc.w $B179
 		dc.w $7185
-		dc.w $18D
+		dc.w $018D
 		dc.w $318E
 PLC_Sonic_DiagWalk7:
 		dc.w 4
@@ -607,12 +609,12 @@ PLC_Sonic_WallWalk3:
 		dc.w $1225
 		dc.w $B227
 		dc.w $5233
-		dc.w $239
+		dc.w $0239
 PLC_Sonic_WallWalk4:
 		dc.w 3
 		dc.w $8248
 		dc.w $5251
-		dc.w $257
+		dc.w $0257
 PLC_Sonic_WallWalk5:
 		dc.w 2
 		dc.w $826C
@@ -631,7 +633,7 @@ PLC_Sonic_WallWalk8:
 		dc.w 3
 		dc.w $82C8
 		dc.w $5251
-		dc.w $257
+		dc.w $0257
 PLC_Sonic_DiagWallWalk1:
 		dc.w 4
 		dc.w $B2E3
@@ -643,7 +645,7 @@ PLC_Sonic_DiagWallWalk2:
 		dc.w $B30A
 		dc.w $5316
 		dc.w $731C
-		dc.w $324
+		dc.w $0324
 PLC_Sonic_DiagWallWalk3:
 		dc.w 4
 		dc.w $F33A
@@ -699,7 +701,7 @@ PLC_Sonic_Run4:
 PLC_Sonic_DiagRun1:
 		dc.w 4
 		dc.w $B48B
-		dc.w $497
+		dc.w $0497
 		dc.w $3498
 		dc.w $249C
 PLC_Sonic_DiagRun2:
@@ -709,7 +711,7 @@ PLC_Sonic_DiagRun2:
 PLC_Sonic_DiagRun3:
 		dc.w 4
 		dc.w $B4E0
-		dc.w $4EC
+		dc.w $04EC
 		dc.w $34ED
 		dc.w $24F1
 PLC_Sonic_DiagRun4:
@@ -791,7 +793,7 @@ PLC_Sonic_Corkscrew7:
 PLC_Sonic_Corkscrew8:
 		dc.w 2
 		dc.w $B64F
-		dc.w $65B
+		dc.w $065B
 PLC_Sonic_Corkscrew9:
 		dc.w 3
 		dc.w $165C
@@ -813,7 +815,7 @@ PLC_Sonic_CorkscrewC:
 		dc.w $268E
 PLC_Sonic_CorkscrewStand1:
 		dc.w 3
-		dc.w $691
+		dc.w $0691
 		dc.w $B692
 		dc.w $269E
 PLC_Sonic_CorkscrewStand2:
@@ -865,7 +867,7 @@ PLC_Sonic_CorkscrewStandC:
 		dc.w $8725
 		dc.w $272E
 		dc.w $3731
-		dc.w $735
+		dc.w $0735
 PLC_Sonic_CorkscrewDiag1:
 		dc.w 4
 		dc.w $8736
@@ -898,9 +900,9 @@ PLC_Sonic_CorkscrewDiag6:
 		dc.w $F783
 PLC_Sonic_CorkscrewDiag7:
 		dc.w 4
-		dc.w $793
+		dc.w $0793
 		dc.w $7794
-		dc.w $79C
+		dc.w $079C
 		dc.w $779D
 PLC_Sonic_CorkscrewDiag8:
 		dc.w 4
@@ -919,13 +921,13 @@ PLC_Sonic_CorkscrewDiagA:
 		dc.w $17CF
 PLC_Sonic_CorkscrewDiagB:
 		dc.w 3
-		dc.w $7D1
+		dc.w $07D1
 		dc.w $87D2
 		dc.w $17DB
 PLC_Sonic_CorkscrewDiagC:
 		dc.w 2
 		dc.w $F7DD
-		dc.w $7ED
+		dc.w $07ED
 PLC_Sonic_360Stand1:
 		dc.w 4
 		dc.w $27EE
@@ -964,7 +966,7 @@ PLC_Sonic_PoleSwing1:
 		dc.w 3
 		dc.w $885D
 		dc.w $5866
-		dc.w $86C
+		dc.w $086C
 PLC_Sonic_PoleSwing2:
 		dc.w 1
 		dc.w $B86D
@@ -976,13 +978,13 @@ PLC_Sonic_PoleSwing4:
 		dc.w 3
 		dc.w $3888
 		dc.w $B88C
-		dc.w $898
+		dc.w $0898
 PLC_Sonic_PoleSwing5:
 		dc.w 1
 		dc.w $B899
 PLC_Sonic_PoleSwing6:
 		dc.w 2
-		dc.w $8A5
+		dc.w $08A5
 		dc.w $B8A6
 PLC_Sonic_BarWalk:
 		dc.w 5
@@ -1013,7 +1015,7 @@ PLC_Sonic_BarSwing5:
 		dc.w $B905
 PLC_Sonic_BarSwing6:
 		dc.w 2
-		dc.w $911
+		dc.w $0911
 		dc.w $B912
 PLC_Sonic_CorkscrewWallRide1:
 		dc.w 2
@@ -1027,7 +1029,7 @@ PLC_Sonic_CorkscrewWallRide2:
 		dc.w $1939
 PLC_Sonic_CorkscrewWallRide3:
 		dc.w 3
-		dc.w $93B
+		dc.w $093B
 		dc.w $793C
 		dc.w $2944
 PLC_Sonic_CorkscrewWall1:
@@ -1041,7 +1043,7 @@ PLC_Sonic_CorkscrewWall2:
 		dc.w $F95A
 PLC_Sonic_CorkscrewWall3:
 		dc.w 2
-		dc.w $96A
+		dc.w $096A
 		dc.w $B96B
 PLC_Sonic_CorkscrewWall4:
 		dc.w 3
@@ -1052,7 +1054,7 @@ PLC_Sonic_CorkscrewWall5:
 		dc.w 3
 		dc.w $2984
 		dc.w $7987
-		dc.w $98F
+		dc.w $098F
 PLC_Sonic_CorkscrewWall6:
 		dc.w 2
 		dc.w $3990
@@ -1068,12 +1070,12 @@ PLC_Sonic_CorkscrewWall8:
 		dc.w $B9B2
 PLC_Sonic_CorkscrewWall9:
 		dc.w 3
-		dc.w $9BE
+		dc.w $09BE
 		dc.w $19BF
 		dc.w $B9C1
 PLC_Sonic_CorkscrewWallA:
 		dc.w 3
-		dc.w $9CD
+		dc.w $09CD
 		dc.w $79CE
 		dc.w $19D6
 PLC_Sonic_CorkscrewWallB:
@@ -1082,7 +1084,7 @@ PLC_Sonic_CorkscrewWallB:
 		dc.w $29E4
 PLC_Sonic_CorkscrewWallC:
 		dc.w 3
-		dc.w $9E7
+		dc.w $09E7
 		dc.w $29E8
 		dc.w $79EB
 PLC_Sonic_HangSwing1:
@@ -1115,7 +1117,7 @@ PLC_Sonic_HangSwing8:
 PLC_Sonic_HangWalk1:
 		dc.w 4
 		dc.w $BA4F
-		dc.w $A5B
+		dc.w $0A5B
 		dc.w $1A5C
 		dc.w $5A5E
 PLC_Sonic_HangWalk2:
@@ -1131,7 +1133,7 @@ PLC_Sonic_HangWalk3:
 		dc.w $BA7E
 PLC_Sonic_HangWalk4:
 		dc.w 4
-		dc.w $A8A
+		dc.w $0A8A
 		dc.w $7A8B
 		dc.w $2A93
 		dc.w $5A96
@@ -1160,7 +1162,7 @@ PLC_Sonic_Hang3:
 		dc.w 4
 		dc.w $2AEA
 		dc.w $BAED
-		dc.w $AF9
+		dc.w $0AF9
 		dc.w $1AFA
 PLC_Sonic_Hang4:
 		dc.w 2
@@ -1269,7 +1271,7 @@ PLC_Sonic_360Run9:
 PLC_Sonic_360RunA:
 		dc.w 2
 		dc.w $BC6D
-		dc.w $C79
+		dc.w $0C79
 PLC_Sonic_360RunB:
 		dc.w 2
 		dc.w $BC7A
@@ -1286,12 +1288,12 @@ PLC_Sonic_PoleSwingRide:
 PLC_Sonic_PoleCurrent1:
 		dc.w 3
 		dc.w $BCA9
-		dc.w $CB5
+		dc.w $0CB5
 		dc.w $5CB6
 PLC_Sonic_PoleCurrent2:
 		dc.w 3
 		dc.w $BCBC
-		dc.w $CC8
+		dc.w $0CC8
 		dc.w $5CC9
 PLC_Sonic_Pulley:
 		dc.w 3
@@ -1373,7 +1375,7 @@ PLC_Sonic_Stand7:
 PLC_Sonic_Stand8:
 		dc.w 4
 		dc.w $BDD2
-		dc.w $DDE
+		dc.w $0DDE
 		dc.w $3DDF
 		dc.w $2DE3
 PLC_Sonic_Dash1:
@@ -1408,7 +1410,7 @@ PLC_Sonic_DiagDash3:
 		dc.w $204C
 		dc.w $F078
 		dc.w $1088
-		dc.w $8A
+		dc.w $008A
 PLC_Sonic_DiagDash4:
 		dc.w 4
 		dc.w $2061
@@ -1447,7 +1449,7 @@ PLC_Sonic_DiagWallDash3:
 		dc.w $20EB
 		dc.w $F117
 		dc.w $1127
-		dc.w $129
+		dc.w $0129
 PLC_Sonic_DiagWallDash4:
 		dc.w 4
 		dc.w $2100
@@ -1459,7 +1461,7 @@ PLC_Sonic_Float3:
 		dc.w 3
 		dc.w $513E
 		dc.w $3144
-		dc.w $148
+		dc.w $0148
 PLC_Sonic_Float2:
 		dc.w 2
 		dc.w $5149
@@ -1474,7 +1476,7 @@ PLC_Sonic_Float5:
 PLC_Sonic_Float7:
 		dc.w 2
 		dc.w $B161
-		dc.w $16D
+		dc.w $016D
 PLC_Sonic_Float6:
 		dc.w 2
 		dc.w $516E
@@ -1487,7 +1489,7 @@ PLC_Sonic_Crane:
 PLC_Sonic_Bubble:
 		dc.w 4
 		dc.w $F187
-		dc.w $197
+		dc.w $0197
 		dc.w $1198
 		dc.w $119A
 PLC_Sonic_Push1:
@@ -1514,13 +1516,13 @@ PLC_Sonic_Death:
 		dc.w 4
 		dc.w $2224
 		dc.w $7227
-		dc.w $22F
+		dc.w $022F
 		dc.w $7230
 PLC_Sonic_Drown:
 		dc.w 4
 		dc.w $1238
 		dc.w $723A
-		dc.w $22F
+		dc.w $022F
 		dc.w $7230
 PLC_Sonic_LookUp1:
 		dc.w 4
@@ -1536,11 +1538,11 @@ PLC_Sonic_LookUp2:
 		dc.w $525E
 PLC_Sonic_Crouch1:
 		dc.w 2
-		dc.w $264
+		dc.w $0264
 		dc.w $B265
 PLC_Sonic_Crouch2:
 		dc.w 2
-		dc.w $285
+		dc.w $0285
 		dc.w $B286
 PLC_Sonic_SpinDash1:
 		dc.w 3
@@ -1672,7 +1674,7 @@ PLC_Sonic_Balance1:
 PLC_Sonic_Balance2:
 		dc.w 3
 		dc.w $F454
-		dc.w $464
+		dc.w $0464
 		dc.w $2465
 PLC_Sonic_Balance3:
 		dc.w 4
@@ -1683,17 +1685,17 @@ PLC_Sonic_Balance3:
 PLC_Sonic_Balance4:
 		dc.w 3
 		dc.w $7489
-		dc.w $491
+		dc.w $0491
 		dc.w $8492
 PLC_Sonic_Balance5:
 		dc.w 4
-		dc.w $49F
+		dc.w $049F
 		dc.w $B4A0
-		dc.w $4AC
+		dc.w $04AC
 		dc.w $54AD
 PLC_Sonic_Balance6:
 		dc.w 3
-		dc.w $4B3
+		dc.w $04B3
 		dc.w $F4B4
 		dc.w $24C4
 PLC_Sonic_Walk1_SUPER:
@@ -1741,7 +1743,7 @@ PLC_Sonic_DiagWalk1_SUPER:
 		dc.w 4
 		dc.w $B0AF
 		dc.w $B0C6
-		dc.w $D2
+		dc.w $00D2
 		dc.w $30D3
 PLC_Sonic_DiagWalk2_SUPER:
 		dc.w 4
@@ -1765,7 +1767,7 @@ PLC_Sonic_DiagWalk5_SUPER:
 		dc.w 4
 		dc.w $8159
 		dc.w $716D
-		dc.w $175
+		dc.w $0175
 		dc.w $2176
 PLC_Sonic_DiagWalk6_SUPER:
 		dc.w 4
@@ -1783,25 +1785,25 @@ PLC_Sonic_DiagWalk8_SUPER:
 		dc.w 4
 		dc.w $81D1
 		dc.w $71E4
-		dc.w $1EC
+		dc.w $01EC
 		dc.w $11ED
 PLC_Sonic_WallWalk1_SUPER:
 		dc.w 3
 		dc.w $B1EF
 		dc.w $8203
-		dc.w $20C
+		dc.w $020C
 PLC_Sonic_WallWalk2_SUPER:
 		dc.w 4
 		dc.w $B20F
 		dc.w $120D
 		dc.w $821B
-		dc.w $224
+		dc.w $0224
 PLC_Sonic_WallWalk3_SUPER:
 		dc.w 4
 		dc.w $B23A
 		dc.w $1246
 		dc.w $8203
-		dc.w $20C
+		dc.w $020C
 PLC_Sonic_WallWalk4_SUPER:
 		dc.w 3
 		dc.w $8258
@@ -1831,7 +1833,7 @@ PLC_Sonic_DiagWallWalk1_SUPER:
 		dc.w $B2E3
 		dc.w $32FA
 		dc.w $B2FE
-		dc.w $2F6
+		dc.w $02F6
 PLC_Sonic_DiagWallWalk2_SUPER:
 		dc.w 4
 		dc.w $B30A
@@ -1842,14 +1844,14 @@ PLC_Sonic_DiagWallWalk3_SUPER:
 		dc.w 4
 		dc.w $F33A
 		dc.w $3357
-		dc.w $35B
+		dc.w $035B
 		dc.w $B35C
 PLC_Sonic_DiagWallWalk4_SUPER:
 		dc.w 4
 		dc.w $8368
 		dc.w $337C
 		dc.w $B380
-		dc.w $378
+		dc.w $0378
 PLC_Sonic_DiagWallWalk5_SUPER:
 		dc.w 4
 		dc.w $838C
@@ -1861,7 +1863,7 @@ PLC_Sonic_DiagWallWalk6_SUPER:
 		dc.w $B3AC
 		dc.w $53C5
 		dc.w $B3CB
-		dc.w $3D7
+		dc.w $03D7
 PLC_Sonic_DiagWallWalk7_SUPER:
 		dc.w 4
 		dc.w $B3D8
@@ -1871,7 +1873,7 @@ PLC_Sonic_DiagWallWalk7_SUPER:
 PLC_Sonic_DiagWallWalk8_SUPER:
 		dc.w 4
 		dc.w $8402
-		dc.w $415
+		dc.w $0415
 		dc.w $1416
 		dc.w $8418
 PLC_Sonic_Run1_SUPER:
@@ -1893,28 +1895,28 @@ PLC_Sonic_DiagRun3_SUPER:
 		dc.w 4
 		dc.w $149F
 		dc.w $74A1
-		dc.w $4A9
+		dc.w $04A9
 		dc.w $B4AA
 PLC_Sonic_DiagRun2_SUPER:
 PLC_Sonic_DiagRun4_SUPER:
 		dc.w 4
 		dc.w $14C9
 		dc.w $74CB
-		dc.w $4D3
+		dc.w $04D3
 		dc.w $B4D4
 PLC_Sonic_WallRun1_SUPER:
 PLC_Sonic_WallRun3_SUPER:
 		dc.w 4
 		dc.w $B517
 		dc.w $1523
-		dc.w $525
+		dc.w $0525
 		dc.w $3526
 PLC_Sonic_WallRun2_SUPER:
 PLC_Sonic_WallRun4_SUPER:
 		dc.w 4
 		dc.w $B53D
 		dc.w $1549
-		dc.w $54B
+		dc.w $054B
 		dc.w $354C
 PLC_Sonic_DiagWallRun1_SUPER:
 PLC_Sonic_DiagWallRun3_SUPER:
@@ -1935,18 +1937,18 @@ PLC_Sonic_Stand1_SUPER:
 		dc.w $8725
 		dc.w $7D67
 		dc.w $2D6F
-		dc.w $D72
+		dc.w $0D72
 PLC_Sonic_Stand2_SUPER:
 		dc.w 4
 		dc.w $8725
 		dc.w $7D84
 		dc.w $2D8C
-		dc.w $D8F
+		dc.w $0D8F
 PLC_Sonic_Stand3_SUPER:
 		dc.w 3
 		dc.w $8725
 		dc.w $BD9B
-		dc.w $DA7
+		dc.w $0DA7
 PLC_Sonic_Push1_SUPER:
 		dc.w 3
 		dc.w $21AB
@@ -1959,7 +1961,7 @@ PLC_Sonic_Push2_SUPER:
 		dc.w $21E0
 PLC_Sonic_Push3_SUPER:
 		dc.w 3
-		dc.w $1F1
+		dc.w $01F1
 		dc.w $F1F2
 		dc.w $3202
 PLC_Sonic_Push4_SUPER:
@@ -1974,7 +1976,7 @@ PLC_Sonic_Crouch1_SUPER:
 PLC_Sonic_Crouch2_SUPER:
 		dc.w 2
 		dc.w $F292
-		dc.w $2A2
+		dc.w $02A2
 PLC_Sonic_Balance1_SUPER:
 		dc.w 4
 		dc.w $7440
