@@ -1,4 +1,5 @@
-Ani_Monitor_:	dc.w byte_1DB50-Ani_Monitor_
+Ani_Monitor_:
+		dc.w byte_1DB50-Ani_Monitor_
 		dc.w byte_1DB54-Ani_Monitor_
 		dc.w byte_1DB5C-Ani_Monitor_
 		dc.w byte_1DB64-Ani_Monitor_
@@ -19,4 +20,4 @@ byte_1DB7C:	dc.b    1,  $C,   7,   7,   0,   7,   7, $FF
 byte_1DB84:	dc.b    1,  $C,   8,   8,   0,   8,   8, $FF
 byte_1DB8C:	dc.b    1,  $C,   9,   9,   0,   9,   9, $FF
 byte_1DB94:	dc.b    1,  $C,  $A,  $A,   0,  $A,  $A, $FF
-byte_1DB9C:	dc.b    2,  $B, $FE,   1 
+byte_1DB9C:	dc.b    2,  $B, $FE,   1

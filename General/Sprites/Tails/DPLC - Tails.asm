@@ -1,240 +1,241 @@
-		dc.w PLC_Tails_Blank-PLC_Tails
-		dc.w PLC_Tails_Walk1-PLC_Tails
-		dc.w PLC_Tails_Walk2-PLC_Tails
-		dc.w PLC_Tails_Walk3-PLC_Tails
-		dc.w PLC_Tails_Walk4-PLC_Tails
-		dc.w PLC_Tails_Walk5-PLC_Tails
-		dc.w PLC_Tails_Walk6-PLC_Tails
-		dc.w PLC_Tails_Walk7-PLC_Tails
-		dc.w PLC_Tails_Walk8-PLC_Tails
-		dc.w PLC_Tails_DiagWalk1-PLC_Tails
-		dc.w PLC_Tails_DiagWalk2-PLC_Tails
-		dc.w PLC_Tails_DiagWalk3-PLC_Tails
-		dc.w PLC_Tails_DiagWalk4-PLC_Tails
-		dc.w PLC_Tails_DiagWalk5-PLC_Tails
-		dc.w PLC_Tails_DiagWalk6-PLC_Tails
-		dc.w PLC_Tails_DiagWalk7-PLC_Tails
-		dc.w PLC_Tails_DiagWalk8-PLC_Tails
-		dc.w PLC_Tails_WallWalk1-PLC_Tails
-		dc.w PLC_Tails_WallWalk2-PLC_Tails
-		dc.w PLC_Tails_WallWalk3-PLC_Tails
-		dc.w PLC_Tails_WallWalk4-PLC_Tails
-		dc.w PLC_Tails_WallWalk5-PLC_Tails
-		dc.w PLC_Tails_WallWalk6-PLC_Tails
-		dc.w PLC_Tails_WallWalk7-PLC_Tails
-		dc.w PLC_Tails_WallWalk8-PLC_Tails
-		dc.w PLC_Tails_DiagWallWalk1-PLC_Tails
-		dc.w PLC_Tails_DiagWallWalk2-PLC_Tails
-		dc.w PLC_Tails_DiagWallWalk3-PLC_Tails
-		dc.w PLC_Tails_DiagWallWalk4-PLC_Tails
-		dc.w PLC_Tails_DiagWallWalk5-PLC_Tails
-		dc.w PLC_Tails_DiagWallWalk6-PLC_Tails
-		dc.w PLC_Tails_DiagWallWalk7-PLC_Tails
-		dc.w PLC_Tails_DiagWallWalk8-PLC_Tails
-		dc.w PLC_Tails_Run1-PLC_Tails
-		dc.w PLC_Tails_Run2-PLC_Tails
-		dc.w PLC_Tails_Run3-PLC_Tails
-		dc.w PLC_Tails_Run4-PLC_Tails
-		dc.w PLC_Tails_DiagRun1-PLC_Tails
-		dc.w PLC_Tails_DiagRun2-PLC_Tails
-		dc.w PLC_Tails_DiagRun3-PLC_Tails
-		dc.w PLC_Tails_DiagRun4-PLC_Tails
-		dc.w PLC_Tails_WallRun1-PLC_Tails
-		dc.w PLC_Tails_WallRun2-PLC_Tails
-		dc.w PLC_Tails_WallRun3-PLC_Tails
-		dc.w PLC_Tails_WallRun4-PLC_Tails
-		dc.w PLC_Tails_DiagWallRun1-PLC_Tails
-		dc.w PLC_Tails_DiagWallRun2-PLC_Tails
-		dc.w PLC_Tails_DiagWallRun3-PLC_Tails
-		dc.w PLC_Tails_DiagWallRun4-PLC_Tails
-		dc.w PLC_Tails_Corkscrew1-PLC_Tails
-		dc.w PLC_Tails_Corkscrew2-PLC_Tails
-		dc.w PLC_Tails_Corkscrew3-PLC_Tails
-		dc.w PLC_Tails_Corkscrew4-PLC_Tails
-		dc.w PLC_Tails_Corkscrew5-PLC_Tails
-		dc.w PLC_Tails_Corkscrew6-PLC_Tails
-		dc.w PLC_Tails_Corkscrew7-PLC_Tails
-		dc.w PLC_Tails_Corkscrew8-PLC_Tails
-		dc.w PLC_Tails_Corkscrew9-PLC_Tails
-		dc.w PLC_Tails_CorkscrewA-PLC_Tails
-		dc.w PLC_Tails_CorkscrewB-PLC_Tails
-		dc.w PLC_Tails_CorkscrewC-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStand1-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStand2-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStand3-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStand4-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStand5-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStand6-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStand7-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStand8-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStand9-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStandA-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStandB-PLC_Tails
-		dc.w PLC_Tails_CorkscrewStandC-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiag1-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiag2-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiag3-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiag4-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiag5-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiag6-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiag7-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiag8-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiag9-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiagA-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiagB-PLC_Tails
-		dc.w PLC_Tails_CorkscrewDiagC-PLC_Tails
-		dc.w PLC_Tails_360Stand1-PLC_Tails
-		dc.w PLC_Tails_360Stand2-PLC_Tails
-		dc.w PLC_Tails_360Stand3-PLC_Tails
-		dc.w PLC_Tails_360Stand4-PLC_Tails
-		dc.w PLC_Tails_360Stand5-PLC_Tails
-		dc.w PLC_Tails_360Stand6-PLC_Tails
-		dc.w PLC_Tails_360Stand7-PLC_Tails
-		dc.w PLC_Tails_PoleSwing1-PLC_Tails
-		dc.w PLC_Tails_PoleSwing2-PLC_Tails
-		dc.w PLC_Tails_PoleSwing3-PLC_Tails
-		dc.w PLC_Tails_PoleSwing4-PLC_Tails
-		dc.w PLC_Tails_PoleSwing5-PLC_Tails
-		dc.w PLC_Tails_PoleSwing6-PLC_Tails
-		dc.w PLC_Tails_BarWalk-PLC_Tails
-		dc.w PLC_Tails_BarSwing1-PLC_Tails
-		dc.w PLC_Tails_BarSwing2-PLC_Tails
-		dc.w PLC_Tails_BarSwing3-PLC_Tails
-		dc.w PLC_Tails_BarSwing4-PLC_Tails
-		dc.w PLC_Tails_BarSwing5-PLC_Tails
-		dc.w PLC_Tails_BarSwing6-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWallRide1-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWallRide2-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWallRide3-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWall1-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWall2-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWall3-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWall4-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWall5-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWall6-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWall7-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWall8-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWall9-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWallA-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWallB-PLC_Tails
-		dc.w PLC_Tails_CorkscrewWallC-PLC_Tails
-		dc.w PLC_Tails_HangSwing1-PLC_Tails
-		dc.w PLC_Tails_HangSwing2-PLC_Tails
-		dc.w PLC_Tails_HangSwing3-PLC_Tails
-		dc.w PLC_Tails_HangSwing4-PLC_Tails
-		dc.w PLC_Tails_HangSwing5-PLC_Tails
-		dc.w PLC_Tails_HangSwing6-PLC_Tails
-		dc.w PLC_Tails_HangSwing7-PLC_Tails
-		dc.w PLC_Tails_HangSwing8-PLC_Tails
-		dc.w PLC_Tails_HangWalk1-PLC_Tails
-		dc.w PLC_Tails_HangWalk2-PLC_Tails
-		dc.w PLC_Tails_HangWalk3-PLC_Tails
-		dc.w PLC_Tails_HangWalk4-PLC_Tails
-		dc.w PLC_Tails_HangWalk5-PLC_Tails
-		dc.w PLC_Tails_HangWalk6-PLC_Tails
-		dc.w PLC_Tails_Hang1-PLC_Tails
-		dc.w PLC_Tails_Hang2-PLC_Tails
-		dc.w PLC_Tails_Hang3-PLC_Tails
-		dc.w PLC_Tails_Hang4-PLC_Tails
-		dc.w PLC_Tails_360Hang1-PLC_Tails
-		dc.w PLC_Tails_360Hang2-PLC_Tails
-		dc.w PLC_Tails_360Hang3-PLC_Tails
-		dc.w PLC_Tails_360Hang4-PLC_Tails
-		dc.w PLC_Tails_360Hang5-PLC_Tails
-		dc.w PLC_Tails_360Hang6-PLC_Tails
-		dc.w PLC_Tails_360Hang7-PLC_Tails
-		dc.w PLC_Tails_WallRide1-PLC_Tails
-		dc.w PLC_Tails_WallRide2-PLC_Tails
-		dc.w PLC_Tails_WallRide3-PLC_Tails
-		dc.w PLC_Tails_WallRide4-PLC_Tails
-		dc.w PLC_Tails_WallRide5-PLC_Tails
-		dc.w PLC_Tails_360Run1-PLC_Tails
-		dc.w PLC_Tails_360Run2-PLC_Tails
-		dc.w PLC_Tails_360Run3-PLC_Tails
-		dc.w PLC_Tails_360Run4-PLC_Tails
-		dc.w PLC_Tails_360Run5-PLC_Tails
-		dc.w PLC_Tails_360Run6-PLC_Tails
-		dc.w PLC_Tails_360Run7-PLC_Tails
-		dc.w PLC_Tails_360Run8-PLC_Tails
-		dc.w PLC_Tails_360Run9-PLC_Tails
-		dc.w PLC_Tails_360RunA-PLC_Tails
-		dc.w PLC_Tails_360RunB-PLC_Tails
-		dc.w PLC_Tails_360RunC-PLC_Tails
-		dc.w PLC_Tails_PoleSwingRide-PLC_Tails
-		dc.w PLC_Tails_PoleCurrent1-PLC_Tails
-		dc.w PLC_Tails_PoleCurrent2-PLC_Tails
-		dc.w PLC_Tails_Pulley-PLC_Tails
-		dc.w PLC_Tails_BarCurrent1-PLC_Tails
-		dc.w PLC_Tails_BarCurrent2-PLC_Tails
-		dc.w PLC_Tails_Fly1-PLC_Tails
-		dc.w PLC_Tails_Fly2-PLC_Tails
-		dc.w PLC_Tails_Fly3-PLC_Tails
-		dc.w PLC_Tails_Fly4-PLC_Tails
-		dc.w PLC_Tails_Fly5-PLC_Tails
-		dc.w PLC_Tails_Fly6-PLC_Tails
-		dc.w PLC_Tails_Stand1-PLC_Tails
-		dc.w PLC_Tails_Stand2-PLC_Tails
-		dc.w PLC_Tails_Stand3-PLC_Tails
-		dc.w PLC_Tails_Stand4-PLC_Tails
-		dc.w PLC_Tails_Stand5-PLC_Tails
-		dc.w PLC_Tails_Stand6-PLC_Tails
-		dc.w PLC_Tails_Swim1-PLC_Tails
-		dc.w PLC_Tails_Swim2-PLC_Tails
-		dc.w PLC_Tails_Swim3-PLC_Tails
-		dc.w PLC_Tails_Swim4-PLC_Tails
-		dc.w PLC_Tails_Swim5-PLC_Tails
-		dc.w PLC_Tails_Swim6-PLC_Tails
-		dc.w PLC_Tails_Swim7-PLC_Tails
-		dc.w PLC_Tails_Swim8-PLC_Tails
-		dc.w PLC_Tails_Swim9-PLC_Tails
-		dc.w PLC_Tails_SwimA-PLC_Tails
-		dc.w PLC_Tails_Dash1-PLC_Tails
-		dc.w PLC_Tails_Dash2-PLC_Tails
-		dc.w PLC_Tails_DiagDash1-PLC_Tails
-		dc.w PLC_Tails_DiagDash2-PLC_Tails
-		dc.w PLC_Tails_WallDash1-PLC_Tails
-		dc.w PLC_Tails_WallDash2-PLC_Tails
-		dc.w PLC_Tails_DiagWallDash1-PLC_Tails
-		dc.w PLC_Tails_DiagWallDash2-PLC_Tails
-		dc.w PLC_Tails_Float1-PLC_Tails
-		dc.w PLC_Tails_Float2-PLC_Tails
-		dc.w PLC_Tails_Float3-PLC_Tails
-		dc.w PLC_Tails_Float4-PLC_Tails
-		dc.w PLC_Tails_Float5-PLC_Tails
-		dc.w PLC_Tails_Float6-PLC_Tails
-		dc.w PLC_Tails_Float7-PLC_Tails
-		dc.w PLC_Tails_Float8-PLC_Tails
-		dc.w PLC_Tails_Crane-PLC_Tails
-		dc.w PLC_Tails_Bubble-PLC_Tails
-		dc.w PLC_Tails_Push1-PLC_Tails
-		dc.w PLC_Tails_Push2-PLC_Tails
-		dc.w PLC_Tails_Push3-PLC_Tails
-		dc.w PLC_Tails_Push4-PLC_Tails
-		dc.w PLC_Tails_Death-PLC_Tails
-		dc.w PLC_Tails_Spring1-PLC_Tails
-		dc.w PLC_Tails_Spring2-PLC_Tails
-		dc.w PLC_Tails_LookUp-PLC_Tails
-		dc.w PLC_Tails_Stand0-PLC_Tails
-		dc.w PLC_Tails_SpinDash1-PLC_Tails
-		dc.w PLC_Tails_SpinDash2-PLC_Tails
-		dc.w PLC_Tails_SpinDash3-PLC_Tails
-		dc.w PLC_Tails_Spin1-PLC_Tails
-		dc.w PLC_Tails_Spin2-PLC_Tails
-		dc.w PLC_Tails_Spin3-PLC_Tails
-		dc.w PLC_Tails_Skid1-PLC_Tails
-		dc.w PLC_Tails_Skid2-PLC_Tails
-		dc.w PLC_Tails_Clear1-PLC_Tails
-		dc.w PLC_Tails_Clear2-PLC_Tails
-		dc.w PLC_Tails_Balance1-PLC_Tails
-		dc.w PLC_Tails_Balance2-PLC_Tails
-		dc.w PLC_Tails_Slide1-PLC_Tails
-		dc.w PLC_Tails_Slide2-PLC_Tails
-		dc.w PLC_Tails_Fall1-PLC_Tails
-		dc.w PLC_Tails_Fall2-PLC_Tails
-		dc.w PLC_Tails_Crouch-PLC_Tails
-		dc.w PLC_Tails_Transform1-PLC_Tails
-		dc.w PLC_Tails_Transform2-PLC_Tails
-		dc.w PLC_Tails_Transform3-PLC_Tails
+PLC_Tails_:
+		dc.w PLC_Tails_Blank-PLC_Tails_
+		dc.w PLC_Tails_Walk1-PLC_Tails_
+		dc.w PLC_Tails_Walk2-PLC_Tails_
+		dc.w PLC_Tails_Walk3-PLC_Tails_
+		dc.w PLC_Tails_Walk4-PLC_Tails_
+		dc.w PLC_Tails_Walk5-PLC_Tails_
+		dc.w PLC_Tails_Walk6-PLC_Tails_
+		dc.w PLC_Tails_Walk7-PLC_Tails_
+		dc.w PLC_Tails_Walk8-PLC_Tails_
+		dc.w PLC_Tails_DiagWalk1-PLC_Tails_
+		dc.w PLC_Tails_DiagWalk2-PLC_Tails_
+		dc.w PLC_Tails_DiagWalk3-PLC_Tails_
+		dc.w PLC_Tails_DiagWalk4-PLC_Tails_
+		dc.w PLC_Tails_DiagWalk5-PLC_Tails_
+		dc.w PLC_Tails_DiagWalk6-PLC_Tails_
+		dc.w PLC_Tails_DiagWalk7-PLC_Tails_
+		dc.w PLC_Tails_DiagWalk8-PLC_Tails_
+		dc.w PLC_Tails_WallWalk1-PLC_Tails_
+		dc.w PLC_Tails_WallWalk2-PLC_Tails_
+		dc.w PLC_Tails_WallWalk3-PLC_Tails_
+		dc.w PLC_Tails_WallWalk4-PLC_Tails_
+		dc.w PLC_Tails_WallWalk5-PLC_Tails_
+		dc.w PLC_Tails_WallWalk6-PLC_Tails_
+		dc.w PLC_Tails_WallWalk7-PLC_Tails_
+		dc.w PLC_Tails_WallWalk8-PLC_Tails_
+		dc.w PLC_Tails_DiagWallWalk1-PLC_Tails_
+		dc.w PLC_Tails_DiagWallWalk2-PLC_Tails_
+		dc.w PLC_Tails_DiagWallWalk3-PLC_Tails_
+		dc.w PLC_Tails_DiagWallWalk4-PLC_Tails_
+		dc.w PLC_Tails_DiagWallWalk5-PLC_Tails_
+		dc.w PLC_Tails_DiagWallWalk6-PLC_Tails_
+		dc.w PLC_Tails_DiagWallWalk7-PLC_Tails_
+		dc.w PLC_Tails_DiagWallWalk8-PLC_Tails_
+		dc.w PLC_Tails_Run1-PLC_Tails_
+		dc.w PLC_Tails_Run2-PLC_Tails_
+		dc.w PLC_Tails_Run3-PLC_Tails_
+		dc.w PLC_Tails_Run4-PLC_Tails_
+		dc.w PLC_Tails_DiagRun1-PLC_Tails_
+		dc.w PLC_Tails_DiagRun2-PLC_Tails_
+		dc.w PLC_Tails_DiagRun3-PLC_Tails_
+		dc.w PLC_Tails_DiagRun4-PLC_Tails_
+		dc.w PLC_Tails_WallRun1-PLC_Tails_
+		dc.w PLC_Tails_WallRun2-PLC_Tails_
+		dc.w PLC_Tails_WallRun3-PLC_Tails_
+		dc.w PLC_Tails_WallRun4-PLC_Tails_
+		dc.w PLC_Tails_DiagWallRun1-PLC_Tails_
+		dc.w PLC_Tails_DiagWallRun2-PLC_Tails_
+		dc.w PLC_Tails_DiagWallRun3-PLC_Tails_
+		dc.w PLC_Tails_DiagWallRun4-PLC_Tails_
+		dc.w PLC_Tails_Corkscrew1-PLC_Tails_
+		dc.w PLC_Tails_Corkscrew2-PLC_Tails_
+		dc.w PLC_Tails_Corkscrew3-PLC_Tails_
+		dc.w PLC_Tails_Corkscrew4-PLC_Tails_
+		dc.w PLC_Tails_Corkscrew5-PLC_Tails_
+		dc.w PLC_Tails_Corkscrew6-PLC_Tails_
+		dc.w PLC_Tails_Corkscrew7-PLC_Tails_
+		dc.w PLC_Tails_Corkscrew8-PLC_Tails_
+		dc.w PLC_Tails_Corkscrew9-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewA-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewB-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewC-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStand1-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStand2-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStand3-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStand4-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStand5-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStand6-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStand7-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStand8-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStand9-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStandA-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStandB-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewStandC-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiag1-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiag2-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiag3-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiag4-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiag5-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiag6-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiag7-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiag8-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiag9-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiagA-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiagB-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewDiagC-PLC_Tails_
+		dc.w PLC_Tails_360Stand1-PLC_Tails_
+		dc.w PLC_Tails_360Stand2-PLC_Tails_
+		dc.w PLC_Tails_360Stand3-PLC_Tails_
+		dc.w PLC_Tails_360Stand4-PLC_Tails_
+		dc.w PLC_Tails_360Stand5-PLC_Tails_
+		dc.w PLC_Tails_360Stand6-PLC_Tails_
+		dc.w PLC_Tails_360Stand7-PLC_Tails_
+		dc.w PLC_Tails_PoleSwing1-PLC_Tails_
+		dc.w PLC_Tails_PoleSwing2-PLC_Tails_
+		dc.w PLC_Tails_PoleSwing3-PLC_Tails_
+		dc.w PLC_Tails_PoleSwing4-PLC_Tails_
+		dc.w PLC_Tails_PoleSwing5-PLC_Tails_
+		dc.w PLC_Tails_PoleSwing6-PLC_Tails_
+		dc.w PLC_Tails_BarWalk-PLC_Tails_
+		dc.w PLC_Tails_BarSwing1-PLC_Tails_
+		dc.w PLC_Tails_BarSwing2-PLC_Tails_
+		dc.w PLC_Tails_BarSwing3-PLC_Tails_
+		dc.w PLC_Tails_BarSwing4-PLC_Tails_
+		dc.w PLC_Tails_BarSwing5-PLC_Tails_
+		dc.w PLC_Tails_BarSwing6-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWallRide1-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWallRide2-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWallRide3-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWall1-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWall2-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWall3-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWall4-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWall5-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWall6-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWall7-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWall8-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWall9-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWallA-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWallB-PLC_Tails_
+		dc.w PLC_Tails_CorkscrewWallC-PLC_Tails_
+		dc.w PLC_Tails_HangSwing1-PLC_Tails_
+		dc.w PLC_Tails_HangSwing2-PLC_Tails_
+		dc.w PLC_Tails_HangSwing3-PLC_Tails_
+		dc.w PLC_Tails_HangSwing4-PLC_Tails_
+		dc.w PLC_Tails_HangSwing5-PLC_Tails_
+		dc.w PLC_Tails_HangSwing6-PLC_Tails_
+		dc.w PLC_Tails_HangSwing7-PLC_Tails_
+		dc.w PLC_Tails_HangSwing8-PLC_Tails_
+		dc.w PLC_Tails_HangWalk1-PLC_Tails_
+		dc.w PLC_Tails_HangWalk2-PLC_Tails_
+		dc.w PLC_Tails_HangWalk3-PLC_Tails_
+		dc.w PLC_Tails_HangWalk4-PLC_Tails_
+		dc.w PLC_Tails_HangWalk5-PLC_Tails_
+		dc.w PLC_Tails_HangWalk6-PLC_Tails_
+		dc.w PLC_Tails_Hang1-PLC_Tails_
+		dc.w PLC_Tails_Hang2-PLC_Tails_
+		dc.w PLC_Tails_Hang3-PLC_Tails_
+		dc.w PLC_Tails_Hang4-PLC_Tails_
+		dc.w PLC_Tails_360Hang1-PLC_Tails_
+		dc.w PLC_Tails_360Hang2-PLC_Tails_
+		dc.w PLC_Tails_360Hang3-PLC_Tails_
+		dc.w PLC_Tails_360Hang4-PLC_Tails_
+		dc.w PLC_Tails_360Hang5-PLC_Tails_
+		dc.w PLC_Tails_360Hang6-PLC_Tails_
+		dc.w PLC_Tails_360Hang7-PLC_Tails_
+		dc.w PLC_Tails_WallRide1-PLC_Tails_
+		dc.w PLC_Tails_WallRide2-PLC_Tails_
+		dc.w PLC_Tails_WallRide3-PLC_Tails_
+		dc.w PLC_Tails_WallRide4-PLC_Tails_
+		dc.w PLC_Tails_WallRide5-PLC_Tails_
+		dc.w PLC_Tails_360Run1-PLC_Tails_
+		dc.w PLC_Tails_360Run2-PLC_Tails_
+		dc.w PLC_Tails_360Run3-PLC_Tails_
+		dc.w PLC_Tails_360Run4-PLC_Tails_
+		dc.w PLC_Tails_360Run5-PLC_Tails_
+		dc.w PLC_Tails_360Run6-PLC_Tails_
+		dc.w PLC_Tails_360Run7-PLC_Tails_
+		dc.w PLC_Tails_360Run8-PLC_Tails_
+		dc.w PLC_Tails_360Run9-PLC_Tails_
+		dc.w PLC_Tails_360RunA-PLC_Tails_
+		dc.w PLC_Tails_360RunB-PLC_Tails_
+		dc.w PLC_Tails_360RunC-PLC_Tails_
+		dc.w PLC_Tails_PoleSwingRide-PLC_Tails_
+		dc.w PLC_Tails_PoleCurrent1-PLC_Tails_
+		dc.w PLC_Tails_PoleCurrent2-PLC_Tails_
+		dc.w PLC_Tails_Pulley-PLC_Tails_
+		dc.w PLC_Tails_BarCurrent1-PLC_Tails_
+		dc.w PLC_Tails_BarCurrent2-PLC_Tails_
+		dc.w PLC_Tails_Fly1-PLC_Tails_
+		dc.w PLC_Tails_Fly2-PLC_Tails_
+		dc.w PLC_Tails_Fly3-PLC_Tails_
+		dc.w PLC_Tails_Fly4-PLC_Tails_
+		dc.w PLC_Tails_Fly5-PLC_Tails_
+		dc.w PLC_Tails_Fly6-PLC_Tails_
+		dc.w PLC_Tails_Stand1-PLC_Tails_
+		dc.w PLC_Tails_Stand2-PLC_Tails_
+		dc.w PLC_Tails_Stand3-PLC_Tails_
+		dc.w PLC_Tails_Stand4-PLC_Tails_
+		dc.w PLC_Tails_Stand5-PLC_Tails_
+		dc.w PLC_Tails_Stand6-PLC_Tails_
+		dc.w PLC_Tails_Swim1-PLC_Tails_
+		dc.w PLC_Tails_Swim2-PLC_Tails_
+		dc.w PLC_Tails_Swim3-PLC_Tails_
+		dc.w PLC_Tails_Swim4-PLC_Tails_
+		dc.w PLC_Tails_Swim5-PLC_Tails_
+		dc.w PLC_Tails_Swim6-PLC_Tails_
+		dc.w PLC_Tails_Swim7-PLC_Tails_
+		dc.w PLC_Tails_Swim8-PLC_Tails_
+		dc.w PLC_Tails_Swim9-PLC_Tails_
+		dc.w PLC_Tails_SwimA-PLC_Tails_
+		dc.w PLC_Tails_Dash1-PLC_Tails_
+		dc.w PLC_Tails_Dash2-PLC_Tails_
+		dc.w PLC_Tails_DiagDash1-PLC_Tails_
+		dc.w PLC_Tails_DiagDash2-PLC_Tails_
+		dc.w PLC_Tails_WallDash1-PLC_Tails_
+		dc.w PLC_Tails_WallDash2-PLC_Tails_
+		dc.w PLC_Tails_DiagWallDash1-PLC_Tails_
+		dc.w PLC_Tails_DiagWallDash2-PLC_Tails_
+		dc.w PLC_Tails_Float1-PLC_Tails_
+		dc.w PLC_Tails_Float2-PLC_Tails_
+		dc.w PLC_Tails_Float3-PLC_Tails_
+		dc.w PLC_Tails_Float4-PLC_Tails_
+		dc.w PLC_Tails_Float5-PLC_Tails_
+		dc.w PLC_Tails_Float6-PLC_Tails_
+		dc.w PLC_Tails_Float7-PLC_Tails_
+		dc.w PLC_Tails_Float8-PLC_Tails_
+		dc.w PLC_Tails_Crane-PLC_Tails_
+		dc.w PLC_Tails_Bubble-PLC_Tails_
+		dc.w PLC_Tails_Push1-PLC_Tails_
+		dc.w PLC_Tails_Push2-PLC_Tails_
+		dc.w PLC_Tails_Push3-PLC_Tails_
+		dc.w PLC_Tails_Push4-PLC_Tails_
+		dc.w PLC_Tails_Death-PLC_Tails_
+		dc.w PLC_Tails_Spring1-PLC_Tails_
+		dc.w PLC_Tails_Spring2-PLC_Tails_
+		dc.w PLC_Tails_LookUp-PLC_Tails_
+		dc.w PLC_Tails_Stand0-PLC_Tails_
+		dc.w PLC_Tails_SpinDash1-PLC_Tails_
+		dc.w PLC_Tails_SpinDash2-PLC_Tails_
+		dc.w PLC_Tails_SpinDash3-PLC_Tails_
+		dc.w PLC_Tails_Spin1-PLC_Tails_
+		dc.w PLC_Tails_Spin2-PLC_Tails_
+		dc.w PLC_Tails_Spin3-PLC_Tails_
+		dc.w PLC_Tails_Skid1-PLC_Tails_
+		dc.w PLC_Tails_Skid2-PLC_Tails_
+		dc.w PLC_Tails_Clear1-PLC_Tails_
+		dc.w PLC_Tails_Clear2-PLC_Tails_
+		dc.w PLC_Tails_Balance1-PLC_Tails_
+		dc.w PLC_Tails_Balance2-PLC_Tails_
+		dc.w PLC_Tails_Slide1-PLC_Tails_
+		dc.w PLC_Tails_Slide2-PLC_Tails_
+		dc.w PLC_Tails_Fall1-PLC_Tails_
+		dc.w PLC_Tails_Fall2-PLC_Tails_
+		dc.w PLC_Tails_Crouch-PLC_Tails_
+		dc.w PLC_Tails_Transform1-PLC_Tails_
+		dc.w PLC_Tails_Transform2-PLC_Tails_
+		dc.w PLC_Tails_Transform3-PLC_Tails_
 PLC_Tails_Blank:
 		dc.w 0
 PLC_Tails_Walk1:
@@ -293,7 +294,7 @@ PLC_Tails_DiagWalk2:
 		dc.w 3
 		dc.w $116C
 		dc.w $F16E
-		dc.w $17E
+		dc.w $017E
 PLC_Tails_DiagWalk3:
 		dc.w 3
 		dc.w $217F
@@ -311,7 +312,7 @@ PLC_Tails_DiagWalk5:
 		dc.w $B1A7
 PLC_Tails_DiagWalk6:
 		dc.w 4
-		dc.w $1B3
+		dc.w $01B3
 		dc.w $51B4
 		dc.w $31BA
 		dc.w $31BE
@@ -361,7 +362,7 @@ PLC_Tails_WallWalk7:
 PLC_Tails_WallWalk8:
 		dc.w 3
 		dc.w $B23D
-		dc.w $249
+		dc.w $0249
 		dc.w $501E
 PLC_Tails_DiagWallWalk1:
 		dc.w 4
@@ -371,7 +372,7 @@ PLC_Tails_DiagWallWalk1:
 		dc.w $5258
 PLC_Tails_DiagWallWalk2:
 		dc.w 3
-		dc.w $25E
+		dc.w $025E
 		dc.w $F25F
 		dc.w $126F
 PLC_Tails_DiagWallWalk3:
@@ -381,7 +382,7 @@ PLC_Tails_DiagWallWalk3:
 		dc.w $227F
 PLC_Tails_DiagWallWalk4:
 		dc.w 4
-		dc.w $282
+		dc.w $0282
 		dc.w $1283
 		dc.w $B285
 		dc.w $1291
@@ -392,10 +393,10 @@ PLC_Tails_DiagWallWalk5:
 		dc.w $12A2
 PLC_Tails_DiagWallWalk6:
 		dc.w 4
-		dc.w $2A4
+		dc.w $02A4
 		dc.w $B2A5
-		dc.w $2B1
-		dc.w $2B2
+		dc.w $02B1
+		dc.w $02B2
 PLC_Tails_DiagWallWalk7:
 		dc.w 3
 		dc.w $22B3
@@ -509,7 +510,7 @@ PLC_Tails_Corkscrew4:
 PLC_Tails_Corkscrew5:
 		dc.w 2
 		dc.w $8367
-		dc.w $370
+		dc.w $0370
 PLC_Tails_Corkscrew6:
 		dc.w 2
 		dc.w $1371
@@ -533,7 +534,7 @@ PLC_Tails_CorkscrewA:
 PLC_Tails_CorkscrewB:
 		dc.w 2
 		dc.w $83A5
-		dc.w $3AE
+		dc.w $03AE
 PLC_Tails_CorkscrewC:
 		dc.w 2
 		dc.w $53AF
@@ -544,7 +545,7 @@ PLC_Tails_CorkscrewStand1:
 		dc.w $13C2
 PLC_Tails_CorkscrewStand2:
 		dc.w 2
-		dc.w $3C4
+		dc.w $03C4
 		dc.w $83C5
 PLC_Tails_CorkscrewStand3:
 		dc.w 1
@@ -567,12 +568,12 @@ PLC_Tails_CorkscrewStand7:
 		dc.w $53FE
 PLC_Tails_CorkscrewStand8:
 		dc.w 2
-		dc.w $404
+		dc.w $0404
 		dc.w $8405
 PLC_Tails_CorkscrewStand9:
 		dc.w 2
 		dc.w $540E
-		dc.w $414
+		dc.w $0414
 PLC_Tails_CorkscrewStandA:
 		dc.w 2
 		dc.w $1415
@@ -590,7 +591,7 @@ PLC_Tails_CorkscrewDiag1:
 		dc.w 3
 		dc.w $2432
 		dc.w $7435
-		dc.w $43D
+		dc.w $043D
 PLC_Tails_CorkscrewDiag2:
 		dc.w 2
 		dc.w $243E
@@ -611,7 +612,7 @@ PLC_Tails_CorkscrewDiag5:
 		dc.w $1465
 PLC_Tails_CorkscrewDiag6:
 		dc.w 4
-		dc.w $467
+		dc.w $0467
 		dc.w $1468
 		dc.w $346A
 		dc.w $546E
@@ -626,7 +627,7 @@ PLC_Tails_CorkscrewDiag8:
 		dc.w $1482
 		dc.w $3484
 		dc.w $5488
-		dc.w $48E
+		dc.w $048E
 PLC_Tails_CorkscrewDiag9:
 		dc.w 3
 		dc.w $148F
@@ -684,8 +685,8 @@ PLC_Tails_PoleSwing2:
 PLC_Tails_PoleSwing3:
 		dc.w 3
 		dc.w $B525
-		dc.w $531
-		dc.w $532
+		dc.w $0531
+		dc.w $0532
 PLC_Tails_PoleSwing4:
 		dc.w 2
 		dc.w $B533
@@ -728,7 +729,7 @@ PLC_Tails_CorkscrewWallRide1:
 		dc.w 3
 		dc.w $25CA
 		dc.w $B5CD
-		dc.w $5D9
+		dc.w $05D9
 PLC_Tails_CorkscrewWallRide2:
 		dc.w 3
 		dc.w $15DA
@@ -799,7 +800,7 @@ PLC_Tails_HangSwing6:
 		dc.w $5690
 PLC_Tails_HangSwing3:
 		dc.w 4
-		dc.w $696
+		dc.w $0696
 		dc.w $5697
 		dc.w $569D
 		dc.w $36A3
@@ -812,7 +813,7 @@ PLC_Tails_HangSwing8:
 		dc.w $16B5
 PLC_Tails_HangSwing7:
 		dc.w 4
-		dc.w $696
+		dc.w $0696
 		dc.w $5697
 		dc.w $56B7
 		dc.w $36A3
@@ -835,7 +836,7 @@ PLC_Tails_HangWalk3:
 PLC_Tails_HangWalk4:
 		dc.w 3
 		dc.w $F6F6
-		dc.w $706
+		dc.w $0706
 		dc.w $2707
 PLC_Tails_HangWalk5:
 		dc.w 3
@@ -881,7 +882,7 @@ PLC_Tails_360Hang3:
 PLC_Tails_360Hang4:
 		dc.w 3
 		dc.w $878D
-		dc.w $796
+		dc.w $0796
 		dc.w $1797
 PLC_Tails_360Hang5:
 		dc.w 2
@@ -895,7 +896,7 @@ PLC_Tails_360Hang6:
 PLC_Tails_360Hang7:
 		dc.w 3
 		dc.w $87B4
-		dc.w $7BD
+		dc.w $07BD
 		dc.w $17BE
 PLC_Tails_WallRide1:
 		dc.w 3
@@ -914,13 +915,13 @@ PLC_Tails_WallRide3:
 PLC_Tails_WallRide4:
 		dc.w 2
 		dc.w $B7E4
-		dc.w $106
+		dc.w $0106
 PLC_Tails_WallRide5:
 		dc.w 4
 		dc.w $27F0
 		dc.w $77F3
 		dc.w $27FB
-		dc.w $7FE
+		dc.w $07FE
 PLC_Tails_360Run1:
 PLC_Tails_360Run7:
 		dc.w 2
@@ -1034,13 +1035,13 @@ PLC_Tails_Swim2:
 PLC_Tails_Swim3:
 		dc.w 2
 		dc.w $F985
-		dc.w $995
+		dc.w $0995
 PLC_Tails_Swim4:
 		dc.w 4
 		dc.w $7996
-		dc.w $99E
+		dc.w $099E
 		dc.w $799F
-		dc.w $9A7
+		dc.w $09A7
 PLC_Tails_Swim5:
 		dc.w 2
 		dc.w $F9A8
@@ -1054,12 +1055,12 @@ PLC_Tails_Swim7:
 		dc.w 3
 		dc.w $19CB
 		dc.w $B9CD
-		dc.w $9C8
+		dc.w $09C8
 PLC_Tails_Swim8:
 		dc.w 3
 		dc.w $19D9
 		dc.w $B9DB
-		dc.w $9C8
+		dc.w $09C8
 PLC_Tails_Swim9:
 		dc.w 2
 		dc.w $19E7
@@ -1127,7 +1128,7 @@ PLC_Tails_Float2:
 PLC_Tails_Float4:
 PLC_Tails_Float8:
 		dc.w 3
-		dc.w $A1C
+		dc.w $0A1C
 		dc.w $7A1D
 		dc.w $3A25
 PLC_Tails_Float5:
@@ -1215,10 +1216,10 @@ PLC_Tails_Clear1:
 		dc.w $BB38
 PLC_Tails_Clear2:
 		dc.w 4
-		dc.w $B44
+		dc.w $0B44
 		dc.w $7B45
 		dc.w $7B4D
-		dc.w $B55
+		dc.w $0B55
 PLC_Tails_Balance1:
 		dc.w 3
 		dc.w $2B56

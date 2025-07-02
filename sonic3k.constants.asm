@@ -111,7 +111,7 @@ next_subspr		= $6
 object_size =		$4A ; the size of an object's status table entry
 next_object =		object_size
 ; ---------------------------------------------------------------------------
-; unknown or inconsistently used offsets that are not applicable to sonic/tails:
+; unknown or inconsistently used offsets that are not applicable to Sonic/Tails:
 objoff_12 =		2+x_pos
 objoff_16 =		2+y_pos
 objoff_1C =		$1C
@@ -194,6 +194,16 @@ shield_art          = $38
 shield_plc          = $3C
 
 ; ---------------------------------------------------------------------------
+; Clock equates
+; ---------------------------------------------------------------------------
+
+Master_Clock    = 53693175
+M68000_Clock    = Master_Clock/7
+Z80_Clock       = Master_Clock/15
+FM_Sample_Rate  = M68000_Clock/(6*6*4)
+PSG_Sample_Rate = Z80_Clock/16
+
+; ---------------------------------------------------------------------------
 ; Address equates
 ; ---------------------------------------------------------------------------
 
@@ -234,9 +244,9 @@ PSG_input =			$C00011
 
 ; RAM addresses
 
-Sprite_table_buffer_2 =		ramaddr(   $FF7880 ) ; $280 bytes ; alternate sprite table for player 1 in competition mode
-Sprite_table_buffer_P2 =	ramaddr(   $FF7B00 ) ; $280 bytes ; sprite table for player 2 in competition mode
-Sprite_table_buffer_P2_2 =	ramaddr(   $FF7D80 ) ; $280 bytes ; alternate sprite table for player 2 in competition mode
+Sprite_table_alternate =	ramaddr(   $FF7880 ) ; $280 bytes ; alternate sprite table for player 1 in competition mode
+Sprite_table_P2 =		ramaddr(   $FF7B00 ) ; $280 bytes ; sprite table for player 2 in competition mode
+Sprite_table_P2_alternate =	ramaddr(   $FF7D80 ) ; $280 bytes ; alternate sprite table for player 2 in competition mode
 
 	phase $FFFF0000
 RAM_start =			*
@@ -247,9 +257,10 @@ Level_layout_main		ds.b $FF8		; $40 word-sized line pointers followed by actual 
 Object_respawn_table_2 :=	Level_layout_header+$400; $200 bytes ; respawn table used by glowing spheres bonus stage, because... Reasons?
 Ring_status_table_2 :=		Level_layout_header+$600; $400 bytes ; ring status table used by glowing spheres bonus stage, because... Reasons?
 Block_table			ds.b $1800		; block (16x16) definitions, 8 bytes per definition, space for $300 blocks
-SStage_collision_response_list := Block_table+$1400	; $100 bytes ; sprite collision list during a special stage
-SStage_unkA500 :=		Block_table+$1500	; unknown special stage array
-SStage_unkA600 :=		Block_table+$1600	; unknown special stage array
+SStage_collision_response_list := 	Block_table+$1400	; $100 bytes ; sprite collision list during a special stage
+SStage_blue_sphere_to_ring_queue :=	Block_table+$1500	; $100 bytes ; queue used by special stages to temporarily store the positions of blue spheres that have turned into rings
+SStage_red_sphere_dfs_walk_stack :=	Block_table+$1600	; $100 bytes ; stack of (direction index bounds, direction index, position) used by special stages
+								; as part of the red sphere DFS walk to check for loops of red spheres
 HScroll_table			ds.b $200		; array of background scroll positions for the level. WARNING: some references are before this label
 _unkA880 :=			HScroll_table+$80	; used in SSZ screen/background events
 _unkA8E0 :=			HScroll_table+$E0	; used in SSZ screen/background events
@@ -361,9 +372,9 @@ Camera_X_pos_P2_copy		ds.w 1
 			ds.w 1				; unused
 Camera_Y_pos_P2_copy		ds.w 1
 			ds.w 1				; unused
-_unkEE70			ds.w 1			; it is unclear how this is used
+Camera_X_pos_P2_BG_copy		ds.w 1			; this is used in competition mode, and it acts as a copy of the x position for player 2's background
 			ds.w 1				; unused
-_unkEE74			ds.w 1			; it is unclear how this is used
+Camera_Y_pos_P2_BG_copy		ds.w 1			; this is used in competition mode, and it acts as a copy of the y position for player 2's background
 			ds.w 1				; unused
 Camera_X_pos			ds.l 1
 Camera_Y_pos			ds.l 1
@@ -388,12 +399,12 @@ Screen_Y_wrap_value		ds.w 1			; either $7FF or $FFF
 Camera_Y_pos_mask		ds.w 1			; either $7F0 or $FF0
 Layout_row_index_mask		ds.w 1			; either $3C or $7C
 
-_unkEEB0			ds.w 1			;
+_unkEEB0			ds.w 1			; only ever set to $100 or $80, used in competition mode
 Special_events_routine		ds.w 1			; routine counter for various special events. Used for example with LBZ2 Death Egg sequence
 Events_fg_0			ds.w 1			; various flags used by screen events
 Events_fg_1			ds.w 1			; various flags used by screen events
 Events_fg_2			ds.w 1			; various flags used by screen events
-_unkEEBA			ds.w 1			; only used in Sonic 3
+_unkEEBA			ds.w 1			; only used in Sonic 3, and only used in the competition mode
 Level_repeat_offset		ds.w 1			; the number of pixels the screen was moved this frame, used to offset level objects horizontally. Used only for level repeat sections, such as AIZ airship.
 Events_fg_3			ds.w 1			; various flags used by screen events
 Events_routine_fg		ds.w 1			; screen events routine counter
@@ -410,7 +421,7 @@ Events_bg			ds.b $18		; $18 bytes ; various flags used by background events
 SStage_results_object_addr =	Events_bg+$E		; word ; RAM address of the special stage results object
 FBZ_cloud_addr =		*			; $14 bytes ; addresses for cloud objects in FBZ2
 Vscroll_buffer =		*			; $50 bytes ; vertical scroll buffer used in various levels
-_unkEEEA			ds.w 1			; various unknown uses for EEEA
+_unkEEEA			ds.w 1			; used in save screen to store VRAM addresses (4 word VRAM addresses), also used in SSZ screen events
 			ds.w 1				; used in some instances (see above)
 _unkEEEE			ds.w 1			; used exclusively in SSZ background events code
 			ds.w 1				; used in some instances (see above)
@@ -421,8 +432,13 @@ _unkEEFA			ds.w 1			; used exclusively in SSZ background events code
 			ds.b $3E			; used in some instances (see above)
 
 Spritemask_flag			ds.w 1			; when set, indicates that special sprites are used for sprite masking
-Use_normal_sprite_table		ds.w 1			; if this is set Sprite_table_buffer and Sprite_table_buffer_P2 will be DMAed instead of Sprite_table_buffer_2 and Sprite_table_buffer_P2_2
-Switch_sprite_table		ds.w 1			; if set, switches the state of Use_normal_sprite_table
+
+; These two variables implement page-flipping of the game's sprite tables in
+; Competition Mode, to avoid incomplete sprite table data being uploaded to
+; the VDP, which was a problem that Sonic 2 suffered from.
+Current_sprite_table_page	ds.w 1
+Sprite_table_page_flip_pending	ds.w 1
+
 Event_LBZ2_DeathEgg =		*			; if set, Launch Base 2 Death Egg is currently rising
 _unkEF40_1			ds.l 1			; used as a part of calculating decimal scores
 _unkEF44_1 =			*			; used as a jump pointer in vint 1E, unknown why this is used
@@ -550,6 +566,7 @@ Scroll_forced_Y_pos		ds.w 1			; note: must be exactly 4 bytes after Scroll_force
 			ds.w 1				; unused
 
 Nem_decomp_queue		ds.b 6*$10		; 6 bytes per entry, first longword is source location and next word is VRAM destination
+Nem_decomp_queue_End
 Nem_decomp_source =		Nem_decomp_queue	; long ; the compressed data location for the first entry in the queue
 Nem_decomp_destination =	Nem_decomp_queue+4	; word ; destination in VRAM for the first entry in the queue
 Nem_decomp_vars =		*			; $20 bytes ; various variables used by the Nemesis decompression queue processor
@@ -647,7 +664,7 @@ Player_prev_frame_P2_tail	ds.b 1			; used by DPLC routines to detect whether a D
 Level_trigger_array		ds.b $10		; used by buttons, etc.
 Anim_Counters			ds.b $10		; each word stores data on animated level art, including duration and current frame
 
-Sprite_table_buffer		ds.b $280
+Sprite_table			ds.b $280
 _unkFA80			ds.w 1			; unused
 _unkFA82			ds.b 1
 _unkFA83			ds.b 1
@@ -837,7 +854,7 @@ Loser_time_left			ds.b 1			; left over from Sonic 2
 			ds.b $23			; unused
 Results_screen_2P		ds.w 1			; left over from Sonic 2
 Perfect_rings_left		ds.w 1			; left over from Sonic 2
-_unkFF06			ds.w 1			; unknown
+Perfect_rings_flag		ds.w 1			; unknown
 Player_mode			ds.w 1			; 0 = Sonic and Tails, 1 = Sonic alone, 2 = Tails alone, 3 = Knuckles alone
 Player_option			ds.w 1			; option selected on level select, data select screen or Sonic & Knuckles title screen
 Encore_mode			ds.b 1		; Liliam: Encore mode
@@ -893,13 +910,13 @@ Blue_spheres_difficulty		ds.b 1			; value currently displayed
 Blue_spheres_target_difficulty	ds.b 1			; value read from the layout
 ;SK_alone_flag
 			ds.w 1			; Liliam: removed S&K alone mode
-Emerald_counts =		*			; both chaos and super emeralds
+Emerald_counts =		*			; both Chaos and Super emeralds
 Chaos_emerald_count		ds.b 1
 Super_emerald_count		ds.b 1
-Collected_emeralds_array	ds.b 7			; 1 byte per emerald, 0 = not collected, 1 = chaos emerald collected, 2 = grey super emerald, 3 = super emerald collected
+Collected_emeralds_array	ds.b 7			; 1 byte per emerald, 0 = not collected, 1 = Chaos Emerald collected, 2 = grey Super Emerald, 3 = Super Emerald collected
 			ds.b 1				; unused
 
-Emeralds_converted_flag		ds.b 1			; set if at least one emerald has been converted to a super emerald
+Emeralds_converted_flag		ds.b 1			; set if at least one emerald has been converted to a Super Emerald
 SK_special_stage_flag		ds.b 1			; set if a Sonic & Knuckles special stage is being run
 Title_anim_buffer		ds.b 1			; status of the title animation buffer. Changes 2 different nametables in VDP while the other is being processed
 Title_anim_delay		ds.b 1			; title animation delay counter

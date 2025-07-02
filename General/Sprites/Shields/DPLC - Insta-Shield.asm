@@ -1,11 +1,12 @@
-		dc.w DPLC_InstaShield0-DPLC_InstaShield
-		dc.w DPLC_InstaShield1-DPLC_InstaShield
-		dc.w DPLC_InstaShield2-DPLC_InstaShield
-		dc.w DPLC_InstaShield3-DPLC_InstaShield
-		dc.w DPLC_InstaShield4-DPLC_InstaShield
-		dc.w DPLC_InstaShield5-DPLC_InstaShield
-		dc.w DPLC_InstaShield5-DPLC_InstaShield
-		dc.w DPLC_InstaShield5-DPLC_InstaShield
+DPLC_InstaShield_:
+		dc.w DPLC_InstaShield0-DPLC_InstaShield_
+		dc.w DPLC_InstaShield1-DPLC_InstaShield_
+		dc.w DPLC_InstaShield2-DPLC_InstaShield_
+		dc.w DPLC_InstaShield3-DPLC_InstaShield_
+		dc.w DPLC_InstaShield4-DPLC_InstaShield_
+		dc.w DPLC_InstaShield5-DPLC_InstaShield_
+		dc.w DPLC_InstaShield5-DPLC_InstaShield_
+		dc.w DPLC_InstaShield5-DPLC_InstaShield_
 DPLC_InstaShield0:
 		dc.w 3
 		dc.w $2000

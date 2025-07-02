@@ -133,7 +133,13 @@ Snd_Menu_Jump03:
 	dc.b	nG3, $0C, nF3, $22, nFs3, $04, nG3, $08, nA3, nB3, nC4, nD4
 	dc.b	nEb4, $12, nG3, nBb3, $0C, nA3, $12, nG3, nA3, $0C, nBb3, $06
 	dc.b	nBb3, nBb3, $12, nBb3, $06, nBb3, nBb3, $3C
+    if FixMusicAndSFXDataBugs
+	smpsSetvoice        $1D
+    else
+	; This was not updated when the universal voice bank was rearranged.
+	; https://sonicresearch.org/community/index.php?threads/the-sonic-origins-music-situation.6773/
 	smpsSetvoice        $0D
+    endif
 	smpsAlterNote       $04
 	smpsModSet          $0F, $01, $FA, $05
 	smpsPan             panLeft, $00
@@ -146,7 +152,13 @@ Snd_Menu_Jump03:
 	smpsModSet          $0F, $01, $FA, $05
 	smpsPan             panLeft, $00
 	dc.b	nG3, $03, nRst, nA3, $06, nBb3, $0C
+    if FixMusicAndSFXDataBugs
+	smpsSetvoice        $1D
+    else
+	; This was not updated when the universal voice bank was rearranged.
+	; https://sonicresearch.org/community/index.php?threads/the-sonic-origins-music-situation.6773/
 	smpsSetvoice        $0D
+    endif
 	smpsAlterNote       $04
 	smpsModSet          $0F, $01, $FA, $05
 	smpsPan             panLeft, $00
@@ -156,7 +168,13 @@ Snd_Menu_Jump03:
 	smpsAlterNote       $04
 	smpsModSet          $0F, $01, $06, $05
 	dc.b	nBb4, $06, nA4, nF4, nD4, nBb3, nA3, nG3, $0C, nRst, $30
+    if FixMusicAndSFXDataBugs
+	smpsSetvoice        $1D
+    else
+	; This was not updated when the universal voice bank was rearranged.
+	; https://sonicresearch.org/community/index.php?threads/the-sonic-origins-music-situation.6773/
 	smpsSetvoice        $0D
+    endif
 	smpsAlterNote       $04
 	smpsModSet          $0F, $01, $FA, $05
 	smpsPan             panLeft, $00
@@ -169,7 +187,13 @@ Snd_Menu_Jump03:
 	smpsModSet          $0F, $01, $FA, $05
 	smpsPan             panLeft, $00
 	dc.b	nG3, $03, nRst, nA3, $06, nBb3, $0C
+    if FixMusicAndSFXDataBugs
+	smpsSetvoice        $1D
+    else
+	; This was not updated when the universal voice bank was rearranged.
+	; https://sonicresearch.org/community/index.php?threads/the-sonic-origins-music-situation.6773/
 	smpsSetvoice        $0D
+    endif
 	smpsAlterNote       $04
 	smpsModSet          $0F, $01, $FA, $05
 	smpsPan             panLeft, $00
@@ -222,7 +246,7 @@ Snd_Menu_Jump02:
 	dc.b	$03, nRst, $09, nD5, $03, nRst, nBb4, nRst, $09, nC5, $03, nRst
 	dc.b	$09, nA4, $03, nRst, $09, nBb4, $03, nRst, $09, nG4, $03, nRst
 	dc.b	$09, nA4, $0C, nAb4, $02, nG4, nFs4, nF4, $06, nRst, $2A
-	smpsFMAlterVol      $EC
+	smpsFMAlterVol     -$14
 	smpsSetvoice        $12
 	smpsAlterNote       $FD
 	smpsModSet          $03, $01, $04, $05
@@ -232,7 +256,13 @@ Snd_Menu_Jump02:
 	dc.b	nG2, $0C, nF2, $22, nFs2, $04, nG2, $08, nA2, nB2, nC3, nD3
 	dc.b	nEb3, $12, nG2, nBb2, $0C, nA2, $12, nG2, nA2, $0C, nBb2, $06
 	dc.b	nBb2, nBb2, $12, nBb2, $06, nBb2, nBb2, $3C
+    if FixMusicAndSFXDataBugs
+	smpsSetvoice        $1D
+    else
+	; This was not updated when the universal voice bank was rearranged.
+	; https://sonicresearch.org/community/index.php?threads/the-sonic-origins-music-situation.6773/
 	smpsSetvoice        $0D
+    endif
 	smpsAlterNote       $FC
 	smpsModSet          $0F, $01, $06, $05
 	smpsPan             panRight, $00
@@ -245,7 +275,13 @@ Snd_Menu_Jump02:
 	smpsModSet          $0F, $01, $06, $05
 	smpsPan             panRight, $00
 	dc.b	nEb3, $03, nRst, nF3, $06, nG3, $0C
+    if FixMusicAndSFXDataBugs
+	smpsSetvoice        $1D
+    else
+	; This was not updated when the universal voice bank was rearranged.
+	; https://sonicresearch.org/community/index.php?threads/the-sonic-origins-music-situation.6773/
 	smpsSetvoice        $0D
+    endif
 	smpsAlterNote       $FC
 	smpsModSet          $0F, $01, $06, $05
 	smpsPan             panRight, $00
@@ -255,7 +291,13 @@ Snd_Menu_Jump02:
 	smpsAlterNote       $FC
 	smpsModSet          $0F, $01, $06, $05
 	dc.b	nG4, $06, nF4, nD4, nBb3, nG3, nF3, nD3, $0C, nRst, $30
+    if FixMusicAndSFXDataBugs
+	smpsSetvoice        $1D
+    else
+	; This was not updated when the universal voice bank was rearranged.
+	; https://sonicresearch.org/community/index.php?threads/the-sonic-origins-music-situation.6773/
 	smpsSetvoice        $0D
+    endif
 	smpsAlterNote       $FC
 	smpsModSet          $0F, $01, $06, $05
 	smpsPan             panRight, $00
@@ -268,7 +310,13 @@ Snd_Menu_Jump02:
 	smpsModSet          $0F, $01, $06, $05
 	smpsPan             panRight, $00
 	dc.b	nEb3, $03, nRst, nF3, $06, nG3, $0C
+    if FixMusicAndSFXDataBugs
+	smpsSetvoice        $1D
+    else
+	; This was not updated when the universal voice bank was rearranged.
+	; https://sonicresearch.org/community/index.php?threads/the-sonic-origins-music-situation.6773/
 	smpsSetvoice        $0D
+    endif
 	smpsAlterNote       $FC
 	smpsModSet          $0F, $01, $06, $05
 	smpsPan             panRight, $00
@@ -302,7 +350,7 @@ Snd_Menu_Jump01:
 	smpsSetvoice        $10
 	smpsFMAlterVol      $06
 	dc.b	nG4, $06, nG5, nG4, nRst, $18
-	smpsFMAlterVol      $FA
+	smpsFMAlterVol     -$06
 	smpsSetvoice        $0B
 	smpsAlterNote       $04
 	smpsModSet          $0F, $01, $FA, $05
@@ -411,7 +459,7 @@ Snd_Menu_Jump00:
 	smpsSetvoice        $10
 	smpsFMAlterVol      $06
 	dc.b	nG4, $06, nG5, nG4, nRst, $18
-	smpsFMAlterVol      $FA
+	smpsFMAlterVol     -$06
 	smpsSetvoice        $0B
 	smpsAlterNote       $FC
 	smpsModSet          $0F, $01, $06, $05
@@ -609,20 +657,50 @@ Snd_Menu_Jump05:
 	; do they not actually do anything on the PSG channel, but they also
 	; cause note data to be skipped.
 	; The dev obviously intended to use smpsPSGAlterVol commands here.
-	smpsPSGAlterVol     $FD
-	dc.b	nMaxPSG1, $06
+    if FixMusicAndSFXDataBugs
+	smpsPSGAlterVol    -$03
+	dc.b	nMaxPSG1
+    else
+	smpsFMAlterVol     -$03, nMaxPSG1
+    endif
+	dc.b	$06
+    if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol     $03
-	dc.b	nMaxPSG1, $03, nMaxPSG1, nMaxPSG1, $06, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, $0C
-	smpsPSGAlterVol     $FD
-	dc.b	nMaxPSG1, $0C, nMaxPSG1, $06, nMaxPSG1, $08, nMaxPSG1, nMaxPSG1, $02
+	dc.b	nMaxPSG1
+    else
+	smpsFMAlterVol      $03, nMaxPSG1
+    endif
+	dc.b	$03, nMaxPSG1, nMaxPSG1, $06, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, $0C
+    if FixMusicAndSFXDataBugs
+	smpsPSGAlterVol    -$03
+	dc.b	nMaxPSG1
+    else
+	smpsFMAlterVol     -$03, nMaxPSG1
+    endif
+	dc.b	$0C, nMaxPSG1, $06, nMaxPSG1, $08, nMaxPSG1, nMaxPSG1, $02
+    if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol     $03
-	dc.b	nRst, $06
+	dc.b	nRst
+    else
+	smpsFMAlterVol      $03, nRst
+    endif
+	dc.b	$06
 	smpsCall            Snd_Menu_Call01
 	smpsCall            Snd_Menu_Call01
-	smpsPSGAlterVol     $FD
-	dc.b	nMaxPSG1, $06
+    if FixMusicAndSFXDataBugs
+	smpsPSGAlterVol    -$03
+	dc.b	nMaxPSG1
+    else
+	smpsFMAlterVol     -$03, nMaxPSG1
+    endif
+	dc.b	$06
+    if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol     $03
-	dc.b	nMaxPSG1, $03, nMaxPSG1
+	dc.b	nMaxPSG1
+    else
+	smpsFMAlterVol      $03, nMaxPSG1
+    endif
+	dc.b	$03, nMaxPSG1
 
 Snd_Menu_Loop06:
 	dc.b	nMaxPSG1, $06
@@ -639,48 +717,110 @@ Snd_Menu_Loop06:
 	dc.b	$36
 	smpsCall            Snd_Menu_Call01
 	smpsCall            Snd_Menu_Call01
-	smpsPSGAlterVol     $FD
-	dc.b	nMaxPSG1, $06
+    if FixMusicAndSFXDataBugs
+	smpsPSGAlterVol    -$03
+	dc.b	nMaxPSG1
+    else
+	smpsFMAlterVol     -$03, nMaxPSG1
+    endif
+	dc.b	$06
+    if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol     $03
-	dc.b	nMaxPSG1, $03, nMaxPSG1
+	dc.b	nMaxPSG1
+    else
+	smpsFMAlterVol      $03, nMaxPSG1
+    endif
+	dc.b	$03, nMaxPSG1
 
 Snd_Menu_Loop07:
 	dc.b	nMaxPSG1, $06
 	smpsLoop            $00, $0D, Snd_Menu_Loop07
-	dc.b	nMaxPSG1, $32, nMaxPSG1, $34, nMaxPSG1, $06, nMaxPSG1, $03, nMaxPSG1, nMaxPSG1, $02
-	smpsPSGAlterVol     $FD
-	dc.b	nMaxPSG1
-	smpsPSGAlterVol     $03
-	dc.b	nMaxPSG1, nMaxPSG1, $06, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1
-
-Snd_Menu_Loop08:
-	dc.b	nMaxPSG1, $06, nMaxPSG1, $03, nMaxPSG1, nMaxPSG1, $02
-	smpsPSGAlterVol     $FD
-	dc.b	nMaxPSG1
-	smpsPSGAlterVol     $03
-	dc.b	nMaxPSG1, nMaxPSG1, $06, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1
-	smpsLoop            $00, $06, Snd_Menu_Loop08
-	dc.b	nMaxPSG1, $06, nMaxPSG1, $03, nMaxPSG1, nMaxPSG1, $02
-	smpsPSGAlterVol     $FD
-	dc.b	nMaxPSG1
-	smpsPSGAlterVol     $03
-	dc.b	nMaxPSG1, nMaxPSG1, $06, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1
-	dc.b	nMaxPSG1, $03, nMaxPSG1, nMaxPSG1, $02
-	smpsPSGAlterVol     $FD
-	dc.b	nMaxPSG1
-	smpsPSGAlterVol     $03
-	dc.b	nMaxPSG1, nMaxPSG1, $06, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1
-	dc.b	nMaxPSG1, $03, nMaxPSG1, nMaxPSG1, $02
-	smpsPSGAlterVol     $FD
+	dc.b	nMaxPSG1, $32, nMaxPSG1, $34, nMaxPSG1, $06, nMaxPSG1, $03, nMaxPSG1, nMaxPSG1
+    if FixMusicAndSFXDataBugs
+	dc.b	$02
+	smpsPSGAlterVol    -$03
 	dc.b	nMaxPSG1
 	smpsPSGAlterVol     $03
 	dc.b	nMaxPSG1, nMaxPSG1, $06
+    else
+	dc.b	$06
+	smpsFMAlterVol     -$03, nMaxPSG1
+	smpsFMAlterVol      $03, nMaxPSG1
+	dc.b	nMaxPSG1
+    endif
+	dc.b	nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1
+
+Snd_Menu_Loop08:
+	dc.b	nMaxPSG1, $06, nMaxPSG1, $03, nMaxPSG1, nMaxPSG1
+    if FixMusicAndSFXDataBugs
+	dc.b	$02
+	smpsPSGAlterVol    -$03
+	dc.b	nMaxPSG1
+	smpsPSGAlterVol     $03
+	dc.b	nMaxPSG1, nMaxPSG1, $06
+    else
+	dc.b	$06
+	smpsFMAlterVol     -$03, nMaxPSG1
+	smpsFMAlterVol      $03, nMaxPSG1
+	dc.b	nMaxPSG1
+    endif
+	dc.b	nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1
+	smpsLoop            $00, $06, Snd_Menu_Loop08
+	dc.b	nMaxPSG1, $06, nMaxPSG1, $03, nMaxPSG1, nMaxPSG1
+    if FixMusicAndSFXDataBugs
+	dc.b	$02
+	smpsPSGAlterVol    -$03
+	dc.b	nMaxPSG1
+	smpsPSGAlterVol     $03
+	dc.b	nMaxPSG1, nMaxPSG1, $06
+    else
+	dc.b	$06
+	smpsFMAlterVol     -$03, nMaxPSG1
+	smpsFMAlterVol      $03, nMaxPSG1
+	dc.b	nMaxPSG1
+    endif
+	dc.b	nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1
+	dc.b	nMaxPSG1, $03, nMaxPSG1, nMaxPSG1
+    if FixMusicAndSFXDataBugs
+	dc.b	$02
+	smpsPSGAlterVol    -$03
+	dc.b	nMaxPSG1
+	smpsPSGAlterVol     $03
+	dc.b	nMaxPSG1, nMaxPSG1, $06
+    else
+	dc.b	$06
+	smpsFMAlterVol     -$03, nMaxPSG1
+	smpsFMAlterVol      $03, nMaxPSG1
+	dc.b	nMaxPSG1
+    endif
+	dc.b	nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1, nMaxPSG1
+	dc.b	nMaxPSG1, $03, nMaxPSG1, nMaxPSG1
+    if FixMusicAndSFXDataBugs
+	dc.b	$02
+	smpsPSGAlterVol    -$03
+	dc.b	nMaxPSG1
+	smpsPSGAlterVol     $03
+	dc.b	nMaxPSG1, nMaxPSG1, $06
+    else
+	dc.b	$06
+	smpsFMAlterVol     -$03, nMaxPSG1
+	dc.b	nMaxPSG1
+    endif
 	smpsJump            Snd_Menu_Jump05
 
 Snd_Menu_Call01:
-	smpsPSGAlterVol     $FD
-	dc.b	nMaxPSG1, $06
+    if FixMusicAndSFXDataBugs
+	smpsPSGAlterVol    -$03
+	dc.b	nMaxPSG1
+    else
+	smpsFMAlterVol     -$03, nMaxPSG1
+    endif
+	dc.b	$06
+    if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol     $03
+    else
+	smpsFMAlterVol      $03, nMaxPSG1
+    endif
 	dc.b	$03, nMaxPSG1
 
 Snd_Menu_Loop0A:
