@@ -22,9 +22,9 @@ Snd_SSZ_FM1:
 	smpsAlterNote       $FE
 
 Snd_SSZ_Jump01:
-	dc.b	nG2, $07, nRst, $04, nG2, $08, nRst, $04, nG2, $24, nG3, nG2, nG2
+	dc.b	nG2, $07, nRst, $04, nG2, $08, nRst, $04, $24, nG3, nG2, nG2
 	dc.b	$0C, nRst, nC3, $14, nB2, $10, nG2, $08, nRst, $04, nG2, $08
-	dc.b	nRst, $04, nG2, $24, nG3, nG2, nG2, $0C, nRst, $30
+	dc.b	nRst, $04, $24, nG3, nG2, nG2, $0C, nRst, $30
 
 Snd_SSZ_Loop08:
 	dc.b	nC3, $60, nC4, $24, nC3, nC4, $18, nBb2, $06, nRst, $06, nBb2
@@ -160,9 +160,9 @@ Snd_SSZ_Loop02:
 	dc.b	nA4, $24, nA4, $18, nRst, $24, nAb4, $0C, nC5, nBb4, nAb4, nEb5
 	dc.b	$18, nC5, $0C, nD5, nEb5, $18, nD5, $0C, nF5, $18
 	smpsFMAlterVol      $FF
-	dc.b	nG5, $24, nEb6, nD6, $07, nRst, $05, nD6, $18, nG5, $54, nAb5, $24
-	dc.b	nEb6, nD6, $07, nRst, $05, nD6, $18, nF6, $24, nEb6, $18, nD6, nG5
-	dc.b	$24, nEb6, nD6, $07, nRst, $05, nD6, $18, nG5, $54, nAb5, $24, nC6
+	dc.b	nG5, $24, nEb6, nD6, $07, nRst, $05, $18, nG5, $54, nAb5, $24
+	dc.b	nEb6, nD6, $07, nRst, $05, $18, nF6, $24, nEb6, $18, nD6, nG5
+	dc.b	$24, nEb6, nD6, $07, nRst, $05, $18, nG5, $54, nAb5, $24, nC6
 	dc.b	nEb6, $18, nG6, nF6, $0C, nEb6, $18, nF6, $24, nC6, $54, nC5
 	dc.b	$06, nE5, nF5, $24, nE5, $18, nC5, $24
 	smpsFMAlterVol      $FF
