@@ -1,24 +1,24 @@
-Snd_Knux_SK_Header:
+Snd_Knux_Header:
 	smpsHeaderStartSong 3
-	smpsHeaderVoice     Snd_Knux_SK_Voices
+	smpsHeaderVoice     Snd_Knux_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $10
 
-	smpsHeaderDAC       Snd_Knux_SK_DAC
-	smpsHeaderFM        Snd_Knux_SK_FM1,	$0C, $11
-	smpsHeaderFM        Snd_Knux_SK_FM2,	$FE, $00
-	smpsHeaderFM        Snd_Knux_SK_FM3,	$0C, $17
-	smpsHeaderFM        Snd_Knux_SK_FM4,	$F4, $0E
-	smpsHeaderFM        Snd_Knux_SK_FM5,	$18, $10
-	smpsHeaderPSG       Snd_Knux_SK_PSG1,	$F4, $05, $00, $00
-	smpsHeaderPSG       Snd_Knux_SK_PSG2,	$F4, $02, $00, $00
-	smpsHeaderPSG       Snd_Knux_SK_PSG3,	$00, $03, $00, $00
+	smpsHeaderDAC       Snd_Knux_DAC
+	smpsHeaderFM        Snd_Knux_FM1,	$0C, $11
+	smpsHeaderFM        Snd_Knux_FM2,	$FE, $00
+	smpsHeaderFM        Snd_Knux_FM3,	$0C, $17
+	smpsHeaderFM        Snd_Knux_FM4,	$F4, $0E
+	smpsHeaderFM        Snd_Knux_FM5,	$18, $10
+	smpsHeaderPSG       Snd_Knux_PSG1,	$F4, $05, $00, $00
+	smpsHeaderPSG       Snd_Knux_PSG2,	$F4, $02, $00, $00
+	smpsHeaderPSG       Snd_Knux_PSG3,	$00, $03, $00, $00
 
 ; FM1 Data
-Snd_Knux_SK_FM1:
+Snd_Knux_FM1:
 	smpsSetvoice        $05
 
-Snd_Knux_SK_Jump01:
+Snd_Knux_Jump01:
 	dc.b	nA3, $06, nG3, nG3, nG3, nG3, nE3, nE3, nE3, nD3, nE3, nD3
 	dc.b	nC3, nC3, nA2, nA2, nA2, nRst, $0C, nE3, nE3, nD3, nC3, nA2
 	dc.b	nA2, nA2, nG2, nA2, nA2, nA2, nC3, nA2, nA2, nA2, nRst, $0C
@@ -27,31 +27,46 @@ Snd_Knux_SK_Jump01:
 	dc.b	nA2, nA2, nA2, nC3, nA2, nA2, nA2, nRst, nE3, nE3, nD3, nC3
 	dc.b	nA2, nA2, nA2, nG2, nA2, nA3, nG3, nA3, $06, nA1, $03, nB1
 	dc.b	nC2, nD2, nE2, nF2, nG2, nA2, nB2, nC3, nD3, nE3, nF3, nG3
-	smpsJump            Snd_Knux_SK_Jump01
+	smpsJump            Snd_Knux_Jump01
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM2 Data
-Snd_Knux_SK_FM2:
+Snd_Knux_FM2:
 	smpsModSet          $01, $01, $F0, $00
 
-Snd_Knux_SK_Jump00:
+Snd_Knux_Jump00:
 	dc.b	nRst, $60
 
-Snd_Knux_SK_Loop01:
+Snd_Knux_Loop01:
 	smpsSetvoice        $04
 	dc.b	nG3, $13, $05, nD3, $0C
 	smpsSetvoice        $07
 	dc.b	nRst
-	smpsLoop            $00, $10, Snd_Knux_SK_Loop01
-	smpsJump            Snd_Knux_SK_Jump00
+	smpsLoop            $00, $10, Snd_Knux_Loop01
+	smpsJump            Snd_Knux_Jump00
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM3 Data
-Snd_Knux_SK_FM3:
+Snd_Knux_FM3:
 	dc.b	nRst, $0C
 	smpsAlterNote       $FE
-	smpsJump            Snd_Knux_SK_FM1
+	smpsJump            Snd_Knux_FM1
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM4 Data
-Snd_Knux_SK_FM4:
+Snd_Knux_FM4:
 	smpsSetvoice        $06
 	smpsNoteFill        $05
 	dc.b	nA5, $06, nG5, nG5, nG5, nG5, nE5, nE5, nE5, nD5, nE5, nD5
@@ -62,20 +77,32 @@ Snd_Knux_SK_FM4:
 	dc.b	nE5, $18, nRst, nRst, $60, nRst, nRst
 	smpsNoteFill        $0C
 	dc.b	nRst, $18, nA5, $0C, nG5, nA5, nRst, $24
-	smpsJump            Snd_Knux_SK_FM4
+	smpsJump            Snd_Knux_FM4
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM5 Data
-Snd_Knux_SK_FM5:
+Snd_Knux_FM5:
 	smpsAlterNote       $FE
 	smpsAlterPitch      $E8
-	smpsJump            Snd_Knux_SK_FM4
+	smpsJump            Snd_Knux_FM4
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsSetvoice        $03
+	smpsAlterNote       $02
+	smpsStop
+    endif
 
 ; PSG1 Data
-Snd_Knux_SK_PSG1:
+Snd_Knux_PSG1:
 	smpsPSGvoice        sTone_0A
 	dc.b	nRst, $0B
 
-Snd_Knux_SK_Jump04:
+Snd_Knux_Jump04:
 	dc.b	nRst, $60, nA3, $0C
 	smpsNoteFill        $05
 	dc.b	$06, $06
@@ -94,14 +121,19 @@ Snd_Knux_SK_Jump04:
 	dc.b	$0C, nE4, nD4, smpsNoAttack, nD4, nC4, nC4, $01, smpsNoAttack, nCs4, smpsNoAttack, nD4
 	dc.b	smpsNoAttack, nC4, $09, nA3, $0C, nA3, nG3, nA3, nRst, nA4, nG4, nA4
 	dc.b	nRst, nRst, nRst
-	smpsJump            Snd_Knux_SK_Jump04
+	smpsJump            Snd_Knux_Jump04
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG2 Data
-Snd_Knux_SK_PSG2:
+Snd_Knux_PSG2:
 	smpsPSGvoice        sTone_0A
 	smpsAlterNote       $FF
 
-Snd_Knux_SK_Jump03:
+Snd_Knux_Jump03:
 	dc.b	nRst, $60, nA3, $0C
 	smpsNoteFill        $05
 	dc.b	$06, $06
@@ -124,33 +156,48 @@ Snd_Knux_SK_Jump03:
 	dc.b	nD4, smpsNoAttack, nD4, nC4, nC4, $01, smpsNoAttack, nCs4, smpsNoAttack, nD4, smpsNoAttack, nC4
 	dc.b	$09, nA3, $0C, nA3, nG3, nA3, nRst, nA4, nG4, nA4, nRst, nRst
 	dc.b	nRst
-	smpsJump            Snd_Knux_SK_Jump03
+	smpsJump            Snd_Knux_Jump03
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG3 Data
-Snd_Knux_SK_PSG3:
+Snd_Knux_PSG3:
 	smpsPSGform         $E7
 
-Snd_Knux_SK_Jump02:
+Snd_Knux_Jump02:
 	smpsPSGvoice        sTone_26
 	dc.b	nMaxPSG2, $60
 	smpsPSGvoice        sTone_01
 
-Snd_Knux_SK_Loop02:
+Snd_Knux_Loop02:
 	dc.b	nMaxPSG2, $06, nRst, nMaxPSG2, nRst, nMaxPSG2, nRst, nMaxPSG2, nRst, nMaxPSG2, nRst, nMaxPSG2
 	dc.b	nRst, nMaxPSG2, nRst, nMaxPSG2, nRst
-	smpsLoop            $00, $08, Snd_Knux_SK_Loop02
-	smpsJump            Snd_Knux_SK_Jump02
+	smpsLoop            $00, $08, Snd_Knux_Loop02
+	smpsJump            Snd_Knux_Jump02
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; DAC Data
-Snd_Knux_SK_DAC:
+Snd_Knux_DAC:
 	dc.b	dCrashCymbal, $3C, dEchoedClapHit, $06, dEchoedClapHit, nRst, dEchoedClapHit, dEchoedClapHit, nRst
 
-Snd_Knux_SK_Loop00:
+Snd_Knux_Loop00:
 	dc.b	dLooserSnare, $18, dElectricFloorTom, dElectricFloorTom, $0C, dEchoedClapHit, $06, dEchoedClapHit, dElectricFloorTom, dEchoedClapHit, dEchoedClapHit, nRst
-	smpsLoop            $00, $08, Snd_Knux_SK_Loop00
-	smpsJump            Snd_Knux_SK_DAC
+	smpsLoop            $00, $08, Snd_Knux_Loop00
+	smpsJump            Snd_Knux_DAC
 
-Snd_Knux_SK_Voices:
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
+Snd_Knux_Voices:
 ;	Voice $00
 ;	$01
 ;	$02, $00, $00, $00, 	$1F, $1F, $1F, $1F, 	$10, $18, $18, $10

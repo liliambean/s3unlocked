@@ -41,6 +41,11 @@ Snd_SSZ_Loop08:
 	dc.b	nBb3, $24, nBb2, nBb3, $18, nRst, $01
 	smpsJump            Snd_SSZ_Jump01
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM2 Data
 Snd_SSZ_FM2:
 	dc.b	nRst, $60, nRst, nRst, nRst
@@ -53,6 +58,11 @@ Snd_SSZ_Loop07:
 	dc.b	nG3, smpsNoAttack, $60, nAb3, smpsNoAttack, $60, nG3, smpsNoAttack, $60, nAb3, nBb3, nC4
 	dc.b	smpsNoAttack, $60, nBb3, smpsNoAttack, $60, nA3, smpsNoAttack, $60, nAb3, nBb3
 	smpsJump            Snd_SSZ_FM2
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM3 Data
 Snd_SSZ_FM3:
@@ -88,6 +98,11 @@ Snd_SSZ_Loop06:
 	dc.b	nE3, nBb1, nF3, nBb1, nE3, nBb1, nD3, nBb1, nE3, nBb1
 	smpsCall            Snd_SSZ_Call00
 	smpsJump            Snd_SSZ_FM3
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 Snd_SSZ_Call00:
 	smpsSetvoice        $02
@@ -160,6 +175,11 @@ Snd_SSZ_Loop02:
 	smpsFMAlterVol      $07
 	smpsJump            Snd_SSZ_Jump00
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM4 Data
 Snd_SSZ_FM4:
 	smpsModSet          $24, $01, $04, $07
@@ -167,6 +187,11 @@ Snd_SSZ_FM4:
 	smpsSetvoice        $01
 	dc.b	nRst, $0E
 	smpsJump            Snd_SSZ_Jump00
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG1 Data
 Snd_SSZ_PSG1:
@@ -194,6 +219,11 @@ Snd_SSZ_Loop0B:
 	smpsLoop            $00, $04, Snd_SSZ_Loop0B
 	smpsJump            Snd_SSZ_Loop09
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 Snd_SSZ_Call01:
 	dc.b	nC5, $06, nC4, nC5, nC4, nC5, nC4, nC5, nC4, nC6, nC4, nC6
 	dc.b	nC4, nC5, nC4, nC5, nC4
@@ -214,6 +244,11 @@ Snd_SSZ_Jump02:
 	smpsPSGvoice        sTone_04
 	dc.b	nMaxPSG2, $0C
 	smpsJump            Snd_SSZ_Jump02
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; DAC Data
 Snd_SSZ_DAC:
@@ -237,6 +272,11 @@ Snd_SSZ_Loop00:
 	smpsLoop            $00, $08, Snd_SSZ_Loop00
 	dc.b	nRst, $01
 	smpsJump            Snd_SSZ_DAC
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 Snd_SSZ_Voices:
 ;	Voice $00

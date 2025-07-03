@@ -4923,10 +4923,10 @@ DAC_9B_Data:			DACBINCLUDE "Sound/DAC/9B.bin"
 	endif
 
 	if (use_s3_samples<>0)||(use_sk_samples<>0)
-DAC_B2_B3_Data:			DACBINCLUDE "Sound/DAC/B2-B3.bin"
+DAC_B2_B3_Data:			DACBINCLUDE "Sound/DAC/B2-B3 (Sonic & Knuckles).bin"
 
 	if (use_s3_samples<>0)
-DAC_D8_D9_Data:			DACBINCLUDE "Sound/DAC/D8-D9.bin"
+DAC_D8_D9_Data:			DACBINCLUDE "Sound/DAC/B2-B3 (Sonic 3).bin"
 	endif
 
 	finishBank
@@ -5301,7 +5301,7 @@ Sound_97:	include "Sound/SFX/97 - Enemy Breath.asm"
 Sound_98:	include "Sound/SFX/98 - Boss Projectile.asm"
 Sound_99:	include "Sound/SFX/99 - Unknown Plink.asm"
 Sound_9A:	include "Sound/SFX/9A - Spring Latch.asm"
-Sound_9B:	include "Sound/SFX/9B - Thump Boss (Sonic & Knuckles).asm"
+Sound_9B:	include "Sound/SFX/9B - Thump Boss.asm"
 Sound_9C:	include "Sound/SFX/9C - Super Emerald.asm"
 Sound_9D:	include "Sound/SFX/9D - Targeting.asm"
 Sound_9E:	include "Sound/SFX/9E - Clank.asm"
@@ -5319,7 +5319,7 @@ Sound_A9:	include "Sound/SFX/A9 - Air Ding.asm"
 Sound_AA:	include "Sound/SFX/AA - Bumper.asm"
 Sound_AB:	include "Sound/SFX/AB - Spin Dash.asm"
 Sound_AC:	include "Sound/SFX/AC - Continue.asm"
-Sound_AD:	include "Sound/SFX/AD - Launch Go (Sonic & Knuckles).asm"
+Sound_AD:	include "Sound/SFX/AD - Launch Go.asm"
 Sound_AE:	include "Sound/SFX/AE - Flipper.asm"
 Sound_AF:	include "Sound/SFX/AF - Enter Special Stage.asm"
 Sound_B0:	include "Sound/SFX/B0 - Register.asm"
@@ -5387,7 +5387,7 @@ MusData_MGZ1:			include	"Sound/Music/MGZ1.asm"
 MusData_MGZ2:			include	"Sound/Music/MGZ2.asm"
 MusData_CNZ1:			include	"Sound/Music/CNZ1.asm"
 MusData_CNZ2:			include	"Sound/Music/CNZ2.asm"
-MusData_FBZ1:			include	"Sound/Music/FBZ1 (Sonic & Knuckles).asm"
+MusData_FBZ1:			include	"Sound/Music/FBZ1.asm"
 MusData_FBZ2:			include	"Sound/Music/FBZ2.asm"
 MusData_Results:		include	"Sound/Music/Level Outro.asm"
 
@@ -5409,7 +5409,7 @@ MusData_SOZ1:			include	"Sound/Music/SOZ1.asm"
 MusData_SOZ2:			include	"Sound/Music/SOZ2.asm"
 MusData_LRZ1:			include	"Sound/Music/LRZ1.asm"
 MusData_LRZ2:			include	"Sound/Music/LRZ2.asm"
-MusData_SSZ:			include	"Sound/Music/SSZ (Sonic & Knuckles).asm"
+MusData_SSZ:			include	"Sound/Music/SSZ.asm"
 MusData_DEZ1:			include	"Sound/Music/DEZ1.asm"
 MusData_DEZ2:			include	"Sound/Music/DEZ2.asm"
 MusData_Minib_SK:		include	"Sound/Music/Miniboss (Sonic & Knuckles).asm"
@@ -5439,7 +5439,7 @@ MusData_GameOver:		include	"Sound/Music/Game Over.asm"
 MusData_Emerald:		include	"Sound/Music/Chaos Emerald.asm"
 MusData_Invic:			include	"Sound/Music/Invincible (Sonic 3).asm"
 MusData_2PMenu:			include	"Sound/Music/Competition Menu.asm"
-MusData_Menu:			include	"Sound/Music/Menu (Sonic & Knuckles).asm"
+MusData_Menu:			include	"Sound/Music/Menu.asm"
 MusData_Drown:			include	"Sound/Music/Countdown.asm"
 
 	finishBank
@@ -5451,7 +5451,7 @@ Mus_Bank4_Start:	startBank
 	Music_Master_Table
 				include "Sound/UniBank.asm"
 MusData_S3Credits:		include	"Sound/Music/Credits (Sonic 3).asm"
-MusData_Continue:		include	"Sound/Music/Continue (Sonic & Knuckles).asm"
+MusData_Continue:		include	"Sound/Music/Continue.asm"
 MusData_1UP:			include	"Sound/Music/1UP (Sonic 3).asm"
 MusData_Minib:			include	"Sound/Music/Miniboss (Sonic 3).asm"
 ;MusData_PresSega:		include	"Sound/Music/Game Complete (Sonic 3).asm"

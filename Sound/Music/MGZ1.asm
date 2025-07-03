@@ -39,6 +39,11 @@ Snd_MGZ1_Loop05:
 	dc.b	nC3, $16
 	smpsJump            Snd_MGZ1_FM1
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM2 Data
 Snd_MGZ1_FM2:
 	smpsSetvoice        $00
@@ -71,6 +76,11 @@ Snd_MGZ1_FM2:
 	dc.b	nFs5, $0C, nE5, nEb5, nCs5, $06, nRst, nRst, $0C, nEb5, $06, nRst
 	dc.b	$12, nB4, $24, nRst, $18
 	smpsJump            Snd_MGZ1_FM2
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM3 Data
 Snd_MGZ1_FM3:
@@ -133,6 +143,11 @@ Snd_MGZ1_Loop03:
 	dc.b	nRst, nFs4, $08, nEb4, $06, nRst, nRst, $10, nE4, $18
 	smpsJump            Snd_MGZ1_FM3
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM4 Data
 Snd_MGZ1_FM4:
 	smpsSetvoice        $02
@@ -194,6 +209,11 @@ Snd_MGZ1_Loop01:
 	dc.b	nRst, nB4, $08, nFs4, $06, nRst, nRst, $10, nA4, $18
 	smpsJump            Snd_MGZ1_FM4
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM5 Data
 Snd_MGZ1_FM5:
 	dc.b	nRst, $0B
@@ -230,6 +250,11 @@ Snd_MGZ1_Jump00:
 	dc.b	$12, nB4, $24, nRst, $18
 	smpsJump            Snd_MGZ1_Jump00
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; DAC Data
 Snd_MGZ1_DAC:
 	dc.b	dKickS3, $0C, dKickS3, $08, dKickS3, $04, dSnareS3, $0C, dKickS3, $08, dKickS3, $0C
@@ -242,6 +267,11 @@ Snd_MGZ1_DAC:
 	smpsLoop            $00, $07, Snd_MGZ1_DAC
 	smpsJump            Snd_MGZ1_DAC
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG1 Data
 Snd_MGZ1_PSG1:
 	smpsStop
@@ -249,6 +279,11 @@ Snd_MGZ1_PSG1:
 ; PSG2 Data
 Snd_MGZ1_PSG2:
 	smpsStop
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG3 Data
 Snd_MGZ1_PSG3:

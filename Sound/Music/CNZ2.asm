@@ -81,6 +81,13 @@ Snd_CNZ2_Call00:
 	dc.b	$05, nRst, $07, nC5, $0C, nB4, nG4, nRst
 	smpsReturn
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	dc.b	nF5, $07, nE5, $05, nEb5, nRst, $07, nD5, $05, nRst, $07, nCs5
+	dc.b	nD5, $05, nCs5, $07, nC5, $05
+	smpsReturn
+    endif
+
 ; FM2 Data
 Snd_CNZ2_FM2:
 	smpsSetvoice        $01
@@ -365,6 +372,11 @@ Snd_CNZ2_Loop01:
 	smpsLoop            $00, $0D, Snd_CNZ2_Loop01
 	dc.b	dGlassCrashSnare, $60, dGlassCrash
 	smpsJump            Snd_CNZ2_DAC
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 Snd_CNZ2_Call02:
 	smpsSetvoice        $05

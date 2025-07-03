@@ -45,6 +45,11 @@ Snd_FinalBoss_Loop10:
 	dc.b	nA5, $1E, nRst, $30, nRst
 	smpsJump            Snd_FinalBoss_Loop0F
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM2 Data
 Snd_FinalBoss_FM2:
 	smpsSetvoice        $01
@@ -79,6 +84,11 @@ Snd_FinalBoss_Loop0E:
 	dc.b	$0C, nBb2, $48, nRst, $0C
 	smpsJump            Snd_FinalBoss_Loop0D
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM3 Data
 Snd_FinalBoss_FM3:
 	smpsSetvoice        $02
@@ -105,6 +115,11 @@ Snd_FinalBoss_Loop0B:
 	dc.b	$48, nRst, $0C
 	smpsJump            Snd_FinalBoss_Loop0A
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM4 Data
 Snd_FinalBoss_FM4:
 	smpsSetvoice        $02
@@ -130,6 +145,11 @@ Snd_FinalBoss_Loop08:
 	dc.b	nB4, $30, nA4, nG4, nA4, nE5, nFs5, nG5, nA5, nRst, $0C, nE5
 	dc.b	$48, nRst, $0C
 	smpsJump            Snd_FinalBoss_Loop07
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM5 Data
 Snd_FinalBoss_FM5:
@@ -169,6 +189,11 @@ Snd_FinalBoss_Loop05:
 	dc.b	nA5, $1E, nRst, $30, nRst
 	smpsJump            Snd_FinalBoss_Loop04
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; DAC Data
 Snd_FinalBoss_DAC:
 	dc.b	nRst, $30, nRst, $18
@@ -201,6 +226,11 @@ Snd_FinalBoss_Loop03:
 	dc.b	dKickS3, $06, dKickS3, dSnareS3, $24, nRst, dSnareS3, $0C
 	smpsJump            Snd_FinalBoss_Loop01
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG1 Data
 Snd_FinalBoss_PSG1:
 	smpsModSet          $0D, $01, $02, $06
@@ -227,6 +257,11 @@ Snd_FinalBoss_Loop19:
 	dc.b	nRst, $30
 	smpsLoop            $00, $06, Snd_FinalBoss_Loop19
 	smpsJump            Snd_FinalBoss_Loop17
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG2 Data
 Snd_FinalBoss_PSG2:
@@ -267,6 +302,12 @@ Snd_FinalBoss_Loop15:
 	dc.b	nRst, $09, nG5, $03, nRst, nA4, nRst, nD5, nRst, nFs5, nRst, nG5
 	dc.b	nRst, nFs5, nRst, nE5, nRst, nD5, nRst, nA4, nRst, nRst, $30, nRst
 	smpsJump            Snd_FinalBoss_Loop12
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+	smpsStop
+    endif
 
 ; PSG3 Data
 Snd_FinalBoss_PSG3:

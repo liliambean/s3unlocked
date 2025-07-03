@@ -46,6 +46,11 @@ Snd_FBZ1_Jump01:
 	dc.b	nE5, $7F, smpsNoAttack, nE5, $05, nRst, $30
 	smpsJump            Snd_FBZ1_Jump01
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM2 Data
 Snd_FBZ1_FM2:
 	smpsSetvoice        $01
@@ -83,7 +88,12 @@ Snd_FBZ1_Loop08:
 	dc.b	$03, nRst, nA2, nRst, nA2, nRst, nA3, nRst, nG3, $06, nA3, nD3
 	dc.b	nE3, nA2, $03, nRst, nA2, nRst
 	smpsJump            Snd_FBZ1_Loop08
-	
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM3 Data
 Snd_FBZ1_FM3:
 	smpsModSet          $0D, $01, $02, $06
@@ -110,7 +120,12 @@ Snd_FBZ1_Loop07:
 	smpsLoop            $00, $02, Snd_FBZ1_Loop07
 	dc.b	nRst, $0C, nE5, $06, nRst, nE5, nRst, nE5, nRst, nE5, nRst, $2A
 	smpsJump            Snd_FBZ1_Loop06
-	
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM4 Data
 Snd_FBZ1_FM4:
 	smpsModSet          $0D, $01, $02, $06
@@ -137,7 +152,12 @@ Snd_FBZ1_Loop05:
 	smpsLoop            $00, $02, Snd_FBZ1_Loop05
 	dc.b	nRst, $0C, nC5, $06, nRst, nC5, nRst, nC5, nRst, nC5, nRst, $2A
 	smpsJump            Snd_FBZ1_Loop04
-	
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM5 Data
 Snd_FBZ1_FM5:
 	dc.b	nRst, $10
@@ -170,7 +190,12 @@ Snd_FBZ1_Jump00:
 	dc.b	$0C, nD5, $18, nF5, $06, nRst, nE5, nRst, nD5, nRst, nE5, nD5
 	dc.b	nE5, $7F, smpsNoAttack, nE5, $05, nRst, $30
 	smpsJump            Snd_FBZ1_Jump00
-	
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; DAC Data
 Snd_FBZ1_DAC:
 	dc.b	dKickS3, $06, dKickS3, dKickS3, dKickS3
@@ -197,7 +222,12 @@ Snd_FBZ1_Loop03:
 	smpsLoop            $00, $04, Snd_FBZ1_Loop03
 	dc.b	dKickS3, $0C, dSnareS3, dSnareS3, dSnareS3, $06, dSnareS3, dSnareS3, $30
 	smpsJump            Snd_FBZ1_Loop00
-	
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG1 Data
 Snd_FBZ1_PSG1:
 	smpsStop
@@ -205,6 +235,11 @@ Snd_FBZ1_PSG1:
 ; PSG2 Data
 Snd_FBZ1_PSG2:
 	smpsStop
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG3 Data
 Snd_FBZ1_PSG3:

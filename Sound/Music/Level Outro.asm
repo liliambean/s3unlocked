@@ -14,6 +14,12 @@ Snd_Results_Header:
 	smpsHeaderPSG       Snd_Results_PSG2,	$00, $03, $00, sTone_0C
 	smpsHeaderPSG       Snd_Results_PSG3,	$00, $05, $00, sTone_0C
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+	smpsStop
+    endif
+
 ; DAC Data
 Snd_Results_DAC:
 	dc.b	dSnareS3, $06, dKickS3, dKickS3, dSnareS3, dKickS3, dKickS3, dSnareS3, dKickS3, dSnareS3, dKickS3, dKickS3
@@ -80,11 +86,26 @@ Snd_Results_FM5:
 	smpsSetvoice        $01
 	smpsJump            Snd_Results_Jump00
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG1 Data
 Snd_Results_PSG1:
 	smpsAlterNote       $01
 	smpsPSGvoice        sTone_03
 	smpsJump            Snd_Results_Jump00
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsSetvoice        sTone_01
+	dc.b	nD3, $06, nD3, nD3, nD3, $05, nRst, $07, nD3, $05, nRst, $07
+	dc.b	nE3, $03, nRst, $09, nE3, $03, nRst, $09, nE3, $05, nRst, $07
+	dc.b	nE3, $11, nRst, $01, nG3, $05, nRst, $0D, nA3, $05, nRst, $0D
+	dc.b	nC4, $11, nRst, $01, nD4, $5F, nRst, $01
+	smpsStop
+    endif
 
 ; PSG2 Data
 Snd_Results_PSG2:
@@ -92,6 +113,11 @@ Snd_Results_PSG2:
 	smpsSetvoice        sTone_01
 	smpsPSGvoice        sTone_03
 	smpsJump            Snd_Results_Jump01
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG3 Data
 Snd_Results_PSG3:

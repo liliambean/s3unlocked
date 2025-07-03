@@ -4,7 +4,7 @@ Sound_AD_Header:
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01
 
-	smpsHeaderSFXChannel cFM4, Sound_AD_FM4,	$17, $0C
+	smpsHeaderSFXChannel cFM4, Sound_AD_FM4,	$17, $0C ; This channel used to be FM3 in Sonic 3.
 
 ; FM4 Data
 Sound_AD_FM4:
