@@ -865,7 +865,7 @@ Snd_AIZ2_FM5:
 	dc.b	nC5, nD5, $0C, nEb5, $30, nD5, nC5, nG4, $3C, nAb4, $0C, nC5
 	dc.b	nG5, nF5, $12, nEb5, nD5, $0C, nB4, $24, nG4, $0C, nB4, $12
 	dc.b	nC5, nD5, $0C, nEb5, $24, nD5, $06, nEb5, nF5, $24, nEb5, $06
-	dc.b	nF5, nRst, $60, nF5, $60
+	dc.b	nF5, nRst, $60, $60
 	smpsAlterPitch      $0C
 	smpsSetvoice        $06
 	smpsAlterNote       $FD

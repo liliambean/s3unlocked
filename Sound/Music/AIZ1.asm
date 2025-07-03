@@ -1175,7 +1175,7 @@ Snd_AIZ1_PSG2:
 	dc.b	$15
 	if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol		$0A
-	dc.b	nD3
+	dc.b	nG3
 	else
 	; Bug: The PSG volume does not change with this command.
 	smpsFMAlterVol      $0A, $AC
@@ -1186,7 +1186,7 @@ Snd_AIZ1_PSG2:
 	dc.b	$05, nRst, $01
 	if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol		$F6
-	dc.b	nB3
+	dc.b	nD5
 	else
 	; Bug: The PSG volume does not change with this command.
 	smpsFMAlterVol      $F6, $BF

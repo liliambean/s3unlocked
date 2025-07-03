@@ -57,13 +57,13 @@ Snd_2PMenu_FM2:
 	dc.b	nG0, $60, nRst
     endif
 	smpsSetvoice        $07
-	dc.b	nE4, $0D
+	dc.b	nE5, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE4, $0B, nRst, $48
+	dc.b	nE5, $0B, nRst, $48
 	smpsFMAlterVol      $F8
-	dc.b	nE4, $0D
+	dc.b	nE5, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE4, $0B, nRst, $48
+	dc.b	nE5, $0B, nRst, $48
 	smpsFMAlterVol      $F8
 	smpsSetvoice        $06
     if FixMusicAndSFXDataBugs
@@ -77,13 +77,13 @@ Snd_2PMenu_FM2:
 	dc.b	nG0, $60, nRst
     endif
 	smpsSetvoice        $07
-	dc.b	nE4, $0D
+	dc.b	nE5, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE4, $0B, nRst, $48
+	dc.b	nE5, $0B, nRst, $48
 	smpsFMAlterVol      $F8
-	dc.b	nE4, $0D
+	dc.b	nE5, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE4, $0B, nRst, $48
+	dc.b	nE5, $0B, nRst, $48
 	smpsFMAlterVol      $F8
 	smpsCall            Snd_2PMenu_Call03
 	smpsJump            Snd_2PMenu_FM2
@@ -95,19 +95,19 @@ Snd_2PMenu_FM2:
 
 Snd_2PMenu_Call03:
 	smpsSetvoice        $06
-	dc.b	nC3, $60, nRst
+	dc.b	nC4, $60, nRst
 	smpsSetvoice        $07
-	dc.b	nE4, $0D
+	dc.b	nE5, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE4, $0B, nRst, $48
+	dc.b	nE5, $0B, nRst, $48
 	smpsFMAlterVol      $F8
 	dc.b	nRst, $60
 	smpsSetvoice        $06
-	dc.b	nRst, $06, nC3, $5A, nRst, $60
+	dc.b	nRst, $06, nC4, $5A, nRst, $60
 	smpsSetvoice        $07
-	dc.b	nE4, $0D
+	dc.b	nE5, $0D
 	smpsFMAlterVol      $08
-	dc.b	nE4, $0B, nRst, $48
+	dc.b	nE5, $0B, nRst, $48
 	smpsFMAlterVol      $F8
 	dc.b	nRst, $60
 	smpsReturn

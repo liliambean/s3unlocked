@@ -857,7 +857,6 @@ Snd_Menu_Loop08:
 Snd_Menu_Call01:
     if FixMusicAndSFXDataBugs
 	smpsPSGAlterVol    -$03
-	dc.b	nMaxPSG1
     else
 	smpsFMAlterVol     -$03, nMaxPSG1
     endif

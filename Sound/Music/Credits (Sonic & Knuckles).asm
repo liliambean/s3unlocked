@@ -22,7 +22,7 @@ Snd_SKCredits_FM1:
 	smpsSetvoice        $20
 	dc.b	nD2, $10, $07, nRst, $06, nRst, $05, nD2, $07, nRst, $06, nRst
 	dc.b	$05, nD3, $06, nD2, nRst, $07, nD3, $06, nRst, nC2, $0C, smpsNoAttack
-	dc.b	$0C, $0C, nRst, $06, nC3, nRst, $0C, nC3, $18, $18, nD2, $11, $07
+	dc.b	$0C, $0C, nRst, $06, nC3, nRst, $0C, $18, $18, nD2, $11, $07
 	dc.b	nRst, $06, nRst, $05, nD2, $07, nRst, $06, nRst, $05, nD3, $06
 	dc.b	nD2, nRst, $07, nD3, $06, nRst, nC2, $0C, smpsNoAttack, $06, nRst, nC3
 	dc.b	nRst, nC2, nC3, nC2, nRst, nC2, nRst, nG1, nRst, nB1, nRst, nBb1
@@ -96,9 +96,9 @@ Snd_SKCredits_Loop1B:
 	smpsSetVol          $72
 	smpsSetvoice        $0F
 	smpsAlterNote       $FE
-	dc.b	nG2, $07, nRst, $04, nG2, $08, nRst, $04, nG2, $24, nG3, nG2, nG2
+	dc.b	nG2, $07, nRst, $04, nG2, $08, nRst, $04, $24, nG3, nG2, nG2
 	dc.b	$0C, nRst, nC3, $14, nB2, $10, nG2, $08, nRst, $04, nG2, $08
-	dc.b	nRst, $04, nG2, $24, nG3, nG2, nG2, $0C, nRst, $30
+	dc.b	nRst, $04, $24, nG3, nG2, nG2, $0C, nRst, $30
 
 Snd_SKCredits_Loop1C:
 	dc.b	nC3, $60, nC4, $24, nC3, nC4, $18, nBb2, $06, nRst, $06, nBb2
@@ -418,7 +418,7 @@ Snd_SKCredits_Loop13:
 	dc.b	nC5, $32, nRst, $0A, nE5, $0C, nA4, $04, nRst, $02, nE5, $06
 	dc.b	nRst, $0C, nA4, $22, nRst, $02, nC5, $14, nRst, $04, nB4, $06
 	dc.b	nRst, $06, nB4, $04, nRst, $02, nD5, $06, nRst, $06, nB4, $04
-	dc.b	nRst, $02, nC5, $26, nRst, $14, nC5, $30
+	dc.b	nRst, $02, nC5, $26, nRst, $14, $30
 	smpsPan             panLeft, $00
 	smpsSetNote         $40
 	smpsSetVol          $74

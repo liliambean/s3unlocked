@@ -18,7 +18,7 @@ Snd_CNZ2_Header:
 Snd_CNZ2_FM1:
 	smpsModSet          $02, $01, $05, $04
 	smpsSetvoice        $03
-	dc.b	nRst, $60, smpsNoAttack, nRst, nRst, nRst, $48
+	dc.b	nRst, $60, smpsNoAttack, $60, nRst, $60, nRst, $48
 	smpsSetvoice        $00
 	smpsModSet          $0B, $01, $0C, $04
 	dc.b	nC5, $13, nB4, $05
