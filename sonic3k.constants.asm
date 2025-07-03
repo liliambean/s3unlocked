@@ -1089,8 +1089,9 @@ ArtTile_DashDust_P2                   = $07F0
 ; ---------------------------------------------------------------------------
 ; Liliam: add extra music tracks
 
-	phase $E8
+	phase $E7
 mus__FirstExtra =		*
+mus_Credits			ds.b 1		; $E7
 mus_CreditsK			ds.b 1		; $E8
 mus_KnucklesK			ds.b 1		; $E9
 mus_ExtraLifeK			ds.b 1		; $EA
@@ -1175,7 +1176,7 @@ mus_Miniboss			ds.b 1		; $2E
 mus_DataSelect			ds.b 1		; $2F
 mus_FinalBoss			ds.b 1		; $30
 mus_Drowning			ds.b 1		; $31
-mus_Credits			ds.b 1		; $32
+mus_Ending			ds.b 1		; $32
 mus__End =			*		; next ID after last music
 mus__Gap = mus__First-mus__End+mus__FirstExtra	; gap between last music and extra music
 	dephase
