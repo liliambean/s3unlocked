@@ -4614,8 +4614,8 @@ z80_MusicBanks:
 	db zmake68kBank(Snd_Menu)
 	db zmake68kBank(Snd_FinalBoss)
 	db zmake68kBank(Snd_Drown)
+	db zmake68kBank(Snd_PresSega)
 	db zmake68kBank(Snd_3CCredits)			;
-;	db zmake68kBank(Snd_PresSega)			;
 	db zmake68kBank(Snd_SKCredits)
 	db zmake68kBank(Snd_SKKnux)			;
 	db zmake68kBank(Snd_SK1UP)			;
@@ -4868,8 +4868,8 @@ MusicPointers label *
 	declsong Snd_Menu
 	declsong Snd_FinalBoss
 	declsong Snd_Drown
+	declsong Snd_PresSega
 	declsong Snd_3CCredits				;
-;	declsong Snd_PresSega				;
 	declsong Snd_SKCredits
 	declsong Snd_SKKnux				;
 	declsong Snd_SK1UP				;
@@ -5378,7 +5378,7 @@ Sound_DB:	include "Sound/SFX/DB - Water Skid.asm"
 Snd_Bank1_Start:	startBank
 	Music_Master_Table
 z80_UniVoiceBank:	include "Sound/UniBank.asm"
-Snd_Title:	include "Sound/Music/Title (Sonic 3).asm"
+Snd_ProtoKnux:	include "Sound/Music/Knuckles (Prototype).asm"
 Snd_AIZ1:	include "Sound/Music/AIZ1.asm"
 Snd_AIZ2:	include "Sound/Music/AIZ2.asm"
 Snd_HCZ1:	include "Sound/Music/HCZ1.asm"
@@ -5438,8 +5438,8 @@ Snd_EMZ:	include "Sound/Music/Endless Mine.asm"
 Snd_GameOver:	include "Sound/Music/Game Over.asm"
 Snd_Emerald:	include "Sound/Music/Chaos Emerald.asm"
 Snd_Invic:	include "Sound/Music/Invincible (Sonic 3).asm"
-Snd_2PMenu:	include "Sound/Music/Competition Menu.asm"
 Snd_Menu:	include "Sound/Music/Menu.asm"
+Snd_2PMenu:	include "Sound/Music/Competition Menu.asm"
 Snd_Drown:	include "Sound/Music/Countdown.asm"
 
 	finishBank
@@ -5450,14 +5450,13 @@ Snd_Drown:	include "Sound/Music/Countdown.asm"
 Snd_Bank4_Start:	startBank
 	Music_Master_Table
 			include "Sound/UniBank.asm"
-Snd_S3Credits:	include "Sound/Music/Credits (Sonic 3).asm"
+;Snd_SKTitle:	include "Sound/Music/Title (Sonic & Knuckles).asm"
+;Snd_SKPresSega:include "Sound/Music/Game Complete (Sonic & Knuckles).asm"
 Snd_Continue:	include "Sound/Music/Continue.asm"
 Snd_1UP:	include "Sound/Music/1UP (Sonic 3).asm"
 Snd_Minib:	include "Sound/Music/Miniboss (Sonic 3).asm"
-;Snd_PresSega:	include "Sound/Music/Game Complete (Sonic 3).asm"
+Snd_S3Credits:	include "Sound/Music/Credits (Sonic 3).asm"
 Snd_3CCredits:	include "Sound/Music/Credits (Sonic 3C).asm"
-;Snd_SKTitle:	include "Sound/Music/Title (Sonic & Knuckles).asm"
-;Snd_SKPresSega:include "Sound/Music/Game Complete (Sonic & Knuckles).asm"
 Snd_SKCredits:	include "Sound/Music/Credits (Sonic & Knuckles).asm"
 Snd_SKKnux:	include "Sound/Music/Knuckles (Sonic & Knuckles).asm"
 Snd_SK1UP:	include "Sound/Music/1UP (Sonic & Knuckles).asm"
@@ -5476,9 +5475,10 @@ Snd_ProtCredits:include "Sound/Music/Credits (Prototype).asm"
 Snd_Bank5_Start:	startBank
 	Music_Master_Table
 			include "Sound/UniBank (Prototype).asm"
+Snd_Title:	include "Sound/Music/Title (Sonic 3).asm"
+Snd_PresSega:	include "Sound/Music/Game Complete (Sonic 3).asm"
 Snd_EncoreBonus:include "Sound/Music/Encore Bonus.asm"
 Snd_HighFive:	include "Sound/Music/High Five.asm"
-Snd_ProtoKnux:	include "Sound/Music/Knuckles (Prototype).asm"
 Snd_ProtoCNZ1:	include "Sound/Music/CNZ1 (Prototype).asm"
 Snd_ProtoCNZ2:	include "Sound/Music/CNZ2 (Prototype).asm"
 Snd_ProtoICZ1:	include "Sound/Music/ICZ1 (Prototype).asm"
