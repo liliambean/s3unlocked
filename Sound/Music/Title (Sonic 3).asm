@@ -1,21 +1,21 @@
-Snd_Title_Header:
+Snd_S3_Title_Header:
 	smpsHeaderStartSong 3
-	smpsHeaderVoice     Snd_Title_Voices
+	smpsHeaderVoice     Snd_S3_Title_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $02
 
-	smpsHeaderDAC       Snd_Title_DAC
-	smpsHeaderFM        Snd_Title_FM1,	$18, $10
-	smpsHeaderFM        Snd_Title_FM2,	$18, $1B
-	smpsHeaderFM        Snd_Title_FM3,	$00, $05
-	smpsHeaderFM        Snd_Title_FM4,	$18, $18
-	smpsHeaderFM        Snd_Title_FM5,	$18, $13
-	smpsHeaderPSG       Snd_Title_PSG1,	$00, $01, $00, $00
-	smpsHeaderPSG       Snd_Title_PSG2,	$00, $01, $00, $00
-	smpsHeaderPSG       Snd_Title_PSG3,	$00, $04, $00, $00
+	smpsHeaderDAC       Snd_S3_Title_DAC
+	smpsHeaderFM        Snd_S3_Title_FM1,	$18, $10
+	smpsHeaderFM        Snd_S3_Title_FM2,	$18, $1B
+	smpsHeaderFM        Snd_S3_Title_FM3,	$00, $05
+	smpsHeaderFM        Snd_S3_Title_FM4,	$18, $18
+	smpsHeaderFM        Snd_S3_Title_FM5,	$18, $13
+	smpsHeaderPSG       Snd_S3_Title_PSG1,	$00, $01, $00, $00
+	smpsHeaderPSG       Snd_S3_Title_PSG2,	$00, $01, $00, $00
+	smpsHeaderPSG       Snd_S3_Title_PSG3,	$00, $04, $00, $00
 
 ; FM1 Data
-Snd_Title_FM1:
+Snd_S3_Title_FM1:
 	smpsSetvoice        $00
 	smpsModSet          $14, $01, $06, $06
 	dc.b	nRst, $60, nB3, $06, nRst, nB3, $0C, nC4, $06, nRst, nC4, $0C
@@ -38,7 +38,7 @@ Snd_Title_FM1:
 	smpsStop
 
 ; FM2 Data
-Snd_Title_FM2:
+Snd_S3_Title_FM2:
 	smpsSetvoice        $00
 	smpsModSet          $15, $01, $06, $06
 	dc.b	nRst, $60, nRst, $03
@@ -65,36 +65,36 @@ Snd_Title_FM2:
 	dc.b	nRst, $02
 	smpsPan             panRight, $00
 
-Snd_Title_Loop07:
-	smpsCall            Snd_Title_Call03
-	smpsLoop            $00, $04, Snd_Title_Loop07
+Snd_S3_Title_Loop07:
+	smpsCall            Snd_S3_Title_Call03
+	smpsLoop            $00, $04, Snd_S3_Title_Loop07
 	smpsStop
 
 ; FM3 Data
-Snd_Title_FM3:
+Snd_S3_Title_FM3:
 	smpsSetvoice        $01
 	dc.b	nRst, $06, nD2, $05, nRst, $01, nD2, $05, nRst, $01, nRst, $06
 	dc.b	nD2, $05, nRst, $0D, nD2, $05, nRst, $01, nD2, $05, nRst, $07
 	dc.b	nD2, $05, nRst, $07, nD2, $05, nRst, $01, nD2, $05, nRst, $01
 	dc.b	nD2, $05, nRst, $01, nD2, $05, nRst, $01
-	smpsCall            Snd_Title_Call04
-	smpsCall            Snd_Title_Call05
+	smpsCall            Snd_S3_Title_Call04
+	smpsCall            Snd_S3_Title_Call05
 	dc.b	nE2, $05, nRst, $01, nRst, $06
-	smpsCall            Snd_Title_Call06
+	smpsCall            Snd_S3_Title_Call06
 	dc.b	nF2, $05, nRst, $01, nRst, $06
-	smpsCall            Snd_Title_Call05
+	smpsCall            Snd_S3_Title_Call05
 	dc.b	nD2, $05, nRst, $01, nRst, $06
-	smpsCall            Snd_Title_Call04
-	smpsCall            Snd_Title_Call05
+	smpsCall            Snd_S3_Title_Call04
+	smpsCall            Snd_S3_Title_Call05
 	dc.b	nE2, $05, nRst, $01, nRst, $06
-	smpsCall            Snd_Title_Call06
+	smpsCall            Snd_S3_Title_Call06
 	dc.b	nA2, $05, nRst, $01, nRst, $06, nG2, $05, nRst, $01, nG2, $05
 	dc.b	nRst, $01, nG2, $05, nRst, $01, nRst, $06, nG2, $05, nRst, $01
 	dc.b	nRst, $06, nG2, $05, nRst, $01, nG2, $05, nRst, $01, nRst, $06
 	dc.b	nG2, $05, nRst, $01, nG2, $05, nRst, $01, nRst, $06, nG2, $18
 	smpsStop
 
-Snd_Title_Call04:
+Snd_S3_Title_Call04:
 	dc.b	nG2, $05, nRst, $01, nG2, $05, nRst, $01, nG2, $05, nRst, $01
 	dc.b	nRst, $06, nG2, $05, nRst, $01, nRst, $06, nG2, $05, nRst, $01
 	dc.b	nG2, $05, nRst, $01, nRst, $06, nG2, $05, nRst, $01, nG2, $05
@@ -102,14 +102,14 @@ Snd_Title_Call04:
 	dc.b	nRst, $01, nRst, $06
 	smpsReturn
 
-Snd_Title_Call05:
+Snd_S3_Title_Call05:
 	dc.b	nD2, $05, nRst, $01, nD2, $05, nRst, $01, nD2, $05, nRst, $01
 	dc.b	nRst, $06, nD2, $05, nRst, $01, nRst, $06, nD2, $05, nRst, $01
 	dc.b	nD2, $05, nRst, $01, nRst, $06, nD2, $05, nRst, $01, nD2, $05
 	dc.b	nRst, $01, nRst, $06, nD2, $05, nRst, $01, nRst, $06
 	smpsReturn
 
-Snd_Title_Call06:
+Snd_S3_Title_Call06:
 	dc.b	nF2, $05, nRst, $01, nF2, $05, nRst, $01, nF2, $05, nRst, $01
 	dc.b	nRst, $06, nF2, $05, nRst, $01, nRst, $06, nF2, $05, nRst, $01
 	dc.b	nF2, $05, nRst, $01, nRst, $06, nF2, $05, nRst, $01, nF2, $05
@@ -117,53 +117,53 @@ Snd_Title_Call06:
 	smpsReturn
 
 ; FM4 Data
-Snd_Title_FM4:
+Snd_S3_Title_FM4:
 	smpsSetvoice        $03
 	dc.b	nRst, $60
 
-Snd_Title_Loop00:
-	smpsCall            Snd_Title_Call00
-	smpsLoop            $00, $08, Snd_Title_Loop00
+Snd_S3_Title_Loop00:
+	smpsCall            Snd_S3_Title_Call00
+	smpsLoop            $00, $08, Snd_S3_Title_Loop00
 
-Snd_Title_Loop01:
-	smpsCall            Snd_Title_Call01
-	smpsLoop            $00, $04, Snd_Title_Loop01
+Snd_S3_Title_Loop01:
+	smpsCall            Snd_S3_Title_Call01
+	smpsLoop            $00, $04, Snd_S3_Title_Loop01
 
-Snd_Title_Loop02:
-	smpsCall            Snd_Title_Call02
-	smpsLoop            $00, $04, Snd_Title_Loop02
+Snd_S3_Title_Loop02:
+	smpsCall            Snd_S3_Title_Call02
+	smpsLoop            $00, $04, Snd_S3_Title_Loop02
 
-Snd_Title_Loop03:
-	smpsCall            Snd_Title_Call00
-	smpsLoop            $00, $08, Snd_Title_Loop03
+Snd_S3_Title_Loop03:
+	smpsCall            Snd_S3_Title_Call00
+	smpsLoop            $00, $08, Snd_S3_Title_Loop03
 
-Snd_Title_Loop04:
-	smpsCall            Snd_Title_Call01
-	smpsLoop            $00, $04, Snd_Title_Loop04
+Snd_S3_Title_Loop04:
+	smpsCall            Snd_S3_Title_Call01
+	smpsLoop            $00, $04, Snd_S3_Title_Loop04
 
-Snd_Title_Loop05:
-	smpsCall            Snd_Title_Call00
-	smpsLoop            $00, $04, Snd_Title_Loop05
+Snd_S3_Title_Loop05:
+	smpsCall            Snd_S3_Title_Call00
+	smpsLoop            $00, $04, Snd_S3_Title_Loop05
 	smpsPan             panLeft, $00
 
-Snd_Title_Loop06:
-	smpsCall            Snd_Title_Call03
-	smpsLoop            $00, $04, Snd_Title_Loop06
+Snd_S3_Title_Loop06:
+	smpsCall            Snd_S3_Title_Call03
+	smpsLoop            $00, $04, Snd_S3_Title_Loop06
 	smpsStop
 
-Snd_Title_Call00:
+Snd_S3_Title_Call00:
 	dc.b	nG4, $06, nF4, nD4, nF4
 	smpsReturn
 
-Snd_Title_Call01:
+Snd_S3_Title_Call01:
 	dc.b	nA4, $06, nG4, nE4, nG4
 	smpsReturn
 
-Snd_Title_Call02:
+Snd_S3_Title_Call02:
 	dc.b	nD4, $06, nC4, nA3, nC4
 	smpsReturn
 
-Snd_Title_Call03:
+Snd_S3_Title_Call03:
 	dc.b	nG4, $06
 	smpsFMAlterVol      $04
 	dc.b	nF4
@@ -175,29 +175,29 @@ Snd_Title_Call03:
 	smpsReturn
 
 ; FM5 Data
-Snd_Title_FM5:
+Snd_S3_Title_FM5:
 	dc.b	nRst, $08
 	smpsFMAlterVol      $05
-	smpsJump            Snd_Title_FM1
+	smpsJump            Snd_S3_Title_FM1
 
 ; PSG1 Data
-Snd_Title_PSG1:
+Snd_S3_Title_PSG1:
 	smpsPSGvoice        sTone_0A
 	dc.b	nRst, $60, nG3, $60, nA3, nE3, nD3, nG3, nA3, nC4, nD4
 	smpsStop
 
 ; PSG2 Data
-Snd_Title_PSG2:
+Snd_S3_Title_PSG2:
 	smpsPSGvoice        sTone_0A
 	dc.b	nRst, $60, nD3, $60, nF3, nC3, nFs3, nD3, nF3, nA3, nB3
 	smpsStop
 
 ; PSG3 Data
-Snd_Title_PSG3:
+Snd_S3_Title_PSG3:
 	smpsPSGform         $E7
 	smpsPSGvoice        sTone_02
 
-Snd_Title_Loop08:
+Snd_S3_Title_Loop08:
 	dc.b	nMaxPSG2, $06, nMaxPSG2
 	smpsPSGAlterVol     $FC
 	dc.b	nMaxPSG2, $06, nMaxPSG2
@@ -214,7 +214,7 @@ Snd_Title_Loop08:
 	smpsPSGAlterVol     $FC
 	dc.b	nMaxPSG2, $06, nMaxPSG2
 	smpsPSGAlterVol     $04
-	smpsLoop            $00, $08, Snd_Title_Loop08
+	smpsLoop            $00, $08, Snd_S3_Title_Loop08
 	dc.b	nMaxPSG2, $06, nMaxPSG2
 	smpsPSGAlterVol     $FC
 	dc.b	nMaxPSG2, $06, nMaxPSG2
@@ -229,7 +229,7 @@ Snd_Title_Loop08:
 	smpsStop
 
 ; DAC Data
-Snd_Title_DAC:
+Snd_S3_Title_DAC:
 	dc.b	dKickS3, $06, dSnareS3, dSnareS3, nRst, dSnareS3, nRst, $0C, dSnareS3, $06, dSnareS3, nRst
 	dc.b	dSnareS3, nRst, dSnareS3, dSnareS3, dSnareS3, dSnareS3, dKickS3, $18, dSnareS3, dKickS3, dSnareS3, dKickS3
 	dc.b	dSnareS3, dKickS3, dSnareS3, $06, nRst, $0C, dSnareS3, $06, dKickS3, $18, dSnareS3, dKickS3
@@ -240,7 +240,7 @@ Snd_Title_DAC:
 	dc.b	dSnareS3, dSnareS3, dSnareS3, dSnareS3
 	smpsStop
 
-Snd_Title_Voices:
+Snd_S3_Title_Voices:
 ;	Voice $00
 ;	$3D
 ;	$01, $00, $04, $03, 	$1F, $1F, $1F, $1F, 	$10, $06, $06, $06

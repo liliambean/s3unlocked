@@ -331,6 +331,11 @@ Snd_BPZ_Loop0A:
 	smpsAlterPitch      $F4
 	smpsJump            Snd_BPZ_Loop0A
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG2 Data
 Snd_BPZ_PSG2:
 	dc.b	nRst, $30
@@ -354,9 +359,20 @@ Snd_BPZ_Loop09:
 	smpsAlterPitch      $F4
 	smpsJump            Snd_BPZ_Loop09
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG3 Data
 Snd_BPZ_PSG3:
 	smpsStop
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsPSGform         $E7
+	dc.b	nRst, $30
+    endif
 
 Snd_BPZ_Jump05:
 	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nBb4, $05, nRst

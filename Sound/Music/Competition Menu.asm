@@ -37,6 +37,11 @@ Snd_2PMenu_Loop04:
 	smpsLoop            $00, $08, Snd_2PMenu_Loop04
 	smpsJump            Snd_2PMenu_Loop03
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM2 Data
 Snd_2PMenu_FM2:
 	smpsCall            Snd_2PMenu_Call03
@@ -83,6 +88,11 @@ Snd_2PMenu_FM2:
 	smpsCall            Snd_2PMenu_Call03
 	smpsJump            Snd_2PMenu_FM2
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 Snd_2PMenu_Call03:
 	smpsSetvoice        $06
 	dc.b	nC3, $60, nRst
@@ -114,6 +124,11 @@ Snd_2PMenu_Jump01:
 	dc.b	$24, nE3, $3C, nA3, $60, nA3, $48, nCs4, $18
 	smpsCall            Snd_2PMenu_Call02
 	smpsJump            Snd_2PMenu_Jump01
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 Snd_2PMenu_Call02:
 	smpsSetvoice        $03
@@ -158,6 +173,11 @@ Snd_2PMenu_Jump00:
 	smpsCall            Snd_2PMenu_Call01
 	smpsJump            Snd_2PMenu_Jump00
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 Snd_2PMenu_Call01:
 	smpsSetvoice        $03
 	dc.b	nRst, $24, nB3, $3C, smpsNoAttack, $3C
@@ -198,6 +218,11 @@ Snd_2PMenu_FM5:
 	smpsCall            Snd_2PMenu_Call00
 	smpsJump            Snd_2PMenu_FM5
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 Snd_2PMenu_Call00:
 	smpsSetvoice        $03
 	dc.b	nRst, $24, nD4, $3C, smpsNoAttack, $60, nE4, smpsNoAttack, nE4
@@ -228,6 +253,11 @@ Snd_2PMenu_Loop05:
 	dc.b	nRst, $18, nE5, $0C, nB4, $06, nRst, nG4, $0C, nB4, $06, nRst
 	dc.b	nE5, $0C, nB4, $06, nRst, nRst, $60
 	smpsJump            Snd_2PMenu_Jump03
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 Snd_2PMenu_Call08:
 	dc.b	nRst, $18, nD5, $0C, nB4, $06, nRst, nG4, $0C, nB4, $06, nRst
@@ -271,6 +301,11 @@ Snd_2PMenu_Jump02:
 	smpsCall            Snd_2PMenu_Call04
 	smpsCall            Snd_2PMenu_Call07
 	smpsJump            Snd_2PMenu_Jump02
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 Snd_2PMenu_Call04:
 	smpsPSGvoice        sTone_1E
@@ -371,6 +406,11 @@ Snd_2PMenu_Loop02:
 	dc.b	dSnareS3, nRst, dSnareS3, dSnareS3
 	smpsLoop            $01, $02, Snd_2PMenu_Loop02
 	smpsJump            Snd_2PMenu_DAC
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 Snd_2PMenu_Voices:
 ;	Voice $00

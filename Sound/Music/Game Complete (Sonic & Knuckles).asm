@@ -1,21 +1,21 @@
-Snd_Pres_SK_Header:
+Snd_PresSega_Header:
 	smpsHeaderStartSong 3
-	smpsHeaderVoice     Snd_Pres_SK_Voices
+	smpsHeaderVoice     Snd_PresSega_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $08
 
-	smpsHeaderDAC       Snd_Pres_SK_DAC
-	smpsHeaderFM        Snd_Pres_SK_FM1,	$01, $12
-	smpsHeaderFM        Snd_Pres_SK_FM2,	$0D, $04
-	smpsHeaderFM        Snd_Pres_SK_FM3,	$01, $1C
-	smpsHeaderFM        Snd_Pres_SK_FM4,	$0D, $12
-	smpsHeaderFM        Snd_Pres_SK_FM5,	$0D, $12
-	smpsHeaderPSG       Snd_Pres_SK_PSG1,	$01, $09, $00, $00
-	smpsHeaderPSG       Snd_Pres_SK_PSG2,	$01, $09, $00, $00
-	smpsHeaderPSG       Snd_Pres_SK_PSG3,	$E9, $01, $00, $00
+	smpsHeaderDAC       Snd_PresSega_DAC
+	smpsHeaderFM        Snd_PresSega_FM1,	$01, $12
+	smpsHeaderFM        Snd_PresSega_FM2,	$0D, $04
+	smpsHeaderFM        Snd_PresSega_FM3,	$01, $1C
+	smpsHeaderFM        Snd_PresSega_FM4,	$0D, $12
+	smpsHeaderFM        Snd_PresSega_FM5,	$0D, $12
+	smpsHeaderPSG       Snd_PresSega_PSG1,	$01, $09, $00, $00
+	smpsHeaderPSG       Snd_PresSega_PSG2,	$01, $09, $00, $00
+	smpsHeaderPSG       Snd_PresSega_PSG3,	$E9, $01, $00, $00
 
 ; FM1 Data
-Snd_Pres_SK_FM1:
+Snd_PresSega_FM1:
 	smpsSetvoice        $05
 	smpsAlterNote       $FE
 	smpsModSet          $14, $01, $06, $06
@@ -39,7 +39,7 @@ Snd_Pres_SK_FM1:
 	smpsStop
 
 ; FM2 Data
-Snd_Pres_SK_FM2:
+Snd_PresSega_FM2:
 	smpsSetvoice        $01
 	dc.b	nE1, $06, nE1, nRst, nE1, nRst, nE1, nE1, smpsNoAttack, nE1, nRst, nRst
 	dc.b	nE1, smpsNoAttack, nE1, nE1, nE1, nE1, nE1, nA1, $06, nA1, nRst, nA1
@@ -54,7 +54,7 @@ Snd_Pres_SK_FM2:
 	smpsStop
 
 ; FM3 Data
-Snd_Pres_SK_FM3:
+Snd_PresSega_FM3:
 	smpsSetvoice        $05
 	smpsAlterNote       $02
 	smpsModSet          $15, $01, $06, $06
@@ -79,7 +79,7 @@ Snd_Pres_SK_FM3:
 	smpsStop
 
 ; FM4 Data
-Snd_Pres_SK_FM4:
+Snd_PresSega_FM4:
 	smpsSetvoice        $04
 	smpsPan             panRight, $00
 	smpsModSet          $01, $01, $0C, $00
@@ -96,7 +96,7 @@ Snd_Pres_SK_FM4:
 	smpsStop
 
 ; FM5 Data
-Snd_Pres_SK_FM5:
+Snd_PresSega_FM5:
 	smpsSetvoice        $04
 	smpsPan             panLeft, $00
 	smpsModSet          $01, $01, $0C, $00
@@ -113,7 +113,7 @@ Snd_Pres_SK_FM5:
 	smpsStop
 
 ; PSG1 Data
-Snd_Pres_SK_PSG1:
+Snd_PresSega_PSG1:
 	smpsPSGvoice        sTone_0C
 	dc.b	nA2, $06, nCs3, nB2, nD3
 	smpsPSGAlterVol     $FF
@@ -129,16 +129,16 @@ Snd_Pres_SK_PSG1:
 	dc.b	nD4, nB3, nD4, nA3, nD4, nA3, nE4, nB3, nE4
 	smpsPSGAlterVol     $01
 
-Snd_Pres_SK_Loop01:
+Snd_PresSega_Loop01:
 	dc.b	nA4
 	smpsPSGAlterVol     $01
 	dc.b	nG5
 	smpsPSGAlterVol     $01
-	smpsLoop            $00, $05, Snd_Pres_SK_Loop01
+	smpsLoop            $00, $05, Snd_PresSega_Loop01
 	smpsStop
 
 ; PSG2 Data
-Snd_Pres_SK_PSG2:
+Snd_PresSega_PSG2:
 	smpsPSGvoice        sTone_0C
 	dc.b	nRst, $03, nB2, $06, nE3, nCs3, nFs3
 	smpsPSGAlterVol     $FF
@@ -154,16 +154,16 @@ Snd_Pres_SK_PSG2:
 	dc.b	nCs4, nA3, nCs4, nA3, nB3, nG3, nB3, nG3, nCs4, nA3, nCs4
 	smpsPSGAlterVol     $01
 
-Snd_Pres_SK_Loop00:
+Snd_PresSega_Loop00:
 	dc.b	nE5
 	smpsPSGAlterVol     $01
 	dc.b	nA5
 	smpsPSGAlterVol     $01
-	smpsLoop            $00, $05, Snd_Pres_SK_Loop00
+	smpsLoop            $00, $05, Snd_PresSega_Loop00
 	smpsStop
 
 ; PSG3 Data
-Snd_Pres_SK_PSG3:
+Snd_PresSega_PSG3:
 	smpsPSGvoice        sTone_0A
 	smpsModSet          $14, $01, $03, $06
 	dc.b	nRst, $60, nA4, $18, nFs4, $0C, nE4, nA4, nFs4, nD4, nE4, smpsNoAttack
@@ -176,7 +176,7 @@ Snd_Pres_SK_PSG3:
 	smpsStop
 
 ; DAC Data
-Snd_Pres_SK_DAC:
+Snd_PresSega_DAC:
 	smpsFade            $25
 	dc.b	dCrashCymbal, $30, nRst, $0C, dSnareS3, dSnareS3, dSnareS3, $06, $06, dCrashCymbal, $18, dSnareS3
 	dc.b	$0C, dKickS3, dKickS3, $06, dKickS3, dKickS3, $0C, dSnareS3, $18, dKickS3, $18, dSnareS3
@@ -185,7 +185,7 @@ Snd_Pres_SK_DAC:
 	dc.b	$12, dKickS3, $06, dKickS3, dKickS3, dKickS3, $0C, dSnareS3, dCrashCymbal, $60
 	smpsStop
 
-Snd_Pres_SK_Voices:
+Snd_PresSega_Voices:
 ;	Voice $00
 ;	$3D
 ;	$01, $01, $11, $12, 	$18, $1F, $1F, $1F, 	$10, $06, $06, $06

@@ -1,21 +1,21 @@
-Snd_Title_SK_Header:
+Snd_Title_Header:
 	smpsHeaderStartSong 3, 1
-	smpsHeaderVoice     Snd_Title_SK_Voices
+	smpsHeaderVoice     Snd_Title_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $00
 
-	smpsHeaderDAC       Snd_Title_SK_DAC
-	smpsHeaderFM        Snd_Title_SK_FM1,	$00, $15
-	smpsHeaderFM        Snd_Title_SK_FM2,	$0C, $1C
-	smpsHeaderFM        Snd_Title_SK_FM3,	$00, $10
-	smpsHeaderFM        Snd_Title_SK_FM4,	$00, $05
-	smpsHeaderFM        Snd_Title_SK_FM5,	$00, $05
-	smpsHeaderPSG       Snd_Title_SK_PSG1,	$E8, $05, $00, sTone_0A
-	smpsHeaderPSG       Snd_Title_SK_PSG2,	$F4, $02, $00, sTone_0A
-	smpsHeaderPSG       Snd_Title_SK_PSG3,	$E8, $05, $00, sTone_0A
+	smpsHeaderDAC       Snd_Title_DAC
+	smpsHeaderFM        Snd_Title_FM1,	$00, $15
+	smpsHeaderFM        Snd_Title_FM2,	$0C, $1C
+	smpsHeaderFM        Snd_Title_FM3,	$00, $10
+	smpsHeaderFM        Snd_Title_FM4,	$00, $05
+	smpsHeaderFM        Snd_Title_FM5,	$00, $05
+	smpsHeaderPSG       Snd_Title_PSG1,	$E8, $05, $00, sTone_0A
+	smpsHeaderPSG       Snd_Title_PSG2,	$F4, $02, $00, sTone_0A
+	smpsHeaderPSG       Snd_Title_PSG3,	$E8, $05, $00, sTone_0A
 
 ; FM1 Data
-Snd_Title_SK_FM1:
+Snd_Title_FM1:
 	smpsSetvoice        $04
 	smpsAlterNote       $F6
 	dc.b	nRst, $6C
@@ -27,7 +27,7 @@ Snd_Title_SK_FM1:
 	smpsAlterNote       $00
 	smpsModSet          $14, $01, $04, $07
 
-Snd_Title_SK_Jump00:
+Snd_Title_Jump00:
 	dc.b	nA4, $18, nFs4, $0C, nE4, nA4, nFs4, nD4, nE4, $30, nD5, $18
 	smpsNoteFill        $06
 	dc.b	$0C, $0C, $0C
@@ -44,8 +44,13 @@ Snd_Title_SK_Jump00:
 	dc.b	nG4, $18, nA4, $09
 	smpsStop
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM2 Data
-Snd_Title_SK_FM2:
+Snd_Title_FM2:
 	smpsSetvoice        $01
 	smpsModSet          $15, $01, $06, $06
 	dc.b	nE1, $06, nE1, nRst, nE1, nRst, nE1, nE1, smpsNoAttack, nE1, nRst, nRst
@@ -64,7 +69,7 @@ Snd_Title_SK_FM2:
 	smpsStop
 
 ; FM3 Data
-Snd_Title_SK_FM3:
+Snd_Title_FM3:
 	smpsSetvoice        $04
 	smpsPan             panCenter, $00
 	dc.b	nRst, $60
@@ -76,7 +81,7 @@ Snd_Title_SK_FM3:
 	smpsPan             panLeft, $00
 	smpsModSet          $00, $00, $00, $00
 
-Snd_Title_SK_Loop00:
+Snd_Title_Loop00:
 	dc.b	nA2, $06, nA2
 	smpsFMAlterVol      $FD
 	dc.b	nA2, nA2
@@ -109,7 +114,7 @@ Snd_Title_SK_Loop00:
 	smpsFMAlterVol      $FD
 	dc.b	nD3, nD2
 	smpsFMAlterVol      $FD
-	smpsLoop            $00, $02, Snd_Title_SK_Loop00
+	smpsLoop            $00, $02, Snd_Title_Loop00
 	dc.b	nA2, $06, nA2
 	smpsFMAlterVol      $FD
 	dc.b	nA2, nA2
@@ -145,7 +150,7 @@ Snd_Title_SK_Loop00:
 	smpsStop
 
 ; FM4 Data
-Snd_Title_SK_FM4:
+Snd_Title_FM4:
 	smpsSetvoice        $05
 	smpsAlterNote       $FC
 	smpsPan             panRight, $00
@@ -167,7 +172,7 @@ Snd_Title_SK_FM4:
 	smpsStop
 
 ; FM5 Data
-Snd_Title_SK_FM5:
+Snd_Title_FM5:
 	smpsPan             panLeft, $00
 	smpsSetvoice        $05
 	smpsModSet          $01, $01, $06, $00
@@ -189,7 +194,7 @@ Snd_Title_SK_FM5:
 	smpsStop
 
 ; PSG1 Data
-Snd_Title_SK_PSG1:
+Snd_Title_PSG1:
 	smpsPSGvoice        sTone_0A
 	dc.b	nRst, $60, nA3, $06, nCs4, nB3, nD4
 	smpsPSGAlterVol     $FF
@@ -223,7 +228,7 @@ Snd_Title_SK_PSG1:
 	smpsStop
 
 ; PSG2 Data
-Snd_Title_SK_PSG2:
+Snd_Title_PSG2:
 	smpsModSet          $01, $01, $FD, $00
 	smpsAlterNote       $04
 	dc.b	nD1, $60, smpsNoAttack, $60, nRst, $06
@@ -252,7 +257,7 @@ Snd_Title_SK_PSG2:
 	smpsStop
 
 ; PSG3 Data
-Snd_Title_SK_PSG3:
+Snd_Title_PSG3:
 	smpsAlterNote       $02
 	dc.b	nRst, $60, nRst, $03, nB3, $06, nE4, nCs4, nFs4
 	smpsPSGAlterVol     $FF
@@ -263,10 +268,15 @@ Snd_Title_SK_PSG3:
 	dc.b	nA4, nD5, nB4, nE5, $03
 	smpsModSet          $15, $01, $03, $06
 	smpsPSGAlterVol     $FF
-	smpsJump            Snd_Title_SK_Jump00
+	smpsJump            Snd_Title_Jump00
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; DAC Data
-Snd_Title_SK_DAC:
+Snd_Title_DAC:
 	dc.b	dKickS3, $06, dKickS3, nRst, dKickS3, nRst, nRst, dKickS3, nRst, nRst, nRst, dKickS3
 	dc.b	nRst, dSnareS3, dSnareS3, nRst, nRst, dKickS3, dKickS3, nRst, dKickS3, nRst, nRst, dSnareS3
 	dc.b	nRst, nRst, nRst, dKickS3, nRst, dSnareS3, dSnareS3, dSnareS3, dSnareS3, dCrashCymbal, $06, nRst
@@ -281,7 +291,7 @@ Snd_Title_SK_DAC:
 	dc.b	nRst, nRst, nRst, dSnareS3, nRst, nRst, dSnareS3, dKickS3, $0C, dKickS3, dSnareS3, dCrashCymbal
 	smpsStop
 
-Snd_Title_SK_Voices:
+Snd_Title_Voices:
 ;	Voice $00
 ;	$3D
 ;	$61, $02, $12, $52, 	$1F, $18, $18, $1B, 	$09, $02, $01, $02

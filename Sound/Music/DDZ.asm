@@ -50,6 +50,11 @@ Snd_DDZ_Jump03:
 	dc.b	nCs6, $06, nD6, nE6, $7F, smpsNoAttack, nE6, $47
 	smpsJump            Snd_DDZ_Jump03
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM2 Data
 Snd_DDZ_FM2:
 	smpsSetvoice        $01
@@ -89,6 +94,11 @@ Snd_DDZ_Loop04:
 	dc.b	$06, nA3, nA3, nA3, nE3, nA3, nA3
 	smpsJump            Snd_DDZ_Loop03
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM3 Data
 Snd_DDZ_FM3:
 	smpsSetvoice        $00
@@ -127,6 +137,11 @@ Snd_DDZ_Jump02:
 	dc.b	$0C, nCs6, $03, nRst, nCs6, nRst, nCs6, nRst, nCs6, $06, nRst, nCs6
 	dc.b	$03, nRst, nCs6, nRst
 	smpsJump            Snd_DDZ_Jump02
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM4 Data
 Snd_DDZ_FM4:
@@ -170,6 +185,11 @@ Snd_DDZ_Jump01:
 	dc.b	$03, nRst, nG5, nRst
 	smpsJump            Snd_DDZ_Jump01
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM5 Data
 Snd_DDZ_FM5:
 	dc.b	nRst, $0D
@@ -206,6 +226,11 @@ Snd_DDZ_Jump00:
 	dc.b	nB5, $06, nBb5, nA5, $30, nE5, $0C, nG5, $06, nBb5, nD6, $0C
 	dc.b	nCs6, $06, nD6, nE6, $7F, smpsNoAttack, nE6, $47
 	smpsJump            Snd_DDZ_Jump00
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; DAC Data
 Snd_DDZ_DAC:
@@ -247,6 +272,11 @@ Snd_DDZ_Loop02:
 	dc.b	$0C, dSnareS3, $06, dSnareS3, dSnareS3, dSnareS3, dSnareS3, dSnareS3, dSnareS3
 	smpsJump            Snd_DDZ_Loop00
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG1 Data
 Snd_DDZ_PSG1:
 	smpsModSet          $0D, $01, $02, $06
@@ -277,6 +307,11 @@ Snd_DDZ_Loop09:
 	dc.b	nA5, nA6, nA5, nA5, nA6
 	smpsJump            Snd_DDZ_Loop09
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG2 Data
 Snd_DDZ_PSG2:
 	smpsModSet          $0D, $01, $02, $06
@@ -289,6 +324,12 @@ Snd_DDZ_Loop05:
 	smpsLoop            $00, $1C, Snd_DDZ_Loop05
 	dc.b	nRst, $60, nRst, $30
 	smpsJump            Snd_DDZ_Loop05
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+	smpsStop
+    endif
 
 ; PSG3 Data
 Snd_DDZ_PSG3:

@@ -45,6 +45,11 @@ Snd_MHZ1_Loop09:
 	dc.b	nC5, $06, nRst, nBb4, $04, nRst, $60
 	smpsJump            Snd_MHZ1_Jump05
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM2 Data
 Snd_MHZ1_FM2:
 	smpsSetvoice        $01
@@ -79,6 +84,11 @@ Snd_MHZ1_Loop08:
 	dc.b	nRst, nAb2, $08, nAb2, $04, nRst, $08, nBb2, $10, nBb2, $06, nRst
 	dc.b	$12, nBb2, $08, nAb2, $04, nA2, $08, nBb2, $06, nRst, $16
 	smpsJump            Snd_MHZ1_Jump04
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM3 Data
 Snd_MHZ1_FM3:
@@ -121,6 +131,11 @@ Snd_MHZ1_Loop06:
 	dc.b	nRst, nF4, $04, nRst, $60
 	smpsJump            Snd_MHZ1_Jump03
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM4 Data
 Snd_MHZ1_FM4:
 	smpsSetvoice        $03
@@ -162,6 +177,11 @@ Snd_MHZ1_Loop04:
 	dc.b	nRst, nD4, $04, nRst, $60
 	smpsJump            Snd_MHZ1_Jump02
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM5 Data
 Snd_MHZ1_FM5:
 	dc.b	nRst, $60, nRst, $30, nRst, $07
@@ -193,6 +213,11 @@ Snd_MHZ1_Loop02:
 	dc.b	nC5, $06, nRst, nBb4, $04, nRst, $60
 	smpsJump            Snd_MHZ1_Jump01
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; DAC Data
 Snd_MHZ1_DAC:
 	dc.b	dKickS3, $0C, dSnareS3, dSnareS3, dKickS3, dSnareS3, dSnareS3, dKickS3, dSnareS3, dKickS3, $08, dKickS3
@@ -221,6 +246,11 @@ Snd_MHZ1_Loop01:
 	dc.b	$18, dLowTomS3, $08, dLowTomS3, $04, dLowTomS3, $08, dSnareS3, $10, dKickS3, $0C
 	smpsJump            Snd_MHZ1_Jump00
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG1 Data
 Snd_MHZ1_PSG1:
 	smpsStop
@@ -228,6 +258,11 @@ Snd_MHZ1_PSG1:
 ; PSG2 Data
 Snd_MHZ1_PSG2:
 	smpsStop
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG3 Data
 Snd_MHZ1_PSG3:

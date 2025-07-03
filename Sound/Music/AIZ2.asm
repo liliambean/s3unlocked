@@ -14,6 +14,12 @@ Snd_AIZ2_Header:
 	smpsHeaderPSG       Snd_AIZ2_PSG2,	$F4, $04, $00, sTone_0C
 	smpsHeaderPSG       Snd_AIZ2_PSG3,	$00, $03, $00, sTone_0C
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+	smpsStop
+    endif
+
 Snd_AIZ2_Call00:
 	dc.b	dKickS3, $0C, dKickS3, dSnareS3, dKickS3, $06, dSnareS3, $0C, dSnareS3, $06, dKickS3, $0C
 	dc.b	dSnareS3, dKickS3, dKickS3, dKickS3, dSnareS3, dKickS3, $06, dSnareS3, $0C, dSnareS3, $06, dKickS3
@@ -65,6 +71,11 @@ Snd_AIZ2_Loop01:
 	dc.b	dKickS3, dKickS3, dSnareS3, $06, dKickS3, $0C, dKickS3, $06, dHighTom, dMidTomS3, $0C, dFloorTomS3
 	dc.b	$06, dSnareS3, dSnareS3, dMidTomS3, $0C
 	smpsJump            Snd_AIZ2_DAC
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM1 Data
 Snd_AIZ2_FM1:
@@ -289,6 +300,11 @@ Snd_AIZ2_FM1:
 	dc.b	nD1, $0C, nEb1, nF1
 	smpsJump            Snd_AIZ2_FM1
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM2 Data
 Snd_AIZ2_FM2:
 	dc.b	nRst, $0C
@@ -452,6 +468,11 @@ Snd_AIZ2_Loop13:
 	dc.b	nC5, $05, nRst, $01, nEb5, $05, nRst, $01, nAb5, $05, nRst, $01
 	dc.b	nRst, $60
 	smpsJump            Snd_AIZ2_FM2
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM3 Data
 Snd_AIZ2_FM3:
@@ -623,6 +644,11 @@ Snd_AIZ2_Loop0A:
 	dc.b	nG5, $60
 	smpsJump            Snd_AIZ2_FM3
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM4 Data
 Snd_AIZ2_FM4:
 	smpsSetvoice        $16
@@ -740,6 +766,11 @@ Snd_AIZ2_FM4:
 	dc.b	nF4, $17, nRst, $01
 	smpsJump            Snd_AIZ2_FM4
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 Snd_AIZ2_Call02:
 	dc.b	nRst, $54, nEb4, $05, nRst, $01, nF4, $05, nRst, $01
 	smpsReturn
@@ -844,6 +875,11 @@ Snd_AIZ2_FM5:
 	dc.b	nC3, nG3, $18, nF3, nG3, nAb3
 	smpsJump            Snd_AIZ2_FM5
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG1 Data
 Snd_AIZ2_PSG1:
 	smpsPSGvoice        sTone_05
@@ -945,6 +981,11 @@ Snd_AIZ2_Loop1B:
 	dc.b	nRst, $01, nD4, $17, nRst, $01, nEb4, $17, nRst, $01, nF4, $17
 	dc.b	nRst, $01
 	smpsJump            Snd_AIZ2_PSG1
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 Snd_AIZ2_Call04:
 	smpsPSGvoice        sTone_05
@@ -1062,6 +1103,11 @@ Snd_AIZ2_Loop19:
 	dc.b	nRst, $01
 	smpsJump            Snd_AIZ2_PSG2
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG3 Data
 Snd_AIZ2_PSG3:
 	smpsPSGvoice        sTone_02
@@ -1106,3 +1152,7 @@ Snd_AIZ2_Loop17:
 	dc.b	nMaxPSG1, nMaxPSG1, $0C, nMaxPSG1, $06, nMaxPSG1, nMaxPSG1, $60, $0C
 	smpsJump            Snd_AIZ2_Loop14
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif

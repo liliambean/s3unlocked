@@ -14,6 +14,12 @@ Snd_Menu_Header:
 	smpsHeaderPSG       Snd_Menu_PSG2,	$00, $06, $00, sTone_0C
 	smpsHeaderPSG       Snd_Menu_PSG3,	$00, $04, $00, sTone_0C
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+	smpsStop
+    endif
+
 Snd_Menu_Call00:
 	dc.b	dKickS3, $12, dKickS3, $06, dKickS3, dElectricHighTom, $0C, dKickS3, $06, dKickS3, $12, dKickS3
 	dc.b	$06, dKickS3, dElectricMidTom, dElectricLowTom, $0C
@@ -61,6 +67,11 @@ Snd_Menu_Loop05:
 	dc.b	dElectricLowTom, nRst, $36
 	smpsJump            Snd_Menu_Loop00
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM1 Data
 Snd_Menu_FM1:
 	dc.b	nRst, $2A
@@ -92,6 +103,11 @@ Snd_Menu_Jump04:
 	dc.b	nC2, nF2, $0C, nF1, $12, nC2, nF2, $0C, nBb0, $12, nC1, nD1
 	dc.b	$0C, nRst, $30
 	smpsJump            Snd_Menu_Jump04
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM2 Data
 Snd_Menu_FM2:
@@ -209,6 +225,11 @@ Snd_Menu_Jump03:
 	smpsPan             panCenter, $00
 	dc.b	nBb3, $0C, nBb3, $06, nBb3, $08, nA3, nBb3
 	smpsJump            Snd_Menu_Jump03
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM3 Data
 Snd_Menu_FM3:
@@ -333,6 +354,11 @@ Snd_Menu_Jump02:
 	dc.b	nBb2, $08, nRst, $04, nBb2, $06, nBb2, $08, nA2, nBb2
 	smpsJump            Snd_Menu_Jump02
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM4 Data
 Snd_Menu_FM4:
 	dc.b	nRst, $2A
@@ -441,6 +467,11 @@ Snd_Menu_Jump01:
 	smpsPan             panLeft, $00
 	dc.b	nD3, $06, nRst, $0C, nEb3, $06, nRst, $0C, nF3, $06, nRst, $36
 	smpsJump            Snd_Menu_Jump01
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM5 Data
 Snd_Menu_FM5:
@@ -551,6 +582,11 @@ Snd_Menu_Jump00:
 	dc.b	nBb2, $06, nRst, $0C, nC3, $06, nRst, $0C, nD3, $06, nRst, $36
 	smpsJump            Snd_Menu_Jump00
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG1 Data
 Snd_Menu_PSG1:
 	smpsPSGvoice        sTone_04
@@ -611,6 +647,11 @@ Snd_Menu_Call05:
 	dc.b	nF5, nF4, $36
 	smpsReturn
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG2 Data
 Snd_Menu_PSG2:
 	smpsPSGvoice        sTone_04
@@ -642,6 +683,11 @@ Snd_Menu_Jump06:
 	dc.b	nF5, nF4, $0C
 	smpsCall            Snd_Menu_Call05
 	smpsJump            Snd_Menu_Jump06
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG3 Data
 Snd_Menu_PSG3:
@@ -835,4 +881,9 @@ Snd_Menu_Loop09:
 	dc.b	nMaxPSG1, $06
 	smpsLoop            $01, $0E, Snd_Menu_Loop09
 	smpsReturn
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 

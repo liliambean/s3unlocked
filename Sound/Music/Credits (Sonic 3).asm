@@ -33,6 +33,18 @@ Snd_S3Credits_Loop07:
 	smpsCall            Snd_S3Credits_Call0B
 	smpsJump            Snd_S3Credits_Jump03
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsAlterVol        $09
+	dc.b	nAb2, $60, nAb2
+	smpsAlterVol        $F7
+	smpsSetvoice        $00
+
+Snd_S3Credits_Jump05:
+	smpsCall            Snd_S3Credits_Call0A
+	smpsJump            Snd_S3Credits_Jump05
+    endif
+
 Snd_S3Credits_Call0A:
 	dc.b	nEb2, $06, nRst, $24, nEb2, $06, nEb2, nRst, $2A, nCs2, $06, nRst
 	dc.b	$18, nCs2, $06, nRst, $18, nCs2, $06, nRst, $1E, nFs2, $06, nRst
@@ -77,6 +89,13 @@ Snd_S3Credits_Loop05:
 	dc.b	nEb4
 	smpsFMAlterVol      $FF
 	smpsJump            Snd_S3Credits_Jump02
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+Snd_S3Credits_Jump06:
+	smpsCall            Snd_S3Credits_Call06
+	smpsJump            Snd_S3Credits_Jump06
+    endif
 
 Snd_S3Credits_Call09:
 	dc.b	nBb2, $06, nEb4, nAb3, nBb2, nEb4, nAb3, nBb2, nEb4
@@ -132,6 +151,16 @@ Snd_S3Credits_Jump01:
 	smpsCall            Snd_S3Credits_Call04
 	smpsJump            Snd_S3Credits_Jump01
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	dc.b	nEb5, $60, smpsNoAttack, $60
+
+Snd_S3Credits_Jump07:
+	smpsCall            Snd_S3Credits_Call02
+	smpsCall            Snd_S3Credits_Call05
+	smpsJump            Snd_S3Credits_Jump07
+    endif
+
 Snd_S3Credits_Call03:
 	dc.b	nRst, $30, nEb4, $60, nCs4, nEb4, $30, nC4, $24, nCs4, nEb4, $18
 	smpsReturn
@@ -185,6 +214,21 @@ Snd_S3Credits_Jump00:
 	smpsCall            Snd_S3Credits_Call01
 	smpsJump            Snd_S3Credits_Jump00
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	dc.b	nBb3, $60, nC4
+
+Snd_S3Credits_Jump08:
+	smpsAlterPitch      $F4
+	smpsCall            Snd_S3Credits_Call02
+	smpsAlterPitch      $0C
+	;smpsJump            Snd_BPZ_Jump05;$ABFD
+	smpsAlterVol        $FD
+	dc.b	nFs3, $24, nBb3, nCs4, $18, nC4, $24, nAb3, $A8, $18
+	smpsAlterVol        $03
+	smpsJump            Snd_S3Credits_Jump08
+    endif
+
 Snd_S3Credits_Call00:
 	dc.b	nG3, $60, nF3, nFs3, nAb3, nEb3, nCs3, nFs3, nC3
 	smpsReturn
@@ -207,6 +251,11 @@ Snd_S3Credits_FM5:
 	smpsAlterNote       $03
 	smpsJump            Snd_S3Credits_FM3
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG1 Data
 Snd_S3Credits_PSG1:
 	smpsCall            Snd_S3Credits_Call0C
@@ -216,6 +265,13 @@ Snd_S3Credits_Loop08:
 	dc.b	nRst, $60
 	smpsLoop            $00, $0D, Snd_S3Credits_Loop08
 	smpsJump            Snd_S3Credits_PSG1
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+Snd_S3Credits_Jump09:
+	smpsCall            Snd_S3Credits_Call0C
+	smpsJump            Snd_S3Credits_Jump09
+    endif
 
 Snd_S3Credits_Call0C:
 	dc.b	nEb4, $0C, nBb4, nEb4, $06, nEb4, nBb4, nEb4, nRst, $24, nCs4, $0C
@@ -277,6 +333,15 @@ Snd_S3Credits_Loop04:
 	smpsLoop            $00, $04, Snd_S3Credits_Loop04
 	dc.b	dKickHey, $18, dOddSnareKick, $12, nRst, $12, dKickHey, dKickHey
 	smpsJump            Snd_S3Credits_Loop02
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+Snd_S3Credits_Jump0A:
+	dc.b	nEb5, $18, nBb2, nB2, nBb2
+	smpsLoop            $00, $03, Snd_S3Credits_Jump0A
+	dc.b	nEb5, $18, nBb2, $12, nRst, $12, nEb5, nEb5
+	smpsJump            Snd_S3Credits_Jump0A
+    endif
 
 Snd_S3Credits_Voices:
 ;	Voice $00

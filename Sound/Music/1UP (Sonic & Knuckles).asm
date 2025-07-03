@@ -1,28 +1,28 @@
-Snd_1UP_SK_Header:
+Snd_1UP_Header:
 	smpsHeaderStartSong 3
-	smpsHeaderVoice     Snd_1UP_SK_Voices
+	smpsHeaderVoice     Snd_1UP_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $20
 
-	smpsHeaderDAC       Snd_1UP_SK_DAC
-	smpsHeaderFM        Snd_1UP_SK_FM1,	$0C, $08
-	smpsHeaderFM        Snd_1UP_SK_FM2,	$0C, $19
-	smpsHeaderFM        Snd_1UP_SK_FM3,	$00, $0D
-	smpsHeaderFM        Snd_1UP_SK_FM4,	$0C, $1B
-	smpsHeaderFM        Snd_1UP_SK_FM5,	$0C, $12
-	smpsHeaderPSG       Snd_1UP_SK_PSG1,	$00, $03, $00, $00
-	smpsHeaderPSG       Snd_1UP_SK_PSG2,	$00, $03, $00, $00
-	smpsHeaderPSG       Snd_1UP_SK_PSG3,	$00, $03, $00, $00
+	smpsHeaderDAC       Snd_1UP_DAC
+	smpsHeaderFM        Snd_1UP_FM1,	$0C, $08
+	smpsHeaderFM        Snd_1UP_FM2,	$0C, $19
+	smpsHeaderFM        Snd_1UP_FM3,	$00, $0D
+	smpsHeaderFM        Snd_1UP_FM4,	$0C, $1B
+	smpsHeaderFM        Snd_1UP_FM5,	$0C, $12
+	smpsHeaderPSG       Snd_1UP_PSG1,	$00, $03, $00, $00
+	smpsHeaderPSG       Snd_1UP_PSG2,	$00, $03, $00, $00
+	smpsHeaderPSG       Snd_1UP_PSG3,	$00, $03, $00, $00
 
 ; FM1 Data
-Snd_1UP_SK_FM1:
+Snd_1UP_FM1:
 	smpsSetvoice        $01
 	dc.b	nA4, $18, nFs4, $06, nRst, nE4, nRst, nB4, $0C, nE4, $06, nRst
 	dc.b	nB4, $0C, nD5, nCs5, $30
 	smpsStop
 
 ; FM2 Data
-Snd_1UP_SK_FM2:
+Snd_1UP_FM2:
 	smpsSetvoice        $03
 	dc.b	nE4, $18, nCs4, $06, nRst, nA3, nRst, nAb4, $0C, nB3, $06, nRst
 	dc.b	nAb4, $0C, nB4
@@ -31,7 +31,7 @@ Snd_1UP_SK_FM2:
 	smpsStop
 
 ; FM3 Data
-Snd_1UP_SK_FM3:
+Snd_1UP_FM3:
 	smpsSetvoice        $00
 	smpsNoteFill        $06
 	dc.b	nA2, $0C, $06, $06, nFs2, $0C, nE2, nA2, $18, nB2, nA2, $0C
@@ -39,44 +39,49 @@ Snd_1UP_SK_FM3:
 	smpsStop
 
 ; FM4 Data
-Snd_1UP_SK_FM4:
+Snd_1UP_FM4:
 	smpsSetvoice        $02
 	dc.b	nRst, $60, nA4, $10, nB3, $08, nD4, nF4, nG4, nA4, $18
 	smpsStop
 
 ; FM5 Data
-Snd_1UP_SK_FM5:
+Snd_1UP_FM5:
 	smpsAlterNote       $02
 	dc.b	nRst, $0A
-	smpsJump            Snd_1UP_SK_FM1
+	smpsJump            Snd_1UP_FM1
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG1 Data
-Snd_1UP_SK_PSG1:
+Snd_1UP_PSG1:
 	smpsPSGvoice        sTone_0A
 	dc.b	nA3, $30, nB3, nCs4, $30
 	smpsStop
 
 ; PSG2 Data
-Snd_1UP_SK_PSG2:
+Snd_1UP_PSG2:
 	smpsPSGvoice        sTone_0A
 	dc.b	nE3, $30, nAb3, nA3, $30
 	smpsStop
 
 ; PSG3 Data
-Snd_1UP_SK_PSG3:
+Snd_1UP_PSG3:
 	smpsPSGvoice        sTone_0A
 	dc.b	nCs3, $30, nE3, nE3, $30
 	smpsStop
 
 ; DAC Data
-Snd_1UP_SK_DAC:
+Snd_1UP_DAC:
 	dc.b	dCrashCymbal, $0C, nRst, $06, dKickS3, dMuffledSnare, $03, dMuffledSnare, dMuffledSnare, dMuffledSnare, dMuffledSnare, $0C
 	dc.b	dCrashCymbal, $0C, dMuffledSnare, $06, dMuffledSnare, dMuffledSnare, $03, dMuffledSnare, dMuffledSnare, dMuffledSnare, dMuffledSnare, $0C
 	dc.b	dHiTimpaniS3, $0C, dLowTimpaniS3, dHiTimpaniS3, dLowTimpaniS3, dHiTimpaniS3, $30
 	smpsFade
 	smpsStop
 
-Snd_1UP_SK_Voices:
+Snd_1UP_Voices:
 ;	Voice $00
 ;	$3B
 ;	$0D, $01, $00, $00, 	$9F, $1F, $1F, $1F, 	$0E, $0D, $09, $09

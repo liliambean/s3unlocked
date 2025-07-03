@@ -14,6 +14,12 @@ Snd_LRZ2_Header:
 	smpsHeaderPSG       Snd_LRZ2_PSG2,	$F4, $03, $00, sTone_0C
 	smpsHeaderPSG       Snd_LRZ2_PSG3,	$00, $02, $00, sTone_0C
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+	smpsStop
+    endif
+
 ; DAC Data
 Snd_LRZ2_DAC:
 	dc.b	nRst, $18, nRst, $0C
@@ -178,6 +184,11 @@ Snd_LRZ2_Jump00:
 	dc.b	nRst, $0C, dSnareS3, $06, nRst, $06
 	smpsJump            Snd_LRZ2_Jump00
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM1 Data
 Snd_LRZ2_FM1:
 	smpsPan             panRight, $00
@@ -207,6 +218,11 @@ Snd_LRZ2_Jump05:
 	dc.b	smpsNoAttack, $0C, nA4, $0C, smpsNoAttack, $18, nC5, $18, nB4, $18, smpsNoAttack, $18
 	dc.b	smpsNoAttack, $18, smpsNoAttack, $18
 	smpsJump            Snd_LRZ2_Jump05
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM2 Data
 Snd_LRZ2_FM2:
@@ -257,6 +273,11 @@ Snd_LRZ2_Jump04:
 	smpsFMAlterVol      $04
 	smpsJump            Snd_LRZ2_Jump04
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM3 Data
 Snd_LRZ2_FM3:
 	dc.b	nRst, $07
@@ -265,6 +286,11 @@ Snd_LRZ2_FM3:
 	smpsAlterNote       $01
 	smpsModSet          $0F, $01, $06, $06
 	smpsJump            Snd_LRZ2_Jump03
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM4 Data
 Snd_LRZ2_FM4:
@@ -337,6 +363,11 @@ Snd_LRZ2_Jump02:
 	dc.b	nG3, $06, nD3, $06, nA3, $06, nE3, $06, nG3, $06, nE3, $06
 	dc.b	nD3, $06, nE3, $06
 	smpsJump            Snd_LRZ2_Jump02
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM5 Data
 Snd_LRZ2_FM5:
@@ -429,6 +460,11 @@ Snd_LRZ2_Jump01:
 	dc.b	nD4, $04, nRst, $02, nG4, $04, nRst, $08, nE4, $04, nRst, $08
 	smpsJump            Snd_LRZ2_Jump01
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG1 Data
 Snd_LRZ2_PSG1:
 	smpsPSGvoice        sTone_0A
@@ -510,6 +546,11 @@ Snd_LRZ2_Jump08:
 	dc.b	nE4, $04, nRst, $08
 	smpsJump            Snd_LRZ2_Jump08
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG2 Data
 Snd_LRZ2_PSG2:
 	smpsPSGvoice        sTone_08
@@ -571,6 +612,11 @@ Snd_LRZ2_Jump07:
 	dc.b	nRst, $18, nRst, $18
 	smpsJump            Snd_LRZ2_Jump07
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG3 Data
 Snd_LRZ2_PSG3:
 	smpsPSGvoice        sTone_02
@@ -618,3 +664,7 @@ Snd_LRZ2_Jump06:
 	dc.b	nMaxPSG1, $0C
 	smpsJump            Snd_LRZ2_Jump06
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif

@@ -1,30 +1,30 @@
-Snd_Invic_SK_Header:
+Snd_Invic_Header:
 	smpsHeaderStartSong 3
-	smpsHeaderVoice     Snd_Invic_SK_Voices
+	smpsHeaderVoice     Snd_Invic_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $70
 
-	smpsHeaderDAC       Snd_Invic_SK_DAC
-	smpsHeaderFM        Snd_Invic_SK_FM1,	$00, $15
-	smpsHeaderFM        Snd_Invic_SK_FM2,	$00, $0A
-	smpsHeaderFM        Snd_Invic_SK_FM3,	$00, $1F
-	smpsHeaderFM        Snd_Invic_SK_FM4,	$00, $13
-	smpsHeaderFM        Snd_Invic_SK_FM5,	$00, $13
-	smpsHeaderPSG       Snd_Invic_SK_PSG1,	$00, $05, $00, $00
-	smpsHeaderPSG       Snd_Invic_SK_PSG2,	$00, $05, $00, $00
-	smpsHeaderPSG       Snd_Invic_SK_PSG3,	$E8, $01, $00, $00
+	smpsHeaderDAC       Snd_Invic_DAC
+	smpsHeaderFM        Snd_Invic_FM1,	$00, $15
+	smpsHeaderFM        Snd_Invic_FM2,	$00, $0A
+	smpsHeaderFM        Snd_Invic_FM3,	$00, $1F
+	smpsHeaderFM        Snd_Invic_FM4,	$00, $13
+	smpsHeaderFM        Snd_Invic_FM5,	$00, $13
+	smpsHeaderPSG       Snd_Invic_PSG1,	$00, $05, $00, $00
+	smpsHeaderPSG       Snd_Invic_PSG2,	$00, $05, $00, $00
+	smpsHeaderPSG       Snd_Invic_PSG3,	$E8, $01, $00, $00
 
 ; FM1 Data
-Snd_Invic_SK_FM1:
+Snd_Invic_FM1:
 	smpsModSet          $14, $01, $06, $06
 	smpsAlterNote       $FE
 	smpsPan             panCenter, $00
 
-Snd_Invic_SK_Jump03:
+Snd_Invic_Jump03:
 	smpsSetvoice        $00
 	dc.b	nRst, $18
 
-Snd_Invic_SK_Jump05:
+Snd_Invic_Jump05:
 	dc.b	nA4, $0C, nFs4, $06, nE4, nA4, nFs4, nD4, nE4, smpsNoAttack, nE4, $12
 	dc.b	nD5, $0C
 	smpsNoteFill        $05
@@ -32,37 +32,52 @@ Snd_Invic_SK_Jump05:
 	smpsNoteFill        $00
 	dc.b	nCs5, $0C, nA4, $06, nE4, nFs4, $02, nRst, $04, nA4, $0C, nB4
 	dc.b	$06, smpsNoAttack, nB4, $24, nRst, $0C
-	smpsJump            Snd_Invic_SK_Jump05
+	smpsJump            Snd_Invic_Jump05
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM2 Data
-Snd_Invic_SK_FM2:
+Snd_Invic_FM2:
 	dc.b	nRst, $18
 	smpsSetvoice        $01
 
-Snd_Invic_SK_Jump04:
+Snd_Invic_Jump04:
 	dc.b	nA1, $03, nA1, nRst, nA1, nRst, nA1, nA1, smpsNoAttack, nA1, nFs1, $06
 	dc.b	nFs1, smpsNoAttack, nFs1, nE1, nE1, $03, nE1, nRst, nE1, nRst, nE1, nD1
 	dc.b	smpsNoAttack, nD1, nRst, nD1, nRst, nD2, smpsNoAttack, nD2, nD1, nD1, nD1, nA1
 	dc.b	nA1, nRst, nA1, nRst, nA1, nA1, smpsNoAttack, nA1, nFs1, $06, nFs1, smpsNoAttack
 	dc.b	nFs1, nG1, nG1, $03, nG1, nRst, nG1, nRst, nG1, nE1, smpsNoAttack, nE1
 	dc.b	nRst, nE1, nRst, nE2, smpsNoAttack, nE2, nE1, nE1, nE1
-	smpsJump            Snd_Invic_SK_Jump04
+	smpsJump            Snd_Invic_Jump04
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM3 Data
-Snd_Invic_SK_FM3:
+Snd_Invic_FM3:
 	dc.b	nRst, $0B
 	smpsAlterNote       $02
 	smpsModSet          $14, $01, $05, $06
 	smpsPan             panLeft, $00
-	smpsJump            Snd_Invic_SK_Jump03
+	smpsJump            Snd_Invic_Jump03
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM4 Data
-Snd_Invic_SK_FM4:
+Snd_Invic_FM4:
 	smpsPan             panRight, $00
 	smpsSetvoice        $02
 	dc.b	nRst, $18
 
-Snd_Invic_SK_Jump02:
+Snd_Invic_Jump02:
 	smpsNoteFill        $05
 	dc.b	nRst, $0C, nA5, $12, nA5, nRst, $0C, nB5, $12
 	smpsNoteFill        $00
@@ -71,15 +86,20 @@ Snd_Invic_SK_Jump02:
 	dc.b	nRst, $0C, nA5, $12, nA5, nG5, $06
 	smpsNoteFill        $00
 	dc.b	nG5, $0C, nE5, $18, nRst, $06
-	smpsJump            Snd_Invic_SK_Jump02
+	smpsJump            Snd_Invic_Jump02
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM5 Data
-Snd_Invic_SK_FM5:
+Snd_Invic_FM5:
 	smpsPan             panLeft, $00
 	smpsSetvoice        $02
 	dc.b	nRst, $18
 
-Snd_Invic_SK_Jump01:
+Snd_Invic_Jump01:
 	smpsNoteFill        $05
 	dc.b	nRst, $0C, nE5, $12, nE5, nRst, $0C, nE5, $12
 	smpsNoteFill        $00
@@ -88,56 +108,81 @@ Snd_Invic_SK_Jump01:
 	dc.b	nRst, $0C, nE5, $12, nE5, nD5, $06
 	smpsNoteFill        $00
 	dc.b	nD5, $0C, nB4, $18, nRst, $06
-	smpsJump            Snd_Invic_SK_Jump01
+	smpsJump            Snd_Invic_Jump01
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG1 Data
-Snd_Invic_SK_PSG1:
+Snd_Invic_PSG1:
 	dc.b	nRst, $18
 	smpsPSGvoice        sTone_0A
 
-Snd_Invic_SK_Jump07:
+Snd_Invic_Jump07:
 	dc.b	nE4, $06, nB3, nE4, nB3, nE4, nB3, nE4, nB3, nD4, nB3, nE4
 	dc.b	nB3, nE4, nB3, nE4, nB3, nE4, $06, nB3, nE4, nB3, nE4, nB3
 	dc.b	nE4, nB3, nD4, nB3, nD4, nB3, nD5, nB4, nD5, nB4, nE4, $06
 	dc.b	nB3, nE4, nB3, nE4, nB3, nE4, nB3, nD4, nB3, nE4, nB3, nE4
 	dc.b	nB3, nE4, nB3, nE4, $06, nB3, nE4, nB3, nE4, nB3, nE4, nB3
 	dc.b	nE3, nG3, nFs3, nA3, nAb3, nB3, nB3, nD4
-	smpsJump            Snd_Invic_SK_Jump07
+	smpsJump            Snd_Invic_Jump07
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG2 Data
-Snd_Invic_SK_PSG2:
+Snd_Invic_PSG2:
 	dc.b	nRst, $18
 	smpsPSGvoice        sTone_0A
 	dc.b	nRst, $03
 
-Snd_Invic_SK_Jump06:
+Snd_Invic_Jump06:
 	dc.b	nCs4, $06, nA3, nCs4, nA3, nCs4, nA3, nCs4, nA3, nCs4, nA3, nCs4
 	dc.b	nA3, nCs4, nA3, nCs4, nA3, nCs4, $06, nA3, nCs4, nA3, nCs4, nA3
 	dc.b	nCs4, nA3, nCs4, nA3, nCs4, nA3, nCs5, nA4, nCs5, nA4, nCs4, $06
 	dc.b	nA3, nCs4, nA3, nCs4, nA3, nCs4, nA3, nCs4, nA3, nCs4, nA3, nCs4
 	dc.b	nA3, nCs4, nA3, nCs4, $06, nA3, nCs4, nA3, nCs4, nA3, nCs4, nA3
 	dc.b	nFs3, nA3, nG3, nB3, nA3, nCs4, nCs4, nE4
-	smpsJump            Snd_Invic_SK_Jump06
+	smpsJump            Snd_Invic_Jump06
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG3 Data
-Snd_Invic_SK_PSG3:
+Snd_Invic_PSG3:
 	smpsPSGvoice        sTone_0A
 	smpsModSet          $14, $01, $02, $06
 	dc.b	nRst, $18
-	smpsJump            Snd_Invic_SK_Jump05
+	smpsJump            Snd_Invic_Jump05
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; DAC Data
-Snd_Invic_SK_DAC:
+Snd_Invic_DAC:
 	dc.b	dSnareS3, $06, dSnareS3, dSnareS3, $03, dSnareS3, dSnareS3, dSnareS3
 
-Snd_Invic_SK_Jump00:
+Snd_Invic_Jump00:
 	dc.b	dCrashCymbal, $0C, dSnareS3, dKickS3, $06, dKickS3, dSnareS3, nRst, dKickS3, $0C, dSnareS3, $09
 	dc.b	$03, dKickS3, $06, dKickS3, dSnareS3, nRst, dKickS3, $0C, dSnareS3, dKickS3, $06, dKickS3
 	dc.b	dSnareS3, nRst, dKickS3, $0C, dSnareS3, $09, $03, dKickS3, $06, dKickS3, dSnareS3, $03
 	dc.b	nRst, dSnareS3, dSnareS3
-	smpsJump            Snd_Invic_SK_Jump00
+	smpsJump            Snd_Invic_Jump00
 
-Snd_Invic_SK_Voices:
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
+Snd_Invic_Voices:
 ;	Voice $00
 ;	$3D
 ;	$61, $02, $12, $52, 	$1F, $18, $18, $1B, 	$04, $02, $01, $02

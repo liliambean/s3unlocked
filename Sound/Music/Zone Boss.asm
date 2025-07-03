@@ -47,6 +47,11 @@ Snd_Boss_Loop08:
 	dc.b	nE5, $3C
 	smpsJump            Snd_Boss_FM1
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM2 Data
 Snd_Boss_FM2:
 	smpsSetvoice        $01
@@ -70,6 +75,11 @@ Snd_Boss_Loop07:
 	dc.b	nD4, nE2, nE3, nE3, nE2, nE3, nE3, nD3, nE3, nA3, nB3, nD3
 	dc.b	nE3, nA2, nB2, nE2, $18
 	smpsJump            Snd_Boss_FM2
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM3 Data
 Snd_Boss_FM3:
@@ -97,6 +107,11 @@ Snd_Boss_Loop05:
 	smpsLoop            $00, $02, Snd_Boss_Loop05
 	smpsJump            Snd_Boss_FM3
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; FM4 Data
 Snd_Boss_FM4:
 	smpsSetvoice        $03
@@ -122,6 +137,11 @@ Snd_Boss_Loop03:
 	dc.b	nE3, $30, nG3, nFs3, nA3, nE3, nG3, nB3, $18, nG3, nE3, nB2
 	smpsLoop            $00, $02, Snd_Boss_Loop03
 	smpsJump            Snd_Boss_FM4
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; FM5 Data
 Snd_Boss_FM5:
@@ -159,6 +179,11 @@ Snd_Boss_Loop01:
 	dc.b	nE5, $3C
 	smpsJump            Snd_Boss_Jump00
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; DAC Data
 Snd_Boss_DAC:
 	dc.b	dSnareS3, $0C, dKickS3, dKickS3, dSnareS3, dKickS3, dKickS3, dSnareS3, dKickS3, dSnareS3, dKickS3, $24
@@ -170,6 +195,11 @@ Snd_Boss_Loop00:
 	smpsLoop            $00, $0F, Snd_Boss_Loop00
 	dc.b	dKickS3, $0C, dSnareS3, dSnareS3, dSnareS3, $06, dSnareS3, dKickS3, $0C, dSnareS3, dSnareS3, dSnareS3
 	smpsJump            Snd_Boss_DAC
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG1 Data
 Snd_Boss_PSG1:
@@ -184,9 +214,19 @@ Snd_Boss_PSG1:
 	dc.b	nC5, $06, nRst, nD5, nRst, nG5, $3C
 	smpsJump            Snd_Boss_PSG1
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 ; PSG2 Data
 Snd_Boss_PSG2:
 	smpsStop
+
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
 
 ; PSG3 Data
 Snd_Boss_PSG3:

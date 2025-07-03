@@ -411,6 +411,11 @@ Snd_CNZ1_Loop01:
 	dc.b	dGlassCrashSnare, $60, dGlassCrash
 	smpsJump            Snd_CNZ1_DAC
 
+    if ~~FixMusicAndSFXDataBugs
+; Unreachable
+	smpsStop
+    endif
+
 Snd_CNZ1_Call02:
 	smpsSetvoice        $05
 	dc.b	nC5, $18
