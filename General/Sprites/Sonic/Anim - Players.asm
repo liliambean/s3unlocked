@@ -124,13 +124,13 @@ AniKnuckles:
 		dc.w Ani_PlayerTransform-AniKnuckles	; 16
 		dc.w Ani_PlayerDrown-AniKnuckles	; 17
 		dc.w Ani_PlayerDeath-AniKnuckles	; 18
-		dc.w Ani_KnucklesFall-AniKnuckles	; 19
+		dc.w Ani_KnucklesSlide-AniKnuckles	; 19
 		dc.w Ani_KnucklesHurt-AniKnuckles	; 1A
 		dc.w Ani_KnucklesFall-AniKnuckles	; 1B
 		dc.w Ani_PlayerBlank-AniKnuckles	; 1C
 		dc.w Ani_KnucklesGlideFall-AniKnuckles	; 1D
-		dc.w Ani_KnucklesGlideLand-AniKnuckles	; 1E
-		dc.w Ani_KnucklesGlideSlide-AniKnuckles	; 1F
+		dc.w Ani_KnucklesGlideCrouch-AniKnuckles; 1E
+		dc.w Ani_KnucklesGlideLand-AniKnuckles	; 1F
 Ani_PlayerWalk:		dc.b  $FF,   1,   2,   3,   4,   5,   6,   7,   8, $FF
 Ani_PlayerRun:		dc.b  $FF, $21, $22, $23, $24, $FF, $FF, $FF, $FF, $FF
 Ani_PlayerSpin:		dc.b  $FE, $E0, $E1, $E0, $E2, $E0, $E3, $E0, $E4, $FF
@@ -196,15 +196,15 @@ Ani_PlayerDrown:	dc.b  $20, $D5, $FF
 Ani_TailsDrown:
 Ani_PlayerDeath:	dc.b  $20, $D4, $FF
 Ani_PlayerSlide:	dc.b    9, $E5, $E6, $FF
-Ani_KnucklesSlide:
-Ani_KnucklesFall:	dc.b    9, $8B, $FF
+Ani_KnucklesFall:
+Ani_KnucklesSlide:	dc.b    9, $CD, $FF
 Ani_PlayerHurt:		dc.b  $40, $E8, $FF
 Ani_KnucklesHurt:	dc.b  $40, $CE, $FF
 Ani_PlayerFall:		dc.b    9, $E7, $E8, $FF
 Ani_PlayerBlank:	dc.b  $77,   0, $FF
 Ani_KnucklesGlideFall:	dc.b    7, $CA, $CB, $FE,   1
-Ani_KnucklesGlideLand:	dc.b   $F, $D9, $FD,   0
-Ani_KnucklesGlideSlide:	dc.b   $F, $CD, $FD,   0
+Ani_KnucklesGlideCrouch:dc.b   $F, $D9, $FD,   0
+Ani_KnucklesGlideLand:	dc.b   $F, $CC, $FD,   0
 Ani_TailsSwimTired:	dc.b   $B, $B9, $BA, $BB, $FF
 Ani_TailsSwimCarry:	dc.b    4, $BC, $BD, $FF
 Ani_TailsFlyBoost:	dc.b  $1F, $A8, $FF

@@ -138,7 +138,7 @@ PLC_Knuckles_:
 		dc.w PLC_Knuckles_Hang3-PLC_Knuckles_
 		dc.w PLC_Knuckles_Hang4-PLC_Knuckles_
 		dc.w PLC_Knuckles_360Hang1-PLC_Knuckles_
-		dc.w PLC_Knuckles_Fall-PLC_Knuckles_
+		dc.w PLC_Knuckles_360Hang2-PLC_Knuckles_
 		dc.w PLC_Knuckles_360Hang3-PLC_Knuckles_
 		dc.w PLC_Knuckles_360Hang4-PLC_Knuckles_
 		dc.w PLC_Knuckles_360Hang5-PLC_Knuckles_
@@ -201,10 +201,10 @@ PLC_Knuckles_:
 		dc.w PLC_Knuckles_Glide8-PLC_Knuckles_
 		dc.w PLC_Knuckles_Glide9-PLC_Knuckles_
 		dc.w PLC_Knuckles_GlideA-PLC_Knuckles_
-		dc.w PLC_Knuckles_GlideB-PLC_Knuckles_
-		dc.w PLC_Knuckles_GlideC-PLC_Knuckles_
-		dc.w PLC_Knuckles_GlideD-PLC_Knuckles_
-		dc.w PLC_Knuckles_GlideE-PLC_Knuckles_
+		dc.w PLC_Knuckles_GlideFall1-PLC_Knuckles_
+		dc.w PLC_Knuckles_GlideFall2-PLC_Knuckles_
+		dc.w PLC_Knuckles_GlideLand2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Slide-PLC_Knuckles_
 		dc.w PLC_Knuckles_Hurt-PLC_Knuckles_
 		dc.w PLC_Knuckles_Bubble-PLC_Knuckles_
 		dc.w PLC_Knuckles_Push1-PLC_Knuckles_
@@ -252,6 +252,7 @@ PLC_Knuckles_:
 		dc.w PLC_Knuckles_BalanceA-PLC_Knuckles_
 		dc.w PLC_Knuckles_BalanceB-PLC_Knuckles_
 		dc.w PLC_Knuckles_BalanceC-PLC_Knuckles_
+		dc.w PLC_Knuckles_GlideLand1-PLC_Knuckles_
 PLC_Knuckles_Blank:
 		dc.w 0
 PLC_Knuckles_Walk1:
@@ -865,6 +866,7 @@ PLC_Knuckles_Hang1:
 		dc.w $5972
 		dc.w $1978
 PLC_Knuckles_Hang2:
+PLC_Knuckles_360Hang2:
 		dc.w 2
 		dc.w $B97A
 		dc.w $5986
@@ -884,11 +886,6 @@ PLC_Knuckles_360Hang1:
 		dc.w $29A5
 		dc.w $79A8
 		dc.w $59B0
-PLC_Knuckles_Fall:
-		dc.w 3
-		dc.w $B9B6
-		dc.w $59C2
-		dc.w $19C8
 PLC_Knuckles_360Hang3:
 		dc.w 3
 		dc.w $F9CA
@@ -1162,29 +1159,28 @@ PLC_Knuckles_Glide9:
 PLC_Knuckles_Glide8:
 		dc.w 1
 		dc.w $BCDB
-PLC_Knuckles_GlideB:
+PLC_Knuckles_GlideFall1:
 		dc.w 4
 		dc.w $7CE7
 		dc.w $7CEF
 		dc.w $3CF7
 		dc.w $2CFB
-PLC_Knuckles_GlideC:
+PLC_Knuckles_GlideFall2:
 		dc.w 4
 		dc.w $BCFE
 		dc.w $0D0A
 		dc.w $3D0B
 		dc.w $3D0F
-PLC_Knuckles_GlideD:
-		dc.w 4
-		dc.w $1D13
-		dc.w $3D15
-		dc.w $3D19
-		dc.w $2D1D
-PLC_Knuckles_GlideE:
+PLC_Knuckles_GlideLand2:
 		dc.w 3
 		dc.w $2D20
 		dc.w $BD23
 		dc.w $1D2F
+PLC_Knuckles_Slide:
+		dc.w 3
+		dc.w $B9B6
+		dc.w $59C2
+		dc.w $19C8
 PLC_Knuckles_Hurt:
 		dc.w 4
 		dc.w $80F8
@@ -1432,3 +1428,9 @@ PLC_Knuckles_BalanceC:
 		dc.w $00A1
 		dc.w $30A2
 		dc.w $10A6
+PLC_Knuckles_GlideLand1:
+		dc.w 4
+		dc.w $1D13
+		dc.w $3D15
+		dc.w $3D19
+		dc.w $2D1D
