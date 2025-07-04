@@ -1,4 +1,5 @@
 Map_GameOver_:
+		dc.w 0
 		dc.w word_2EDD8-Map_GameOver_
 		dc.w word_2EDE6-Map_GameOver_
 		dc.w word_2EDF4-Map_GameOver_
