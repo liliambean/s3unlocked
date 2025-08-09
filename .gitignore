@@ -5,3 +5,11 @@ sonic3k.[ph]
 s3unlocked.bin
 s3unlocked.prev.bin
 sonic3k.lst
+
+# Automatically-generated (D)PCM data.
+Sound/DAC/generated/*.inc
+Sound/DAC/generated/*.dpcm
+Sound/DAC/generated/hashes.lua
+Sound/PCM/generated/*.inc
+Sound/PCM/generated/*.pcm
+Sound/PCM/generated/hashes.lua

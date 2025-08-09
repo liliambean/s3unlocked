@@ -190,10 +190,12 @@ plreq macro toVRAMaddr,fromROMaddr
     endm
 
 ; macro for a debug object list header
-; must be on the same line as a label that has a corresponding _End label later
-dbglistheader macro {INTLABEL}
+; must be on the same line as a label
+dbglistinclude macro {INTLABEL},path
 __LABEL__ label *
 	dc.w ((__LABEL___End - __LABEL__ - 2) / $A)
+	include path
+__LABEL___End:
     endm
 
 ; macro to define debug list object data
@@ -254,4 +256,64 @@ palscriptloop	macro header
 ; macro to run the custom script routine
 palscriptrun	macro header
 	dc.w -$C
+    endm
+
+; Function to turn a sample rate into a djnz loop counter
+pcmLoopCounterBase function sampleRate,baseCycles, 1+(Z80_Clock/(sampleRate)-(baseCycles)+(13/2))/13
+pcmLoopCounter function sampleRate, pcmLoopCounterBase(sampleRate,105) ; 105 is the number of cycles zPlaySEGAPCM takes to deliver one sample.
+dpcmLoopCounter function sampleRate, pcmLoopCounterBase(sampleRate,303/2) ; 303 is the number of cycles zPlayDigitalAudio takes to deliver two samples.
+
+little_endian function x,(x)<<8&$FF00|(x)>>8&$FF
+
+; Function to make a little endian (z80) pointer
+k68z80Pointer function addr,little_endian((addr#$8000)+$8000)
+
+startBank macro {INTLABEL}
+soundBankDecl := *
+	align	$8000
+__LABEL__ label *
+soundBankStart := __LABEL__
+soundBankPadding := soundBankStart - soundBankDecl
+soundBankName := "__LABEL__"
+    endm
+
+DebugSoundbanks = 1
+
+finishBank macro
+	if * > soundBankStart + $8000
+		fatal "soundBank \{soundBankName} must fit in $8000 bytes but was $\{*-soundBankStart}. Try moving something to the other bank."
+	elseif (DebugSoundbanks<>0)&&(MOMPASS=1)
+		message "soundBank \{soundBankName} has $\{$8000+soundBankStart-*} bytes free at end, needed $\{soundBankPadding} bytes padding at start."
+	endif
+    endm
+
+; macro to declare an entry in an offset table rooted at a bank
+offsetBankTableEntry macro ptr
+	dc.ATTRIBUTE k68z80Pointer(ptr)
+    endm
+
+; Function magic for boolean arithmetic, because 'if' statements suffer from those annoying 'must be evaluable on first pass' errors.
+zero_if_false function boolean,value,value&(0-boolean)
+zero_if_true function boolean,value,zero_if_false(~~boolean,value)
+ternary function boolean,trueValue,falseValue,zero_if_false(boolean,trueValue)|zero_if_true(boolean,falseValue)
+
+get_z80_bank function value,value-(value#$8000)
+is_in_this_z80_bank function value,get_z80_bank(value)==get_z80_bank(*)
+
+; Setup macro for DAC samples.
+DAC_Setup macro dacptr,sampleRateScale
+    if "sampleRateScale"==""
+	DAC_Setup dacptr,1.0
+    else
+	dc.b	dpcmLoopCounter(int(dacptr.sample_rate*sampleRateScale))
+	; Your eyes are not deceiving you; DAC metadata does some truly bizarre things.
+	; Basically, in Sonic 3, if the DAC sample is not in the same bank as this metadata,
+	; then the metadata will have blank pointers. An exception to this is when this is
+	; not the first metadata in the bank to reference the DAC sample, in which case it
+	; will point to the previous metadata instead. It makes absolutely no sense, but it
+	; must be recreated in order to produce a bit-perfect ROM.
+	dc.w	zero_if_false((SonicDriverVer <> 3) || is_in_this_z80_bank(dacptr), little_endian(dacptr.size))
+	dc.w	ternary((SonicDriverVer <> 3) || is_in_this_z80_bank(dacptr), k68z80Pointer(dacptr), zero_if_false(is_in_this_z80_bank(dacptr.last_reference), k68z80Pointer(dacptr.last_reference)))
+dacptr.last_reference := *-2
+    endif
     endm

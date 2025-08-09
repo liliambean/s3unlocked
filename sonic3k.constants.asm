@@ -740,6 +740,8 @@ Target_palette_line_4 =		Target_palette+$60	; $20 bytes
 Stack_contents			ds.b $100		; stack contents
 System_stack =			*			; this is the top of the stack, it grows downwards
 
+CrossResetRAM:	; RAM in this region will not be cleared after a soft reset.
+
 			ds.w 1				; unused
 Restart_level_flag		ds.w 1
 Level_frame_counter		ds.w 1			; the number of frames which have elapsed since the level started
@@ -948,6 +950,8 @@ P2_character			ds.b 1
 Encore_stocks_packed		ds.w 1		; Liliam: Encore mode
 Encore_available_chars		ds.b 1		; Liliam: Encore mode
 			ds.b 1				; unused
+
+CrossResetRAM_End =		*
 
 V_int_jump			ds.b 6			; contains an instruction to jump to the V-int handler
 V_int_addr :=			V_int_jump+2		; long
