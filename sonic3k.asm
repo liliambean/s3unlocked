@@ -135545,8 +135545,6 @@ loc_5EF3E:
 		bne.s	loc_5EF56
 		btst	#6,$38(a0)
 		bne.w	locret_5FF1A
-
-loc_5EF50:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -135562,7 +135560,7 @@ loc_5EF5C:
 Obj_Ending_CutsceneSkip:					; Liliam: cutscene skip - ending part 5
 		movea.w	$44(a0),a1
 		btst	#7,status(a1)
-		beq.s	loc_5EF50
+		beq.s	.checkScroll
 		bset	#3,(_unkFAB8).w
 		move.w	#8,(_unkFA86).w
 		stopZ80
@@ -135575,6 +135573,21 @@ Obj_Ending_CutsceneSkip:					; Liliam: cutscene skip - ending part 5
 		move.l	#Obj_Ending_CutsceneSkip_Wait,(a1)
 		move.l	d2,$34(a1)
 		bra.w	Ending_LoadEyecatchArt
+; ---------------------------------------------------------------------------
+
+	.checkScroll:
+		move.w	$2E(a0),d1
+		beq.s	.draw
+		subi.w	#60*8,d1
+		bmi.s	.draw
+		addi.w	#$19C,d1
+		move.w	d1,x_pos(a0)
+
+	.wait:
+		subq.w	#8,$2E(a0)
+
+	.draw:
+		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
 Obj_Ending_CutsceneSkip_Wait:					; Liliam: cutscene skip - ending part 5
@@ -135667,7 +135680,7 @@ off_5EFB6:
 loc_5F05C:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F070
-		move.l	#loc_5F20A,(a1)
+		move.l	#Obj_EndingS3KLogo,(a1)
 		move.b	#4,subtype(a1)
 
 locret_5F070:
@@ -135685,12 +135698,12 @@ locret_5F070:
 loc_5F0A6:
 		jsr	(AllocateObject).l
 		bne.s	loc_5F0B4
-		move.l	#loc_5F480,(a1)
+		move.l	#Obj_KnuxEndPose,(a1)
 
 loc_5F0B4:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F0C2
-		move.l	#loc_5F20A,(a1)
+		move.l	#Obj_EndingS3KLogo,(a1)
 
 locret_5F0C2:
 		rts
@@ -135699,7 +135712,7 @@ locret_5F0C2:
 loc_5F0C4:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F0D8
-		move.l	#loc_5F20A,(a1)
+		move.l	#Obj_EndingS3KLogo,(a1)
 		move.b	#8,subtype(a1)
 
 locret_5F0D8:
@@ -135715,12 +135728,12 @@ loc_5F0DA:
 loc_5F0E2:
 		jsr	(AllocateObject).l
 		bne.s	loc_5F0F0
-		move.l	#loc_5F566,(a1)
+		move.l	#Obj_EndingEyecatch_Eggman,(a1)
 
 loc_5F0F0:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F104
-		move.l	#loc_5F8C6,(a1)
+		move.l	#Obj_EndingEyecatch_MasterEmerald,(a1)
 		move.b	#4,subtype(a1)
 
 locret_5F104:
@@ -135730,7 +135743,7 @@ locret_5F104:
 loc_5F106:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F114
-		move.l	#loc_5F5C2,(a1)
+		move.l	#Obj_EndingEyecatch_EggRobo,(a1)
 
 locret_5F114:
 		rts
@@ -135739,7 +135752,7 @@ locret_5F114:
 loc_5F116:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F124
-		move.l	#loc_5FD5A,(a1)
+		move.l	#Obj_EndingEyecatch_S3Sprites,(a1)
 
 locret_5F124:
 		rts
@@ -135748,12 +135761,12 @@ locret_5F124:
 loc_5F126:
 		jsr	(AllocateObject).l
 		bne.s	loc_5F134
-		move.l	#loc_5F71E,(a1)
+		move.l	#Obj_EndingEyecatch_MechaSonic,(a1)
 
 loc_5F134:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F142
-		move.l	#loc_5F8C6,(a1)
+		move.l	#Obj_EndingEyecatch_MasterEmerald,(a1)
 
 locret_5F142:
 		rts
@@ -135813,7 +135826,7 @@ loc_5F204:
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_5F20A:
+Obj_EndingS3KLogo:
 		lea	ObjDat3_60124(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		move.l	#loc_5F1F6,(a0)
@@ -135910,7 +135923,8 @@ loc_5F2F8:
 loc_5F314:
 		move.b	(Demo_mode_flag).w,(Game_mode).w	; Liliam: ending - allow start from save screen
 ;		move.b	#0,(Game_mode).w			;
-		rts
+;		rts						; Liliam: bugfix - sprite draw bug
+		jmp	(Draw_Sprite).l				;
 ; ---------------------------------------------------------------------------
 
 loc_5F31C:
@@ -136042,7 +136056,7 @@ loc_5F46A:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_5F480:
+Obj_KnuxEndPose:
 		move.l	#loc_5F4E4,(a0)
 		move.l	#Map_EndingPoses,mappings(a0)		; Liliam: simplify ending pose selection
 ;		move.l	#Map_KnuxEndPose,mappings(a0)		;
@@ -136119,7 +136133,7 @@ byte_5F564:
 ;		dc.b    0, $48					;
 ; ---------------------------------------------------------------------------
 
-loc_5F566:
+Obj_EndingEyecatch_Eggman:
 		lea	ObjDat3_6018E(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		move.l	#loc_5F5B4,(a0)
@@ -136146,7 +136160,7 @@ loc_5F5B4:
 		bra.w	loc_5F2F8
 ; ---------------------------------------------------------------------------
 
-loc_5F5C2:
+Obj_EndingEyecatch_EggRobo:
 		moveq	#0,d0
 		move.b	routine(a0),d0
 		move.w	off_5F5D6(pc,d0.w),d1
@@ -136198,7 +136212,8 @@ loc_5F654:
 		move.w	#$1F,$2E(a0)
 
 locret_5F668:
-		rts
+		bra.w	EndingEyecatch_CutsceneSkip		; Liliam: cutscene skip - ending eyecatch
+;		rts						;
 ; ---------------------------------------------------------------------------
 
 loc_5F66A:
@@ -136209,13 +136224,15 @@ loc_5F66A:
 		move.w	#$4AF,$2E(a0)
 
 locret_5F680:
-		rts
+		bra.w	EndingEyecatch_CutsceneSkip		; Liliam: cutscene skip - ending eyecatch
+;		rts						;
 ; ---------------------------------------------------------------------------
 
 loc_5F682:
 		lea	AniRaw_602C2(pc),a1
 		jsr	(Animate_RawNoSST).l
-		bra.w	loc_5F2F8
+		bra.w	loc_5F8A8				; Liliam: bugfix - sprite draw bug
+;		bra.w	loc_5F2F8				;
 ; ---------------------------------------------------------------------------
 
 loc_5F690:
@@ -136268,11 +136285,12 @@ loc_5F712:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_5F71E:
+Obj_EndingEyecatch_MechaSonic:
 		moveq	#0,d0
 		move.b	routine(a0),d0
 		move.w	off_5F73E(pc,d0.w),d1
 		jsr	off_5F73E(pc,d1.w)
+		bsr.w	EndingEyecatch_CutsceneSkip
 		lea	(DPLCPtr_MechaSonic).l,a2
 		jsr	(Perform_DPLC).l
 		jmp	(Draw_Sprite).l
@@ -136406,7 +136424,15 @@ locret_5F8C4:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_5F8C6:
+EndingEyecatch_CutsceneSkip:					; Liliam: cutscene skip - ending eyecatch
+		btst	#button_start,(Ctrl_1_held).w
+		bne.s	loc_5F8BE
+		btst	#button_start,(Ctrl_2_held).w
+		bne.s	loc_5F8BE
+		rts
+; ---------------------------------------------------------------------------
+
+Obj_EndingEyecatch_MasterEmerald:
 		lea	ObjDat3_60182(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		bclr	#2,render_flags(a0)
@@ -136843,7 +136869,7 @@ off_5FD52:
 		dc.l PalCycle_HyperSonic
 ; ---------------------------------------------------------------------------
 
-loc_5FD5A:
+Obj_EndingEyecatch_S3Sprites:
 		move.l	#loc_5FD66,(a0)
 		move.w	#32-1,$2E(a0)
 
