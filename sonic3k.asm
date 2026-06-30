@@ -138953,8 +138953,13 @@ loc_61F2A:
 loc_61F44:
 		st	(AIZ_skip_intro_flag).w			; Liliam: cutscene skip - AIZ intro
 		move.b	#1,(Update_HUD_timer).w			;
-;		move.b	#$91,(Level_started_flag).w		;
+		cmpi.b	#8,(Game_mode).w			;
+		bne.s	loc_61F50				;
+		move.b	#$91,(Level_started_flag).w
+		move.b	#$81,(Update_HUD_timer).w		;
 ;		move.b	#$80,(Update_HUD_timer).w		;
+
+loc_61F50:
 		clr.l	(Timer).w
 ;		move.b	#1,(Update_HUD_life_count).w		; Liliam: title cards - don't reload PLCs if suppressed
 
