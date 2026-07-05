@@ -560,7 +560,7 @@ Competition_menu_zone		ds.b 1			; competition mode zone id. This is different fr
 Dataselect_entry		ds.b 1			; the selected save entry in data select menu. This includes no save and delete options, too
 Dataselect_nosave_player	ds.w 1			; Player mode for NO SAVE option in data select menu
 Competition_menu_items		ds.b 1			; 0 = Enabled, FF = Disabled
-			ds.b 1				; unused
+Dataselect_encore_entry		ds.b 1		; Liliam: Encore mode - save data
 Demo_start_button		ds.b 1			; keeps track of whether controller 1 has pressed the start button. May be used by the demo data itself
 			ds.b 1				; unused
 Demo_data_addr			ds.l 1			; keeps getting incremented as the demo progresses

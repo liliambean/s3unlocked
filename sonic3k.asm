@@ -17144,12 +17144,31 @@ Obj_SaveScreen_Selector:
 		moveq	#0,d2
 		move.b	(Dataselect_entry).w,d2
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - save data
+		bne.s	.encoreMode					;
+		tst.b	(Dataselect_encore_entry).w			;
 		beq.s	loc_D1C2					;
-		cmpi.b	#SRAM_encore_num_slots,d2			;
+		move.b	(Dataselect_encore_entry).w,d2			;
+		clr.b	(Dataselect_encore_entry).w			;
+		cmpi.b	#2,d2						;
+		bls.s	.apply						;
+		addq.b	#SRAM_num_slots-SRAM_encore_num_slots,d2	;
+		bra.s	.apply						;
+; ---------------------------------------------------------------------------
+
+	.encoreMode:
+		tst.b	(Dataselect_encore_entry).w			; Liliam: Encore mode - save data
+		bne.s	loc_D1C2					;
+		cmpi.b	#2,d2						;
 		bls.s	loc_D1C2					;
-		cmpi.b	#(SRAM_num_slots+1),d2				;
-		sne	d2						;
-		addq.b	#SRAM_encore_num_slots+1,d2			;
+		subq.b	#SRAM_num_slots-SRAM_encore_num_slots,d2	;
+		cmpi.b	#2,d2						;
+		bge.s	.update						;
+		moveq	#2,d2						;
+
+	.update:
+		move.b	d2,(Dataselect_encore_entry).w			;
+
+	.apply:
 		move.b	d2,(Dataselect_entry).w				;
 
 loc_D1C2:
@@ -17167,10 +17186,10 @@ loc_D1C8:
 		addq.w	#8,d1
 		cmpi.w	#(SRAM_num_slots*$68)-$80,d1
 		bhi.s	loc_D1DA					; Liliam: Encore mode - save data
-		cmpi.w	#(SRAM_encore_num_slots*$68)-$80,d1		;
-		bls.s	loc_D1DE
 		tst.b	(Encore_mode).w					;
 		beq.s	loc_D1DE					;
+		cmpi.w	#(SRAM_encore_num_slots*$68)-$80,d1		;
+		bls.s	loc_D1DE
 
 loc_D1DA:
 		subq.w	#8,d1
@@ -17200,7 +17219,8 @@ loc_D212:
 		tst.w	(Events_bg+$10).w
 		bne.w	loc_D2CE
 		tst.w	$30(a0)
-		bne.s	loc_D28A
+		bne.w	loc_D28A					; Liliam: Encore mode - save data
+;		bne.s	loc_D28A					;
 		moveq	#0,d0
 		btst	#button_left,(Ctrl_1_pressed).w
 		beq.s	loc_D254
@@ -17247,6 +17267,9 @@ loc_D27A:
 		move.w	d0,$2E(a0)
 		beq.s	loc_D288
 		move.w	#$D,$30(a0)
+		tst.b	(Encore_mode).w					; Liliam: Encore mode - save data
+		beq.s	loc_D28A					;
+		move.b	(Dataselect_entry).w,(Dataselect_encore_entry).w;
 		bra.s	loc_D28A
 ; ---------------------------------------------------------------------------
 
@@ -18402,7 +18425,11 @@ SaveScreen_PickZoneID:
 
 loc_DA4E:
 		cmpi.w	#3,saveslot_player_mode(a0)
+		beq.s	loc_DA56				; Liliam: Metal Sonic - final boss
+		cmpi.w	#7,saveslot_player_mode(a0)		;
 		bne.s	loc_DA62
+
+loc_DA56:
 		cmpi.b	#$B,d0
 		bne.s	loc_DA62
 		move.w	#$A01,d0
