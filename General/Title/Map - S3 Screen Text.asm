@@ -69,13 +69,13 @@ Map_TitleScreenText_OptionUp5:
 		dc.b    0,  $C, $20, $38,   0, $40
 		dc.b  $10,  $C,   0, $3C,   0,   0
 		dc.b  $10,  $C,   0, $40,   0, $20
-		dc.b  $10,  $C,   0, $20,   0, $40
+		dc.b  $10,  $C,   0, $2C,   0, $40
 		dc.b    0,   4, $20, $50, $FF, $EC
 Map_TitleScreenText_OptionUp6_Hidden:
 		dc.w 7
 		dc.b    0,  $C, $20, $3C,   0,   0
 		dc.b    0,  $C, $20, $40,   0, $20
-		dc.b    0,  $C, $20, $20,   0, $40
+		dc.b    0,  $C, $20, $2C,   0, $40
 		dc.b  $10,  $C,   0,   0,   0,   0
 		dc.b  $10,  $C,   0,   4,   0, $20
 		dc.b  $10,  $C,   0,   8,   0, $40
@@ -84,7 +84,7 @@ Map_TitleScreenText_OptionUp6:
 		dc.w 7
 		dc.b    0,  $C, $20, $3C,   0,   0
 		dc.b    0,  $C, $20, $40,   0, $20
-		dc.b    0,  $C, $20, $20,   0, $40
+		dc.b    0,  $C, $20, $2C,   0, $40
 		dc.b  $10,  $C,   0, $44,   0,   0
 		dc.b  $10,  $C,   0, $48,   0, $20
 		dc.b  $10,  $C,   0, $4C,   0, $40
@@ -102,7 +102,7 @@ Map_TitleScreenText_OptionDown1_Hidden:
 		dc.w 7
 		dc.b    0,  $C,   0, $3C,   0,   0
 		dc.b    0,  $C,   0, $40,   0, $20
-		dc.b    0,  $C,   0, $20,   0, $40
+		dc.b    0,  $C,   0, $2C,   0, $40
 		dc.b  $10,  $C, $20,   0,   0,   0
 		dc.b  $10,  $C, $20,   4,   0, $20
 		dc.b  $10,  $C, $20,   8,   0, $40
@@ -159,13 +159,13 @@ Map_TitleScreenText_OptionDown6:
 		dc.b    0,  $C,   0, $38,   0, $40
 		dc.b  $10,  $C, $20, $3C,   0,   0
 		dc.b  $10,  $C, $20, $40,   0, $20
-		dc.b  $10,  $C, $20, $20,   0, $40
+		dc.b  $10,  $C, $20, $2C,   0, $40
 		dc.b  $10,   4, $20, $50, $FF, $EC
 Map_TitleScreenText_OptionDown7:
 		dc.w 7
 		dc.b    0,  $C,   0, $3C,   0,   0
 		dc.b    0,  $C,   0, $40,   0, $20
-		dc.b    0,  $C,   0, $20,   0, $40
+		dc.b    0,  $C,   0, $2C,   0, $40
 		dc.b  $10,  $C, $20, $44,   0,   0
 		dc.b  $10,  $C, $20, $48,   0, $20
 		dc.b  $10,  $C, $20, $4C,   0, $40

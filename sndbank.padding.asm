@@ -22,7 +22,7 @@ Obj_LevelSelect_Init:
 		move.w	#-1,(V_scroll_value).w
 		move.b	#4,routine(a0)
 		cmpi.b	#$1E,(Level_select_option+1).w
-		bcs.s	Obj_LevelSelect_Return
+		blo.s	Obj_LevelSelect_Return
 		move.w	#-$13*8,(H_scroll_buffer).w
 		move.w	#$90,x_pos(a0)
 		subq.b	#1,mapping_frame(a0)
@@ -43,7 +43,7 @@ Obj_LevelSelect_LeftPage:
 
 	.checkScroll:
 		cmpi.b	#$1E,(Level_select_option+1).w
-		bcs.s	Obj_LevelSelect_Return
+		blo.s	Obj_LevelSelect_Return
 		move.w	#$90,x_pos(a0)
 		move.b	#6,routine(a0)
 		subq.b	#1,mapping_frame(a0)
@@ -63,7 +63,7 @@ Obj_LevelSelect_RightPage:
 
 	.checkScroll:
 		cmpi.b	#$12,(Level_select_option+1).w
-		bcc.s	Obj_LevelSelect_Return
+		bhs.s	Obj_LevelSelect_Return
 		move.w	#$1B8,x_pos(a0)
 		move.b	#2,routine(a0)
 		addq.b	#1,mapping_frame(a0)
@@ -147,7 +147,7 @@ LevelSelectZoneIcon_LoadArt:
 		clr.b	(Special_stage_override_flag).w
 		move.b	#7,mapping_frame(a0)
 		cmpi.b	#$13,d1
-		bcc.s	LevelSelectZoneIcon_LoadArt_Extra
+		bhs.s	LevelSelectZoneIcon_LoadArt_Extra
 		mulu.w	#$46<<5,d1
 		ori.l	#RAM_start,d1
 		move.w	#tiles_to_bytes(ArtTile_LevelSelectBG-9*$46),d2
@@ -180,11 +180,7 @@ LevelSelectZoneIcon_LoadArt_Extra:
 
 LevelSelectZoneIcon_CheckButtons:
 		tst.b	anim(a0)
-	if DevMode
-		beq.s	LevelSelectZoneIcon_CheckButtons_EncorePalette
-	else
 		beq.s	LevelSelectZoneIcon_Draw
-	endif
 		lea	$14(a3),a3
 
 LevelSelectZoneIcon_CheckButtons_SpecialStage:
@@ -227,24 +223,6 @@ LevelSelectZoneIcon_Draw:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-LevelSelectZoneIcon_CheckButtons_EncorePalette:
-		jsr	(Encore_LoadFlags).l
-		bclr	#EncoreFlags_Palette,d2
-		btst	#button_A,(Ctrl_2_held).w
-		beq.s	.checkEncore
-		bset	#EncoreFlags_Palette,d2
-
-	.checkEncore:
-		tst.b	(Encore_mode).w
-		bne.s	.checkUpdate
-		rol.b	#2,d2
-
-	.checkUpdate:
-		cmp.b	(Encore_options).w,d2
-		beq.s	LevelSelectZoneIcon_Draw
-		move.b	d2,(Encore_options).w
-		jsr	(Draw_Sprite).l
-
 LevelSelectZoneIcon_LoadPalette:
 		jsr	(LevelSelect_GetActNumber).l
 		moveq	#0,d1
@@ -257,7 +235,7 @@ LevelSelectZoneIcon_LoadPalette:
 
 	.notEnding:
 		cmpi.b	#$13,d1
-		bcs.s	LevelSelectZoneIcon_LoadPalette_Main
+		blo.s	LevelSelectZoneIcon_LoadPalette_Main
 		moveq	#$18,d1
 		move.w	(a4,d4.w),d0
 		bmi.s	LevelSelectZoneIcon_LoadPalette_SoundTest
@@ -268,7 +246,7 @@ LevelSelectZoneIcon_LoadPalette:
 		lsr.w	#7,d0
 		move.b	LevelSelectZoneIcon_ExtraIcons-$13<<1(pc,d0.w),d1
 		cmpi.b	#$13,d1
-		bcc.s	LevelSelectZoneIcon_LoadPalette_Extra
+		bhs.s	LevelSelectZoneIcon_LoadPalette_Extra
 
 LevelSelectZoneIcon_LoadPalette_Main:
 		move.w	d1,d0
@@ -278,21 +256,27 @@ LevelSelectZoneIcon_LoadPalette_Main:
 		bra.s	LevelSelectZoneIcon_LoadPalette_Copy
 ; ---------------------------------------------------------------------------
 
-LevelSelectZoneIcon_CheckEncorePalette:
-		cmpi.b	#$E,d0
-		bcc.s	SaveScreen_CheckEncorePalette.encoreMode
-		lea	(Pal_Save_ZoneCard_AIZ).l,a2
-
 SaveScreen_CheckEncorePalette:
-		jsr	(Encore_LoadFlags).l
-		btst	#EncoreFlags_Palette,d2
-		bne.s	.encoreMode
+		tst.b	(Encore_mode).w
+		bne.s	LevelSelectZoneIcon_CheckEncorePalette
+		cmpi.b	#$E,d0
+		blo.s	LevelSelectZoneIcon_CheckEncorePalette
+		addi.b	#$B,d0
+
+LevelSelectZoneIcon_CheckEncorePalette:
+		lea	(Pal_Save_ZoneCard_AIZ_Encore).l,a2
+		tst.b	(Encore_flags).w
+		bpl.s	.notEncore
+		cmpi.b	#$C,d0
+		blo.s	.return
+
+	.notEncore:
+		lea	(Pal_Save_ZoneCard_AIZ).l,a2
+		tst.b	(Encore_mode).w
+		beq.s	.return
 		cmpi.b	#4,d0
 		bne.s	.return
-		moveq	#$C,d0
-
-	.encoreMode:
-		lea	(Pal_Save_ZoneCard_AIZ_Encore).l,a2
+		addi.b	#$F,d0
 
 	.return:
 		rts
@@ -354,6 +338,8 @@ Obj_PhotoPiece_Main:
 		bsr.w	PhotoPiece_LoadArray
 		bset	d1,(a1)
 		st	(Photo_piece_disable_flag).w
+		st	(SRAM_mask_interrupts_flag).w
+		jsr	(Write_SaveExtra).l
 		move.l	#Obj_PhotoPiece_DrawDigits,(a0)
 		moveq	#signextendB(sfx_PhotoPiece),d0
 		jsr	(Play_SFX).l
@@ -536,6 +522,8 @@ Obj_MetalSonicHologram_DrawCount:
 		move.b	d1,subtype(a0)				; Save number of destroyed holograms
 		subq.w	#1,d1
 		bsr.w	MetalSonicHologram_DrawDigits
+		st	(SRAM_mask_interrupts_flag).w
+		jsr	(Write_SaveExtra).l
 
 Obj_MetalSonicHologram_MoveSprite:
 		subq.w	#1,y_pos(a0)

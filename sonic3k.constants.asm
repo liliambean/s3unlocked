@@ -166,7 +166,8 @@ button_C_mask:			EQU	1<<button_C	; $20
 button_A_mask:			EQU	1<<button_A	; $40
 button_start_mask:		EQU	1<<button_start	; $80
 button_ABC_mask:		EQU	button_A_mask|button_B_mask|button_C_mask
-button_confirm_mask:		EQU	button_A_mask|button_C_mask|button_start_mask
+button_confirm_mask:		EQU	button_C_mask|button_start_mask			; Liliam: options menu
+;button_confirm_mask:		EQU	button_A_mask|button_C_mask|button_start_mask	;
 
 ; ---------------------------------------------------------------------------
 ; Player Status Variables
@@ -211,22 +212,22 @@ shield_art          = $38
 shield_plc          = $3C
 
 ; ---------------------------------------------------------------------------
-; Liliam: hidden skills
-Skill_TailsAssist     = 0
-Skill_SonicDropDash   = 1
-Skill_TailsAscend     = 2
-Skill_KnuxClimbDash   = 3
-Skill_AmyDoubleJump   = 4
-Skill_MightyWallJump  = 5
-Skill_RayWallJump     = 6
-Skill_SonicPeelOut    = 7
+; Liliam: Encore mode - palette
+EncoreFlags_Palette     = 7
+EncoreFlags_Music       = 0
+EncoreFlags_Palette2    = 1
+EncoreFlags_Music2      = 2
+EncoreFlags_Initial     = (1<<EncoreFlags_Palette)|(1<<EncoreFlags_Music)
 
 ; ---------------------------------------------------------------------------
-; Liliam: Encore mode - palette
-EncoreFlags_Music     = 0
-EncoreFlags_Palette2  = 1
-EncoreFlags_Music2    = 2
-EncoreFlags_Palette   = 7
+; Liliam: hidden skills
+Skill_SonicDropDash     = 1
+Skill_TailsRingBarrier  = 2
+Skill_KnuxClimbDash     = 3
+Skill_AmyDoubleJump     = 4
+Skill_MightyWallJump    = 5
+Skill_RayWallJump       = 6
+Skill_SonicPeelOut      = 7
 
 ; ---------------------------------------------------------------------------
 ; Liliam: HUD - Encore mode HUD
@@ -407,13 +408,13 @@ Competition_saved_data		ds.b $54		; saved data from Competition Mode
 Emerald_flicker_flag		ds.w 1			; controls the emerald flicker in save screen and special stage results.
 Save_pointer			ds.l 1			; pointer to the active save slot in 1 player mode
 Extra_saved_data =		*		; Liliam: options menu
-Encore_options			ds.b 1		; Liliam: options menu
-Collected_photo_piece_array	ds.b $F		; Liliam: museum - photo piece object
-Collected_holograms_array	ds.l 1		; Liliam: Metal Sonic hologram object
 Blue_spheres_saved_level	ds.l 1		; Liliam: blue sphere - load saved level on startup
-			ds.b 7				; unused
+Collected_holograms_array	ds.l 1		; Liliam: Metal Sonic hologram object
+Collected_photo_piece_array	ds.b $F		; Liliam: museum - photo piece object
+Encore_options			ds.b 1		; Liliam: Encore mode - palette
 Skill_options			ds.b 1		; Liliam: hidden skills
-Unlock_flags			ds.w 1		; Liliam: options menu
+Unlock_flags			ds.b 1		; Liliam: options menu
+			ds.b 8				; unused
 				ds.w 2		; Liliam: options menu
 Encore_saved_data		ds.b $22	; Liliam: Encore mode - save game
 Saved_data			ds.b $54		; saved data from 1 player mode
@@ -1202,9 +1203,14 @@ ArtTile_Competition_CharSel           = $05C9
 ; Save screen.
 ArtTile_Save_Misc                     = $029F
 ArtTile_Save_Extra                    = $0454
-ArtTile_Save_Text                     = $0547	; Liliam: museum - add kana character set
+ArtTile_Save_Text                     = $0540	; Liliam: museum - add kana character set
 ;ArtTile_Save_Text                    = $0562	;
 ArtTile_Save_ZoneIcon                 = $05BA	; Liliam: data select - add extra characters
+
+; Options screen.
+ArtTile_OptionsFont                   = $0001	; Liliam: options menu
+ArtTile_OptionsBG                     = $00C0	; Liliam: options menu
+ArtTile_OptionsMisc                   = $035E	; Liliam: options menu
 
 ; Blue Sphere.
 ArtTile_BlueSphere_Difficulty         = $0180

@@ -3,8 +3,8 @@ Map_SaveScreen_:
 		dc.w word_CE58-Map_SaveScreen_
 		dc.w word_CEC6-Map_SaveScreen_
 		dc.w word_CF1C-Map_SaveScreen_
-		dc.w Map_SaveScreen_OptionsButton1-Map_SaveScreen_
-		dc.w Map_SaveScreen_OptionsButton2-Map_SaveScreen_
+		dc.w Map_SaveScreen_Options1-Map_SaveScreen_
+		dc.w Map_SaveScreen_Options2-Map_SaveScreen_
 		dc.w word_CF36-Map_SaveScreen_
 		dc.w word_CF84-Map_SaveScreen_
 		dc.w word_CF98-Map_SaveScreen_
@@ -567,9 +567,13 @@ Map_SaveScreen_Amy2:
 		dc.w 2
 		dc.b  $D8,   8, $42, $7B, $FF, $F4
 		dc.b  $E0,  $B, $42, $7E, $FF, $F4
-Map_SaveScreen_OptionsButton1:
-		dc.w 1
-		dc.b  $DA,  $F, $22, $8A, $FF, $F0
-Map_SaveScreen_OptionsButton2:
-		dc.w 1
-		dc.b  $E2,  $E, $22, $9A, $FF, $F0
+Map_SaveScreen_Options1:
+		dc.w 3
+		dc.b  $F8,  $D, $22, $8A, $FF, $D8
+		dc.b  $F8,   9, $22, $92, $FF, $F8
+		dc.b  $F4,  $A, $22, $98,   0, $10
+Map_SaveScreen_Options2:
+		dc.w 3
+		dc.b  $F8,  $D, $42, $8A, $FF, $D8
+		dc.b  $F8,   9, $42, $92, $FF, $F8
+		dc.b  $F4,  $A, $22, $98,   0, $10

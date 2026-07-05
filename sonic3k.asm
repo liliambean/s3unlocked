@@ -325,10 +325,10 @@ GameModes:
 		dc.l Title_Screen		;   4
 		dc.l LevelDemo			;   8
 		dc.l Level			;  $C
-		dc.l JumpToSegaScreen		; $10
+		dc.l Museum			; $10		; Liliam: title screen - expand options
 		dc.l ContinueScreen		; $14
-		dc.l JumpToSegaScreen		; $18
-		dc.l EncoreMode			; $1C		; Liliam: title screen - expand options
+		dc.l UnlockScreen		; $18		;
+		dc.l EncoreMode			; $1C		;
 		dc.l S3Credits			; $20
 		dc.l LevelSelect		; $24
 		dc.l BlueSpheres		; $28		;
@@ -342,11 +342,7 @@ GameModes:
 		dc.l SpecialStage_Results	; $48
 		dc.l SaveScreen			; $4C
 		dc.l TimeAttack_Records		; $50
-; ---------------------------------------------------------------------------
-
-JumpToSegaScreen:
-		move.b	#0,(Game_mode).w
-		rts
+		dc.l OptionsScreen		; $54		;
 ; ---------------------------------------------------------------------------
 		; Liliam: removed dead code
 
@@ -1310,18 +1306,22 @@ Pause_Loop:
 		beq.s	Pause_ChkFrameAdvance	; branch if A isn't pressed
 
 		tst.b	(Blue_spheres_stage_flag).w		; Liliam: ported from S3 - return to level select from pause
-		bne.w	Pause_ReturnToBlueSpheres		;
-		move.b	#$24+$80,(Game_mode).w			;
-;		move.b	#4,(Game_mode).w			;
-;		nop						;
-
+		bne.s	Pause_ReturnToBlueSpheres		;
+		move.b	#$24,(Game_mode).w			;
 		tst.w	(Competition_mode).w			;
-		beq.s	Pause_ResumeMusic			;
+		beq.s	Pause_FadeOut				;
 		move.b	#$40,(Game_mode).w			;
 		tst.b	(Competition_type).w			;
 		bmi.s	Pause_ReturnToTimeAttack		;
-		bne.s	Pause_ResumeMusic			;
+		bne.s	Pause_FadeOut				;
 		move.b	#$44,(Game_mode).w			;
+		bra.s	Pause_FadeOut				;
+; ---------------------------------------------------------------------------
+
+Pause_ReturnToBlueSpheres:
+		move.b	#$28,(Game_mode).w			; Liliam: blue sphere - quick return by pressing B
+;		move.b	#4,(Game_mode).w			;
+;		nop						;
 		bra.s	Pause_ResumeMusic
 ; ---------------------------------------------------------------------------
 
@@ -1332,31 +1332,37 @@ Pause_ChkFrameAdvance:
 		bne.s	Pause_FrameAdvance	; branch if C is pressed
 
 Pause_NoSlowMo:
-		btst	#button_B,(Ctrl_1_pressed).w		; Liliam: blue sphere - quick return by pressing B
-		beq.s	Pause_ChkStart				;
-		tst.b	(Blue_spheres_stage_flag).w		;
-		bne.s	Pause_ReturnToBlueSpheres		;
-
 		tst.w	(Competition_mode).w			; Liliam: Encore mode - add extra levels
-		beq.s	Pause_ChkStart				;
+		beq.s	Pause_ChkBlueSpheres			;
 ;		cmpi.b	#$E,(Current_zone).w			;
 ;		blo.s	Pause_ChkStart				;
 ;		cmpi.b	#$12,(Current_zone).w			;
 ;		bhi.s	Pause_ChkStart				;
 		tst.b	(Competition_type).w
 		bpl.s	Pause_ChkStart
-;		btst	#button_B,(Ctrl_1_pressed).w		; Liliam: blue sphere - quick return by pressing B
-;		beq.s	Pause_ChkStart				;
+		btst	#button_B,(Ctrl_1_pressed).w
+		beq.s	Pause_ChkStart
 
 Pause_ReturnToTimeAttack:
 		move.b	#$40+$80,(Game_mode).w	; If in time attack mode, go back to 2P menu if B is pressed
+
+Pause_FadeOut:
+		moveq	#signextendB(cmd_FadeOut),d0		; Liliam: ported from S3 - return to level select from pause
+		bsr.w	Play_Music				;
 		bra.s	Pause_ResumeMusic
 ; ---------------------------------------------------------------------------
+
+Pause_ChkBlueSpheres:
+		tst.b	(Blue_spheres_stage_flag).w		; Liliam: blue sphere - quick return by pressing B
+		beq.s	Pause_ChkStart				;
+		btst	#button_B,(Ctrl_1_pressed).w		;
+		bne.s	Pause_ReturnToBlueSpheres		;
 
 Pause_ChkStart:
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.b	#button_start_mask,d0
-		beq.s	Pause_Loop
+		beq.w	Pause_Loop				;
+;		beq.s	Pause_Loop				;
 
 Pause_ResumeMusic:
 		stopZ80
@@ -1376,11 +1382,6 @@ Pause_FrameAdvance:
 		move.b	#$80,(Z80_RAM+zPauseFlag).l	; Unpause music
 		startZ80
 		rts	; advance by a single frame
-; ---------------------------------------------------------------------------
-
-Pause_ReturnToBlueSpheres:
-		move.b	#$2C+$80,(Game_mode).w			; Liliam: blue sphere - quick return by pressing B
-		bra.s	Pause_ResumeMusic			;
 ; End of function Pause_Game
 
 ; ---------------------------------------------------------------------------
@@ -5588,7 +5589,21 @@ loc_3DBA:
 
 ; ---------------------------------------------------------------------------
 
+Encore_LoadFlags:						; Liliam: Encore mode - palette
+		moveq	#8,d0
+		move.b	(Encore_options).w,d2
+		tst.b	(Encore_mode).w
+		bne.s	.updateFlags
+		move.w	(Player_mode).w,d0
+		ror.b	#2,d2
+
+	.updateFlags:
+		move.b	d2,(Encore_flags).w
+		rts
+; ---------------------------------------------------------------------------
+
 LoadPalette_LevelLoad:								; Liliam: fade in player palette if title card suppressed
+		bsr.s	Encore_LoadFlags
 		tst.w	(Competition_mode).w
 		bne.s	LoadPalette_NoEncore
 		tst.b	(Act3_flag).w
@@ -6016,7 +6031,7 @@ TitleScreen_DenySelection:					; Liliam: museum - game mode
 ; ---------------------------------------------------------------------------
 
 TitleScreen_GameModes:						; Liliam: title screen - expand options
-		dc.b  $4C, $1C, sfx_Error, $38, $28, $20, $24
+		dc.b  $4C, $1C, $38, sfx_Error, $28, $20, $24
 		even
 ; ---------------------------------------------------------------------------
 
@@ -7021,17 +7036,9 @@ loc_61BE:
 		move.w	(H_int_counter_command).w,(a6)
 ;		clr.w	(DMA_queue).w				; Liliam: bugfix - fix DPLC fade bug (credit: flamewing)
 ;		move.l	#DMA_queue,(DMA_queue_slot).w		;
-
 		; Liliam: removed original implementation
-		moveq	#8,d0					; Liliam: Encore mode - palette
-		move.b	(Encore_options).w,d2			;
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_61DA				;
-		move.w	(Player_mode).w,d0			;
-		ror.b	#2,d2					;
 
-loc_61DA:
-		move.b	d2,(Encore_flags).w			;
+;loc_61DA:
 		bsr.w	LoadPalette_LevelLoad					; Liliam: fade in player palette if title card suppressed
 ;		bsr.w	LoadPalette_Immediate					;
 		bsr.w	CheckLevelForWater
@@ -9426,8 +9433,6 @@ LevelSelect:
 		bsr.w	Clear_Nem_Queue							; Liliam: level select - add HPZ special
 		clr.w	(Apparent_zone_and_act).w					;
 		clr.w	(Current_zone_and_act).w
-		moveq	#signextendB(cmd_FadeOut),d0		; Liliam: ported from S3 - return to level select from pause
-		bsr.w	Play_Music				;
 		bsr.w	Pal_FadeToBlack
 		disableDisplay
 		bsr.w	Clear_DisplayData
@@ -9556,7 +9561,13 @@ loc_7BEC:
 		moveq	#signextendB(mus_DataSelect),d0
 
 loc_7BEE:
+		tst.b	(Game_mode).w				; Liliam: options menu
+		bmi.s	loc_7BF4				;
 		jsr	(Play_Music).l
+
+loc_7BF4:
+		bclr	#7,(Game_mode).w			;
+		bsr.w	Encore_LoadFlags			;
 		move.w	#(30*60)-1,(Demo_timer).w
 		clr.w	(Competition_mode).w
 		clr.l	(Camera_X_pos).w
@@ -9631,7 +9642,8 @@ loc_7C7E:
 		; Liliam: removed original implementation
 
 ;LevelSelect_Return:
-		move.b	#0,(Game_mode).w
+		move.b	#$18+$80,(Game_mode).w			; Liliam: options menu
+;		move.b	#0,(Game_mode).w			;
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -9653,39 +9665,6 @@ LevelSelect_GetActNumber:					; Liliam: level select - expand options
 ; ---------------------------------------------------------------------------
 
 LevelSelect_CheckKnuckles:
-	if DevMode
-		bsr.w	Encore_LoadFlags			; Liliam: Encore mode - music
-		bclr	#EncoreFlags_Music,d2			;
-		btst	#button_B,(Ctrl_2_held).w		;
-		beq.s	.checkEncore				;
-		bset	#EncoreFlags_Music,d2			;
-
-	.checkEncore:
-		tst.b	(Encore_mode).w				;
-		bne.s	.updateFlags				;
-		rol.b	#2,d2					;
-
-	.updateFlags:
-		move.b	d2,(Encore_options).w			;
-	else
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-	endif
-
 		clr.b	(Alternate_start_flag).w		; Liliam: Encore mode - player starts
 		tst.b	(Encore_mode).w				;
 		bne.s	LevelSelect_EncoreStart			;
@@ -9835,19 +9814,6 @@ LevelSelect_StartZoneContinued:
 ;		move.w	d0,(Demo_mode_flag).w			;
 		move.l	#5000,(Next_extra_life_score).w
 		move.l	#5000,(Next_extra_life_score_P2).w
-		move.b	#1,(Skill_options).w			; Liliam: hidden skills
-	if DevMode
-		btst	#button_A,(Ctrl_1_held).w		;
-		beq.s	locret_7E62				;
-		st	(Skill_options).w			;
-	else
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-		nop						;
-	endif
 ;		moveq	#signextendB(cmd_FadeOut),d0		; Liliam: Encore mode - add extra levels
 ;		jsr	(Play_SFX).l				;
 ;		moveq	#0,d0					;
@@ -9874,7 +9840,7 @@ LevSelControls:
 
 loc_7E74:
 		move.w	#$B,(Level_select_repeat).w
-		move.b	(Ctrl_1).w,d1
+		move.b	(Ctrl_1_held).w,d1
 		andi.b	#button_up_mask|button_down_mask,d1
 		beq.s	LevSelControls_CheckLR
 		cmpi.b	#button_up_mask|button_down_mask,d1	; Liliam: level select - expand options
@@ -9884,11 +9850,11 @@ loc_7E74:
 ;		btst	#button_up,d1				;
 		cmpi.b	#button_down_mask,d1			;
 		beq.s	loc_7E94
-		subq.b	#1,d5					;
-		blo.s	loc_7E92				;
+		subq.w	#1,d5					;
+		bmi.s	loc_7E92				;
 		cmpi.b	#$1D,d5					;
 		bne.s	loc_7EA4				;
-		subq.b	#1,d5					;
+		subq.w	#1,d5					;
 ;		subq.w	#1,d0					;
 ;		bcc.s	loc_7E94				;
 		bra.s	loc_7EA4				;
@@ -9905,25 +9871,25 @@ loc_7E94:
 ;		beq.s	loc_7EA4				;
 ;		addq.w	#1,d0					;
 ;		cmpi.w	#$21,d0					;
-		addq.b	#1,d5					;
+		addq.w	#1,d5					;
 		cmpi.b	#$1D,d5					;
 		bne.s	loc_7EA0				;
-		addq.b	#1,d5					;
+		addq.w	#1,d5					;
 		bra.s	loc_7EA4				;
 ; ---------------------------------------------------------------------------
 
 loc_7EA0:
-		cmpi.b	#$29,d5					; Liliam: level select - expand options
-		blo.s	loc_7EA4
+		cmpi.b	#$28,d5					; Liliam: level select - expand options
+		bls.s	loc_7EA4
 		moveq	#0,d5					;
 ;		moveq	#0,d0					;
 
 loc_7EA4:
 		move.w	#palette_line_1,d3			;
 		bsr.w	LevelSelect_MarkFields			;
-		move.w	#palette_line_2,d3			;
 		move.w	d5,(Level_select_option).w		;
 ;		move.w	d0,(Level_select_option).w		;
+		move.w	#palette_line_2,d3			;
 		bra.w	LevelSelect_MarkFields			;
 ;		rts						;
 ; ---------------------------------------------------------------------------
@@ -10638,8 +10604,8 @@ loc_851A:
 		cmpi.b	#$34,(Game_mode).w
 		beq.s	loc_84C2
 		move.b	#$1C,(V_int_routine).w			; Liliam: blue sphere - quick return by pressing B
-		tst.b	(Game_mode).w				;
-		bmi.w	Wait_VSync				;
+		cmpi.b	#$2C,(Game_mode).w			;
+		blo.w	Wait_VSync				;
 
 ;loc_8522:
 		move.w	#$3F,(Demo_timer).w			; Liliam: bugfix - SS results fade
@@ -15781,14 +15747,6 @@ locret_C152:
 		rts
 ; End of function Competition_InitGameVars
 
-; ---------------------------------------------------------------------------
-
-Encore_LoadFlags:						; Liliam: Encore mode - palette
-		move.b	(Encore_options).w,d2
-		tst.b	(Encore_mode).w
-		beq.s	locret_C152
-		ror.b	#2,d2
-		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -15882,6 +15840,14 @@ loc_C256:
 		clr.w	(a1)+					;
 		dbf	d0,.loop3				;
 		move.w	d1,(a1)+				;
+	if DevMode
+		move.b	#-1,(Unlock_flags).w			;
+	else
+		nop						;
+		nop						;
+		nop						;
+	endif
+		move.b	#EncoreFlags_Initial,(Encore_options).w	;
 		bsr.w	Write_SaveExtra				;
 
 	.done:
@@ -16541,7 +16507,13 @@ loc_C7B8:
 		moveq	#signextendB(mus_DataSelect),d0
 
 loc_C7D4:
+		tst.b	(Game_mode).w				; Liliam: options menu
+		bmi.s	loc_C7DA				;
 		jsr	(Play_Music).l
+
+loc_C7DA:
+		bclr	#7,(Game_mode).w			;
+		jsr	(Encore_LoadFlags).l			;
 		move.l	#VInt_DrawSaveSlots,(V_int_1E_addr).w
 		move.b	#$1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
@@ -16956,9 +16928,10 @@ Pal_SaveScreen:
 Pal_SaveScreen_Encore:							; Liliam: Encore mode - save data
 		binclude "General/Save Menu/Palettes/Encore Mode/Main.bin"
 Pal_Save_FinishCard1:
+		; Liliam: options menu
 		binclude "General/Save Menu/Palettes/Zone Card Sound Test.bin"
 Pal_Save_FinishCard2:
-		; Liliam: level select - restore zone icons
+		; Liliam: options menu
 		binclude "General/Save Menu/Palettes/Encore Mode/Zone Card Sound Test.bin"
 Pal_Save_FinishCard3:
 		binclude "General/Save Menu/Palettes/Finish Card Sonic & Tails.bin"
@@ -16998,6 +16971,28 @@ Pal_Save_ZoneCard_DDZ:
 		binclude "General/Save Menu/Palettes/Zone Card E.bin"
 Pal_Save_ZoneCard_HPZ:							; Liliam: Encore mode - save data
 		binclude "General/Save Menu/Palettes/Zone Card B.bin"
+Pal_Save_ZoneCard_ALZ:							; Liliam: Encore mode - save data
+		binclude "General/Save Menu/Palettes/Zone Cards 2P 1.bin"
+Pal_Save_ZoneCard_BPZ:							; Liliam: Encore mode - save data
+		binclude "General/Save Menu/Palettes/Zone Cards 2P 2.bin"
+Pal_Save_ZoneCard_DPZ:							; Liliam: Encore mode - save data
+		binclude "General/Save Menu/Palettes/Zone Cards 2P 3.bin"
+Pal_Save_ZoneCard_CGZ:							; Liliam: Encore mode - save data
+		binclude "General/Save Menu/Palettes/Zone Cards 2P 4.bin"
+Pal_Save_ZoneCard_EMZ:							; Liliam: Encore mode - save data
+		binclude "General/Save Menu/Palettes/Zone Cards 2P 5.bin"
+Pal_Save_ZoneCard_FBZ_Night:						; Liliam: Encore mode - save data
+		binclude "General/Save Menu/Palettes/Zone Card 8 Night.bin"
+Pal_Save_ZoneCard_Bonus1:					; Liliam: level select - restore zone icons
+		binclude "General/Save Menu/Palettes/Zone Card Bonus 1.bin"
+Pal_Save_ZoneCard_Bonus2:					; Liliam: level select - restore zone icons
+		binclude "General/Save Menu/Palettes/Zone Card Bonus 2.bin"
+Pal_Save_ZoneCard_Bonus3:					; Liliam: level select - restore zone icons
+		binclude "General/Save Menu/Palettes/Zone Card Bonus 3.bin"
+Pal_Save_ZoneCard_EncoreBonus:					; Liliam: level select - restore zone icons
+		binclude "General/Save Menu/Palettes/Zone Card Bonus 4.bin"
+Pal_Save_ZoneCard_SpecialStage:					; Liliam: level select - restore zone icons
+		binclude "General/Save Menu/Palettes/Zone Card Special.bin"
 ;Pal_Save_ZoneCardF:
 		; Liliam: data select - add extra characters
 ;Pal_Save_ZoneCard10:
@@ -17076,7 +17071,8 @@ Map_SaveScreen:
 		; Liliam: data select - add extra characters
 		include "General/Save Menu/Map - Save Screen General.asm"
 ObjDat_SaveScreen:
-		dc.l Draw_Sprite				; "Data Select" Text
+		dc.l Obj_SaveScreen_StillSprites		; Liliam: options menu
+;		dc.l Draw_Sprite				;
 		dc.w   $120						; x_pos, objoff_12 (x_pos copy)
 		dc.w   $14C						; y_pos
 		dc.b    3						; mapping_frame
@@ -17136,6 +17132,20 @@ ObjDat_SaveScreen:
 		dc.w   $108						; y_pos
 		dc.b    0						; unused
 		dc.b    7						; Save Slot ID Number
+; ---------------------------------------------------------------------------
+
+Obj_SaveScreen_StillSprites:					; Liliam: options menu
+		move.l	#Draw_Sprite,(a0)
+		move.w	#1,mainspr_childsprites(a0)
+		move.w	#$190,sub2_x_pos(a0)
+		move.w	#$14C,sub2_y_pos(a0)
+		move.b	#4,sub2_mapframe(a0)
+		tst.b	(Encore_mode).w
+		beq.s	.done
+		move.b	#5,sub2_mapframe(a0)
+
+	.done:
+		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
 Obj_SaveScreen_Selector:
@@ -17204,7 +17214,16 @@ loc_D1E6:
 		move.w	d1,(Camera_X_pos_copy).w
 		neg.w	d1
 		move.w	d1,(H_scroll_buffer+2).w
-		move.l	#loc_D1FA,(a0)
+		move.l	#Obj_SaveScreen_Selector_Main,(a0)
+
+Obj_SaveScreen_Selector_Main:
+		btst	#button_A,(Ctrl_1_pressed).w		; Liliam: options menu
+		beq.s	loc_D1FA				;
+		tst.w	(Events_bg+$10).w			;
+		bne.w	loc_D2CE				;
+		move.b	#$54,(Game_mode).w			;
+		bra.w	loc_D2CE				;
+; ---------------------------------------------------------------------------
 
 loc_D1FA:
 		tst.w	(Events_bg+$12).w
@@ -17353,16 +17372,15 @@ locret_D30A:
 
 Obj_SaveScreen_NoSave_Slot:
 		move.b	#$F,sub2_mapframe(a0)
-		move.l	#loc_D31C,(a0)					; Liliam: data select - add extra characters
-		clr.w	(Dataselect_nosave_player).w			;
-		moveq	#0,d0						;
-		bsr.w	SaveScreen_PickCharFrame			;
-;		move.w	(Dataselect_nosave_player).w,d0			;
+		move.w	(Dataselect_nosave_player).w,d0
+		bsr.w	SaveScreen_PickCharFrame			; Liliam: data select - add extra characters
+		move.l	#loc_D31C,(a0)					;
 ;		addq.w	#4,d0						;
 ;		move.b	d0,mapping_frame(a0)				;
 
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - save data
 		beq.s	loc_D31C					;
+		move.b	#$24,mapping_frame(a0)				;
 		clr.b	sub2_mapframe(a0)				;
 		jsr	(AllocateObject).l				;
 		bne.s	loc_D31C					;
@@ -17380,8 +17398,13 @@ loc_D31C:
 		andi.w	#button_confirm_mask,d0
 		beq.s	loc_D376
 		move.b	#$C,(Game_mode).w
+		clr.w	(Player_mode).w					; Liliam: Encore mode - save data
+		tst.b	(Encore_mode).w					;
+		bne.s	loc_D342					;
 		move.w	(Dataselect_nosave_player).w,(Player_option).w
 		move.w	(Dataselect_nosave_player).w,(Player_mode).w	; Liliam: prevent other characters from playing DDZ
+
+loc_D342:
 		clr.w	(Current_zone_and_act).w
 		clr.w	(Apparent_zone_and_act).w
 		clr.w	(Current_special_stage).w
@@ -18318,10 +18341,8 @@ loc_D9A6:
 		move.w	(sp)+,d0
 		movea.l	(sp)+,a1
 		lea	Pal_Save_ZoneCard_AIZ(pc),a2
-		move.b	(Encore_mode).w,d2				; Liliam: Encore mode - save data
-		beq.s	loc_D9C8					;
-		jsr	(SaveScreen_CheckEncorePalette).l		;
-;		bra.s	loc_D9E2					;
+		jsr	(SaveScreen_CheckEncorePalette).l	; Liliam: Encore mode - palette
+;		bra.s	loc_D9E2				;
 
 loc_D9C8:
 ;		lea	Pal_Save_FinishCard1(pc),a2			; Liliam: data select - add extra characters
@@ -106728,13 +106749,12 @@ sub_4C8E4:
 ; ---------------------------------------------------------------------------
 
 BlueSpheres:
-		; TODO: load saved level from SRAM
 		move.b	#$2C,(Game_mode).w			; Liliam: blue sphere - load saved level on startup
 		andi.b	#$7F,(Blue_spheres_menu_flag).w		;
 		bne.s	BlueSpheresTitle			;
 		move.b	#1,(Blue_spheres_menu_flag).w		;
 		move.l	(Blue_spheres_saved_level).w,d1		;
-		bsr.w	BlueSpheres_LoadStage			;
+		bsr.w	BlueSpheres_LoadStage_NoSFX		;
 
 BlueSpheresTitle:
 		moveq	#signextendB(cmd_FadeOut),d0
@@ -106810,7 +106830,6 @@ BlueSpheresTitle:
 		jsr	(Play_Music).l
 		enableDisplay
 		jsr	(Pal_FadeFromBlack).l
-		bclr	#7,(Game_mode).w			; Liliam: blue sphere - quick return by pressing B
 
 loc_4CAE8:
 		move.b	#$1A,(V_int_routine).w
@@ -107489,16 +107508,24 @@ loc_4D4C2:
 		beq.s	loc_4D4FC
 		subi.l	#$7654321,d1
 		andi.l	#$7FFFFFF,d1
-		move.l	(Blue_spheres_current_level).w,(Blue_spheres_saved_level).w	; Liliam: blue sphere - save level when lock-on code is used
-		move.b	#0,(Blue_spheres_menu_flag).w					;
-;		move.b	#-1,(Blue_spheres_progress_flag).w				;
+;		move.b	#-1,(Blue_spheres_progress_flag).w	;
+		move.b	#0,(Blue_spheres_menu_flag).w		;
+		bra.s	BlueSpheres_LoadStage			;
+; ---------------------------------------------------------------------------
 
 loc_4D4FC:
-		bsr.s	BlueSpheres_LoadStage			; Liliam: blue sphere - load saved level on startup
-		bra.s	loc_4D56C				;
+		bsr.s	BlueSpheres_LoadStage						; Liliam: blue sphere - save level
+
+BlueSpheres_SaveStage:
+		move.l	(Blue_spheres_current_level).w,(Blue_spheres_saved_level).w	;
+		st	(SRAM_mask_interrupts_flag).w					;
+		jmp	(Write_SaveExtra).l						;
 ; ---------------------------------------------------------------------------
 
 BlueSpheres_LoadStage:
+		bsr.s	sub_4D56C				; Liliam: blue sphere - load saved level on startup
+
+BlueSpheres_LoadStage_NoSFX:
 		move.l	d1,(Blue_spheres_current_level).w
 		lea	(Blue_spheres_current_stage).w,a2
 		move.l	d1,d0
@@ -107549,7 +107576,7 @@ BlueSpheres_LoadStage:
 		rts						; Liliam: blue sphere - load saved level on startup
 ; ---------------------------------------------------------------------------
 
-loc_4D56C:
+sub_4D56C:
 		lea	(Normal_palette).w,a2
 		bsr.w	sub_4CB1A
 		moveq	#signextendB(sfx_Starpost),d0
@@ -107979,6 +108006,7 @@ loc_4DB9E:
 ;		tst.b	(Blue_spheres_mode).w			;
 ;		beq.s	locret_4DC18				;
 		addq.l	#1,(Blue_spheres_current_level).w
+		bsr.w	BlueSpheres_SaveStage						; Liliam: blue sphere - save level
 		lea	(Blue_spheres_current_stage).w,a2
 		addi.l	#$01030507,(a2)
 		andi.b	#$7F,(a2)
@@ -108118,9 +108146,10 @@ loc_4DDD4:
 
 loc_4DDE2:
 		dbf	d1,loc_4DDAA
+		bra.w	BlueSpheres_SaveStage						; Liliam: blue sphere - save level
 
-locret_4DDE6:
-		rts
+;locret_4DDE6:
+;		rts									;
 ; ---------------------------------------------------------------------------
 PLC_SphereResults: plrlistheader
 		plreq ArtTile_SSZMasterEmerald, ArtNem_EndingMasterEmerald	; Liliam: bugfix - queue Master Emerald for ending
@@ -132658,6 +132687,578 @@ ArtNem_ContinueDigits:
 		binclude "General/Continue/Nemesis Art/Digits.bin"
 		even
 ; ---------------------------------------------------------------------------
+plane_width =	40*2
+plane_height =	28
+Options_buffer = RAM_start+plane_width*plane_height
+
+Museum:
+UnlockScreen:
+OptionsScreen:							; Liliam: options menu
+		moveq	#signextendB(sfx_Starpost),d0
+		jsr	(Play_SFX).l
+		jsr	(Pal_FadeToBlack).l
+		disableDisplay
+
+		jsr	(Clear_DisplayData).l
+		dmaFillVRAM 0,VRAM_Plane_A_Name_Table+$1000,$1000
+
+		lea	(VDP_control_port).l,a6
+		move.w	#VDP_Option0|VDPReg0_DisableHInt,(a6)
+		move.w	#VDP_Plane_A|(VRAM_Plane_A_Name_Table>>10),(a6)
+		move.w	#VDP_Plane_B|(VRAM_Plane_B_Name_Table_Competition>>13),(a6)
+		move.w	#VDP_BGColor|(palette_line_0>>9)|$00,(a6)
+		move.w	#VDP_Option2|VDPReg2_LineScroll,(a6)
+		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
+		move.w	#VDP_PlnSize|PlaneSize_1024x256,(a6)
+		move.w	#VDP_WinYPos|Window_Disable,(a6)
+		clearRAM	H_scroll_buffer,$400
+		clearRAM	Sprite_table_input,$400
+		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
+		clr.w	(DMA_queue).w
+		move.l	#DMA_queue,(DMA_queue_slot).w
+
+		lea	(MapEni_S3MenuBG).l,a0
+		lea	(RAM_start).l,a1
+		move.w	#make_art_tile(ArtTile_OptionsBG,0,0),d0
+		jsr	(Eni_Decomp).l
+		lea	(RAM_start).l,a1
+		move.l	#vdpComm(VRAM_Plane_B_Name_Table_Competition,VRAM,WRITE),d0
+		moveq	#plane_width>>1-1,d1
+		moveq	#plane_height-1,d2
+		jsr	(Plane_Map_To_VRAM_2).l
+
+		move.l	#vdpComm(tiles_to_bytes(ArtTile_OptionsFont),VRAM,WRITE),(VDP_control_port).l
+		lea	(ArtNem_MenuFont).l,a0
+		jsr	(Nem_Decomp).l
+
+		lea	(ArtKos_S3MenuBG).l,a0
+		lea	(RAM_start).l,a1
+		movea.w	#tiles_to_bytes(ArtTile_OptionsBG),a2
+		jsr	(KosArt_To_VDP).l
+		move.l	#OptionsScreen_Return,(V_int_1E_addr).w
+		move.b	#$1E,(V_int_routine).w
+		jsr	(Wait_VSync).l
+
+		lea	(ArtKos_OptionsScreen).l,a0
+		lea	(RAM_start).l,a1
+		movea.w	#tiles_to_bytes(ArtTile_OptionsMisc),a2
+		jsr	(KosArt_To_VDP).l
+		move.b	#$1E,(V_int_routine).w
+		jsr	(Wait_VSync).l
+
+		clearRAM	Options_buffer,plane_width*plane_height*2
+		bsr.w	OptionsScreen_BuildPlaneMap
+		bsr.w	OptionsScreen_MarkFields
+		lea	(Options_buffer).l,a1
+		move.l	#vdpComm(VRAM_Plane_A_Name_Table,VRAM,WRITE),d0
+		moveq	#plane_width>>1-1,d1
+		moveq	#plane_height-1,d2
+		jsr	(Plane_Map_To_VRAM_2).l
+
+		lea	(Object_RAM).w,a0
+		move.l	#Draw_Sprite,(a0)
+		move.l	#Map_OptionsScreen,mappings(a0)
+		move.w	#make_art_tile(ArtTile_OptionsMisc,0,1),art_tile(a0)
+		move.w	#$120,x_pos(a0)
+		move.w	#$14C,y_pos(a0)
+		move.b	(Encore_mode).w,$1C(a0)
+		move.b	#6,$2C(a0)
+		move.b	#$40,render_flags(a0)
+		move.b	#1,mapping_frame(a0)
+		move.w	#1,mainspr_childsprites(a0)
+		move.w	#$19C,sub2_x_pos(a0)
+		move.w	#$14C,sub2_y_pos(a0)
+		move.b	#2,sub2_mapframe(a0)
+		move.b	#9,$2C(a0)
+		jsr	(Init_SpriteTable).l
+		jsr	(Process_Sprites).l
+		jsr	(Render_Sprites).l
+		enableDisplay
+
+		tst.b	(Game_mode).w
+		bmi.s	.levelSelect
+		move.w	#$EEE,(Target_palette_line_2+$02).w
+		move.w	#$222,(Target_palette_line_2+$1E).w
+		move.w	#$0EE,(Target_palette_line_3+$02).w
+		move.w	#$222,(Target_palette_line_3+$1E).w
+		lea	(Target_palette).w,a1
+		moveq	#bytesToLcnt($18),d0
+		tst.b	(Encore_mode).w
+		bne.s	.encoreBG
+		lea	(Pal_LevelSelect).l,a0
+
+	.loop:
+		move.l	(a0)+,(a1)+
+		dbf	d0,.loop
+
+	.levelSelectBG:
+		jsr	(Pal_FadeFromBlack_Original).l
+		bra.s	OptionsScreen_MainLoop
+; ---------------------------------------------------------------------------
+
+	.levelSelect:
+		move.w	#$222,(Target_palette_line_2+$0C).w
+		move.w	#$EEE,(Target_palette_line_3+$0C).w
+		move.l	#$CAA0ECC,(Target_palette_line_3+$1A).w
+		tst.b	(Encore_mode).w
+		beq.s	.levelSelectBG
+
+	.encoreBG:
+		jsr	(Pal_FadeFromBlack).l
+		bra.s	OptionsScreen_MainLoop
+; ---------------------------------------------------------------------------
+
+OptionsScreen_Animate:						; Liliam: options menu
+		lea	(H_scroll_buffer).w,a2
+		bsr.w	OptionsScreen_Scroll
+
+OptionsScreen_MainLoop:
+		move.b	#$1E,(V_int_routine).w
+		jsr	(Wait_VSync).l
+		jsr	(Process_Sprites).l
+		jsr	(Render_Sprites).l
+		lea	(Object_RAM).w,a0
+		move.w	$2E(a0),d0
+		bne.s	OptionsScreen_Animate
+		tst.w	mainspr_childsprites(a0)
+		beq.w	OptionsScreen_Help
+		move	#$2700,sr
+		bsr.w	OptionsScreen_Controls
+		move	#$2300,sr
+		btst	#button_B,(Ctrl_1_pressed).w
+		beq.s	OptionsScreen_MainLoop
+		st	(SRAM_mask_interrupts_flag).w
+		jsr	(Write_SaveExtra).l
+		move.b	(Game_mode).w,d0
+		move.b	#$24+$80,(Game_mode).w
+		tst.b	d0
+		bmi.s	.checkResetMusic
+		move.b	#$4C+$80,(Game_mode).w
+
+	.checkResetMusic:
+		move.b	(Object_RAM+$1C).w,d0
+		cmp.b	(Encore_mode).w,d0
+		beq.w	OptionsScreen_Return
+		bclr	#7,(Game_mode).w
+		moveq	#signextendB(cmd_FadeOut),d0
+		jmp	(Play_Music).l
+; ---------------------------------------------------------------------------
+
+OptionsScreen_Controls:						; Liliam: options menu
+		move.b	(Ctrl_1_pressed).w,d1
+		andi.b	#button_up_mask|button_down_mask,d1
+		bne.s	.handleInput
+		subq.w	#1,(Level_select_repeat).w
+		bpl.w	OptionsScreen_CheckLR
+
+	.handleInput:
+		move.w	#$B,(Level_select_repeat).w
+		move.b	(Ctrl_1_held).w,d1
+		andi.b	#button_up_mask|button_down_mask,d1
+		beq.w	OptionsScreen_CheckLR
+		cmpi.b	#button_up_mask|button_down_mask,d1
+		beq.w	OptionsScreen_Return
+		move.l	$24(a0),d5
+		cmpi.b	#button_up_mask,d1
+		beq.s	.loop2
+
+	.loop1:
+		addq.b	#1,d5
+		cmp.b	$2C(a0),d5
+		bls.s	.checkUnlock1
+		moveq	#0,d5
+
+	.checkUnlock1:
+		bsr.s	OptionsScreen_GetUnlockState
+		tst.b	d1
+		bne.s	.loop1
+		bra.s	.markFields
+; ---------------------------------------------------------------------------
+
+	.loop2:
+		subq.b	#1,d5
+		bpl.s	.checkUnlock2
+		move.b	$2C(a0),d5
+
+	.checkUnlock2:
+		bsr.s	OptionsScreen_GetUnlockState
+		tst.b	d1
+		bne.s	.loop2
+
+	.markFields:
+		moveq	#palette_line_1>>8,d1
+		bsr.w	OptionsScreen_UnmarkFields
+		bsr.s	OptionsScreen_WriteToVRAM
+		move.l	d5,(Object_RAM+$24).w
+
+OptionsScreen_MarkAndWriteToVRAM:
+		bsr.w	OptionsScreen_MarkFields
+
+OptionsScreen_WriteToVRAM:
+		moveq	#2-1,d2
+
+OptionsScreen_CustomWriteToVRAM:
+		moveq	#plane_width>>1-1,d1
+		lsl.l	#8,d0
+		add.w	#VRAM_Plane_A_Name_Table,d0
+		lsl.l	#2,d0
+		lsr.w	#2,d0
+		ori.w	#$4000,d0
+		swap	d0
+		jmp	(Plane_Map_To_VRAM_2).l
+; ---------------------------------------------------------------------------
+
+OptionsScreen_GetUnlockState:					; Liliam: options menu
+		moveq	#0,d1
+		move.w	d5,d2
+		cmpi.b	#3,d2
+		blo.s	OptionsScreen_Return
+		subq.w	#2,d2
+		btst	d2,(Unlock_flags).w
+		bne.s	OptionsScreen_Return
+		moveq	#$10,d1
+		rts
+; ---------------------------------------------------------------------------
+
+OptionsScreen_GetOnOffState:					; Liliam: options menu
+		lea	(Encore_mode).w,a1
+		move.w	d5,d2
+		beq.s	OptionsScreen_Return
+		cmpi.b	#3,d2
+		blo.s	.encoreFlags
+		lea	(Skill_options).w,a1
+		subq.w	#2,d2
+		rts
+; ---------------------------------------------------------------------------
+
+	.encoreFlags:
+		lea	(Encore_options).w,a1
+		tst.b	(Encore_mode).w
+		beq.s	OptionsScreen_Return
+		subq.w	#2,d2
+		rts
+; ---------------------------------------------------------------------------
+
+OptionsScreen_SetupDrawOnOff:					; Liliam: options menu
+		moveq	#0,d1
+		move.l	#Options_buffer+(plane_width*1)+(2*30),d4
+		tst.b	(Graphics_flags).w
+		bmi.s	OptionsScreen_Return
+		subq.w	#3*2,d4
+
+OptionsScreen_Return:
+		rts
+; ---------------------------------------------------------------------------
+
+OptionsScreen_CheckLR:						; Liliam: options menu
+		move.b	(Ctrl_1_pressed).w,d1
+		andi.b	#button_left_mask|button_right_mask,d1
+		beq.w	OptionsScreen_CheckButton
+		move.l	$24(a0),d5
+		bsr.s	OptionsScreen_GetOnOffState
+		bchg	d2,(a1)
+		bsr.s	OptionsScreen_SetupDrawOnOff
+		bsr.w	OptionsScreen_RedrawOnOff
+		bsr.w	OptionsScreen_MarkAndWriteToVRAM
+		tst.b	d5
+		bne.s	.done
+		bsr.s	OptionsScreen_SetupDrawOnOff
+		bsr.w	OptionsScreen_DrawOnOff
+		bsr.w	OptionsScreen_DrawOnOff
+		lea	(Options_buffer+(plane_width*3)).l,a1
+		moveq	#3,d0
+		moveq	#4-1,d2
+		bsr.w	OptionsScreen_CustomWriteToVRAM
+
+	.done:
+		moveq	#signextendB(sfx_Switch),d0
+		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
+OptionsScreen_MarkFields:					; Liliam: options menu
+		moveq	#palette_line_2>>8,d1
+
+OptionsScreen_UnmarkFields:
+		lea	(Options_buffer).l,a0
+		move.l	(Object_RAM+$24).w,d0
+		move.b	OptionsScreen_MarkTable(pc,d0.w),d0
+		move.l	d0,d2
+		mulu.w	#plane_width,d2
+		adda.w	d2,a0
+		movea.l	a0,a1
+		moveq	#plane_width-1,d2
+
+	.loop:
+		move.b	d1,(a0)
+		addq.w	#2,a0
+		dbf	d2,.loop
+		rts
+; ---------------------------------------------------------------------------
+OptionsScreen_TextPtrs:						; Liliam: options menu
+		dc.l OptionText_EncoreMode
+		dc.l OptionText_EncorePalette
+		dc.l OptionText_EncoreMusic
+		dc.l OptionText_SonicDropDash
+		dc.l OptionText_TailsRingBarrier
+		dc.l OptionText_KnuxClimbDash
+		dc.l OptionText_AmyDoubleJump
+		dc.l OptionText_MightyWallJump
+		dc.l OptionText_RayWallJump
+		dc.l OptionText_SonicPeelOut
+OptionsScreen_MarkTable:					; Liliam: options menu
+		dc.b    1,   3,   5,   8,  10,  12,  14,  16,  18,  20
+; ---------------------------------------------------------------------------
+
+OptionsScreen_BuildPlaneMap:					; Liliam: options menu
+		moveq	#0,d1
+		move.l	#Options_buffer+(plane_width*2)+(2*5),d0
+		tst.b	(Graphics_flags).w
+		bmi.s	.draw
+		addq.w	#2*3,d0
+
+	.draw:
+		lea	(OptionText_EncoreFlags).l,a0
+		bsr.s	OptionsScreen_DrawText
+		subi.w	#(plane_width*7),d0
+		move.l	d0,d4
+		moveq	#3,d5
+
+	.loop1:
+		bsr.w	OptionsScreen_GetUnlockState
+		move.w	d5,d2
+		lsl.w	#2,d2
+		movea.l	OptionsScreen_TextPtrs(pc,d2.w),a0
+		bsr.s	OptionsScreen_DrawOption
+		addq.w	#1,d5
+		cmpi.b	#9,d5
+		bls.s	.loop1
+		bsr.w	OptionsScreen_SetupDrawOnOff
+		moveq	#-1,d5
+
+	.loop2:
+		bsr.s	OptionsScreen_DrawOnOff
+		cmpi.b	#9-2,d5
+		bls.s	.loop2
+
+OptionsScreen_DrawOnOff:
+		addq.w	#1,d5
+		bsr.w	OptionsScreen_GetOnOffState
+
+OptionsScreen_RedrawOnOff:
+		lea	(OptionText_On).l,a0
+		btst	d2,(a1)
+		bne.s	OptionsScreen_DrawOption
+		lea	(OptionText_Off).l,a0
+
+OptionsScreen_DrawOption:
+		moveq	#0,d0
+		move.b	OptionsScreen_MarkTable(pc,d5.w),d0
+		mulu.w	#plane_width,d0
+		add.l	d4,d0
+
+OptionsScreen_DrawText:
+		movea.l a0,a1
+		move.w	(a1)+,d3
+		ori.w	#palette_line_1,d1
+		tst.b	(Graphics_flags).w
+		bmi.s	.nextLine
+		addq.w	#2,a1
+
+	.nextLine:
+		move.w	(a1),d2
+		lea	(a0,d2.w),a2
+		moveq	#0,d2
+		move.b	(a2)+,d2
+		move.l	d0,a3
+		tst.b	d1
+		beq.s	.loop
+
+	.override:
+		move.w	d1,(a3)+
+		tst.b	(a2)+
+		bne.s	.skip
+		clr.b	-1(a3)
+
+	.skip:
+		dbf	d2,.override
+		bra.s	.done
+; ---------------------------------------------------------------------------
+
+	.loop:
+		move.b	(a2)+,d1
+		cmpi.b	#Kana_Voiced,d1
+		bhs.s	.dakuten
+
+	.draw:
+		move.w	d1,(a3)+
+		dbf	d2,.loop
+		clr.b	d1
+
+	.done:
+		addq.w	#4,a1
+		addi.w	#(plane_width*2),d0
+		dbf	d3,.nextLine
+		rts
+; ---------------------------------------------------------------------------
+
+	.dakuten:
+		cmpi.b	#Kana_Voiced+40,d1
+		bhs.s	.handakuten
+		move.w	#palette_line_1+Kana_Voiced,-80(a3)
+		subi.b	#Kana_Voiced-Hiragana_KST,d1
+		cmpi.b	#Hiragana_H-5,d1
+		blo.s	.draw
+		addi.b	#5,d1
+		cmpi.b	#Hiragana_H+5,d1
+		blo.s	.draw
+		addi.b	#Katakana_KST-Hiragana_H-5,d1
+		cmpi.b	#Katakana_H-5,d1
+		blo.s	.draw
+		addi.b	#5,d1
+		bra.s	.draw
+; ---------------------------------------------------------------------------
+
+	.handakuten:
+		cmpi.b	#Kana_Voiced+50,d1
+		bhs.s	.custom
+		move.w	#palette_line_1+Kana_Voiced+01,-80(a3)
+		subi.b	#Kana_Voiced+40-Hiragana_H,d1
+		cmpi.b	#Hiragana_H+5,d1
+		blo.s	.draw
+		addi.b	#Katakana_H-Hiragana_H-5,d1
+		bra.s	.draw
+; ---------------------------------------------------------------------------
+
+	.custom:
+		subi.b	#Kana_Voiced+50,d1
+		ext.w	d1
+		add.w	d1,d1
+		lea	OptionsScreen_8x16_Kana(pc,d1.w),a4
+		move.w	#palette_line_1,d1
+		move.b	(a4)+,d1
+		move.w	d1,-80(a3)
+		move.b	(a4)+,d1
+		bra.s	.draw
+; ---------------------------------------------------------------------------
+OptionsScreen_8x16_Kana:					; Liliam: options menu
+		dc.b Kana_Voiced, Katakana_KST-3
+		dc.b Kana_Voiced+02, Kana_Voiced+03
+		dc.b Kana_Voiced+02, Kana_Voiced+04
+		dc.b Kana_Voiced+02, Kana_Voiced+05
+		dc.b Kana_Voiced+02, Kana_Voiced+06
+		dc.b Kana_Voiced+02, Kana_Voiced+07
+		dc.b Kana_Voiced+02, Kana_Voiced+08
+		dc.b Kana_Voiced+09, Kana_Voiced+10
+		dc.b Kana_Voiced+11, Kana_Voiced+12
+		dc.b Kana_Voiced+13, Kana_Voiced+14
+OptionsScreen_HelpText:						; Liliam: options menu
+		dc.l HelpText_EncoreMode
+		dc.l HelpText_EncorePalette
+		dc.l HelpText_EncoreMusic
+		dc.l HelpText_SonicDropDash
+		dc.l HelpText_TailsRingBarrier
+		dc.l HelpText_KnuxClimbDash
+		dc.l HelpText_AmyDoubleJump
+		dc.l HelpText_MightyWallJump
+		dc.l HelpText_RayWallJump
+		dc.l HelpText_SonicPeelOut
+; ---------------------------------------------------------------------------
+
+OptionsScreen_CheckButton:					; Liliam: options menu
+		btst	#button_A,(Ctrl_1_pressed).w
+		beq.w	OptionsScreen_Return
+		clearRAM	RAM_start,plane_width*plane_height
+
+		move.l	#RAM_start+(plane_width*3)+(2*5),d0
+		lea	(OptionsScreen_TextPtrs).l,a0
+		bsr.s	OptionsScreen_DrawHelpText
+		lea	(RAM_start+(plane_width*5)+(2*5)),a0
+		bsr.s	OptionsScreen_DrawDivider
+
+		move.l	#RAM_start+(plane_width*7)+(2*5),d0
+		lea	(OptionsScreen_HelpText).l,a0
+		bsr.s	OptionsScreen_DrawHelpText
+		lea	(RAM_start).l,a1
+		move.l	#vdpComm(VRAM_Plane_A_Name_Table+(1024-320)>>2,VRAM,WRITE),d0
+		moveq	#plane_width>>1-1,d1
+		moveq	#plane_height-1,d2
+		jsr	(Plane_Map_To_VRAM_2).l
+
+		lea	(Object_RAM).w,a0
+		move.w	#41,$2E(a0)
+		move.w	#-$20,$28(a0)
+		clr.w	mainspr_childsprites(a0)
+
+	.done:
+		moveq	#signextendB(sfx_Starpost),d0
+		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
+OptionsScreen_DrawDivider:					; Liliam: options menu
+		move.w	#palette_line_1+Katakana_H+31,d0
+		moveq	#$1D-1,d1
+
+	.loop:
+		move.w	d0,(a0)+
+		dbf	d1,.loop
+		addq.w	#1,d0
+		move.w	d0,(a0)
+		rts
+; ---------------------------------------------------------------------------
+
+OptionsScreen_DrawHelpText:					; Liliam: options menu
+		move.l	(Object_RAM+$24).w,d5
+		lsl.w	#2,d5
+		movea.l	(a0,d5.w),a0
+		moveq	#0,d1
+		bra.w	OptionsScreen_DrawText
+; ---------------------------------------------------------------------------
+
+OptionsScreen_Help:						; Liliam: options menu
+		move.b	(Ctrl_1_pressed).w,d0
+		andi.b	#button_ABC_mask|button_start_mask,d0
+		beq.w	OptionsScreen_MainLoop
+		lea	(Object_RAM).w,a0
+		move.w	#41,$2E(a0)
+		move.w	#$20,$28(a0)
+		bra.w	OptionsScreen_MainLoop
+; ---------------------------------------------------------------------------
+
+OptionsScreen_Scroll:						; Liliam: options menu
+		addq.w	#1,d0
+		lsr.w	#1,d0
+		lea	OptionsScreen_ScrollOffsets-1(pc,d0.w),a1
+		moveq	#10-1,d1
+		moveq	#32-1,d2
+
+	.loop1:
+		moveq	#0,d0
+		tst.b	(a1)+
+		beq.s	.loop2
+		move.l	$28(a0),d0
+
+	.loop2:
+		add.l	d0,(a2)+
+		dbf	d2,.loop2
+		moveq	#16-1,d2
+		dbf	d1,.loop1
+		subq.w	#1,$2E(a0)
+		bne.s	.return
+		tst.l	$28(a0)
+		bmi.s	.return
+		move.w	#1,mainspr_childsprites(a0)
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+OptionsScreen_ScrollOffsets:					; Liliam: options menu
+		dc.b    0,   0,   0,   0,   0,   0,   0,   0,   0,   1
+		dc.b    1,   1,   1,   1,   1,   1,   1,   1,   1
+		dc.b    1,   0,   0,   0,   0,   0,   0,   0,   0,   0
+		even
+Map_OptionsScreen:						; Liliam: options menu
+		include "General/Save Menu/Map - Options Menu.asm"
+; ---------------------------------------------------------------------------
 
 S3Credits:							; Liliam: ported from S3 - restore staff roll
 		jsr	(Pal_FadeToBlack).l
@@ -132674,8 +133275,8 @@ S3Credits:							; Liliam: ported from S3 - restore staff roll
 		clr.w	(Competition_mode).w
 		disableDisplay
 		jsr	(Clear_DisplayData).l
-		clearRAM	Sprite_table,$280+4
-		clearRAM	H_scroll_buffer,$400+4
+		clearRAM	Sprite_table,$280
+		clearRAM	H_scroll_buffer,$400
 		clearRAM	Sprite_table_input,$400
 		clearRAM	Player_1,$2000
 		clearRAM	RAM_start+$2000,$2000
@@ -215523,6 +216124,7 @@ ArtUnc_StarPostStars3:							; Liliam: HUD - barrier HUD
 		binclude "General/Sprites/Starpost/Starpost Stars 3.bin"
 ArtUnc_StarPostStars_Encore:						; Liliam: Encore mode - bonus stage
 		binclude "General/Sprites/Starpost/Starpost Stars Encore.bin"
+		include "strings.asm"				; Liliam: options menu
 		align $20000
 ; ---------------------------------------------------------------------------
 ArtUnc_Sonic_Extra:
@@ -215908,9 +216510,6 @@ ArtKos_SaveScreenZoneArt_Encore:
 		even
 ArtKos_SaveScreenPortrait:
 		binclude "General/Save Menu/Kosinski Art/Portraits.bin"
-		even
-ArtKos_LevelSelectZoneArt:					; Liliam: level select - restore zone icons
-		binclude "General/Save Menu/Kosinski Art/Level Select Zone Art.bin"
 		even
 DemoDat_AIZ:							; Liliam: reinsert S3 data
 		binclude "Levels/AIZ/Demodata/1.bin"
@@ -216791,33 +217390,8 @@ Pal_Save_ZoneCard_SSZ_Encore:						; Liliam: Encore mode - save data
 		binclude "General/Save Menu/Palettes/Encore Mode/Zone Card C.bin"
 Pal_Save_ZoneCard_DEZ_Encore:						; Liliam: Encore mode - save data
 		binclude "General/Save Menu/Palettes/Encore Mode/Zone Card D.bin"
-Pal_Save_ZoneCard_FBZ_Night:						; Liliam: Encore mode - save data
-		binclude "General/Save Menu/Palettes/Encore Mode/Zone Card 8 Night.bin"
-Pal_Save_ZoneCard_HPZ_Encore:						; Liliam: Encore mode - save data
-		binclude "General/Save Menu/Palettes/Encore Mode/Zone Card B.bin"
-Pal_Save_ZoneCard_ALZ:							; Liliam: Encore mode - save data
-		binclude "General/Save Menu/Palettes/Encore Mode/Zone Cards 2P 1.bin"
-Pal_Save_ZoneCard_BPZ:							; Liliam: Encore mode - save data
-		binclude "General/Save Menu/Palettes/Encore Mode/Zone Cards 2P 2.bin"
-Pal_Save_ZoneCard_DPZ:							; Liliam: Encore mode - save data
-		binclude "General/Save Menu/Palettes/Encore Mode/Zone Cards 2P 3.bin"
-Pal_Save_ZoneCard_CGZ:							; Liliam: Encore mode - save data
-		binclude "General/Save Menu/Palettes/Encore Mode/Zone Cards 2P 4.bin"
-Pal_Save_ZoneCard_EMZ:							; Liliam: Encore mode - save data
-		binclude "General/Save Menu/Palettes/Encore Mode/Zone Cards 2P 5.bin"
-Pal_Save_ZoneCard_Bonus1:					; Liliam: level select - restore zone icons
-		binclude "General/Save Menu/Palettes/Zone Card Bonus 1.bin"
-Pal_Save_ZoneCard_Bonus2:					; Liliam: level select - restore zone icons
-		binclude "General/Save Menu/Palettes/Zone Card Bonus 2.bin"
-Pal_Save_ZoneCard_Bonus3:					; Liliam: level select - restore zone icons
-		binclude "General/Save Menu/Palettes/Zone Card Bonus 3.bin"
-Pal_Save_ZoneCard_EncoreBonus:					; Liliam: level select - restore zone icons
-		binclude "General/Save Menu/Palettes/Encore Mode/Zone Card Bonus.bin"
-Pal_Save_ZoneCard_SpecialStage:					; Liliam: level select - restore zone icons
-		binclude "General/Save Menu/Palettes/Zone Card Special.bin"
 Pal_LevelSelect:								; Liliam: level select - use data select background
 		binclude "General/Save Menu/Palettes/Level Select.bin"
-		even
 Map_LevelSelect:						; Liliam: level select - restore zone icons
 		include "General/Save Menu/Map - Level Select.asm"
 LevelSelectOptions:						; Liliam: level select - expand options
@@ -216956,11 +217530,17 @@ LevSelData_SoundTest:						; Liliam: level select - expand options
 		dc.w $FFFF, $FFFF
 		levselstr "SOUND TEST  <00>"
 		even
+ArtKos_LevSelBorder:						; Liliam: level select - restore zone icons
+		binclude "General/Save Menu/Kosinski Art/Level Select Border.bin"
+		even
 MapEni_LevSelBorder:						; Liliam: level select - restore zone icons
 		binclude "General/Save Menu/Enigma Map/Level Select Border.eni"
 		even
-ArtKos_LevSelBorder:						; Liliam: level select - restore zone icons
-		binclude "General/Save Menu/Kosinski Art/Level Select Border.bin"
+ArtKos_LevelSelectZoneArt:					; Liliam: level select - restore zone icons
+		binclude "General/Save Menu/Kosinski Art/Level Select Zone Art.bin"
+		even
+ArtKos_OptionsScreen:						; Liliam: options menu
+		binclude "General/Save Menu/Kosinski Art/Options Menu.bin"
 		even
 ArtKosM_TitleCardNum1_HCZ:					; Liliam: title cards - display unique act icons
 		binclude "General/Sprites/Title Card/Title Card HCZ 1.bin"
