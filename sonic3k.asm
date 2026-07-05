@@ -10029,31 +10029,33 @@ LevSelControls_PickCharacters:					; Liliam: ported from S3 - pick both characte
 
 sub_206C3C:
 		btst	#button_C+8,d0
-		beq.s	locret_7F60
+		beq.s	locret_7F20
 		btst	#button_A,d0
 		beq.s	loc_206C56
 		clr.w	(Encore_stocks_packed).w
 		subq.b	#1,(a1)
-		bpl.s	locret_7F60
-	if NoMetalSonic
+		bpl.s	locret_7F20
 		move.b	#5,(a1)
-	else
+		btst	#Unlock_MetalSonic,(Unlock_flags).w
+		beq.s	locret_7F20
 		move.b	#6,(a1)
-	endif
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_206C56:
+loc_206C56:							; Liliam: ported from S3 - pick both characters
 		btst	#button_C,d0
-		beq.s	locret_7F60
+		beq.s	locret_7F20
 		clr.w	(Encore_stocks_packed).w
 		addq.b	#1,(a1)
-	if NoMetalSonic
+
 		cmpi.b	#6,(a1)
-	else
+		blo.s	locret_7F20
+		btst	#Unlock_MetalSonic,(Unlock_flags).w
+		beq.s	loc_206C6A
 		cmpi.b	#7,(a1)
-	endif
-		blo.s	locret_7F60
+		blo.s	locret_7F20
+
+loc_206C6A:
 		move.b	#0,(a1)
 		rts
 ; ---------------------------------------------------------------------------
@@ -10065,11 +10067,10 @@ LevelSelect_PickPlayerMode:
 		beq.s	loc_7F46				;
 		subq.w	#1,(Player_option).w			;
 		bpl.s	locret_7F60				;
-	if NoMetalSonic
 		move.w	#6,(Player_option).w			;
-	else
+		btst	#Unlock_MetalSonic,(Unlock_flags).w	;
+		beq.s	locret_7F60				;
 		move.w	#7,(Player_option).w			;
-	endif
 		rts						;
 ; ---------------------------------------------------------------------------
 
@@ -10077,13 +10078,15 @@ loc_7F46:
 		btst	#button_C,(Ctrl_1_pressed).w
 		beq.s	locret_7F60
 		addq.w	#1,(Player_option).w
-	if NoMetalSonic
 		cmpi.w	#7,(Player_option).w			; Liliam: add extra characters
-	else
+		blo.s	locret_7F60				;
+		btst	#Unlock_MetalSonic,(Unlock_flags).w	;
+		beq.s	loc_7F5A				;
 		cmpi.w	#8,(Player_option).w			;
-	endif
 ;		cmpi.w	#4,(Player_option).w			;
 		blo.s	locret_7F60
+
+loc_7F5A:
 		move.w	#0,(Player_option).w
 
 locret_7F60:
@@ -15840,13 +15843,6 @@ loc_C256:
 		clr.w	(a1)+					;
 		dbf	d0,.loop3				;
 		move.w	d1,(a1)+				;
-	if DevMode
-		move.b	#-1,(Unlock_flags).w			;
-	else
-		nop						;
-		nop						;
-		nop						;
-	endif
 		move.b	#EncoreFlags_Initial,(Encore_options).w	;
 		bsr.w	Write_SaveExtra				;
 
@@ -15888,29 +15884,15 @@ SaveData_MainDefault:
 	endif
 SaveData_EncoreDefault:							; Liliam: Encore mode - save data
 	if DevMode
-		if NoMetalSonic
-		dc.w   $30C,   %111111001000<<3,     0, $FFFC,    %110101100011
-		dc.w      6,   %111111000010<<3,     0,     0,       %110101010
-		dc.w  $8000,   %111111<<9,           0,     0,                0
+		dc.w   $30C,   %1111111001000<<3,     0, $FFFC, %111110101100011
+		dc.w      7,    %111111000010<<3,     0,     0,       %110101010
+		dc.w  $8000,                1<<9,     0,     0,                0
 		dc.w  SRAM_integrity
-		else
-		dc.w   $30C,  %1111111001000<<3,     0, $FFFC, %111110101100011
-		dc.w      6,  %1111111000010<<3,     0,     0,       %110101010
-		dc.w  $8000,  %1111111<<9,           0,     0,                0
-		dc.w  SRAM_integrity
-		endif
 	else
-		if NoMetalSonic
-		dc.w  $8000,  %111111<<9,     0,     0,     0
-		dc.w  $8000,  %111111<<9,     0,     0,     0
-		dc.w  $8000,  %111111<<9,     0,     0,     0
+		dc.w  $8000,  1<<9,     0,     0,     0
+		dc.w  $8000,  1<<9,     0,     0,     0
+		dc.w  $8000,  1<<9,     0,     0,     0
 		dc.w  SRAM_integrity
-		else
-		dc.w  $8000, %1111111<<9,     0,     0,     0
-		dc.w  $8000, %1111111<<9,     0,     0,     0
-		dc.w  $8000, %1111111<<9,     0,     0,     0
-		dc.w  SRAM_integrity
-		endif
 	endif
 ;SaveData_S3LevRef:
 		; Liliam: removed S&K lock-on code
@@ -17865,17 +17847,16 @@ SaveScreen_PickPlayerMode:
 		lsr.w	#1,d1
 		bcc.s	loc_D6EE
 		moveq	#signextendB(sfx_Switch),d2
-		subq.w	#1,d0						; Liliam: data select - reverse up/down controls
-		bpl.s	loc_D6FA					;
-	if NoMetalSonic
-		moveq	#6,d0						;
-	else
-		moveq	#7,d0						;
-	endif
-;		addq.w	#1,d0						;
+;		addq.w	#1,d0						; Liliam: data select - reverse up/down controls
 ;		cmpi.w	#3,d0						;
 ;		bls.s	loc_D6FA					;
+		subq.w	#1,d0						;
+		bpl.s	loc_D6FA					;
+		moveq	#6,d0						;
 ;		moveq	#0,d0						;
+		btst	#Unlock_MetalSonic,(Unlock_flags).w		;
+		beq.s	loc_D6FA					;
+		moveq	#7,d0						;
 		bra.s	loc_D6FA
 ; ---------------------------------------------------------------------------
 
@@ -17883,16 +17864,18 @@ loc_D6EE:
 		lsr.w	#1,d1
 		bcc.s	loc_D6FA
 		moveq	#signextendB(sfx_Switch),d2
-		addq.w	#1,d0						; Liliam: data select - reverse up/down controls
-	if NoMetalSonic
-		cmpi.w	#6,d0						;
-	else
-		cmpi.w	#7,d0						;
-	endif
-		bls.s	loc_D6FA					;
-		moveq	#0,d0						;
-;		subq.w	#1,d0						;
+;		subq.w	#1,d0						; Liliam: data select - reverse up/down controls
 ;		bpl.s	loc_D6FA					;
+		addq.w	#1,d0						;
+		cmpi.w	#6,d0						;
+		bls.s	loc_D6FA					;
+		btst	#Unlock_MetalSonic,(Unlock_flags).w		;
+		beq.s	loc_D6F8					;
+		cmpi.w	#7,d0						;
+		bls.s	loc_D6FA					;
+
+loc_D6F8:
+		moveq	#0,d0						;
 ;		moveq	#3,d0						;
 
 loc_D6FA:
@@ -18199,11 +18182,7 @@ loc_D8C4:
 		move.w	#$8000,SRAM_clear_type(a1)
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - save data
 		beq.s	loc_D8E8					;
-	if NoMetalSonic
-		move.w	#%111111<<9,SRAM_player_mode(a1)		;
-	else
-		move.w	#%1111111<<9,SRAM_player_mode(a1)		;
-	endif
+		move.w	#1<<9,SRAM_player_mode(a1)			;
 		clr.l	SRAM_collected_special_rings(a1)		;
 		clr.w	SRAM_life_count(a1)				;
 		st	(SRAM_mask_interrupts_flag).w			;
@@ -44450,11 +44429,7 @@ Obj_Monitor_EncoreStock:					; Liliam: Encore mode - character stock monitor
 
 	.nextItem:
 		addq.b	#1,d1
-	if NoMetalSonic
-		cmpi.b	#6,d1
-	else
 		cmpi.b	#7,d1
-	endif
 		blo.s	.checkAvailable
 		moveq	#0,d1
 
@@ -104742,22 +104717,21 @@ Slots_AniBreakableWallData:
 Slots_PickLayout:							; Liliam: Encore mode - bonus stage
 		moveq	#0,d1
 		tst.b	(Current_act).w
-		beq.s	Encore_CheckSpecialBonus.return
+		beq.s	locret_4B686
 
 Encore_CheckSpecialBonus:
+		moveq	#0,d0
 		move.b	(Encore_available_chars).w,d0
-		beq.s 	.return
+		beq.s 	locret_4B686
 		move.b	(Encore_unlocked_chars).w,d2
 		eor.b	d2,d0
 
-	.count:
+PopCount32:
 		addq.w	#1,d1
-		move.b	d0,d2
-		subq.b	#1,d2
-		and.b	d2,d0
-		bne.s	.count
-
-	.return:
+		move.l	d0,d2
+		subq.l	#1,d2
+		and.l	d2,d0
+		bne.s	PopCount32
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -107694,12 +107668,14 @@ loc_4D648:
 		bne.s	BlueSpheres_ReturnToTitle					;
 		move.w	(Player_option).w,d0						;
 		addq.w	#1,d0								;
-	if NoMetalSonic
+		cmpi.b	#6,d0								;
+		bls.s	.setPlayer							;
+		btst	#Unlock_MetalSonic,(Unlock_flags).w				;
+		beq.s	.loop								;
 		cmpi.b	#7,d0								;
-	else
-		cmpi.b	#8,d0								;
-	endif
-		blo.s	.setPlayer							;
+		bls.s	.setPlayer							;
+
+	.loop:
 		moveq	#1,d0								;
 
 	.setPlayer:
@@ -132689,10 +132665,180 @@ ArtNem_ContinueDigits:
 ; ---------------------------------------------------------------------------
 plane_width =	40*2
 plane_height =	28
+
+UnlockScreen:							; Liliam: hidden skills
+		move.b	(Demo_mode_flag).w,(Game_mode).w
+		tst.b	(Encore_mode).w
+		bne.s	.encoreMode
+		move.w	(Player_mode).w,d0
+		bne.s	.checkFlags
+		addq.w	#1,d0
+
+	.checkFlags:
+		bset	d0,(Unlock_flags).w
+		bne.w	UnlockScreen_Return
+		move.w	d0,-(sp)
+		bset	d0,(Skill_options).w
+		bra.s	.unlock
+; ---------------------------------------------------------------------------
+
+	.encoreMode:
+		btst	#Unlock_MetalSonic,(Unlock_flags).w
+	if NoMetalSonic
+		bra.w	UnlockScreen_Return
+	else
+		bne.w	UnlockScreen_Return
+	endif
+		move.l	(Collected_holograms_array).w,d0
+		moveq	#0,d1
+		jsr	(PopCount32).l
+	if EncoreSkip2PZones
+		cmpi.b	#28-5,d1
+	else
+		cmpi.b	#28,d1
+	endif
+	if DevMode
+		nop
+		nop
+	else
+		blo.w	UnlockScreen_Return
+	endif
+		move.w	#8,-(sp)
+		bset	#Unlock_MetalSonic,(Unlock_flags).w
+
+	.unlock:
+		st	(SRAM_mask_interrupts_flag).w
+		jsr	(Write_SaveExtra).l
+		jsr	(Pal_FadeToBlack).l
+		disableDisplay
+
+		jsr	(Clear_DisplayData).l
+		dmaFillVRAM 0,VRAM_Plane_A_Name_Table+$1000,$1000
+
+		lea	(VDP_control_port).l,a6
+		move.w	#VDP_Option0|VDPReg0_DisableHInt,(a6)
+		move.w	#VDP_Plane_A|(VRAM_Plane_A_Name_Table>>10),(a6)
+		move.w	#VDP_Plane_B|(VRAM_Plane_A_Name_Table>>13),(a6)
+		move.w	#VDP_BGColor|(palette_line_0>>9)|$00,(a6)
+		move.w	#VDP_Option2|VDPReg2_LineScroll,(a6)
+		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
+		move.w	#VDP_PlnSize|PlaneSize_1024x256,(a6)
+		move.w	#VDP_WinYPos|Window_Disable,(a6)
+		clearRAM	H_scroll_buffer,$400
+		clearRAM	Sprite_table_input,$400
+		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
+		clr.w	(DMA_queue).w
+		move.l	#DMA_queue,(DMA_queue_slot).w
+
+		move.l	#vdpComm(tiles_to_bytes(ArtTile_OptionsFont),VRAM,WRITE),(VDP_control_port).l
+		lea	(ArtNem_MenuFont).l,a0
+		jsr	(Nem_Decomp).l
+		move.l	#vdpComm(tiles_to_bytes(ArtTile_OptionsBG),VRAM,WRITE),(VDP_control_port).l
+		lea	(ArtNem_UnlockScreen).l,a0
+		jsr	(Nem_Decomp).l
+
+		clearRAM	RAM_start,plane_width*plane_height
+		move.w	(sp)+,d5
+		lsl.w	#2,d5
+		bsr.w	UnlockScreen_Congratulations
+		bsr.w	UnlockScreen_BuildPlaneMap
+
+		lea	(Object_RAM).w,a0
+		move.l	#Obj_UnlockScreen,(a0)
+		move.w	#82,$2E(a0)
+		move.w	#-$10,$28(a0)
+		jsr	(Init_SpriteTable).l
+		enableDisplay
+
+		lea	(Pal_SonicTails).l,a0
+		lea	(Normal_palette_line_2).w,a1
+		moveq	#bytesToLcnt($20),d0
+
+	.loop:
+		move.l	(a0)+,(a1)+
+		dbf	d0,.loop
+		moveq	#signextendB(cmd_Stop),d0
+		jsr	(Play_Music).l
+		move.l	#UnlockScreen_Return,(V_int_1E_addr).w
+
+UnlockScreen_MainLoop:
+		move.b	#$1E,(V_int_routine).w
+		jsr	(Wait_VSync).l
+		jsr	(Process_Sprites).l
+		jsr	(Render_Sprites).l
+		tst.l	(Object_RAM).w
+		bne.s	UnlockScreen_MainLoop
+		btst	#button_start,(Ctrl_1_held).w
+		bne.s	UnlockScreen_Return
+		btst	#button_start,(Ctrl_2_held).w
+		beq.s	UnlockScreen_MainLoop
+
+UnlockScreen_Return:
+		rts
+; ---------------------------------------------------------------------------
+
+Obj_UnlockScreen:						; Liliam: hidden skills
+		move.w	$2E(a0),d0
+		addq.w	#1,d0
+		lsr.w	#1,d0
+		lea	(H_scroll_buffer+$40).w,a2
+		bsr.w	OptionsScreen_Scroll
+		tst.w	$2E(a0)
+		bne.s	UnlockScreen_Return
+		moveq	#signextendB(sfx_Perfect),d0
+		jsr	(Play_SFX).l
+		jmp	(Delete_Current_Sprite).l
+; ---------------------------------------------------------------------------
+
+UnlockScreen_Congratulations:					; Liliam: hidden skills
+		lea	(MapEni_UnlockScreen).l,a0
+		lea	(RAM_start+(plane_width*3)+(2*6)).l,a1
+		move.w	#make_art_tile(ArtTile_OptionsBG,0,0),d0
+		jsr	(Eni_Decomp).l
+
+		lea	(RAM_start+(plane_width*5)-(2*6)).l,a1
+		moveq	#bytesToLcnt(2*40),d0
+
+	.loop1:
+		move.l	-(a1),2*2*6(a1)
+		dbf	d0,.loop1
+		moveq	#bytesToLcnt(2*2*6),d0
+
+	.loop2:
+		clr.l	(a1)+
+		dbf	d0,.loop2
+		rts
+; ---------------------------------------------------------------------------
+
+UnlockScreen_BuildPlaneMap:					; Liliam: hidden skills
+		movea.l	UnlockScreen_TextPtrs+8(pc,d5.w),a0
+		move.l	#RAM_start+(plane_width*9)+(2*5),d0
+		moveq	#-1,d1
+		bsr.w	OptionsScreen_DrawText
+
+UnlockScreen_WriteToVRAM:
+		lea	(RAM_start).l,a1
+		move.l	#vdpComm(VRAM_Plane_A_Name_Table+(1024-320)>>2,VRAM,WRITE),d0
+		moveq	#plane_width>>1-1,d1
+		moveq	#plane_height-1,d2
+		jmp	(Plane_Map_To_VRAM_2).l
+; ---------------------------------------------------------------------------
+UnlockScreen_TextPtrs:						; Liliam: hidden skills
+		dc.l HelpText_EncoreMode
+		dc.l HelpText_EncorePalette
+		dc.l HelpText_EncoreMusic
+		dc.l HelpText_SonicDropDash
+		dc.l HelpText_TailsRingBarrier
+		dc.l HelpText_KnuxClimbDash
+		dc.l HelpText_AmyDoubleJump
+		dc.l HelpText_MightyWallJump
+		dc.l HelpText_RayWallJump
+		dc.l HelpText_SonicPeelOut
+		dc.l UnlockText_MetalSonic
+; ---------------------------------------------------------------------------
 Options_buffer = RAM_start+plane_width*plane_height
 
 Museum:
-UnlockScreen:
 OptionsScreen:							; Liliam: options menu
 		moveq	#signextendB(sfx_Starpost),d0
 		jsr	(Play_SFX).l
@@ -133066,10 +133212,13 @@ OptionsScreen_DrawText:
 
 	.nextLine:
 		move.w	(a1),d2
+		beq.s	.done
 		lea	(a0,d2.w),a2
 		moveq	#0,d2
 		move.b	(a2)+,d2
 		move.l	d0,a3
+		tst.l	d1
+		bmi.s	.center
 		tst.b	d1
 		beq.s	.loop
 
@@ -133083,6 +133232,13 @@ OptionsScreen_DrawText:
 		dbf	d2,.override
 		bra.s	.done
 ; ---------------------------------------------------------------------------
+
+	.center:
+		move.w	#30,d1
+		sub.b	d2,d1
+		and.b	#$FE,d1
+		adda.w	d1,a3
+		move.w	#palette_line_1,d1
 
 	.loop:
 		move.b	(a2)+,d1
@@ -133151,17 +133307,6 @@ OptionsScreen_8x16_Kana:					; Liliam: options menu
 		dc.b Kana_Voiced+09, Kana_Voiced+10
 		dc.b Kana_Voiced+11, Kana_Voiced+12
 		dc.b Kana_Voiced+13, Kana_Voiced+14
-OptionsScreen_HelpText:						; Liliam: options menu
-		dc.l HelpText_EncoreMode
-		dc.l HelpText_EncorePalette
-		dc.l HelpText_EncoreMusic
-		dc.l HelpText_SonicDropDash
-		dc.l HelpText_TailsRingBarrier
-		dc.l HelpText_KnuxClimbDash
-		dc.l HelpText_AmyDoubleJump
-		dc.l HelpText_MightyWallJump
-		dc.l HelpText_RayWallJump
-		dc.l HelpText_SonicPeelOut
 ; ---------------------------------------------------------------------------
 
 OptionsScreen_CheckButton:					; Liliam: options menu
@@ -133176,13 +133321,9 @@ OptionsScreen_CheckButton:					; Liliam: options menu
 		bsr.s	OptionsScreen_DrawDivider
 
 		move.l	#RAM_start+(plane_width*7)+(2*5),d0
-		lea	(OptionsScreen_HelpText).l,a0
+		lea	(UnlockScreen_TextPtrs).l,a0
 		bsr.s	OptionsScreen_DrawHelpText
-		lea	(RAM_start).l,a1
-		move.l	#vdpComm(VRAM_Plane_A_Name_Table+(1024-320)>>2,VRAM,WRITE),d0
-		moveq	#plane_width>>1-1,d1
-		moveq	#plane_height-1,d2
-		jsr	(Plane_Map_To_VRAM_2).l
+		bsr.w	UnlockScreen_WriteToVRAM
 
 		lea	(Object_RAM).w,a0
 		move.w	#41,$2E(a0)
@@ -136309,7 +136450,7 @@ locret_5F0D8:
 ; ---------------------------------------------------------------------------
 
 loc_5F0DA:
-		move.b	(Demo_mode_flag).w,(Game_mode).w	; Liliam: ending - allow start from save screen
+		move.b	#$18,(Game_mode).w			; Liliam: hidden skills
 ;		move.b	#0,(Game_mode).w			;
 		rts
 ; ---------------------------------------------------------------------------
@@ -136510,7 +136651,7 @@ loc_5F2F8:
 ; ---------------------------------------------------------------------------
 
 loc_5F314:
-		move.b	(Demo_mode_flag).w,(Game_mode).w	; Liliam: ending - allow start from save screen
+		move.b	#$18,(Game_mode).w			; Liliam: hidden skills
 ;		move.b	#0,(Game_mode).w			;
 ;		rts						; Liliam: bugfix - sprite draw bug
 		jmp	(Draw_Sprite).l				;
@@ -137006,7 +137147,7 @@ loc_5F8A8:
 		bpl.s	locret_5F8C4
 
 loc_5F8BE:
-		move.b	(Demo_mode_flag).w,(Game_mode).w	; Liliam: ending - allow start from save screen
+		move.b	#$18,(Game_mode).w			; Liliam: hidden skills
 ;		move.b	#0,(Game_mode).w			;
 
 locret_5F8C4:
@@ -148093,6 +148234,13 @@ Obj_AIZMinibossCutscene:
 		move.w	#$370,y_pos(a1)				;
 		move.w	a1,parent3(a0)				;
 		move.l	#Obj_AIZMinibossCutscene_Wait,(a0)	;
+		btst	#Unlock_MetalSonic,(Unlock_flags).w	;
+		beq.s	Obj_AIZMinibossCutscene_Wait		;
+		btst	#2,(Encore_unlocked_chars).w		;
+		beq.s	Obj_AIZMinibossCutscene_Wait		;
+		btst	#6,(Encore_unlocked_chars).w		;
+		bne.s	Obj_AIZMinibossCutscene_Wait		;
+		move.b	#6,subtype(a1)				;
 
 Obj_AIZMinibossCutscene_Wait:
 		movea.w	parent3(a0),a1				;
@@ -217541,6 +217689,12 @@ ArtKos_LevelSelectZoneArt:					; Liliam: level select - restore zone icons
 		even
 ArtKos_OptionsScreen:						; Liliam: options menu
 		binclude "General/Save Menu/Kosinski Art/Options Menu.bin"
+		even
+ArtNem_UnlockScreen:						; Liliam: hidden skills
+		binclude "General/Save Menu/Nemesis Art/Unlock Screen.bin"
+		even
+MapEni_UnlockScreen:						; Liliam: hidden skills
+		binclude "General/Save Menu/Enigma Map/Unlock Screen.eni"
 		even
 ArtKosM_TitleCardNum1_HCZ:					; Liliam: title cards - display unique act icons
 		binclude "General/Sprites/Title Card/Title Card HCZ 1.bin"

@@ -13,6 +13,7 @@
 	public OptionText_MightyWallJump,   HelpText_MightyWallJump
 	public OptionText_RayWallJump,      HelpText_RayWallJump
 	public OptionText_SonicPeelOut,     HelpText_SonicPeelOut
+	public UnlockText_MetalSonic
 
 text macro numlines
 	dc.w numlines - 1
@@ -317,6 +318,15 @@ HelpText_SonicPeelOut: text 8
 .EN7:	str "RELEASE THE DIRECTIONAL PAD TO"
 .EN8:	str "IMMEDIATELY DASH FORWARD."
 	even
+
+UnlockText_MetalSonic: text 3+2
+	dc.w 0, 0
+	dc.w 0, 0
+	dc.w 0, 0
+	dc.w .EN1-UnlockText_MetalSonic, .EN1-UnlockText_MetalSonic
+	dc.w .EN2-UnlockText_MetalSonic, .EN2-UnlockText_MetalSonic
+.EN1:	str "YOU CAN NOW PLAY"
+.EN2:	str "AS METAL SONIC."
 
 	restore
 	endsection strings

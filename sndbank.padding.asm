@@ -512,13 +512,7 @@ Obj_MetalSonicHologram_DrawCount:
 		bset	d1,d0
 		move.l	d0,(Collected_holograms_array).w
 		moveq	#0,d1
-
-	.count:
-		addq.b	#1,d1
-		move.l	d0,d2
-		subq.l	#1,d2
-		and.l	d2,d0
-		bne.s	.count
+		jsr	(PopCount32).l
 		move.b	d1,subtype(a0)				; Save number of destroyed holograms
 		subq.w	#1,d1
 		bsr.w	MetalSonicHologram_DrawDigits
@@ -558,8 +552,12 @@ Obj_MetalSonicHologram_WaitForExplosions:
 		moveq	#signextendB(sfx_TimeStone),d0
 		moveq	#0,d1
 		move.b	subtype(a0),d1
+	if EncoreSkip2PZones
+		cmpi.b	#28-5,d1
+	else
 		cmpi.b	#28,d1
-		bne.s	.updateCount
+	endif
+		blo.s	.updateCount
 		move.l	#Obj_MetalSonicHologram_FlickerSprite,(a0)
 		moveq	#sfx_Perfect,d0
 
@@ -1426,11 +1424,12 @@ EncoreCapsule_SpawnPlayer:
 ; ---------------------------------------------------------------------------
 
 EncoreCapsule_UnlockCharacters:
-	if NoMetalSonic
-		moveq	#%111111,d0
-	else
+		moveq	#%0111111,d0
+		btst	#Unlock_MetalSonic,(Unlock_flags).w
+		beq.s	.updateFlags
 		moveq	#%1111111,d0
-	endif
+
+	.updateFlags:
 		move.b	d0,(Encore_unlocked_chars).w
 		move.b	d0,(Encore_available_chars).w
 		move.b	(P1_character).w,d0
