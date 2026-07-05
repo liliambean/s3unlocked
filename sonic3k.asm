@@ -46085,6 +46085,8 @@ loc_1E44C:
 		sub.w	d3,d0
 
 loc_1E45A:
+		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - release player from object
+		bne.w	locret_1E4D4				;
 		move.w	y_pos(a1),d2
 		move.b	y_radius(a1),d1
 		ext.w	d1
@@ -46098,8 +46100,6 @@ loc_1E45A:
 		bmi.w	locret_1E4D4
 		cmpi.b	#State_NoControl,routine(a1)
 		bhs.w	locret_1E4D4
-		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - release player from object
-		bne.s	locret_1E4D4				;
 		add.w	d0,d2
 		addq.w	#4,d2				; Liliam: bugfix???
 ;		addq.w	#3,d2				;
@@ -46140,6 +46140,8 @@ locret_1E4D4:
 loc_1E4D6:
 		move.w	y_pos(a0),d0
 		add.w	d3,d0
+		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - release player from object
+		bne.s	locret_1E4D4				;
 		move.w	y_pos(a1),d2
 		move.b	y_radius(a1),d1
 		ext.w	d1
@@ -46157,7 +46159,8 @@ loc_1E4D6:
 		sub.w	d1,d2
 		subq.w	#4,d2
 		move.w	d2,y_pos(a1)
-		bra.s	RideObject_SetRide
+		bra.w	RideObject_SetRide			;
+;		bra.s	RideObject_SetRide			;
 ; ---------------------------------------------------------------------------
 
 SolidObjCheckSloped2:
@@ -145014,10 +145017,10 @@ loc_660A6:
 		bne.w	locret_6206C
 
 loc_660AE:
-		btst	#Status_InAir,status_secondary(a1)
-		bne.w	locret_6206C
 		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - release player from object
 		bne.w	locret_6206C				;
+		btst	#Status_InAir,status_secondary(a1)
+		bne.w	locret_6206C
 		jmp	(HurtCharacter_Directly).l
 ; ---------------------------------------------------------------------------
 
@@ -185133,6 +185136,8 @@ sub_80FA6:
 		beq.s	locret_80FF0
 		tst.w	d0
 		beq.s	loc_80FD6
+		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - release player from object
+		bne.s	loc_80FD6				;
 		movea.w	d0,a1
 		tst.b	invulnerability_timer(a1)
 		bne.s	loc_80FD6
