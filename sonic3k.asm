@@ -343,6 +343,7 @@ GameModes:
 		dc.l SaveScreen			; $4C
 		dc.l TimeAttack_Records		; $50
 		dc.l OptionsScreen		; $54		;
+		dc.l EraseDataScreen		; $58		;
 ; ---------------------------------------------------------------------------
 		; Liliam: removed dead code
 
@@ -17202,6 +17203,9 @@ Obj_SaveScreen_Selector_Main:
 		btst	#button_A,(Ctrl_1_pressed).w		; Liliam: options menu
 		beq.s	loc_D1FA				;
 		tst.w	(Events_bg+$10).w			;
+		bne.w	loc_D2CE				;
+		move.b	#$58,(Game_mode).w			;
+		tst.w	(Events_bg+$12).w			;
 		bne.w	loc_D2CE				;
 		move.b	#$54,(Game_mode).w			;
 		bra.w	loc_D2CE				;
@@ -132839,6 +132843,7 @@ UnlockScreen_TextPtrs:						; Liliam: hidden skills
 Options_buffer = RAM_start+plane_width*plane_height
 
 Museum:
+EraseDataScreen:
 OptionsScreen:							; Liliam: options menu
 		moveq	#signextendB(sfx_Starpost),d0
 		jsr	(Play_SFX).l
@@ -132909,6 +132914,8 @@ OptionsScreen:							; Liliam: options menu
 		move.w	#$14C,y_pos(a0)
 		move.b	(Encore_mode).w,$1C(a0)
 		move.b	#6,$2C(a0)
+		cmp.b	#$58,(Game_mode).w
+		beq.s	.initSprites
 		move.b	#$40,render_flags(a0)
 		move.b	#1,mapping_frame(a0)
 		move.w	#1,mainspr_childsprites(a0)
@@ -132916,30 +132923,42 @@ OptionsScreen:							; Liliam: options menu
 		move.w	#$14C,sub2_y_pos(a0)
 		move.b	#2,sub2_mapframe(a0)
 		move.b	#9,$2C(a0)
+
+	.initSprites:
 		jsr	(Init_SpriteTable).l
 		jsr	(Process_Sprites).l
 		jsr	(Render_Sprites).l
 		enableDisplay
 
-		tst.b	(Game_mode).w
+		move.b	(Game_mode).w,d1
 		bmi.s	.levelSelect
 		move.w	#$EEE,(Target_palette_line_2+$02).w
 		move.w	#$222,(Target_palette_line_2+$1E).w
 		move.w	#$0EE,(Target_palette_line_3+$02).w
 		move.w	#$222,(Target_palette_line_3+$1E).w
+		lea	(Pal_EraseDataMenuBG).l,a0
 		lea	(Target_palette).w,a1
 		moveq	#bytesToLcnt($18),d0
+		cmpi.b	#$58,d1
+		beq.s	.loop2
 		tst.b	(Encore_mode).w
 		bne.s	.encoreBG
 		lea	(Pal_LevelSelect).l,a0
 
-	.loop:
+	.loop1:
 		move.l	(a0)+,(a1)+
-		dbf	d0,.loop
+		dbf	d0,.loop1
 
 	.levelSelectBG:
 		jsr	(Pal_FadeFromBlack_Original).l
 		bra.s	OptionsScreen_MainLoop
+; ---------------------------------------------------------------------------
+
+	.loop2:
+		move.l	(a0)+,(a1)+
+		dbf	d0,.loop2
+		jsr	(Pal_FadeFromBlack).l
+		bra.w	EraseDataScreen_MainLoop
 ; ---------------------------------------------------------------------------
 
 	.levelSelect:
@@ -132973,8 +132992,7 @@ OptionsScreen_MainLoop:
 		move	#$2300,sr
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	OptionsScreen_MainLoop
-		st	(SRAM_mask_interrupts_flag).w
-		jsr	(Write_SaveExtra).l
+		bsr.w	OptionsScreen_SaveData
 		move.b	(Game_mode).w,d0
 		move.b	#$24+$80,(Game_mode).w
 		tst.b	d0
@@ -132988,6 +133006,32 @@ OptionsScreen_MainLoop:
 		bclr	#7,(Game_mode).w
 		moveq	#signextendB(cmd_FadeOut),d0
 		jmp	(Play_Music).l
+; ---------------------------------------------------------------------------
+
+EraseDataScreen_Animate:					; Liliam: options menu
+		subq.w	#1,d0
+		move.w	d0,$2E(a0)
+		lsr.w	#1,d0
+		move.b	PalCycle_EraseDataScreen(pc,d0.w),d0
+		move.b	d0,(Normal_palette_line_3+$03).w
+
+EraseDataScreen_MainLoop:
+		move.b	#$1E,(V_int_routine).w
+		jsr	(Wait_VSync).l
+		lea	(Object_RAM).w,a0
+		move.w	$2E(a0),d0
+		bne.s	EraseDataScreen_Animate
+		move	#$2700,sr
+		bsr.s	OptionsScreen_Controls
+		move	#$2300,sr
+		btst	#button_B,(Ctrl_1_pressed).w
+		beq.s	EraseDataScreen_MainLoop
+		move.b	#$4C+$80,(Game_mode).w
+		rts
+; ---------------------------------------------------------------------------
+PalCycle_EraseDataScreen:					; Liliam: options menu
+		dc.b  $EE, $CE, $AE, $8E, $6E, $4E, $2E, $2E, $2E, $2E, $2E, $2E
+		dc.b  $2E, $2E, $2E, $2E
 ; ---------------------------------------------------------------------------
 
 OptionsScreen_Controls:						; Liliam: options menu
@@ -133056,6 +133100,8 @@ OptionsScreen_CustomWriteToVRAM:
 
 OptionsScreen_GetUnlockState:					; Liliam: options menu
 		moveq	#0,d1
+		cmp.b	#$58,(Game_mode).w
+		beq.s	OptionsScreen_Return
 		move.w	d5,d2
 		cmpi.b	#3,d2
 		blo.s	OptionsScreen_Return
@@ -133098,6 +133144,20 @@ OptionsScreen_Return:
 
 OptionsScreen_CheckLR:						; Liliam: options menu
 		move.b	(Ctrl_1_pressed).w,d1
+		cmp.b	#$58,(Game_mode).w
+		bne.s	.notEraseMenu
+		andi.w	#button_confirm_mask,d1
+		beq.s	OptionsScreen_Return
+		move.w	#$20,$2E(a0)
+		move.l	$24(a0),d5
+		add.w	d5,d5
+		move.w	EraseDataScreen_Index(pc,d5.w),d0
+		jsr	EraseDataScreen_Index(pc,d0.w)
+		moveq	#signextendB(sfx_AllSpheres),d0
+		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
+	.notEraseMenu:
 		andi.b	#button_left_mask|button_right_mask,d1
 		beq.w	OptionsScreen_CheckButton
 		move.l	$24(a0),d5
@@ -133120,6 +133180,83 @@ OptionsScreen_CheckLR:						; Liliam: options menu
 		moveq	#signextendB(sfx_Switch),d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
+EraseDataScreen_Index:						; Liliam: options menu
+		dc.w EraseDataScreen_Erase1Player-EraseDataScreen_Index
+		dc.w EraseDataScreen_EraseEncoreMode-EraseDataScreen_Index
+		dc.w EraseDataScreen_EraseCompetition-EraseDataScreen_Index
+		dc.w EraseDataScreen_ErasePhotoPieces-EraseDataScreen_Index
+		dc.w EraseDataScreen_EraseHolograms-EraseDataScreen_Index
+		dc.w EraseDataScreen_EraseBlueSphere-EraseDataScreen_Index
+		dc.w EraseDataScreen_EraseUnlockFlags-EraseDataScreen_Index
+; ---------------------------------------------------------------------------
+
+EraseDataScreen_Erase1Player:					; Liliam: options menu
+		lea	(SaveData_MainDefault).l,a0
+		lea	(Saved_data).w,a1
+		moveq	#bytesToWcnt(SRAM_main_size-2),d0
+
+	.loop:
+		move.w	(a0)+,(a1)+
+		dbf	d0,.loop
+		st	(SRAM_mask_interrupts_flag).w
+		jmp	(Write_SaveGame).l
+; ---------------------------------------------------------------------------
+
+EraseDataScreen_EraseEncoreMode:				; Liliam: options menu
+		lea	(SaveData_EncoreDefault).l,a0
+		lea	(Encore_saved_data).w,a1
+		moveq	#bytesToWcnt(SRAM_encore_size-2),d0
+
+	.loop:
+		move.w	(a0)+,(a1)+
+		dbf	d0,.loop
+		st	(SRAM_mask_interrupts_flag).w
+		jmp	(Write_SaveEncore).l
+; ---------------------------------------------------------------------------
+
+EraseDataScreen_EraseCompetition:				; Liliam: options menu
+		lea	(SaveData_CompetitionDefault).l,a0
+		lea	(Competition_saved_data).w,a1
+		moveq	#bytesToWcnt(SRAM_competition_size-2),d0
+
+	.loop:
+		move.w	(a0)+,(a1)+
+		dbf	d0,.loop
+		st	(SRAM_mask_interrupts_flag).w
+		jmp	(Write_SaveCompetition).l
+; ---------------------------------------------------------------------------
+
+EraseDataScreen_ErasePhotoPieces:				; Liliam: options menu
+		move.b	(Encore_options).w,d0
+		clr.l	(Collected_photo_piece_array).w
+		clr.l	(Collected_photo_piece_array+4).w
+		clr.l	(Collected_photo_piece_array+8).w
+		clr.l	(Collected_photo_piece_array+$C).w
+		move.b	d0,(Encore_options).w
+		bra.s	OptionsScreen_SaveData
+; ---------------------------------------------------------------------------
+
+EraseDataScreen_EraseHolograms:					; Liliam: options menu
+		clr.l	(Collected_holograms_array).w
+		bra.s	OptionsScreen_SaveData
+; ---------------------------------------------------------------------------
+
+EraseDataScreen_EraseBlueSphere:				; Liliam: options menu
+		clr.l	(Blue_spheres_saved_level).w
+		clr.b	(Blue_spheres_menu_flag).w
+		bra.s	OptionsScreen_SaveData
+; ---------------------------------------------------------------------------
+
+EraseDataScreen_EraseUnlockFlags:				; Liliam: options menu
+		clr.w	(Skill_options).w
+		clr.w	(Dataselect_nosave_player).w
+		clr.w	(Player_option).w
+		clr.w	(P1_character).w
+
+OptionsScreen_SaveData:
+		st	(SRAM_mask_interrupts_flag).w
+		jmp	(Write_SaveExtra).l
+; ---------------------------------------------------------------------------
 
 OptionsScreen_MarkFields:					; Liliam: options menu
 		moveq	#palette_line_2>>8,d1
@@ -133127,7 +133264,17 @@ OptionsScreen_MarkFields:					; Liliam: options menu
 OptionsScreen_UnmarkFields:
 		lea	(Options_buffer).l,a0
 		move.l	(Object_RAM+$24).w,d0
+		cmp.b	#$58,(Game_mode).w
+		bne.s	.notEraseMenu
+		add.w	d0,d0
+		addq.w	#5,d0
+		bra.s	.calc
+; ---------------------------------------------------------------------------
+
+	.notEraseMenu:
 		move.b	OptionsScreen_MarkTable(pc,d0.w),d0
+
+	.calc:
 		move.l	d0,d2
 		mulu.w	#plane_width,d2
 		adda.w	d2,a0
@@ -133159,10 +133306,18 @@ OptionsScreen_BuildPlaneMap:					; Liliam: options menu
 		moveq	#0,d1
 		move.l	#Options_buffer+(plane_width*2)+(2*5),d0
 		tst.b	(Graphics_flags).w
-		bmi.s	.draw
+		bmi.s	.checkEraseMenu
 		addq.w	#2*3,d0
 
-	.draw:
+	.checkEraseMenu:
+		cmp.b	#$58,(Game_mode).w
+		bne.s	.notEraseMenu
+		addi.w	#(plane_width*4),d0
+		lea	(OptionText_EraseDataScreen).l,a0
+		bra.s	OptionsScreen_DrawText
+; ---------------------------------------------------------------------------
+
+	.notEraseMenu:
 		lea	(OptionText_EncoreFlags).l,a0
 		bsr.s	OptionsScreen_DrawText
 		subi.w	#(plane_width*7),d0
@@ -215825,6 +215980,9 @@ ArtKosM_EMZTitleCard:						; Liliam: reinsert S3 data
 ArtKosM_BonusTitleCard:
 		; Liliam: title cards - display katakana in Japan mode
 		binclude "General/Sprites/Title Card/Bonus Title Card.bin"
+		even
+Pal_EraseDataMenuBG:						; Liliam: options menu
+		binclude "General/Save Menu/Palettes/Erase Data Menu BG.bin"
 		even
 Pal_CompetitionMenuBG:						; Liliam: reinsert S3 data
 		binclude "General/Competition Menu/Palettes/BG.bin"

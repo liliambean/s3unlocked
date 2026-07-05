@@ -1,7 +1,7 @@
 	section strings
 
 	public Hiragana_KST, Hiragana_H, Katakana_KST, Katakana_H, Kana_Voiced
-	public OptionText_EncoreFlags
+	public OptionText_EraseDataScreen,  OptionText_EncoreFlags
 	public OptionText_On,               OptionText_Off
 	public OptionText_EncoreMode,       HelpText_EncoreMode
 	public OptionText_EncorePalette,    HelpText_EncorePalette
@@ -53,6 +53,29 @@ Kana_Voiced  = ga
 	charset '&', '(', $2F
 	charset '-', $A3
 	charset ' ',   0
+
+OptionText_EraseDataScreen: text 7
+	dc.w .EN1-OptionText_EraseDataScreen, .JP1-OptionText_EraseDataScreen
+	dc.w .EN2-OptionText_EraseDataScreen, .JP2-OptionText_EraseDataScreen
+	dc.w .EN3-OptionText_EraseDataScreen, .JP3-OptionText_EraseDataScreen
+	dc.w .EN4-OptionText_EraseDataScreen, .JP4-OptionText_EraseDataScreen
+	dc.w .EN5-OptionText_EraseDataScreen, .JP5-OptionText_EraseDataScreen
+	dc.w .EN6-OptionText_EraseDataScreen, .JP6-OptionText_EraseDataScreen
+	dc.w .EN7-OptionText_EraseDataScreen, .JP7-OptionText_EraseDataScreen
+.EN1:	str "ERASE 1 PLAYER DATA"
+.EN2:	str "ERASE ENCORE MODE DATA"
+.EN3:	str "ERASE COMPETITION RECORDS"
+.EN4:	str "ERASE COLLECTED PHOTO PIECES"
+.EN5:	str "ERASE COLLECTED HOLOGRAMS"
+.EN6:	str "ERASE BLUE SPHERE PROGRESS"
+.EN7:	str "ERASE UNLOCKED REWARDS"
+.JP1:	str "1 PLAYER ", SE, dash, BU, DE, dash, TA, wo, 0, ke, shi, te
+.JP2:	str A, N, KO, dash, RU, MO, dash, DO, 0, SE, dash, BU, DE, dash, TA, wo, 0, ke, shi, te
+.JP3:	str KO, N, PE, TE, xI, SHI, xYO, N, " BEST TIME", wo, 0, ke, shi, te
+.JP4:	str FU, xO, TO, PI, dash, SU, 0, SE, dash, BU, DE, dash, TA, wo, 0, ke, shi, te
+.JP5:	str HO, RO, GU, RA, MU, 0, 0, SE, dash, BU, DE, dash, TA, wo, 0, ke, shi, te
+.JP6:	str BU, RU, dash, SU, FU, xI, A, IMA, no, " LEVEL", wo, 0, ke, shi, te
+.JP7:	str A, N, RO, xTU, KU, sa, re, ta, 0, 0, O, PU, SHI, xYO, N, wo, 0, ke, shi, te
 
 OptionText_EncoreFlags: text 3
 	dc.w OptionText_EncoreMode.EN-OptionText_EncoreFlags,    OptionText_EncoreMode.JP-OptionText_EncoreFlags
