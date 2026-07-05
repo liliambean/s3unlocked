@@ -1135,13 +1135,13 @@ Clear_DisplayData:
 
 		tst.w	(Competition_mode).w
 		beq.s	Clear_DisplayData_No2P
-		dmaFillVRAM 0,$8000,$4000
+		dmaFillVRAM 0,VRAM_Plane_A_Name_Table_Competition,$4000
 		bra.s	Clear_DisplayData_Cont
 ; ---------------------------------------------------------------------------
 
 Clear_DisplayData_No2P:
-		dmaFillVRAM 0,$C000,$1000	; clear plane A PNT
-		dmaFillVRAM 0,$E000,$1000	; clear plane B PNT
+		dmaFillVRAM 0,VRAM_Plane_A_Name_Table,$1000	; clear plane A PNT
+		dmaFillVRAM 0,VRAM_Plane_B_Name_Table,$1000	; clear plane B PNT
 
 Clear_DisplayData_Cont:
 		clr.l	(V_scroll_value).w
@@ -1290,12 +1290,12 @@ Pause_Main:
 		tst.b	(Life_count).w
 		beq.w	Pause_Unpause
 		tst.w	(Game_paused).w
-		bne.s	+
+		bne.s	loc_1408
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.b	#button_start_mask,d0	; is Start pressed?
 		beq.w	Pause_NoPause	; if not, branch
 
-+
+loc_1408:
 		move.w	#1,(Game_paused).w
 		stopZ80
 		move.b	#1,(Z80_RAM+zPauseFlag).l	; Pause the music
@@ -6961,7 +6961,7 @@ loc_6088:
 ;		bsr.w	LevelLoad_ActiveCharacter		; Liliam: reinsert AIZ intro PLC
 		; Liliam: removed original implementation
 
-loc_60DE:
+;loc_60DE:
 		clearRAM	Sprite_table_input,$400
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clearRAM	Lag_frame_count,$58
@@ -16362,7 +16362,7 @@ SaveScreen:
 		disableDisplay
 		jsr	(Clear_DisplayData).l
 
-		dmaFillVRAM 0,$D000,$1000
+		dmaFillVRAM 0,VRAM_Plane_A_Name_Table+$1000,$1000
 
 		lea	(VDP_control_port).l,a6
 		move.l	#CopyPal_SaveScreen,(Water_palette_data_addr).w	; Liliam: data select - add extra characters
@@ -128537,7 +128537,7 @@ LRZ3BGE_Normal:
 		jsr	(Load_PLC).l				;
 		jsr	(Load_PLC_MonitorsSpikesSprings).l	;
 		stopZ80						;
-		dmaFillVRAM 0,$E000,$1000			;
+		dmaFillVRAM 0,VRAM_Plane_B_Name_Table,$1000	;
 		startZ80					;
 		movem.l	(sp)+,d7-a0/a2-a3			;
 		addq.w	#4,(Events_routine_bg).w		;
@@ -132674,48 +132674,12 @@ S3Credits:							; Liliam: ported from S3 - restore staff roll
 		clr.w	(Competition_mode).w
 		disableDisplay
 		jsr	(Clear_DisplayData).l
-		lea	(Sprite_table).w,a1
-		moveq	#0,d0
-		move.w	#$A0,d1
-
-loc_2403AC:
-		move.l	d0,(a1)+
-		dbf	d1,loc_2403AC
-		lea	(H_scroll_buffer).w,a1
-		moveq	#0,d0
-		move.w	#$100,d1
-
-loc_2403BC:
-		move.l	d0,(a1)+
-		dbf	d1,loc_2403BC
-		lea	(Sprite_table_input).w,a1
-		moveq	#0,d0
-		move.w	#$FF,d1
-
-loc_2403CC:
-		move.l	d0,(a1)+
-		dbf	d1,loc_2403CC
-		lea	(Player_1).w,a1
-		moveq	#0,d0
-		move.w	#$7FF,d1
-
-loc_2403DC:
-		move.l	d0,(a1)+
-		dbf	d1,loc_2403DC
-		lea	(RAM_start+$2000).l,a1
-		moveq	#0,d0
-		move.w	#$7FF,d1
-
-loc_2403EE:
-		move.l	d0,(a1)+
-		dbf	d1,loc_2403EE
-		lea	(_unkFA80).w,a1
-		moveq	#0,d0
-		move.w	#$1F,d1
-
-loc_2403FE:
-		move.l	d0,(a1)+
-		dbf	d1,loc_2403FE
+		clearRAM	Sprite_table,$280+4
+		clearRAM	H_scroll_buffer,$400+4
+		clearRAM	Sprite_table_input,$400
+		clearRAM	Player_1,$2000
+		clearRAM	RAM_start+$2000,$2000
+		clearRAM	_unkFA80,$80
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
 		clr.w	(Player_mode).w
@@ -132802,13 +132766,7 @@ loc_240538:
 
 loc_24053E:
 		jsr	(Pal_FadeToBlack).l
-		lea	(RAM_start+$2000).l,a1
-		moveq	#0,d0
-		move.w	#$3FF,d1
-
-loc_240550:
-		move.l	d0,(a1)+
-		dbf	d1,loc_240550
+		clearRAM	RAM_start+$2000,$1000
 		move.w	(_unkFA84).w,d0
 		addq.w	#2,d0
 		move.w	d0,(_unkFA84).w
@@ -135594,7 +135552,7 @@ Obj_Ending_CutsceneSkip:					; Liliam: cutscene skip - ending part 5
 		bset	#3,(_unkFAB8).w
 		move.w	#8,(_unkFA86).w
 		stopZ80
-		dmaFillVRAM 0,$C000,$1000
+		dmaFillVRAM 0,VRAM_Plane_A_Name_Table,$1000
 		startZ80
 		bsr.s	Ending_LoadEyecatchObjects
 		move.l	$34(a0),d2
