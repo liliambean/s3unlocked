@@ -18,8 +18,8 @@ Obj_LevelSelect_Init:
 		move.w	#$1B8,x_pos(a0)
 		move.w	#$F0,y_pos(a0)
 		move.b	#$C,mapping_frame(a0)
+		move.w	#-1,(V_scroll_value_FG).w
 		clr.w	(H_scroll_buffer).w
-		move.w	#-1,(V_scroll_value).w
 		move.b	#4,routine(a0)
 		cmpi.b	#$1E,(Level_select_option+1).w
 		blo.s	Obj_LevelSelect_Return
@@ -317,12 +317,14 @@ LevelSelectZoneIcon_ExtraIcons:
 
 Obj_PhotoPiece:
 		tst.b	(Encore_mode).w
-		bne.w	PhotoPiece_Delete
-		cmpi.b	#120,subtype(a0)
-		bhs.w	PhotoPiece_Delete
-		bsr.w	PhotoPiece_LoadArray
+		bne.s	PhotoPiece_Delete
+		moveq	#0,d0
+		move.b	subtype(a0),d0
+		cmpi.b	#120,d0
+		bhs.s	PhotoPiece_Delete
+		bsr.s	PhotoPiece_LoadArray
 		btst	d1,(a1)
-		bne.w	PhotoPiece_Delete
+		bne.s	PhotoPiece_Delete
 		move.l	#Obj_PhotoPiece_Main,(a0)
 		move.l	#Map_PhotoPiece,mappings(a0)
 		move.w	#make_art_tile(ArtTile_EncoreCursor,0,1),art_tile(a0)
@@ -335,7 +337,9 @@ Obj_PhotoPiece:
 Obj_PhotoPiece_Main:
 		tst.b	routine(a0)
 		beq.s	.checkDelete
-		bsr.w	PhotoPiece_LoadArray
+		moveq	#0,d0
+		move.b	subtype(a0),d0
+		bsr.s	PhotoPiece_LoadArray
 		bset	d1,(a1)
 		st	(Photo_piece_disable_flag).w
 		st	(SRAM_mask_interrupts_flag).w
@@ -348,6 +352,20 @@ Obj_PhotoPiece_Main:
 
 	.checkDelete:
 		jmp	(Sprite_CheckDeleteTouch3).l
+; ---------------------------------------------------------------------------
+
+PhotoPiece_Delete:
+		clr.b	(Photo_piece_disable_flag).w
+		jmp	(Delete_Current_Sprite).l
+; ---------------------------------------------------------------------------
+
+PhotoPiece_LoadArray:
+		lea	(Collected_photo_piece_array),a1
+		move.b	d0,d1
+		andi.b	#%111,d1
+		lsr.w	#3,d0
+		adda.w	d0,a1
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_PhotoPiece_DrawDigits:
@@ -380,22 +398,6 @@ Obj_PhotoPiece_MoveSprite:
 
 	.done:
 		jmp	(Draw_Sprite).l
-; ---------------------------------------------------------------------------
-
-PhotoPiece_LoadArray:
-		lea	(Collected_photo_piece_array),a1
-		moveq	#0,d0
-		move.b	subtype(a0),d0
-		move.b	d0,d1
-		andi.b	#%111,d1
-		lsr.w	#3,d0
-		adda.w	d0,a1
-		rts
-; ---------------------------------------------------------------------------
-
-PhotoPiece_Delete:
-		clr.b	(Photo_piece_disable_flag).w
-		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 Map_PhotoPiece:
 		include "General/Sprites/Ring/Map - Photo Piece.asm"

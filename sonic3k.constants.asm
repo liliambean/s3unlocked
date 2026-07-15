@@ -567,7 +567,7 @@ Demo_start_button		ds.b 1			; keeps track of whether controller 1 has pressed th
 			ds.b 1				; unused
 Demo_data_addr			ds.l 1			; keeps getting incremented as the demo progresses
 SRAM_mask_interrupts_flag	ds.w 1			; if this is set SRAM routines will mask all interrupts (by setting the SR to $2700)
-			ds.w 1				; unused
+Museum_entry			ds.w 1		; Liliam: museum
 Object_index_addr		ds.l 1			; points to either the object index for S3 levels or that for S&K levels
 Act3_ring_count			ds.w 1			; stores ring count during act 3 transition
 Act3_timer			ds.l 1			; stores timer during act 3 transition

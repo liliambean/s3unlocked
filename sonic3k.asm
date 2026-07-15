@@ -6014,7 +6014,6 @@ loc_41D4:
 		moveq	#$7F,d0					; Liliam: title screen - expand options
 		and.b	(Title_screen_option).w,d0		;
 		move.b	TitleScreen_GameModes(pc,d0.w),d0	;
-		bmi.s	TitleScreen_DenySelection		;
 		move.b	d0,(Game_mode).w			;
 		cmpi.b	#$24,d0					;
 		beq.s	TitleScreen_LevelSelect			;
@@ -6026,13 +6025,8 @@ TitleScreen_LevelSelect:
 		bra.w	Play_Music				;
 ; ---------------------------------------------------------------------------
 
-TitleScreen_DenySelection:					; Liliam: museum - game mode
-		bsr.w	Play_SFX
-		bra.w	loc_41D4
-; ---------------------------------------------------------------------------
-
 TitleScreen_GameModes:						; Liliam: title screen - expand options
-		dc.b  $4C, $1C, $38, sfx_Error, $28, $20, $24
+		dc.b  $4C, $1C, $38, $10, $28, $20, $24
 		even
 ; ---------------------------------------------------------------------------
 
@@ -17121,7 +17115,7 @@ Obj_SaveScreen_StillSprites:					; Liliam: options menu
 		move.l	#Draw_Sprite,(a0)
 		move.w	#1,mainspr_childsprites(a0)
 		move.w	#$190,sub2_x_pos(a0)
-		move.w	#$14C,sub2_y_pos(a0)
+		move.w	#$14D,sub2_y_pos(a0)
 		move.b	#4,sub2_mapframe(a0)
 		tst.b	(Encore_mode).w
 		beq.s	.done
@@ -18837,7 +18831,7 @@ HUD_DrawZeroRings:
 
 
 HUD_DrawInitial:
-		move.w	#$F-1,d2					; Liliam: HUD - stop redrawing full HUD on exiting debug
+		move.w	#$F-1,d2				; Liliam: cutscene skip object
 
 sub_DE9C:
 		lea	(VDP_data_port).l,a6
@@ -18847,7 +18841,7 @@ sub_DE9C:
 
 		move.l	#vdpComm(tiles_to_bytes(ArtTile_PhotoPiece+$26),VRAM,WRITE),(VDP_control_port).l
 		lea	HUD_Initial_Parts(pc),a2
-;		move.w	#$F-1,d2					; Liliam: HUD - stop redrawing full HUD on exiting debug
+;		move.w	#$F-1,d2				; Liliam: cutscene skip object
 
 loc_DEBE:
 		lea	ArtUnc_HUDDigits(pc),a1
@@ -132842,7 +132836,6 @@ UnlockScreen_TextPtrs:						; Liliam: hidden skills
 ; ---------------------------------------------------------------------------
 Options_buffer = RAM_start+plane_width*plane_height
 
-Museum:
 EraseDataScreen:
 OptionsScreen:							; Liliam: options menu
 		moveq	#signextendB(sfx_Starpost),d0
@@ -132920,7 +132913,7 @@ OptionsScreen:							; Liliam: options menu
 		move.b	#1,mapping_frame(a0)
 		move.w	#1,mainspr_childsprites(a0)
 		move.w	#$19C,sub2_x_pos(a0)
-		move.w	#$14C,sub2_y_pos(a0)
+		move.w	#$14D,sub2_y_pos(a0)
 		move.b	#2,sub2_mapframe(a0)
 		move.b	#9,$2C(a0)
 
@@ -133413,9 +133406,10 @@ OptionsScreen_DrawText:
 ; ---------------------------------------------------------------------------
 
 	.dakuten:
+		move.w	d1,-80(a3)
 		cmpi.b	#Kana_Voiced+40,d1
 		bhs.s	.handakuten
-		move.w	#palette_line_1+Kana_Voiced,-80(a3)
+		move.b	#Kana_Voiced,-79(a3)
 		subi.b	#Kana_Voiced-Hiragana_KST,d1
 		cmpi.b	#Hiragana_H-5,d1
 		blo.s	.draw
@@ -133432,7 +133426,7 @@ OptionsScreen_DrawText:
 	.handakuten:
 		cmpi.b	#Kana_Voiced+50,d1
 		bhs.s	.custom
-		move.w	#palette_line_1+Kana_Voiced+01,-80(a3)
+		move.b	#Kana_Voiced+01,-79(a3)
 		subi.b	#Kana_Voiced+40-Hiragana_H,d1
 		cmpi.b	#Hiragana_H+5,d1
 		blo.s	.draw
@@ -133445,9 +133439,8 @@ OptionsScreen_DrawText:
 		ext.w	d1
 		add.w	d1,d1
 		lea	OptionsScreen_8x16_Kana(pc,d1.w),a4
-		move.w	#palette_line_1,d1
-		move.b	(a4)+,d1
-		move.w	d1,-80(a3)
+		move.w	-80(a3),d1
+		move.b	(a4)+,-79(a3)
 		move.b	(a4)+,d1
 		bra.s	.draw
 ; ---------------------------------------------------------------------------
@@ -133554,6 +133547,576 @@ OptionsScreen_ScrollOffsets:					; Liliam: options menu
 		even
 Map_OptionsScreen:						; Liliam: options menu
 		include "General/Save Menu/Map - Options Menu.asm"
+; ---------------------------------------------------------------------------
+
+Museum:								; Liliam: museum
+		jsr	(Pal_FadeToBlack).l
+		disableDisplay
+
+		jsr	(Clear_DisplayData).l
+
+		lea	(VDP_control_port).l,a6
+		move.w	#VDP_Option0|VDPReg0_DisableHInt,(a6)
+		move.w	#VDP_Plane_A|(VRAM_Plane_A_Name_Table>>10),(a6)
+		move.w	#VDP_Plane_B|(VRAM_Plane_B_Name_Table>>13),(a6)
+		move.w	#VDP_BGColor|(palette_line_0>>9)|$00,(a6)
+		move.w	#VDP_Option2|VDPReg2_LineScroll,(a6)
+		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
+		move.w	#VDP_PlnSize|PlaneSize_512x256,(a6)
+		move.w	#VDP_WinYPos|Window_Disable,(a6)
+		clearRAM	H_scroll_buffer,$400
+		clearRAM	Sprite_table_input,$400
+		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
+		clr.w	(DMA_queue).w
+		move.l	#DMA_queue,(DMA_queue_slot).w
+
+		move.l	#vdpComm(tiles_to_bytes(ArtTile_OptionsFont),VRAM,WRITE),(VDP_control_port).l
+		lea	(ArtNem_MenuFont).l,a0
+		jsr	(Nem_Decomp).l
+		move.l	#vdpComm(tiles_to_bytes(ArtTile_OptionsBG),VRAM,WRITE),(VDP_control_port).l
+		lea	(ArtNem_Museum).l,a0
+		jsr	(Nem_Decomp).l
+
+		lea	(MapEni_Museum_A).l,a0
+		move.l	#vdpComm(VRAM_Plane_A_Name_Table,VRAM,WRITE),d1
+		bsr.w	Museum_PlaneToVRAM
+
+		lea	(MapEni_Museum_B).l,a0
+		move.l	#vdpComm(VRAM_Plane_B_Name_Table,VRAM,WRITE),d1
+		bsr.w	Museum_PlaneToVRAM
+
+		bsr.w	Museum_DrawOption
+		bsr.w	Museum_OptionToVRAM
+
+		lea	(Object_RAM).w,a0
+		move.l	#Draw_Sprite,(a0)
+		move.l	#Map_MuseumSprites,mappings(a0)
+		move.w	#make_art_tile(ArtTile_OptionsBG,0,0),art_tile(a0)
+		move.b	#$40,render_flags(a0)
+		move.w	#$164,x_pos(a0)
+		move.w	#$D0,y_pos(a0)
+		move.b	#2,mapping_frame(a0)
+		move.w	#$19C,sub2_x_pos(a0)
+		move.w	#$14D,sub2_y_pos(a0)
+		move.w	#$A4,sub3_x_pos(a0)
+		move.w	#$154,sub3_y_pos(a0)
+		move.b	#1,sub3_mapframe(a0)
+		move.b	#$20,$1C(a0)
+		jsr	(Init_SpriteTable).l
+		jsr	(Process_Sprites).l
+		jsr	(Render_Sprites).l
+		enableDisplay
+
+		lea	(Pal_SonicTails).l,a0
+		lea	(Target_palette).w,a1
+		moveq	#bytesToLcnt($20),d0
+
+	.loop1:
+		move.l	(a0)+,(a1)+
+		dbf	d0,.loop1
+
+		lea	(Pal_Museum1).l,a0
+		lea	(Target_palette_line_4).w,a1
+		moveq	#bytesToLcnt($20),d0
+
+	.loop2:
+		move.l	(a0)+,(a1)+
+		dbf	d0,.loop2
+		bset 	#7,(Game_mode).w
+		bne.s	.done
+		moveq	#signextendB(mus_CompetitionMenu),d0
+		jsr	(Play_Music).l
+
+	.done:
+		jsr	(Pal_FadeFromBlack).l
+		move.l	#Obj_MuseumSprites,(Object_RAM).w
+		move.l	#Museum_Return,(V_int_1E_addr).w
+
+Museum_MainLoop:
+		move.b	#$1E,(V_int_routine).w
+		jsr	(Wait_VSync).l
+		jsr	(Process_Sprites).l
+		jsr	(Render_Sprites).l
+		bsr.s	Museum_Scroll
+		tst.w	(Object_RAM+mainspr_childsprites).w
+		beq.s	Museum_MainLoop
+		move.b	(Ctrl_1_pressed).w,d1
+		btst	#button_A,d1
+		bne.w	MuseumChecklist
+		move	#$2700,sr
+		bsr.w	Museum_Controls
+		move	#$2300,sr
+		btst	#button_B,(Ctrl_1_pressed).w
+		beq.s	Museum_MainLoop
+		clr.w	(Museum_entry).w
+		move.b	#4,(Game_mode).w
+		rts
+; ---------------------------------------------------------------------------
+
+Museum_PlaneToVRAM:						; Liliam: museum
+		move.w	#make_art_tile($000,3,0),d0
+		lea	(RAM_start).l,a1
+		jsr	(Eni_Decomp).l
+		lea	(RAM_start).l,a1
+		move.l	d1,d0
+		moveq	#64-1,d1
+		moveq	#28-1,d2
+		jmp	(Plane_Map_To_VRAM).l
+; ---------------------------------------------------------------------------
+
+Museum_Scroll:							; Liliam: museum
+		lea	(Object_RAM).w,a0
+		lea	(H_scroll_buffer).w,a1
+		move.w	$44(a0),d0
+		moveq	#$20-1,d1
+		bsr.s	.loop
+		move.w	$38(a0),d0
+		moveq	#$60-1,d1
+		bsr.s	.loop
+		move.w	$44(a0),d0
+		moveq	#$40-1,d1
+		bsr.s	.loop
+		move.w	$48(a0),d0
+		moveq	#$18-1,d1
+		bsr.s	.loop
+		lea	(H_scroll_buffer+2).w,a1
+		move.w	$38(a0),d0
+		moveq	#$20-1,d1
+		bsr.s	.loop
+		move.w	$30(a0),d0
+		moveq	#$40-1,d1
+		bsr.s	.loop
+		move.w	$34(a0),d0
+		moveq	#$20-1,d1
+		bsr.s	.loop
+		move.w	$38(a0),d0
+		moveq	#8-1,d1
+		bsr.s	.loop
+		move.w	$3C(a0),d0
+		moveq	#$20-1,d1
+		bsr.s	.loop
+		move.w	$40(a0),d0
+		moveq	#$18-1,d1
+		bsr.s	.loop
+		move.w	$44(a0),d0
+		moveq	#$20-1,d1
+
+	.loop:
+		move.w	d0,(a1)
+		addq.w	#4,a1
+		dbf	d1,.loop
+
+Museum_Return:
+		rts
+; ---------------------------------------------------------------------------
+
+Museum_Controls:						; Liliam: museum
+		andi.b	#button_left_mask|button_right_mask,d1
+		beq.s	Museum_Return
+		move.w	(Museum_entry).w,d0
+		cmpi.b	#button_left_mask,d1
+		beq.s	.decrement
+		addq.w	#1,d0
+		cmpi.b	#119,d0
+		bls.s	.playSFX
+		moveq	#0,d0
+		bra.s	.playSFX
+; ---------------------------------------------------------------------------
+
+	.decrement:
+		subq.w	#1,d0
+		bpl.s	.playSFX
+		move.w	#119,d0
+
+	.playSFX:
+		move.w	d0,(Museum_entry).w
+		moveq	#signextendB(sfx_Switch),d0
+		jsr	(Play_SFX).l
+		bsr.s	Museum_DrawOption
+		bsr.s	Museum_DrawOptionNumber
+
+Museum_OptionToVRAM:
+		lea	(RAM_start).l,a1
+		move.l	#vdpComm(VRAM_Plane_A_Name_Table+(64*2)*24+(34*2),VRAM,WRITE),d0
+		moveq	#40-1,d1
+		moveq	#3-1,d2
+		jmp	(Plane_Map_To_VRAM).l
+; ---------------------------------------------------------------------------
+
+Museum_DrawOption:						; Liliam: museum
+		clearRAM	RAM_start,($40*2)*3
+		move.w	(Museum_entry).w,d0
+		add.w	d0,d0
+		add.w	d0,d0
+		lea	(MuseumText).l,a0
+		lea	(a0,d0.w),a1
+		moveq	#0,d1
+		moveq	#0,d3
+		move.l	#RAM_start+(40*2)*2+(6*2),d0
+		bsr.w	OptionsScreen_DrawText.nextLine
+		subq.w	#2,a1
+		moveq	#0,d3
+		move.l	#RAM_start+(40*2)*1+(6*2),d0
+		bra.w	OptionsScreen_DrawText.nextLine
+; ---------------------------------------------------------------------------
+
+Museum_DrawOptionNumber:					; Liliam: museum
+		move.w	(Museum_entry).w,d0
+		addq.w	#1,d0
+		moveq	#0,d1
+
+	.loop1:
+		addq.w	#1,d1
+		subi.b	#100,d0
+		bpl.s	.loop1
+		addi.b	#100,d0
+		move.w	d1,(RAM_start+(40*2)*2+(1*2)).l
+		moveq	#0,d1
+
+	.loop2:
+		addq.w	#1,d1
+		subi.b	#10,d0
+		bpl.s	.loop2
+		addi.b	#10,d0
+		move.w	d1,(RAM_start+(40*2)*2+(2*2)).l
+		addq.b	#1,d0
+		move.w	d0,(RAM_start+(40*2)*2+(3*2)).l
+		rts
+; ---------------------------------------------------------------------------
+
+Obj_MuseumSprites:						; Liliam: museum
+		addq.w	#2,$24(a0)
+		addq.w	#4,$26(a0)
+		addq.w	#4,$28(a0)
+		addq.w	#6,$2A(a0)
+		addq.w	#8,$2C(a0)
+		addq.w	#8,$2E(a0)
+		subq.b	#1,$1C(a0)
+		beq.s	.done
+		cmpi.b	#$10,$1C(a0)
+		bhi.s	MuseumSprites_ApplySpeeds
+		subi.w	#$10,$48(a0)
+		bra.s	MuseumSprites_ApplySpeeds
+; ---------------------------------------------------------------------------
+
+	.done:
+		move.l	#Obj_MuseumSprites_DrawOption,(a0)
+		bra.s	Obj_MuseumSprites_Main
+; ---------------------------------------------------------------------------
+
+Obj_MuseumSprites_DrawOption:					; Liliam: museum
+		move.l	#Obj_MuseumSprites_Main,(a0)
+		move.l	a0,-(sp)
+		move	#$2700,sr
+		bsr.s	Museum_DrawOptionNumber
+		bsr.w	Museum_OptionToVRAM
+		move	#$2300,sr
+		movea.l	(sp)+,a0
+
+Obj_MuseumSprites_Main:
+		move.w	#1,mainspr_childsprites(a0)
+		move.w	x_pos(a0),d0
+		addq.w	#7,d0
+		btst	#4,d0
+		beq.s	MuseumSprites_ApplySpeeds
+		move.w	#2,mainspr_childsprites(a0)
+
+MuseumSprites_ApplySpeeds:
+		lea	$24(a0),a1
+		lea	$30(a0),a2
+		moveq	#6-1,d1
+
+	.loop:
+		moveq	#0,d0
+		move.w	(a1)+,d0
+		lsl.l	#8,d0
+		sub.l	d0,(a2)+
+		dbf	d1,.loop
+		sub.l	d0,x_pos(a0)
+		cmpi.w	#$164-$80,x_pos(a0)
+		bgt.s	.clamp1
+		addi.w	#$80,x_pos(a0)
+
+	.clamp1:
+		cmpi.w	#-$30,$34(a0)
+		bgt.s	.clamp2
+		addi.w	#$30,$34(a0)
+
+	.clamp2:
+		cmpi.w	#-$48,$40(a0)
+		bgt.s	.clamp3
+		addi.w	#$48,$40(a0)
+
+	.clamp3:
+		jmp	(Draw_Sprite).l
+; ---------------------------------------------------------------------------
+Map_MuseumSprites:						; Liliam: museum
+		include "General/Museum/Map - Museum.asm"
+; ---------------------------------------------------------------------------
+
+MuseumChecklist:						; Liliam: museum
+		moveq	#signextendB(sfx_Starpost),d0
+		jsr	(Play_SFX).l
+		jsr	(Pal_FadeToBlack).l
+		disableDisplay
+
+		move.w	#VDP_PlnSize|PlaneSize_512x512,(VDP_control_port).l
+		clearRAM	H_scroll_buffer,$400
+		clearRAM	Sprite_table_input,$400
+		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
+		clr.w	(DMA_queue).w
+		move.l	#DMA_queue,(DMA_queue_slot).w
+
+		lea	(ArtKos_S3MenuBG).l,a0
+		lea	(RAM_start).l,a1
+		movea.w	#tiles_to_bytes(ArtTile_OptionsBG+6),a2
+		jsr	(KosArt_To_VDP).l
+		move.b	#$1E,(V_int_routine).w
+		jsr	(Wait_VSync).l
+
+		lea	(MapEni_S3MenuBG).l,a0
+		lea	(RAM_start).l,a1
+		move.w	#make_art_tile(ArtTile_OptionsBG+6,3,0),d0
+		jsr	(Eni_Decomp).l
+		move.l	#vdpComm(VRAM_Plane_B_Name_Table,VRAM,WRITE),d0
+		moveq	#28-1,d2
+		bsr.w	MuseumChecklist_WriteToVRAM
+		bsr.w	MuseumChecklist_MarkCollected
+
+		lea	(Object_RAM).w,a0
+		move.l	#Obj_MuseumChecklist,(a0)
+		move.l	#Map_MuseumSprites,mappings(a0)
+		move.w	#make_art_tile(ArtTile_OptionsBG,0,0),art_tile(a0)
+		move.w	#$120,x_pos(a0)
+		move.w	#$F0,y_pos(a0)
+		move.w	#3,(V_scroll_value_FG).w
+		move.b	#7,(Rings_frame).w
+		clr.b	(Rings_frame_timer).w
+		jsr	(Init_SpriteTable).l
+		jsr	(Process_Sprites).l
+		jsr	(Render_Sprites).l
+		jsr	(ChangeRingFrame).l
+		enableDisplay
+
+		lea	(Pal_HPZ).l,a0
+		lea	(Target_palette_line_2).w,a1
+		moveq	#bytesToLcnt($20),d0
+
+	.loop1:
+		move.l	(a0)+,(a1)+
+		dbf	d0,.loop1
+		lea	(Pal_MuseumChecklistBG).l,a0
+		lea	(Target_palette_line_4).w,a1
+		moveq	#bytesToLcnt($18),d0
+
+	.loop2:
+		move.l	(a0)+,(a1)+
+		dbf	d0,.loop2
+		jsr	(Pal_FadeFromBlack).l
+
+MuseumChecklist_MainLoop:
+		move.b	#$1E,(V_int_routine).w
+		jsr	(Wait_VSync).l
+		jsr	(Process_Sprites).l
+		jsr	(Render_Sprites).l
+		jsr	(ChangeRingFrame).l
+		btst	#button_B,(Ctrl_1_pressed).w
+		beq.s	MuseumChecklist_MainLoop
+
+MuseumChecklist_Return:
+		rts
+; ---------------------------------------------------------------------------
+
+Obj_MuseumChecklist:						; Liliam: museum
+		move.w	(V_scroll_value_FG).w,d0
+		subq.w	#3,d0
+		btst	#button_down,(Ctrl_1_held).w
+		beq.s	.checkUp
+		addq.w	#2,d0
+
+	.checkUp:
+		btst	#button_up,(Ctrl_1_held).w
+		beq.s	.checkScroll
+		subq.w	#2,d0
+
+	.checkScroll:
+		move.b	#3,mapping_frame(a0)
+		tst.w	d0
+		beq.s	.scroll
+		bmi.s	.checkDraw
+		move.b	#4,mapping_frame(a0)
+		cmpi.w	#8*(40-28),d0
+		beq.s	.scroll
+		bhi.s	.checkDraw
+		move.b	#5,mapping_frame(a0)
+
+	.scroll:
+		addq.w	#3,d0
+		move.w	d0,(V_scroll_value_FG).w
+
+	.checkDraw:
+		move.b	(Rings_frame).w,d0
+		addq.b	#2,d0
+		btst	#2,d0
+		bne.s	MuseumChecklist_Return
+		jmp	(Draw_Sprite).l
+; ---------------------------------------------------------------------------
+
+MuseumChecklist_MarkCollected:					; Liliam: museum
+		lea	(MapEni_MuseumChecklist).l,a0
+		lea	(RAM_start).l,a1
+		move.w	#make_art_tile($000,0,0),d0
+		jsr	(Eni_Decomp).l
+		moveq	#-1,d1
+		moveq	#0,d2
+
+	.loop:
+		move.w	d2,d0
+		jsr	(PhotoPiece_LoadArray).l
+		btst	d1,(a1)
+		beq.s	.skip
+		move.w	d2,d0
+		add.w	d0,d0
+		move.w	MuseumChecklist_PhotoPieceLocs(pc,d0.w),d1
+		movea.l	d1,a1
+		move.w	#palette_line_1+ArtTile_PhotoPiece,(a1)
+		move.w	#palette_line_1+ArtTile_PhotoPiece+1,80(a1)
+		move.w	#palette_line_1+ArtTile_PhotoPiece+2,2(a1)
+		move.w	#palette_line_1+ArtTile_PhotoPiece+3,82(a1)
+
+	.skip:
+		addq.w	#1,d2
+		cmpi.w	#120,d2
+		blo.s	.loop
+		move.l	#vdpComm(VRAM_Plane_A_Name_Table,VRAM,WRITE),d0
+		moveq	#41-1,d2
+
+MuseumChecklist_WriteToVRAM:
+		lea	(RAM_start).l,a1
+		moveq	#40-1,d1
+		jmp	(Plane_Map_To_VRAM).l
+; ---------------------------------------------------------------------------
+MuseumChecklist_PhotoPieceLocs:					; Liliam: museum
+		dc.w  $72	; AIZ 1
+		dc.w  $76	; AIZ 2
+		dc.w  $7A	; AIZ 3
+		dc.w  $7E	; AIZ 4
+		dc.w  $82	; AIZ 5
+		dc.w  $88	; AIZ 6
+		dc.w  $8C	; AIZ 7
+		dc.w  $90	; AIZ 8
+		dc.w  $94	; AIZ 9
+		dc.w  $98	; AIZ 10
+		dc.w $162	; HCZ 1
+		dc.w $166	; HCZ 2
+		dc.w $16A	; HCZ 3
+		dc.w $16E	; HCZ 4
+		dc.w $172	; HCZ 5
+		dc.w $178	; HCZ 6
+		dc.w $17C	; HCZ 7
+		dc.w $180	; HCZ 8
+		dc.w $184	; HCZ 9
+		dc.w $188	; HCZ 10
+		dc.w $252	; MGZ 1
+		dc.w $256	; MGZ 2
+		dc.w $25A	; MGZ 3
+		dc.w $25E	; MGZ 4
+		dc.w $262	; MGZ 5
+		dc.w $268	; MGZ 6
+		dc.w $26C	; MGZ 7
+		dc.w $270	; MGZ 8
+		dc.w $274	; MGZ 9
+		dc.w $278	; MGZ 10
+		dc.w $342	; CNZ 1
+		dc.w $346	; CNZ 2
+		dc.w $34A	; CNZ 3
+		dc.w $34E	; CNZ 4
+		dc.w $352	; CNZ 5
+		dc.w $358	; CNZ 6
+		dc.w $35C	; CNZ 7
+		dc.w $360	; CNZ 8
+		dc.w $364	; CNZ 9
+		dc.w $368	; CNZ 10
+		dc.w $432	; ICZ 1
+		dc.w $436	; ICZ 2
+		dc.w $43A	; ICZ 3
+		dc.w $43E	; ICZ 4
+		dc.w $442	; ICZ 5
+		dc.w $448	; ICZ 6
+		dc.w $44C	; ICZ 7
+		dc.w $450	; ICZ 8
+		dc.w $454	; ICZ 9
+		dc.w $458	; ICZ 10
+		dc.w $522	; LBZ 1
+		dc.w $526	; LBZ 2
+		dc.w $52A	; LBZ 3
+		dc.w $52E	; LBZ 4
+		dc.w $532	; LBZ 5
+		dc.w $538	; LBZ 6
+		dc.w $53C	; LBZ 7
+		dc.w $540	; LBZ 8
+		dc.w $544	; LBZ 9
+		dc.w $548	; LBZ 10
+		dc.w $612	; MHZ 1
+		dc.w $616	; MHZ 2
+		dc.w $61A	; MHZ 3
+		dc.w $61E	; MHZ 4
+		dc.w $622	; MHZ 5
+		dc.w $628	; MHZ 6
+		dc.w $62C	; MHZ 7
+		dc.w $630	; MHZ 8
+		dc.w $634	; MHZ 9
+		dc.w $638	; MHZ 10
+		dc.w $702	; FBZ 1
+		dc.w $706	; FBZ 2
+		dc.w $70A	; FBZ 3
+		dc.w $70E	; FBZ 4
+		dc.w $712	; FBZ 5
+		dc.w $718	; FBZ 6
+		dc.w $71C	; FBZ 7
+		dc.w $720	; FBZ 8
+		dc.w $724	; FBZ 9
+		dc.w $728	; FBZ 10
+		dc.w $7F2	; SOZ 1
+		dc.w $7F6	; SOZ 2
+		dc.w $7FA	; SOZ 3
+		dc.w $7FE	; SOZ 4
+		dc.w $802	; SOZ 5
+		dc.w $808	; SOZ 6
+		dc.w $80C	; SOZ 7
+		dc.w $810	; SOZ 8
+		dc.w $814	; SOZ 9
+		dc.w $818	; SOZ 10
+		dc.w $8DC	; LRZ 1
+		dc.w $8E0	; LRZ 2
+		dc.w $8E4	; LRZ 3
+		dc.w $8E8	; LRZ 4
+		dc.w $8EC	; LRZ 5
+		dc.w $8F2	; LRZ 6
+		dc.w $8F6	; LRZ 7
+		dc.w $8FA	; LRZ 8
+		dc.w $8FE	; LRZ 9
+		dc.w $902	; LRZ 10
+		dc.w $908	; LRZ Boss
+		dc.w $9E2	; SSZ 1
+		dc.w $9E6	; SSZ 2
+		dc.w $9EA	; SSZ 3
+		dc.w $9EE	; SSZ 4
+		dc.w $9F2	; SSZ 5
+		dc.w $9F8	; SSZ Boss
+		dc.w $ABC	; DEZ 1
+		dc.w $AC0	; DEZ 2
+		dc.w $AC4	; DEZ 3
+		dc.w $AC8	; DEZ 4
+		dc.w $ACC	; DEZ 5
+		dc.w $AD2	; DEZ 6
+		dc.w $AD6	; DEZ 7
+		dc.w $ADA	; DEZ 8
+		dc.w $ADE	; DEZ 9
+		dc.w $AE2	; DEZ 10
+		dc.w $AE8	; DEZ Boss
+		dc.w $BB0	; DDZ
+		dc.w $BD8	; HPZ
 ; ---------------------------------------------------------------------------
 
 S3Credits:							; Liliam: ported from S3 - restore staff roll
@@ -194084,7 +194647,7 @@ Make_CutsceneSkipObj:						; Liliam: cutscene skip object
 		move.l	#Obj_CutsceneSkip_CheckDelete,(a1)
 		move.l	#Map_CutsceneSkip,mappings(a1)
 		move.w	#make_art_tile(ArtTile_Ring+$1E,0,1),art_tile(a1)
-		move.w	#$14E,y_pos(a1)
+		move.w	#$14F,y_pos(a1)
 		move.w	(Current_zone_and_act).w,d0
 		beq.s	CutsceneSkip_LoadArt
 		ror.b	#1,d0
@@ -214762,12 +215325,9 @@ loc_92C34:
 ;		move.b	#9,x_radius(a1)				;
 
 Debug_Reset_HUD:
-		move	#$2700,sr
-		st	(Update_HUD_score).w				; Liliam: HUD - stop redrawing full HUD on exiting debug
-;		move.b	#1,(Update_HUD_score).w				;
-		move.b	#$80,(Update_HUD_ring_count).w
+		st	(Update_HUD_score).w				; Liliam: HUD - reset on exiting debug frame cycling mode
+		move.b	#$80,(Update_HUD_ring_count).w			;
 		ori.b	#$80,(Update_HUD_timer).w			; Liliam: HUD - update timer on exiting debug
-		move	#$2300,sr
 
 locret_92C52:
 		rts
@@ -215984,6 +216544,9 @@ ArtKosM_BonusTitleCard:
 Pal_EraseDataMenuBG:						; Liliam: options menu
 		binclude "General/Save Menu/Palettes/Erase Data Menu BG.bin"
 		even
+Pal_MuseumChecklistBG:						; Liliam: museum
+		binclude "General/Save Menu/Palettes/Museum Checklist BG.bin"
+		even
 Pal_CompetitionMenuBG:						; Liliam: reinsert S3 data
 		binclude "General/Competition Menu/Palettes/BG.bin"
 		even
@@ -216349,7 +216912,7 @@ ArtUnc_BossExplosion:						; Liliam: Metal Sonic hologram object
 PalTable_CutsceneKnux_S3:					; Liliam: cutscene knux - convert palette
 		binclude  "General/Sprites/Knuckles/Cutscene/Pal - S3.bin"
 PalTable_CutsceneKnux_SK:					; Liliam: cutscene knux - convert palette
-		binclude  "General/Sprites/Knuckles/Cutscene/Pal - Sk.bin"
+		binclude  "General/Sprites/Knuckles/Cutscene/Pal - SK.bin"
 		align $20000
 ; ---------------------------------------------------------------------------
 ArtUnc_CutsceneKnux:						; Liliam: Encore mode - special Knuckles art for palette
@@ -216408,8 +216971,6 @@ ArtUnc_CutsceneSkip:						; Liliam: cutscene skip object
 		binclude "General/Sprites/HUD Icon/Cutscene Skip Hint.bin"
 ArtUnc_CutsceneRobotnik:						; Liliam: Encore mode - use Robotnik for cutscenes
 		binclude "General/Sprites/Robotnik/Cutscene Main.bin"
-PalTable_PlayerGrayscale:						; Liliam: Encore mode - bonus stage
-		binclude  "Levels/Slots/Misc Object Data/Pal - Grayscale.bin"
 Ani_Player:							; Liliam: simplify player anim selection
 		include "General/Sprites/Sonic/Anim - Players.asm"
 		align $20000
@@ -216420,8 +216981,6 @@ ArtUnc_Ray:							; Liliam: add extra characters
 ; ---------------------------------------------------------------------------
 ArtUnc_MetalSonic:						; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Art/Metal Sonic.bin"
-ArtUnc_BarrierHUD:							; Liliam: HUD - barrier HUD
-		binclude "General/Sprites/HUD Icon/Barrier HUD Icons.bin"
 ArtUnc_StarPostStars1:							; Liliam: HUD - barrier HUD
 		binclude "General/Sprites/Starpost/Starpost Stars 1.bin"
 ArtUnc_StarPostStars2:							; Liliam: HUD - barrier HUD
@@ -216430,6 +216989,8 @@ ArtUnc_StarPostStars3:							; Liliam: HUD - barrier HUD
 		binclude "General/Sprites/Starpost/Starpost Stars 3.bin"
 ArtUnc_StarPostStars_Encore:						; Liliam: Encore mode - bonus stage
 		binclude "General/Sprites/Starpost/Starpost Stars Encore.bin"
+PalTable_PlayerGrayscale:						; Liliam: Encore mode - bonus stage
+		binclude  "Levels/Slots/Misc Object Data/Pal - Grayscale.bin"
 		include "strings.asm"				; Liliam: options menu
 		align $20000
 ; ---------------------------------------------------------------------------
@@ -216438,6 +216999,8 @@ ArtUnc_Sonic_Extra:
 		binclude "General/Sprites/Sonic/Art/Sonic Extra.bin"
 ;ArtUnc_Tails_Extra:
 		; Liliam: simplify player anim selection
+ArtUnc_BarrierHUD:							; Liliam: HUD - barrier HUD
+		binclude "General/Sprites/HUD Icon/Barrier HUD Icons.bin"
 Map_Sonic:
 		; Liliam: simplify player anim selection
 		include "General/Sprites/Sonic/Map - Sonic.asm"
@@ -217672,6 +218235,81 @@ byte_3E544_S2:	c7anilistheader $10
 byte_3E544_S2_End
 		; Liliam: Metal Sonic - final boss END
 		even
+ArtKosM_TitleCardNum1_HCZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card HCZ 1.bin"
+		even
+ArtKosM_TitleCardNum2_HCZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card HCZ 2.bin"
+		even
+ArtKosM_TitleCardNum1_MGZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card MGZ 1.bin"
+		even
+ArtKosM_TitleCardNum2_MGZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card MGZ 2.bin"
+		even
+ArtKosM_TitleCardNum1_CNZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card CNZ 1.bin"
+		even
+ArtKosM_TitleCardNum2_CNZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card CNZ 2.bin"
+		even
+ArtKosM_TitleCardNum1_FBZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card FBZ 1.bin"
+		even
+ArtKosM_TitleCardNum2_FBZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card FBZ 2.bin"
+		even
+ArtKosM_TitleCardNum1_ICZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card ICZ 1.bin"
+		even
+ArtKosM_TitleCardNum2_ICZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card ICZ 2.bin"
+		even
+ArtKosM_TitleCardNum1_LBZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card LBZ 1.bin"
+		even
+ArtKosM_TitleCardNum2_LBZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card LBZ 2.bin"
+		even
+ArtKosM_TitleCardNum1_MHZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card MHZ 1.bin"
+		even
+ArtKosM_TitleCardNum2_MHZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card MHZ 2.bin"
+		even
+ArtKosM_TitleCardNum1_SOZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card SOZ 1.bin"
+		even
+ArtKosM_TitleCardNum2_SOZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card SOZ 2.bin"
+		even
+ArtKosM_TitleCardNum1_LRZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card LRZ 1.bin"
+		even
+ArtKosM_TitleCardNum2_LRZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card LRZ 2.bin"
+		even
+ArtKosM_TitleCardNum1_DEZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card DEZ 1.bin"
+		even
+ArtKosM_TitleCardNum2_DEZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card DEZ 2.bin"
+		even
+ArtKosM_TitleCardNum1_ALZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card ALZ.bin"
+		even
+ArtKosM_TitleCardNum1_BPZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card BPZ.bin"
+		even
+ArtKosM_TitleCardNum1_DPZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card DPZ.bin"
+		even
+ArtKosM_TitleCardNum1_CGZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card CGZ.bin"
+		even
+ArtKosM_TitleCardNum1_EMZ:					; Liliam: title cards - display unique act icons
+		binclude "General/Sprites/Title Card/Title Card EMZ.bin"
+		even
 Pal_Save_ZoneCard_AIZ_Encore:						; Liliam: Encore mode - save data
 		binclude "General/Save Menu/Palettes/Encore Mode/Zone Card 1.bin"
 Pal_Save_ZoneCard_HCZ_Encore:						; Liliam: Encore mode - save data
@@ -217854,81 +218492,22 @@ ArtNem_UnlockScreen:						; Liliam: hidden skills
 MapEni_UnlockScreen:						; Liliam: hidden skills
 		binclude "General/Save Menu/Enigma Map/Unlock Screen.eni"
 		even
-ArtKosM_TitleCardNum1_HCZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card HCZ 1.bin"
+ArtNem_Museum:							; Liliam: museum
+		binclude "General/Museum/Tiles.bin"
 		even
-ArtKosM_TitleCardNum2_HCZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card HCZ 2.bin"
+MapEni_Museum_A:						; Liliam: museum
+		binclude "General/Museum/Plane A Map.eni"
 		even
-ArtKosM_TitleCardNum1_MGZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card MGZ 1.bin"
+MapEni_Museum_B:						; Liliam: museum
+		binclude "General/Museum/Plane B Map.eni"
 		even
-ArtKosM_TitleCardNum2_MGZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card MGZ 2.bin"
+MapEni_MuseumChecklist:						; Liliam: museum
+		binclude "General/Museum/Checklist Plane Map.eni"
 		even
-ArtKosM_TitleCardNum1_CNZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card CNZ 1.bin"
-		even
-ArtKosM_TitleCardNum2_CNZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card CNZ 2.bin"
-		even
-ArtKosM_TitleCardNum1_FBZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card FBZ 1.bin"
-		even
-ArtKosM_TitleCardNum2_FBZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card FBZ 2.bin"
-		even
-ArtKosM_TitleCardNum1_ICZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card ICZ 1.bin"
-		even
-ArtKosM_TitleCardNum2_ICZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card ICZ 2.bin"
-		even
-ArtKosM_TitleCardNum1_LBZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card LBZ 1.bin"
-		even
-ArtKosM_TitleCardNum2_LBZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card LBZ 2.bin"
-		even
-ArtKosM_TitleCardNum1_MHZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card MHZ 1.bin"
-		even
-ArtKosM_TitleCardNum2_MHZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card MHZ 2.bin"
-		even
-ArtKosM_TitleCardNum1_SOZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card SOZ 1.bin"
-		even
-ArtKosM_TitleCardNum2_SOZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card SOZ 2.bin"
-		even
-ArtKosM_TitleCardNum1_LRZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card LRZ 1.bin"
-		even
-ArtKosM_TitleCardNum2_LRZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card LRZ 2.bin"
-		even
-ArtKosM_TitleCardNum1_DEZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card DEZ 1.bin"
-		even
-ArtKosM_TitleCardNum2_DEZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card DEZ 2.bin"
-		even
-ArtKosM_TitleCardNum1_ALZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card ALZ.bin"
-		even
-ArtKosM_TitleCardNum1_BPZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card BPZ.bin"
-		even
-ArtKosM_TitleCardNum1_DPZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card DPZ.bin"
-		even
-ArtKosM_TitleCardNum1_CGZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card CGZ.bin"
-		even
-ArtKosM_TitleCardNum1_EMZ:					; Liliam: title cards - display unique act icons
-		binclude "General/Sprites/Title Card/Title Card EMZ.bin"
-		even
+Pal_Museum1:							; Liliam: museum
+		binclude "General/Museum/Palette.bin"
+Pal_Museum2:							; Liliam: museum
+		binclude "General/Museum/Palette 2.bin"
 ;ArtKosM_StarPostStars1:
 		; Liliam: HUD - barrier HUD
 ;ArtKosM_StarPostStars2:
