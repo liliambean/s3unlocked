@@ -92836,7 +92836,12 @@ loc_41E6A:
 		subq.w	#4,$30(a0)
 
 loc_41E78:
-		move.b	-$1FB(a0),d0
+	if FixBugs
+		move.b	(Level_frame_counter+1).w,d0
+	else
+		; Bug: Level_frame_counter should not be using a0, as a0 is the object's RAM!
+		move.b	Level_frame_counter+1(a0),d0
+	endif
 		andi.b	#$F,d0
 		bne.s	loc_41E90
 		tst.b	render_flags(a0)
@@ -112205,7 +112210,7 @@ AIZ2SE_ShipRefresh:
 
 loc_4FFBA:
 		st	(Events_bg+$04).w
-		move.l	#HInt6,(H_int_addr).w	; HInt is needed to change Y scroll value to proper amount mid-draw
+		move.l	#HInt7,(H_int_addr).w	; HInt is needed to change Y scroll value to proper amount mid-draw
 		clr.b	(Water_flag).w
 		move.b	#$40,(H_int_counter).w		; Set HInt position
 		addq.w	#4,(Events_routine_fg).w
@@ -112254,7 +112259,7 @@ AIZ2SE_End:
 		jmp	DrawTilesAsYouMove(pc)
 ; ---------------------------------------------------------------------------
 
-HInt6:
+HInt7:
 		move.w	#VDP_HIntPos|$FF,(VDP_control_port).l
 		move.l	#vdpComm($0000,VSRAM,WRITE),(VDP_control_port).l
 		move.w	(Camera_Y_pos_copy).w,(VDP_data_port).l
@@ -121260,7 +121265,7 @@ loc_54F2A:
 		jsr	(Queue_Kos_Module).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		move.w	#$4EF9,(H_int_jump).w
-		move.l	#HInt6,(H_int_addr).w
+		move.l	#HInt7,(H_int_addr).w
 		move.b	#$80,(H_int_counter).w
 		move.w	#VDP_Option0|VDPReg0_EnableHInt,(VDP_control_port).l
 		addq.w	#4,(Events_routine_fg).w
