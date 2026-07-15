@@ -208,8 +208,8 @@ HelpText_EncoreMusic: text 8
 	even
 
 HelpText_SonicDropDash: text 8
-	dc.w .EN1-HelpText_SonicDropDash, .EN1-HelpText_SonicDropDash
-	dc.w .EN2-HelpText_SonicDropDash, .EN2-HelpText_SonicDropDash
+	dc.w .EN1-HelpText_SonicDropDash, .JP1-HelpText_SonicDropDash
+	dc.w .EN2-HelpText_SonicDropDash, .JP2-HelpText_SonicDropDash
 	dc.w .EN3-HelpText_SonicDropDash, .EN3-HelpText_SonicDropDash
 	dc.w .EN4-HelpText_SonicDropDash, .EN4-HelpText_SonicDropDash
 	dc.w .EN5-HelpText_SonicDropDash, .EN5-HelpText_SonicDropDash
@@ -224,11 +224,13 @@ HelpText_SonicDropDash: text 8
 .EN6:	str "RELEASE THE BUTTON TO CANCEL."
 .EN7:	str "GOING DOWNHILL MAXIMIZES"
 .EN8:	str "YOUR SPEED, UPHILL DAMPENS IT."
+.JP1:	str "[", SO, NI, xTU, KU, MA, NI, A, "]", ka, ra, no
+.JP2:	str SO, NI, xTU, KU, no, A, KU, SHI, xYO, N, ga, 0, A, N, RO, xTU, KU, sa, re, ta, "!"
 	even
 
 HelpText_TailsRingBarrier: text 8
-	dc.w .EN1-HelpText_TailsRingBarrier, .EN1-HelpText_TailsRingBarrier
-	dc.w .EN2-HelpText_TailsRingBarrier, .EN2-HelpText_TailsRingBarrier
+	dc.w .EN1-HelpText_TailsRingBarrier, .JP1-HelpText_TailsRingBarrier
+	dc.w .EN2-HelpText_TailsRingBarrier, .JP2-HelpText_TailsRingBarrier
 	dc.w .EN3-HelpText_TailsRingBarrier, .EN3-HelpText_TailsRingBarrier
 	dc.w .EN4-HelpText_TailsRingBarrier, .EN4-HelpText_TailsRingBarrier
 	dc.w .EN5-HelpText_TailsRingBarrier, .EN5-HelpText_TailsRingBarrier
@@ -243,11 +245,13 @@ HelpText_TailsRingBarrier: text 8
 .EN6:	str "RELEASE THE BUTTON TO TOSS THE"
 .EN7:	str "RING AND ATTACK ENEMIES."
 .EN8:	str "AIM IT BY PRESSING UP OR DOWN."
+.JP1:	str "[", TE, I, RU, SU, no, SU, KA, I, PA, TO, RO, dash, RU, "]", ka, ra, no
+.JP2:	str MA, I, RU, SU, no, A, KU, SHI, xYO, N, ga, 0, A, N, RO, xTU, KU, sa, re, ta, "!"
 	even
 
 HelpText_KnuxClimbDash: text 8
-	dc.w .EN1-HelpText_KnuxClimbDash, .EN1-HelpText_KnuxClimbDash
-	dc.w .EN2-HelpText_KnuxClimbDash, .EN2-HelpText_KnuxClimbDash
+	dc.w .EN1-HelpText_KnuxClimbDash, .JP1-HelpText_KnuxClimbDash
+	dc.w .EN2-HelpText_KnuxClimbDash, .JP2-HelpText_KnuxClimbDash
 	dc.w .EN3-HelpText_KnuxClimbDash, .EN3-HelpText_KnuxClimbDash
 	dc.w .EN4-HelpText_KnuxClimbDash, .EN4-HelpText_KnuxClimbDash
 	dc.w .EN5-HelpText_KnuxClimbDash, .EN5-HelpText_KnuxClimbDash
@@ -262,11 +266,13 @@ HelpText_KnuxClimbDash: text 8
 .EN6:	str "BEGIN CHARGING A SPIN DASH."
 .EN7:	str "RELEASE THE DIRECTIONAL PAD TO"
 .EN8:	str "DASH UP THE WALL."
+.JP1:	str "[", SO, NI, xTU, KU, A, DO, BA, N, SU, "3]", ka, ra, no
+.JP2:	str NA, xTU, KU, RU, ZU, no, A, KU, SHI, xYO, N, ga, 0, A, N, RO, xTU, KU, sa, re, ta, "!"
 	even
 
 HelpText_AmyDoubleJump: text 8
-	dc.w .EN1-HelpText_AmyDoubleJump, .EN1-HelpText_AmyDoubleJump
-	dc.w .EN2-HelpText_AmyDoubleJump, .EN2-HelpText_AmyDoubleJump
+	dc.w .EN1-HelpText_AmyDoubleJump, .JP1-HelpText_AmyDoubleJump
+	dc.w .EN2-HelpText_AmyDoubleJump, .JP2-HelpText_AmyDoubleJump
 	dc.w .EN3-HelpText_AmyDoubleJump, .EN3-HelpText_AmyDoubleJump
 	dc.w .EN4-HelpText_AmyDoubleJump, .EN4-HelpText_AmyDoubleJump
 	dc.w .EN5-HelpText_AmyDoubleJump, .EN5-HelpText_AmyDoubleJump
@@ -281,11 +287,13 @@ HelpText_AmyDoubleJump: text 8
 .EN6:	str "PRESS THE JUMP BUTTON AGAIN TO"
 .EN7:	str "PERFORM A DOUBLE JUMP AND GAIN"
 .EN8:	str "ADDITIONAL HEIGHT."
+.JP1:	str "[", SO, NI, xTU, KU, dot, SU, dash, PA, dash, SU, TA, dash, ZU, "]", ka, ra, no
+.JP2:	str E, MI, dash, no, A, KU, SHI, xYO, N, ga, 0, A, N, RO, xTU, KU, sa, re, ta, "!"
 	even
 
 HelpText_MightyWallJump: text 8
-	dc.w .EN1-HelpText_MightyWallJump, .EN1-HelpText_MightyWallJump
-	dc.w .EN2-HelpText_MightyWallJump, .EN2-HelpText_MightyWallJump
+	dc.w .EN1-HelpText_MightyWallJump, .JP1-HelpText_MightyWallJump
+	dc.w .EN2-HelpText_MightyWallJump, .JP2-HelpText_MightyWallJump
 	dc.w .EN3-HelpText_MightyWallJump, .EN3-HelpText_MightyWallJump
 	dc.w .EN4-HelpText_MightyWallJump, .EN4-HelpText_MightyWallJump
 	dc.w .EN5-HelpText_MightyWallJump, .EN5-HelpText_MightyWallJump
@@ -300,10 +308,12 @@ HelpText_MightyWallJump: text 8
 .EN6:	str "AIM USING THE DIRECTIONAL PAD,"
 .EN7:	str "THEN PRESS THE JUMP BUTTON"
 .EN8:	str "TO LEAP OFF IN THAT DIRECTION."
+.JP1:	str "[", KA, O, TE, xI, KU, SU, "]", ka, ra, no
+.JP2:	str MA, I, TE, xI, no, A, KU, SHI, xYO, N, ga, 0, A, N, RO, xTU, KU, sa, re, ta, "!"
 	even
 
 HelpText_RayWallJump: text 8
-	dc.w .EN1-HelpText_RayWallJump, .EN1-HelpText_RayWallJump
+	dc.w .EN1-HelpText_RayWallJump, .JP1-HelpText_RayWallJump
 	dc.w .EN2-HelpText_RayWallJump, .EN2-HelpText_RayWallJump
 	dc.w .EN3-HelpText_RayWallJump, .EN3-HelpText_RayWallJump
 	dc.w .EN4-HelpText_RayWallJump, .EN4-HelpText_RayWallJump
@@ -319,11 +329,12 @@ HelpText_RayWallJump: text 8
 .EN6:	str "RAY WILL ALSO GRAB ONTO A WALL"
 .EN7:	str "AUTOMATICALLY IF HE BUMPS INTO"
 .EN8:	str "IT WHILE FLYING."
+.JP1:	str RE, I, no, ka, ku, shi, A, KU, SHI, xYO, N, ga, 0, A, N, RO, xTU, KU, sa, re, ta, "?"
 	even
 
 HelpText_SonicPeelOut: text 8
-	dc.w .EN1-HelpText_SonicPeelOut, .EN1-HelpText_SonicPeelOut
-	dc.w .EN2-HelpText_SonicPeelOut, .EN2-HelpText_SonicPeelOut
+	dc.w .EN1-HelpText_SonicPeelOut, .JP1-HelpText_SonicPeelOut
+	dc.w .EN2-HelpText_SonicPeelOut, .JP2-HelpText_SonicPeelOut
 	dc.w .EN3-HelpText_SonicPeelOut, .EN3-HelpText_SonicPeelOut
 	dc.w .EN4-HelpText_SonicPeelOut, .EN4-HelpText_SonicPeelOut
 	dc.w .EN5-HelpText_SonicPeelOut, .EN5-HelpText_SonicPeelOut
@@ -338,6 +349,8 @@ HelpText_SonicPeelOut: text 8
 .EN6:	str "BEGIN CHARGING UP SPEED."
 .EN7:	str "RELEASE THE DIRECTIONAL PAD TO"
 .EN8:	str "IMMEDIATELY DASH FORWARD."
+.JP1:	str "[", SO, NI, xTU, KU, "CD]", ka, ra, no
+.JP2:	str SO, NI, xTU, KU, no, A, KU, SHI, xYO, N, ga, 0, A, N, RO, xTU, KU, sa, re, ta, "!"
 	even
 
 UnlockText_MetalSonic: text 3+2

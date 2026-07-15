@@ -1,0 +1,17 @@
+方向ボタン	directional button
+上下ボタン	up/down buttons
+ＡＢＣボタン	ABC buttons
+ジャンプ中	while jumping
+長押しする	press and hold
+上陸する	land
+前方に		forward
+放す		release
+上り坂		uphill
+下り坂		downhill
+スピードが上がる	speed goes up
+スピードが下がる	speed goes down
+飛行中		while flying
+投げ		throw
+上と下を狙う	aim up and down
+壁を登りながら	while climbing
+ボタンを押す	press the button
