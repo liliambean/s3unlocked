@@ -9637,7 +9637,7 @@ loc_7C7E:
 		; Liliam: removed original implementation
 
 ;LevelSelect_Return:
-		move.b	#$18+$80,(Game_mode).w			; Liliam: options menu
+		move.b	#$54+$80,(Game_mode).w			; Liliam: options menu
 ;		move.b	#0,(Game_mode).w			;
 		rts
 ; ---------------------------------------------------------------------------
