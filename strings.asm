@@ -76,6 +76,7 @@ OptionText_EraseDataScreen: text 7
 .JP5:	str HO, RO, GU, RA, MU, 0, 0, SE, dash, BU, DE, dash, TA, wo, 0, ke, shi, te
 .JP6:	str BU, RU, dash, SU, FU, xI, A, IMA, no, " LEVEL", wo, 0, ke, shi, te
 .JP7:	str A, N, RO, xTU, KU, sa, re, ta, 0, 0, O, PU, SHI, xYO, N, wo, 0, ke, shi, te
+	even
 
 OptionText_EncoreFlags: text 3
 	dc.w OptionText_EncoreMode.EN-OptionText_EncoreFlags,    OptionText_EncoreMode.JP-OptionText_EncoreFlags
@@ -91,7 +92,7 @@ OptionText_Off: text 1
 	dc.w .EN-OptionText_Off, .EN-OptionText_Off
 .EN:	str "<OFF>"
 	even
-	
+
 OptionText_EncoreMode: text 1
 	dc.w .EN-OptionText_EncoreMode, .JP-OptionText_EncoreMode
 .EN:	str "ENCORE MODE"
@@ -350,6 +351,7 @@ UnlockText_MetalSonic: text 3+2
 	dc.w .EN2-UnlockText_MetalSonic, .EN2-UnlockText_MetalSonic
 .EN1:	str "YOU CAN NOW PLAY"
 .EN2:	str "AS METAL SONIC."
+	even
 
 MuseumText:
 	dc.w .EN001-MuseumText, .JP001-MuseumText
@@ -712,6 +714,7 @@ MuseumText:
 .JP119:	str FU, xA, I, NA, RU, U, xE, PO, N
 .EN120:	str "GIANT EGGMAN ROBOT"
 .JP120:	str KYO, DAI, E, xTU, GU, MA, N, RO, BO
+	even
 
 	restore
 	endsection strings
