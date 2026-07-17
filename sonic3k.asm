@@ -133574,6 +133574,7 @@ Museum:								; Liliam: museum
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
+		clr.w	(Level_frame_counter).w
 
 		move.l	#vdpComm(tiles_to_bytes(ArtTile_OptionsFont),VRAM,WRITE),(VDP_control_port).l
 		lea	(ArtNem_MenuFont).l,a0
@@ -133593,10 +133594,11 @@ Museum:								; Liliam: museum
 		bsr.w	Museum_DrawOption
 		bsr.w	Museum_OptionToVRAM
 
-		lea	(Object_RAM).w,a0
+		lea	(Level_object_RAM).w,a0
 		move.l	#Draw_Sprite,(a0)
 		move.l	#Map_MuseumSprites,mappings(a0)
 		move.w	#make_art_tile(ArtTile_OptionsBG,0,0),art_tile(a0)
+		move.w	#$380,priority(a0)
 		move.b	#$40,render_flags(a0)
 		move.w	#$164,x_pos(a0)
 		move.w	#$D0,y_pos(a0)
@@ -133634,16 +133636,17 @@ Museum:								; Liliam: museum
 
 	.done:
 		jsr	(Pal_FadeFromBlack).l
-		move.l	#Obj_MuseumSprites,(Object_RAM).w
+		move.l	#Obj_MuseumSprites,(Level_object_RAM).w
 		move.l	#Museum_Return,(V_int_1E_addr).w
 
 Museum_MainLoop:
 		move.b	#$1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
+		addq.w	#1,(Level_frame_counter).w
 		jsr	(Process_Sprites).l
 		jsr	(Render_Sprites).l
 		bsr.s	Museum_Scroll
-		tst.w	(Object_RAM+mainspr_childsprites).w
+		tst.w	(Level_object_RAM+mainspr_childsprites).w
 		beq.s	Museum_MainLoop
 		move.b	(Ctrl_1_pressed).w,d1
 		btst	#button_A,d1
@@ -133670,7 +133673,7 @@ Museum_PlaneToVRAM:						; Liliam: museum
 ; ---------------------------------------------------------------------------
 
 Museum_Scroll:							; Liliam: museum
-		lea	(Object_RAM).w,a0
+		lea	(Level_object_RAM).w,a0
 		lea	(H_scroll_buffer).w,a1
 		move.w	$44(a0),d0
 		moveq	#$20-1,d1
@@ -133710,33 +133713,39 @@ Museum_Scroll:							; Liliam: museum
 		move.w	d0,(a1)
 		addq.w	#4,a1
 		dbf	d1,.loop
-
-Museum_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
 Museum_Controls:						; Liliam: museum
 		andi.b	#button_left_mask|button_right_mask,d1
-		beq.s	Museum_Return
+		beq.w	Museum_Return
 		move.w	(Museum_entry).w,d0
 		cmpi.b	#button_left_mask,d1
 		beq.s	.decrement
 		addq.w	#1,d0
 		cmpi.b	#119,d0
-		bls.s	.playSFX
+		bls.s	.updateEntry
 		moveq	#0,d0
-		bra.s	.playSFX
+		bra.s	.updateEntry
 ; ---------------------------------------------------------------------------
 
 	.decrement:
 		subq.w	#1,d0
-		bpl.s	.playSFX
+		bpl.s	.updateEntry
 		move.w	#119,d0
 
-	.playSFX:
+	.updateEntry:
 		move.w	d0,(Museum_entry).w
 		moveq	#signextendB(sfx_Switch),d0
 		jsr	(Play_SFX).l
+		lea	(Level_object_RAM).w,a0
+		tst.b	$1C(a0)
+		bpl.s	.updateOption
+		clearRAM	Dynamic_object_RAM,(Level_object_RAM-Dynamic_object_RAM)
+
+	.updateOption:
+		move.l	#Obj_MuseumSprites_SpawnObjects,(a0)
+		move.b	#$17,$1C(a0)
 		bsr.s	Museum_DrawOption
 		bsr.s	Museum_DrawOptionNumber
 
@@ -133751,14 +133760,23 @@ Museum_OptionToVRAM:
 Museum_DrawOption:						; Liliam: museum
 		clearRAM	RAM_start,($40*2)*3
 		move.w	(Museum_entry).w,d0
+		jsr	(PhotoPiece_LoadArray).l
+		moveq	#$10,d1
+		btst	d2,(a1)
+		beq.s	.drawText
+		moveq	#0,d1
+
+	.drawText:
+		move.w	(Museum_entry).w,d0
 		add.w	d0,d0
 		add.w	d0,d0
 		lea	(MuseumText).l,a0
 		lea	(a0,d0.w),a1
-		moveq	#0,d1
 		moveq	#0,d3
 		move.l	#RAM_start+(40*2)*2+(6*2),d0
 		bsr.w	OptionsScreen_DrawText.nextLine
+		tst.b	d1
+		bne.s	Museum_Return
 		subq.w	#2,a1
 		moveq	#0,d3
 		move.l	#RAM_start+(40*2)*1+(6*2),d0
@@ -133786,6 +133804,8 @@ Museum_DrawOptionNumber:					; Liliam: museum
 		move.w	d1,(RAM_start+(40*2)*2+(2*2)).l
 		addq.b	#1,d0
 		move.w	d0,(RAM_start+(40*2)*2+(3*2)).l
+
+Museum_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -133810,7 +133830,6 @@ Obj_MuseumSprites:						; Liliam: museum
 ; ---------------------------------------------------------------------------
 
 Obj_MuseumSprites_DrawOption:					; Liliam: museum
-		move.l	#Obj_MuseumSprites_Main,(a0)
 		move.l	a0,-(sp)
 		move	#$2700,sr
 		bsr.s	Museum_DrawOptionNumber
@@ -133818,12 +133837,26 @@ Obj_MuseumSprites_DrawOption:					; Liliam: museum
 		move	#$2300,sr
 		movea.l	(sp)+,a0
 
+Obj_MuseumSprites_SpawnObjects:
+		move.l	#Obj_MuseumSprites_Main,(a0)
+		move.w	(Museum_entry).w,d0
+		jsr	(PhotoPiece_LoadArray).l
+		btst	d2,(a1)
+		beq.s	Obj_MuseumSprites_Main
+		move.l	#Obj_MuseumSprites_Wait,(a0)
+
+Obj_MuseumSprites_Wait:
+		subq.b	#1,$1C(a0)
+		bpl.s	Obj_MuseumSprites_Main
+		move.l	#Obj_MuseumSprites_Main,(a0)
+		move.l	#Obj_MuseumPlayer,(Dynamic_object_RAM).w
+
 Obj_MuseumSprites_Main:
 		move.w	#1,mainspr_childsprites(a0)
-		move.w	x_pos(a0),d0
-		addq.w	#7,d0
+		move.w	(Level_frame_counter).w,d0
+		addq.w	#4,d0
 		btst	#4,d0
-		beq.s	MuseumSprites_ApplySpeeds
+		bne.s	MuseumSprites_ApplySpeeds
 		move.w	#2,mainspr_childsprites(a0)
 
 MuseumSprites_ApplySpeeds:
@@ -133972,26 +134005,26 @@ MuseumChecklist_MarkCollected:					; Liliam: museum
 		lea	(RAM_start).l,a1
 		move.w	#make_art_tile($000,0,0),d0
 		jsr	(Eni_Decomp).l
-		moveq	#-1,d1
-		moveq	#0,d2
+		moveq	#-1,d0
+		moveq	#0,d1
 
 	.loop:
-		move.w	d2,d0
+		move.w	d1,d0
 		jsr	(PhotoPiece_LoadArray).l
-		btst	d1,(a1)
+		btst	d2,(a1)
 		beq.s	.skip
-		move.w	d2,d0
+		move.w	d1,d0
 		add.w	d0,d0
-		move.w	MuseumChecklist_PhotoPieceLocs(pc,d0.w),d1
-		movea.l	d1,a1
+		move.w	MuseumChecklist_PhotoPieceLocs(pc,d0.w),d0
+		movea.l	d0,a1
 		move.w	#palette_line_1+ArtTile_PhotoPiece,(a1)
 		move.w	#palette_line_1+ArtTile_PhotoPiece+1,80(a1)
 		move.w	#palette_line_1+ArtTile_PhotoPiece+2,2(a1)
 		move.w	#palette_line_1+ArtTile_PhotoPiece+3,82(a1)
 
 	.skip:
-		addq.w	#1,d2
-		cmpi.w	#120,d2
+		addq.w	#1,d1
+		cmpi.w	#120,d1
 		blo.s	.loop
 		move.l	#vdpComm(VRAM_Plane_A_Name_Table,VRAM,WRITE),d0
 		moveq	#41-1,d2
@@ -134122,6 +134155,40 @@ MuseumChecklist_PhotoPieceLocs:					; Liliam: museum
 		dc.w $AE8	; DEZ Boss
 		dc.w $BB0	; DDZ
 		dc.w $BD8	; HPZ
+; ---------------------------------------------------------------------------
+
+Obj_MuseumPlayer:						; Liliam: museum
+		move.w	(Museum_entry).w,d0
+		cmpi.w	#7,d0
+		bhs.s	Obj_MuseumNull
+		move.b	d0,character_id(a0)
+		addq.w	#1,d0
+		move.w	d7,-(sp)
+		jsr	(LoadPalette_Immediate_NoEncore).l
+		move.w	(sp)+,d7
+		move.w	(Museum_entry).w,d0
+		lsl.w	#2,d0
+		lea	(Player_MappingPtrs).l,a1
+		move.l	(a1,d0.w),mappings(a0)
+		move.l	#Obj_MuseumPlayer_Main,(a0)
+		move.w	#$120,x_pos(a0)
+		move.w	#$F0,y_pos(a0)
+		move.w	#ArtTile_Player_2,art_tile(a0)
+		clr.w	(Player_prev_frame_P2).w
+
+Obj_MuseumPlayer_Main:
+		move.b	$25(a0),d0
+		jsr	(GetSineCosine).l
+		neg.w	d1
+		add.w	#$580,d1
+		move.w	d1,ground_vel(a0)
+		addq.b	#1,$25(a0)
+		jsr	(Animate_Player).l
+		jmp	(Draw_Sprite).l
+; ---------------------------------------------------------------------------
+
+Obj_MuseumNull:							; Liliam: museum
+		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
 S3Credits:							; Liliam: ported from S3 - restore staff roll

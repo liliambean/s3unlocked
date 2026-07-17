@@ -323,7 +323,7 @@ Obj_PhotoPiece:
 		cmpi.b	#120,d0
 		bhs.s	PhotoPiece_Delete
 		bsr.s	PhotoPiece_LoadArray
-		btst	d1,(a1)
+		btst	d2,(a1)
 		bne.s	PhotoPiece_Delete
 		move.l	#Obj_PhotoPiece_Main,(a0)
 		move.l	#Map_PhotoPiece,mappings(a0)
@@ -340,7 +340,7 @@ Obj_PhotoPiece_Main:
 		moveq	#0,d0
 		move.b	subtype(a0),d0
 		bsr.s	PhotoPiece_LoadArray
-		bset	d1,(a1)
+		bset	d2,(a1)
 		st	(Photo_piece_disable_flag).w
 		st	(SRAM_mask_interrupts_flag).w
 		jsr	(Write_SaveExtra).l
@@ -361,8 +361,8 @@ PhotoPiece_Delete:
 
 PhotoPiece_LoadArray:
 		lea	(Collected_photo_piece_array),a1
-		move.b	d0,d1
-		andi.b	#%111,d1
+		move.b	d0,d2
+		andi.b	#%111,d2
 		lsr.w	#3,d0
 		adda.w	d0,a1
 		rts
@@ -411,9 +411,9 @@ Obj_MetalSonicHologram:
 		beq.w	MetalSonicHologram_Delete
 	endif
 		bsr.w	MetalSonicHologram_LoadArray
-		btst	d1,d0
+		btst	d2,d0
 		bne.w	MetalSonicHologram_Delete
-		cmpi.b	#18,d1					; Skip over the next bit if in LRZ1
+		cmpi.b	#18,d2					; Skip over the next bit if in LRZ1
 		beq.s	Obj_MetalSonicHologram_Init
 		move.l	#Obj_MetalSonicHologram_Wait,(a0)
 
@@ -511,7 +511,7 @@ Obj_MetalSonicHologram_DrawCount:
 		move.w	#$1F,$2E(a0)
 
 		bsr.w	MetalSonicHologram_LoadArray
-		bset	d1,d0
+		bset	d2,d0
 		move.l	d0,(Collected_holograms_array).w
 		moveq	#0,d1
 		jsr	(PopCount32).l
@@ -603,23 +603,23 @@ MetalSonicHologram_DrawDigits:
 
 MetalSonicHologram_LoadArray:
 		move.l	(Collected_holograms_array).w,d0
-		move.w	(Apparent_zone_and_act).w,d1
-		cmpi.w	#$E01,d1
+		move.w	(Apparent_zone_and_act).w,d2
+		cmpi.w	#$E01,d2
 		blo.s	.calc1P
 		bhi.s	.calc2P
-		moveq	#21,d1
+		moveq	#21,d2
 		rts
 ; ---------------------------------------------------------------------------
 
 	.calc1P:
-		ror.b	#1,d1
-		lsr.w	#7,d1
+		ror.b	#1,d2
+		lsr.w	#7,d2
 		rts
 ; ---------------------------------------------------------------------------
 
 	.calc2P:
-		lsr.w	#8,d1
-		addi.b	#9,d1
+		lsr.w	#8,d2
+		addi.b	#9,d2
 		rts
 ; ---------------------------------------------------------------------------
 
