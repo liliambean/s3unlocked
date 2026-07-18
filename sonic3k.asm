@@ -6366,8 +6366,8 @@ Obj_TitleBanner:
 		move.w	#$120,x_pos(a0)
 		tst.b	(Game_mode).w				; Liliam: title screen - quick return by pressing B
 		beq.s	loc_4852				;
-		move.w	#$E4,y_pos(a0)				;
-		move.w	#8,(V_scroll_value).w			;
+		move.w	#$E6,y_pos(a0)				;
+		move.w	#6,(V_scroll_value).w			;
 		move.l	#Obj_TitleBanner_Display,(a0)		;
 		move.l	#Obj_TitleTM,(Reserved_object_3).w	;
 		moveq	#signextendB(sfx_Signpost),d0		;
@@ -6423,20 +6423,15 @@ loc_48B4:
 loc_48C2:
 		move.w	$30(a0),d0
 		neg.w	d0
-		addi.w	#$E4,d0											; Liliam: title screen - add 'Unlocked' branding
+		addi.w	#$E6,d0											; Liliam: title screen - add 'Unlocked' branding
 ;		addi.w	#$D4,d0											;
 		move.w	d0,y_pos(a0)
-		btst	#0,anim_frame_timer(a0)									;
-		beq.s	Obj_TitleBanner_Display									;
-		cmpi.b	#$1C,anim_frame(a0)									;
-		beq.s	loc_48D8										;
 		tst.b	anim_frame(a0)										;
 		bne.s	Obj_TitleBanner_Display									;
-		cmpi.w	#8,(V_scroll_value).w									;
+		btst	#0,anim_frame_timer(a0)									;
+		bne.s	Obj_TitleBanner_Display									;
 ;		cmpi.w	#$10,(V_scroll_value).w									;
-		beq.s	Obj_TitleBanner_Display
-
-loc_48D8:
+;		beq.s	Obj_TitleBanner_Display									;
 		addq.w	#1,(V_scroll_value).w
 
 Obj_TitleBanner_Display:
@@ -6461,7 +6456,7 @@ Obj_TitleTM:
 		move.l	#Map_S3TitleBanner,mappings(a0)		;S3DATA
 		move.w	#make_art_tile(ArtTile_Title_Banner,3,1),art_tile(a0)	; Start at $A000
 		move.w	#$188,x_pos(a0)
-		move.w	#$FC,y_pos(a0)										; Liliam: title screen - add 'Unlocked' branding
+		move.w	#$FE,y_pos(a0)										; Liliam: title screen - add 'Unlocked' branding
 ;		move.w	#$EC,y_pos(a0)										;
 		move.w	#$80,priority(a0)
 		move.b	#$C,width_pixels(a0)
