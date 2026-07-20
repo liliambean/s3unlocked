@@ -38683,18 +38683,14 @@ Obj_EncoreHelper_Main:
 ; ---------------------------------------------------------------------------
 
 	.swapInteractBits:
+		btst	#6,render_flags(a1)
+		bne.s	.nextObject
 		moveq	#$78,d1
 		and.b	status(a1),d1
-		beq.s	.nextObject
-		moveq	#$28,d2
-		moveq	#$50,d3
-		and.b	d1,d2
-		and.b	d1,d3
-		lsl.b	#1,d2
-		lsr.b	#1,d3
-		eor.b	d2,d1
-		eor.b	d3,d1
 		eor.b	d1,status(a1)
+		lsr.b	#3,d1
+		move.b	EncoreHelper_StatusLookup(pc,d1.w),d1
+		or.b	d1,status(a1)
 
 	.nextObject:
 		lea	next_object(a1),a1
@@ -38731,6 +38727,11 @@ EncoreHelper_ColiChgObjPtrs:					; Liliam: Encore mode - player swap
 		dc.l Obj_AutoSpin_Vertical
 		dc.l Obj_AutoSpin_Horizontal
 		dc.w $FFFF
+EncoreHelper_StatusLookup:					; Liliam: Encore mode - player swap
+		dc.b %0000000, %0010000, %0001000, %0011000
+		dc.b %1000000, %1010000, %1001000, %1011000
+		dc.b %0100000, %0110000, %0101000, %0111000
+		dc.b %1100000, %1110000, %1101000, %1111000
 Map_EncoreHelper:						; Liliam: Encore mode - player swap
 		include "General/Sprites/Enemy Misc/Map - Encore Cursor.asm"
 ; ---------------------------------------------------------------------------
