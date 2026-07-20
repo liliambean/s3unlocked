@@ -9183,6 +9183,7 @@ LoadLevel_ReloadTitleCardPLCs:					; Liliam: Encore mode - restart level
 		jsr	(Load_PLC_MonitorsSpikesSprings).l
 		jsr	(LoadEnemyArt).l
 		jsr	(PLCLoad_AnimalsAndExplosion).l
+		clr.b	(Respawn_table_keep).w
 		bra.w	loc_7870
 
 ; =============== S U B R O U T I N E =======================================
@@ -132267,7 +132268,7 @@ Continue_MechaSonic_Index:						; Liliam: Metal Sonic - use Mecha Sonic for cont
 
 Continue_MechaSonic_Init:						; Liliam: Metal Sonic - use Mecha Sonic for continue screen
 		lea	(ArtKosM_MechaSonicExtra).l,a1
-		move.w	#$8380,d2
+		move.w	#tiles_to_bytes(ArtTile_MechaSonicExtra),d2
 		jsr	(Queue_Kos_Module).l
 		lea	(Pal_SSZGHZMisc).l,a1
 		lea	(Target_palette_line_4).w,a2
@@ -132278,7 +132279,7 @@ Continue_MechaSonic_Init:						; Liliam: Metal Sonic - use Mecha Sonic for conti
 		dbf	d2,.loop
 		bsr.s	Continue_Robotnik_Init2
 		clr.b	render_flags(a0)
-		move.w	#$63F4,art_tile(a0)
+		move.w	#make_art_tile(ArtTile_MechaSonic,3,0),art_tile(a0)
 		move.l	#Map_MechaSonic,mappings(a0)
 		move.b	#2,mapping_frame(a0)
 		bset	#2,$38(a0)
@@ -194960,8 +194961,8 @@ CutsceneSkip_RestartLevel:
 		move.w	#1,(Restart_level_flag).w
 		move.b	#1,(Act3_flag).w
 		move.b	#1,(Special_bonus_entry_flag).w
-		clr.w	(Slotted_object_bits).w
 		st	(Respawn_table_keep).w
+		clr.w	(Slotted_object_bits).w
 		jmp	(Save_Level_Data2).l
 ; ---------------------------------------------------------------------------
 
@@ -194986,6 +194987,7 @@ CutsceneSkip_SSZ:						; Liliam: cutscene skip - SSZ level end
 		move.w	#1,(Restart_level_flag).w
 		st	(Act3_flag).w
 		st	(Respawn_table_keep).w
+		clr.w	(Slotted_object_bits).w
 		jmp	(SSZ1_Save_StarPost).l
 ; ---------------------------------------------------------------------------
 
@@ -212519,7 +212521,6 @@ Obj_HPZSuperEmerald_Encore:
 	.return:
 		rts
 ; ---------------------------------------------------------------------------
-
 
 Obj_HPZSuperEmerald_EncoreActivated:
 		bsr.s	Obj_HPZSuperEmerald_Encore.flickerMain			; Liliam: Encore mode - special stage
