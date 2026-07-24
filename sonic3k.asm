@@ -5641,7 +5641,7 @@ LoadPalette_LevelLoad:										; Liliam: fade in player palette if title card s
 
 
 LoadPalette:
-		lea	(PalPoint_Encore-$50).l,a1		; Liliam: Encore mode - palette
+		lea	(PalPoint_Encore-$48).l,a1		; Liliam: Encore mode - palette
 		tst.b	(Encore_flags).w			;
 		bmi.s	loc_3DC4				;
 
@@ -5667,7 +5667,7 @@ loc_3DD2:
 
 
 LoadPalette_Immediate:
-		lea	(PalPoint_Encore-$50).l,a1		; Liliam: Encore mode - palette
+		lea	(PalPoint_Encore-$48).l,a1		; Liliam: Encore mode - palette
 		tst.b	(Encore_flags).w			;
 		bmi.s	loc_3DE0				;
 
@@ -5692,7 +5692,7 @@ loc_3DEA:
 
 
 LoadPalette2:
-		lea	(PalPoint_Encore-$50).l,a1		; Liliam: Encore mode - palette
+		lea	(PalPoint_Encore-$48).l,a1		; Liliam: Encore mode - palette
 		tst.b	(Encore_flags).w			;
 		bmi.s	loc_3DF8				;
 		lea	(PalPoint).l,a1
@@ -5716,7 +5716,7 @@ loc_3E06:
 
 
 LoadPalette2_Immediate:
-		lea	(PalPoint_Encore-$50).l,a1		; Liliam: Encore mode - palette
+		lea	(PalPoint_Encore-$48).l,a1		; Liliam: Encore mode - palette
 		tst.b	(Encore_flags).w			;
 		bmi.s	loc_3E14				;
 		lea	(PalPoint).l,a1
@@ -6985,7 +6985,7 @@ loc_6068:
 		bne.s	loc_6084					;
 		tst.b	(Encore_mode).w					;
 		beq.s	loc_6084					;
-		subq.w	#PLCID_HPZ-PLCID_HPZ_Encore,d0			;
+		addq.w	#PLCID_HPZ_Encore-PLCID_HPZ,d0			;
 
 loc_6084:
 		bsr.w	Load_PLC
@@ -9385,13 +9385,15 @@ LoadWaterPalette:
 		move.l	#WaterTransition_CNZ2ICZ2,(Water_palette_data_addr).w
 		cmpi.w	#$501,(Current_zone_and_act).w
 		beq.s	loc_7A00
-		moveq	#PalID_LBZ_Water,d0
-		move.l	#WaterTransition_HCZLBZ1,(Water_palette_data_addr).w
-		cmpi.w	#$600,(Current_zone_and_act).w
-		beq.s	loc_7A00
+;		moveq	#PalID_LBZ_Water,d0					; Liliam: removed dead code
+;		move.l	#WaterTransition_HCZLBZ1,(Water_palette_data_addr).w	;
+;		cmpi.w	#$600,(Current_zone_and_act).w				;
+;		beq.s	loc_7A00						;
 		moveq	#PalID_LBZ2_Water,d0
 		move.l	#WaterTransition_LBZ2,(Water_palette_data_addr).w
-		; Liliam: removed dead code
+;		cmpi.w	#$601,(Current_zone_and_act).w				;
+;		beq.s	loc_7A00						;
+;		nop								;
 
 loc_7A00:
 		move.w	d0,d1
@@ -9555,12 +9557,12 @@ LevelSelect:
 ;		jsr	(AnimateTiles_DoAniPLC).l					;
 ;		moveq	#PalID_S2Menu,d0						;
 ;		bsr.w	LoadPalette							;
+		lea	(Target_palette).w,a2						;
 		tst.b	(Encore_mode).w							;
 		beq.s	loc_7BEC							;
+		lea	Pal_SaveScreen_Encore(pc),a1					;
 ;		lea	(Normal_palette_line_3).w,a1					;
 ;		lea	(Target_palette_line_3).w,a2					;
-		lea	Pal_SaveScreen_Encore(pc),a1					;
-		lea	(Target_palette).w,a2						;
 		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d1
 
 loc_7BE4:
@@ -9571,19 +9573,19 @@ loc_7BE4:
 		lea	(Pal_EncoreMode).l,a1						;
 		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_2),d1	;
 
-	.loop:
-		move.l	(a1)+,(a2)+							;
-		dbf	d1,.loop							;
 		moveq	#signextendB(mus_ProtoMenu),d0		; Liliam: Encore mode - music
 		bra.s	loc_7BEE				;
 ; ---------------------------------------------------------------------------
 
 loc_7BEC:
-		moveq	#PalID_LevelSelect,d0						; Liliam: level select - use data select background
-		bsr.w	LoadPalette_NoEncore						;
+		lea	(Pal_LevelSelect).l,a1						; Liliam: level select - use data select background
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette),d1		;
 		moveq	#signextendB(mus_DataSelect),d0
 
 loc_7BEE:
+		move.l	(a1)+,(a2)+							;
+		dbf	d1,loc_7BEE							;
+
 		tst.b	(Game_mode).w				; Liliam: options menu
 		bmi.s	loc_7BF4				;
 		jsr	(Play_Music).l
@@ -68204,7 +68206,7 @@ loc_2E16C:
 		moveq	#PLCID_HPZ,d0
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - special stage
 		beq.s	loc_2E1CE					;
-		subq.w	#PLCID_HPZ-PLCID_HPZ_Encore,d0			;
+		addq.w	#PLCID_HPZ_Encore-PLCID_HPZ,d0			;
 
 loc_2E1CE:
 		jsr	(Load_PLC).l
@@ -214566,113 +214568,128 @@ __LABEL__:	label	(*-Offs_PLC)/2
 		endm
 
 Offs_PLC:
-PLCID_MightyLifeIcon:		plcptr PLC_MightyLifeIcon			; Liliam: Mighty life icon/universal level graphics
+;PLCID_00:			plcptr PLC_00
 PLCID_SonicLifeIcon:		plcptr PLC_SonicLifeIcon
-PLCID_RayLifeIcon:		plcptr PLC_RayLifeIcon				; Liliam: Ray life icon/universal level graphics
-PLCID_GameOver:			plcptr PLC_GameOver
-PLCID_EncoreMode:		plcptr PLC_EncoreMode				; Liliam: Encore mode life icon/universal level graphics
-PLCID_KnucklesLifeIcon:		plcptr PLC_KnucklesLifeIcon
 PLCID_AmyLifeIcon:		plcptr PLC_AmyLifeIcon				; Liliam: Amy life icon/universal level graphics
-PLCID_TailsLifeIcon:		plcptr PLC_TailsLifeIcon
+PLCID_MightyLifeIcon:		plcptr PLC_MightyLifeIcon			; Liliam: Mighty life icon/universal level graphics
+PLCID_RayLifeIcon:		plcptr PLC_RayLifeIcon				; Liliam: Ray life icon/universal level graphics
 PLCID_MetalLifeIcon:		plcptr PLC_MetalLifeIcon			; Liliam: Metal Sonic life icon/universal level graphics
-PLCID_09:			plcptr PLC_SphereTest
+;PLCID_02:			plcptr PLC_02
+PLCID_GameOver:			plcptr PLC_GameOver
+;PLCID_04:			plcptr PLC_04
+PLCID_KnucklesLifeIcon:		plcptr PLC_KnucklesLifeIcon
+;PLCID_06:			plcptr PLC_06
+PLCID_TailsLifeIcon:		plcptr PLC_TailsLifeIcon
+;PLCID_08:			plcptr PLC_08
+PLCID_EncoreMode:		plcptr PLC_EncoreMode				; Liliam: Encore mode life icon/universal level graphics
+;PLCID_09:			plcptr PLC_09
 PLCID_AIZIntro:			plcptr PLC_AIZIntro
 PLCID_AIZ1:			plcptr PLC_AIZ1
 PLCID_AIZ2:			plcptr PLC_AIZ2
-PLCID_0D:			plcptr PLC_AIZ2
+;PLCID_0D:			plcptr PLC_AIZ2
 PLCID_HCZ1:			plcptr PLC_HCZ1
 PLCID_HCZ1_2:			plcptr PLC_HCZ1_2
 PLCID_HCZ2:			plcptr PLC_HCZ2
 PLCID_HCZ2_2:			plcptr PLC_HCZ2_2
 PLCID_MGZ1:			plcptr PLC_MGZ1
-PLCID_13:			plcptr PLC_MGZ1
+;PLCID_13:			plcptr PLC_MGZ1
 PLCID_MGZ2:			plcptr PLC_MGZ2
-PLCID_15:			plcptr PLC_MGZ2
+;PLCID_15:			plcptr PLC_MGZ2
 PLCID_CNZ1:			plcptr PLC_CNZ
 PLCID_CNZ1_2:			plcptr PLC_CNZ
 PLCID_CNZ2:			plcptr PLC_CNZ
 PLCID_CNZ2_2:			plcptr PLC_CNZ
 PLCID_FBZ1:			plcptr PLC_FBZ1
-PLCID_1B:			plcptr PLC_FBZ1
+;PLCID_1B:			plcptr PLC_FBZ1
 PLCID_FBZ2:			plcptr PLC_FBZ2
-PLCID_1D:			plcptr PLC_FBZ2
+;PLCID_1D:			plcptr PLC_FBZ2
 PLCID_ICZ1:			plcptr PLC_ICZ1
-PLCID_1F:			plcptr PLC_ICZ1
+;PLCID_1F:			plcptr PLC_ICZ1
 PLCID_ICZ2:			plcptr PLC_ICZ2
-PLCID_21:			plcptr PLC_ICZ2
+;PLCID_21:			plcptr PLC_ICZ2
 PLCID_LBZ1:			plcptr PLC_LBZ1
-PLCID_23:			plcptr PLC_LBZ1
+;PLCID_23:			plcptr PLC_LBZ1
 PLCID_LBZ2:			plcptr PLC_LBZ2
 PLCID_LBZ2_2:			plcptr PLC_LBZ2_2
 PLCID_MHZ1:			plcptr PLC_MHZ
-PLCID_27:			plcptr PLC_MHZ
+;PLCID_27:			plcptr PLC_MHZ
 PLCID_MHZ2:			plcptr PLC_MHZ
-PLCID_29:			plcptr PLC_MHZ
+;PLCID_29:			plcptr PLC_MHZ
 PLCID_SOZ1:			plcptr PLC_SOZ1
-PLCID_2B:			plcptr PLC_SOZ1
+;PLCID_2B:			plcptr PLC_SOZ1
 PLCID_SOZ2:			plcptr PLC_SOZ2
-PLCID_2D:			plcptr PLC_SOZ2
+;PLCID_2D:			plcptr PLC_SOZ2
 PLCID_LRZ1:			plcptr PLC_LRZ1
 PLCID_LRZ1_2:			plcptr PLC_LRZ1
 PLCID_LRZ2:			plcptr PLC_LRZ2
-PLCID_31:			plcptr PLC_LRZ2
+;PLCID_31:			plcptr PLC_LRZ2
 PLCID_SSZ1:			plcptr PLC_SSZ
-PLCID_33:			plcptr PLC_SSZ
+;PLCID_33:			plcptr PLC_SSZ
 PLCID_SSZ2:			plcptr PLC_SSZ
-PLCID_35:			plcptr PLC_SSZ
+;PLCID_35:			plcptr PLC_SSZ
 PLCID_DEZ1:			plcptr PLC_DEZ1
-PLCID_37:			plcptr PLC_DEZ1
+;PLCID_37:			plcptr PLC_DEZ1
 PLCID_DEZ2:			plcptr PLC_DEZ2
-PLCID_39:			plcptr PLC_DEZ2
+;PLCID_39:			plcptr PLC_DEZ2
 PLCID_DDZ1:			plcptr PLC_DDZ
-PLCID_3B:			plcptr PLC_DDZ
+;PLCID_3B:			plcptr PLC_DDZ
 PLCID_DDZ2:			plcptr PLC_DDZ
-PLCID_3D:			plcptr PLC_DDZ
-PLCID_3E:			plcptr PLC_DDZ
-PLCID_3F:			plcptr PLC_DDZ
+;PLCID_3D:			plcptr PLC_DDZ
+;PLCID_3E:			plcptr PLC_DDZ
+;PLCID_3F:			plcptr PLC_DDZ
 PLCID_Ending:			plcptr PLC_Ending
-PLCID_41:			plcptr PLC_Ending
+;PLCID_41:			plcptr PLC_Ending
 PLCID_ALZ:			plcptr PLC_ALZ
-PLCID_BPZ:			plcptr PLC_BPZ
-PLCID_DPZ:			plcptr PLC_DPZ
-PLCID_CGZ:			plcptr PLC_CGZ
-PLCID_EMZ:			plcptr PLC_EMZ
-PLCID_HPZ_Encore:		plcptr PLC_HPZ_Encore				; Liliam: Encore mode - special stage
-PLCID_HPZ:			plcptr PLC_HPZ
 PLCID_ALZ_2:			plcptr PLC_ALZ_2				; Liliam: Encore mode - add extra levels
+PLCID_BPZ:			plcptr PLC_BPZ
 PLCID_BPZ_2:			plcptr PLC_BPZ_2				; Liliam: Encore mode - add extra levels
-PLCID_CGZ_2:			plcptr PLC_CGZ_2				; Liliam: Encore mode - add extra levels
-PLCID_DEZBoss:			plcptr PLC_DEZBoss
-PLCID_4D:			plcptr PLC_DEZBoss
-PLCID_4E:			plcptr PLC_GumballBonus
-PLCID_Gumball:			plcptr PLC_GumballBonus				; Liliam: level select - add gumball bonus
-PLCID_Pachinko:			plcptr PLC_PachinkoBonus
-PLCID_Slots:			plcptr PLC_SlotBonus
-PLCID_MilesLifeIcon:		plcptr PLC_MilesLifeIcon
-PLCID_53:			plcptr PLC_MilesLifeIcon
+PLCID_DPZ:			plcptr PLC_DPZ
 PLCID_DPZ_2:			plcptr PLC_DPZ_2				; Liliam: Encore mode - add extra levels
+PLCID_CGZ:			plcptr PLC_CGZ
+PLCID_CGZ_2:			plcptr PLC_CGZ_2				; Liliam: Encore mode - add extra levels
+PLCID_EMZ:			plcptr PLC_EMZ
 PLCID_EMZ_2:			plcptr PLC_EMZ_2				; Liliam: Encore mode - add extra levels
+PLCID_Gumball:			plcptr PLC_GumballBonus
 PLCID_Gumball_2:		plcptr PLC_GumballBonus_Encore			; Liliam: Encore mode - change character item
+PLCID_HPZ:			plcptr PLC_HPZ
+PLCID_HPZ_Encore:		plcptr PLC_HPZ_Encore				; Liliam: Encore mode - special stage
+;PLCID_49:			plcptr PLC_HPZ
+;PLCID_4A:			plcptr PLC_HPZ
+;PLCID_4B:			plcptr PLC_HPZ
+PLCID_DEZBoss:			plcptr PLC_DEZBoss
+;PLCID_4D:			plcptr PLC_DEZBoss
+;PLCID_4E:			plcptr PLC_4E_4F
+;PLCID_4F:			plcptr PLC_4E_4F
+PLCID_Pachinko:			plcptr PLC_PachinkoBonus
 PLCID_Pachinko_2:		plcptr PLC_PachinkoBonus_Encore			; Liliam: Encore mode - change character item
+PLCID_Slots:			plcptr PLC_SlotBonus
 PLCID_Slots_2:			plcptr PLC_EncoreBonus				; Liliam: Encore mode - bonus stage
+PLCID_MilesLifeIcon:		plcptr PLC_MilesLifeIcon
 PLCID_AIZMinibossCutscene:	plcptr PLC_AIZMinibossCutscene			; Liliam: bugfix - stop double-loading AIZ2 PLCs
+;PLCID_53:			plcptr PLC_AIZMiniboss
+;PLCID_54:			plcptr PLC_AIZMiniboss
+;PLCID_55:			plcptr PLC_AIZMiniboss
+;PLCID_56:			plcptr PLC_AIZMiniboss
+;PLCID_57:			plcptr PLC_AIZMiniboss
+;PLCID_58:			plcptr PLC_AIZMiniboss
+;PLCID_59:			plcptr PLC_AIZMiniboss
 PLCID_AIZMiniboss:		plcptr PLC_AIZMiniboss
 PLCID_HCZMiniboss:		plcptr PLC_HCZMiniboss
-PLCID_5C:			plcptr PLC_CNZMiniboss
+;PLCID_5C:			plcptr PLC_CNZMiniboss
 PLCID_CNZMiniboss:		plcptr PLC_CNZMiniboss
-PLCID_5E:			plcptr PLC_FBZMiniboss
+;PLCID_5E:			plcptr PLC_FBZMiniboss
 PLCID_ICZMiniboss:		plcptr PLC_ICZMiniboss
 PLCID_LBZMiniboss:		plcptr PLC_LBZMiniboss
-PLCID_61:			plcptr PLC_SOZMiniboss
-PLCID_62:			plcptr PLC_FBZ2Subboss
-PLCID_63:			plcptr PLC_FBZ2Subboss
-PLCID_64:			plcptr PLC_FBZ2Subboss
-PLCID_65:			plcptr PLC_FBZ2Subboss
-PLCID_66:			plcptr PLC_FBZ2Subboss
-PLCID_67:			plcptr PLC_FBZ2Subboss
-PLCID_68:			plcptr PLC_FBZ2Subboss
-PLCID_69:			plcptr PLC_FBZ2Subboss
-PLCID_6A:			plcptr PLC_FBZ2Subboss
+;PLCID_61:			plcptr PLC_SOZMiniboss
+;PLCID_62:			plcptr PLC_FBZ2Subboss
+;PLCID_63:			plcptr PLC_FBZ2Subboss
+;PLCID_64:			plcptr PLC_FBZ2Subboss
+;PLCID_65:			plcptr PLC_FBZ2Subboss
+;PLCID_66:			plcptr PLC_FBZ2Subboss
+;PLCID_67:			plcptr PLC_FBZ2Subboss
+;PLCID_68:			plcptr PLC_FBZ2Subboss
+;PLCID_69:			plcptr PLC_FBZ2Subboss
+;PLCID_6A:			plcptr PLC_FBZ2Subboss
 PLCID_AIZEndBoss:		plcptr PLC_AIZEndBoss
 PLCID_HCZEndBoss:		plcptr PLC_HCZEndBoss
 PLCID_MGZEndBoss:		plcptr PLC_MGZEndBoss
@@ -214680,26 +214697,21 @@ PLCID_CNZEndBoss:		plcptr PLC_CNZEndBoss
 PLCID_FBZEndBoss:		plcptr PLC_FBZEndBoss
 PLCID_ICZEndBoss:		plcptr PLC_ICZEndBoss
 PLCID_LBZFinalBoss1:		plcptr PLC_LBZFinalBoss1
-PLCID_72:			plcptr PLC_DEZEndBoss
-PLCID_73:			plcptr PLC_DEZEndBoss
-PLCID_74:			plcptr PLC_DEZEndBoss
-PLCID_75:			plcptr PLC_DEZEndBoss
+;PLCID_72:			plcptr PLC_DEZEndBoss
+;PLCID_73:			plcptr PLC_DEZEndBoss
+;PLCID_74:			plcptr PLC_DEZEndBoss
+;PLCID_75:			plcptr PLC_DEZEndBoss
 PLCID_DEZEndBoss:		plcptr PLC_DEZEndBoss
-PLCID_LBZEndBoss:		plcptr PLC_LBZEndBoss
 PLCID_DEZEndBossK:		plcptr PLC_DEZEndBoss_Knux			; Liliam: bugfix - use Egg Robo for DEZ2 boss
+PLCID_LBZEndBoss:		plcptr PLC_LBZEndBoss
 PLCID_LBZEndBossK:		plcptr PLC_LBZEndBoss_Knux			; Liliam: bugfix - use Egg Robo for LBZ2 boss
-PLCID_7A:			plcptr PLC_EndBoss
+;PLCID_78:			plcptr PLC_EndBoss
+;PLCID_79:			plcptr PLC_EndBoss
+;PLCID_7A:			plcptr PLC_EndBoss
 PLCID_EndBoss:			plcptr PLC_EndBoss
 
-PLC_MightyLifeIcon: plrlistheader
-		plreq ArtTile_PlayerLifeIcon, ArtNem_MightyLifeIcon		; Liliam: Mighty life icon/universal level graphics
-;		plreq ArtTile_PlayerLifeIcon, ArtNem_SonicLifeIcon		;
-		plreq ArtTile_Monitors, ArtNem_Monitors				;
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon		;
-		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
-;		plreq ArtTile_Monitors, ArtNem_Monitors				;
-PLC_MightyLifeIcon_End
+;PLC_00:
+		; Liliam: removed unused data
 
 PLC_SonicLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_SonicLifeIcon
@@ -214708,28 +214720,47 @@ PLC_SonicLifeIcon: plrlistheader
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
 PLC_SonicLifeIcon_End
 
-PLC_RayLifeIcon: plrlistheader
-		plreq ArtTile_PlayerLifeIcon, ArtNem_RayLifeIcon		; Liliam: Ray life icon/universal level graphics
-		plreq ArtTile_Monitors, ArtNem_Monitors				;
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon		;
-		plreq ArtTile_Ring, ArtNem_RingHUDText				;
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost		;
-;		plreq ArtTile_Explosion, ArtNem_Explosion			;
-;		plreq ArtTile_Animals1, ArtNem_Squirrel				;
-;		plreq ArtTile_Animals2, ArtNem_BlueFlicky			;
+PLC_AmyLifeIcon: plrlistheader							; Liliam: Amy life icon/universal level graphics
+		plreq ArtTile_PlayerLifeIcon, ArtNem_AmyLifeIcon
+		plreq ArtTile_Monitors, ArtNem_Monitors
+		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon_Amy
+		plreq ArtTile_Ring, ArtNem_RingHUDText
+		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+PLC_AmyLifeIcon_End
+
+PLC_MightyLifeIcon: plrlistheader						; Liliam: Mighty life icon/universal level graphics
+		plreq ArtTile_PlayerLifeIcon, ArtNem_MightyLifeIcon
+		plreq ArtTile_Monitors, ArtNem_Monitors
+		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
+		plreq ArtTile_Ring, ArtNem_RingHUDText
+		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+PLC_MightyLifeIcon_End
+
+PLC_RayLifeIcon: plrlistheader							; Liliam: Ray life icon/universal level graphics
+		plreq ArtTile_PlayerLifeIcon, ArtNem_RayLifeIcon
+		plreq ArtTile_Monitors, ArtNem_Monitors
+		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
+		plreq ArtTile_Ring, ArtNem_RingHUDText
+		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
 PLC_RayLifeIcon_End
+
+PLC_MetalLifeIcon: plrlistheader						; Liliam: Metal Sonic life icon/universal level graphics
+		plreq ArtTile_PlayerLifeIcon, ArtNem_MetalLifeIcon
+		plreq ArtTile_Monitors, ArtNem_Monitors
+		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
+		plreq ArtTile_Ring, ArtNem_RingHUDText
+		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+PLC_MetalLifeIcon_End
+
+;PLC_02:
+		; Liliam: removed unused data
 
 PLC_GameOver: plrlistheader
 		plreq ArtTile_Shield, ArtNem_GameOver
 PLC_GameOver_End
 
-PLC_EncoreMode: plrlistheader
-		plreq ArtTile_Monitors, ArtNem_Monitors_Encore			; Liliam: Encore mode universal level graphics
-		plreq ArtTile_Ring, ArtNem_RingHUDText				;
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost		;
-		plreq ArtTile_EncoreCursor-1, ArtNem_EncoreCursor		;
-;		plreq ArtTile_S2Signpost, ArtNem_S2Signpost			;
-PLC_EncoreMode_End
+;PLC_04:
+		; Liliam: removed unused data
 
 PLC_KnucklesLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_KnucklesLifeIcon
@@ -214738,16 +214769,8 @@ PLC_KnucklesLifeIcon: plrlistheader
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
 PLC_KnucklesLifeIcon_End
 
-PLC_AmyLifeIcon: plrlistheader
-		plreq ArtTile_PlayerLifeIcon, ArtNem_AmyLifeIcon		; Liliam: Amy life icon/universal level graphics
-		plreq ArtTile_Monitors, ArtNem_Monitors				;
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon_Amy		;
-		plreq ArtTile_Ring, ArtNem_RingHUDText				;
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost		;
-;		plreq ArtTile_2PArt_2, ArtNem_2PArt_2				;
-;		plreq ArtTile_2PArt_1, ArtNem_2PArt_1				;
-;		plreq ArtTile_2PArt_3, ArtNem_2PArt_3				;
-PLC_AmyLifeIcon_End
+;PLC_06:
+		; Liliam: removed unused data
 
 PLC_TailsLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_TailsLifeIcon
@@ -214756,17 +214779,18 @@ PLC_TailsLifeIcon: plrlistheader
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
 PLC_TailsLifeIcon_End
 
-PLC_MetalLifeIcon: plrlistheader
-		plreq ArtTile_PlayerLifeIcon, ArtNem_MetalLifeIcon		; Liliam: Metal Sonic life icon/universal level graphics
-		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon		;
-		plreq ArtTile_Ring, ArtNem_RingHUDText				;
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost		;
-PLC_MetalLifeIcon_End
+;PLC_08:
+		; Liliam: removed unused data
 
-PLC_SphereTest: plrlistheader
-		plreq ArtTile_Monitors, ArtNem_Monitors
-PLC_SphereTest_End
+PLC_EncoreMode: plrlistheader							; Liliam: Encore mode universal level graphics
+		plreq ArtTile_Monitors, ArtNem_Monitors_Encore
+		plreq ArtTile_Ring, ArtNem_RingHUDText
+		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+		plreq ArtTile_EncoreCursor-1, ArtNem_EncoreCursor
+PLC_EncoreMode_End
+
+;PLC_09:
+		; Liliam: removed unused data
 
 PLC_AIZIntro: plrlistheader
 		plreq ArtTile_AIZIntroSprites, ArtNem_AIZIntroSprites
@@ -214947,6 +214971,9 @@ PLC_ALZ: plrlistheader
 		plreq ArtTile_2PArt_3, ArtNem_2PArt_3
 PLC_ALZ_End
 
+PLC_ALZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+PLC_ALZ_2_End
+
 PLC_BPZ: plrlistheader
 		plreq ArtTile_BPZMisc, ArtNem_BPZMisc
 		plreq ArtTile_DashDust, ArtNem_2PDashdust
@@ -214958,6 +214985,9 @@ PLC_BPZ: plrlistheader
 		plreq ArtTile_2PArt_1, ArtNem_2PArt_1
 		plreq ArtTile_2PArt_3, ArtNem_2PArt_3
 PLC_BPZ_End
+
+PLC_BPZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+PLC_BPZ_2_End
 
 PLC_DPZ: plrlistheader
 		plreq ArtTile_DPZMisc, ArtNem_DPZMisc
@@ -214971,6 +215001,9 @@ PLC_DPZ: plrlistheader
 		plreq ArtTile_2PArt_3, ArtNem_2PArt_3
 PLC_DPZ_End
 
+PLC_DPZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+PLC_DPZ_2_End
+
 PLC_CGZ: plrlistheader
 		plreq ArtTile_CGZMisc, ArtNem_CGZMisc
 		plreq ArtTile_DashDust, ArtNem_2PDashdust
@@ -214982,6 +215015,9 @@ PLC_CGZ: plrlistheader
 		plreq ArtTile_2PArt_1, ArtNem_2PArt_1
 		plreq ArtTile_2PArt_3, ArtNem_2PArt_3
 PLC_CGZ_End
+
+PLC_CGZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+PLC_CGZ_2_End
 
 PLC_EMZ: plrlistheader
 		plreq ArtTile_EMZMisc, ArtNem_EMZMisc
@@ -214995,55 +215031,13 @@ PLC_EMZ: plrlistheader
 		plreq ArtTile_2PArt_3, ArtNem_2PArt_3
 PLC_EMZ_End
 
-PLC_HPZ_Encore: plrlistheader
-		plreq ArtTile_HPZEmeraldMisc, ArtNem_HPZEmeraldMisc		; Liliam: Encore mode - special stage
-;		plreq ArtTile_BonusStage, ArtNem_BonusStage			;
-PLC_HPZ_Encore_End
-
-PLC_HPZ: plrlistheader
-		plreq ArtTile_HPZEmeraldMisc, ArtNem_HPZEmeraldMisc
-		plreq ArtTile_HPZGrayEmerald, ArtNem_HPZGrayEmerald
-PLC_HPZ_End
-
-PLC_ALZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
-PLC_ALZ_2_End
-
-PLC_BPZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
-PLC_BPZ_2_End
-
-PLC_CGZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
-PLC_CGZ_2_End
-
-PLC_DEZBoss: plrlistheader
-		plreq ArtTile_DEZRobotnikRun, ArtNem_FBZRobotnikRun
-PLC_DEZBoss_End
-
-PLC_GumballBonus: plrlistheader
-		plreq ArtTile_BonusStage, ArtNem_BonusStage			; Liliam: level select - add gumball bonus
-		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
-PLC_GumballBonus_End
-
-PLC_PachinkoBonus: plrlistheader
-		plreq ArtTile_PachinkoMain, ArtNem_PachinkoMain
-		plreq ArtTile_PachinkoGumballs, ArtNem_BonusStage
-PLC_PachinkoBonus_End
-
-PLC_SlotBonus: plrlistheader
-		plreq ArtTile_SlotsBlocks, ArtNem_SlotsBlocks
-PLC_SlotBonus_End
-
-PLC_MilesLifeIcon: plrlistheader
-		plreq ArtTile_PlayerLifeIcon, ArtNem_MilesLifeIcon
-		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
-PLC_MilesLifeIcon_End
-
-PLC_DPZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
-PLC_DPZ_2_End
-
 PLC_EMZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
 PLC_EMZ_2_End
+
+PLC_GumballBonus: plrlistheader
+		plreq ArtTile_BonusStage, ArtNem_BonusStage
+		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings		; Liliam: level select - add gumball bonus
+PLC_GumballBonus_End
 
 PLC_GumballBonus_Encore: plrlistheader						; Liliam: Encore mode - change character item
 		plreq ArtTile_BonusStage, ArtNem_BonusStage
@@ -215052,6 +215046,27 @@ PLC_GumballBonus_Encore: plrlistheader						; Liliam: Encore mode - change chara
 		plreq ArtTile_Explosion, ArtNem_Explosion
 PLC_GumballBonus_Encore_End
 
+PLC_HPZ: plrlistheader
+		plreq ArtTile_HPZEmeraldMisc, ArtNem_HPZEmeraldMisc
+		plreq ArtTile_HPZGrayEmerald, ArtNem_HPZGrayEmerald
+PLC_HPZ_End
+
+PLC_HPZ_Encore: plrlistheader							; Liliam: Encore mode - special stage
+		plreq ArtTile_HPZEmeraldMisc, ArtNem_HPZEmeraldMisc
+PLC_HPZ_Encore_End
+
+PLC_DEZBoss: plrlistheader
+		plreq ArtTile_DEZRobotnikRun, ArtNem_FBZRobotnikRun
+PLC_DEZBoss_End
+
+;PLC_4E_4F:
+		; Liliam: removed unused data
+
+PLC_PachinkoBonus: plrlistheader
+		plreq ArtTile_PachinkoMain, ArtNem_PachinkoMain
+		plreq ArtTile_PachinkoGumballs, ArtNem_BonusStage
+PLC_PachinkoBonus_End
+
 PLC_PachinkoBonus_Encore: plrlistheader						; Liliam: Encore mode - change character item
 		plreq ArtTile_PachinkoMain, ArtNem_PachinkoMain
 		plreq ArtTile_PachinkoGumballs, ArtNem_BonusStage
@@ -215059,10 +215074,21 @@ PLC_PachinkoBonus_Encore: plrlistheader						; Liliam: Encore mode - change char
 		plreq ArtTile_Explosion, ArtNem_Explosion
 PLC_PachinkoBonus_Encore_End
 
+PLC_SlotBonus: plrlistheader
+		plreq ArtTile_SlotsBlocks, ArtNem_SlotsBlocks
+PLC_SlotBonus_End
+
 PLC_EncoreBonus: plrlistheader							; Liliam: Encore mode - bonus stage
 		plreq ArtTile_SlotsBlocks, ArtNem_SlotsBlocks
 		plreq ArtTile_SlotsBlocks+$122, ArtNem_SlotsEncore
 PLC_EncoreBonus_End
+
+PLC_MilesLifeIcon: plrlistheader
+		plreq ArtTile_PlayerLifeIcon, ArtNem_MilesLifeIcon
+		plreq ArtTile_Monitors, ArtNem_Monitors
+		plreq ArtTile_Ring, ArtNem_RingHUDText
+		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+PLC_MilesLifeIcon_End
 
 PLC_AIZMinibossCutscene: plrlistheader						; Liliam: bugfix - stop double-loading AIZ2 PLCs
 		plreq ArtTile_AIZMiniboss, ArtNem_AIZMiniboss
@@ -215166,17 +215192,17 @@ PLC_DEZEndBoss: plrlistheader
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
 PLC_DEZEndBoss_End
 
-PLC_LBZEndBoss: plrlistheader
-		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
-		plreq ArtTile_FBZRobotnikRun, ArtNem_FBZRobotnikRun
-		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_LBZEndBoss_End
-
 PLC_DEZEndBoss_Knux: plrlistheader						; Liliam: bugfix - use Egg Robo for DEZ2 boss
 		plreq ArtTile_FBZRobotnikStand, ArtNem_EggRoboStand
 		plreq ArtTile_FBZRobotnikRun, ArtNem_EggRoboRun
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
 PLC_DEZEndBoss_Knux_End
+
+PLC_LBZEndBoss: plrlistheader
+		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
+		plreq ArtTile_FBZRobotnikRun, ArtNem_FBZRobotnikRun
+		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
+PLC_LBZEndBoss_End
 
 PLC_LBZEndBoss_Knux: plrlistheader						; Liliam: bugfix - use Egg Robo for LBZ2 boss
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
@@ -215981,9 +216007,8 @@ Pal_LBZ_Water:
 		; Liliam: bugfix - color underwater Knuckles consistently
 		binclude "Levels/LBZ/Palettes/Act 2 Water.bin"
 		even
-Pal_LBZ_Water2:
-		binclude "Levels/LBZ/Palettes/Act 2 Water 2.bin"
-		even
+;Pal_LBZ_Water2:
+		; Liliam: removed unused data
 Pal_MHZ1:
 		binclude "Levels/MHZ/Palettes/1.bin"
 		even
@@ -215997,9 +216022,9 @@ Pal_SOZ2:
 		binclude "Levels/SOZ/Palettes/2.bin"
 		even
 ;Pal_SOZ1_Clone:
-;		; Liliam: Encore mode - bonus stage
+;		; Liliam: removed unused data
 ;Pal_SOZ2_Extra:
-;		; Liliam: Encore mode - bonus stage
+;		; Liliam: removed unused data
 Pal_LRZ1:	binclude "Levels/LRZ/Palettes/1.bin"
 		even
 Pal_LRZ2:
@@ -216131,9 +216156,6 @@ Pal_LBZ2_Encore:						; Liliam: Encore mode - palette
 Pal_LBZ_Water_Encore:						; Liliam: Encore mode - palette
 		binclude "Levels/LBZ/Palettes/Act 2 Water.bin"
 		even
-Pal_LBZ_Water2_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/LBZ/Palettes/Act 2 Water 2.bin"
-		even
 Pal_MHZ1_Encore:						; Liliam: Encore mode - palette
 		binclude "Levels/MHZ/Palettes/Encore 2.bin"
 		even
@@ -216158,9 +216180,6 @@ Pal_SSZ1_Encore:						; Liliam: Encore mode - palette
 Pal_SSZ2_Encore:						; Liliam: Encore mode - palette
 		binclude "Levels/SSZ/Palettes/2.bin"
 		even
-Pal_Ending_Encore:						; Liliam: Encore mode - palette
-		binclude "General/Ending/Palettes/Ending 2.bin"
-		even
 Pal_DEZ1_Encore:						; Liliam: Encore mode - palette
 		binclude "Levels/DEZ/Palettes/1.bin"
 		even
@@ -216184,6 +216203,9 @@ Pal_CGZ_Encore:							; Liliam: Encore mode - palette
 		even
 Pal_EMZ_Encore:							; Liliam: Encore mode - palette
 		binclude "Levels/EMZ/Palettes/Main.bin"
+		even
+Pal_LRZBoss_Encore:						; Liliam: Encore mode - palette
+		binclude "Levels/LRZ/Palettes/Boss Act.bin"
 		even
 Pal_DEZBoss_Encore:						; Liliam: Encore mode - palette
 		binclude "Levels/DEZ/Palettes/Boss.bin"
