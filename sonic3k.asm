@@ -79,8 +79,8 @@ Checksum:	dc.w $DFB3
 Input:		dc.b "J               "
 ROMStartLoc:	dc.l StartOfROM
 ROMEndLoc:	dc.l EndOfROM-1
-RAMStartLoc:	dc.l (RAM_start&$FFFFFF)
-RAMEndLoc:	dc.l (RAM_start&$FFFFFF)+$FFFF
+RAMStartLoc:	dc.l (RAM_start)&$FFFFFF
+RAMEndLoc:	dc.l (RAM_end-1)&$FFFFFF
 CartRAM_Info:	dc.b "RA"
 CartRAM_Type:	dc.w %1111100000100000	; Save odd number 8-bit addresses
 CartRAMStartLoc:dc.l SRAM_start
@@ -89,7 +89,7 @@ Modem_Info:	dc.b "  "
 		dc.b "          "
 Unknown_Header:	dc.w 0
 		dc.b "      "
-		dc.w 0, 0
+		dc.l StartOfROM
 		dc.l EndOfROM-1	; 0	;CHECKLATER (ROM Bank Info)
 		dc.b "        "
 KiS2ROM_Info:	dc.b "RO"
@@ -311,7 +311,7 @@ Test_Checksum_Done:
 		bsr.w	SndDrvInit
 		bsr.w	Init_Controllers
 		jsr	(SRAM_Load).l
-		move.b	#0,(Game_mode).w
+		move.b	#GameMode_SegaScreen,(Game_mode).w
 
 GameLoop:
 		move.b	(Game_mode).w,d0
@@ -321,29 +321,35 @@ GameLoop:
 		bra.s	GameLoop
 ; ---------------------------------------------------------------------------
 GameModes:
-		dc.l Sega_Screen		;   0
-		dc.l Title_Screen		;   4
-		dc.l LevelDemo			;   8
-		dc.l Level			;  $C
-		dc.l Museum			; $10		; Liliam: title screen - expand options
-		dc.l ContinueScreen		; $14
-		dc.l UnlockScreen		; $18		;
-		dc.l EncoreMode			; $1C		;
-		dc.l S3Credits			; $20
-		dc.l LevelSelect		; $24
-		dc.l BlueSpheres		; $28		;
-		dc.l BlueSpheresTitle		; $2C
-		dc.l BlueSpheresResults		; $30
-		dc.l SpecialStage		; $34
-		dc.l Competition_Menu		; $38
-		dc.l Competition_PlayerSelect	; $3C
-		dc.l Competition_LevelSelect	; $40
-		dc.l Competition_Results	; $44
-		dc.l SpecialStage_Results	; $48
-		dc.l SaveScreen			; $4C
-		dc.l TimeAttack_Records		; $50
-		dc.l OptionsScreen		; $54		;
-		dc.l EraseDataScreen		; $58		;
+
+gmptr:		macro gamemode,{INTLABEL}
+__LABEL__:	label	*-GameModes
+		dc.l	gamemode
+		endm
+
+GameMode_SegaScreen:		gmptr Sega_Screen			;   0
+GameMode_TitleScreen:		gmptr Title_Screen			;   4
+GameMode_Demo:			gmptr LevelDemo				;   8
+GameMode_Level:			gmptr Level				;  $C
+GameMode_Museum:		gmptr Museum				; $10	; Liliam: title screen - expand options
+GameMode_Continue:		gmptr ContinueScreen			; $14
+GameMode_UnlockScreen:		gmptr UnlockScreen			; $18	;
+GameMode_EncoreMode:		gmptr EncoreMode			; $1C	;
+GameMode_S3Credits:		gmptr S3Credits				; $20
+GameMode_LevelSelect:		gmptr LevelSelect			; $24
+GameMode_BlueSpheres:		gmptr BlueSpheres			; $28	;
+GameMode_BlueSpheresTitle:	gmptr BlueSpheresTitle			; $2C
+GameMode_BlueSpheresResults:	gmptr BlueSpheresResults		; $30
+GameMode_SpecialStage:		gmptr SpecialStage			; $34
+GameMode_Competition:		gmptr Competition_Menu			; $38
+GameMode_CompPlayerSelect:	gmptr Competition_PlayerSelect		; $3C
+GameMode_CompLevelSelect:	gmptr Competition_LevelSelect		; $40
+GameMode_CompResults:		gmptr Competition_Results		; $44
+GameMode_SpecialStageResults:	gmptr SpecialStage_Results		; $48
+GameMode_SaveScreen:		gmptr SaveScreen			; $4C
+GameMode_TimeAttackRecords:	gmptr TimeAttack_Records		; $50
+GameMode_Options:		gmptr OptionsScreen			; $54	;
+GameMode_EraseData:		gmptr EraseDataScreen			; $58	;
 ; ---------------------------------------------------------------------------
 		; Liliam: removed dead code
 
@@ -355,21 +361,21 @@ DetectPAL:
 		move.w	#VDP_Option1|VDPReg1_EnableDisplay,(a5)		; Command $8174 - Display on, VInt on, DMA on, PAL off
 		moveq	#0,d0
 
-$$waitForVBlankStart:
+.waitForVBlankStart:
 		move.w	(a5),d1
 		andi.w	#8,d1
-		beq.s	$$waitForVBlankStart
+		beq.s	.waitForVBlankStart
 
-$$waitForVBlankEnd:
+.waitForVBlankEnd:
 		move.w	(a5),d1
 		andi.w	#8,d1
-		bne.s	$$waitForVBlankEnd	; Wait for VBlank to run once
+		bne.s	.waitForVBlankEnd	; Wait for VBlank to run once
 
-$$waitForNextVBlank:
+.waitForNextVBlank:
 		addq.w	#1,d0
 		move.w	(a5),d1
 		andi.w	#8,d1
-		beq.s	$$waitForNextVBlank
+		beq.s	.waitForNextVBlank
 		move.w	d0,(V_blank_cycles).w	; Count cycles between VBlanks (likely to detect PAL systems and/or for other timing mechanisms
 		rts
 ; End of function DetectPAL
@@ -398,7 +404,7 @@ VInt:
 
 +
 		move.b	(V_int_routine).w,d0
-		move.b	#0,(V_int_routine).w
+		move.b	#VInt_ID_0,(V_int_routine).w
 		move.w	#1,(H_int_flag).w		; Allow H Interrupt code to run
 		andi.w	#$3E,d0
 		move.w	VInt_Table(pc,d0.w),d0
@@ -411,22 +417,28 @@ VInt_Done:
 		rte
 ; ---------------------------------------------------------------------------
 VInt_Table:
-		dc.w VInt_0-VInt_Table
-		dc.w VInt_2-VInt_Table
-		dc.w VInt_4-VInt_Table
-		dc.w VInt_6-VInt_Table
-		dc.w VInt_8-VInt_Table
-		dc.w VInt_A_C-VInt_Table
-		dc.w VInt_A_C-VInt_Table
-		dc.w VInt_E-VInt_Table
-		dc.w VInt_10-VInt_Table
-		dc.w VInt_12-VInt_Table
-		dc.w VInt_14-VInt_Table
-		dc.w VInt_16-VInt_Table
-		dc.w VInt_18-VInt_Table
-		dc.w VInt_1A-VInt_Table
-		dc.w VInt_1C-VInt_Table
-		dc.w VInt_1E-VInt_Table
+
+vintptr:	macro vintroutine,{INTLABEL}
+__LABEL__:	label	*-VInt_Table
+		dc.w	vintroutine-VInt_Table
+		endm
+
+VInt_ID_0:	vintptr VInt_0
+VInt_ID_2:	vintptr VInt_2
+VInt_ID_4:	vintptr VInt_4
+VInt_ID_6:	vintptr VInt_6
+VInt_ID_8:	vintptr VInt_8
+VInt_ID_A:	vintptr VInt_A_C
+VInt_ID_C:	vintptr VInt_A_C
+VInt_ID_E:	vintptr VInt_E
+VInt_ID_10:	vintptr VInt_10
+VInt_ID_12:	vintptr VInt_12
+VInt_ID_14:	vintptr VInt_14
+VInt_ID_16:	vintptr VInt_16
+VInt_ID_18:	vintptr VInt_18
+VInt_ID_1A:	vintptr VInt_1A
+VInt_ID_1C:	vintptr VInt_1C
+VInt_ID_1E:	vintptr VInt_1E
 ; ---------------------------------------------------------------------------
 
 VInt_0:
@@ -436,13 +448,13 @@ VInt_0_Main:
 		addq.w	#1,(Lag_frame_count).w
 
 		; branch if a level or demo is running
-		cmpi.b	#8+$80,(Game_mode).w
+		cmpi.b	#GameMode_Demo+$80,(Game_mode).w
 		beq.s	VInt_0_Level
-		cmpi.b	#$C+$80,(Game_mode).w
+		cmpi.b	#GameMode_Level+$80,(Game_mode).w
 		beq.s	VInt_0_Level
-		cmpi.b	#8,(Game_mode).w
+		cmpi.b	#GameMode_Demo,(Game_mode).w
 		beq.s	VInt_0_Level
-		cmpi.b	#$C,(Game_mode).w
+		cmpi.b	#GameMode_Level,(Game_mode).w
 		beq.s	VInt_0_Level
 		bra.s	VInt_Done	; otherwise, return from V-int
 ; ---------------------------------------------------------------------------
@@ -461,12 +473,12 @@ VInt_0_Level:
 		stopZ80
 		tst.b	(Water_full_screen_flag).w
 		bne.s	VInt_0_FullyUnderwater
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
+		dma68kToVDP Normal_palette,0,Normal_palette_end-Normal_palette,CRAM
 		bra.s	VInt_0_Water_Cont
 ; ---------------------------------------------------------------------------
 
 VInt_0_FullyUnderwater:
-		dma68kToVDP Water_palette,$0000,$80,CRAM
+		dma68kToVDP Water_palette,0,Water_palette_end-Water_palette,CRAM
 
 VInt_0_Water_Cont:
 		move.w	(H_int_counter_command).w,(a5)
@@ -503,11 +515,11 @@ VInt_0_NoWater:
 		; Upload the front buffer.
 		tst.w	(Current_sprite_table_page).w
 		beq.s	+
-		dma68kToVDP Sprite_table,VRAM_Sprite_Table,$280,VRAM
+		dma68kToVDP Sprite_table,VRAM_Sprite_Table,Sprite_table_end-Sprite_table,VRAM
 		bra.s	VInt_0_Done
 
 +
-		dma68kToVDP Sprite_table_alternate,VRAM_Sprite_Table,$280,VRAM
+		dma68kToVDP Sprite_table_alternate,VRAM_Sprite_Table,Sprite_table_alternate_end-Sprite_table_alternate,VRAM
 
 VInt_0_Done:
 		startZ80
@@ -561,7 +573,7 @@ VInt_6:
 ; ---------------------------------------------------------------------------
 
 VInt_10:
-		cmpi.b	#$34,(Game_mode).w
+		cmpi.b	#GameMode_SpecialStage,(Game_mode).w
 		beq.w	VInt_1C		; If in a special stage, branch
 
 VInt_8:
@@ -592,17 +604,17 @@ VInt_8:
 VInt_8_NoFlash:
 		tst.b	(Water_full_screen_flag).w
 		bne.s	+
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
+		dma68kToVDP Normal_palette,0,Normal_palette_end-Normal_palette,CRAM
 		bra.s	++
 
 +
-		dma68kToVDP Water_palette,$0000,$80,CRAM
+		dma68kToVDP Water_palette,0,Water_palette_end-Water_palette,CRAM
 
 +
 		move.w	(H_int_counter_command).w,(a5)
 
 VInt_8_Cont:
-		dma68kToVDP H_scroll_buffer,VRAM_HScroll_Table,$380,VRAM
+		dma68kToVDP H_scroll_buffer,VRAM_HScroll_Table,H_scroll_buffer_end-H_scroll_buffer,VRAM
 
 		tst.w	(Competition_mode).w
 		beq.s	++
@@ -620,11 +632,11 @@ VInt_8_Cont:
 		; Upload the front buffer.
 		tst.w	(Current_sprite_table_page).w
 		bne.s	+
-		dma68kToVDP Sprite_table_alternate,VRAM_Sprite_Table,$280,VRAM
+		dma68kToVDP Sprite_table_alternate,VRAM_Sprite_Table,Sprite_table_alternate_end-Sprite_table_alternate,VRAM
 		bra.s	++
 
 +
-		dma68kToVDP Sprite_table,VRAM_Sprite_Table,$280,VRAM
+		dma68kToVDP Sprite_table,VRAM_Sprite_Table,Sprite_table_end-Sprite_table,VRAM
 
 +
 		bsr.w	Process_DMA_Queue
@@ -666,15 +678,15 @@ VInt_A_C:
 		bsr.w	Poll_Controllers
 		tst.b	(Water_full_screen_flag).w
 		bne.s	+
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
+		dma68kToVDP Normal_palette,0,Normal_palette_end-Normal_palette,CRAM
 		bra.s	++
 
 +
-		dma68kToVDP Water_palette,$0000,$80,CRAM
+		dma68kToVDP Water_palette,0,Water_palette_end-Water_palette,CRAM
 
 +
 		move.w	(H_int_counter_command).w,(a5)
-		dma68kToVDP H_scroll_buffer,VRAM_HScroll_Table,$380,VRAM
+		dma68kToVDP H_scroll_buffer,VRAM_HScroll_Table,H_scroll_buffer_end-H_scroll_buffer,VRAM
 
 		tst.w	(Competition_mode).w
 		beq.s	++
@@ -692,11 +704,11 @@ VInt_A_C:
 		; Upload the front buffer.
 		tst.w	(Current_sprite_table_page).w
 		bne.s	+
-		dma68kToVDP Sprite_table_alternate,VRAM_Sprite_Table,$280,VRAM
+		dma68kToVDP Sprite_table_alternate,VRAM_Sprite_Table,Sprite_table_alternate_end-Sprite_table_alternate,VRAM
 		bra.s	++
 
 +
-		dma68kToVDP Sprite_table,VRAM_Sprite_Table,$280,VRAM
+		dma68kToVDP Sprite_table,VRAM_Sprite_Table,Sprite_table_end-Sprite_table,VRAM
 
 +
 		bsr.w	Process_DMA_Queue
@@ -708,7 +720,7 @@ VInt_A_C:
 
 VInt_E:
 		bsr.w	Do_ControllerPal
-		move.b	#$E,(V_int_routine).w
+		move.b	#VInt_ID_E,(V_int_routine).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -722,13 +734,13 @@ VInt_18:
 		stopZ80
 		bsr.w	Poll_Controllers
 
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
-		dma68kToVDP Sprite_table,VRAM_Sprite_Table,$280,VRAM
-		dma68kToVDP H_scroll_buffer,VRAM_HScroll_Table,$380,VRAM
+		dma68kToVDP Normal_palette,0,Normal_palette_end-Normal_palette,CRAM
+		dma68kToVDP Sprite_table,VRAM_Sprite_Table,Sprite_table_end-Sprite_table,VRAM
+		dma68kToVDP H_scroll_buffer,VRAM_HScroll_Table,H_scroll_buffer_end-H_scroll_buffer,VRAM
 
 		bclr	#0,(Ending_completion_level).w
 		beq.s	+
-		dma68kToVDP $FF2000,$C000,$2000,VRAM
+		dma68kToVDP RAM_start+$2000,$C000,$2000,VRAM
 
 +
 		bsr.w	Process_DMA_Queue
@@ -740,9 +752,9 @@ VInt_16:
 		stopZ80
 		bsr.w	Poll_Controllers
 
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
-		dma68kToVDP Sprite_table,VRAM_Sprite_Table,$280,VRAM
-		dma68kToVDP H_scroll_buffer,VRAM_HScroll_Table,$380,VRAM
+		dma68kToVDP Normal_palette,0,Normal_palette_end-Normal_palette,CRAM
+		dma68kToVDP Sprite_table,VRAM_Sprite_Table,Sprite_table_end-Sprite_table,VRAM
+		dma68kToVDP H_scroll_buffer,VRAM_HScroll_Table,H_scroll_buffer_end-H_scroll_buffer,VRAM
 
 		bsr.w	Process_DMA_Queue
 		startZ80
@@ -781,7 +793,7 @@ VInt_1C:
 
 VInt_1E:
 		bsr.s	Do_ControllerPal
-		move.w	(H_int_counter_command).w,(a5)			; Liliam: data select - add extra characters
+		move.w	(H_int_counter_command).w,(a5)					; Liliam: data select - use HInt for more colors
 		movea.l	(V_int_1E_addr).w,a0
 		jsr	(a0)
 		bsr.w	Process_Nem_Queue_2
@@ -795,15 +807,15 @@ Do_ControllerPal:
 		bsr.w	Poll_Controllers
 		tst.b	(Water_full_screen_flag).w
 		bne.s	+
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
+		dma68kToVDP Normal_palette,0,Normal_palette_end-Normal_palette,CRAM
 		bra.s	++
 
 +
-		dma68kToVDP Water_palette,$0000,$80,CRAM
+		dma68kToVDP Water_palette,0,Water_palette_end-Water_palette,CRAM
 
 +
-		dma68kToVDP Sprite_table,VRAM_Sprite_Table,$280,VRAM
-		dma68kToVDP H_scroll_buffer,VRAM_HScroll_Table,$380,VRAM
+		dma68kToVDP Sprite_table,VRAM_Sprite_Table,Sprite_table_end-Sprite_table,VRAM
+		dma68kToVDP H_scroll_buffer,VRAM_HScroll_Table,H_scroll_buffer_end-H_scroll_buffer,VRAM
 		bsr.w	Process_DMA_Queue
 		startZ80
 		rts
@@ -842,11 +854,11 @@ HInt:
 		; Upload the front buffer.
 		tst.w	(Current_sprite_table_page).w
 		beq.s	+
-		dma68kToVDP Sprite_table_P2,VRAM_Sprite_Table,$280,VRAM
+		dma68kToVDP Sprite_table_P2,VRAM_Sprite_Table,Sprite_table_P2_end-Sprite_table_P2,VRAM
 		bra.s	++
 
 +
-		dma68kToVDP Sprite_table_P2_alternate,VRAM_Sprite_Table,$280,VRAM
+		dma68kToVDP Sprite_table_P2_alternate,VRAM_Sprite_Table,Sprite_table_P2_alternate_end-Sprite_table_P2_alternate,VRAM
 
 +
 		startZ80
@@ -885,11 +897,11 @@ HInt3:
 		subi.b	#203,d0							;
 ;		move.b	(H_int_counter).w,d0					;
 ;		subi.b	#200,d0							;
-		bcs.s	$$transferColors
+		bcs.s	.transferColors
 		sub.b	d0,d1
-		bcs.s	$$skipTransfer
+		bcs.s	.skipTransfer
 
-$$transferColors:
+.transferColors:
 		move.w	(a2)+,d0
 		lea	(Water_palette).w,a0
 		adda.w	d0,a0
@@ -902,9 +914,9 @@ $$transferColors:
 		nop
 		moveq	#$24,d0
 		dbf	d0,*	; waste some cycles
-		dbf	d1,$$transferColors	; repeat for number of colors
+		dbf	d1,.transferColors	; repeat for number of colors
 
-$$skipTransfer:
+.skipTransfer:
 		startZ80
 		movem.l	(sp)+,d0-d1/a0-a2
 		tst.b	(Do_Updates_in_H_int).w
@@ -946,11 +958,11 @@ HInt4:
 		subi.b	#203,d0							;
 ;		move.b	(H_int_counter).w,d0					;
 ;		subi.b	#200,d0							;
-		bcs.s	$$transferColors
+		bcs.s	.transferColors
 		sub.b	d0,d1
-		bcs.s	$$skipTransfer
+		bcs.s	.skipTransfer
 
-$$transferColors:
+.transferColors:
 		move.w	(a2)+,d0
 		lea	(Water_palette).w,a0
 		adda.w	d0,a0
@@ -962,9 +974,9 @@ $$transferColors:
 		nop
 		moveq	#$33,d0
 		dbf	d0,*	; waste some cycles
-		dbf	d1,$$transferColors
+		dbf	d1,.transferColors
 
-$$skipTransfer:
+.skipTransfer:
 		startZ80
 		movem.l	(sp)+,d0-d1/a0-a2
 		tst.b	(Do_Updates_in_H_int).w
@@ -1076,9 +1088,9 @@ Init_VDP:
 		lea	(VDP_register_values).l,a2
 		moveq	#19-1,d7
 
-$$setRegisters:
+.setRegisters:
 		move.w	(a2)+,(a0)
-		dbf	d7,$$setRegisters
+		dbf	d7,.setRegisters
 		move.w	(VDP_register_values+2).l,d0	; get command for register #1
 		move.w	d0,(VDP_reg_1_command).w	; and store it in RAM (for easy display blanking/enabling)
 		move.w	#VDP_HIntPos|(224-1),(H_int_counter_command).w
@@ -1089,9 +1101,9 @@ $$setRegisters:
 		move.l	#vdpComm($0000,CRAM,WRITE),(VDP_control_port).l
 		move.w	#bytesToWcnt($80),d7
 
-$$clearCRAM:
+.clearCRAM:
 		move.w	d0,(a1)
-		dbf	d7,$$clearCRAM
+		dbf	d7,.clearCRAM
 		clr.l	(V_scroll_value).w
 		clr.l	(_unkF61A).w
 		move.l	d1,-(sp)
@@ -1144,13 +1156,13 @@ Clear_DisplayData_Cont:
 		clr.l	(V_scroll_value).w
 		clr.l	(_unkF61A).w
 	if FixBugs
-		clearRAM Sprite_table,$280
-		clearRAM H_scroll_buffer,$400
+		clearRAM Sprite_table,(Sprite_table_end-Sprite_table)
+		clearRAM H_scroll_buffer,(Collision_response_list_end-H_scroll_buffer)
 	else
-		; Bug: this should be $280
-		clearRAM Sprite_table,$280+4
-		; Bug: this should be $400
-		clearRAM H_scroll_buffer,$400+4
+		; Bug: this should be (Sprite_table_End-Sprite_table)
+		clearRAM Sprite_table,(Sprite_table_end-Sprite_table)+4
+		; Bug: this should be (Collision_response_list_End-H_scroll_buffer)
+		clearRAM H_scroll_buffer,(Collision_response_list_end-H_scroll_buffer)+4
 	endif
 
 		startZ80
@@ -1299,7 +1311,7 @@ loc_1408:
 		startZ80
 
 Pause_Loop:
-		move.b	#$10,(V_int_routine).w
+		move.b	#VInt_ID_10,(V_int_routine).w
 		bsr.w	Wait_VSync
 		tst.b	(Slow_motion_flag).w
 		beq.s	Pause_NoSlowMo
@@ -1308,20 +1320,20 @@ Pause_Loop:
 
 		tst.b	(Blue_spheres_stage_flag).w		; Liliam: ported from S3 - return to level select from pause
 		bne.s	Pause_ReturnToBlueSpheres		;
-		move.b	#$24,(Game_mode).w			;
+		move.b	#GameMode_LevelSelect,(Game_mode).w	;
 		tst.w	(Competition_mode).w			;
 		beq.s	Pause_FadeOut				;
-		move.b	#$40,(Game_mode).w			;
+		move.b	#GameMode_CompLevelSelect,(Game_mode).w	;
 		tst.b	(Competition_type).w			;
 		bmi.s	Pause_ReturnToTimeAttack		;
 		bne.s	Pause_FadeOut				;
-		move.b	#$44,(Game_mode).w			;
+		move.b	#GameMode_CompResults,(Game_mode).w	;
 		bra.s	Pause_FadeOut				;
 ; ---------------------------------------------------------------------------
 
 Pause_ReturnToBlueSpheres:
-		move.b	#$28,(Game_mode).w			; Liliam: blue sphere - quick return by pressing B
-;		move.b	#4,(Game_mode).w			;
+		move.b	#GameMode_BlueSpheres,(Game_mode).w	; Liliam: blue sphere - quick return by pressing B
+;		move.b	#GameMode_TitleScreen,(Game_mode).w	;
 ;		nop						;
 		bra.s	Pause_ResumeMusic
 ; ---------------------------------------------------------------------------
@@ -1345,7 +1357,7 @@ Pause_NoSlowMo:
 		beq.s	Pause_ChkStart
 
 Pause_ReturnToTimeAttack:
-		move.b	#$40+$80,(Game_mode).w	; If in time attack mode, go back to 2P menu if B is pressed
+		move.b	#GameMode_CompLevelSelect+$80,(Game_mode).w	; If in time attack mode, go back to 2P menu if B is pressed
 
 Pause_FadeOut:
 		moveq	#signextendB(cmd_FadeOut),d0		; Liliam: ported from S3 - return to level select from pause
@@ -1523,9 +1535,9 @@ Process_DMA_Queue:
 		lea	(VDP_control_port).l,a5
 		lea	(DMA_queue).w,a1
 
-$$loop:
+.loop:
 		move.w	(a1)+,d0	; has a stop token been encountered?
-		beq.s	$$stop	; if it has, branch
+		beq.s	.stop	; if it has, branch
 		move.w	d0,(a5)
 		move.w	(a1)+,(a5)
 		move.w	(a1)+,(a5)
@@ -1534,9 +1546,9 @@ $$loop:
 		move.w	(a1)+,(a5)
 		move.w	(a1)+,(a5)
 		cmpa.w	#DMA_queue_slot,a1	; has the end of the queue been reached?
-		bne.s	$$loop	; if not, loop
+		bne.s	.loop	; if not, loop
 
-$$stop:
+.stop:
 		move.w	#0,(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
 		rts
@@ -1778,23 +1790,23 @@ Load_PLC:
 		lea	(a1,d0.w),a1
 		lea	(Nem_decomp_queue).w,a2
 
-$$findFreeSlot:
+.findFreeSlot:
 		tst.l	(a2)	; is the current slot in the queue free?
-		beq.s	$$getPieceCount	; if it is, branch
+		beq.s	.getPieceCount	; if it is, branch
 		addq.w	#6,a2	; otherwise check the next slot
-		bra.s	$$findFreeSlot
+		bra.s	.findFreeSlot
 ; ---------------------------------------------------------------------------
 
-$$getPieceCount:
+.getPieceCount:
 		move.w	(a1)+,d0
-		bmi.s	$$done
+		bmi.s	.done
 
-$$queuePieces:
+.queuePieces:
 		move.l	(a1)+,(a2)+	; store compressed data location
 		move.w	(a1)+,(a2)+	; store destination in VRAM
-		dbf	d0,$$queuePieces
+		dbf	d0,.queuePieces
 
-$$done:
+.done:
 		movem.l	(sp)+,a1-a2
 		rts
 ; End of function Load_PLC
@@ -1810,23 +1822,23 @@ $$done:
 Load_PLC_Raw:
 		lea	(Nem_decomp_queue).w,a2
 
-$$findFreeSlot:
+.findFreeSlot:
 		tst.l	(a2)
-		beq.s	$$getPieceCount
+		beq.s	.getPieceCount
 		addq.w	#6,a2
-		bra.s	$$findFreeSlot
+		bra.s	.findFreeSlot
 ; ---------------------------------------------------------------------------
 
-$$getPieceCount:
+.getPieceCount:
 		move.w	(a1)+,d0
-		bmi.s	$$done
+		bmi.s	.done
 
-$$queuePieces:
+.queuePieces:
 		move.l	(a1)+,(a2)+
 		move.w	(a1)+,(a2)+
-		dbf	d0,$$queuePieces
+		dbf	d0,.queuePieces
 
-$$done:
+.done:
 		rts
 ; End of function Load_PLC_Raw
 
@@ -1848,14 +1860,14 @@ Load_PLC_2:
 		bsr.s	Clear_Nem_Queue
 		lea	(Nem_decomp_queue).w,a2
 		move.w	(a1)+,d0
-		bmi.s	$$done
+		bmi.s	.done
 
-$$queuePieces:
+.queuePieces:
 		move.l	(a1)+,(a2)+
 		move.w	(a1)+,(a2)+
-		dbf	d0,$$queuePieces
+		dbf	d0,.queuePieces
 
-$$done:
+.done:
 		movem.l	(sp)+,a1-a2
 		rts
 ; End of function Load_PLC_2
@@ -1869,11 +1881,11 @@ $$done:
 
 Clear_Nem_Queue:
 		lea	(Nem_decomp_queue).w,a2
-		moveq	#bytesToLcnt($80),d0	; clear till the end of Nem_decomp_vars
+		moveq	#bytesToLcnt(Nem_decomp_vars_end-Nem_decomp_queue),d0	; clear till the end of Nem_decomp_vars
 
-$$loop:
+.loop:
 		clr.l	(a2)+
-		dbf	d0,$$loop
+		dbf	d0,.loop
 		rts
 ; End of function Clear_Nem_Queue
 
@@ -2035,7 +2047,7 @@ Process_Nem_Queue_ShiftUp:
 Load_PLC_Immediate:
 		move.w	(a1)+,d1
 
-$$decompPieces:
+.decompPieces:
 		movea.l	(a1)+,a0	; get source address
 		moveq	#0,d0
 		move.w	(a1)+,d0	; get destination VRAM address
@@ -2045,7 +2057,7 @@ $$decompPieces:
 		swap	d0	; d0 = VDP command to write to destination
 		move.l	d0,(VDP_control_port).l
 		bsr.w	Nem_Decomp
-		dbf	d1,$$decompPieces
+		dbf	d1,.decompPieces
 		rts
 ; End of function Load_PLC_Immediate
 
@@ -2115,29 +2127,29 @@ Eni_Decomp_01:
 Eni_Decomp_100:
 		bsr.w	Eni_Decomp_FetchInlineValue
 
-$$loop:
+.loop:
 		move.w	d1,(a1)+	; copy inline value
-		dbf	d2,$$loop	; repeat
+		dbf	d2,.loop	; repeat
 		bra.s	Eni_Decomp_Loop
 ; ---------------------------------------------------------------------------
 
 Eni_Decomp_101:
 		bsr.w	Eni_Decomp_FetchInlineValue
 
-$$loop:
+.loop:
 		move.w	d1,(a1)+	; copy inline value
 		addq.w	#1,d1	; increment
-		dbf	d2,$$loop	; repeat
+		dbf	d2,.loop	; repeat
 		bra.s	Eni_Decomp_Loop
 ; ---------------------------------------------------------------------------
 
 Eni_Decomp_110:
 		bsr.w	Eni_Decomp_FetchInlineValue
 
-$$loop:
+.loop:
 		move.w	d1,(a1)+	; copy inline value
 		subq.w	#1,d1	; decrement
-		dbf	d2,$$loop	; repeat
+		dbf	d2,.loop	; repeat
 		bra.s	Eni_Decomp_Loop
 ; ---------------------------------------------------------------------------
 
@@ -2145,10 +2157,10 @@ Eni_Decomp_111:
 		cmpi.w	#$F,d2
 		beq.s	Eni_Decomp_Done
 
-$$loop:
+.loop:
 		bsr.w	Eni_Decomp_FetchInlineValue	; fetch new inline value
 		move.w	d1,(a1)+	; copy it
-		dbf	d2,$$loop	; and repeat
+		dbf	d2,.loop	; and repeat
 		bra.s	Eni_Decomp_Loop
 ; ---------------------------------------------------------------------------
 
@@ -2241,7 +2253,7 @@ Eni_Decomp_FetchInlineValue:
 		move.w	d5,d1
 		move.w	d6,d7
 		sub.w	a5,d7	; subtract length in bits of inline copy value
-		bcc.s	$$enoughBits	; branch if a new word doesn't need to be read
+		bcc.s	.enoughBits	; branch if a new word doesn't need to be read
 		move.w	d7,d6
 		addi.w	#$10,d6
 		neg.w	d7	; calculate bit deficit
@@ -2252,7 +2264,7 @@ Eni_Decomp_FetchInlineValue:
 		and.w	Eni_Decomp_Masks-2(pc,d7.w),d5
 		add.w	d5,d1	; combine upper bits with lower bits
 
-$$maskValue:
+.maskValue:
 		move.w	a5,d0	; get length in bits of inline copy value
 		add.w	d0,d0
 		and.w	Eni_Decomp_Masks-2(pc,d0.w),d1	; mask value appropriately
@@ -2263,8 +2275,8 @@ $$maskValue:
 		rts
 ; ---------------------------------------------------------------------------
 
-$$enoughBits:
-		beq.s	$$justEnough	; if the word has been exactly exhausted, branch
+.enoughBits:
+		beq.s	.justEnough	; if the word has been exactly exhausted, branch
 		lsr.w	d7,d1	; get inline copy value
 		move.w	a5,d0
 		add.w	d0,d0
@@ -2274,9 +2286,9 @@ $$enoughBits:
 		bra.s	Eni_Decomp_FetchByte
 ; ---------------------------------------------------------------------------
 
-$$justEnough:
+.justEnough:
 		moveq	#$10,d6	; reset shift value
-		bra.s	$$maskValue
+		bra.s	.maskValue
 ; End of function Eni_Decomp_FetchInlineValue
 
 ; ---------------------------------------------------------------------------
@@ -2436,14 +2448,14 @@ Queue_Kos_Module:
 		beq.s	Process_Kos_Module_Queue_Init	; if it is, branch
 		addq.w	#6,a2	; otherwise, check next slot
 
-$$findFreeSlot:
+.findFreeSlot:
 		tst.l	(a2)
-		beq.s	$$freeSlotFound
+		beq.s	.freeSlotFound
 		addq.w	#6,a2
-		bra.s	$$findFreeSlot
+		bra.s	.findFreeSlot
 ; ---------------------------------------------------------------------------
 
-$$freeSlotFound:
+.freeSlotFound:
 		move.l	a1,(a2)+	; store source address
 		move.w	d2,(a2)+	; store destination VRAM address
 		rts
@@ -2490,16 +2502,16 @@ Process_Kos_Module_Queue_Init:
 
 Process_Kos_Module_Queue:
 		tst.b	(Kos_modules_left).w
-		bne.s	$$modulesLeft
+		bne.s	.modulesLeft
 
-$$done:
+.done:
 		rts
 ; ---------------------------------------------------------------------------
 
-$$modulesLeft:
-		bmi.s	$$decompressionStarted
+.modulesLeft:
+		bmi.s	.decompressionStarted
 		cmpi.w	#4,(Kos_decomp_queue_count).w
-		bhs.s	$$done	; branch if the Kosinski decompression queue is full
+		bhs.s	.done	; branch if the Kosinski decompression queue is full
 		movea.l	(Kos_module_queue).w,a1
 		lea	(Kos_decomp_buffer).w,a2
 		bsr.w	Queue_Kos	; add current module to decompression queue
@@ -2507,9 +2519,9 @@ $$modulesLeft:
 		rts
 ; ---------------------------------------------------------------------------
 
-$$decompressionStarted:
+.decompressionStarted:
 		tst.w	(Kos_decomp_queue_count).w
-		bne.s	$$done	; branch if the decompression isn't complete
+		bne.s	.done	; branch if the decompression isn't complete
 
 		; otherwise, DMA the decompressed data to VRAM
 		andi.b	#$7F,(Kos_modules_left).w
@@ -2944,7 +2956,7 @@ AnPal_None:
 
 AnPal_AIZ1:
 		move.b	(AIZ1_palette_cycle_flag).w,d0
-		bmi.s	locret_221C				; Liliam: Knuckles intro - apply bomb flash to waterfall
+		bmi.s	locret_221C							; Liliam: Knuckles intro - apply bomb flash to waterfall
 		bne.s	loc_221E
 		subq.w	#1,(Palette_cycle_counter1).w
 		bpl.s	locret_221C
@@ -3366,8 +3378,8 @@ loc_26B6:
 		move.l	(a0,d0.w),(Normal_palette_line_4+$02).w
 
 loc_26C2:
-		tst.b	(Palette_cycle_counters+$00).w		; Liliam: bugfix - stop palette cycle for boss
-		bne.s	locret_26F0				;
+		tst.b	(Palette_cycle_counters+$00).w					; Liliam: bugfix - stop palette cycle for boss
+		bne.s	locret_26F0							;
 		subq.w	#1,(Palette_cycle_counters+$08).w
 		bpl.s	locret_26F0
 		move.w	#7,(Palette_cycle_counters+$08).w
@@ -4897,7 +4909,7 @@ Pal_FadeFromBlack:
 		move.w	#$15,d4
 
 loc_3AFE:
-		move.b	#$12,(V_int_routine).w
+		move.b	#VInt_ID_12,(V_int_routine).w
 		bsr.w	Wait_VSync
 		bsr.s	Pal_FromBlack
 		bsr.w	Process_Nem_Queue_Init
@@ -5000,7 +5012,7 @@ loc_3B7C:
 
 ; ---------------------------------------------------------------------------
 
-Pal_PrepFade_LevelLoad:								; Liliam: fade in player palette if title card suppressed
+Pal_PrepFade_LevelLoad:										; Liliam: fade in player palette if title card suppressed
 		cmpi.l	#Obj_TitleCard,(Dynamic_object_RAM+(object_size*5)).w
 		bne.s	.fadePlayerPal
 		move.w	#$2030-1,(Palette_fade_info).w
@@ -5182,7 +5194,7 @@ Pal_FadeToBlack:
 		move.w	#$15,d4
 
 loc_3BEE:
-		move.b	#$12,(V_int_routine).w
+		move.b	#VInt_ID_12,(V_int_routine).w
 		bsr.w	Wait_VSync
 		bsr.s	Pal_ToBlack
 		bsr.w	Process_Nem_Queue_Init
@@ -5289,7 +5301,7 @@ Pal_FadeFromWhite:
 		move.w	#$15,d4
 
 loc_3C8E:
-		move.b	#$12,(V_int_routine).w
+		move.b	#VInt_ID_12,(V_int_routine).w
 		bsr.w	Wait_VSync
 		bsr.s	Pal_FromWhite
 		bsr.w	Process_Nem_Queue_Init
@@ -5382,7 +5394,7 @@ Pal_FadeFromWhite_SpecialStage:					; Liliam: ported from S1 - Naka fade for spe
 		moveq	#$16-1,d4
 
 	.loop:
-		move.b	#$12,(V_int_routine).w
+		move.b	#VInt_ID_12,(V_int_routine).w
 		bsr.w	Wait_VSync
 		bsr.s	Pal_FromWhite_SpecialStage
 		bsr.w	Process_Nem_Queue_Init
@@ -5398,7 +5410,7 @@ Pal_FadeFromWhite_EncoreBonus:						; Liliam: Encore mode - bonus stage
 		move.l	a0,-(sp)
 		lea	(Normal_palette).w,a0
 		lea	(Target_palette).w,a1
-		moveq	#bytesToLcnt($80),d4
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette),d4
 
 	.loop1:
 		move.l	(a0)+,(a1)+
@@ -5515,7 +5527,7 @@ Pal_FadeToWhite:
 		move.w	#$15,d4
 
 loc_3D3A:
-		move.b	#$12,(V_int_routine).w
+		move.b	#VInt_ID_12,(V_int_routine).w
 		bsr.w	Wait_VSync
 		bsr.s	Pal_ToWhite
 		bsr.w	Process_Nem_Queue_Init
@@ -5603,7 +5615,7 @@ Encore_LoadFlags:						; Liliam: Encore mode - palette
 		rts
 ; ---------------------------------------------------------------------------
 
-LoadPalette_LevelLoad:								; Liliam: fade in player palette if title card suppressed
+LoadPalette_LevelLoad:										; Liliam: fade in player palette if title card suppressed
 		bsr.s	Encore_LoadFlags
 		tst.w	(Competition_mode).w
 		bne.s	LoadPalette_NoEncore
@@ -5728,7 +5740,7 @@ loc_3E22:
 Sega_Screen:
 		bsr.w	Pal_FadeToBlack				; Liliam: title screen - quick return by pressing B
 		bra.s	loc_3E32				;
-;		move.b	#4,(Game_mode).w			;
+;		move.b	#GameMode_TitleScreen,(Game_mode).w	;
 ;		rts						;
 ; ---------------------------------------------------------------------------
 
@@ -5739,7 +5751,7 @@ loc_3E32:
 		moveq	#signextendB(cmd_FadeOut),d0
 		bsr.w	Play_Music			; Fade music if any is playing
 		clr.w	(Kos_decomp_queue_count).w
-		clearRAM	Kos_decomp_stored_registers,$6C	; Clear FFFF10-FFFF7B
+		clearRAM	Kos_decomp_stored_registers,(Kos_decomp_module_end-Kos_decomp_stored_registers)	; Clear FFFF10-FFFF7B
 		bsr.w	Clear_Nem_Queue
 		clr.w	(Current_zone_and_act).w		; Clear zone/act index
 ;		bsr.w	Pal_FadeToBlack				; Liliam: title screen - quick return by pressing B
@@ -5756,12 +5768,12 @@ loc_3E32:
 		clr.b	(Water_flag).w					; Both water flags cleared
 		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)		; Command $8C81 - 40cell screen size, no interlacing, no s/h
 		bsr.w	Clear_DisplayData
-		clearRAM	Sprite_table_input,$400		; Clear object display array
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)		; Clear object display array
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)	; Clear SST array
-		clearRAM	Tails_CPU_interact,$100	; Clear active play variables
-		clearRAM	Camera_RAM,$100	; Clear play positional values
+		clearRAM	Tails_CPU_interact,(Sprite_table-Tails_CPU_interact)	; Clear active play variables
+		clearRAM	Camera_RAM,(Camera_RAM_end-Camera_RAM)	; Clear play positional values
 		jsr	(Init_SpriteTable).l		; Initialize the sprite table
-		clearRAM	Normal_palette,$100	; Clear main palette
+		clearRAM	Normal_palette,(Stack_contents-Normal_palette)	; Clear main palette
 		moveq	#0,d0
 		move.b	d0,(Last_star_post_hit).w
 		move.b	d0,(Special_bonus_entry_flag).w
@@ -5833,7 +5845,7 @@ loc_3F7E:
 		jsr	(Plane_Map_To_VRAM).l		; Copy screen mappings to VRAM
 		lea	(Pal_TitleSonic1).l,a0
 		lea	(Target_palette).w,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d0
 
 loc_3F9E:
 		move.l	(a0)+,(a1)+			; Fill 2 palette lines with title screen data
@@ -5853,7 +5865,7 @@ loc_3F9E:
 ;		move.w	#3*60,(Demo_timer).w				;
 
 Wait_SegaS3K:
-		move.b	#$14,(V_int_routine).w
+		move.b	#VInt_ID_14,(V_int_routine).w
 		bsr.w	Wait_VSync				; Wait for SEGA sound
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.b	#button_start_mask,d0
@@ -5867,18 +5879,18 @@ loc_3FE4:
 		lea	(Pal_Title).l,a1
 
 loc_3FF0:
-;		move.b	#2,(V_int_routine).w		; Liliam: bugfix - don't stop fade prematurely
+;		move.b	#VInt_ID_2,(V_int_routine).w	; Liliam: bugfix - don't stop fade prematurely
 ;		bsr.w	Wait_VSync			;
 		lea	(Normal_palette).w,a2
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
 		move.w	(a1)+,(a2)+
-		move.b	#2,(V_int_routine).w		; Liliam: bugfix - don't stop fade prematurely
+		move.b	#VInt_ID_2,(V_int_routine).w	; Liliam: bugfix - don't stop fade prematurely
 		bsr.w	Wait_VSync			;
 		tst.w	-$E(a1)					; Wait for BG color to turn to black
 		bne.s	loc_3FF0
-		clr.w	(_unkF660).w
+		clr.w	(Ending_scroll_delay).w
 		clr.w	(_unkF662).w
 		move.b	#-1,(Title_anim_buffer).w
 		move.b	#0,(Title_anim_delay).w
@@ -5902,7 +5914,7 @@ loc_4040:
 		bsr.w	Play_Music				; Start playing the title screen music
 
 Wait_TitleS3K:
-		move.b	#4,(V_int_routine).w
+		move.b	#VInt_ID_4,(V_int_routine).w
 ;		jsr	(Process_Kos_Queue).l		; Liliam: moved to loc_3F9E - decompress art during SEGA sound
 		bsr.w	Wait_VSync
 		bsr.w	Iterate_TitleSonicFrame
@@ -5920,13 +5932,13 @@ Wait_TitleS3K:
 loc_4090:
 		move.w	#$C,(Title_anim_frame).w
 		lea	(Normal_palette).w,a1
-		moveq	#bytesToWcnt($80),d1
+		moveq	#bytesToWcnt(Normal_palette_end-Normal_palette),d1
 
 loc_409C:
 		move.w	#$EEE,(a1)+
 		dbf	d1,loc_409C				; Flash palette white
 		move.b	#3,(Title_anim_delay).w
-		move.b	#4,(V_int_routine).w
+		move.b	#VInt_ID_4,(V_int_routine).w
 		bsr.w	Wait_VSync
 		lea	(ArtKos_S3TitleSonicD).l,a0	;S3DATA
 		lea	(RAM_start).l,a1
@@ -5955,11 +5967,11 @@ loc_409C:
 		moveq	#40-1,d1
 		moveq	#28-1,d2
 		jsr	(Plane_Map_To_VRAM).l		; Load S3K Title BG to $E000 VRAM
-		move.b	#4,(V_int_routine).w
+		move.b	#VInt_ID_4,(V_int_routine).w
 		bsr.w	Wait_VSync
 		lea	(Pal_TitleSonicD).l,a0		; Title palette
 		lea	(Target_palette).w,a1
-		moveq	#bytesToLcnt($80),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette),d0
 
 loc_4140:
 		move.l	(a0)+,(a1)+
@@ -5993,8 +6005,9 @@ loc_4140:
 		bsr.w	Pal_FadeFromWhite						;
 
 loc_41D4:
-		move.b	#$1A,(V_int_routine).w						;
-;		move.b	#4,(V_int_routine).w						;
+
+		move.b	#VInt_ID_1A,(V_int_routine).w					;
+;		move.b	#VInt_ID_4,(V_int_routine).w					;
 		bsr.w	Wait_VSync
 		jsr	(Process_Sprites).l
 		jsr	(Render_Sprites).l
@@ -6015,7 +6028,7 @@ loc_41D4:
 		and.b	(Title_screen_option).w,d0		;
 		move.b	TitleScreen_GameModes(pc,d0.w),d0	;
 		move.b	d0,(Game_mode).w			;
-		cmpi.b	#$24,d0					;
+		cmpi.b	#GameMode_LevelSelect,d0		;
 		beq.s	TitleScreen_LevelSelect			;
 
 		clr.b	(Encore_mode).w				; Liliam: Encore mode - clear variables
@@ -6026,7 +6039,13 @@ TitleScreen_LevelSelect:
 ; ---------------------------------------------------------------------------
 
 TitleScreen_GameModes:						; Liliam: title screen - expand options
-		dc.b  $4C, $1C, $38, $10, $28, $20, $24
+		dc.b GameMode_SaveScreen
+		dc.b GameMode_EncoreMode
+		dc.b GameMode_Competition
+		dc.b GameMode_Museum
+		dc.b GameMode_BlueSpheres
+		dc.b GameMode_S3Credits
+		dc.b GameMode_LevelSelect
 		even
 ; ---------------------------------------------------------------------------
 
@@ -6057,7 +6076,7 @@ loc_42C8:
 		move.w	d1,(Next_demo_number).w
 		tst.w	d0
 		bpl.s	loc_4300			; Branch if we are indeed playing a level
-		move.b	#$34,(Game_mode).w	; Do the special stage demo
+		move.b	#GameMode_SpecialStage,(Game_mode).w	; Do the special stage demo
 		move.b	#1,(Current_special_stage).w
 		move.b	#1,(SK_special_stage_flag).w
 ;		move.b	#7,(Current_zone).w			; Liliam: removed S&K alone mode
@@ -6070,7 +6089,7 @@ loc_42C8:
 ; ---------------------------------------------------------------------------
 
 loc_4300:
-		move.b	#8,(Game_mode).w	; We're about to perform a level demo
+		move.b	#GameMode_Demo,(Game_mode).w	; We're about to perform a level demo
 
 loc_4306:
 		move.w	#1,(Demo_mode_flag).w
@@ -6110,7 +6129,7 @@ TitleAnim_FlipBuffer:
 ;		move.b	#4-1,(Title_anim_delay).w			;
 		lea	(Target_palette).w,a0
 		lea	(Normal_palette).w,a1
-		moveq	#bytesToLcnt($40),d0
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette),d0
 
 loc_4376:
 		move.l	(a0)+,(a1)+
@@ -6141,7 +6160,7 @@ TitleAnim_Delay:							; Liliam: title anim - compensate for variable decompress
 loc_43B2:
 		lea	(Target_palette).w,a0
 		lea	(Normal_palette).w,a1
-		moveq	#bytesToLcnt($80),d0
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette),d0
 
 loc_43BC:
 		move.l	(a0)+,(a1)+
@@ -6214,7 +6233,7 @@ loc_445A:
 loc_4466:
 		movea.l	(a2)+,a0			; Palette data address
 		lea	(Target_palette).w,a1
-		moveq	#bytesToLcnt($40),d0
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette),d0
 
 loc_446E:
 		move.l	(a0)+,(a1)+
@@ -6783,9 +6802,9 @@ LevelMusic_Playlist:
 
 Level:
 LevelDemo:
-		cmpi.b	#8,(Game_mode).w					; Liliam: level select - add HPZ special
+		cmpi.b	#GameMode_Demo,(Game_mode).w				; Liliam: level select - add HPZ special
 		beq.s	loc_5FB2						;
-		cmpi.b	#$C,(Game_mode).w					;
+		cmpi.b	#GameMode_Level,(Game_mode).w				;
 		beq.s	loc_5FB2						;
 		rts								;
 ; ---------------------------------------------------------------------------
@@ -6805,22 +6824,22 @@ loc_5FC4:
 		clr.w	(DMA_queue).w				; Liliam: bugfix - fix DPLC fade bug (credit: flamewing)
 		move.l	#DMA_queue,(DMA_queue_slot).w		;
 		clr.w	(Kos_decomp_queue_count).w
-		clearRAM	Kos_decomp_stored_registers,$6C	; Clear the KosM bytes
+		clearRAM	Kos_decomp_stored_registers,(Kos_decomp_module_end-Kos_decomp_stored_registers)	; Clear the KosM bytes
 		bsr.w	Clear_Nem_Queue				; Clear PLCs
 
-		tst.b	(Encore_restart_flag).w			; Liliam: Encore mode - restart level
-		beq.s	loc_5FE0				;
-		moveq	#signextendB(sfx_Teleport),d0		;
-		bsr.w	Play_SFX				;
-		lea	(Normal_palette).w,a1			;
-		moveq	#bytesToWcnt($80),d0			;
+		tst.b	(Encore_restart_flag).w					; Liliam: Encore mode - restart level
+		beq.s	loc_5FE0						;
+		moveq	#signextendB(sfx_Teleport),d0				;
+		bsr.w	Play_SFX						;
+		lea	(Normal_palette).w,a1					;
+		moveq	#bytesToWcnt(Normal_palette_end-Normal_palette),d0	;
 
 	.loop:
-		move.w	#$EEE,(a1)+				;
-		dbf	d0,.loop				;
-		move.b	#$12,(V_int_routine).w			;
-		bsr.w	Wait_VSync				;
-		bra.s	loc_6000				;
+		move.w	#$EEE,(a1)+						;
+		dbf	d0,.loop						;
+		move.b	#VInt_ID_12,(V_int_routine).w				;
+		bsr.w	Wait_VSync						;
+		bra.s	loc_6000						;
 ; ---------------------------------------------------------------------------
 
 loc_5FE0:
@@ -6856,7 +6875,16 @@ loc_6000:
 		bra.s	loc_6040
 ; ---------------------------------------------------------------------------
 Player_PLCs:							; Liliam: simplify player PLC selection
-		dc.b    1,   1,   7,   5,   6,   0,   2,   8,   4, $52
+		dc.b PLCID_01
+		dc.b PLCID_01
+		dc.b PLCID_07
+		dc.b PLCID_05
+		dc.b PLCID_06
+		dc.b PLCID_00
+		dc.b PLCID_02
+		dc.b PLCID_08
+		dc.b PLCID_04
+		dc.b PLCID_52
 ; ---------------------------------------------------------------------------
 
 loc_6034:
@@ -6953,7 +6981,7 @@ loc_6068:
 		moveq	#0,d0
 		move.b	(a2,d1.w),d0			; Get the first PLC number for the level
 		beq.s	loc_6088
-		cmpi.b	#$48,d0						; Liliam: Encore mode - special stage
+		cmpi.b	#PLCID_48,d0					; Liliam: Encore mode - special stage
 		bne.s	loc_6084					;
 		tst.b	(Encore_mode).w					;
 		beq.s	loc_6084					;
@@ -6967,15 +6995,15 @@ loc_6088:
 		; Liliam: removed original implementation
 
 ;loc_60DE:
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
-		clearRAM	Lag_frame_count,$58
-		clearRAM	Tails_CPU_interact,$100
+		clearRAM	Lag_frame_count,(Nem_decomp_queue-Lag_frame_count)
+		clearRAM	Tails_CPU_interact,(Sprite_table-Tails_CPU_interact)
 		clearRAM	Oscillating_table,(AIZ_vine_angle-Oscillating_table)
 
 		tst.b	(Respawn_table_keep).w			; Liliam: cutscene skip - MHZ1 intro
 		bmi.s	loc_613E				;
-		clearRAM	_unkFA80,$80
+		clearRAM	_unkFA80,(DMA_queue-_unkFA80)
 
 loc_613E:
 		jsr	(Init_SpriteTable).l
@@ -7029,10 +7057,10 @@ loc_61BE:
 		; Liliam: removed original implementation
 
 ;loc_61DA:
-		bsr.w	LoadPalette_LevelLoad					; Liliam: fade in player palette if title card suppressed
-;		bsr.w	LoadPalette_Immediate					;
+		bsr.w	LoadPalette_LevelLoad							; Liliam: fade in player palette if title card suppressed
+;		bsr.w	LoadPalette_Immediate							;
 		bsr.w	CheckLevelForWater
-		clearRAM	Water_palette_line_2,$60
+		clearRAM	Water_palette_line_2,(Water_palette_end-Water_palette_line_2)
 		tst.b	(Water_flag).w
 		beq.s	loc_61FC
 		move.w	#VDP_Option0|VDPReg0_EnableHInt,(a6)
@@ -7080,10 +7108,10 @@ loc_6268:
 		; Liliam: moved to loc_6040 - queue animals to avoid VDP bugs
 
 ;loc_62B6:
-		tst.w	(Competition_mode).w			; Liliam: fade in player palette if title card suppressed
-		bne.s	loc_62CC				;
-		cmpi.w	#$D01,(Apparent_zone_and_act).w		;
-		beq.s	loc_62CC				;
+		tst.w	(Competition_mode).w							; Liliam: fade in player palette if title card suppressed
+		bne.s	loc_62CC								;
+		cmpi.w	#$D01,(Apparent_zone_and_act).w						;
+		beq.s	loc_62CC								;
 		cmpi.w	#$1701,(Current_zone_and_act).w
 		beq.s	loc_62FE
 		tst.b	(Act3_flag).w
@@ -7097,7 +7125,7 @@ loc_6268:
 		eori.b	#1,(Alternate_start_flag).w			;
 
 loc_62CC:
-		move.b	#$C,(V_int_routine).w
+		move.b	#VInt_ID_C,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		bsr.w	Wait_VSync
 		jsr	(Process_Sprites).l
@@ -7122,7 +7150,7 @@ loc_62FE:
 		bsr.w	ChangeRingFrame						; Liliam: QOL - extend ring animation
 
 loc_6310:
-;		moveq	#3,d0					; Liliam: competition - use 1P player palettes
+;		moveq	#PalID_SonicTails,d0			; Liliam: competition - use 1P player palettes
 ;		bsr.w	LoadPalette				;
 		jsr	(Get_LevelSizeStart).l
 		jsr	(DeformBgLayer).l
@@ -7228,8 +7256,8 @@ loc_6468:
 		jsr	(Render_Sprites).l
 		jsr	(Animate_Tiles).l
 		move.w	#1800,(Demo_timer).w
-;		bsr.w	LoadWaterPalette					; Liliam: fade in player palette if title card suppressed
-;		clearRAM	Water_palette_line_2,$60			;
+;		bsr.w	LoadWaterPalette							; Liliam: fade in player palette if title card suppressed
+;		clearRAM	Water_palette_line_2,(Water_palette_end-Water_palette_line_2)	;
 		move.b	#0,(Ctrl_1_locked).w
 		move.b	#0,(Ctrl_2_locked).w
 		jsr	GetDemoPtr(pc)
@@ -7246,19 +7274,19 @@ loc_6468:
 ;		jsr	(PLCLoad_AnimalsAndExplosion).l		;
 
 ;loc_64DC:
-		bsr.w	Pal_PrepFade_LevelLoad					; Liliam: fade in player palette if title card suppressed
-;		move.w	#$2030-1,(Palette_fade_info).w				;
-;		jsr	(Pal_FillBlack).l					;
+		bsr.w	Pal_PrepFade_LevelLoad							; Liliam: fade in player palette if title card suppressed
+;		move.w	#$2030-1,(Palette_fade_info).w						;
+;		jsr	(Pal_FillBlack).l							;
 		move.w	#$16,(Palette_fade_timer).w
-;		move.w	#$16,(Dynamic_object_RAM+(object_size*5)+objoff_2E).w	;
-		move.w	#$7F<<8,(Ctrl_1).w
-		move.w	#$7F<<8,(Ctrl_2).w
+;		move.w	#$16,(Dynamic_object_RAM+(object_size*5)+objoff_2E).w			;
+		move.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask)<<8,(Ctrl_1).w
+		move.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask)<<8,(Ctrl_2).w
 		andi.b	#$7F,(Last_star_post_hit).w
 		bclr	#7,(Game_mode).w
 
 LevelLoop:
 		bsr.w	Pause_Game
-		move.b	#8,(V_int_routine).w
+		move.b	#VInt_ID_8,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		bsr.w	Wait_VSync
 		addq.w	#1,(Level_frame_counter).w
@@ -7291,9 +7319,9 @@ Level_NotLRZ:
 		jsr	(Slots_CycleOptions).l
 
 Level_NotSlots:
-		cmpi.b	#8,(Game_mode).w
+		cmpi.b	#GameMode_Demo,(Game_mode).w
 		beq.s	DemoMode
-		cmpi.b	#$C,(Game_mode).w
+		cmpi.b	#GameMode_Level,(Game_mode).w
 		beq.w	LevelLoop
 		rts
 ; ---------------------------------------------------------------------------
@@ -7302,17 +7330,17 @@ DemoMode:
 		tst.w	(Restart_level_flag).w
 		bne.s	loc_65D0
 		tst.w	(Demo_timer).w
-		bne.w	LevelLoop			; Liliam: removed dead code
-;		beq.s	loc_65D0			;
-;		cmpi.b	#8,(Game_mode).w		;
-;		beq.w	LevelLoop			;
-;		move.b	#0,(Game_mode).w		;
-;		rts					;
+		bne.w	LevelLoop				; Liliam: removed dead code
+;		beq.s	loc_65D0				;
+;		cmpi.b	#GameMode_Demo,(Game_mode).w		;
+;		beq.w	LevelLoop				;
+;		move.b	#GameMode_SegaScreen,(Game_mode).w	;
+;		rts						;
 
 loc_65D0:
-;		cmpi.b	#8,(Game_mode).w		;
-;		bne.s	loc_65E0			;
-		move.b	#0,(Game_mode).w
+;		cmpi.b	#GameMode_Demo,(Game_mode).w		;
+;		bne.s	loc_65E0				;
+		move.b	#GameMode_SegaScreen,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 		; Liliam: removed dead code
@@ -7338,7 +7366,7 @@ loc_665A:
 
 LevelLoop_Competition:
 		bsr.w	Pause_Game
-		move.b	#8,(V_int_routine).w
+		move.b	#VInt_ID_8,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		bsr.w	Wait_VSync
 		addq.w	#1,(Level_frame_counter).w
@@ -7365,7 +7393,7 @@ loc_66CA:
 		blo.s	loc_66CA
 
 loc_66DA:
-;		bsr.w	Demo_PlayRecord			; Liliam: removed dead code
+;		bsr.w	Demo_PlayRecord				; Liliam: removed dead code
 		jsr	(Process_Sprites).l
 		jsr	(DeformBgLayer).l
 
@@ -7381,9 +7409,9 @@ loc_66EA:
 		jsr	(Animate_Palette).l
 		bsr.w	Process_Nem_Queue_Init
 		jsr	(Process_Kos_Module_Queue).l
-;		cmpi.b	#8,(Game_mode).w		; Liliam: removed dead code
-;		beq.s	loc_672E			;
-		cmpi.b	#$C,(Game_mode).w
+;		cmpi.b	#GameMode_Demo,(Game_mode).w		; Liliam: removed dead code
+;		beq.s	loc_672E				;
+		cmpi.b	#GameMode_Level,(Game_mode).w
 		beq.w	LevelLoop_Competition
 		rts
 ; ---------------------------------------------------------------------------
@@ -7562,9 +7590,9 @@ loc_693E:
 ;loc_695A:
 		cmpi.w	#$800,(Current_zone_and_act).w
 		bne.s	loc_6986
-		move.l	#Obj_SOZMushroomParachute,(Level_intro_object).w; Liliam: Encore mode - FBZ level order
-		tst.b	(Alternate_start_flag).w			;
-		bne.s	loc_6986					;
+		move.l	#Obj_SOZMushroomParachute,(Level_intro_object).w		; Liliam: Encore mode - FBZ level order
+		tst.b	(Alternate_start_flag).w					;
+		bne.s	loc_6986							;
 		move.l	#Obj_LevelIntro_PlayerFallIntoGround,(Level_intro_object).w
 
 loc_696A:
@@ -7840,7 +7868,7 @@ loc_6BF6:
 		lea	(Target_palette).w,a2			;
 ;		lea	(Target_palette_line_2).w,a2		;
 ;		lea	(Pal_Level_2P).l,a1			;
-		move.w	#bytesToWcnt($20),d0
+		move.w	#bytesToWcnt(Target_palette_line_2-Target_palette),d0
 
 loc_6C04:
 		move.l	(a1)+,(a2)+				;
@@ -8136,7 +8164,7 @@ word_6F12:
 ; ---------------------------------------------------------------------------
 
 DynamicWaterHeight_Null2:
-;		rts					; Liliam: removed dead code
+;		rts						; Liliam: removed dead code
 
 DynamicWaterHeight_AIZIntro:
 		; Liliam: removed dead code
@@ -8234,7 +8262,7 @@ loc_6FA4:
 		lsl.l	#8,d1
 		add.l	d1,y_pos(a1)
 		move.b	#$F,anim(a1)
-		bset	#1,status(a1)
+		bset	#Status_InAir,status(a1)
 		move.b	#0,double_jump_flag(a1)
 		tst.b	$C(a2)
 		bne.s	loc_7030
@@ -8349,7 +8377,7 @@ sub_717C:
 		movea.w	d0,a2
 		move.b	(a2),d0
 		lea	byte_7498(pc),a2
-		moveq	#$A-1,d1
+		moveq	#(byte_7498-byte_748E)-1,d1
 
 loc_71B0:
 		cmp.b	-(a2),d0
@@ -8399,7 +8427,7 @@ sub_71E4:
 		movea.w	d0,a2
 		move.b	(a2),d0
 		lea	byte_74A2(pc),a2
-		moveq	#$A-1,d1
+		moveq	#(byte_74A2-byte_7498)-1,d1
 
 loc_7218:
 		cmp.b	-(a2),d0
@@ -8530,7 +8558,7 @@ sub_730C:
 		movea.w	d0,a2
 		move.b	(a2),d0
 		lea	byte_74BD(pc),a2
-		moveq	#$10,d1
+		moveq	#(byte_74BD-byte_74AC)-1,d1
 
 loc_7342:
 		cmp.b	-(a2),d0
@@ -8651,11 +8679,14 @@ loc_747C:
 ; End of function sub_730C
 
 ; ---------------------------------------------------------------------------
+byte_748E:
 		dc.b  $1C, $72, $83, $84, $8B, $91, $9F, $A0, $A5, $A6
 byte_7498:
 		dc.b  $2E, $C6, $33, $C5, $24, $2A, $44, $1F, $27, $2B
 byte_74A2:
-		dc.b  $F8, $F8,   8,   8, $F4, $F4, $F4,  $C,  $C,  $C,  $F, $13, $14, $15, $16, $17, $35, $6C, $6D, $76
+		dc.b  $F8, $F8,   8,   8, $F4, $F4, $F4,  $C,  $C,  $C
+byte_74AC:
+		dc.b   $F, $13, $14, $15, $16, $17, $35, $6C, $6D, $76
 		dc.b  $77, $7E, $7F, $85, $8A, $8C, $90
 byte_74BD:
 		dc.b  $F8,   0, $F8,   0, $FA,   1, $FA,   2, $F8,   0, $F8,   0, $F8,   0,   6,   1,   0,   3,   6,   2
@@ -8785,7 +8816,7 @@ WaterTransition_LBZ2: watertransheader
 		dc.w    $4E
 WaterTransition_LBZ2_End
 
-CopyPal_SaveScreen: watertransheader					; Liliam: data select - add extra characters
+CopyPal_SaveScreen: watertransheader							; Liliam: data select - use HInt for more colors
 		dc.w    $62
 		dc.w    $68
 		dc.w    $6E
@@ -8840,7 +8871,7 @@ loc_761E:
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.b	#button_start_mask,d0
 		beq.s	loc_762E
-		move.b	#4,(Game_mode).w
+		move.b	#GameMode_TitleScreen,(Game_mode).w
 
 loc_762E:
 		movea.l	(Demo_data_addr).w,a0
@@ -8956,7 +8987,7 @@ loc_774A:
 		lea	(Oscillating_table).w,a1
 		lea	(Osc_Data2).l,a2
 		move.w	(a1)+,d3
-		moveq	#$10-1,d1
+		moveq	#bytesToLcnt(Osc_Data2_end-Osc_Data2),d1
 
 loc_7758:
 		move.w	(a2)+,d2
@@ -9009,6 +9040,7 @@ Osc_Data2:
 		dc.w    7, $70
 		dc.w    2, $40
 		dc.w    2, $40
+Osc_Data2_end
 ; ---------------------------------------------------------------------------
 
 ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
@@ -9245,7 +9277,7 @@ loc_782A:
 		jsr	(Queue_Kos_Module).l
 
 loc_7870:
-		move.b	#$C,(V_int_routine).w
+		move.b	#VInt_ID_C,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		bsr.w	Wait_VSync
 		bsr.w	Process_Nem_Queue_Init
@@ -9330,34 +9362,34 @@ loc_7932:
 LoadWaterPalette:
 		tst.b	(Water_flag).w
 		beq.w	locret_7A20
-		moveq	#$2B,d0
+		moveq	#PalID_AIZ_Water,d0
 		cmpi.w	#0,(Current_zone_and_act).w
 		beq.w	loc_7A00
-		moveq	#$2C,d0
+		moveq	#PalID_AIZ2_Water,d0
 		move.l	#WaterTransition_AIZ2,(Water_palette_data_addr).w
 		cmpi.w	#1,(Current_zone_and_act).w
 		beq.s	loc_7A00
-		moveq	#$31,d0
+		moveq	#PalID_HCZ1_Water,d0
 		move.l	#WaterTransition_HCZLBZ1,(Water_palette_data_addr).w
 		cmpi.w	#$100,(Current_zone_and_act).w
 		beq.s	loc_7A00
-		moveq	#$32,d0
+		moveq	#PalID_HCZ2_Water,d0
 		move.l	#WaterTransition_HCZLBZ1,(Water_palette_data_addr).w
 		cmpi.w	#$101,(Current_zone_and_act).w
 		beq.s	loc_7A00
-		moveq	#$3A,d0
+		moveq	#PalID_CNZ_Water,d0
 		move.l	#WaterTransition_CNZ2ICZ2,(Water_palette_data_addr).w
 		cmpi.w	#$301,(Current_zone_and_act).w
 		beq.s	loc_7A00
-		moveq	#$39,d0
+		moveq	#PalID_ICZ2_Water,d0
 		move.l	#WaterTransition_CNZ2ICZ2,(Water_palette_data_addr).w
 		cmpi.w	#$501,(Current_zone_and_act).w
 		beq.s	loc_7A00
-		moveq	#$2D,d0
+		moveq	#PalID_LBZ_Water,d0
 		move.l	#WaterTransition_HCZLBZ1,(Water_palette_data_addr).w
 		cmpi.w	#$600,(Current_zone_and_act).w
 		beq.s	loc_7A00
-		moveq	#$2E,d0
+		moveq	#PalID_LBZ2_Water,d0
 		move.l	#WaterTransition_LBZ2,(Water_palette_data_addr).w
 		; Liliam: removed dead code
 
@@ -9438,7 +9470,7 @@ LevelSelect:
 		move.w	#VDP_Option2|VDPReg2_FullScroll,(a6)
 		move.w	#VDP_WinYPos|Window_Disable,(a6)	; Liliam: ported from S3 - return to level select from pause
 		clr.b	(Water_full_screen_flag).w		;
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -9446,10 +9478,10 @@ LevelSelect:
 		lea	(ArtNem_MenuFont).l,a0
 		bsr.w	Nem_Decomp
 		lea	(RAM_start).l,a1
-		lea	(MapEni_S3MenuBG).l,a0					; Liliam: level select - use data select background
-		move.w	#make_art_tile(ArtTile_LevelSelectBG,0,0),d0		;
-;		lea	(MapEni_S22POptions).l,a0				;
-;		move.w	#make_art_tile($000,3,0),d0				;
+		lea	(MapEni_S3MenuBG).l,a0						; Liliam: level select - use data select background
+		move.w	#make_art_tile(ArtTile_LevelSelectBG,0,0),d0			;
+;		lea	(MapEni_S22POptions).l,a0					;
+;		move.w	#make_art_tile($000,3,0),d0					;
 		bsr.w	Eni_Decomp
 		lea	(RAM_start).l,a1
 		move.l	#vdpComm(VRAM_Plane_B_Name_Table,VRAM,WRITE),d0
@@ -9458,32 +9490,32 @@ LevelSelect:
 		jsr	(Plane_Map_To_VRAM).l
 
 		; Liliam: removed original implementation
-		lea	(MapEni_LevSelBorder).l,a0				; Liliam: level select - use data select background
-		move.w	#make_art_tile(ArtTile_LevelSelectBG+$265,0,0),d0	;
-		bsr.w	Eni_Decomp						;
-		lea	(RAM_start+tiles_to_bytes($46)).l,a1			;
-		move.l	#vdpComm(VRAM_Plane_B_Name_Table+$92C,VRAM,WRITE),d0	;
-		moveq	#11,d1							;
-		moveq	#8,d2							;
-		jsr	(Plane_Map_To_VRAM).l					;
+		lea	(MapEni_LevSelBorder).l,a0					;
+		move.w	#make_art_tile(ArtTile_LevelSelectBG+$265,0,0),d0		;
+		bsr.w	Eni_Decomp							;
+		lea	(RAM_start+tiles_to_bytes($46)).l,a1				;
+		move.l	#vdpComm(VRAM_Plane_B_Name_Table+$92C,VRAM,WRITE),d0		;
+		moveq	#11,d1								;
+		moveq	#8,d2								;
+		jsr	(Plane_Map_To_VRAM).l						;
 
-		lea	(ArtKos_S3MenuBG).l,a0					;
-		lea	(RAM_start).l,a1					;
-		movea.w	#tiles_to_bytes(ArtTile_LevelSelectBG),a2		;
-		jsr	KosArt_To_VDP(pc)					;
-		lea	(ArtKos_LevSelBorder).l,a0				;
-		lea	(RAM_start+tiles_to_bytes($265)).l,a1			;
-		jsr	Kos_Decomp(pc)						;
-		move.l	#locret_7F60,(V_int_1E_addr).w				;
-		move.b	#$1E,(V_int_routine).w					;
-		jsr	(Wait_VSync).l						;
+		lea	(ArtKos_S3MenuBG).l,a0						;
+		lea	(RAM_start).l,a1						;
+		movea.w	#tiles_to_bytes(ArtTile_LevelSelectBG),a2			;
+		jsr	KosArt_To_VDP(pc)						;
+		lea	(ArtKos_LevSelBorder).l,a0					;
+		lea	(RAM_start+tiles_to_bytes($265)).l,a1				;
+		jsr	Kos_Decomp(pc)							;
+		move.l	#locret_7F60,(V_int_1E_addr).w					;
+		move.b	#VInt_ID_1E,(V_int_routine).w					;
+		jsr	(Wait_VSync).l							;
 
-		lea	(ArtKos_LevelSelectZoneArt).l,a0			;
-		lea	(RAM_start).l,a1					;
-		movea.w	#tiles_to_bytes(ArtTile_LevelSelectBG-8*$46),a2		;
-		jsr	KosArt_To_VDP(pc)					;
-		move.b	#$1E,(V_int_routine).w					;
-		jsr	(Wait_VSync).l						;
+		lea	(ArtKos_LevelSelectZoneArt).l,a0				;
+		lea	(RAM_start).l,a1						;
+		movea.w	#tiles_to_bytes(ArtTile_LevelSelectBG-8*$46),a2			;
+		jsr	KosArt_To_VDP(pc)						;
+		move.b	#VInt_ID_1E,(V_int_routine).w					;
+		jsr	(Wait_VSync).l							;
 
 		lea	(RAM_start).l,a1			; Liliam: level select - restore zone icons
 		lea	(ArtKos_SaveScreenZoneArt).l,a0		;
@@ -9519,36 +9551,36 @@ LevelSelect:
 		jsr	(Process_Sprites).l			;
 		jsr	(Render_Sprites).l			;
 
-;		lea	(AniPLC_SONICMILES).l,a2				; Liliam: level select - use data select background
-;		jsr	(AnimateTiles_DoAniPLC).l				;
-;		moveq	#4,d0							;
-;		bsr.w	LoadPalette						;
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - palette
-		beq.s	loc_7BEC				;
-;		lea	(Normal_palette_line_3).w,a1		;
-;		lea	(Target_palette_line_3).w,a2		;
-		lea	Pal_SaveScreen_Encore(pc),a1		;
-		lea	(Target_palette).w,a2			;
-		moveq	#bytesToLcnt($20),d1
+;		lea	(AniPLC_SONICMILES).l,a2					; Liliam: level select - use data select background
+;		jsr	(AnimateTiles_DoAniPLC).l					;
+;		moveq	#PalID_S2Menu,d0						;
+;		bsr.w	LoadPalette							;
+		tst.b	(Encore_mode).w							;
+		beq.s	loc_7BEC							;
+;		lea	(Normal_palette_line_3).w,a1					;
+;		lea	(Target_palette_line_3).w,a2					;
+		lea	Pal_SaveScreen_Encore(pc),a1					;
+		lea	(Target_palette).w,a2						;
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d1
 
 loc_7BE4:
-		move.l	(a1)+,(a2)+				;
-;		move.l	(a1),(a2)+				;
-;		clr.l	(a1)+					;
+		move.l	(a1)+,(a2)+							;
+;		move.l	(a1),(a2)+							;
+;		clr.l	(a1)+								;
 		dbf	d1,loc_7BE4
-		lea	(Pal_Encore).l,a1			;
-		moveq	#bytesToLcnt($40),d1			;
+		lea	(Pal_EncoreMode).l,a1						;
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_2),d1	;
 
 	.loop:
-		move.l	(a1)+,(a2)+				;
-		dbf	d1,.loop				;
+		move.l	(a1)+,(a2)+							;
+		dbf	d1,.loop							;
 		moveq	#signextendB(mus_ProtoMenu),d0		; Liliam: Encore mode - music
 		bra.s	loc_7BEE				;
 ; ---------------------------------------------------------------------------
 
 loc_7BEC:
-		moveq	#9,d0							; Liliam: level select - use data select background
-		bsr.w	LoadPalette_NoEncore					;
+		moveq	#PalID_LevelSelect,d0						; Liliam: level select - use data select background
+		bsr.w	LoadPalette_NoEncore						;
 		moveq	#signextendB(mus_DataSelect),d0
 
 loc_7BEE:
@@ -9591,14 +9623,14 @@ loc_7BF4:
 		clr.b	(Debug_cheat_input_counter).w		;
 		clr.w	(Cheat_input_counter).w
 		clr.w	(Cheat_input_counter2).w
-		move.b	#$16,(V_int_routine).w
+		move.b	#VInt_ID_16,(V_int_routine).w
 		bsr.w	Wait_VSync
 		enableDisplay
 		bsr.w	Pal_FadeFromBlack_Original		; Liliam: use legacy fade for level select
 ;		bsr.w	Pal_FadeFromBlack			;
 
 LevelSelect_Main:	; routine running during level select
-		move.b	#$16,(V_int_routine).w
+		move.b	#VInt_ID_16,(V_int_routine).w
 		bsr.w	Wait_VSync
 		addq.w	#1,(Level_frame_counter).w		; Liliam: level select - restore zone icons
 		jsr	(Process_Sprites).l			;
@@ -9610,12 +9642,12 @@ LevelSelect_Main:	; routine running during level select
 ;		move.w	#palette_line_3,d3			;
 ;		bsr.w	LevelSelect_MarkFields			;
 		move	#$2300,sr
-;		lea	(AniPLC_SONICMILES).l,a2				; Liliam: level select - use data select background
-;		jsr	(AnimateTiles_DoAniPLC).l				;
+;		lea	(AniPLC_SONICMILES).l,a2					; Liliam: level select - use data select background
+;		jsr	(AnimateTiles_DoAniPLC).l					;
 		move.b	(Ctrl_1_pressed).w,d0
 		btst	#button_B,d0				; Liliam: title screen - quick return by pressing B
 		beq.s	loc_7C7E				;
-		move.b	#4,(Game_mode).w			;
+		move.b	#GameMode_TitleScreen,(Game_mode).w	;
 		rts						;
 ; ---------------------------------------------------------------------------
 
@@ -9633,8 +9665,8 @@ loc_7C7E:
 		; Liliam: removed original implementation
 
 ;LevelSelect_Return:
-		move.b	#$54+$80,(Game_mode).w			; Liliam: options menu
-;		move.b	#0,(Game_mode).w			;
+		move.b	#GameMode_Options+$80,(Game_mode).w	; Liliam: options menu
+;		move.b	#GameMode_SegaScreen,(Game_mode).w	;
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -9665,9 +9697,9 @@ LevelSelect_CheckKnuckles:
 
 		cmpi.w	#3,(Player_mode).w		; Are we Knuckles?
 		bne.s	LevelSelect_CheckSonicTails	; If not, branch
-		cmpi.w	#$800,d0				; Liliam: Encore mode - FBZ level order
-		beq.w	LevelSelect_StartZone			;
-		move.b	#1,(Alternate_start_flag).w		;
+		cmpi.w	#$800,d0							; Liliam: Encore mode - FBZ level order
+		beq.w	LevelSelect_StartZone						;
+		move.b	#1,(Alternate_start_flag).w					;
 
 		cmpi.w	#$A00,d0			; Is SSZ act 1 selected?
 		beq.s	LevelSelect_DenySelection	; If so, branch and deny entry
@@ -9758,7 +9790,7 @@ LevelSelect_CheckSpecialStage:
 		moveq	#signextendB(sfx_EnterSS),d0		;
 		bsr.w	Play_SFX				;
 		clr.b	(SK_special_stage_flag).w		;
-		move.b	#$34,(Game_mode).w			;
+		move.b	#GameMode_SpecialStage,(Game_mode).w	;
 		cmpi.b	#7,(Chaos_emerald_count).w		;
 		blo.s	LevelSelect_StartZoneContinued		;
 		move.b	#1,(SK_special_stage_flag).w		;
@@ -9784,7 +9816,7 @@ LevelSelect_StartZone:
 		move.w	#$1000,d0
 		move.w	d0,(Saved_camera_max_Y_pos).w
 		move.w	d0,(Saved2_camera_max_Y_pos).w
-		move.b	#$C,(Game_mode).w
+		move.b	#GameMode_Level,(Game_mode).w
 
 LevelSelect_StartZoneContinued:
 		st	(AIZ_skip_intro_flag).w			; Liliam: cutscene skip - AIZ intro
@@ -10384,7 +10416,7 @@ SpecialStage:
 		bsr.w	Play_Music
 		clr.w	(Ending_running_flag).w			; Liliam: ending - allow start from save screen
 		clr.w	(Kos_decomp_queue_count).w
-		clearRAM	Kos_decomp_stored_registers,$6C
+		clearRAM	Kos_decomp_stored_registers,(Kos_decomp_module_end-Kos_decomp_stored_registers)
 		bsr.w	Clear_Nem_Queue
 		bsr.w	Pal_FadeToWhite
 		move	#$2700,sr
@@ -10399,10 +10431,10 @@ SpecialStage:
 		clr.b	(Water_full_screen_flag).w
 		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
 		bsr.w	Clear_DisplayData
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clearRAM	Oscillating_table,(AIZ_vine_angle-Oscillating_table)
-		clearRAM	Stat_table,$100
+		clearRAM	Stat_table,(Pos_table-Stat_table)
 		moveq	#0,d0
 		move.l	d0,(LRZ_rocks_addr_front).w
 		move.l	d0,(LRZ_rocks_addr_back).w
@@ -10411,20 +10443,20 @@ SpecialStage:
 		move.l	#DMA_queue,(DMA_queue_slot).w
 		lea	(Pal_SStage_Main).l,a1
 		lea	(Target_palette).w,a2
-		move.w	#bytesToWcnt($80),d0
+		move.w	#bytesToWcnt(Target_palette_end-Target_palette),d0
 
 loc_8284:
 		move.w	(a1)+,(a2)+
 		dbf	d0,loc_8284
-;		cmpi.w	#3,(Player_mode).w					; Liliam: special stage - add extra characters
-;		bne.s	loc_82A6						;
-;		lea	(Pal_SStage_Knux).l,a1					;
-;		lea	(Target_palette+$10).w,a2				;
-;		move.w	#bytesToWcnt($10),d0					;
+;		cmpi.w	#3,(Player_mode).w						; Liliam: special stage - add extra characters
+;		bne.s	loc_82A6							;
+;		lea	(Pal_SStage_Knux).l,a1						;
+;		lea	(Target_palette+$10).w,a2					;
+;		move.w	#bytesToWcnt(Target_palette_line_2-Target_palette+$10),d0	;
 
 ;loc_82A0:
-;		move.w	(a1)+,(a2)+						;
-;		dbf	d0,loc_82A0						;
+;		move.w	(a1)+,(a2)+							;
+;		dbf	d0,loc_82A0							;
 
 ;loc_82A6:
 		move.l	#vdpComm(tiles_to_bytes($000),VRAM,WRITE),(VDP_control_port).l
@@ -10514,36 +10546,36 @@ loc_842C:
 		move.w	#0,(Camera_Y_pos_copy).w
 		move.w	#-1,(Screen_Y_wrap_value).w
 		move.l	#Obj_SStage_8FAA,(Player_1).w
-		tst.b	(Encore_mode).w						; Liliam: special stage - add extra characters
-		beq.s	loc_8446						;
-		move.b	#1,(SK_special_stage_flag).w				;
-		move.b	(P1_character).w,d0					;
-		move.b	(P2_character).w,d1					;
-		cmp.b	d0,d1							;
-		beq.s	loc_8454						;
-		move.b	d1,(Player_2+character_id).w				;
-		bra.s	loc_844C						;
+		tst.b	(Encore_mode).w							; Liliam: special stage - add extra characters
+		beq.s	loc_8446							;
+		move.b	#1,(SK_special_stage_flag).w					;
+		move.b	(P1_character).w,d0						;
+		move.b	(P2_character).w,d1						;
+		cmp.b	d0,d1								;
+		beq.s	loc_8454							;
+		move.b	d1,(Player_2+character_id).w					;
+		bra.s	loc_844C							;
 ; ---------------------------------------------------------------------------
 
 loc_8446:
-		move.w	(Player_mode).w,d0					; Liliam: special stage - add extra characters
-		subq.w	#1,d0							;
-		bhs.s	loc_8454						;
-		moveq	#0,d0							;
-		move.b	#1,(Player_2+character_id).w				;
-;		tst.w	(Player_mode).w						;
-;		bne.s	loc_8454						;
+		move.w	(Player_mode).w,d0						; Liliam: special stage - add extra characters
+		subq.w	#1,d0								;
+		bhs.s	loc_8454							;
+		moveq	#0,d0								;
+		move.b	#1,(Player_2+character_id).w					;
+;		tst.w	(Player_mode).w							;
+;		bne.s	loc_8454							;
 
 loc_844C:
 		move.l	#Obj_SStage_9212,(Player_2).w
 
 loc_8454:
-		move.b	d0,(Player_1+character_id).w				;
-		lea	(Dynamic_object_RAM),a1					;
-		move.l	#Obj_SStage_8DF8,(a1)					;
-		move.l	#Obj_SStage_8E40,next_object(a1)			;
-;		move.l	#Obj_SStage_8DF8,(Reserved_object_3).w			;
-;		move.l	#Obj_SStage_8E40,(Dynamic_object_RAM).w			;
+		move.b	d0,(Player_1+character_id).w					;
+		lea	(Dynamic_object_RAM),a1						;
+		move.l	#Obj_SStage_8DF8,(a1)						;
+		move.l	#Obj_SStage_8E40,next_object(a1)				;
+;		move.l	#Obj_SStage_8DF8,(Reserved_object_3).w				;
+;		move.l	#Obj_SStage_8E40,(Dynamic_object_RAM).w				;
 		jsr	(Process_Sprites).l
 		bsr.w	Animate_SSRings
 		bsr.w	Touch_SSSprites
@@ -10551,7 +10583,7 @@ loc_8454:
 		jsr	Draw_SSSprites(pc)
 		bsr.w	sub_9D5E
 		move.b	#1,(Special_stage_fade_timer).w
-		move.b	#$1C,(V_int_routine).w
+		move.b	#VInt_ID_1C,(V_int_routine).w
 		bsr.w	Wait_VSync
 		move.b	#0,(Special_stage_fade_timer).w
 		move.w	#VDP_Option3|VDPReg3_EnableSH,(VDP_control_port).l
@@ -10570,7 +10602,7 @@ loc_84AC:
 
 loc_84C2:
 		bsr.w	Pause_Game
-		move.b	#$1C,(V_int_routine).w
+		move.b	#VInt_ID_1C,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		bsr.w	Wait_VSync
 		addq.w	#1,(Level_frame_counter).w
@@ -10590,15 +10622,15 @@ loc_84C2:
 		tst.w	(Demo_timer).w
 		bne.s	loc_851A				; Liliam: title screen - no white fade after special stage
 ;		beq.s	loc_8522				;
-		move.b	#0,(Game_mode).w			;
+		move.b	#GameMode_SegaScreen,(Game_mode).w	;
 		rts						;
 ; ---------------------------------------------------------------------------
 
 loc_851A:
-		cmpi.b	#$34,(Game_mode).w
+		cmpi.b	#GameMode_SpecialStage,(Game_mode).w
 		beq.s	loc_84C2
-		move.b	#$1C,(V_int_routine).w			; Liliam: blue sphere - quick return by pressing B
-		cmpi.b	#$2C,(Game_mode).w			;
+		move.b	#VInt_ID_1C,(V_int_routine).w		; Liliam: blue sphere - quick return by pressing B
+		cmpi.b	#GameMode_BlueSpheresTitle,(Game_mode).w;
 		blo.w	Wait_VSync				;
 
 ;loc_8522:
@@ -10606,7 +10638,7 @@ loc_851A:
 		tst.w	(Demo_mode_flag).w
 		beq.s	loc_852E
 		clr.w	(Demo_timer).w				;
-;		move.b	#0,(Game_mode).w			;
+;		move.b	#GameMode_SegaScreen,(Game_mode).w	;
 
 loc_852E:
 ;		move.w	#60,(Demo_timer).w			;
@@ -10614,7 +10646,7 @@ loc_852E:
 		clr.w	(Pal_fade_delay).w
 
 loc_853E:
-		move.b	#$1C,(V_int_routine).w
+		move.b	#VInt_ID_1C,(V_int_routine).w
 		bsr.w	Wait_VSync
 		jsr	(Demo_PlayRecord).l
 		jsr	(Process_Sprites).l
@@ -10935,7 +10967,7 @@ loc_87F8:
 		movea.l	(Special_stage_palette_addr).w,a1
 		lea	(a1,d0.w),a1
 		lea	(Normal_palette_line_4+$10).w,a2
-		move.w	#bytesToWcnt($10),d0
+		move.w	#bytesToWcnt(Normal_palette_end-(Normal_palette_line_4+$10)),d0
 
 loc_8812:
 		move.w	(a1)+,(a2)+
@@ -11178,8 +11210,8 @@ Map_SSIcons:
 ; ---------------------------------------------------------------------------
 
 Obj_SStage_8E40:
-		jsr	(AllocateObject).l					; Liliam: special stage - add extra characters
-;		jsr	(AllocateObjectAfterCurrent_SpecialStage).l		;
+		jsr	(AllocateObject).l						; Liliam: special stage - add extra characters
+;		jsr	(AllocateObjectAfterCurrent_SpecialStage).l			;
 		bne.w	loc_8E5C
 		move.l	#loc_8E5C,(a1)
 		bset	#0,status(a1)
@@ -11283,28 +11315,28 @@ Map_GetBlueSpheres:
 ; ---------------------------------------------------------------------------
 
 Obj_SStage_8FAA:
-		lea	(Target_palette+$10).w,a2				; Liliam: special stage - add extra characters
-		bsr.w	Setup_SSPlayerObj					;
+		lea	(Target_palette+$10).w,a2					; Liliam: special stage - add extra characters
+		bsr.w	Setup_SSPlayerObj						;
 		move.b	#4,render_flags(a0)
 		move.b	#$10,width_pixels(a0)
 		move.b	#$10,height_pixels(a0)
 		move.w	#$200,priority(a0)
-;		move.l	#Map_SStageSonic,mappings(a0)				;
+;		move.l	#Map_SStageSonic,mappings(a0)					;
 		move.w	#make_art_tile(ArtTile_SStage_Player1,0,1),art_tile(a0)
-;		cmpi.w	#2,(Player_mode).w					;
-;		bne.s	loc_8FFA						;
-;		move.l	#Map_SStageTails,mappings(a0)				;
-;		move.w	#make_art_tile(ArtTile_SStage_Player2,1,1),art_tile(a0)	;
-;		jsr	(AllocateObjectAfterCurrent_SpecialStage).l		;
-;		bne.w	loc_8FFA						;
-;		move.l	#Obj_SStage_9444,(a1)					;
-;		move.w	a0,$3E(a1)						;
+;		cmpi.w	#2,(Player_mode).w						;
+;		bne.s	loc_8FFA							;
+;		move.l	#Map_SStageTails,mappings(a0)					;
+;		move.w	#make_art_tile(ArtTile_SStage_Player2,1,1),art_tile(a0)		;
+;		jsr	(AllocateObjectAfterCurrent_SpecialStage).l			;
+;		bne.w	loc_8FFA							;
+;		move.l	#Obj_SStage_9444,(a1)						;
+;		move.w	a0,$3E(a1)							;
 
 ;loc_8FFA:
-;		cmpi.w	#3,(Player_mode).w					;
-;		bne.s	loc_9010						;
-;		move.l	#Map_SStageKnuckles,mappings(a0)			;
-;		move.w	#make_art_tile(ArtTile_SStage_Player1,0,1),art_tile(a0)	;
+;		cmpi.w	#3,(Player_mode).w						;
+;		bne.s	loc_9010							;
+;		move.l	#Map_SStageKnuckles,mappings(a0)				;
+;		move.w	#make_art_tile(ArtTile_SStage_Player1,0,1),art_tile(a0)		;
 
 ;loc_9010:
 		move.w	#$A0,$30(a0)
@@ -11339,27 +11371,27 @@ loc_905C:
 
 loc_907E:
 		bsr.w	sub_9580
-		tst.b	(Special_stage_started).w				; Liliam: special stage - add extra characters
-		bne.s	loc_9084						;
+		tst.b	(Special_stage_started).w					; Liliam: special stage - add extra characters
+		bne.s	loc_9084							;
 		moveq	#$C,d0
-		tst.b	(Special_stage_jumping).w				;
-		beq.s	loc_90CC						;
-		move.w	(Level_frame_counter).w,d0				;
-		asr.w	#1,d0							;
-		bra.s	loc_90B8						;
+		tst.b	(Special_stage_jumping).w					;
+		beq.s	loc_90CC							;
+		move.w	(Level_frame_counter).w,d0					;
+		asr.w	#1,d0								;
+		bra.s	loc_90B8							;
 ; ---------------------------------------------------------------------------
 
 loc_9084:
 		move.w	(Special_stage_velocity).w,d1
-;		beq.s	loc_90A8						;
-		tst.b	$3B(a0)							;
-		beq.s	loc_908A						;
-		tst.b	(Special_stage_jumping).w				;
-		bne.s	loc_908A						;
-		moveq	#0,d0							;
-		tst.b	(Special_stage_advancing).w				;
-		beq.s	loc_90CC						;
-		move.w	#$2000,d1						;
+;		beq.s	loc_90A8							;
+		tst.b	$3B(a0)								;
+		beq.s	loc_908A							;
+		tst.b	(Special_stage_jumping).w					;
+		bne.s	loc_908A							;
+		moveq	#0,d0								;
+		tst.b	(Special_stage_advancing).w					;
+		beq.s	loc_90CC							;
+		move.w	#$2000,d1							;
 
 loc_908A:
 		asr.w	#5,d1
@@ -11378,22 +11410,22 @@ loc_909E:
 
 loc_90A8:
 		move.b	d0,anim_frame_timer(a0)
-;		lea	(byte_91E8).l,a1					; Liliam: special stage - add extra characters
+;		lea	(byte_91E8).l,a1						; Liliam: special stage - add extra characters
 		tst.b	(Special_stage_jumping).w
 		bpl.s	loc_90CC
 
 loc_90B8:
-		lea	(byte_9204).l,a1					;
-;		lea	(byte_91F6).l,a1					;
-;		move.w	(Special_stage_velocity).w,d1				;
-;		bne.s	loc_90CC						;
-;		move.b	(Level_frame_counter+1).w,d0				;
+		lea	(byte_9204).l,a1						;
+;		lea	(byte_91F6).l,a1						;
+;		move.w	(Special_stage_velocity).w,d1					;
+;		bne.s	loc_90CC							;
+;		move.b	(Level_frame_counter+1).w,d0					;
 		andi.w	#3,d0
-		move.b	(a1,d0.w),d0						;
+		move.b	(a1,d0.w),d0							;
 
 loc_90CC:
-		move.b	d0,mapping_frame(a0)					;
-;		move.b	(a1,d0.w),mapping_frame(a0)				;
+		move.b	d0,mapping_frame(a0)						;
+;		move.b	(a1,d0.w),mapping_frame(a0)					;
 		tst.b	(Special_stage_clear_routine).w
 		bne.s	loc_90EE
 		move.w	(Ctrl_1).w,d0
@@ -11454,28 +11486,28 @@ loc_9152:
 loc_9156:
 		bsr.w	sub_953E
 		jsr	(Draw_Sprite).l
-		movea.l	$2C(a0),a2						; Liliam: special stage - add extra characters
-		move.w	art_tile(a0),d4						;
-		lsl.w	#5,d4							;
-;		lea	(PLC_SStageSonic).l,a2					;
-;		move.l	#ArtUnc_SStageSonic,d6					;
-;		move.w	#tiles_to_bytes(ArtTile_SStage_Player1),d4		;
-;		cmpi.w	#2,(Player_mode).w					;
-;		bne.s	loc_918A						;
-;		lea	(PLC_SStageTails).l,a2					;
-;		move.l	#ArtUnc_SStageTails,d6					;
-;		move.w	#tiles_to_bytes(ArtTile_SStage_Player2),d4		;
-;		bra.s	SStage_PLCLoad_91A2					;
+		movea.l	$2C(a0),a2							; Liliam: special stage - add extra characters
+		move.w	art_tile(a0),d4							;
+		lsl.w	#5,d4								;
+;		lea	(PLC_SStageSonic).l,a2						;
+;		move.l	#ArtUnc_SStageSonic,d6						;
+;		move.w	#tiles_to_bytes(ArtTile_SStage_Player1),d4			;
+;		cmpi.w	#2,(Player_mode).w						;
+;		bne.s	loc_918A							;
+;		lea	(PLC_SStageTails).l,a2						;
+;		move.l	#ArtUnc_SStageTails,d6						;
+;		move.w	#tiles_to_bytes(ArtTile_SStage_Player2),d4			;
+;		bra.s	SStage_PLCLoad_91A2						;
 
 ;loc_918A:
-;		cmpi.w	#3,(Player_mode).w					;
-;		bne.s	SStage_PLCLoad_91A2					;
-;		lea	(PLC_SStageKnuckles).l,a2				;
-;		move.l	#ArtUnc_SStageKnuckles,d6				;
-;		move.w	#tiles_to_bytes(ArtTile_SStage_Player1),d4		;
+;		cmpi.w	#3,(Player_mode).w						;
+;		bne.s	SStage_PLCLoad_91A2						;
+;		lea	(PLC_SStageKnuckles).l,a2					;
+;		move.l	#ArtUnc_SStageKnuckles,d6					;
+;		move.w	#tiles_to_bytes(ArtTile_SStage_Player1),d4			;
 
 SStage_PLCLoad_91A2:
-		move.l	#ArtUnc_SStagePlayers,d6				;
+		move.l	#ArtUnc_SStagePlayers,d6					;
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0
 		cmp.b	$3A(a0),d0
@@ -11516,13 +11548,13 @@ byte_9204:
 ; ---------------------------------------------------------------------------
 
 Obj_SStage_9212:
-		lea	(Target_palette_line_2+$10).w,a2			; Liliam: special stage - add extra characters
-		bsr.w	Setup_SSPlayerObj					;
+		lea	(Target_palette_line_2+$10).w,a2				; Liliam: special stage - add extra characters
+		bsr.w	Setup_SSPlayerObj						;
 		move.b	#4,render_flags(a0)
 		move.b	#$10,width_pixels(a0)
 		move.b	#$10,height_pixels(a0)
 		move.w	#$180,priority(a0)
-;		move.l	#Map_SStageTails,mappings(a0)				;
+;		move.l	#Map_SStageTails,mappings(a0)					;
 		move.w	#make_art_tile(ArtTile_SStage_Player2,1,1),art_tile(a0)
 		move.w	#$A0,$30(a0)
 		move.w	#$70,$32(a0)
@@ -11531,36 +11563,36 @@ Obj_SStage_9212:
 		move.w	#-$20,$38(a0)
 		move.b	#$FF,$3A(a0)
 		bsr.w	sub_93E2
-;		jsr	(AllocateObjectAfterCurrent_SpecialStage).l		;
-;		bne.w	loc_9274						;
-;		move.l	#Obj_SStage_9444,(a1)					;
-;		move.w	a0,$3E(a1)						;
+;		jsr	(AllocateObjectAfterCurrent_SpecialStage).l			;
+;		bne.w	loc_9274							;
+;		move.l	#Obj_SStage_9444,(a1)						;
+;		move.w	a0,$3E(a1)							;
 
 ;loc_9274:
 		move.l	#loc_927A,(a0)
 
 loc_927A:
-		tst.b	(Special_stage_started).w				; Liliam: special stage - add extra characters
-		bne.s	loc_927C						;
+		tst.b	(Special_stage_started).w					; Liliam: special stage - add extra characters
+		bne.s	loc_927C							;
 		moveq	#$C,d0
-		tst.b	(Special_stage_jumping_P2).w				;
-		beq.s	loc_92C4						;
-		move.w	(Level_frame_counter).w,d0				;
-		asr.w	#1,d0							;
-		bra.s	loc_92B0						;
+		tst.b	(Special_stage_jumping_P2).w					;
+		beq.s	loc_92C4							;
+		move.w	(Level_frame_counter).w,d0					;
+		asr.w	#1,d0								;
+		bra.s	loc_92B0							;
 ; ---------------------------------------------------------------------------
 
 loc_927C:
 		move.w	(Special_stage_velocity).w,d1
-;		beq.s	loc_92A0						;
-		tst.b	$3B(a0)							;
-		beq.s	loc_9282						;
-		tst.b	(Special_stage_jumping_P2).w				;
-		bne.s	loc_9282						;
-		moveq	#0,d0							;
-		tst.b	(Special_stage_advancing).w				;
-		beq.s	loc_92C4						;
-		move.w	#$2000,d1						;
+;		beq.s	loc_92A0							;
+		tst.b	$3B(a0)								;
+		beq.s	loc_9282							;
+		tst.b	(Special_stage_jumping_P2).w					;
+		bne.s	loc_9282							;
+		moveq	#0,d0								;
+		tst.b	(Special_stage_advancing).w					;
+		beq.s	loc_92C4							;
+		move.w	#$2000,d1							;
 
 loc_9282:
 		asr.w	#5,d1
@@ -11579,21 +11611,21 @@ loc_9296:
 
 loc_92A0:
 		move.b	d0,anim_frame_timer(a0)
-;		lea	(byte_91E8).l,a1					; Liliam: special stage - add extra characters
+;		lea	(byte_91E8).l,a1						; Liliam: special stage - add extra characters
 		tst.b	(Special_stage_jumping_P2).w
 		beq.s	loc_92C4
 
 loc_92B0:
 		lea	(byte_9204).l,a1
-;		move.w	(Special_stage_velocity).w,d1				;
-;		bne.s	loc_92C4						;
-;		move.b	(Level_frame_counter+1).w,d0				;
+;		move.w	(Special_stage_velocity).w,d1					;
+;		bne.s	loc_92C4							;
+;		move.b	(Level_frame_counter+1).w,d0					;
 		andi.w	#3,d0
-		move.b	(a1,d0.w),d0						;
+		move.b	(a1,d0.w),d0							;
 
 loc_92C4:
-		move.b	d0,mapping_frame(a0)					;
-;		move.b	(a1,d0.w),mapping_frame(a0)				;
+		move.b	d0,mapping_frame(a0)						;
+;		move.b	(a1,d0.w),mapping_frame(a0)					;
 		bsr.w	sub_9402
 		tst.b	(Special_stage_green_spheres).w		; Liliam: special stage - player 2 green sphere collision
 		bne.s	loc_9304				;
@@ -11643,13 +11675,13 @@ loc_9344:
 		move.w	d0,$36(a0)
 
 loc_935E:
-		bra.w	loc_9156						; Liliam: special stage - add extra characters
-;		bsr.w	sub_953E						;
-;		jsr	(Draw_Sprite).l						;
-;		lea	(PLC_SStageTails).l,a2					;
-;		move.l	#ArtUnc_SStageTails,d6					;
-;		move.w	#$tiles_to_bytes(ArtTile_SStage_Player2),d4		;
-;		bra.w	SStage_PLCLoad_91A2					;
+		bra.w	loc_9156							; Liliam: special stage - add extra characters
+;		bsr.w	sub_953E							;
+;		jsr	(Draw_Sprite).l							;
+;		lea	(PLC_SStageTails).l,a2						;
+;		move.l	#ArtUnc_SStageTails,d6						;
+;		move.w	#$tiles_to_bytes(ArtTile_SStage_Player2),d4			;
+;		bra.w	SStage_PLCLoad_91A2						;
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -11700,7 +11732,7 @@ locret_93E0:
 
 sub_93E2:
 		lea	(Pos_table).w,a2
-		move.w	#bytesToLcnt($100),d0
+		move.w	#bytesToLcnt(Pos_table_end-Pos_table),d0
 
 loc_93EA:
 		move.l	#0,(a2)+
@@ -11737,7 +11769,7 @@ sub_9402:
 
 ; ---------------------------------------------------------------------------
 
-Setup_SSPlayerObj:								; Liliam: special stage - add extra characters
+Setup_SSPlayerObj:									; Liliam: special stage - add extra characters
 		moveq	#0,d0
 		move.b	character_id(a0),d0
 		cmpi.b	#6,d0
@@ -11771,7 +11803,7 @@ Setup_SSPlayerObj:								; Liliam: special stage - add extra characters
 		move.l	(a1)+,(a2)+
 		rts
 ; ---------------------------------------------------------------------------
-DPLCPtr_SStage_Players:								; Liliam: special stage - add extra characters
+DPLCPtr_SStage_Players:									; Liliam: special stage - add extra characters
 		dc.l Map_SStageSonic
 		dc.l PLC_SStageSonic
 		dc.l Map_SStageTails
@@ -11786,7 +11818,7 @@ DPLCPtr_SStage_Players:								; Liliam: special stage - add extra characters
 		dc.l PLC_SStageRay
 		dc.l Map_SStageMetalSonic
 		dc.l PLC_SStageMetalSonic
-Pal_SStage_Players:								; Liliam: special stage - add extra characters
+Pal_SStage_Players:									; Liliam: special stage - add extra characters
 		binclude "General/Special Stage/Palettes/Players.bin"
 		even
 ; ---------------------------------------------------------------------------
@@ -11795,15 +11827,15 @@ Obj_SStage_9444:
 		move.b	#4,render_flags(a0)
 		move.b	#$10,width_pixels(a0)
 		move.b	#$10,height_pixels(a0)
-;		move.w	#$100,priority(a0)					; Liliam: special stage - add extra characters
+;		move.w	#$100,priority(a0)						; Liliam: special stage - add extra characters
 		move.l	#Map_SStageTailstails,mappings(a0)
 		move.w	#make_art_tile(ArtTile_SStage_Player2_Tail,1,1),art_tile(a0)
-		movea.w	$3E(a0),a1						;
-		move.w	priority(a1),priority(a0)				;
-		sub.w	#$80,priority(a0)					;
-		btst	#5,art_tile(a1)						;
-		bne.s	loc_946A						;
-		bclr	#5,art_tile(a0)						;
+		movea.w	$3E(a0),a1							;
+		move.w	priority(a1),priority(a0)					;
+		sub.w	#$80,priority(a0)						;
+		btst	#5,art_tile(a1)							;
+		bne.s	loc_946A							;
+		bclr	#5,art_tile(a0)							;
 
 loc_946A:
 		move.w	#$A0,$30(a0)
@@ -11826,11 +11858,11 @@ loc_94A4:
 		bcc.s	loc_94BC
 		move.b	mapping_frame(a0),d0
 		addq.b	#1,d0
-		cmpi.b	#$E,d0							; Liliam: special stage - add extra characters
-;		cmpi.b	#$F,d0							;
+		cmpi.b	#$E,d0								; Liliam: special stage - add extra characters
+;		cmpi.b	#$F,d0								;
 		blo.s	loc_94B8
-		moveq	#0,d0							;
-;		moveq	#1,d0							;
+		moveq	#0,d0								;
+;		moveq	#1,d0								;
 
 loc_94B8:
 		move.b	d0,mapping_frame(a0)
@@ -11838,7 +11870,7 @@ loc_94B8:
 loc_94BC:
 		jsr	(Draw_Sprite).l
 		lea	(PLC_SStageTailstails).l,a2
-;		move.l	#ArtUnc_SStageTailstails,d6				;
+;		move.l	#ArtUnc_SStageTailstails,d6					;
 		move.w	#tiles_to_bytes(ArtTile_SStage_Player2_Tail),d4
 		bra.w	SStage_PLCLoad_91A2
 
@@ -11853,10 +11885,10 @@ Draw_SSShadows:
 		addq.w	#1,a6
 		move.w	(a3)+,(a6)+
 		move.w	(a3)+,(a6)+
-		tst.l	(Player_2).w						; Liliam: special stage - add extra characters
-		beq.s	locret_94FA						;
-;		tst.w	(Player_mode).w						;
-;		bne.s	locret_94FA						;
+		tst.l	(Player_2).w							; Liliam: special stage - add extra characters
+		beq.s	locret_94FA							;
+;		tst.w	(Player_mode).w							;
+;		bne.s	locret_94FA							;
 		move.w	(a3)+,(a6)+
 		move.b	(a3)+,(a6)+
 		addq.w	#1,a3
@@ -12121,10 +12153,10 @@ sub_972E:
 		tst.b	(Special_stage_fade_timer).w
 		bne.s	locret_97A8
 		move.b	#1,(Special_stage_fade_timer).w
-		move.b	#$48,(Game_mode).w
+		move.b	#GameMode_SpecialStageResults,(Game_mode).w
 		tst.b	(Blue_spheres_stage_flag).w
 		beq.s	loc_978E
-		move.b	#$2C,(Game_mode).w
+		move.b	#GameMode_BlueSpheresTitle,(Game_mode).w
 
 loc_978E:
 		tst.b	(Special_bonus_entry_flag).w
@@ -12741,10 +12773,10 @@ loc_9CCE:
 loc_9CE6:
 		addq.b	#1,(Special_stage_clear_routine).w
 		move.b	#1,(Special_stage_fade_timer).w
-		move.b	#$48,(Game_mode).w
+		move.b	#GameMode_SpecialStageResults,(Game_mode).w
 		tst.b	(Blue_spheres_stage_flag).w
 		beq.s	loc_9D02
-		move.b	#$30,(Game_mode).w
+		move.b	#GameMode_BlueSpheresResults,(Game_mode).w
 
 loc_9D02:
 		tst.b	(Special_bonus_entry_flag).w
@@ -13371,7 +13403,7 @@ loc_A0F2:
 		move.l	(a0)+,(a1)+
 		dbf	d1,loc_A0F2
 		lea	(SStage_collision_response_list).w,a1
-		move.w	#bytesToLcnt($100),d1
+		move.w	#bytesToLcnt(SStage_collision_response_list_end-SStage_collision_response_list),d1
 
 loc_A102:
 		clr.l	(a1)+
@@ -13576,7 +13608,7 @@ Competition_Menu:
 		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
 		move.w	#VDP_PlnSize|PlaneSize_512x512,(a6)
 		jsr	sub_C02A(pc)
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -13600,7 +13632,7 @@ loc_A8DC:
 		movea.w	#tiles_to_bytes(ArtTile_S3MenuBG),a2	; Transfer destination
 		jsr	KosArt_To_VDP(pc)
 		move.l	#locret_A85C,(V_int_1E_addr).w
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	(ArtKos_CompetitionLevel).l,a0				; Decompress source
 		lea	(RAM_start).l,a1					; Decompress destination/Transfer source, used by the next KosArt_To_VDP also
@@ -13609,17 +13641,17 @@ loc_A8DC:
 		lea	(ArtKos_CompetitionMode).l,a0				; Decompress source
 		movea.w	#tiles_to_bytes(ArtTile_Competition_ModeSel),a2	; Transfer destination
 		jsr	KosArt_To_VDP(pc)
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	Pal_Competition1(pc),a0			; Liliam: reinsert S3 data
 		lea	(Target_palette).w,a1
-		moveq	#bytesToLcnt($60),d0
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette),d0
 
 loc_A96A:
 		move.l	(a0)+,(a1)+
 		dbf	d0,loc_A96A
 		lea	(Pal_CompetitionMenuBG).l,a0
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_4),d0
 
 loc_A978:
 		move.l	(a0)+,(a1)+
@@ -13648,13 +13680,13 @@ loc_A988:
 		jsr	(Play_Music).l
 
 loc_A9CA:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		enableDisplay
 		bsr.w	Pal_FadeFromBlack
 
 loc_A9E8:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		addq.w	#1,(Level_frame_counter).w
 		jsr	(Process_Sprites).l
@@ -13681,7 +13713,7 @@ loc_AA28:
 ; ---------------------------------------------------------------------------
 
 loc_AA2E:
-		move.b	#4,(Game_mode).w
+		move.b	#GameMode_TitleScreen,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -13691,7 +13723,7 @@ loc_AA36:
 		move.b	(Ctrl_2_pressed).w,d0
 		andi.b	#button_confirm_mask,d0
 		sne	(Not_ghost_flag).w
-		move.b	#$3C,(Game_mode).w
+		move.b	#GameMode_CompPlayerSelect,(Game_mode).w
 		bra.s	loc_AA8E
 ; ---------------------------------------------------------------------------
 
@@ -13701,7 +13733,7 @@ loc_AA54:
 		move.b	(Ctrl_2_pressed).w,d0
 		andi.b	#button_confirm_mask,d0
 		sne	(Not_ghost_flag).w
-		move.b	#$40,(Game_mode).w
+		move.b	#GameMode_CompLevelSelect,(Game_mode).w
 		bra.s	loc_AA8E
 ; ---------------------------------------------------------------------------
 
@@ -13711,7 +13743,7 @@ loc_AA74:
 		beq.s	loc_AAA6
 		move.w	#-1,(Competition_settings).w
 		clr.b	(Not_ghost_flag).w
-		move.b	#$40+$80,(Game_mode).w
+		move.b	#GameMode_CompLevelSelect+$80,(Game_mode).w
 
 loc_AA8E:
 		lea	($FF7800).l,a1
@@ -13843,7 +13875,7 @@ Competition_LevelSelect:
 		move.w	#VDP_Option3|VDPReg3_EnableSH,(a6)
 		move.w	#VDP_PlnSize|PlaneSize_512x512,(a6)
 		jsr	sub_C02A(pc)
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -13886,7 +13918,7 @@ Competition_LevelSelect:
 		movea.w	#tiles_to_bytes(ArtTile_S3MenuBG),a2	; Transfer destination
 		jsr	KosArt_To_VDP(pc)
 		move.l	#locret_A85C,(V_int_1E_addr).w
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	(ArtKos_CompetitionLevel).l,a0				; Decompress source
 		lea	(RAM_start).l,a1					; Decompress destination/Transfer source, used by the next KosArt_To_VDP also
@@ -13895,17 +13927,17 @@ Competition_LevelSelect:
 		lea	(ArtKos_CompetitionPlayer).l,a0				; Decompress source
 		movea.w	#tiles_to_bytes(ArtTile_Competition_CharSel),a2	; Transfer destination
 		jsr	KosArt_To_VDP(pc)
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	(Pal_CompetitionMenuBG).l,a0
 		lea	(Target_palette).w,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d0
 
 loc_AD04:
 		move.l	(a0)+,(a1)+
 		dbf	d0,loc_AD04
 		lea	Pal_Competition2(pc),a0			; Liliam: reinsert S3 data
-		moveq	#bytesToLcnt($60),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_2),d0
 
 loc_AD12:
 		move.l	(a0)+,(a1)+
@@ -13965,13 +13997,13 @@ loc_AD8A:
 		jsr	(Play_Music).l
 
 loc_ADD2:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		enableDisplay
 		jsr	(Pal_FadeFromBlack).l
 
 loc_ADF2:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		addq.w	#1,(Level_frame_counter).w
 		jsr	(Process_Sprites).l
@@ -14087,7 +14119,7 @@ loc_AEF2:
 		move.b	Comp_ZoneList(pc,d0.w),(Current_zone).w
 		clr.b	(Current_act).w
 		jsr	Competition_InitGameVars(pc)
-		move.b	#$C,(Game_mode).w
+		move.b	#GameMode_Level,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 Comp_ZoneList:
@@ -14149,7 +14181,7 @@ loc_AF9E:
 
 loc_AFA4:
 		lea	(Normal_palette_line_3).w,a2
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Normal_palette_line_4-Normal_palette_line_3),d0
 
 loc_AFAA:
 		move.l	(a1)+,(a2)+
@@ -14461,7 +14493,7 @@ Competition_PlayerSelect:
 		jsr	sub_C04C(pc)
 		move.w	#VRAM_Plane_A_Name_Table+$820,d0
 		jsr	sub_C04C(pc)
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -14482,7 +14514,7 @@ Competition_PlayerSelect:
 		movea.w	#tiles_to_bytes(ArtTile_S3MenuBG),a2	; Transfer destination
 		jsr	KosArt_To_VDP(pc)
 		move.l	#locret_A85C,(V_int_1E_addr).w
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	(ArtKos_CompetitionLevel).l,a0				; Decompress source
 		lea	(RAM_start).l,a1					; Decompress destination/Transfer source, used by the next KosArt_To_VDP also
@@ -14491,17 +14523,17 @@ Competition_PlayerSelect:
 		lea	(ArtKos_CompetitionPlayer).l,a0				; Decompress source
 		movea.w	#tiles_to_bytes(ArtTile_Competition_CharSel),a2	; Transfer destination
 		jsr	KosArt_To_VDP(pc)
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	(Pal_CompetitionMenuBG).l,a0
 		lea	(Target_palette).w,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d0
 
 loc_B3E8:
 		move.l	(a0)+,(a1)+
 		dbf	d0,loc_B3E8
 		lea	Pal_Competition2(pc),a0			; Liliam: reinsert S3 data
-		moveq	#bytesToLcnt($60),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_2),d0
 
 loc_B3F6:
 		move.l	(a0)+,(a1)+
@@ -14542,13 +14574,13 @@ loc_B406:
 		jsr	(Render_Sprites).l
 ;		moveq	#signextendB(mus_CompetitionMenu),d0	; Liliam: bugfix - stop restarting music
 ;		jsr	(Play_Music).l				;
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		enableDisplay
 		jsr	(Pal_FadeFromBlack).l
 
 loc_B4A8:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		addq.w	#1,(Level_frame_counter).w
 		jsr	(Process_Sprites).l
@@ -14571,7 +14603,7 @@ loc_B4E0:
 		bne.s	loc_B4A8
 		move.w	#$E00,(Current_zone_and_act).w
 		jsr	Competition_InitGameVars(pc)
-		move.b	#$C,(Game_mode).w
+		move.b	#GameMode_Level,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -14833,7 +14865,7 @@ Competition_Results:
 		jsr	sub_C04C(pc)
 		move.w	#VRAM_Plane_A_Name_Table+$82A,d0
 		jsr	sub_C04C(pc)
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -14857,7 +14889,7 @@ Competition_Results:
 		movea.w	#tiles_to_bytes(ArtTile_S3MenuBG),a2	; Transfer destination
 		jsr	KosArt_To_VDP(pc)
 		move.l	#locret_A85C,(V_int_1E_addr).w
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	(ArtKos_CompetitionLevel).l,a0				; Decompress source
 		lea	(RAM_start).l,a1					; Decompress destination/Transfer source, used by the next two KosArt_To_VDP also
@@ -14869,23 +14901,23 @@ Competition_Results:
 		lea	(ArtKos_CompetitionPlayer).l,a0				; Decompress source
 		movea.w	#tiles_to_bytes(ArtTile_Competition_CharSel),a2	; Transfer destination
 		jsr	KosArt_To_VDP(pc)
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	(Pal_CompetitionMenuBG).l,a0
 		lea	(Target_palette).w,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d0
 
 loc_B888:
 		move.l	(a0)+,(a1)+
 		dbf	d0,loc_B888
 		lea	Pal_Competition2(pc),a0			; Liliam: reinsert S3 data
-		moveq	#bytesToLcnt($40),d0
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_2),d0
 
 loc_B896:
 		move.l	(a0)+,(a1)+
 		dbf	d0,loc_B896
 		lea	Pal_CompetitionResults(pc),a0		; Liliam: reinsert S3 data
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_4),d0
 
 loc_B8A4:
 		move.l	(a0)+,(a1)+
@@ -14913,13 +14945,13 @@ loc_B8B4:
 		jsr	(Render_Sprites).l
 		moveq	#signextendB(mus_Continue),d0
 		jsr	(Play_Music).l
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		enableDisplay
 		jsr	(Pal_FadeFromBlack).l
 
 loc_B922:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		addq.w	#1,(Level_frame_counter).w
 		move.w	(_unkEEA0).w,d7
@@ -14969,7 +15001,7 @@ loc_B980:
 loc_B988:
 		andi.w	#button_confirm_mask,d0
 		beq.s	loc_B996
-		move.b	#$38,(Game_mode).w
+		move.b	#GameMode_Competition,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -15247,7 +15279,7 @@ TimeAttack_Records:
 		jsr	sub_C02A(pc)
 		move.w	#VRAM_Plane_A_Name_Table+$1AA,d0
 		jsr	sub_C04C(pc)
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -15284,7 +15316,7 @@ TimeAttack_Records:
 		movea.w	#tiles_to_bytes(ArtTile_S3MenuBG),a2	; Transfer destination
 		jsr	KosArt_To_VDP(pc)
 		move.l	#locret_A85C,(V_int_1E_addr).w
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	(ArtKos_CompetitionLevel).l,a0				; Decompress source
 		lea	(RAM_start).l,a1					; Decompress destination/Transfer source, used by the next two KosArt_To_VDP also
@@ -15296,7 +15328,7 @@ TimeAttack_Records:
 		lea	(ArtKos_CompetitionPlayer).l,a0				; Decompress source
 		movea.w	#tiles_to_bytes(ArtTile_Competition_CharSel),a2	; Transfer destination
 		jsr	KosArt_To_VDP(pc)
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	(RAM_start+$F60).l,a1			; Liliam: simplify results art selection
 		lea	(ArtKosM_ContinueIconSonic+2).l,a0	;
@@ -15319,19 +15351,19 @@ loc_BDAA:
 		dbf	d0,loc_BDAA
 		lea	(Pal_CompetitionMenuBG).l,a0
 		lea	(Target_palette).w,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d0
 
 loc_BDBC:
 		move.l	(a0)+,(a1)+
 		dbf	d0,loc_BDBC
 		lea	Pal_Competition2(pc),a0			; Liliam: reinsert S3 data
-		moveq	#bytesToLcnt($40),d0
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_2),d0
 
 loc_BDCA:
 		move.l	(a0)+,(a1)+
 		dbf	d0,loc_BDCA
 		lea	Pal_CompetitionTimeAttack(pc),a0	; Liliam: reinsert S3 data
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_4),d0
 
 loc_BDD8:
 		move.l	(a0)+,(a1)+
@@ -15359,13 +15391,13 @@ loc_BDE8:
 		jsr	(Render_Sprites).l
 		moveq	#signextendB(mus_Continue),d0
 		jsr	(Play_Music).l
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		enableDisplay
 		jsr	(Pal_FadeFromBlack).l
 
 loc_BE56:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		addq.w	#1,(Level_frame_counter).w
 		move.w	(_unkEEA0).w,d7
@@ -15392,7 +15424,7 @@ loc_BE92:
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.w	#button_confirm_mask,d0
 		beq.s	loc_BEA4
-		move.b	#$40+$80,(Game_mode).w
+		move.b	#GameMode_CompLevelSelect+$80,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -15564,7 +15596,7 @@ KosArt_To_VDP:
 
 sub_C02A:
 		move.l	#$80008000,d0
-		move.w	#$800-1,d1
+		move.w	#bytesToLcnt($2000),d1
 		move.l	#vdpComm(VRAM_Plane_A_Name_Table,VRAM,WRITE),(VDP_control_port).l
 		lea	(VDP_data_port).l,a6
 
@@ -16067,10 +16099,10 @@ SaveGame_NextLevel:
 		dc.b    2,   2
 		dc.b    3,   3
 		dc.b    4,   4
-		dc.b    8,   5    ;,   8				; Liliam: Encore mode - FBZ level order
-		dc.b    5,   6    ;,   5				;
-		dc.b    6,   7    ;,   6				;
-		dc.b    7,   8    ;,   7				;
+		dc.b    8,   5    ;,   8						; Liliam: Encore mode - FBZ level order
+		dc.b    5,   6    ;,   5						;
+		dc.b    6,   7    ;,   6						;
+		dc.b    7,   8    ;,   7						;
 		dc.b    9,   9
 		dc.b   $A,  $A
 		dc.b   $C,  $B    ;,  $C				; Liliam: Encore mode - save data
@@ -16099,12 +16131,12 @@ SaveGame:
 		movea.l	d0,a1
 		move.w	(Apparent_zone_and_act).w,d0		; Liliam: HPZ - add Knuckles LRZ2 results
 ;		move.w	(Current_zone_and_act).w,d0		;
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - FBZ level order
-		sne	d0						;
-;		ror.b	#1,d0						;
+		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
+		sne	d0								;
+;		ror.b	#1,d0								;
 		lsr.w	#7,d0
 		move.b	SaveGame_NextLevel(pc,d0.w),d0
-		bra.s	loc_C452					;
+		bra.s	loc_C452							;
 ; ---------------------------------------------------------------------------
 
 SaveGame_HPZTeleporter:
@@ -16293,7 +16325,7 @@ locret_C56E:
 ; ---------------------------------------------------------------------------
 
 EncoreMode:
-		move.b	#$4C,(Game_mode).w				; Liliam: Encore mode - save data
+		move.b	#GameMode_SaveScreen,(Game_mode).w		; Liliam: Encore mode - save data
 		move.b	#1,(Encore_mode).w				;
 
 SaveScreen:
@@ -16304,18 +16336,18 @@ SaveScreen:
 		dmaFillVRAM 0,VRAM_Plane_A_Name_Table+$1000,$1000
 
 		lea	(VDP_control_port).l,a6
-		move.l	#CopyPal_SaveScreen,(Water_palette_data_addr).w	; Liliam: data select - add extra characters
-		move.b	#1,(Water_flag).w				;
-		move.w	#$4EF9,(H_int_jump).w				;
-		move.l	#HInt3,(H_int_addr).w				;
-		cmpi.w	#$1000,(V_blank_cycles).w			;
-		blo.s	loc_C5C2					;
-		move.l	#HInt4,(H_int_addr).w				;
+		move.l	#CopyPal_SaveScreen,(Water_palette_data_addr).w			; Liliam: data select - use HInt for more colors
+		move.b	#1,(Water_flag).w						;
+		move.w	#$4EF9,(H_int_jump).w						;
+		move.l	#HInt3,(H_int_addr).w						;
+		cmpi.w	#$1000,(V_blank_cycles).w					;
+		blo.s	loc_C5C2							;
+		move.l	#HInt4,(H_int_addr).w						;
 
 loc_C5C2:
-		move.b	#$54,(H_int_counter).w				;
-		move.w	#VDP_Option0|VDPReg0_EnableHInt,(a6)		;
-;		move.w	#VDP_Option0|VDPReg0_DisableHInt,(a6)		;
+		move.b	#$54,(H_int_counter).w						;
+		move.w	#VDP_Option0|VDPReg0_EnableHInt,(a6)				;
+;		move.w	#VDP_Option0|VDPReg0_DisableHInt,(a6)				;
 		move.w	#VDP_Plane_A|(VRAM_Plane_B_Name_Table>>10),(a6)
 		move.w	#VDP_Window_|(VRAM_Plane_B_Name_Table>>10),(a6)
 		move.w	#VDP_Plane_B|(VRAM_Plane_A_Name_Table>>13),(a6)
@@ -16324,7 +16356,7 @@ loc_C5C2:
 		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
 		move.w	#VDP_PlnSize|PlaneSize_1024x256,(a6)
 		move.w	#VDP_WinYPos|Window_Enable,(a6)
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -16372,51 +16404,51 @@ loc_C696:
 		movea.w	#tiles_to_bytes(ArtTile_S3MenuBG),a2	; Transfer destination
 		jsr	(KosArt_To_VDP).l
 		move.l	#locret_C56E,(V_int_1E_addr).w
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	(ArtKos_SaveScreenMisc).l,a0			; Decompress source
 		lea	(RAM_start).l,a1				; Decompress destination/Transfer source
 		movea.w	#tiles_to_bytes(ArtTile_Save_Misc),a2	; Transfer destination
 		jsr	KosArt_To_VDP(pc)
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
-;		lea	(ArtKos_SaveScreen).l,a0			; Liliam: data select - add extra characters
-;		lea	(RAM_start).l,a1				;
-;		movea.w	#tiles_to_bytes(ArtTile_Save_Extra),a2		;
-;		jsr	KosArt_To_VDP(pc)				;
-;		move.b	#$1E,(V_int_routine).w				;
-;		jsr	(Wait_VSync).l					;
-;		lea	(Pal_SaveMenuBG).l,a0				;
+;		lea	(ArtKos_SaveScreen).l,a0					; Liliam: data select - use HInt for more colors
+;		lea	(RAM_start).l,a1						;
+;		movea.w	#tiles_to_bytes(ArtTile_Save_Extra),a2				;
+;		jsr	KosArt_To_VDP(pc)						;
+;		move.b	#VInt_ID_1E,(V_int_routine).w					;
+;		jsr	(Wait_VSync).l							;
+;		lea	(Pal_SaveMenuBG).l,a0						;
 		lea	(Target_palette).w,a1
-		moveq	#bytesToLcnt($80),d0				;
-;		moveq	#bytesToLcnt($20),d0				;
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette),d0		;
+;		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d0		;
 
 ;loc_C710:
-;		move.l	(a0)+,(a1)+					;
-;		dbf	d0,loc_C710					;
+;		move.l	(a0)+,(a1)+							;
+;		dbf	d0,loc_C710							;
 		lea	Pal_SaveScreen(pc),a0
-;		moveq	#bytesToLcnt($40),d0				;
+;		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_2),d0	;
 
 loc_C71C:
-		move.l	(a0),Target_water_palette-Target_palette(a1)	;
+		move.l	(a0),Target_water_palette-Target_palette(a1)			;
 		move.l	(a0)+,(a1)+
 		dbf	d0,loc_C71C
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - save data
-		beq.s	loc_C722					;
-		lea	Pal_SaveScreen_Encore(pc),a0			;
-		lea	(Target_palette).w,a1				;
-		moveq	#bytesToLcnt($60),d0				;
+		tst.b	(Encore_mode).w							;
+		beq.s	loc_C722							;
+		lea	Pal_SaveScreen_Encore(pc),a0					;
+		lea	(Target_palette).w,a1						;
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette),d0		;
 
 	.loop1:
-		move.l	(a0),Target_water_palette-Target_palette(a1)	;
-		move.l	(a0)+,(a1)+					;
-		dbf	d0,.loop1					;
-		lea	(Target_palette_line_3).w,a0			;
-		moveq	#bytesToLcnt($20),d0				;
+		move.l	(a0),Target_water_palette-Target_palette(a1)			;
+		move.l	(a0)+,(a1)+							;
+		dbf	d0,.loop1							;
+		lea	(Target_palette_line_3).w,a0					;
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_3),d0	;
 
 	.loop2:
-		move.l	(a1)+,(a0)+					;
-		dbf	d0,.loop2					;
+		move.l	(a1)+,(a0)+							;
+		dbf	d0,.loop2							;
 
 loc_C722:
 		lea	(Object_RAM).w,a0
@@ -16443,7 +16475,7 @@ loc_C72C:
 		jsr	(Render_Sprites).l
 		lea	(Normal_palette_line_4).w,a0
 		lea	(Target_palette_line_4).w,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d0
 
 loc_C77A:
 		move.l	(a0),(a1)+
@@ -16488,13 +16520,13 @@ loc_C7DA:
 		bclr	#7,(Game_mode).w			;
 		jsr	(Encore_LoadFlags).l			;
 		move.l	#VInt_DrawSaveSlots,(V_int_1E_addr).w
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		enableDisplay
 		jsr	(Pal_FadeFromBlack).l
 
 SaveScreen_MainLoop:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		addq.w	#1,(Level_frame_counter).w
 		jsr	(Process_Sprites).l
@@ -16502,17 +16534,17 @@ SaveScreen_MainLoop:
 		neg.w	d0
 		move.w	d0,(H_scroll_buffer+2).w
 		jsr	(Render_Sprites).l
-		bsr.s	sub_C828					; Liliam: Encore mode - save data
-		cmpi.b	#$4C,(Game_mode).w				;
-		beq.s	SaveScreen_MainLoop				;
-		cmpi.b	#$C,(Game_mode).w				;
-		bne.s	.return						;
-		cmpi.w	#$D01,(Current_zone_and_act).w			;
-		beq.s	.return						;
-		tst.b	(Encore_mode).w					;
-		beq.w	loc_C85E					;
+		bsr.s	sub_C828							; Liliam: data select - use HInt for more colors
+		cmpi.b	#GameMode_SaveScreen,(Game_mode).w				;
+		beq.s	SaveScreen_MainLoop						;
+		cmpi.b	#GameMode_Level,(Game_mode).w					;
+		bne.s	.return								;
+		cmpi.w	#$D01,(Current_zone_and_act).w					;
+		beq.s	.return								;
+		tst.b	(Encore_mode).w							;
+		beq.w	loc_C85E							;
 
-		moveq	#signextendB(sfx_Teleport),d0			;
+		moveq	#signextendB(sfx_Teleport),d0			; Liliam: Encore mode - save data
 		jsr	(Play_SFX).l					;
 		moveq	#signextendB(cmd_FadeOut),d0			;
 		jsr	(Play_Music).l					;
@@ -16521,7 +16553,7 @@ SaveScreen_MainLoop:
 		moveq	#$F,d4						;
 
 	.loop:
-		move.b	#6,(V_int_routine).w				;
+		move.b	#VInt_ID_6,(V_int_routine).w			;
 		jsr	(Wait_VSync).l					;
 		dbf	d4,.loop					;
 		lea	(VDP_control_port).l,a6				;
@@ -16534,8 +16566,8 @@ SaveScreen_MainLoop:
 
 sub_C828:
 		lea	(Normal_palette_line_3+$2).w,a0
-		moveq	#13-1,d0					; Liliam: data select - add extra characters
-;		moveq	#15-1,d0					;
+		moveq	#13-1,d0							; Liliam: data select - use HInt for more colors
+;		moveq	#15-1,d0							;
 		move.w	(Emerald_flicker_flag).w,d1
 		addq.w	#1,d1
 		cmpi.w	#3,d1
@@ -16555,14 +16587,14 @@ loc_C83C:
 		addq.w	#2,d1						;
 
 	.notEncore:
-		lea	(Water_palette_line_4+$2).w,a0			; Liliam: data select - add extra characters
+		lea	(Water_palette_line_4+$2).w,a0					; Liliam: data select - use HInt for more colors
 
 sub_C840:
-		move.w	#$EEE,(a0)+					;
-		tst.w	d1						;
+		move.w	#$EEE,(a0)+							;
+		tst.w	d1								;
 		beq.s	loc_C84E
-		lea	Pal_SaveScreen+$64(pc),a1			;
-;		lea	Pal_SaveScreen+$22(pc),a1			;
+		lea	Pal_SaveScreen+$64(pc),a1					;
+;		lea	Pal_SaveScreen+$22(pc),a1					;
 
 loc_C846:
 		move.w	(a1)+,(a0)+
@@ -16571,14 +16603,14 @@ loc_C846:
 ; ---------------------------------------------------------------------------
 
 loc_C84E:
-		move.w	d2,(a0)+					; Liliam: Encore mode - save data
-;		move.w	#$EEE,(a0)+					;
+		move.w	d2,(a0)+							; Liliam: data select - use HInt for more colors
+;		move.w	#$EEE,(a0)+							;
 		dbf	d0,loc_C84E
 
 loc_C856:
-;		cmpi.b	#$4C,(Game_mode).w				;
-;		beq.s	SaveScreen_MainLoop				;
-		rts							;
+;		cmpi.b	#GameMode_SaveScreen,(Game_mode).w				;
+;		beq.s	SaveScreen_MainLoop						;
+		rts									;
 ; ---------------------------------------------------------------------------
 
 loc_C85E:
@@ -16896,7 +16928,7 @@ SaveScreen_LivesContinues_Nums:
 		dc.w make_art_tile(ArtTile_Save_Extra+$58,1,1), make_art_tile(ArtTile_Save_Extra+$59,1,1)	; 9
 		dc.w make_art_tile($000,0,1), make_art_tile($000,0,1)	; blank
 Pal_SaveScreen:
-		; Liliam: data select - add extra characters
+		; Liliam: data select - use HInt for more colors
 		binclude "General/Save Menu/Palettes/Main.bin"
 Pal_SaveScreen_Encore:							; Liliam: Encore mode - save data
 		binclude "General/Save Menu/Palettes/Encore Mode/Main.bin"
@@ -17194,10 +17226,10 @@ Obj_SaveScreen_Selector_Main:
 		beq.s	loc_D1FA				;
 		tst.w	(Events_bg+$10).w			;
 		bne.w	loc_D2CE				;
-		move.b	#$58,(Game_mode).w			;
+		move.b	#GameMode_EraseData,(Game_mode).w	;
 		tst.w	(Events_bg+$12).w			;
 		bne.w	loc_D2CE				;
-		move.b	#$54,(Game_mode).w			;
+		move.b	#GameMode_Options,(Game_mode).w		;
 		bra.w	loc_D2CE				;
 ; ---------------------------------------------------------------------------
 
@@ -17206,7 +17238,7 @@ loc_D1FA:
 		bne.s	loc_D212
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	loc_D212
-		move.b	#4,(Game_mode).w
+		move.b	#GameMode_TitleScreen,(Game_mode).w
 		bra.w	loc_D2CE
 ; ---------------------------------------------------------------------------
 
@@ -17373,7 +17405,7 @@ loc_D31C:
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.w	#button_confirm_mask,d0
 		beq.s	loc_D376
-		move.b	#$C,(Game_mode).w
+		move.b	#GameMode_Level,(Game_mode).w
 		clr.w	(Player_mode).w					; Liliam: Encore mode - save data
 		tst.b	(Encore_mode).w					;
 		bne.s	loc_D342					;
@@ -17723,7 +17755,7 @@ loc_D57E:
 		lsr.w	#3,d1						;
 		move.b	d1,(Encore_unlocked_chars).w			;
 		move.l	(P1_character).w,(Saved_encore_stocks).w	;
-		move.b	#$C,(Game_mode).w				;
+		move.b	#GameMode_Level,(Game_mode).w			;
 		jmp	(Draw_Sprite).l					;
 ; ---------------------------------------------------------------------------
 
@@ -17745,7 +17777,7 @@ loc_D5DE:
 		move.b	SRAM_continue_count(a1),(Continue_count).w
 ;		st	(SRAM_mask_interrupts_flag).w		;
 ;		jsr	Write_SaveGame(pc)			;
-		move.b	#$C,(Game_mode).w
+		move.b	#GameMode_Level,(Game_mode).w
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -17766,7 +17798,7 @@ loc_D604:
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.w	#button_confirm_mask,d0
 		beq.s	loc_D67A
-		move.b	#$C,(Game_mode).w
+		move.b	#GameMode_Level,(Game_mode).w
 		clr.b	SRAM_clear_type(a1)				; Liliam: Encore mode - save data
 ;		clr.l	SRAM_clear_type(a1)				;
 ;		clr.l	SRAM_collected_special_rings(a1)		;
@@ -18331,7 +18363,7 @@ loc_D9C8:
 		lsl.w	#5,d0
 		adda.w	d0,a2
 		lea	(Normal_palette_line_4).w,a3
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d0
 
 loc_D9EC:
 		move.l	(a2)+,(a3)+
@@ -19558,7 +19590,7 @@ sub_EB1A:
 		tst.b	(Respawn_table_keep).w
 		bne.s	loc_EB30
 		lea	(Ring_status_table).w,a1
-		move.w	#bytesToLcnt($400),d1
+		move.w	#bytesToLcnt(Ring_status_table_end-Ring_status_table),d1
 
 loc_EB2A:
 		move.l	d0,(a1)+
@@ -19566,7 +19598,7 @@ loc_EB2A:
 
 loc_EB30:
 		lea	(Ring_consumption_table).w,a1
-		moveq	#bytesToLcnt($80),d1
+		moveq	#bytesToLcnt(Ring_consumption_table_end-Ring_consumption_table),d1
 
 loc_EB36:
 		move.l	d0,(a1)+
@@ -19574,7 +19606,7 @@ loc_EB36:
 		cmpi.b	#$14,(Current_zone).w
 		bne.s	loc_EB52
 		lea	(Ring_status_table_2).w,a1
-		move.w	#bytesToLcnt($400),d1
+		move.w	#bytesToLcnt(Ring_status_table_2_end-Ring_status_table_2),d1
 
 loc_EB4C:
 		move.l	d0,(a1)+
@@ -21894,10 +21926,10 @@ Touch_Enemy:
 		move.b	#$1D,anim(a0)				; Liliam: simplify player anim selection
 ;		move.b	#$21,anim(a0)				;
 		; Decide which direction to make Knuckles face
-		bclr	#0,status(a0)
+		bclr	#Status_Facing,status(a0)
 		tst.w	x_vel(a0)
 		bmi.s	.directiondecided
-		bset	#0,status(a0)
+		bset	#Status_Facing,status(a0)
 
 	.directiondecided:
 		move.b	default_y_radius(a0),y_radius(a0)
@@ -22693,7 +22725,7 @@ locret_1090C:
 ; ---------------------------------------------------------------------------
 
 loc_1090E:
-		btst	#2,status(a0)
+		btst	#Status_Roll,status(a0)
 		beq.s	loc_10918
 		rts
 ; ---------------------------------------------------------------------------
@@ -23338,7 +23370,7 @@ Player_RecordPos:
 		move.w	x_pos(a0),(a1)+			; write location to pos_table
 		move.w	y_pos(a0),(a1)+
 		addq.b	#4,(Pos_table_index+1).w	; increment index as the post-increments did a1
-		lea	(Stat_table).w,a1
+		lea	(Pos_table_P2).w,a1
 		lea	(a1,d0.w),a1
 		move.w	(Ctrl_1_logical).w,(a1)+
 		move.b	status(a0),(a1)+
@@ -23362,7 +23394,7 @@ Player_RecordPosCompetition:
 
 Player_RecordPosCompetitionP2:
 		move.w	(Pos_table_index_P2).w,d0
-		lea	(Stat_table).w,a1
+		lea	(Pos_table_P2).w,a1
 		lea	(a1,d0.w),a1
 		move.w	x_pos(a0),(a1)+			; write location to pos_table
 		move.w	y_pos(a0),(a1)+
@@ -23378,8 +23410,8 @@ Reset_Player_Position_Array:
 		cmpa.w	#Player_1,a0			; is object player 1?
 		bne.s	Reset_Player_Position_ArrayP2	; if not, branch
 		lea	(Pos_table).w,a1
-		lea	(Stat_table).w,a2
-		move.w	#bytesToLcnt($100),d0
+		lea	(Pos_table_P2).w,a2
+		move.w	#bytesToLcnt(Pos_table_end-Pos_table),d0
 		move.w	status(a0),d1				; Liliam: face left at left-facing star posts
 		andi.l	#1<<Status_Facing<<8,d1			;
 
@@ -23394,8 +23426,8 @@ loc_10DEC:
 Reset_Player_Position_ArrayP2:
 		tst.w	(Competition_mode).w	; are we in Competition mode?
 		beq.s	locret_10E24		; if not, branch
-		lea	(Stat_table).w,a1
-		move.w	#bytesToLcnt($100),d0
+		lea	(Pos_table_P2).w,a1
+		move.w	#bytesToLcnt(Pos_table_P2_end-Pos_table_P2),d0
 
 loc_10E12:
 		move.w	x_pos(a0),(a1)+
@@ -23502,7 +23534,6 @@ loc_10F22:
 		jmp	(Play_SFX).l
 ; End of function Sonic_Water
 
-; ---------------------------------------------------------------------------
 ; ---------------------------------------------------------------------------
 ; Start of subroutine Obj01_MdNormal
 ; Called if Sonic is neither airborne nor rolling this frame
@@ -24208,7 +24239,7 @@ loc_11578:
 		bhs.s	loc_115C6
 		tst.b	spin_dash_flag(a0)
 		bne.s	loc_115B4
-		bclr	#2,status(a0)
+		bclr	#Status_Roll,status(a0)
 		move.b	y_radius(a0),d0
 		move.b	default_y_radius(a0),y_radius(a0)
 		move.b	default_x_radius(a0),x_radius(a0)
@@ -24963,8 +24994,12 @@ SonicKnux_SuperHyper:
 		tst.b	(Update_HUD_timer).w	; Level over?
 		beq.s	.revertToNormal
 		subq.w	#1,(Super_frame_count).w
-		bhi.w	.return					; Liliam: bugfix - stop accidentally counting 61 frames
-;		bpl.w	.return					;
+	if FixBugs
+		bhi.w	.return
+	else
+		; Bug: This should be a 'bhi'; currently counts down 61 frames
+		bpl.w	.return
+	endif
 		move.w	#60,(Super_frame_count).w
 		tst.w	(Ring_count).w
 		beq.s	.revertToNormal	; If rings depleted, return to normal
@@ -26073,7 +26108,7 @@ loc_12344:
 		movem.l	a4-a6,-(sp)
 		bsr.w	SonicKnux_DoLevelCollision
 		movem.l	(sp)+,a4-a6
-		btst	#1,status(a0)
+		btst	#Status_InAir,status(a0)
 		bne.s	locret_12388
 		moveq	#0,d0
 		move.w	d0,y_vel(a0)
@@ -26188,7 +26223,7 @@ loc_12478:
 ;		move.b	#State_GameOver,routine(a0)		; Liliam: Encore mode - expand player routines
 		move.w	#mus_GameOver,d0
 		jsr	(Play_Music).l
-		moveq	#3,d0
+		moveq	#PLCID_03,d0
 		jmp	(Load_PLC_2).l
 ; ---------------------------------------------------------------------------
 
@@ -26229,7 +26264,7 @@ Player_CheckGameOver_Competition:
 		move.w	(Saved_solid_bits).w,top_solid_bit(a0)
 		clr.w	(Ring_count).w
 		clr.b	(Extra_life_flags).w
-		move.b	#1,(_unkF74A).w
+		move.b	#1,(Competition_lap_count_flag).w	; disable the lap count flag, however, later on this value is reset to 0 in Obj_2PGoalMarker
 		bra.s	loc_1252A
 ; ---------------------------------------------------------------------------
 
@@ -26240,7 +26275,7 @@ loc_12502:
 		move.w	(Saved2_art_tile).w,art_tile(a0)
 		move.w	(Saved2_solid_bits).w,top_solid_bit(a0)
 		clr.w	(Ring_count_P2).w
-		move.b	#1,(_unkF74B).w
+		move.b	#1,(Competition_lap_count_flag_P2).w	; disable the lap count flag, however, later on this value is reset to 0 in Obj_2PGoalMarker
 
 loc_1252A:
 		move.b	#0,object_control(a0)
@@ -28411,7 +28446,7 @@ loc_139A8:
 
 Tails_CPU_Control:
 		move.b	(Ctrl_2_held_logical).w,d0
-		andi.b	#$7F,d0
+		andi.b	#button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_B_mask|button_C_mask|button_A_mask,d0
 		beq.s	loc_139DC
 		move.w	#10*60,(Tails_CPU_idle_timer).w
 
@@ -34683,7 +34718,7 @@ loc_1746A:
 		move.w	#sfx_Skid,d0
 		jsr	(Play_SFX).l
 		move.b	#$D,anim(a0)
-		bclr	#0,status(a0)
+		bclr	#Status_Facing,status(a0)
 		cmpi.b	#12,air_left(a0)
 		blo.s	locret_174B2
 		move.b	#6,routine(a6)
@@ -35040,7 +35075,7 @@ loc_17732:
 		cmpi.w	#6,d1
 		blt.w	locret_177E0
 		move.w	#$600,d2
-		btst	#6,status(a0)
+		btst	#Status_Underwater,status(a0)
 		beq.s	loc_1775C
 		clr.w	y_pos+2(a0)				; Liliam: bugfix - set correct jump height for Knuckles
 		move.w	#$33C,d2				;
@@ -36502,8 +36537,7 @@ off_187DE:
 Obj_Invincibility:
 		move.l	#ArtUnc_Invincibility,d1
 		move.w	#tiles_to_bytes(ArtTile_Shield),d2
-		move.w	#$1C0,d3				; Liliam: HUD - Encore mode HUD
-;		move.w	#$200,d3				;
+		move.w	#(ArtUnc_Invincibility_end-ArtUnc_Invincibility)/2,d3
 		jsr	(Add_To_DMA_Queue).l
 		moveq	#0,d2
 		lea	off_187DE-6(pc),a2
@@ -37687,7 +37721,7 @@ Obj_LightningShield_FlashWater:
 		; Flashes the underwater palette white
 		lea	(Water_palette).w,a1
 		lea	(Target_water_palette).w,a2
-		move.w	#bytesToLcnt($80),d0			; Size of Water_palette/4-1
+		move.w	#bytesToLcnt(Target_water_palette_end-Target_water_palette),d0
 
 loc_197F2:
 		move.l	(a1),(a2)+			; Backup palette entries
@@ -37757,7 +37791,7 @@ Obj_LightningShield_DestroyUnderwater2:
 		move.l	#Obj_InstaShield,(a0)		; Replace Lightning Shield with Insta-Shield
 		lea	(Target_water_palette).w,a1
 		lea	(Water_palette).w,a2
-		move.w	#bytesToLcnt($80),d0		; Size of Water_palette/4-1
+		move.w	#bytesToLcnt(Water_palette_end-Water_palette),d0
 
 	.loop:
 		move.l	(a1)+,(a2)+			; Restore backed-up underwater palette
@@ -41122,7 +41156,7 @@ loc_1B6CA:
 loc_1B6D8:
 		lea	(Object_respawn_table).w,a0
 		moveq	#0,d0
-		move.w	#bytesToLcnt($300),d1
+		move.w	#bytesToLcnt(Object_respawn_table_end-Object_respawn_table),d1
 
 loc_1B6E2:
 		move.l	d0,(a0)+
@@ -41187,7 +41221,7 @@ loc_1B76A:
 		cmpi.b	#$14,(Current_zone).w
 		bne.s	loc_1B78E
 		lea	(Object_respawn_table_2).w,a3
-		moveq	#bytesToLcnt($200),d6
+		moveq	#bytesToLcnt(Object_respawn_table_2_end-Object_respawn_table_2),d6
 
 loc_1B784:
 		clr.l	(a3)+
@@ -41763,7 +41797,7 @@ Get_LevelSizeStart:
 		clr.b	(Fast_V_scroll_flag).w
 		moveq	#0,d0
 		move.b	d0,(Dynamic_resize_routine).w
-		move.w	d0,(_unkF660).w
+		move.w	d0,(Ending_scroll_delay).w
 		move.w	d0,(_unkF662).w
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#1,d0
@@ -41803,7 +41837,7 @@ LevelSizes:	;     xstart    xend  ystart    yend	; Level
 		dc.w       0,  $4310,      0,   $B20	; SOZ1
 		dc.w       0,  $5140,  -$100,   $800	; SOZ2	; Liliam: camera - fix level sizes
 		dc.w       0,  $2CC0,      0,   $B20	; LRZ1
-		dc.w       0,  $3EC0,      0,   $B20	; LRZ2	; Liliam: start from actual act 2 start
+		dc.w       0,  $3EC0,      0,   $B20	; LRZ2	;
 		dc.w       0,  $19A0,  -$100,  $1000	; SSZ1
 		dc.w       0,  $6000,      0,   $400	; SSZ2
 		dc.w       0,  $36C0,      0,   $B20	; DEZ1	; Liliam: camera - fix level sizes
@@ -41974,14 +42008,14 @@ loc_1BF50:
 		cmpi.w	#$900,(Current_zone_and_act).w
 		beq.s	loc_1BF68
 		cmpi.w	#$300,(Current_zone_and_act).w
-		beq.s	loc_1BF68					; Liliam: Encore mode - FBZ level order
-		cmpi.w	#$800,(Current_zone_and_act).w			;
+		beq.s	loc_1BF68							; Liliam: Encore mode - FBZ level order
+		cmpi.w	#$800,(Current_zone_and_act).w					;
 		bne.s	loc_1BF74
-		tst.b	(Alternate_start_flag).w			;
-		beq.s	loc_1BF74					;
-		move.w	#$C0,d1						;
-		move.w	#$658,d0					;
-		bra.s	loc_1BF74					;
+		tst.b	(Alternate_start_flag).w					;
+		beq.s	loc_1BF74							;
+		move.w	#$C0,d1								;
+		move.w	#$658,d0							;
+		bra.s	loc_1BF74							;
 ; ---------------------------------------------------------------------------
 
 loc_1BF68:
@@ -42531,7 +42565,7 @@ Load_Level:
 		lea	(LevelPtrs).l,a0
 		movea.l	(a0,d0.w),a0
 		lea	(Level_layout_header).w,a1
-		move.w	#bytesToWcnt($1000),d2
+		move.w	#bytesToWcnt(Level_layout_main_end-Level_layout_header),d2
 
 loc_1C382:
 		move.w	(a0)+,(a1)+
@@ -42684,14 +42718,14 @@ loc_1C4D0:
 		move.w	#$500,(Anim_Counters+2).w
 		move.w	#$500,(Anim_Counters+4).w
 		addq.b	#2,(Dynamic_resize_routine).w		; Liliam: AIZ intro - load main level art during cutscene
-		moveq	#$B,d0					;
+		moveq	#PLCID_0B,d0				;
 		jmp	(Load_PLC).l				;
 ;		move.b	#1,(Last_star_post_hit).w		;
 ;		move.w	#$13A0,(Saved_X_pos).w			;
 ;		move.w	#$41A,(Saved_Y_pos).w			;
 ;		jsr	(Save_Level_Data).l			;
 ;		move.l	#0,(Saved_timer).w			;
-;		moveq	#8,d0					;
+;		moveq	#PLCID_08,d0				;
 ;		jsr	(Load_PLC).l				;
 ;		addq.b	#2,(Dynamic_resize_routine).w		;
 
@@ -42732,7 +42766,7 @@ loc_1C594:
 loc_1C5AE:
 		move.w	d0,(Normal_palette_line_3+$1E).w
 		move.w	#$2D80,(Camera_min_X_pos).w
-;		moveq	#$5A,d0					; Liliam: bugfix - stop double-loading AIZ2 PLCs
+;		moveq	#PLCID_5A,d0				; Liliam: bugfix - stop double-loading AIZ2 PLCs
 ;		jsr	(Load_PLC).l				;
 		addq.b	#2,(Dynamic_resize_routine).w
 
@@ -42753,7 +42787,7 @@ loc_1C5C6:
 		lea	(AIZ1_8x8_Flames_KosM).l,a1
 		move.w	#tiles_to_bytes($500),d2
 		jsr	(Queue_Kos_Module).l
-;		moveq	#$C,d0					; Liliam: bugfix - stop double-loading AIZ2 PLCs
+;		moveq	#PLCID_0C,d0				; Liliam: bugfix - stop double-loading AIZ2 PLCs
 ;		jsr	(Load_PLC).l				;
 		addq.b	#2,(Dynamic_resize_routine).w
 
@@ -42909,7 +42943,7 @@ loc_1C72E:
 		jsr	(Queue_Kos_Module).l				; Load all battleship art
 
 loc_1C734:
-		moveq	#$30,d0
+		moveq	#PalID_AIZBoss,d0
 		jsr	(LoadPalette_Immediate).l			; Load palette
 		st	(Events_fg_5).w						; Send signal to background event
 		addq.b	#2,(Dynamic_resize_routine).w
@@ -43004,7 +43038,7 @@ AIZ2_KnuxResize4:
 		lea	(AIZ2_8x8_BomberShip_KosM).l,a1
 		move.w	#tiles_to_bytes($1FC),d2
 		jsr	(Queue_Kos_Module).l			; I'm guessing the art here is for the trees and/or the waterfall in the boss arena
-		moveq	#$30,d0
+		moveq	#PalID_AIZBoss,d0
 		jsr	(LoadPalette_Immediate).l
 		move.w	#$3B80,(Camera_min_X_pos).w
 		move.w	#$5DA,(Camera_target_max_Y_pos).w
@@ -43255,33 +43289,33 @@ locret_1C9C8:
 ; ---------------------------------------------------------------------------
 
 CNZ2_Resize:
-		moveq	#0,d0						; Liliam: Encore mode - FBZ level order
-		move.b	(Dynamic_resize_routine).w,d0			;
-		move.w	CNZ2_Resize_Index(pc,d0.w),d0			;
-		jmp	CNZ2_Resize_Index(pc,d0.w)			;
+		moveq	#0,d0								; Liliam: Encore mode - FBZ level order
+		move.b	(Dynamic_resize_routine).w,d0					;
+		move.w	CNZ2_Resize_Index(pc,d0.w),d0					;
+		jmp	CNZ2_Resize_Index(pc,d0.w)					;
 ; ---------------------------------------------------------------------------
 CNZ2_Resize_Index:
-		dc.w CNZ2_Resize1-CNZ2_Resize_Index			; Liliam: Encore mode - FBZ level order
-		dc.w CNZ2_Resize2-CNZ2_Resize_Index			;
-		dc.w CNZ2_Resize3-CNZ2_Resize_Index			;
-		dc.w CNZ1_Resize-CNZ2_Resize_Index			;
+		dc.w CNZ2_Resize1-CNZ2_Resize_Index					; Liliam: Encore mode - FBZ level order
+		dc.w CNZ2_Resize2-CNZ2_Resize_Index					;
+		dc.w CNZ2_Resize3-CNZ2_Resize_Index					;
+		dc.w CNZ1_Resize-CNZ2_Resize_Index					;
 ; ---------------------------------------------------------------------------
 
 CNZ2_Resize1:
-		move.w	#$580,(Camera_min_Y_pos).w			; Liliam: Encore mode - FBZ level order
-		addq.b	#2,(Dynamic_resize_routine).w			;
+		move.w	#$580,(Camera_min_Y_pos).w					; Liliam: Encore mode - FBZ level order
+		addq.b	#2,(Dynamic_resize_routine).w					;
 
 CNZ2_Resize2:
-		cmpi.w	#$440,(Player_1+x_pos).w			;
-		blo.s	CNZ1_Resize					;
-		clr.b	(End_of_level_flag).w				;
-		addq.b	#2,(Dynamic_resize_routine).w			;
+		cmpi.w	#$440,(Player_1+x_pos).w					;
+		blo.s	CNZ1_Resize							;
+		clr.b	(End_of_level_flag).w						;
+		addq.b	#2,(Dynamic_resize_routine).w					;
 
 CNZ2_Resize3:
-		cmpi.w	#$940,(Player_1+x_pos).w			;
-		blo.s	CNZ1_Resize					;
-		clr.w	(Camera_min_Y_pos).w				;
-		addq.b	#2,(Dynamic_resize_routine).w			;
+		cmpi.w	#$940,(Player_1+x_pos).w					;
+		blo.s	CNZ1_Resize							;
+		clr.w	(Camera_min_Y_pos).w						;
+		addq.b	#2,(Dynamic_resize_routine).w					;
 
 CNZ1_Resize:
 FBZ1_Resize:
@@ -51995,7 +52029,7 @@ loc_22FE6:
 		move.b	#1,flips_remaining(a1)
 
 loc_23010:
-		btst	#0,status(a1)
+		btst	#Status_Facing,status(a1)
 		beq.s	loc_23020
 		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)
@@ -52234,7 +52268,7 @@ loc_2328E:
 		subi.w	#$18,d2
 		addi.w	#$18,d3
 		lea	(Player_1).w,a1
-		btst	#1,status(a1)
+		btst	#Status_InAir,status(a1)
 		bne.s	loc_232E2
 		move.w	ground_vel(a1),d4
 		btst	#0,status(a0)
@@ -52505,7 +52539,7 @@ loc_23568:
 		move.b	#3,flips_remaining(a1)
 
 loc_23592:
-		btst	#0,status(a1)
+		btst	#Status_Facing,status(a1)
 		beq.s	loc_235A2
 		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)
@@ -54059,7 +54093,7 @@ Init_ArtScaling:
 		movea.w	d1,a4
 		movea.w	d1,a5
 		lea	(H_scroll_buffer).w,a6
-		move.w	#bytesToXcnt($1000,$100),d1
+		move.w	#bytesToXcnt(H_scroll_buffer-Kos_decomp_buffer,$100),d1
 
 loc_24618:
 	rept 10
@@ -55313,7 +55347,7 @@ loc_2543C:
 
 loc_25448:
 		move.w	#-$380,y_vel(a1)
-		bset	#1,status(a1)
+		bset	#Status_InAir,status(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -59109,8 +59143,8 @@ locret_27C34:
 ; ---------------------------------------------------------------------------
 
 AnimateTiles_CNZ:
-		tst.b	(End_of_level_flag).w				; Liliam: Encore mode - FBZ level order
-		bne.s	locret_27C34					;
+		tst.b	(End_of_level_flag).w						; Liliam: Encore mode - FBZ level order
+		bne.s	locret_27C34							;
 		lea	(Anim_Counters).w,a3
 		moveq	#0,d1
 		move.w	(Events_bg+$10).w,d1
@@ -65014,7 +65048,7 @@ word_2B968:
 		dc.w make_art_tile(ArtTile_MHZMisc+$C7,3,1)			; 1C MHZ Wood Column Top
 		dc.w    $80
 		dc.b  $10,   8
-		dc.w make_art_tile(ArtTile_MHZMisc+$98,2,0)		; Liliam: Encore mode - FBZ level order
+		dc.w make_art_tile(ArtTile_MHZMisc+$98,2,0)			; Liliam: Encore mode - FBZ level order
 ;		dc.w make_art_tile(ArtTile_MHZMisc+$D7,2,0)			; 1D MHZ Parachute Vines
 		dc.w   $200
 		dc.b  $10,   8
@@ -66907,12 +66941,12 @@ loc_2D638:
 loc_2D666:
 		tst.b	(Time_over_flag).w
 		bne.s	loc_2D680
-		move.b	#$14,(Game_mode).w
+		move.b	#GameMode_Continue,(Game_mode).w
 		tst.l	(Save_pointer).w			; Liliam: continues - stop awarding in saved games
 		bne.s	loc_2D68A				;
 		tst.b	(Continue_count).w
 		bne.s	loc_2D68A
-		move.b	#0,(Game_mode).w
+		move.b	#GameMode_SegaScreen,(Game_mode).w
 		bra.s	loc_2D68A
 ; ---------------------------------------------------------------------------
 
@@ -67055,7 +67089,7 @@ loc_2D7AC:
 		bne.s	loc_2D7FE				;
 		lea	(PLC_EggCapsule).l,a1			;
 		jsr	(Load_PLC_Raw).l			;
-;		moveq	#$25,d0					;
+;		moveq	#PLCID_25,d0				;
 ;		jsr	(Load_PLC).l				;
 
 loc_2D7FE:
@@ -68034,7 +68068,7 @@ loc_2DF8C:
 		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
 		move.w	#VDP_PlnSize|PlaneSize_512x256,(a6)
 		jsr	(Clear_DisplayData).l			; Liliam: bugfix - SS results fade
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -68081,7 +68115,7 @@ loc_2E06A:
 		move.l	#locret_2DF62,(V_int_1E_addr).w
 
 loc_2E0C4:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		jsr	(Wait_VSync).l
 		jsr	(Process_Nem_Queue_Init).l
@@ -68092,51 +68126,51 @@ loc_2E0C4:
 		bne.s	loc_2E0C4
 		jsr	(HUD_DrawInitial).l
 		move.b	#1,(Update_HUD_score).w
-		clr.w	(Debug_placement_mode).w		; Liliam: simplify player palette selection
-		moveq	#8,d0					;
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_2E0FA				;
-		move.w	(Player_mode).w,d0			;
+		clr.w	(Debug_placement_mode).w					; Liliam: simplify player palette selection
+		moveq	#8,d0								;
+		tst.b	(Encore_mode).w							;
+		bne.s	loc_2E0FA							;
+		move.w	(Player_mode).w,d0						;
 
 loc_2E0FA:
-		jsr	(LoadPalette_NoEncore).l		;
+		jsr	(LoadPalette_NoEncore).l					;
 		lea	Pal_Results(pc),a0
-		lea	(Target_palette_line_2).w,a1		;
-		moveq	#bytesToLcnt($60),d0			;
-;		lea	(Normal_palette).w,a1			;
-;		moveq	#bytesToLcnt($80),d0			;
+		lea	(Target_palette_line_2).w,a1					;
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_2),d0	;
+;		lea	(Normal_palette).w,a1						;
+;		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette),d0		;
 
 loc_2E104:
-		move.l	(a0)+,(a1)+						; Liliam: bugfix - HPZ SS results palette screwery
-;		move.l	(a0),(a1)+						;
-;		move.l	(a0)+,Target_palette-Normal_palette-4(a1)		;
+		move.l	(a0)+,(a1)+							; Liliam: bugfix - HPZ SS results palette screwery
+;		move.l	(a0),(a1)+							;
+;		move.l	(a0)+,Target_palette-Normal_palette-4(a1)			;
 		dbf	d0,loc_2E104
-;		jsr	sub_2E2C0(pc)						;
+;		jsr	sub_2E2C0(pc)							;
 
 		; Liliam: removed S&K alone mode
 		tst.b	(SK_special_stage_flag).w
 		beq.w	loc_2E226
-;		lea	Pal_Results(pc),a0					;
-;		lea	(Normal_palette).w,a1					;
-		lea	(Pal_HPZ).l,a0						;
-		lea	(Target_palette_line_2).w,a1				;
-		moveq	#bytesToLcnt($20),d0
-		tst.b	(Encore_flags).w					;
-		bpl.s	loc_2E12C						;
-		lea	(Pal_HPZIntro).l,a0					;
+;		lea	Pal_Results(pc),a0						;
+;		lea	(Normal_palette).w,a1						;
+		lea	(Pal_HPZ).l,a0							;
+		lea	(Target_palette_line_2).w,a1					;
+		moveq	#bytesToLcnt(Normal_palette_line_2-Normal_palette),d0
+		tst.b	(Encore_flags).w						;
+		bpl.s	loc_2E12C							;
+		lea	(Pal_HPZIntro).l,a0						;
 
 loc_2E12C:
-		move.l	(a0)+,(a1)+						;
-;		move.l	(a0)+,d1						;
-;		move.l	d1,Target_palette_line_2-Normal_palette(a1)		;
-;		move.l	d1,Normal_palette_line_2-Normal_palette(a1)		;
-;		move.l	d1,Target_palette-Normal_palette(a1)			;
-;		move.l	d1,(a1)+						;
+		move.l	(a0)+,(a1)+							;
+;		move.l	(a0)+,d1							;
+;		move.l	d1,Target_palette_line_2-Normal_palette(a1)			;
+;		move.l	d1,Normal_palette_line_2-Normal_palette(a1)			;
+;		move.l	d1,Target_palette-Normal_palette(a1)				;
+;		move.l	d1,(a1)+							;
 		dbf	d0,loc_2E12C
-;		jsr	sub_2E2C0(pc)						;
-;		lea	(Pal_HPZIntro+$20).l,a0					;
-;		lea	(Normal_palette_line_3).w,a1				;
-		moveq	#bytesToLcnt($40),d0
+;		jsr	sub_2E2C0(pc)							;
+;		lea	(Pal_HPZIntro+$20).l,a0						;
+;		lea	(Normal_palette_line_3).w,a1					;
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_3),d0
 
 loc_2E150:
 		move.l	#$A660A66,(a1)+				; Liliam: results - darken background for contrast
@@ -68145,7 +68179,7 @@ loc_2E150:
 		dbf	d0,loc_2E150
 		lea	(Layout_HPZ).l,a0
 		lea	(Level_layout_header).w,a1
-		move.w	#bytesToLcnt($1000),d0
+		move.w	#bytesToLcnt(Level_layout_main_end-Level_layout_header),d0
 
 loc_2E16C:
 		move.l	(a0)+,(a1)+
@@ -68167,7 +68201,7 @@ loc_2E16C:
 		lea	(ArtKosM_HPZ_Secondary).l,a1
 		move.w	d4,d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$48,d0
+		moveq	#PLCID_48,d0
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - special stage
 		beq.s	loc_2E1CE					;
 		subq.w	#1,d0						;
@@ -68204,7 +68238,7 @@ loc_2E226:
 ;		enableDisplay					; Liliam: bugfix - SS results fade
 
 loc_2E24C:
-		move.b	#8,(V_int_routine).w
+		move.b	#VInt_ID_8,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		jsr	(Wait_VSync).l
 		addq.w	#1,(Level_frame_counter).w
@@ -68235,7 +68269,7 @@ loc_2E28C:
 ;		jsr	(Pal_FromWhite).l			;
 
 loc_2E2B0:
-		cmpi.b	#$48,(Game_mode).w
+		cmpi.b	#GameMode_SpecialStageResults,(Game_mode).w
 		beq.s	loc_2E24C
 		move.w	(Special_stage_zone_and_act).w,(Current_zone_and_act).w
 		rts
@@ -68248,7 +68282,7 @@ loc_2E2B0:
 SpecialStage_Results_EnsurePalette:				; Liliam: results - darken background for contrast
 		lea	(Pal_HPZ+$20).l,a0
 		lea	(Normal_palette_line_3).w,a1
-		moveq	#bytesToLcnt($40),d0
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_3),d0
 		tst.b	(Encore_flags).w
 		bpl.s	.loop
 		lea	(Pal_HPZIntro+$20).l,a0
@@ -68348,24 +68382,24 @@ SpecialStage_Results_HPZFade:
 		beq.s	loc_2E474
 		tst.w	(Special_stage_spheres_left).w
 		bne.s	loc_2E474
-		move.w	d7,-(sp)						; Liliam: bugfix - HPZ SS results palette screwery
-		moveq	#$41,d0							;
-		jsr	(LoadPalette).l						;
-		move.w	(sp)+,d7						;
-		move.w	#$4020-1,(Palette_fade_info).w				;
-;		move.w	#$40-1,(Palette_fade_info).w				;
+		move.w	d7,-(sp)							; Liliam: bugfix - HPZ SS results palette screwery
+		moveq	#PalID_HPZ,d0							;
+		jsr	(LoadPalette).l							;
+		move.w	(sp)+,d7							;
+		move.w	#$4020-1,(Palette_fade_info).w					;
+;		move.w	#$40-1,(Palette_fade_info).w					;
 		move.w	#$16,(Palette_fade_timer).w
-		jsr	(Pal_PrepFade_FromWhite).l				;
-;		lea	(Normal_palette).w,a1					;
-;		move.w	#$EEE,$42(a1)						;
-;		move.w	#$EEE,$44(a1)						;
-;		move.w	#$EEE,$4C(a1)						;
-;		move.w	#$EEE,$62(a1)						;
-;		move.w	#$EEE,$66(a1)						;
-;		move.w	#$EEE,$6E(a1)						;
-;		move.w	#$EEE,$70(a1)						;
-;		move.w	#$EEE,$7C(a1)						;
-;		move.w	#$EEE,$7E(a1)						;
+		jsr	(Pal_PrepFade_FromWhite).l					;
+;		lea	(Normal_palette).w,a1						;
+;		move.w	#$EEE,$42(a1)							;
+;		move.w	#$EEE,$44(a1)							;
+;		move.w	#$EEE,$4C(a1)							;
+;		move.w	#$EEE,$62(a1)							;
+;		move.w	#$EEE,$66(a1)							;
+;		move.w	#$EEE,$6E(a1)							;
+;		move.w	#$EEE,$70(a1)							;
+;		move.w	#$EEE,$7C(a1)							;
+;		move.w	#$EEE,$7E(a1)							;
 
 loc_2E474:
 		rts						; Liliam: cutscene skip - results
@@ -68522,7 +68556,7 @@ loc_2E592:
 ; ---------------------------------------------------------------------------
 
 loc_2E5B8:
-		move.b	#$C,(Game_mode).w
+		move.b	#GameMode_Level,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -68549,7 +68583,7 @@ loc_2E5E0:
 ; ---------------------------------------------------------------------------
 
 loc_2E5EC:
-		move.b	#$C,(Game_mode).w
+		move.b	#GameMode_Level,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -68799,7 +68833,7 @@ SSResults_SlowFade:
 		movea.l	(sp)+,a0
 		subq.b	#1,$2E(a0)
 		bne.s	.return
-		move.b	#$C,(Game_mode).w
+		move.b	#GameMode_Level,(Game_mode).w
 
 	.return:
 		rts
@@ -68995,11 +69029,11 @@ locret_2E9F4:
 
 loc_2E9F6:
 		; Liliam: removed S&K alone mode
-;		tst.b	(SK_special_stage_flag).w				; Liliam: bugfix - HPZ SS results palette screwery
-;		beq.s	loc_2EA10						;
-;		cmpi.w	#3,(Player_mode).w					;
-;		bne.s	loc_2EA10						;
-;		move.w	#make_art_tile($000,1,0),art_tile(a0)			;
+;		tst.b	(SK_special_stage_flag).w					; Liliam: bugfix - HPZ SS results palette screwery
+;		beq.s	loc_2EA10							;
+;		cmpi.w	#3,(Player_mode).w						;
+;		bne.s	loc_2EA10							;
+;		move.w	#make_art_tile($000,1,0),art_tile(a0)				;
 
 loc_2EA10:
 		jsr	sub_2EC80(pc)
@@ -69013,9 +69047,9 @@ loc_2EA1E:
 		tst.b	(SK_special_stage_flag).w
 		beq.s	loc_2EA4A
 		addi.b	#$1A,mapping_frame(a0)
-;		cmpi.w	#3,(Player_mode).w					; Liliam: bugfix - HPZ SS results palette screwery
-;		bne.s	loc_2EA4A						;
-;		addq.b	#5,mapping_frame(a0)					;
+;		cmpi.w	#3,(Player_mode).w						; Liliam: bugfix - HPZ SS results palette screwery
+;		bne.s	loc_2EA4A							;
+;		addq.b	#5,mapping_frame(a0)						;
 		bra.s	loc_2EA4A
 ; ---------------------------------------------------------------------------
 
@@ -69057,9 +69091,9 @@ loc_2EA7C:
 		tst.b	(SK_special_stage_flag).w
 		beq.s	loc_2EA4A
 		addi.b	#$1A,mapping_frame(a0)
-;		cmpi.w	#3,(Player_mode).w					; Liliam: bugfix - HPZ SS results palette screwery
-;		bne.s	loc_2EA4A						;
-;		addq.b	#5,mapping_frame(a0)					;
+;		cmpi.w	#3,(Player_mode).w						; Liliam: bugfix - HPZ SS results palette screwery
+;		bne.s	loc_2EA4A							;
+;		addq.b	#5,mapping_frame(a0)						;
 		bra.s	loc_2EA4A
 ; ---------------------------------------------------------------------------
 
@@ -69105,11 +69139,11 @@ loc_2EAF6:
 		add.b	d1,mapping_frame(a0)
 		move.w	#-$87,art_tile(a0)
 		; Liliam: removed S&K alone mode
-;		tst.b	(SK_special_stage_flag).w				; Liliam: bugfix - HPZ SS results palette screwery
-;		beq.w	loc_2EA4A						;
-;		cmpi.w	#3,(Player_mode).w					;
-;		bne.w	loc_2EA4A						;
-;		addi.w	#palette_line_1,art_tile(a0)				;
+;		tst.b	(SK_special_stage_flag).w					; Liliam: bugfix - HPZ SS results palette screwery
+;		beq.w	loc_2EA4A							;
+;		cmpi.w	#3,(Player_mode).w						;
+;		bne.w	loc_2EA4A							;
+;		addi.w	#palette_line_1,art_tile(a0)					;
 		bra.w	loc_2EA4A
 ; ---------------------------------------------------------------------------
 
@@ -71392,8 +71426,8 @@ loc_30EBA:
 		cmpi.w	#$40,$30(a0)
 		bne.s	loc_30F28
 		moveq	#signextendB(sfx_FanLatch),d0
-		cmpi.b	#$B,(Current_zone).w
-		bne.s	loc_30F02
+		cmpi.b	#$B,(Current_zone).w			; are we on DEZ?
+		bne.s	loc_30F02				; if not, branch
 		moveq	#signextendB(sfx_FanLatch),d0		; this check and sfx selection is not really necessary?
 
 loc_30F02:
@@ -71407,8 +71441,8 @@ loc_30F0A:
 		subq.w	#8,$30(a0)
 		bne.s	loc_30F28
 		moveq	#signextendB(sfx_FanLatch),d0
-		cmpi.b	#$B,(Current_zone).w
-		bne.s	loc_30F22
+		cmpi.b	#$B,(Current_zone).w			; are we on DEZ?
+		bne.s	loc_30F22				; if not, branch
 		moveq	#signextendB(sfx_FanLatch),d0		; this check and sfx selection is not really necessary?
 
 loc_30F22:
@@ -79493,13 +79527,13 @@ loc_36CEA:
 		lea	$34(a0),a2
 		lea	(Player_1).w,a1
 		lea	(Competition_current_lap).w,a3
-		lea	(_unkF74A).w,a4
+		lea	(Competition_lap_count_flag).w,a4
 		lea	(Timer).w,a5
 		lea	($FF7828).l,a6
 		bsr.w	sub_36DFC
 		lea	(Player_2).w,a1
 		lea	(Competition_current_lap_2P).w,a3
-		lea	(_unkF74B).w,a4
+		lea	(Competition_lap_count_flag_P2).w,a4
 		lea	(Timer_P2).w,a5
 		lea	($FF7840).l,a6
 		bsr.w	sub_36DFC
@@ -79694,7 +79728,7 @@ locret_36F58:
 
 sub_36F5A:
 		lea	($FF7828).l,a1
-		moveq	#$C-1,d0
+		moveq	#bytesToLcnt($30),d0
 
 loc_36F62:
 		clr.l	(a1)+
@@ -79986,10 +80020,10 @@ loc_372D0:
 loc_372EE:
 		subq.w	#1,(Events_bg+$16).w
 		bpl.s	locret_37306
-		move.b	#$40,(Game_mode).w
+		move.b	#GameMode_CompLevelSelect,(Game_mode).w
 		tst.b	(Competition_type).w
 		bpl.s	locret_37306
-		move.b	#$50,(Game_mode).w
+		move.b	#GameMode_TimeAttackRecords,(Game_mode).w
 
 locret_37306:
 		rts
@@ -80045,7 +80079,7 @@ loc_37378:
 ; ---------------------------------------------------------------------------
 
 loc_37392:
-		move.b	#$44,(Game_mode).w
+		move.b	#GameMode_CompResults,(Game_mode).w
 
 locret_37398:
 		rts
@@ -80194,7 +80228,7 @@ Map_2PNeonDisplay:
 ; ---------------------------------------------------------------------------
 
 loc_37C8E:
-		move.l	#$FF7000,mappings(a0)
+		move.l	#Map_2PTime_P1_RAM,mappings(a0)
 		move.w	#make_art_tile(ArtTile_2PTime,0,1),art_tile(a0)
 		move.w	#0,priority(a0)
 		move.b	#$40,width_pixels(a0)
@@ -80202,9 +80236,9 @@ loc_37C8E:
 		move.w	#$C8,x_pos(a0)
 		move.w	#$90,y_pos(a0)
 		bset	#3,render_flags(a0)
-		lea	(word_37E8E).l,a1
-		lea	($FF7000).l,a2
-		move.w	#bytesToWcnt($34),d0
+		lea	(Map_2PTime).l,a1
+		lea	(Map_2PTime_P1_RAM).l,a2
+		move.w	#bytesToWcnt(Map_2PTime_end-Map_2PTime),d0
 
 loc_37CD0:
 		move.w	(a1)+,(a2)+
@@ -80213,7 +80247,7 @@ loc_37CD0:
 
 loc_37CDC:
 		lea	(Score).w,a1
-		lea	($FF700A).l,a2
+		lea	(Map_2PTime_P1_RAM+$A).l,a2
 		lea	(Timer_minute).w,a3
 		moveq	#0,d1
 		move.b	(Competition_lap_count).w,d1
@@ -80230,7 +80264,7 @@ loc_37D00:
 ; ---------------------------------------------------------------------------
 
 loc_37D0C:
-		move.l	#$FF7080,mappings(a0)
+		move.l	#Map_2PTime_P2_RAM,mappings(a0)
 		move.w	#make_art_tile(ArtTile_2PTime,0,1),art_tile(a0)
 		move.w	#0,priority(a0)
 		move.b	#$40,width_pixels(a0)
@@ -80238,9 +80272,9 @@ loc_37D0C:
 		move.w	#$C8,x_pos(a0)
 		move.w	#$90,y_pos(a0)
 		bset	#4,render_flags(a0)
-		lea	(word_37E8E).l,a1
-		lea	($FF7080).l,a2
-		move.w	#bytesToWcnt($34),d0
+		lea	(Map_2PTime).l,a1
+		lea	(Map_2PTime_P2_RAM).l,a2
+		move.w	#bytesToWcnt(Map_2PTime_end-Map_2PTime),d0
 
 loc_37D4E:
 		move.w	(a1)+,(a2)+
@@ -80249,7 +80283,7 @@ loc_37D4E:
 
 loc_37D5A:
 		lea	(Score_P2).w,a1
-		lea	($FF708A).l,a2
+		lea	(Map_2PTime_P2_RAM+$A).l,a2
 		lea	(Timer_minute_P2).w,a3
 		moveq	#0,d1
 		move.b	(Competition_lap_count_2P).w,d1
@@ -80350,8 +80384,8 @@ byte_37E52:
 		dc.b    0,   1,   3,   5,   6,   8,  $A,  $B,  $D,  $F, $10, $12, $14, $15, $17, $19, $1A, $1C, $1E, $1F
 		dc.b  $21, $23, $24, $26, $28, $29, $2B, $2D, $2E, $30, $32, $33, $35, $37, $38, $3A, $3C, $3D, $3F, $41
 		dc.b  $42, $44, $46, $47, $49, $4B, $4C, $4E, $50, $51, $53, $55, $56, $58, $5A, $5B, $5D, $5F, $60, $62
-word_37E8E:
-		dc.w word_37E90-word_37E8E
+Map_2PTime:
+		dc.w word_37E90-Map_2PTime
 word_37E90:	dc.w 8
 		dc.b  $F8,  $D,   0,   0, $FF, $C0
 		dc.b  $F8,   5,   0,   8, $FF, $E8
@@ -80361,6 +80395,7 @@ word_37E90:	dc.w 8
 		dc.b  $F0,   0,   0, $2F,   0, $14
 		dc.b  $F8,   5,   0,   8,   0, $1C
 		dc.b  $F8,   5,   0,   8,   0, $28
+Map_2PTime_end
 ; ---------------------------------------------------------------------------
 
 loc_37EC2:
@@ -83678,7 +83713,7 @@ loc_3A5DA:
 		move.w	#$C,d2
 		move.w	#-$D,d3
 		move.w	(sp)+,d4
-		jsr	SolidObjectFull_Offset
+		jsr	(SolidObjectFull_Offset).l
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	loc_3A616
 		move.b	#1,anim_frame_timer(a0)
@@ -84561,8 +84596,8 @@ loc_3B462:
 		move.w	#8,d2
 		move.w	#-9,d3
 		move.w	x_pos(a0),d4
-		jsr	SolidObjectFull_Offset
-		jmp	Sprite_CheckDeleteTouch3
+		jsr	(SolidObjectFull_Offset).l
+		jmp	(Sprite_CheckDeleteTouch3).l
 ; ---------------------------------------------------------------------------
 
 loc_3B482:
@@ -88816,8 +88851,8 @@ Map_MHZStickyVine:
 
 Obj_MHZSwingBarHorizontal:
 		move.l	#Map_MHZSwingBarHorizontal,mappings(a0)
-		move.w	#make_art_tile(ArtTile_MHZMisc+$B2,0,0),$A(a0)	; Liliam: Encore mode - FBZ level order
-;		move.w	#make_art_tile(ArtTile_MHZMisc+$AC,0,0),$A(a0)	;
+		move.w	#make_art_tile(ArtTile_MHZMisc+$B2,0,0),art_tile(a0)		; Liliam: Encore mode - FBZ level order
+;		move.w	#make_art_tile(ArtTile_MHZMisc+$AC,0,0),art_tile(a0)		;
 		ori.b	#4,render_flags(a0)
 		move.w	#$280,priority(a0)
 		move.b	#$20,width_pixels(a0)
@@ -89066,8 +89101,8 @@ Map_MHZSwingBarHorizontal:
 
 Obj_MHZSwingBarVertical:
 		move.l	#Map_MHZSwingBarVertical,mappings(a0)
-		move.w	#make_art_tile(ArtTile_MHZMisc+$D2,0,0),$A(a0)	; Liliam: Encore mode - FBZ level order
-;		move.w	#make_art_tile(ArtTile_MHZMisc+$AC,0,0),$A(a0)	;
+		move.w	#make_art_tile(ArtTile_MHZMisc+$D2,0,0),art_tile(a0)		; Liliam: Encore mode - FBZ level order
+;		move.w	#make_art_tile(ArtTile_MHZMisc+$AC,0,0),art_tile(a0)		;
 		ori.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
 		move.b	#4,width_pixels(a0)
@@ -89363,7 +89398,7 @@ Map_MHZMushroomPlatform:
 		include "Levels/MHZ/Misc Object Data/Map - Mushroom Platform.asm"
 ; ---------------------------------------------------------------------------
 
-Obj_SOZMushroomParachute:						; Liliam: Encore mode - FBZ level order
+Obj_SOZMushroomParachute:								; Liliam: Encore mode - FBZ level order
 		lea	(Player_1).w,a1
 		move.w	#$63F,y_pos(a0)
 		move.b	#1,$30(a0)
@@ -89379,7 +89414,7 @@ Obj_SOZMushroomParachute:						; Liliam: Encore mode - FBZ level order
 	.loadPalette:
 		lea	Pal_SOZMushroomParachute(pc),a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d0
 
 	.loop:
 		move.l	(a1)+,(a2)+
@@ -89394,14 +89429,14 @@ Obj_SOZMushroomParachute:						; Liliam: Encore mode - FBZ level order
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_SOZMushroomParachute_AttachPlayer:					; Liliam: Encore mode - FBZ level order
+Obj_SOZMushroomParachute_AttachPlayer:							; Liliam: Encore mode - FBZ level order
 		ori.b	#$80,render_flags(a1)
 		move.b	#3,object_control(a1)
 		move.w	a0,interact(a1)
 		bra.w	loc_3F6A6
 ; ---------------------------------------------------------------------------
 
-Obj_SOZMushroomParachute_Main:						; Liliam: Encore mode - FBZ level order
+Obj_SOZMushroomParachute_Main:								; Liliam: Encore mode - FBZ level order
 		bsr.w	loc_3F51C
 		cmpi.l	#loc_3F572,(a0)
 		bne.s	Obj_SOZMushroomParachute_Return
@@ -89411,7 +89446,7 @@ Obj_SOZMushroomParachute_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_SOZMushroomParachute_CheckDelete:					; Liliam: Encore mode - FBZ level order
+Obj_SOZMushroomParachute_CheckDelete:							; Liliam: Encore mode - FBZ level order
 		bsr.w	loc_3F572
 		tst.l	(a0)
 		bne.s	Obj_SOZMushroomParachute_Return
@@ -89763,9 +89798,9 @@ locret_3F850:
 Map_MHZMushroomParachute:
 		; Liliam: Encore mode - FBZ level order
 		include "Levels/MHZ/Misc Object Data/Map - Mushroom Parachute.asm"
-Map_SOZMushroomParachute:						; Liliam: Encore mode - FBZ level order
+Map_SOZMushroomParachute:								; Liliam: Encore mode - FBZ level order
 		include "Levels/SOZ/Misc Object Data/Map - Mushroom Parachute.asm"
-Pal_SOZMushroomParachute:						; Liliam: Encore mode - FBZ level order
+Pal_SOZMushroomParachute:								; Liliam: Encore mode - FBZ level order
 		binclude "Levels/SOZ/Palettes/Mushroom Parachute.bin"
 		even
 ; ---------------------------------------------------------------------------
@@ -89810,8 +89845,8 @@ loc_3F8CE:
 		move.w	y_pos(a1),$30(a1)
 		subi.w	#$14,y_pos(a1)
 		move.l	mappings(a0),mappings(a1)
-		move.w	#make_art_tile(ArtTile_MHZMisc+$9A,1,0),$A(a1)	; Liliam: Encore mode - FBZ level order
-;		move.w	#make_art_tile(ArtTile_MHZMisc+$D9,1,0),$A(a1)	;
+		move.w	#make_art_tile(ArtTile_MHZMisc+$9A,1,0),art_tile(a1)		; Liliam: Encore mode - FBZ level order
+;		move.w	#make_art_tile(ArtTile_MHZMisc+$D9,1,0),art_tile(a1)		;
 		ori.b	#4,render_flags(a1)
 		move.w	priority(a0),priority(a1)
 		move.b	#$10,width_pixels(a1)
@@ -92902,7 +92937,7 @@ Map_SOZSolidSprites:
 
 Obj_LevelIntro_PlayerFallIntoGround:
 		move.l	#loc_42028,(a0)
-		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w		; Liliam: Encore mode - FBZ level order
+		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w				; Liliam: Encore mode - FBZ level order
 		move.b	#1,(Ctrl_1_locked).w
 		move.b	#1,(Ctrl_2_locked).w
 		moveq	#0,d0
@@ -106490,7 +106525,7 @@ loc_4C742:
 
 loc_4C766:
 		dbf	d1,loc_4C742
-		move.l	#$FF7C00,d1
+		move.l	#(Chunk_table+$7C00)&$FFFFFF,d1
 		move.w	#$100,d3
 		jsr	(Add_To_DMA_Queue).l
 		rts
@@ -106695,7 +106730,7 @@ byte_4C8DC:
 
 sub_4C8E4:
 		clr.w	(Kos_decomp_queue_count).w
-		clearRAM	Kos_decomp_stored_registers,$6C
+		clearRAM	Kos_decomp_stored_registers,(Kos_decomp_module_end-Kos_decomp_stored_registers)
 		jsr	(Clear_Nem_Queue).l
 		move	#$2700,sr
 		lea	(VDP_control_port).l,a6
@@ -106710,10 +106745,10 @@ sub_4C8E4:
 		clr.b	(Water_flag).w
 		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
 		jsr	(Clear_DisplayData).l
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Player_1,(Kos_decomp_buffer-Player_1)
 		jsr	(Init_SpriteTable).l
-		clearRAM	Normal_palette,$100
+		clearRAM	Normal_palette,(Stack_contents-Normal_palette)
 		clr.w	(Current_zone_and_act).w
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -106723,7 +106758,7 @@ sub_4C8E4:
 ; ---------------------------------------------------------------------------
 
 BlueSpheres:
-		move.b	#$2C,(Game_mode).w			; Liliam: blue sphere - load saved level on startup
+		move.b	#GameMode_BlueSpheresTitle,(Game_mode).w; Liliam: blue sphere - load saved level on startup
 		andi.b	#$7F,(Blue_spheres_menu_flag).w		;
 		bne.s	BlueSpheresTitle			;
 		move.b	#1,(Blue_spheres_menu_flag).w		;
@@ -106806,14 +106841,14 @@ BlueSpheresTitle:
 		jsr	(Pal_FadeFromBlack).l
 
 loc_4CAE8:
-		move.b	#$1A,(V_int_routine).w
+		move.b	#VInt_ID_1A,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		jsr	(Wait_VSync).l
 		bsr.w	sub_4CC96
 		jsr	(Process_Sprites).l
 		jsr	(Render_Sprites).l
 		jsr	(Process_Kos_Module_Queue).l
-		cmpi.b	#$2C,(Game_mode).w
+		cmpi.b	#GameMode_BlueSpheresTitle,(Game_mode).w
 		beq.s	loc_4CAE8
 		rts
 
@@ -106829,8 +106864,8 @@ sub_4CB1A:
 		lea	(Pal_SpheresTitle_1).l,a1
 
 loc_4CB2C:
-		moveq	#bytesToWcnt($60),d0						; Liliam: blue sphere - add extra characters
-;		moveq	#bytesToWcnt($80),d0						;
+		moveq	#bytesToWcnt(Normal_palette_line_4-Normal_palette),d0		; Liliam: blue sphere - add extra characters
+;		moveq	#bytesToWcnt(Normal_palette_end-Normal_palette),d0		;
 
 loc_4CB2E:
 		move.w	(a1)+,(a2)+
@@ -106957,7 +106992,7 @@ loc_4D000:
 		move.b	#3,(Life_count).w
 		move.b	#0,(SK_special_stage_flag).w
 		move.b	#0,(Current_special_stage).w
-		move.b	#$34,(Game_mode).w
+		move.b	#GameMode_SpecialStage,(Game_mode).w
 		moveq	#signextendB(sfx_EnterSS),d0		; Liliam: special stage - play entry SFX
 		jmp	(Play_SFX).l				;
 ; ---------------------------------------------------------------------------
@@ -107635,7 +107670,7 @@ loc_4D602:
 ; ---------------------------------------------------------------------------
 
 BlueSpheres_ReturnToTitle:
-		move.b	#4,(Game_mode).w			; Liliam: title screen - quick return by pressing B
+		move.b	#GameMode_TitleScreen,(Game_mode).w	; Liliam: title screen - quick return by pressing B
 
 loc_4D60A:
 		jmp	(Draw_Sprite).l
@@ -107915,7 +107950,7 @@ BlueSpheresResults:
 		bsr.w	sub_4C8E4
 		lea	(Pal_SphereResults).l,a1
 		lea	(Target_palette).w,a2
-		moveq	#bytesToWcnt($80),d0
+		moveq	#bytesToWcnt(Target_palette_end-Target_palette),d0
 
 loc_4DA96:
 		move.w	(a1)+,(a2)+
@@ -107966,13 +108001,13 @@ loc_4DA96:
 		jsr	(Pal_FadeFromWhite).l
 
 loc_4DB9E:
-		move.b	#$1A,(V_int_routine).w
+		move.b	#VInt_ID_1A,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		jsr	(Wait_VSync).l
 		jsr	(Process_Sprites).l
 		jsr	(Render_Sprites).l
 		jsr	(Process_Kos_Module_Queue).l
-		cmpi.b	#$30,(Game_mode).w
+		cmpi.b	#GameMode_BlueSpheresResults,(Game_mode).w
 		beq.s	loc_4DB9E
 		tst.w	(Special_stage_rings_left).w
 		beq.s	loc_4DC1A
@@ -108009,24 +108044,24 @@ loc_4DC1A:
 		jsr	(Play_Music).l
 		jsr	(Pal_FadeToBlack).l
 		bsr.w	sub_4C8E4
-		clearRAM _unkFA80,$80
+		clearRAM _unkFA80,(DMA_queue-_unkFA80)
 		lea	(Pal_SonicTails).l,a1
 		lea	(Target_palette).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d6
 
 loc_4DC48:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_4DC48
 		lea	(Pal_Knuckles).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_4DC5A:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_4DC5A
 		lea	(Pal_SphereResults+$60).l,a1
 		lea	(Target_palette_line_3).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_3),d6
 
 loc_4DC6C:
 		move.l	(a1)+,(a2)+
@@ -108034,7 +108069,7 @@ loc_4DC6C:
 		lea	(Pal_EndingS3KLogo).l,a1						; Liliam: blue sphere - use S3 branding
 ;		lea	(Pal_EndingSKLogo).l,a1							;
 		lea	(Target_palette_line_4).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_4),d6
 
 loc_4DC7E:
 		move.l	(a1)+,(a2)+
@@ -108082,7 +108117,7 @@ loc_4DC7E:
 		jsr	(Pal_FadeFromBlack).l
 
 loc_4DD5E:
-		move.b	#$1A,(V_int_routine).w
+		move.b	#VInt_ID_1A,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		jsr	(Wait_VSync).l
 		jsr	(Process_Sprites).l
@@ -108166,7 +108201,7 @@ loc_4DEA8:
 		dbf	d5,loc_4DEA8
 		move.w	#$10,(V_scroll_value_BG).w
 		lea	(H_scroll_buffer+2).w,a1
-		move.w	#$E0-1,d1
+		move.w	#224-1,d1
 
 loc_4DED0:
 		subi.w	#$10,(a1)
@@ -108220,7 +108255,7 @@ loc_4DF3E:
 		beq.s	locret_4DF50
 		move.b	(Ctrl_1_pressed).w,d0
 		beq.s	locret_4DF50
-		move.b	#$2C,(Game_mode).w
+		move.b	#GameMode_BlueSpheresTitle,(Game_mode).w
 
 locret_4DF50:
 		rts
@@ -108237,7 +108272,7 @@ loc_4DF5E:
 		beq.s	loc_4DF6A
 
 loc_4DF64:
-		move.b	#$2C,(Game_mode).w
+		move.b	#GameMode_BlueSpheresTitle,(Game_mode).w
 
 loc_4DF6A:
 		move.b	(V_int_run_count+3).w,d0
@@ -108280,7 +108315,7 @@ Obj_SphereResults_4DF86:
 ;		move.b	#$24,anim(a0)							;
 ;		lea	(Pal_Knuckles).l,a1						;
 ;		lea	(Target_palette).w,a2						;
-;		moveq	#bytesToLcnt($20),d6						;
+;		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d6		;
 
 ;loc_4DFDA:
 ;		move.l	(a1)+,(a2)+							;
@@ -109974,7 +110009,7 @@ PlainDeformation:
 		swap	d0
 		move.w	(Camera_X_pos_BG_copy).w,d0
 		neg.w	d0
-		moveq	#bytesToXcnt($380,$10),d1
+		moveq	#bytesToXcnt(H_scroll_buffer_end-H_scroll_buffer,$10),d1
 
 loc_4F086:
 		move.l	d0,(a1)+
@@ -109996,7 +110031,7 @@ PlainDeformation_Flipped:
 		swap	d0
 		move.w	(Camera_X_pos_copy).w,d0
 		neg.w	d0
-		moveq	#$38-1,d1
+		moveq	#bytesToXcnt(H_scroll_buffer_end-H_scroll_buffer,$10),d1
 
 loc_4F0A8:
 		move.l	d0,(a1)+
@@ -110663,7 +110698,7 @@ LBZ_WaterWaveArray:
 
 Clear_Switches:
 		lea	(Level_trigger_array).w,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Sprite_table-Level_trigger_array),d0
 
 loc_4F8FE:
 		clr.l	(a1)+
@@ -111228,7 +111263,6 @@ loc_4F948:
 
 loc_4F952:
 		lea	AIZ_TreeRevealArray(pc),a6		; Liliam: reinsert S3 data
-;		lea	(AIZ_TreeRevealArray).l,a6		;
 		btst	#0,d0
 		bne.s	loc_4F962
 		lea	$10(a6),a6
@@ -111516,7 +111550,6 @@ loc_4FAFA:
 		moveq	#0,d1					; Liliam: AIZ intro - allow start from other levels
 		jsr	Refresh_PlaneFull(pc)
 		lea	AIZ1_IntroDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(AIZ1_IntroDeformArray).l,a4		;
 		lea	(HScroll_table+$028).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -111529,7 +111562,6 @@ loc_4FB1C:
 		clr.l	(HScroll_table).w
 		move.w	d2,(HScroll_table+$006).w
 		lea	AIZ1_BGDrawArray(pc),a4			; Liliam: reinsert S3 data
-;		lea	(AIZ1_BGDrawArray).l,a4			;
 		lea	(HScroll_table).w,a5
 		jsr	Refresh_PlaneTileDeform(pc)
 		jmp	AIZ1_ApplyDeformWater(pc)		; Liliam: reinsert S3 screen events
@@ -111578,13 +111610,11 @@ loc_4FBA4:
 		jsr	AIZ1_IntroDeform(pc)			; Liliam: reinsert S3 screen events
 ;		jsr	(AIZ1_IntroDeform).l			;
 		lea	AIZ1_IntroDrawArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(AIZ1_IntroDrawArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		moveq	#$20,d6
 		moveq	#$A,d5
 		jsr	Draw_BG(pc)
 		lea	AIZ1_IntroDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(AIZ1_IntroDeformArray).l,a4		;
 		lea	(HScroll_table+$028).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -111595,7 +111625,6 @@ AIZ1BGE_NormalRefresh:
 
 loc_4FBD0:
 		lea	AIZ1_BGDrawArray(pc),a4			; Liliam: reinsert S3 data
-;		lea	(AIZ1_BGDrawArray).l,a4			;
 		lea	(HScroll_table-$04).w,a5
 		move.w	(Camera_Y_pos_BG_copy).w,d1
 		jsr	Draw_PlaneVertBottomUpComplex(pc)
@@ -111612,7 +111641,6 @@ AIZ1BGE_Normal:
 
 loc_4FBF6:
 		lea	AIZ1_BGDrawArray(pc),a4			; Liliam: reinsert S3 data
-;		lea	(AIZ1_BGDrawArray).l,a4			;
 		lea	(HScroll_table).w,a5
 		moveq	#$20,d6
 		moveq	#2,d5
@@ -111742,7 +111770,7 @@ loc_4FD62:
 		jsr	(Load_Level).l
 		jsr	(LoadSolids).l
 		jsr	(CheckLevelForWater).l
-		moveq	#$B,d0
+		moveq	#PalID_AIZFire,d0
 		jsr	(LoadPalette_Immediate).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		st	(Anim_Counters+3).w			; Liliam: QOL - animate BG in AIZ transition area
@@ -112271,13 +112299,13 @@ AIZ2SE_BGShipDrawArray2:
 ; ---------------------------------------------------------------------------
 
 AIZ2_BackgroundInit:
-		tst.b	(Last_star_post_hit).w					; Liliam: start from actual act 2 start
-		bne.s	loc_5007A						;
-		tst.b	(Alternate_start_flag).w				;
-		bne.s	loc_5007A						;
-		jsr	(AllocateObject).l					;
-		bne.s	loc_5007A						;
-		move.l	#Obj_LevelIntroAIZ2,(a1)				;
+		tst.b	(Last_star_post_hit).w						; Liliam: start from actual act 2 start
+		bne.s	loc_5007A							;
+		tst.b	(Alternate_start_flag).w					;
+		bne.s	loc_5007A							;
+		jsr	(AllocateObject).l						;
+		bne.s	loc_5007A							;
+		move.l	#Obj_LevelIntroAIZ2,(a1)					;
 
 loc_5007A:
 		move.w	(Camera_X_pos_copy).w,(Events_fg_0).w
@@ -112377,7 +112405,7 @@ loc_50160:
 		cmpi.w	#$310,(Camera_Y_pos_BG_copy).w
 		blo.s	loc_501D6			; If fire hasn't subsided, branch
 		movem.l	d7-a0/a2-a3,-(sp)
-;		moveq	#$C,d0					; Liliam: bugfix - stop double-loading AIZ2 PLCs
+;		moveq	#PLCID_0C,d0				; Liliam: bugfix - stop double-loading AIZ2 PLCs
 ;		jsr	(Load_PLC).l				;
 		jsr	(LoadEnemyArt).l
 		movem.l	(sp)+,d7-a0/a2-a3
@@ -112412,7 +112440,7 @@ loc_501D6:
 		lea	(H_scroll_buffer+2).w,a1
 		move.w	(Camera_X_pos_BG_copy).w,d0	; Cancel out background deformation since we're still in the open field
 		neg.w	d0
-		moveq	#bytesToXcnt($1C0,8),d1
+		moveq	#bytesToLcnt(224),d1
 
 loc_501E8:
 		move.w	d0,(a1)
@@ -112739,8 +112767,7 @@ loc_50364:
 loc_5037E:
 		lea	(Normal_palette_line_2).w,a1
 		lea	Pal_AIZBattleship(pc),a5		; Liliam: reinsert S3 data
-;		lea	(Pal_AIZBattleship).l,a5		;
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d0
 
 loc_5038A:
 		move.l	(a5)+,(a1)+
@@ -112776,7 +112803,6 @@ loc_503D2:
 		asr.w	#2,d1			; Continue bobbing up and down
 		andi.w	#$F,d1
 		lea	AIZBattleShip_BobbingMotion(pc),a1	; Liliam: reinsert S3 data
-;		lea	(AIZBattleShip_BobbingMotion).l,a1	;
 		move.b	(a1,d1.w),d1
 		add.w	(_unkEEA2).w,d1
 		move.w	d1,(_unkEE9C).w	; Get the bobbing motion delta, apply it to the second camera Y
@@ -112823,7 +112849,6 @@ Obj_BattleshipPropellerMain:
 
 loc_50466:
 		lea	Ani_AIZShipPropeller(pc),a1		; Liliam: reinsert S3 data
-;		lea	(Ani_AIZShipPropeller).l,a1		;
 		jsr	(Animate_Sprite).l
 		jsr	Translate_Camera2ObjPosition(pc)
 		jmp	(Draw_Sprite).l
@@ -112891,7 +112916,6 @@ AIZShipBomb_Drop:
 		jsr	(AllocateObjectAfterCurrent).l
 		bne.s	loc_50572
 		lea	AIZBombExplodeDat(pc),a2		; Liliam: reinsert S3 data
-;		lea	(AIZBombExplodeDat).l,a2		;
 		moveq	#8-1,d1
 
 loc_50542:
@@ -112958,7 +112982,6 @@ Obj_AIZBombExplosionAnim:
 
 loc_505E4:
 		lea	Ani_AIZ2BombExplode(pc),a1		; Liliam: reinsert S3 data
-;		lea	(Ani_AIZ2BombExplode).l,a1		;
 		jsr	(Animate_SpriteIrregularDelay).l
 		tst.b	routine(a0)
 		beq.s	loc_505FC
@@ -113052,7 +113075,6 @@ Obj_AIZ2BossSmall:
 		clr.w	$2E(a0)
 		lea	(Normal_palette_line_2+$2).w,a1
 		lea	Pal_AIZBossSmall(pc),a5			; Liliam: reinsert S3 data
-;		lea	(Pal_AIZBossSmall).l,a5			;
 		moveq	#bytesToLcnt($1C),d0
 
 loc_506FA:
@@ -113257,7 +113279,6 @@ loc_50BAC:
 
 loc_50BB0:
 		lea	HCZ1_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(HCZ1_BGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -113287,9 +113308,9 @@ HCZ1BGE_Normal:
 		lea	(HCZ2_8x8_Secondary_KosM).l,a1	; Load secondary HCZ2 art, blocks, and chunks so as to not compromise current position
 		move.w	#tiles_to_bytes($11B),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$10,d0
+		moveq	#PLCID_10,d0
 		jsr	(Load_PLC).l
-		moveq	#$11,d0
+		moveq	#PLCID_11,d0
 		jsr	(Load_PLC).l					; load HCZ 2 PLCs
 		movem.l	(sp)+,d7-a0/a2-a3
 		st	(Events_bg+$16).w
@@ -113303,7 +113324,6 @@ loc_50C2A:
 		moveq	#$20,d6
 		jsr	Draw_TileRow(pc)
 		lea	HCZ1_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(HCZ1_BGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -113328,7 +113348,7 @@ HCZ1BGE_DoTransition:
 		move.w	d0,(Water_level).w
 		move.w	d0,(Mean_water_level).w
 		move.w	d0,(Target_water_level).w	; Set the water up
-		moveq	#$D,d0
+		moveq	#PalID_HCZ2,d0
 		jsr	(LoadPalette_Immediate).l	; Load HCZ2 palette
 		movem.l	(sp)+,d7-a0/a2-a3
 		move.w	#$3600,d0
@@ -113351,7 +113371,6 @@ loc_50CDC:
 		moveq	#$20,d6
 		jsr	Draw_TileRow(pc)
 		lea	HCZ1_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(HCZ1_BGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jmp	ApplyDeformation(pc)
 
@@ -113563,19 +113582,19 @@ HCZ2_ScreenEvent:
 ; ---------------------------------------------------------------------------
 
 HCZ2_BackgroundInit:
-		tst.b	(Last_star_post_hit).w					; Liliam: start from actual act 2 start
-		bne.s	loc_50E9C						;
-		jsr	(AllocateObject).l					;
-		bne.s	loc_50EAC						;
-		move.l	#Obj_LevelIntroHCZ2,(a1)				;
-		move.w	#$3A,$2E(a1)						;
-		move.w	#$80,(Camera_max_X_pos).w				;
-		move.w	#$6A0,d0						;
-		move.w	d0,(Water_level).w					;
-		move.w	d0,(Mean_water_level).w					;
-		move.w	d0,(Target_water_level).w				;
-		st	(_unkFAA2).w						;
-		bra.s	loc_50EAC						;
+		tst.b	(Last_star_post_hit).w						; Liliam: start from actual act 2 start
+		bne.s	loc_50E9C							;
+		jsr	(AllocateObject).l						;
+		bne.s	loc_50EAC							;
+		move.l	#Obj_LevelIntroHCZ2,(a1)					;
+		move.w	#$3A,$2E(a1)							;
+		move.w	#$80,(Camera_max_X_pos).w					;
+		move.w	#$6A0,d0							;
+		move.w	d0,(Water_level).w						;
+		move.w	d0,(Mean_water_level).w						;
+		move.w	d0,(Target_water_level).w					;
+		st	(_unkFAA2).w							;
+		bra.s	loc_50EAC							;
 ; ---------------------------------------------------------------------------
 
 loc_50E9C:
@@ -113604,7 +113623,6 @@ loc_50ED0:
 		moveq	#0,d1
 		jsr	Refresh_PlaneFull(pc)
 		lea	HCZ2_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(HCZ2_BGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -113708,7 +113726,6 @@ loc_50FCE:
 		moveq	#$20,d6
 		jsr	Draw_TileRow(pc)
 		lea	HCZ2_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(HCZ2_BGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jsr	ApplyDeformation(pc)
 		jmp	ShakeScreen_Setup(pc)
@@ -113781,7 +113798,6 @@ HCZ2_Deform:
 		asr.l	#3,d1
 		lea	(HScroll_table).w,a1
 		lea	HCZ2_BGDeformIndex(pc),a5		; Liliam: reinsert S3 data
-;		lea	(HCZ2_BGDeformIndex).l,a5		;
 		moveq	#0,d2
 
 loc_5109C:
@@ -113875,7 +113891,6 @@ MGZ1_BackgroundInit:
 		moveq	#0,d1
 		jsr	Refresh_PlaneFull(pc)
 		lea	MGZ1_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(MGZ1_BGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -113905,7 +113920,7 @@ MGZ1BGE_Normal:
 		lea	(MGZ2_8x8_Secondary_KosM).l,a1
 		move.w	#tiles_to_bytes($252),d2
 		jsr	(Queue_Kos_Module).l		; Queue art, blocks and chunks for act 2
-		moveq	#$14,d0
+		moveq	#PLCID_14,d0
 		jsr	(Load_PLC).l					; Load act 2 PLCs
 		movem.l	(sp)+,d7-a0/a2-a3
 		addq.w	#4,(Events_routine_bg).w
@@ -113914,7 +113929,6 @@ loc_511B0:
 		jsr	MGZ1_Deform(pc)				; Liliam: reinsert S3 screen events
 ;		jsr	(MGZ1_Deform).l				;
 		lea	MGZ1_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(MGZ1_BGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jsr	ApplyDeformation(pc)
 		jmp	ShakeScreen_Setup(pc)
@@ -113933,7 +113947,7 @@ MGZ1BGE_Transition:
 		movem.l	d7-a0/a2-a3,-(sp)
 		jsr	(Load_Level).l
 		jsr	(LoadSolids).l
-		moveq	#$F,d0
+		moveq	#PalID_MGZ2,d0
 		jsr	(LoadPalette_Immediate).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		move.w	#$2E00,d0
@@ -113964,7 +113978,6 @@ loc_51268:
 		jsr	MGZ1_Deform(pc)				; Liliam: reinsert S3 screen events
 ;		jsr	(MGZ1_Deform).l				;
 		lea	MGZ1_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(MGZ1_BGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jmp	ApplyDeformation(pc)
 
@@ -114088,7 +114101,6 @@ MGZ2SE_Collapse:
 
 loc_5131A:
 		lea	MGZ2_FGVScrollArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(MGZ2_FGVScrollArray).l,a4		;
 		lea	(HScroll_table+$100).w,a5
 		moveq	#$F,d6
 		moveq	#$A,d5
@@ -114181,7 +114193,6 @@ loc_5140C:
 		lea	$28(a1),a4
 		lea	$14(a4),a5
 		lea	MGZ2_CollapseScrollDelay(pc),a6		; Liliam: reinsert S3 data
-;		lea	(MGZ2_CollapseScrollDelay).l,a6		;
 		move.w	(Events_bg+$06).w,d0
 		addq.w	#1,(Events_bg+$06).w
 		moveq	#$A,d1
@@ -114299,7 +114310,6 @@ MGZ2_QuakeEvent_Index:
 MGZ2_QuakeEventCheck:
 		lea	(Events_bg+$12).w,a5		; EEE4-EEE6 are flags to determine whether earthquake event has already completed. There are three
 		lea	MGZ2_QuakeEventArray(pc),a1		; Liliam: reinsert S3 data
-;		lea	(MGZ2_QuakeEventArray).l,a1		;
 		moveq	#4,d2
 		moveq	#2,d3
 
@@ -114494,7 +114504,6 @@ MGZ2_ChunkEventCheck:
 		move.w	(Player_1+x_pos).w,d0
 		move.w	(Player_1+y_pos).w,d1
 		lea	MGZ2_ChunkEventArray(pc),a1		; Liliam: reinsert S3 data
-;		lea	(MGZ2_ChunkEventArray).l,a1		;
 		moveq	#4,d2
 		moveq	#3-1,d3
 
@@ -114562,7 +114571,6 @@ loc_51762:
 		bhs.s	locret_517C2
 		move.w	(Events_bg+$0C).w,d0
 		lea	MGZ2_ScreenRedrawArray(pc),a1		; Liliam: reinsert S3 data
-;		lea	(MGZ2_ScreenRedrawArray).l,a1		;
 		add.w	(a1,d2.w),d0		; Calculate the Y position
 		move.w	2(a1,d2.w),d2		; And the number of lines to write
 
@@ -114604,7 +114612,6 @@ locret_517D4:
 
 MGZ2_ModifyChunk:
 		lea	MGZ2_ChunkReplaceArray(pc),a1		; Liliam: reinsert S3 data
-;		lea	(MGZ2_ChunkReplaceArray).l,a1		;
 		lea	($FF5880).l,a5
 		bsr.s	sub_517EA
 		lea	($FF7500).l,a5
@@ -114766,11 +114773,9 @@ loc_518CA:
 		clr.l	(HScroll_table).w
 		move.w	d2,(HScroll_table+$006).w
 		lea	MGZ2_BGDrawArray(pc),a4			; Liliam: reinsert S3 data
-;		lea	(MGZ2_BGDrawArray).l,a4			;
 		lea	(HScroll_table).w,a5
 		jsr	Refresh_PlaneTileDeform(pc)
 		lea	MGZ2_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(MGZ2_BGDeformArray).l,a4		;
 		lea	(HScroll_table+$008).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -114803,17 +114808,14 @@ MGZ2BGE_Normal:
 
 loc_51926:
 		lea	MGZ2_BGDrawArray(pc),a4			; Liliam: reinsert S3 data
-;		lea	(MGZ2_BGDrawArray).l,a4			;
 		lea	(HScroll_table).w,a5
 		moveq	#$20,d6
 		moveq	#2,d5
 		jsr	Draw_BG(pc)
 		lea	MGZ2_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(MGZ2_BGDeformArray).l,a4		;
 		lea	(HScroll_table+$008).w,a5
 		jsr	ApplyDeformation(pc)
 		lea	MGZ2_FGVScrollArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(MGZ2_FGVScrollArray).l,a4		;
 		lea	(HScroll_table+$126).w,a5
 		jsr	Apply_FGVScroll(pc)
 		jsr	Get_BGActualEffectiveDiff(pc)
@@ -114846,7 +114848,6 @@ MGZ2BGE_Refresh:
 
 loc_51994:
 		lea	MGZ2_BGDrawArray(pc),a4			; Liliam: reinsert S3 data
-;		lea	(MGZ2_BGDrawArray).l,a4			;
 		lea	(HScroll_table-$04).w,a5
 		move.w	(Camera_Y_pos_BG_copy).w,d1
 		jsr	Draw_PlaneVertBottomUpComplex(pc)
@@ -115502,9 +115503,9 @@ CNZ1BGE_DoTransition:
 		beq.w	loc_51F28				; Don't do anything until signpost lands
 		clr.w	(Events_fg_5).w
 		movem.l	d7-a0/a2-a3,-(sp)
-		moveq	#$18,d0
+		moveq	#PLCID_18,d0
 		jsr	(Load_PLC).l
-		moveq	#$19,d0
+		moveq	#PLCID_19,d0
 		jsr	(Load_PLC).l				; Load CNZ 2 PLCs
 		move.w	#$301,(Current_zone_and_act).w		; Change to act 2
 		clr.b	(Dynamic_resize_routine).w
@@ -115522,7 +115523,7 @@ CNZ1BGE_DoTransition:
 		move.w	#VDP_Option0|VDPReg0_EnableHInt,(VDP_control_port).l	; Turn HInt on for water only if not playing as Knuckles
 
 loc_51EC0:
-		moveq	#$11,d0
+		moveq	#PalID_CNZ2,d0
 		jsr	(LoadPalette_Immediate).l		; Load CNZ palette
 		movem.l	(sp)+,d7-a0/a2-a3
 		bclr	#7,(Disable_wall_grab).w		; Wall gliding is possible again
@@ -115788,17 +115789,17 @@ CNZ2_ScreenInit:
 CNZ2_ScreenEvent:
 		move.w	(Screen_shake_offset).w,d0
 		add.w	d0,(Camera_Y_pos_copy).w
-;		cmpi.w	#$4600,(Player_1+x_pos).w			; Liliam: Encore mode - FBZ level order
-;		bhs.s	loc_52138					;
-;		moveq	#0,d0						;
-;		cmpi.w	#$940,(Player_1+x_pos).w			;
-;		bhs.s	loc_5212E					;
-;		move.w	#$580,d0					;
+;		cmpi.w	#$4600,(Player_1+x_pos).w					; Liliam: Encore mode - FBZ level order
+;		bhs.s	loc_52138							;
+;		moveq	#0,d0								;
+;		cmpi.w	#$940,(Player_1+x_pos).w					;
+;		bhs.s	loc_5212E							;
+;		move.w	#$580,d0							;
 
 ;loc_5212E:
-;		cmp.w	(Camera_min_Y_pos).w,d0				;
-;		beq.s	loc_52138					;
-;		move.w	d0,(Camera_min_Y_pos).w				;
+;		cmp.w	(Camera_min_Y_pos).w,d0						;
+;		beq.s	loc_52138							;
+;		move.w	d0,(Camera_min_Y_pos).w						;
 
 ;loc_52138:
 		tst.w	(Events_bg+$06).w
@@ -116763,7 +116764,7 @@ FBZ1BGE_Normal:
 		beq.s	loc_529EE
 		clr.w	(Events_fg_5).w		; Check for transition flag
 		movem.l	d7-a0/a2-a3,-(sp)
-		moveq	#$1C,d0
+		moveq	#PLCID_1C,d0
 		jsr	(Load_PLC).l
 		move.w	#$401,(Current_zone_and_act).w
 		clr.b	(Dynamic_resize_routine).w
@@ -116774,7 +116775,7 @@ FBZ1BGE_Normal:
 		jsr	Clear_Switches(pc)
 		jsr	(Load_Level).l
 		jsr	(LoadSolids).l
-		moveq	#$13,d0
+		moveq	#PalID_FBZ2,d0
 		jsr	(LoadPalette_Immediate).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		move.w	#$2E00,d0
@@ -118299,7 +118300,7 @@ ICZ1BGE_Normal:
 		lea	(ICZ2_8x8_Secondary_KosM).l,a1
 		move.w	#tiles_to_bytes($122),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$20,d0
+		moveq	#PLCID_20,d0
 		jsr	(Load_PLC).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		addq.w	#4,(Events_routine_bg).w
@@ -118329,7 +118330,7 @@ ICZ1BGE_Transition:
 		jsr	(LoadSolids).l
 		jsr	(CheckLevelForWater).l
 		move.w	#VDP_Option0|VDPReg0_EnableHInt,(VDP_control_port).l	; Turn on HInt since ICZ2 has water
-		moveq	#$15,d0
+		moveq	#PalID_ICZ2,d0
 		move.l	(Normal_palette_line_3+$1C).w,d1	; Liliam: bugfix - improve ICZ act transition
 		jsr	(LoadPalette_Immediate).l
 		movem.l	(sp)+,d7-a0/a2-a3
@@ -118670,32 +118671,32 @@ loc_53BFE:
 
 
 ICZ1_SetIntroPal:						; Liliam: reinsert S3 screen events
-		tst.b	(Alternate_start_flag).w		; Liliam: Encore mode - palette
-		bne.s	locret_23DEF8				;
-		lea	Pal_ICZ1BGOutdoors_Encore(pc),a1	;
-		lea	(Target_palette_line_4).w,a5		;
-		tst.b	(Encore_flags).w			;
-		bmi.s	loc_23DED2				;
-		lea	Pal_ICZ1BGOutdoors(pc),a1		;
-		bra.s	loc_23DED2				;
-;		tst.b	(Game_mode).w				;
-;		bmi.s	loc_23DE92				;
-;		lea	(Normal_palette_line_4+2).w,a1		;
-;		bsr.s	sub_23DE96				;
+		tst.b	(Alternate_start_flag).w					; Liliam: Encore mode - FBZ level order
+		bne.s	locret_23DEF8							;
+		lea	Pal_ICZ1BGOutdoors_Encore(pc),a1				;
+		lea	(Target_palette_line_4).w,a5					;
+		tst.b	(Encore_flags).w						;
+		bmi.s	loc_23DED2							;
+		lea	Pal_ICZ1BGOutdoors(pc),a1					;
+		bra.s	loc_23DED2							;
+;		tst.b	(Game_mode).w							;
+;		bmi.s	loc_23DE92							;
+;		lea	(Normal_palette_line_4+2).w,a1					;
+;		bsr.s	sub_23DE96							;
 
 ;loc_23DE92:
-;		lea	(Target_palette_line_4+2).w,a1		;
+;		lea	(Target_palette_line_4+2).w,a1					;
 
 ;sub_23DE96:
-;		move.l	#$EEE0EEC,(a1)+				;
-;		move.l	#$EEA0ECA,(a1)+				;
-;		move.l	#$EC80EA6,(a1)+				;
-;		move.l	#$E860E64,(a1)+				;
-;		move.l	#$E400E00,(a1)+				;
-;		move.l	#$C000000,(a1)+				;
-;		move.l	#$AEC0CEA,(a1)+				;
-;		move.w	#$E80,(a1)				;
-;		rts						;
+;		move.l	#$EEE0EEC,(a1)+							;
+;		move.l	#$EEA0ECA,(a1)+							;
+;		move.l	#$EC80EA6,(a1)+							;
+;		move.l	#$E860E64,(a1)+							;
+;		move.l	#$E400E00,(a1)+							;
+;		move.l	#$C000000,(a1)+							;
+;		move.l	#$AEC0CEA,(a1)+							;
+;		move.w	#$E80,(a1)							;
+;		rts									;
 ; End of function ICZ1_SetIntroPal
 
 
@@ -118703,29 +118704,29 @@ ICZ1_SetIntroPal:						; Liliam: reinsert S3 screen events
 
 
 ICZ1_SetIndoorPal:						; Liliam: reinsert S3 screen events
-		lea	(Pal_ICZ1_Encore+$40).l,a1		; Liliam: Encore mode - palette
-		lea	(Normal_palette_line_4).w,a5		;
-		tst.b	(Encore_flags).w			;
-		bmi.s	loc_23DED2				;
-		lea	(Pal_ICZ1+$40).l,a1			;
-;		tst.b	(Game_mode).w				;
-;		bmi.s	loc_23DED2				;
-;		lea	(Normal_palette_line_4+2).w,a1		;
-;		bsr.s	sub_23DED6				;
+		lea	(Pal_ICZ1_Encore+$40).l,a1					; Liliam: Encore mode - FBZ level order
+		lea	(Normal_palette_line_4).w,a5					;
+		tst.b	(Encore_flags).w						;
+		bmi.s	loc_23DED2							;
+		lea	(Pal_ICZ1+$40).l,a1						;
+;		tst.b	(Game_mode).w							;
+;		bmi.s	loc_23DED2							;
+;		lea	(Normal_palette_line_4+2).w,a1					;
+;		bsr.s	sub_23DED6							;
 
 loc_23DED2:
-		moveq	#bytesToLcnt($20),d1			;
-;		lea	(Target_palette_line_4+2).w,a1		;
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d1	;
+;		lea	(Target_palette_line_4+2).w,a1					;
 
 sub_23DED6:
-		move.l	(a1)+,(a5)+				;
-		dbf	d1,sub_23DED6				;
-;		move.l	#$EC00E40,(a1)+				;
-;		move.l	#$E040C00,(a1)+				;
-;		move.l	#$6000200,(a1)+				;
-;		move.l	#$E64,(a1)+				;
-;		move.l	#$E240A02,(a1)+				;
-;		move.w	#$402,(a1)				;
+		move.l	(a1)+,(a5)+							;
+		dbf	d1,sub_23DED6							;
+;		move.l	#$EC00E40,(a1)+							;
+;		move.l	#$E040C00,(a1)+							;
+;		move.l	#$6000200,(a1)+							;
+;		move.l	#$E64,(a1)+							;
+;		move.l	#$E240A02,(a1)+							;
+;		move.w	#$402,(a1)							;
 
 locret_23DEF8:
 		rts
@@ -118879,7 +118880,6 @@ loc_53D10:
 		moveq	#0,d1
 		jsr	Refresh_PlaneFull(pc)
 		lea	ICZ2_OutBGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(ICZ2_OutBGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -118895,7 +118895,6 @@ loc_53D2C:
 		moveq	#0,d1
 		jsr	Refresh_PlaneFull(pc)
 		lea	ICZ2_InBGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(ICZ2_InBGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -118953,7 +118952,6 @@ loc_53DC4:
 
 loc_53DCA:
 		lea	ICZ2_OutBGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(ICZ2_OutBGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -119011,7 +119009,6 @@ loc_53E3E:
 		moveq	#$20,d6
 		jsr	Draw_TileRow(pc)
 		lea	ICZ2_InBGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(ICZ2_InBGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -119333,7 +119330,6 @@ loc_53F6A:
 
 loc_53F86:
 		lea	LBZ1_LayoutModExitRange-4(pc),a1	; Liliam: reinsert S3 data
-;		lea	(LBZ1_LayoutModExitRange-4).l,a1	;
 		adda.w	d2,a1
 		cmp.w	(a1)+,d0
 		blo.s	loc_53F98
@@ -119390,7 +119386,6 @@ LBZ1_LayoutExitMod4:
 loc_53FE2:
 		jsr	LBZ1_EventVScroll(pc)		; Do the vscroll deformation, if necessary
 		lea	LBZ1_FGVScrollArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(LBZ1_FGVScrollArray).l,a4		;
 		lea	(HScroll_table+$100).w,a5
 		moveq	#$F,d6
 		moveq	#$C,d5
@@ -119413,7 +119408,6 @@ LBZ1_EventVScroll:
 loc_5401C:
 		lea	(HScroll_table+$14C).w,a1
 		lea	LBZ1_CollapseScrollSpeed(pc),a5		; Liliam: reinsert S3 data
-;		lea	(LBZ1_CollapseScrollSpeed).l,a5		;
 		move.l	$2C(a1),d0
 		addi.l	#$100,$2C(a1)
 		move.w	$30(a1),d1
@@ -119807,7 +119801,6 @@ loc_54248:
 		lea	(HScroll_table+$008).w,a5
 		jsr	ApplyDeformation(pc)
 		lea	LBZ1_FGVScrollArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(LBZ1_FGVScrollArray).l,a4		;
 		lea	(HScroll_table+$12E).w,a5
 		jsr	Apply_FGVScroll(pc)
 		jmp	ShakeScreen_Setup(pc)
@@ -119816,8 +119809,8 @@ loc_54248:
 LBZ1BGE_DoTransition:
 		tst.b	(Kos_modules_left).w
 		bne.w	loc_5432E
-		moveq	#$25,d0							; Liliam: start from actual act 2 start
-		jsr	(Load_PLC).l						;
+		moveq	#PLCID_25,d0							; Liliam: start from actual act 2 start
+		jsr	(Load_PLC).l							;
 		move.w	#$601,(Current_zone_and_act).w
 		clr.b	(Dynamic_resize_routine).w
 		clr.b	(Object_load_routine).w
@@ -119830,7 +119823,7 @@ LBZ1BGE_DoTransition:
 		jsr	(LoadSolids).l
 		jsr	(CheckLevelForWater).l
 		move.w	#VDP_Option0|VDPReg0_EnableHInt,(VDP_control_port).l	; Water in this stage yaaay
-		moveq	#$17,d0
+		moveq	#PalID_LBZ2,d0
 		jsr	(LoadPalette_Immediate).l
 		movem.l	(sp)+,d7-a0/a2-a3
 ;		jsr	Adjust_LBZ2Layout(pc)			; Liliam: bake in LBZ2 layout fixes
@@ -119922,13 +119915,13 @@ LBZ1_BGDeformArray:
 
 LBZ2_ScreenInit:
 ;		jsr	Adjust_LBZ2Layout(pc)			; Liliam: bake in LBZ2 layout fixes
-;		move.w	#4,(Events_routine_fg).w				; Liliam: start from actual act 2 start
+;		move.w	#4,(Events_routine_fg).w					; Liliam: start from actual act 2 start
 		clr.l	(Events_bg+$14).w
 		clr.w	(_unkEEA0).w
 		clr.w	(Event_LBZ2_DeathEgg).w
 		clr.w	(Events_fg_3).w
-		bsr.s	LBZ2_KnuxLevelSizeAdjust				;
-;		bsr.s	LBZ2_LayoutMod						;
+		bsr.s	LBZ2_KnuxLevelSizeAdjust					;
+;		bsr.s	LBZ2_LayoutMod							;
 		jsr	Reset_TileOffsetPositionActual(pc)
 		jmp	Refresh_PlaneFull(pc)
 ; ---------------------------------------------------------------------------
@@ -119954,15 +119947,15 @@ LBZ2SE_FromTransition:
 
 loc_54394:
 		bsr.s	LBZ2_LayoutMod
-		cmpi.w	#$300,(Camera_Y_pos).w					; Liliam: start from actual act 2 start
-		bhs.s	loc_5439E						;
-;		addq.w	#4,(Events_routine_fg).w				;
+		cmpi.w	#$300,(Camera_Y_pos).w						; Liliam: start from actual act 2 start
+		bhs.s	loc_5439E							;
+;		addq.w	#4,(Events_routine_fg).w					;
 		jmp	Refresh_PlaneScreenDirect(pc)
 ; ---------------------------------------------------------------------------
 
 LBZ2_CheckLayoutMod:
-		cmpi.w	#$5A0,(Player_1+x_pos).w				; Liliam: start from actual act 2 start
-		bls.s	loc_54394						;
+		cmpi.w	#$5A0,(Player_1+x_pos).w					; Liliam: start from actual act 2 start
+		bls.s	loc_54394							;
 
 loc_5439E:
 		jmp	DrawTilesAsYouMove(pc)
@@ -119981,32 +119974,32 @@ LBZ2_KnuxLevelSizeAdjust:
 loc_543A2:
 		cmp.w	(Target_water_level).w,d0			;
 		sne	(_unkF7C2).w					;
-		cmpi.w	#$60A,(Player_1+x_pos).w				; Liliam: start from actual act 2 start
-		blo.s	locret_543C0						;
+		cmpi.w	#$60A,(Player_1+x_pos).w					; Liliam: start from actual act 2 start
+		blo.s	locret_543C0							;
 
 LBZ2_LayoutMod:
-		movea.w	$30(a3),a5						;
-;		movea.w	(a3),a5							;
-;		lea	$94(a5),a5						;
+		movea.w	$30(a3),a5							;
+;		movea.w	(a3),a5								;
+;		lea	$94(a5),a5							;
 		movea.w	(a3),a1
 		addq.w	#6,a1
-		addq.w	#3,a1							;
-		eori.b	#4,(Events_routine_fg+1).w				;
-		beq.s	loc_543AC						;
-		movea.w	$48(a3),a5						;
+		addq.w	#3,a1								;
+		eori.b	#4,(Events_routine_fg+1).w					;
+		beq.s	loc_543AC							;
+		movea.w	$48(a3),a5							;
 
 loc_543AC:
 		move.w	-8(a3),d0
-		subq.w	#3,d0							;
-;		subq.w	#6,d0							;
+		subq.w	#3,d0								;
+;		subq.w	#6,d0								;
 		moveq	#6-1,d1
 
 loc_543B4:
-		move.b	(a5)+,(a1)+						;
-		move.b	(a5)+,(a1)+						;
-		move.b	(a5)+,(a1)+						;
-;		move.l	(a5)+,(a1)+						;
-;		move.w	(a5)+,(a1)+						;
+		move.b	(a5)+,(a1)+							;
+		move.b	(a5)+,(a1)+							;
+		move.b	(a5)+,(a1)+							;
+;		move.l	(a5)+,(a1)+							;
+;		move.w	(a5)+,(a1)+							;
 		adda.w	d0,a5
 		adda.w	d0,a1
 		dbf	d1,loc_543B4
@@ -120018,8 +120011,8 @@ locret_543C0:
 ; ---------------------------------------------------------------------------
 
 ;loc_543C2:
-;		bsr.s	LBZ2_LayoutMod						; Liliam: start from actual act 2 start
-;		addq.w	#4,(Events_routine_fg).w				;
+;		bsr.s	LBZ2_LayoutMod							; Liliam: start from actual act 2 start
+;		addq.w	#4,(Events_routine_fg).w					;
 
 LBZ2SE_Normal:
 		tst.b	(Event_LBZ2_DeathEgg).w			; Liliam: QOL - flicker jets during LBZ2 Death Egg launch
@@ -120070,7 +120063,6 @@ loc_54432:
 
 loc_54436:
 		lea	LBZ2_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(LBZ2_BGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jmp	ApplyDeformation(pc)
 ; ---------------------------------------------------------------------------
@@ -120129,7 +120121,6 @@ loc_544A4:
 		moveq	#$20,d6
 		jsr	Draw_TileRow(pc)
 		lea	LBZ2_BGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(LBZ2_BGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jsr	ApplyDeformation(pc)
 		jmp	ShakeScreen_Setup(pc)
@@ -120247,7 +120238,6 @@ loc_545DE:
 		moveq	#$20,d6
 		jsr	Draw_TileRow(pc)
 		lea	LBZ2_DEBGDeformArray(pc),a4		; Liliam: reinsert S3 data
-;		lea	(LBZ2_DEBGDeformArray).l,a4		;
 		lea	(HScroll_table).w,a5
 		jsr	ApplyDeformation(pc)
 		jmp	ShakeScreen_Setup(pc)
@@ -120388,7 +120378,6 @@ loc_546FA:
 		move.w	d1,-(a1)
 		swap	d1
 		lea	LBZ2_BGUWDeformRange(pc),a5		; Liliam: reinsert S3 data
-;		lea	(LBZ2_BGUWDeformRange).l,a5		;
 		sub.l	d3,d1					; Likely because the underwater wavy effect necessitates specifying deformation line-by-line
 		moveq	#4,d4
 
@@ -120426,7 +120415,6 @@ loc_54750:
 loc_54756:
 		lea	(HScroll_table).w,a1			; With that over with, we can actually do some normal stuff
 		lea	LBZ2_CloudDeformArray(pc),a5		; Liliam: reinsert S3 data
-;		lea	(LBZ2_CloudDeformArray).l,a5		;
 		move.l	d0,d1
 		asr.l	#6,d1
 		move.l	d1,d3
@@ -120669,7 +120657,6 @@ loc_54928:
 loc_5492E:
 		lea	(HScroll_table+$00C).w,a1
 		lea	LBZ2_CloudDeformArray(pc),a5		; Liliam: reinsert S3 data
-;		lea	(LBZ2_CloudDeformArray).l,a5		;
 		move.l	d0,d1
 		asr.l	#6,d1
 		move.l	d1,d3
@@ -120933,7 +120920,7 @@ MHZ1_BackgroundEvent:
 		beq.w	loc_54C3C
 		clr.w	(Events_fg_5).w
 		movem.l	d7-a0/a2-a3,-(sp)
-		moveq	#$28,d0
+		moveq	#PLCID_28,d0
 		jsr	(Load_PLC).l
 		move.w	#$701,(Current_zone_and_act).w
 		clr.b	(Dynamic_resize_routine).w
@@ -121087,7 +121074,7 @@ MHZ2_ScreenInit:
 loc_54D72:
 		lea	(Normal_palette_line_3).w,a5
 		lea	(Target_palette_line_3).w,a6
-		moveq	#bytesToLcnt($40),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_3),d0
 
 loc_54D7C:
 		move.l	(a1),(a5)+
@@ -121234,7 +121221,7 @@ loc_54E9C:
 		move.w	d0,(a1)+
 		lea	(Normal_palette_line_2).w,a1
 		lea	Pal_MHZ2Ship(pc),a5
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d0
 
 loc_54EE4:
 		move.l	(a5)+,(a1)+
@@ -121463,7 +121450,7 @@ loc_550B8:
 
 loc_550C4:
 		lea	(Normal_palette_line_3).w,a5
-		moveq	#bytesToLcnt($40),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_3),d0
 
 loc_550CA:
 		move.l	(a1)+,(a5)+
@@ -122436,7 +122423,7 @@ loc_55C4E:
 		lea	(ArtKosM_SOZ2_Secondary).l,a1
 		move.w	#tiles_to_bytes($315),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$2C,d0
+		moveq	#PLCID_2C,d0
 		jsr	(Load_PLC).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		addq.w	#4,(Events_routine_bg).w
@@ -122457,22 +122444,22 @@ loc_55C84:
 		jsr	(Load_Level).l
 		jsr	(LoadSolids).l
 		; Liliam: removed original implementation
-		moveq	#8,d0					; Liliam: simplify player palette selection
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_55CC6				;
-		move.w	(Player_mode).w,d0			;
+		moveq	#PalID_EncoreMode,d0						; Liliam: simplify player palette selection
+		tst.b	(Encore_mode).w							;
+		bne.s	loc_55CC6							;
+		move.w	(Player_mode).w,d0						;
 
 loc_55CC6:
 		jsr	(LoadPalette_NoEncore).l		; Liliam: Encore mode - palette
 ;		jsr	(LoadPalette).l				;
-		moveq	#$1B,d0
+		moveq	#PalID_SOZ2,d0
 		jsr	(LoadPalette).l
-		moveq	#$1B,d0
+		moveq	#PalID_SOZ2,d0
 		jsr	(LoadPalette_Immediate).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		jsr	sub_55EFC(pc)
 		lea	(Normal_palette_line_3).w,a1
-		moveq	#bytesToLcnt($40),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_3),d0
 
 loc_55CEA:
 		clr.l	(a1)+
@@ -123354,7 +123341,7 @@ loc_5661A:
 		lea	(ArtKosM_SOZ2_Secondary).l,a1
 		move.w	#tiles_to_bytes($315),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$1B,d0
+		moveq	#PalID_SOZ2,d0
 		jsr	(LoadPalette_Immediate).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		addq.w	#4,(Events_routine_bg).w
@@ -123979,7 +123966,7 @@ loc_56BD2:
 		lea	(ArtKosM_LRZ2_Secondary).l,a1
 		move.w	#tiles_to_bytes($090),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$30,d0
+		moveq	#PLCID_30,d0
 		jsr	(Load_PLC).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		move.w	#$C,(Events_routine_bg).w
@@ -124355,23 +124342,23 @@ LRZ2_ScreenEvent:
 ; ---------------------------------------------------------------------------
 
 LRZ2_BackgroundInit:
-		tst.b	(Last_star_post_hit).w					; Liliam: start from actual act 2 start
-		beq.s	.load							;
-		move.w	#$960,(Camera_min_X_pos).w				;
-		bra.s	loc_56FC0						;
+		tst.b	(Last_star_post_hit).w						; Liliam: start from actual act 2 start
+		beq.s	.load								;
+		move.w	#$960,(Camera_min_X_pos).w					;
+		bra.s	loc_56FC0							;
 ; ---------------------------------------------------------------------------
 
 	.load:
-		jsr	(AllocateObject).l					; Liliam: start from actual act 2 start
-		bne.s	loc_56FC0						;
-		move.l	#Obj_LevelIntroLRZ2,(a1)				;
-		lea	(Pal_LRZMiniboss2).l,a1					;
-		lea	(Target_palette_line_3).w,a5				;
-		moveq	#bytesToLcnt($40),d0					;
+		jsr	(AllocateObject).l						; Liliam: start from actual act 2 start
+		bne.s	loc_56FC0							;
+		move.l	#Obj_LevelIntroLRZ2,(a1)					;
+		lea	(Pal_LRZMiniboss2).l,a1						;
+		lea	(Target_palette_line_3).w,a5					;
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_3),d0	;
 
 	.loop:
-		move.l	(a1)+,(a5)+						;
-		dbf	d0,.loop						;
+		move.l	(a1)+,(a5)+							;
+		dbf	d0,.loop							;
 
 loc_56FC0:
 		jsr	(AllocateObject).l
@@ -124733,7 +124720,7 @@ loc_57360:
 		move.b	#9,2(a1,d0.w)
 		lea	(Normal_palette_line_2).w,a1
 		lea	Pal_SSZDeathEgg(pc),a5
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d0
 
 loc_573E4:
 		move.l	(a5)+,(a1)+
@@ -126658,7 +126645,7 @@ loc_58BBC:
 		move.w	d0,(Camera_Y_pos_BG_rounded).w
 		lea	(Pal_Ending2).l,a1
 		lea	(Normal_palette_line_2).w,a5
-		moveq	#bytesToLcnt($60),d0
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_2),d0
 
 loc_58C0E:
 		move.l	(a1)+,(a5)+
@@ -126672,7 +126659,7 @@ loc_58C1A:
 		beq.s	locret_58C7E
 		lea	(Pal_Ending1).l,a1
 		lea	(Normal_palette_line_2).w,a5
-		moveq	#bytesToLcnt($60),d0
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_2),d0
 
 loc_58C2C:
 		move.l	(a1)+,(a5)+
@@ -127466,7 +127453,7 @@ loc_593A8:
 		lea	(ArtKosM_DEZ2_Secondary).l,a1
 		move.w	#tiles_to_bytes($292),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$38,d0
+		moveq	#PLCID_38,d0
 		jsr	(Load_PLC).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		addq.w	#4,(Events_routine_bg).w
@@ -127490,7 +127477,7 @@ loc_593EC:
 		jsr	(LoadSolids).l
 		lea	(Normal_palette_line_3).w,a0
 		lea	(Pal_DEZ2+$20).l,a1
-		moveq	#bytesToLcnt($40),d0
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_3),d0
 
 loc_59430:
 		move.l	(a1)+,(a0)+
@@ -128242,7 +128229,7 @@ LRZ3_ScreenInit:
 		blo.s	loc_59AF8
 		lea	(Target_palette_line_2).w,a1
 		lea	(Pal_LRZBossFire).l,a5
-		moveq	#bytesToLcnt($60),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_2),d0
 
 loc_59A9A:
 		move.l	(a5)+,(a1)+
@@ -128538,7 +128525,7 @@ LRZ3BGE_Normal:
 		lea	(ArtKosM_HPZ_Secondary).l,a1		;
 		move.w	#$16E0,d2				;
 		jsr	(Queue_Kos_Module).l			;
-		moveq	#$48,d0					;
+		moveq	#PLCID_48,d0				;
 		jsr	(Load_PLC).l				;
 		jsr	(Load_PLC_MonitorsSpikesSprings).l	;
 		stopZ80						;
@@ -128572,7 +128559,7 @@ LRZ3BGE_Transition:						; Liliam: HPZ - add transition from LRZ3
 		movem.l	d7-a0/a2-a3,-(sp)
 		jsr	(Load_Level).l
 		jsr	(LoadSolids).l
-		moveq	#$3F,d0
+		moveq	#PalID_HPZIntro,d0
 		jsr	(LoadPalette_Immediate).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		move.w	#$1000,d0
@@ -130083,7 +130070,7 @@ loc_5ABC0:
 		movea.l	(sp)+,a0
 		subq.w	#1,(Events_bg+$08).w
 		bpl.w	loc_5AEE4
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Player_2,(Kos_decomp_buffer-Player_2)-2
 		cmpi.b	#7,(Super_emerald_count).w
 		bhs.s	loc_5AC04
@@ -130132,20 +130119,20 @@ loc_5AC70:
 		jsr	(LoadSolids).l
 		move.w	#$D01,(Current_zone_and_act).w
 		clr.b	(Last_star_post_hit).w
-		moveq	#8,d0					; Liliam: simplify player palette selection
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_5AC9E				;
-		move.w	(Player_mode).w,d0			;
-;		moveq	#3,d0					;
+		moveq	#PalID_EncoreMode,d0						; Liliam: simplify player palette selection
+		tst.b	(Encore_mode).w							;
+		bne.s	loc_5AC9E							;
+		move.w	(Player_mode).w,d0						;
+;		moveq	#PalID_SonicTails,d0						;
 
 loc_5AC9E:
 		jsr	(LoadPalette_NoEncore).l		; Liliam: Encore mode - palette
 ;		jsr	(LoadPalette).l				;
-		moveq	#$2A,d0
+		moveq	#PalID_AIZ,d0
 		jsr	(LoadPalette).l
 		lea	(Pal_SSZ2+$20).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_5ACB8:
 		move.l	(a1)+,(a2)+
@@ -130222,7 +130209,7 @@ loc_5AD8E:
 		movea.l	(sp)+,a0
 		subq.w	#1,(Events_bg+$08).w
 		bpl.w	loc_5AEE4
-		clearRAM	Sprite_table_input,$400
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Player_2,(Kos_decomp_buffer-Player_2)-2
 
 loc_5ADC0:
@@ -130250,18 +130237,18 @@ loc_5AE0A:
 		movem.l	d7-a0/a2-a3,-(sp)
 		jsr	(Load_Level).l
 		jsr	(LoadSolids).l
-		moveq	#8,d0					; Liliam: simplify player palette selection
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_5AE24				;
-		move.w	(Player_mode).w,d0			;
-;		moveq	#3,d0					;
+		moveq	#PalID_EncoreMode,d0						; Liliam: simplify player palette selection
+		tst.b	(Encore_mode).w							;
+		bne.s	loc_5AE24							;
+		move.w	(Player_mode).w,d0						;
+;		moveq	#PalID_SonicTails,d0						;
 
 loc_5AE24:
 		jsr	(LoadPalette_NoEncore).l		; Liliam: Encore mode - palette
 ;		jsr	(LoadPalette).l				;
 		lea	(Pal_Ending1).l,a1
 		lea	(Target_palette_line_2).w,a5
-		moveq	#bytesToLcnt($60),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_2),d0
 
 loc_5AE36:
 		move.l	(a1)+,(a5)+
@@ -130379,7 +130366,7 @@ loc_5AF5A:
 		clr.w	(Events_fg_5).w
 		lea	(Pal_Ending1).l,a1
 		lea	(Normal_palette_line_2).w,a5
-		moveq	#bytesToLcnt($60),d0
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_2),d0
 
 loc_5AF6A:
 		move.l	(a1)+,(a5)+
@@ -130560,14 +130547,14 @@ sub_5B11C:
 loc_5B120:
 		lea	(Target_palette_line_2).w,a5
 		lea	Pal_5B16E(pc),a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d0
 
 loc_5B12A:
 		move.l	(a1),(a5)+
 		move.l	(a1)+,(a6)+
 		dbf	d0,loc_5B12A
 		lea	(Pal_SSZ2+$20).l,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_3),d0
 
 loc_5B13A:
 		move.l	(a1),(a5)+
@@ -130654,7 +130641,7 @@ PLC_SKCredits_End
 ; ---------------------------------------------------------------------------
 
 loc_5B1F4:
-		subq.w	#1,(_unkF660).w
+		subq.w	#1,(Ending_scroll_delay).w
 		bpl.s	locret_5B202
 		addq.w	#2,(_unkFA86).w
 		tst.w	(Ending_running_flag).w			; Liliam: cutscene skip - ending part 4
@@ -130668,7 +130655,7 @@ locret_5B202:
 loc_5B204:
 		move.l	(Camera_Y_pos).w,d0
 		move.l	d0,d1
-		add.l	(_unkFAC8).w,d0
+		add.l	(Ending_scroll_speed).w,d0
 		move.l	d0,(Camera_Y_pos).w
 		swap	d0
 		swap	d1
@@ -130728,10 +130715,10 @@ loc_5B29E:
 		addq.w	#2,(_unkFA86).w
 		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: ending - compensate for longer credits music
 		bne.s	loc_5B2A2				;
-		move.w	#290,(_unkF660).w			;
+		move.w	#290,(Ending_scroll_delay).w		;
 
 loc_5B2A2:
-		subq.w	#1,(_unkF660).w				;
+		subq.w	#1,(Ending_scroll_delay).w		;
 		bpl.s	locret_5B2CC				;
 		addq.w	#2,(_unkFA86).w				;
 		clr.l	(Timer).w
@@ -131093,12 +131080,13 @@ loc_5B54A:
 		moveq	#0,d0
 		move.w	(a1,d1.w),d0
 		lsl.l	#8,d0
-		move.l	d0,(_unkFAC8).w
+		move.l	d0,(Ending_scroll_speed).w
 		lea	CreditsText_ScrollDelay(pc),a1
-		move.w	(a1,d1.w),(_unkF660).w
+		move.w	(a1,d1.w),(Ending_scroll_delay).w
+
 		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: ending - compensate for longer credits music
 		bne.s	locret_5B564				;
-		addi.w	#90,(_unkF660).w			;
+		addi.w	#90,(Ending_scroll_delay).w		;
 
 locret_5B564:
 		rts
@@ -131611,7 +131599,7 @@ ContinueScreen:
 		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)		;
 		clr.b	(Water_full_screen_flag).w			;
 		clr.w	(Kos_decomp_queue_count).w
-		clearRAM	Kos_decomp_stored_registers,$6C
+		clearRAM	Kos_decomp_stored_registers,(Kos_decomp_module_end-Kos_decomp_stored_registers)
 		jsr	(Clear_Nem_Queue).l
 		jsr	(Clear_DisplayData).l
 		move.l	#vdpComm(tiles_to_bytes(ArtTile_Continue_Digits),VRAM,WRITE),(VDP_control_port).l
@@ -131649,22 +131637,22 @@ loc_5C3A4:
 		jsr	(Init_SpriteTable).l
 		move.w	#(11*60)-1,(Demo_timer).w
 		lea	(Pal_ContinueScreen).l,a1
-		lea	(Target_palette_line_2).w,a2		; Liliam: simplify player palette selection
-		moveq	#bytesToLcnt($60),d6			;
-;		lea	(Target_palette).w,a2			;
-;		moveq	#bytesToLcnt($80),d6			;
+		lea	(Target_palette_line_2).w,a2					; Liliam: simplify player palette selection
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_2),d6	;
+;		lea	(Target_palette).w,a2						;
+;		moveq	#bytesToLcnt(Target_palette_end-Target_palette),d6		;
 
 loc_5C3BC:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_5C3BC
-		move.w	(Player_mode).w,d0			;
-		tst.b	(Encore_mode).w				;
-		beq.s	loc_5C3C2				;
-		moveq	#8,d0					;
-		move.w	#$E66,(Target_palette_line_3+$A).w	;
+		move.w	(Player_mode).w,d0						;
+		tst.b	(Encore_mode).w							;
+		beq.s	loc_5C3C2							;
+		moveq	#PalID_EncoreMode,d0						;
+		move.w	#$E66,(Target_palette_line_3+$A).w				;
 
 loc_5C3C2:
-		jsr	(LoadPalette_NoEncore).l		;
+		jsr	(LoadPalette_NoEncore).l					;
 		lea	S3CreditsText_Continue(pc),a1				; Liliam: ported from S3 - restore continue font
 		bsr.w	sub_240A4A						;
 ;		lea	aCONTINUE(pc),a1					;
@@ -131703,8 +131691,8 @@ loc_5C3FE:
 		bsr.w	sub_5CB1C
 		jsr	(Process_Sprites).l
 		jsr	(Render_Sprites).l
-		move.b	#$18,(V_int_routine).w					; Liliam: ported from S3 - restore continue font
-;		move.b	#$16,(V_int_routine).w					;
+		move.b	#VInt_ID_18,(V_int_routine).w				; Liliam: ported from S3 - restore continue font
+;		move.b	#VInt_ID_16,(V_int_routine).w				;
 		jsr	(Wait_VSync).l
 		enableDisplay
 		moveq	#signextendB(mus_Continue),d0
@@ -131712,7 +131700,7 @@ loc_5C3FE:
 		jsr	(Pal_FadeFromBlack).l
 
 loc_5C454:
-		move.b	#$16,(V_int_routine).w
+		move.b	#VInt_ID_16,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		jsr	(Wait_VSync).l
 		jsr	(Process_Sprites).l
@@ -131722,12 +131710,12 @@ loc_5C454:
 		beq.s	loc_5C454
 		subq.b	#1,d0
 		beq.s	loc_5C48A
-		move.b	#0,(Game_mode).w
+		move.b	#GameMode_SegaScreen,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_5C48A:
-		move.b	#$C,(Game_mode).w
+		move.b	#GameMode_Level,(Game_mode).w
 		move.b	#3,(Life_count).w
 		move.b	#3,(Life_count_P2).w
 		move.l	(Saved_encore_stocks).w,(P1_character).w	; Liliam: Encore mode - save data
@@ -132290,7 +132278,7 @@ Continue_MechaSonic_Init:						; Liliam: Metal Sonic - use Mecha Sonic for conti
 
 Continue_Robotnik_Init:						; Liliam: continues - use Robotnik once Knuckles switches sides
 		move.l	#byte_70419,$30(a0)
-		moveq	#$4C,d0
+		moveq	#PLCID_4C,d0
 		jsr	(Load_PLC).l
 
 Continue_Robotnik_Init2:
@@ -132724,8 +132712,8 @@ UnlockScreen:							; Liliam: hidden skills
 		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
 		move.w	#VDP_PlnSize|PlaneSize_1024x256,(a6)
 		move.w	#VDP_WinYPos|Window_Disable,(a6)
-		clearRAM	H_scroll_buffer,$400
-		clearRAM	Sprite_table_input,$400
+		clearRAM	H_scroll_buffer,(Collision_response_list_end-H_scroll_buffer)
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -132752,7 +132740,7 @@ UnlockScreen:							; Liliam: hidden skills
 
 		lea	(Pal_SonicTails).l,a0
 		lea	(Normal_palette_line_2).w,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d0
 
 	.loop:
 		move.l	(a0)+,(a1)+
@@ -132762,7 +132750,7 @@ UnlockScreen:							; Liliam: hidden skills
 		move.l	#UnlockScreen_Return,(V_int_1E_addr).w
 
 UnlockScreen_MainLoop:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		jsr	(Process_Sprites).l
 		jsr	(Render_Sprites).l
@@ -132857,8 +132845,8 @@ OptionsScreen:							; Liliam: options menu
 		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
 		move.w	#VDP_PlnSize|PlaneSize_1024x256,(a6)
 		move.w	#VDP_WinYPos|Window_Disable,(a6)
-		clearRAM	H_scroll_buffer,$400
-		clearRAM	Sprite_table_input,$400
+		clearRAM	H_scroll_buffer,(Collision_response_list_end-H_scroll_buffer)
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -132882,14 +132870,14 @@ OptionsScreen:							; Liliam: options menu
 		movea.w	#tiles_to_bytes(ArtTile_OptionsBG),a2
 		jsr	(KosArt_To_VDP).l
 		move.l	#OptionsScreen_Return,(V_int_1E_addr).w
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 
 		lea	(ArtKos_OptionsScreen).l,a0
 		lea	(RAM_start).l,a1
 		movea.w	#tiles_to_bytes(ArtTile_OptionsMisc),a2
 		jsr	(KosArt_To_VDP).l
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 
 		clearRAM	Options_buffer,plane_width*plane_height*2
@@ -132909,7 +132897,7 @@ OptionsScreen:							; Liliam: options menu
 		move.w	#$14C,y_pos(a0)
 		move.b	(Encore_mode).w,$1C(a0)
 		move.b	#6,$2C(a0)
-		cmp.b	#$58,(Game_mode).w
+		cmp.b	#GameMode_EraseData,(Game_mode).w
 		beq.s	.initSprites
 		move.b	#$40,render_flags(a0)
 		move.b	#1,mapping_frame(a0)
@@ -132934,7 +132922,7 @@ OptionsScreen:							; Liliam: options menu
 		lea	(Pal_EraseDataMenuBG).l,a0
 		lea	(Target_palette).w,a1
 		moveq	#bytesToLcnt($18),d0
-		cmpi.b	#$58,d1
+		cmpi.b	#GameMode_EraseData,d1
 		beq.s	.loop2
 		tst.b	(Encore_mode).w
 		bne.s	.encoreBG
@@ -132973,7 +132961,7 @@ OptionsScreen_Animate:						; Liliam: options menu
 		bsr.w	OptionsScreen_Scroll
 
 OptionsScreen_MainLoop:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		jsr	(Process_Sprites).l
 		jsr	(Render_Sprites).l
@@ -132989,10 +132977,10 @@ OptionsScreen_MainLoop:
 		beq.s	OptionsScreen_MainLoop
 		bsr.w	OptionsScreen_SaveData
 		move.b	(Game_mode).w,d0
-		move.b	#$24+$80,(Game_mode).w
+		move.b	#GameMode_LevelSelect+$80,(Game_mode).w
 		tst.b	d0
 		bmi.s	.checkResetMusic
-		move.b	#$4C+$80,(Game_mode).w
+		move.b	#GameMode_SaveScreen+$80,(Game_mode).w
 
 	.checkResetMusic:
 		move.b	(Object_RAM+$1C).w,d0
@@ -133011,7 +132999,7 @@ EraseDataScreen_Animate:					; Liliam: options menu
 		move.b	d0,(Normal_palette_line_3+$03).w
 
 EraseDataScreen_MainLoop:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		lea	(Object_RAM).w,a0
 		move.w	$2E(a0),d0
@@ -133021,7 +133009,7 @@ EraseDataScreen_MainLoop:
 		move	#$2300,sr
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	EraseDataScreen_MainLoop
-		move.b	#$4C+$80,(Game_mode).w
+		move.b	#GameMode_SaveScreen+$80,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 PalCycle_EraseDataScreen:					; Liliam: options menu
@@ -133095,7 +133083,7 @@ OptionsScreen_CustomWriteToVRAM:
 
 OptionsScreen_GetUnlockState:					; Liliam: options menu
 		moveq	#0,d1
-		cmp.b	#$58,(Game_mode).w
+		cmp.b	#GameMode_EraseData,(Game_mode).w
 		beq.s	OptionsScreen_Return
 		move.w	d5,d2
 		cmpi.b	#3,d2
@@ -133139,7 +133127,7 @@ OptionsScreen_Return:
 
 OptionsScreen_CheckLR:						; Liliam: options menu
 		move.b	(Ctrl_1_pressed).w,d1
-		cmp.b	#$58,(Game_mode).w
+		cmp.b	#GameMode_EraseData,(Game_mode).w
 		bne.s	.notEraseMenu
 		andi.w	#button_confirm_mask,d1
 		beq.s	OptionsScreen_Return
@@ -133259,7 +133247,7 @@ OptionsScreen_MarkFields:					; Liliam: options menu
 OptionsScreen_UnmarkFields:
 		lea	(Options_buffer).l,a0
 		move.l	(Object_RAM+$24).w,d0
-		cmp.b	#$58,(Game_mode).w
+		cmp.b	#GameMode_EraseData,(Game_mode).w
 		bne.s	.notEraseMenu
 		add.w	d0,d0
 		addq.w	#5,d0
@@ -133305,7 +133293,7 @@ OptionsScreen_BuildPlaneMap:					; Liliam: options menu
 		addq.w	#2*3,d0
 
 	.checkEraseMenu:
-		cmp.b	#$58,(Game_mode).w
+		cmp.b	#GameMode_EraseData,(Game_mode).w
 		bne.s	.notEraseMenu
 		addi.w	#(plane_width*4),d0
 		lea	(OptionText_EraseDataScreen).l,a0
@@ -133566,8 +133554,8 @@ Museum:								; Liliam: museum
 		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
 		move.w	#VDP_PlnSize|PlaneSize_512x256,(a6)
 		move.w	#VDP_WinYPos|Window_Disable,(a6)
-		clearRAM	H_scroll_buffer,$400
-		clearRAM	Sprite_table_input,$400
+		clearRAM	H_scroll_buffer,(Collision_response_list_end-H_scroll_buffer)
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -133613,7 +133601,7 @@ Museum:								; Liliam: museum
 
 		lea	(Pal_SonicTails).l,a0
 		lea	(Target_palette).w,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d0
 
 	.loop1:
 		move.l	(a0)+,(a1)+
@@ -133621,7 +133609,7 @@ Museum:								; Liliam: museum
 
 		lea	(Pal_Museum1).l,a0
 		lea	(Target_palette_line_4).w,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_4),d0
 
 	.loop2:
 		move.l	(a0)+,(a1)+
@@ -133637,7 +133625,7 @@ Museum:								; Liliam: museum
 		move.l	#Museum_Return,(V_int_1E_addr).w
 
 Museum_MainLoop:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		addq.w	#1,(Level_frame_counter).w
 		jsr	(Process_Sprites).l
@@ -133654,7 +133642,7 @@ Museum_MainLoop:
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	Museum_MainLoop
 		clr.w	(Museum_entry).w
-		move.b	#4,(Game_mode).w
+		move.b	#GameMode_TitleScreen,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -133896,8 +133884,8 @@ MuseumChecklist:						; Liliam: museum
 		disableDisplay
 
 		move.w	#VDP_PlnSize|PlaneSize_512x512,(VDP_control_port).l
-		clearRAM	H_scroll_buffer,$400
-		clearRAM	Sprite_table_input,$400
+		clearRAM	H_scroll_buffer,(Collision_response_list_end-H_scroll_buffer)
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
@@ -133906,7 +133894,7 @@ MuseumChecklist:						; Liliam: museum
 		lea	(RAM_start).l,a1
 		movea.w	#tiles_to_bytes(ArtTile_OptionsBG+6),a2
 		jsr	(KosArt_To_VDP).l
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 
 		lea	(MapEni_S3MenuBG).l,a0
@@ -133935,7 +133923,7 @@ MuseumChecklist:						; Liliam: museum
 
 		lea	(Pal_HPZ).l,a0
 		lea	(Target_palette_line_2).w,a1
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d0
 
 	.loop1:
 		move.l	(a0)+,(a1)+
@@ -133950,7 +133938,7 @@ MuseumChecklist:						; Liliam: museum
 		jsr	(Pal_FadeFromBlack).l
 
 MuseumChecklist_MainLoop:
-		move.b	#$1E,(V_int_routine).w
+		move.b	#VInt_ID_1E,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		jsr	(Process_Sprites).l
 		jsr	(Render_Sprites).l
@@ -134203,12 +134191,19 @@ S3Credits:							; Liliam: ported from S3 - restore staff roll
 		clr.w	(Competition_mode).w
 		disableDisplay
 		jsr	(Clear_DisplayData).l
-		clearRAM	Sprite_table,$280
-		clearRAM	H_scroll_buffer,$400
-		clearRAM	Sprite_table_input,$400
-		clearRAM	Player_1,$2000
+	if FixBugs
+		clearRAM	Sprite_table,(Sprite_table_end-Sprite_table)
+		clearRAM	H_scroll_buffer,(Collision_response_list_end-H_scroll_buffer)
+	else
+		; Bug: this should be Sprite_table_End-Sprite_table
+		clearRAM	Sprite_table,(Sprite_table_end-Sprite_table)+4
+		; Bug: this should be Collision_response_list_End-H_scroll_buffer
+		clearRAM	H_scroll_buffer,(Collision_response_list_end-H_scroll_buffer)+4
+	endif
+		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
+		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
 		clearRAM	RAM_start+$2000,$2000
-		clearRAM	_unkFA80,$80
+		clearRAM	_unkFA80,(DMA_queue-_unkFA80)
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w
 		clr.w	(Player_mode).w
@@ -134254,13 +134249,13 @@ loc_2404AC:
 		move.w	#(3*50)-8,(_unkFA82).w			;
 
 loc_2404C0:
-		move.b	#$18,(V_int_routine).w
+		move.b	#VInt_ID_18,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		enableDisplay
 		jsr	(Pal_FadeFromBlack).l
 
 loc_2404E0:
-		move.b	#$18,(V_int_routine).w
+		move.b	#VInt_ID_18,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		jsr	(Wait_VSync).l
 		addq.w	#1,(Level_frame_counter).w
@@ -134269,7 +134264,7 @@ loc_2404E0:
 		bsr.s	sub_240530
 		jsr	(Process_Nem_Queue_Init).l
 		jsr	(Process_Kos_Module_Queue).l
-		cmpi.b	#$20,(Game_mode).w
+		cmpi.b	#GameMode_S3Credits,(Game_mode).w
 		beq.s	loc_2404E0
 		rts
 
@@ -134281,7 +134276,7 @@ sub_240530:							; Liliam: ported from S3 - restore staff roll
 		bmi.s	loc_240538
 		btst	#button_B,(Ctrl_1_pressed).w		; Liliam: title screen - quick return by pressing B
 		beq.s	locret_24053A				;
-		move.b	#4,(Game_mode).w			;
+		move.b	#GameMode_TitleScreen,(Game_mode).w	;
 
 locret_24053A:
 		rts
@@ -134304,7 +134299,7 @@ loc_24053E:
 		beq.w	loc_5F0DA
 		lea	(a1,d0.w),a1
 		bsr.s	sub_240A4A
-		move.b	#$18,(V_int_routine).w
+		move.b	#VInt_ID_18,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		jmp	(Pal_FadeFromBlack).l
 ; End of function sub_240530
@@ -135055,10 +135050,10 @@ loc_5D944:
 
 loc_5D95C:
 		move.l	#$EEE0EEE,d0
-		move.l	d0,(Target_palette+$4).w				; Liliam: fade in player palette if title card suppressed
-		move.w	d0,(Target_palette+$8).w				;
-;		move.l	d0,(Normal_palette+$4).w				;
-;		move.w	d0,(Normal_palette+$8).w				;
+		move.l	d0,(Target_palette+$4).w						; Liliam: fade in player palette if title card suppressed
+		move.w	d0,(Target_palette+$8).w						;
+;		move.l	d0,(Normal_palette+$4).w						;
+;		move.w	d0,(Normal_palette+$8).w						;
 
 loc_5D96A:
 		move.w	#$100,x_pos(a0)
@@ -135084,7 +135079,7 @@ loc_5D992:
 loc_5D9AC:
 		lea	(Pal_SSZ2+$20).l,a1
 		lea	(Target_palette_line_3).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_3),d6
 
 loc_5D9B8:
 		move.l	(a1)+,(a2)+
@@ -135763,10 +135758,10 @@ loc_5E0F8:
 		move.w	#$E0,y_pos(a0)
 		move.w	#-$200,x_vel(a0)
 		clr.w	y_vel(a0)
-		lea	(Pal_Knuckles).l,a1			; Liliam: simplify player palette selection
-;		lea	(Pal_ContinueScreen+$60).l,a1		;
+		lea	(Pal_Knuckles).l,a1						; Liliam: simplify player palette selection
+;		lea	(Pal_ContinueScreen+$60).l,a1					;
 		lea	(Normal_palette).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Normal_palette_line_2-Normal_palette),d6
 
 loc_5E13A:
 		move.l	(a1)+,(a2)+
@@ -135991,7 +135986,7 @@ loc_5E334:
 		lea	(Normal_palette_line_3).w,a2
 		lsr.b	#1,d0					; Liliam: simplify ending pose selection
 		move.b	d0,mapping_frame(a0)			;
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Normal_palette_line_4-Normal_palette_line_3),d0
 
 loc_5E388:
 		move.l	(a1)+,(a2)+
@@ -136405,7 +136400,7 @@ loc_5E70E:
 loc_5E7C0:
 		lea	(Pal_SonicTails).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_5E7CC:
 		move.l	(a1)+,(a2)+
@@ -137237,8 +137232,8 @@ locret_5F0D8:
 ; ---------------------------------------------------------------------------
 
 loc_5F0DA:
-		move.b	#$18,(Game_mode).w			; Liliam: hidden skills
-;		move.b	#0,(Game_mode).w			;
+		move.b	#GameMode_UnlockScreen,(Game_mode).w	; Liliam: hidden skills
+;		move.b	#GameMode_SegaScreen,(Game_mode).w	;
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -137351,7 +137346,7 @@ Obj_EndingS3KLogo:
 		bsr.w	sub_5FF1C
 		lea	(Pal_EndingS3KLogo).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_5F22E:
 		move.l	(a1)+,(a2)+
@@ -137382,9 +137377,9 @@ word_5F260:
 loc_5F26C:
 		lea	ObjDat3_60154(pc),a1
 		jsr	(SetUp_ObjAttributes).l
-;		move.l	#loc_5F1F6,(a0)			; Liliam: removed dead code
-;		tst.b	subtype(a0)			;
-;		beq.s	loc_5F294			;
+;		move.l	#loc_5F1F6,(a0)				; Liliam: removed dead code
+;		tst.b	subtype(a0)				;
+;		beq.s	loc_5F294				;
 		move.l	#loc_5F2EA,(a0)
 		move.w	#$4AF,$2E(a0)
 		bclr	#2,(_unkFAB8).w
@@ -137394,7 +137389,7 @@ loc_5F26C:
 		bsr.w	sub_5FF1C
 		lea	(Pal_EndingS3KLogo).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_5F2A8:
 		move.l	(a1)+,(a2)+
@@ -137419,7 +137414,7 @@ loc_5F2D8:
 word_5F2E2:
 		dc.w   $11E,   $F0				; Liliam: ending - add 'Unlocked' branding
 ;		dc.w   $120,   $F0				;
-;		dc.w   $120,   $F0			; Liliam: removed dead code
+;		dc.w   $120,   $F0				; Liliam: removed dead code
 ; ---------------------------------------------------------------------------
 
 loc_5F2EA:
@@ -137438,8 +137433,8 @@ loc_5F2F8:
 ; ---------------------------------------------------------------------------
 
 loc_5F314:
-		move.b	#$18,(Game_mode).w			; Liliam: hidden skills
-;		move.b	#0,(Game_mode).w			;
+		move.b	#GameMode_UnlockScreen,(Game_mode).w	; Liliam: hidden skills
+;		move.b	#GameMode_SegaScreen,(Game_mode).w	;
 ;		rts						; Liliam: bugfix - sprite draw bug
 		jmp	(Draw_Sprite).l				;
 ; ---------------------------------------------------------------------------
@@ -137453,7 +137448,7 @@ loc_5F31C:
 		bsr.w	sub_5FEFE
 		lea	(Pal_SonicTails).l,a1
 		lea	(Target_palette).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d6
 
 loc_5F346:
 		move.l	(a1)+,(a2)+
@@ -137541,7 +137536,7 @@ loc_5F410:
 		bsr.w	sub_5FEFE
 		lea	(Pal_EndingEyecatchKnuckles).l,a1
 		lea	(Target_palette_line_3).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_3),d6
 
 loc_5F43A:
 		move.l	(a1)+,(a2)+
@@ -137586,7 +137581,7 @@ Obj_KnuxEndPose:
 		move.l	#AniRaw_602CA,$30(a0)
 		lea	(Pal_KnuxEndPose).l,a1
 		lea	(Normal_palette).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Normal_palette_line_2-Normal_palette),d6
 
 loc_5F4C6:
 		move.l	(a1)+,(a2)+
@@ -137660,7 +137655,7 @@ Obj_EndingEyecatch_Eggman:
 		move.w	#$4AF,$2E(a0)
 		lea	(Pal_EndingEyecatchEggman).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_5F59A:
 		move.l	(a1)+,(a2)+
@@ -137700,7 +137695,7 @@ loc_5F5DE:
 		move.w	#$EF,$2E(a0)
 		lea	(Pal_EndingEyecatchEggRobo).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_5F60C:
 		move.l	(a1)+,(a2)+
@@ -137835,7 +137830,7 @@ loc_5F74E:
 		move.w	#$EF,$2E(a0)
 		lea	(Pal_SSZGHZMisc).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_5F78E:
 		move.l	(a1)+,(a2)+
@@ -137867,7 +137862,7 @@ loc_5F7D8:
 		move.b	#4,routine(a0)
 		lea	(Pal_SSZGHZMisc).l,a1
 		lea	(Normal_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d6
 
 loc_5F7EA:
 		move.l	(a1)+,(a2)+
@@ -137934,8 +137929,8 @@ loc_5F8A8:
 		bpl.s	locret_5F8C4
 
 loc_5F8BE:
-		move.b	#$18,(Game_mode).w			; Liliam: hidden skills
-;		move.b	#0,(Game_mode).w			;
+		move.b	#GameMode_UnlockScreen,(Game_mode).w	; Liliam: hidden skills
+;		move.b	#GameMode_SegaScreen,(Game_mode).w	;
 
 locret_5F8C4:
 		rts
@@ -137961,7 +137956,7 @@ Obj_EndingEyecatch_MasterEmerald:
 		move.w	(a1)+,y_pos(a0)
 		lea	(Pal_EndingMasterEmerald).l,a1
 		lea	(Target_palette).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d6
 
 loc_5F8FA:
 		move.l	(a1)+,(a2)+
@@ -138396,7 +138391,7 @@ loc_5FD66:
 		jsr	(AllocateObject).l
 		bne.s	loc_5FD82
 		move.l	#loc_5F26C,(a1)
-;		move.b	#4,subtype(a1)			; Liliam: removed dead code
+;		move.b	#4,subtype(a1)				; Liliam: removed dead code
 
 loc_5FD82:
 		jmp	(Delete_Current_Sprite).l
@@ -138613,7 +138608,7 @@ sub_5FF1C:
 		bclr	#2,render_flags(a0)
 		lea	(Normal_palette_line_2).w,a1
 		moveq	#0,d0
-		moveq	#bytesToLcnt($20),d1
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d1
 
 loc_5FF3A:
 		move.l	d0,(a1)+
@@ -138967,7 +138962,11 @@ AniRaw_60253:
 AniRaw_6025C:
 		dc.b   $F,   1,   2, $FC
 AniRaw_60260:
-		dc.b    7,   1,   1,   3,   4, $F8,   7, $7F,   4,   4, $FC
+		dc.b    7,   1,   1,   3,   4
+		dc.b  $F8, .jump-AniRaw_60260
+
+.jump:
+		dc.b  $7F,   4,   4, $FC
 AniRaw_6026B:
 		dc.b   $F,  $A,  $B, $FC
 AniRaw_6026F:
@@ -138996,9 +138995,12 @@ AniRaw_602C2:
 AniRaw_602C6:
 		dc.b   $B,   0,   1, $FC
 AniRaw_602CA:
-		dc.b    5, $13, $13,   4,   5, $F8,   7		; Liliam: simplify ending pose selection
+		dc.b    5, $13, $13,   4,   5			; Liliam: simplify ending pose selection
+;		dc.b    5,   0,   0,   1,   2			;
+		dc.b  $F8, .jump-AniRaw_602CA
+
+.jump:
 		dc.b  $7F,   5, $FC				;
-;		dc.b    5,   0,   0,   1,   2, $F8,   7		;
 ;		dc.b  $7F,   2,   2, $FC			;
 		even
 Map_KnuxEnding:
@@ -140134,7 +140136,7 @@ loc_61892:
 ;		move.b	d0,(SK_special_stage_flag).w	;
 		move.b	#0,(SK_special_stage_flag).w	;
 		move.b	#1,(Special_bonus_entry_flag).w
-		move.b	#$34,(Game_mode).w
+		move.b	#GameMode_SpecialStage,(Game_mode).w
 		move.b	#1,(Respawn_table_keep).w
 		bra.w	loc_618D0
 ; ---------------------------------------------------------------------------
@@ -140239,9 +140241,12 @@ DPLCPtr_SSEntryFlash:
 		dc.l DPLC_SSEntryFlash
 AniRaw_SSEntryRing:
 		; Liliam: QOL - extend ring animation
-		dc.b    3,   0,   0,   1,   2,   3,   4,   5,   6,   7,   8, $F8,  $D
+		dc.b    3,   0,   0,   1,   2,   3,   4,   5,   6,   7,   8
+;		dc.b    4,   0,   0,   1,   2,   3,   4,   5,   6,   7
+		dc.b  $F8, .jump-AniRaw_SSEntryRing
+
+.jump:
 		dc.b    3,   9,  $A,  $B,  $C,  $D,  $E,  $F, $10, $FC
-;		dc.b    4,   0,   0,   1,   2,   3,   4,   5,   6,   7, $F8,  $C
 ;		dc.b    6,  $A,   9,   8,  $B, $FC
 AniRaw_SSEntryFlash:
 		dc.b    0,   0,   0,   1,   2,   3|$40,   3,   2,   1,   0, $F4
@@ -140470,7 +140475,7 @@ loc_61F2A:
 loc_61F44:
 		st	(AIZ_skip_intro_flag).w			; Liliam: cutscene skip - AIZ intro
 		move.b	#1,(Update_HUD_timer).w			;
-		cmpi.b	#8,(Game_mode).w			;
+		cmpi.b	#GameMode_Demo,(Game_mode).w		;
 		bne.s	loc_61F50				;
 		move.b	#$91,(Level_started_flag).w
 		move.b	#$81,(Update_HUD_timer).w		;
@@ -140890,7 +140895,7 @@ loc_62308:
 ;		jsr	(FadeMusic_SetUpCamera).l		;
 		lea	(Normal_palette_line_2).w,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_62318:
 		move.l	(a1)+,(a2)+
@@ -140981,7 +140986,7 @@ loc_623FE:
 loc_62422:
 		lea	(Target_palette_line_2).w,a1
 		lea	(Normal_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d6
 
 loc_6242C:
 		move.l	(a1)+,(a2)+
@@ -141036,7 +141041,7 @@ loc_624A8:
 
 sub_624AE:
 		lea	(Normal_palette_line_3).w,a2
-		moveq	#bytesToLcnt($40),d0
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_3),d0
 
 loc_624B4:
 		move.l	(a1)+,(a2)+
@@ -141049,20 +141054,20 @@ locret_624BA:
 ; ---------------------------------------------------------------------------
 
 loc_624BC:
-		lea	(Pal_CNZFlash_Water).l,a3		; Liliam: bugfix - also darken CNZ water palette
+		lea	(Pal_CNZFlash_Water).l,a3					; Liliam: bugfix - also darken CNZ water palette
 		tst.b	subtype(a0)
 		beq.s	loc_624CA
 		lea	(Pal_CNZ+$20).l,a1
 		bsr.s	sub_624AE
-		lea	(Pal_CNZ_Water+$40).l,a3		;
+		lea	(Pal_CNZ_Water+$40).l,a3					;
 
 loc_624CA:
-		lea	(Water_palette_line_3).w,a2		;
-		moveq	#bytesToLcnt($40),d0			;
+		lea	(Water_palette_line_3).w,a2					;
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_3),d0	;
 
 	.loop:
-		move.l	(a3)+,(a2)+				;
-		dbf	d0,.loop				;
+		move.l	(a3)+,(a2)+							;
+		dbf	d0,.loop							;
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 word_624D0:
@@ -141680,7 +141685,7 @@ loc_62B68:
 		move.w	#$200,x_vel(a0)
 		lea	(Normal_palette_line_2).w,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_62BA2:
 		move.l	(a1)+,(a2)+
@@ -142448,15 +142453,15 @@ MHZ2_Save_StarPost:
 ;		move.l	#Obj_AIZKnuxIntro,(a0)				;
 
 Obj_AIZKnucklesIntro:
-		subq.w	#1,(Palette_cycle_counter1).w		; Liliam: Knuckles intro - apply bomb flash to waterfall
-		bpl.s	loc_63466				;
-		move.w	#7,(Palette_cycle_counter1).w		;
-		move.w	(Palette_cycle_counter0).w,d0		;
-		addq.w	#8,(Palette_cycle_counter0).w		;
-		lea	(Normal_palette_line_3+$16).w,a1	;
-		bsr.s	AIZKnuxIntro_AnimatePal			;
-		lea	(Target_palette_line_3+$16).w,a1	;
-		bsr.s	AIZKnuxIntro_AnimatePal			;
+		subq.w	#1,(Palette_cycle_counter1).w					; Liliam: Knuckles intro - apply bomb flash to waterfall
+		bpl.s	loc_63466							;
+		move.w	#7,(Palette_cycle_counter1).w					;
+		move.w	(Palette_cycle_counter0).w,d0					;
+		addq.w	#8,(Palette_cycle_counter0).w					;
+		lea	(Normal_palette_line_3+$16).w,a1				;
+		bsr.s	AIZKnuxIntro_AnimatePal						;
+		lea	(Target_palette_line_3+$16).w,a1				;
+		bsr.s	AIZKnuxIntro_AnimatePal						;
 
 loc_63466:
 		moveq	#0,d0
@@ -142482,7 +142487,7 @@ off_63494:
 		dc.w loc_634B8-off_63494
 ; ---------------------------------------------------------------------------
 
-AIZKnuxIntro_AnimatePal:					; Liliam: Knuckles intro - apply bomb flash to waterfall
+AIZKnuxIntro_AnimatePal:								; Liliam: Knuckles intro - apply bomb flash to waterfall
 		move.l	6(a1),d0
 		move.w	(a1),d0
 		move.l	2(a1),(a1)
@@ -142531,7 +142536,7 @@ loc_63508:
 		jsr	(CreateChild6_Simple).l
 		lea	(Pal_SKIntroBomb).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_6351E:
 		move.l	(a1)+,(a2)+
@@ -142780,7 +142785,7 @@ loc_63846:
 		jsr	(Play_SFX).l
 		lea	(Normal_palette).w,a1
 		lea	(Target_palette).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d6
 
 loc_63870:
 		move.l	(a1)+,(a2)+
@@ -142810,7 +142815,7 @@ loc_638A2:
 loc_638C4:
 		lea	(Pal_SSZ1).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_638D0:
 		move.l	(a1)+,(a2)+
@@ -143236,7 +143241,7 @@ loc_63D5C:
 		clr.w	$44(a0)
 		lea	(Normal_palette_line_2).w,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_63DBC:
 		move.l	(a1)+,(a2)+
@@ -143980,8 +143985,8 @@ loc_644FC:
 		move.w	#tiles_to_bytes(ArtTile_HPZBossCrane),d2		; Liliam: HPZ - add Knuckles cutscene
 ;		move.w	#tiles_to_bytes(ArtTile_HPZSSZBossCrane),d2		;
 		jsr	(Queue_Kos_Module).l
-		lea	(PLC_DEZHPZRobotnikShip).l,a1				; Liliam: move Egg Mobile boss flash out of palette line 1
-;		lea	PLC_KnuxHPZCutsceneShip(pc),a1				;
+		lea	(PLC_DEZHPZRobotnikShip).l,a1					; Liliam: move Egg Mobile boss flash out of palette line 1
+;		lea	PLC_KnuxHPZCutsceneShip(pc),a1					;
 		jmp	(Load_PLC_Raw).l
 ; ---------------------------------------------------------------------------
 ;PLC_KnuxHPZCutsceneShip:
@@ -144850,7 +144855,7 @@ locret_64E86:
 loc_64E88:
 		lea	ObjDat3_664EE(pc),a1
 		jsr	(SetUp_ObjAttributes).l
-		move.b	#$E,mapping_frame(a0)					; Liliam: move Egg Mobile boss flash out of palette line 1
+		move.b	#$E,mapping_frame(a0)						; Liliam: move Egg Mobile boss flash out of palette line 1
 		move.w	a0,(_unkFAAE).w
 		move.l	#loc_64EC4,(a0)
 		bset	#0,render_flags(a0)
@@ -145611,16 +145616,16 @@ loc_65692:
 
 Obj_HPZPaletteControl:
 		move.w	$3A(a0),d0
-		cmpi.w	#$300,(Camera_X_pos).w			; Liliam: bugfix - improve HPZ palette switch
-		bhs.s	loc_656B6				;
+		cmpi.w	#$300,(Camera_X_pos).w						; Liliam: bugfix - improve HPZ palette switch
+		bhs.s	loc_656B6							;
 		moveq	#0,d1
-		cmpi.w	#$280,(Camera_X_pos).w			;
-;		cmpi.w	#$460,(Camera_X_pos).w			;
+		cmpi.w	#$280,(Camera_X_pos).w						;
+;		cmpi.w	#$460,(Camera_X_pos).w						;
 		blo.s	loc_656B8
-		cmpi.w	#$380,(Camera_Y_pos).w			;
-		bhs.s	loc_656B6				;
-		cmpi.w	#$230,(Camera_Y_pos).w			;
-		bhs.s	loc_656B8				;
+		cmpi.w	#$380,(Camera_Y_pos).w						;
+		bhs.s	loc_656B6							;
+		cmpi.w	#$230,(Camera_Y_pos).w						;
+		bhs.s	loc_656B8							;
 
 loc_656B6:
 		moveq	#4,d1
@@ -145633,13 +145638,13 @@ loc_656B8:
 loc_656C0:
 		movea.l	HPZPaletteControl_PalIndex(pc,d1.w),a1
 		lea	(Normal_palette_line_2).w,a2
-;		moveq	#bytesToLcnt($60),d0			; Liliam: bugfix - improve HPZ palette switch
+;		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_2),d0	; Liliam: bugfix - improve HPZ palette switch
 ;loc_656CA:
-		move.w	$56(a1),$56(a2)				;
-		move.l	$58(a1),$58(a2)				;
-		move.l	$5C(a1),$5C(a2)				;
-;		move.l	(a1)+,(a2)+				;
-;		dbf	d0,loc_656CA				;
+		move.w	$56(a1),$56(a2)							;
+		move.l	$58(a1),$58(a2)							;
+		move.l	$5C(a1),$5C(a2)							;
+;		move.l	(a1)+,(a2)+							;
+;		dbf	d0,loc_656CA							;
 
 locret_656D0:
 		rts
@@ -145691,7 +145696,7 @@ loc_65730:
 		move.w	#$80,priority(a0)
 		lea	(Normal_palette_line_2).w,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_6574E:
 		move.l	(a1)+,(a2)+
@@ -145862,7 +145867,7 @@ loc_65976:
 ;		jsr	(Save_Level_Data).l			;
 		lea	(Target_palette_line_2).w,a1
 		lea	(Normal_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d6
 
 loc_65998:
 		move.l	(a1)+,(a2)+
@@ -145898,14 +145903,14 @@ loc_659CC:
 		jsr	(CreateChild1_Normal).l
 		lea	(Normal_palette_line_4).w,a1
 		lea	(Target_palette_line_4).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_4),d6
 
 loc_65A14:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_65A14
 		lea	Pal_KnuxSSZEnd(pc),a1
 		lea	(Normal_palette_line_4).w,a2
-		moveq	#bytesToWcnt($20),d0
+		moveq	#bytesToWcnt(Normal_palette_end-Normal_palette_line_4),d0
 
 loc_65A24:
 		move.w	(a1)+,d1
@@ -145939,7 +145944,7 @@ loc_65A4A:
 		bset	#1,(_unkFAB8).w
 		lea	(Target_palette_line_4).w,a1
 		lea	(Normal_palette_line_4).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d6
 
 loc_65A80:
 		move.l	(a1)+,(a2)+
@@ -146908,13 +146913,13 @@ sub_66348:
 		jsr	(Play_SFX).l
 
 loc_66364:
-		moveq	#0,d0					; Liliam: add Egg Mobile boss flash
-		btst	#0,$20(a0)				;
-		bne.s	.apply					;
-		addi.w	#6,d0					;
+		moveq	#0,d0								; Liliam: add Egg Mobile boss flash
+		btst	#0,$20(a0)							;
+		bne.s	.apply								;
+		addi.w	#6,d0								;
 
 	.apply:
-		bsr.s	HPZRobotnikShip_BossFlash		;
+		bsr.s	HPZRobotnikShip_BossFlash					;
 		subq.b	#1,$20(a0)
 		bne.s	locret_66370
 		bclr	#6,status(a0)
@@ -146949,8 +146954,8 @@ loc_66392:
 	endif
 
 loc_663A0:
-		bsr.s	HPZRobotnikShip_BossFlash				; Liliam: move Egg Mobile boss flash out of palette line 1
-;		jsr	(sub_7A614).l						;
+		bsr.s	HPZRobotnikShip_BossFlash					; Liliam: move Egg Mobile boss flash out of palette line 1
+;		jsr	(sub_7A614).l							;
 		subq.b	#1,$20(a0)
 		bne.s	locret_663B8
 		bclr	#6,status(a0)
@@ -146962,7 +146967,7 @@ locret_663B8:
 
 ; ---------------------------------------------------------------------------
 
-HPZRobotnikShip_BossFlash:							; Liliam: move Egg Mobile boss flash out of palette line 1
+HPZRobotnikShip_BossFlash:								; Liliam: move Egg Mobile boss flash out of palette line 1
 		lea	HPZRobotnikShip_BossFlashOffsets(pc),a1
 		lea	HPZRobotnikShip_BossFlashColors(pc,d0.w),a2
 		jmp	(CopyWordData_3).l
@@ -147305,7 +147310,8 @@ AniRaw_666AF:
 		dc.b    1,   4,   5,   4,   6,   4,   7,   4,   8, $FC
 ;		dc.b    1,   8,   4,   8,   5,   8,   6,   8,   7, $FC
 AniRaw_666B9:
-		dc.b    7, $1C, $1C, $1D, $F8,   6
+		dc.b    7, $1C, $1C, $1D
+		dc.b  $F8, AniRaw_666BF-AniRaw_666B9
 AniRaw_666BF:
 		dc.b    7, $1E, $1F, $FC
 AniRaw_666C3:
@@ -147318,14 +147324,21 @@ AniRaw_666F6:
 		dc.b    3,   7,   3, $1F,   0,   7,   1, $1F,   2,   7,   1, $7F,   2,   7,   1, $1F,   2,   7,   1,  $F,   2,   7
 		dc.b    1,  $B,   2,   7,   1,   7,   2,   7,   1,   7,   2,   7, $F4
 AniRaw_66719:
-		dc.b    0,   7,   0,   7, $F8,   6
+		dc.b    0,   7,   0,   7
+		dc.b  $F8, AniRaw_6671F-AniRaw_66719
 AniRaw_6671F:
 		dc.b    1,  $B,   2,   5,   3,  $B,   2,  $B,   1,  $B, $FC
 AniRaw_6672A:
-		dc.b    4,   7,   4,   7,   5,   7,   6, $1F, $F8,  $A,   5,  $F,   6, $1F, $FC
+		dc.b    4,   7,   4,   7,   5,   7,   6, $1F
+		dc.b  $F8, .jump-AniRaw_6672A
+.jump:
+		dc.b    5,  $F,   6, $1F, $FC
 AniRaw_66739:
 		dc.b    0,   5,   0,   5,   1,   7,   2,   9,   3,   9,   4,  $B,   5,  $C,   6,  $D,   7,  $E,   8,  $F,   9, $13
-		dc.b   $A, $1D,  $B, $27,  $C, $63, $F8, $1E,  $B, $3B,  $A, $63,  $B, $3B,  $C, $63, $FC
+		dc.b   $A, $1D,  $B, $27,  $C, $63
+		dc.b  $F8, .jump-AniRaw_66739
+.jump:
+		dc.b   $B, $3B,  $A, $63,  $B, $3B,  $C, $63, $FC
 AniRaw_66760:
 		dc.b    6,   0,   6, $4D,   1, $4D,   1, $4D,   1, $4D,   1, $4D,   2,   9,   3,   9, $F4
 AniRaw_66771:
@@ -147366,8 +147379,12 @@ AniRaw_667E7:
 		dc.b    2,   3,   3,   3,   4,   3,   5,   3,   4, $7F,   4, $1F, $FF, $F4
 AniRaw_667F5:
 		; Liliam: simplify player anim selection
-		dc.b    3, $B2, $B2, $D8, $D9, $FF, $F8,   8,   0, $DA, $DB, $DA, $DC, $DA, $DD, $DA, $DE, $DA, $DF, $FF, $FC
-;		dc.b    3, $DA, $DA, $9B, $9C, $FF, $F8,   8,   0, $86, $87, $86, $88, $86, $89, $86, $8A, $86, $8B, $FF, $FC
+		dc.b    3, $B2, $B2, $D8, $D9, $FF
+;		dc.b    3, $DA, $DA, $9B, $9C, $FF
+		dc.b  $F8, .jump-AniRaw_667F5
+.jump:
+		dc.b    0, $DA, $DB, $DA, $DC, $DA, $DD, $DA, $DE, $DA, $DF, $FF, $FC
+;		dc.b    0, $86, $87, $86, $88, $86, $89, $86, $8A, $86, $8B, $FF, $FC
 AniRaw_6680A:
 		dc.b    2,   3,   3,   3,   4,   3,   5,   3,   4, $3F, $FF, $F4,   2,   3,   3,   3,   4,   3,   5,   3,   4, $7F
 		dc.b    6,   3, $FF, $F4
@@ -147424,7 +147441,7 @@ Pal_CutsceneKnux:
 Pal_CNZFlash:
 		binclude "Levels/CNZ/Palettes/Flash.bin"
 		even
-Pal_CNZFlash_Water:						; Liliam: bugfix - also darken CNZ water palette
+Pal_CNZFlash_Water:									; Liliam: bugfix - also darken CNZ water palette
 		binclude "Levels/CNZ/Palettes/Flash Water.bin"
 		even
 Pal_KnuxSSZEnd:
@@ -147552,7 +147569,7 @@ loc_674AC:
 		lea	(Player_MappingPtrs).l,a1		;
 		move.l	(a1,d0.w),mappings(a0)			;
 
-		cmpi.b	#$88,(Game_mode).w			; Liliam: cutscene skip - AIZ intro
+		cmpi.b	#GameMode_Demo+$80,(Game_mode).w	; Liliam: cutscene skip - AIZ intro
 		beq.s	locret_67512				;
 		jmp	(Make_CutsceneSkipObj).l		;
 ; ---------------------------------------------------------------------------
@@ -147812,7 +147829,7 @@ loc_6775A:
 		lea	(Pal_SaveScreen+$60).l,a1				; Liliam: restore yellow chaos emerald
 ;		lea	Pal_AIZIntroEmeralds(pc),a1				;
 		lea	(Normal_palette_line_4).w,a2
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d0
 
 loc_67764:
 		move.l	(a1)+,(a2)+
@@ -149061,8 +149078,8 @@ loc_68508:
 		move.b	#$60,collision_property(a0)
 		move.w	(Camera_max_X_pos).w,(Camera_stored_max_X_pos).w
 ;		move.b	#1,(Boss_flag).w			; Liliam: bugfix - use correct music for bosses
-;		moveq	#$5A,d0					; Liliam: bugfix - stop double-loading AIZ2 PLCs
-		moveq	#$59,d0					;
+;		moveq	#PLCID_5A,d0				; Liliam: bugfix - stop double-loading AIZ2 PLCs
+		moveq	#PLCID_59,d0				;
 		jmp	(Load_PLC).l
 ; ---------------------------------------------------------------------------
 
@@ -149553,7 +149570,7 @@ loc_68A46:
 		jsr	(SetUp_ObjAttributes).l
 		move.b	#6,collision_property(a0)
 ;		move.b	#1,(Boss_flag).w			; Liliam: bugfix - use correct music for bosses
-		moveq	#$5A,d0
+		moveq	#PLCID_5A,d0
 		jsr	(Load_PLC).l
 		lea	Pal_AIZMiniboss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -150343,7 +150360,7 @@ loc_691D4:
 		move.b	#1,(Boss_flag).w		; Lock the screen
 		clr.b	(_unkFAA2).w
 		clr.b	(_unkFAA3).w
-		moveq	#$6B,d0
+		moveq	#PLCID_6B,d0
 		jsr	(Load_PLC).l					; Load Robotnik's ship and explosions
 		lea	(ArtKosM_AIZEndBoss).l,a1
 		move.w	#tiles_to_bytes(ArtTile_AIZEndBoss),d2
@@ -151562,7 +151579,7 @@ Obj_HCZMiniboss:
 		move.l	#loc_69EDA,(a0)
 ;		move.b	#1,(Boss_flag).w			; Liliam: bugfix - use correct music for bosses
 		st	(Events_bg+$16).w
-		moveq	#$5B,d0
+		moveq	#PLCID_5B,d0
 		jsr	(Load_PLC).l
 		move.w	#$300,(Camera_min_Y_pos).w
 		lea	ChildObjDat_6AD6E(pc),a2
@@ -151883,12 +151900,12 @@ loc_6A25A:
 
 loc_6A270:
 		tst.b	(End_of_level_flag).w
-		bne.s	loc_6A278						; Liliam: start from actual act 2 start
-;		beq.w	locret_69F78						;
-		rts								;
+		bne.s	loc_6A278							; Liliam: start from actual act 2 start
+;		beq.w	locret_69F78							;
+		rts									;
 ; ---------------------------------------------------------------------------
 
-Obj_LevelIntroHCZ2:								; Liliam: start from actual act 2 start
+Obj_LevelIntroHCZ2:									; Liliam: start from actual act 2 start
 		subq.w	#1,$2E(a0)
 		bpl.s	loc_6A25A
 		move.w	#$638,(Camera_target_max_Y_pos).w
@@ -151899,15 +151916,15 @@ Obj_LevelIntroHCZ2:								; Liliam: start from actual act 2 start
 ; ---------------------------------------------------------------------------
 
 Obj_LevelIntroHCZ2_Main:
-		jsr	(Change_Act2Sizes).l					; Liliam: start from actual act 2 start
+		jsr	(Change_Act2Sizes).l						; Liliam: start from actual act 2 start
 
 loc_6A278:
 		move.l	#loc_6A2A0,(a0)
 		lea	ChildObjDat_6ADA4(pc),a2
-		tst.l	(Player_2).w						;
-		bne.s	loc_6A28C						;
-;		tst.b	(Player_mode+1).w					;
-;		beq.s	loc_6A28C						;
+		tst.l	(Player_2).w							;
+		bne.s	loc_6A28C							;
+;		tst.b	(Player_mode+1).w						;
+;		beq.s	loc_6A28C							;
 		lea	ChildObjDat_6AD9E(pc),a2
 
 loc_6A28C:
@@ -152171,7 +152188,7 @@ loc_6A55C:
 		move.b	#4,routine(a0)
 		lea	Pal_HCZMinibossWater(pc),a1
 		lea	(Water_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Water_palette_line_3-Water_palette_line_2),d0
 
 loc_6A574:
 		move.l	(a1)+,(a2)+
@@ -153151,16 +153168,16 @@ loc_6AEC6:
 		jsr	(Boss_FadeMusic_SetUpCamera).l
 		move.l	#loc_6AEFE,(a0)
 		move.l	#loc_6AF04,$34(a0)
-		moveq	#$6C,d0
+		moveq	#PLCID_6C,d0
 		jsr	(Load_PLC).l
-		lea	(Pal_SonicTails).l,a1			; Liliam: add Egg Mobile boss flash
-		lea	(Normal_palette_line_3).w,a2		;
-		moveq	#bytesToLcnt($20),d6			;
+		lea	(Pal_SonicTails).l,a1						; Liliam: add Egg Mobile boss flash
+		lea	(Normal_palette_line_3).w,a2					;
+		moveq	#bytesToLcnt(Normal_palette_line_4-Normal_palette_line_3),d6	;
 
 	.loop:
-		move.l	(a1)+,(a2)+				;
-		dbf	d6,.loop				;
-;		move.w	#0,(Normal_palette+$1E).w		;
+		move.l	(a1)+,(a2)+							;
+		dbf	d6,.loop							;
+;		move.w	#0,(Normal_palette+$1E).w					;
 		lea	Pal_HCZEndBoss(pc),a1
 		jmp	(PalLoad_Line1).l
 ; ---------------------------------------------------------------------------
@@ -153204,8 +153221,8 @@ loc_6AF32:
 		lea	(ChildObjDat_6BDEC).l,a2
 		jsr	(CreateChild1_Normal).l
 		bne.s	loc_6AF6A
-		move.b	#$F,subtype(a1)				; Liliam: add Egg Mobile boss flash
-;		move.b	#5,subtype(a1)				;
+		move.b	#$F,subtype(a1)							; Liliam: add Egg Mobile boss flash
+;		move.b	#5,subtype(a1)							;
 
 loc_6AF6A:
 		lea	ChildObjDat_6BD8A(pc),a2
@@ -153921,13 +153938,13 @@ loc_6B7BC:
 		lea	(ArtKosM_HCZGeyserVert).l,a1
 		move.w	#tiles_to_bytes(ArtTile_HCZCutsceneGeyser),d2
 		jsr	(Queue_Kos_Module).l
-		lea	(Pal_HCZ2+$20).l,a1			; Liliam: add Egg Mobile boss flash
-		lea	(Normal_palette_line_3).w,a2		;
-		moveq	#bytesToLcnt($20),d6			;
+		lea	(Pal_HCZ2+$20).l,a1						; Liliam: add Egg Mobile boss flash
+		lea	(Normal_palette_line_3).w,a2					;
+		moveq	#bytesToLcnt(Normal_palette_line_4-Normal_palette_line_3),d6	;
 
 	.loop:
-		move.l	(a1)+,(a2)+				;
-		dbf	d6,.loop				;
+		move.l	(a1)+,(a2)+							;
+		dbf	d6,.loop							;
 		move.l	#loc_6B7D2,(a0)
 
 loc_6B7D2:
@@ -154404,14 +154421,14 @@ loc_6BBE8:
 		moveq	#0,d0
 		btst	#0,$20(a0)
 		bne.s	loc_6BBFA
-		addi.w	#2*6,d0					; Liliam: add Egg Mobile boss flash
-;		addq.w	#2*3,d0					;
+		addi.w	#2*6,d0								; Liliam: add Egg Mobile boss flash
+;		addq.w	#2*3,d0								;
 
 loc_6BBFA:
 		lea	word_6BC30(pc),a1
 		lea	word_6BC36(pc,d0.w),a2
-		jsr	(CopyWordData_6).l			;
-;		jsr	(CopyWordData_3).l			;
+		jsr	(CopyWordData_6).l						;
+;		jsr	(CopyWordData_3).l						;
 		subq.b	#1,$20(a0)
 		bne.s	locret_6BC1A
 		bclr	#6,status(a0)
@@ -154434,10 +154451,10 @@ word_6BC30:
 		; Liliam: add Egg Mobile boss flash
 		dc.w Normal_palette_line_3+$0E, Normal_palette_line_3+$1C, Normal_palette_line_3+$1E
 
-word_6BC36:	dc.w      6,  $222,  $624,    8,  $866,  $222	; Liliam: add Egg Mobile boss flash
-		dc.w   $CCC,  $EEE,  $888, $888,  $CCC,  $EEE	;
-;		dc.w      6,   $20,  $624			;
-;		dc.w   $EEE,  $EEE,  $EEE			;
+word_6BC36:	dc.w      6,  $222,  $624,    8,  $866,  $222				; Liliam: add Egg Mobile boss flash
+		dc.w   $CCC,  $EEE,  $888, $888,  $CCC,  $EEE				;
+;		dc.w      6,   $20,  $624						;
+;		dc.w   $EEE,  $EEE,  $EEE						;
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -154738,7 +154755,7 @@ Obj_MGZ2DrillingRobotnik:
 		jsr	(Queue_Kos_Module).l
 		lea	(PLC_RobotnikShip).l,a1			; Liliam: bugfix - stop loading capsule art and having to reload everything again (yes, really)
 		jsr	(Load_PLC_Raw).l			;
-;		moveq	#$6D,d0					;
+;		moveq	#PLCID_6D,d0				;
 ;		jsr	(Load_PLC).l				;
 		lea	Pal_MGZEndBoss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -154983,7 +155000,7 @@ loc_6C200:
 		lea	(MGZ2_8x8_Secondary_KosM).l,a1
 		move.w	#tiles_to_bytes($252),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$14,d0
+		moveq	#PLCID_14,d0
 		jsr	(Load_PLC).l
 		lea	(ArtKosM_Spiker).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Spiker),d2
@@ -155104,7 +155121,7 @@ loc_6C354:
 		lea	(ArtKosM_MGZEndBossDebris).l,a1
 		move.w	#tiles_to_bytes(ArtTile_MGZEndBossDebris),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$6D,d0
+		moveq	#PLCID_6D,d0
 		jsr	(Load_PLC).l
 		lea	Pal_MGZEndBoss(pc),a1
 		jsr	(PalLoad_Line1).l
@@ -155349,7 +155366,7 @@ Obj_MGZEndBossKnux:
 		lea	(ArtKosM_MGZEndBossDebris).l,a1
 		move.w	#tiles_to_bytes(ArtTile_MGZEndBossDebris),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$6D,d0
+		moveq	#PLCID_6D,d0
 		jsr	(Load_PLC).l
 ;		cmpi.b	#2,(Player_1+character_id).w	; Liliam: ???
 		lea	Pal_MGZEndBoss(pc),a1
@@ -155521,8 +155538,8 @@ loc_6C8B4:
 
 loc_6C8DC:
 		move.w	(_unkFAB4).w,d0
-		addi.w	#$128,d0				; Liliam: improve transition to CNZ
-;		addi.w	#$118,d0				;
+		addi.w	#$128,d0							; Liliam: improve transition to CNZ
+;		addi.w	#$118,d0							;
 		move.w	d0,(Camera_stored_max_X_pos).w
 		lea	(Child6_IncLevX).l,a2
 		jmp	(CreateChild6_Simple).l
@@ -155541,31 +155558,31 @@ loc_6C8F4:
 		lea	(Player_2).w,a1				;
 		jsr	(Restore_PlayerControl2).l		;
 		clr.w	$2E(a0)
-		move.w	#$500,$30(a0)				; Liliam: improve transition to CNZ
-		move.b	#6,subtype(a0)				;
-		move.w	#$4000,x_pos(a0)			;
-;		move.b	#1,(Scroll_lock).w			;
-;		addi.w	#$30,(Camera_max_X_pos).w		;
+		move.w	#$500,$30(a0)							; Liliam: improve transition to CNZ
+		move.b	#6,subtype(a0)							;
+		move.w	#$4000,x_pos(a0)						;
+;		move.b	#1,(Scroll_lock).w						;
+;		addi.w	#$30,(Camera_max_X_pos).w					;
 
 locret_6C930:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_6C932:
-		subq.b	#1,$30(a0)				; Liliam: improve transition to CNZ
-		bne.s	.done					;
-		move.w	$30(a0),d0				;
-		lea	Pal_MGZFadeCNZ_Alternate(pc,d0.w),a1	;
-		lea	(Normal_palette_line_3).w,a2		;
-		moveq	#bytesToLcnt($40),d0			;
+		subq.b	#1,$30(a0)							; Liliam: improve transition to CNZ
+		bne.s	.done								;
+		move.w	$30(a0),d0							;
+		lea	Pal_MGZFadeCNZ_Alternate(pc,d0.w),a1				;
+		lea	(Normal_palette_line_3).w,a2					;
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_3),d0	;
 
 	.loop:
-		move.l	(a1)+,(a2)+				;
-		dbf	d0,.loop				;
-		move.b	#4,$30(a0)				;
-		addi.b	#$40,$31(a0)				;
-		bpl.s	.done					;
-		move.l	#.done,(a0)				;
+		move.l	(a1)+,(a2)+							;
+		dbf	d0,.loop							;
+		move.b	#4,$30(a0)							;
+		addi.b	#$40,$31(a0)							;
+		bpl.s	.done								;
+		move.l	#.done,(a0)							;
 
 	.done:
 		jsr	(Obj_StartNewLevel).l			; Liliam: de-automate transition cutscene
@@ -155582,7 +155599,7 @@ loc_6C932:
 		moveq	#signextendB(sfx_WaveHover),d0		;
 		jmp	(Play_SFX).l				;
 ; ---------------------------------------------------------------------------
-Pal_MGZFadeCNZ_Alternate:					; Liliam: improve transition to CNZ
+Pal_MGZFadeCNZ_Alternate:								; Liliam: improve transition to CNZ
 		binclude "Levels/MGZ/Palettes/Fade to CNZ Alternate.bin"
 		even
 ; ---------------------------------------------------------------------------
@@ -156267,7 +156284,7 @@ loc_6D104:
 		lea	(Pal_MGZFadeCNZ).l,a1
 		adda.w	d0,a1
 		lea	(Normal_palette_line_4).w,a2
-		moveq	#bytesToLcnt($20),d1
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d1
 
 loc_6D128:
 		move.l	(a1)+,(a2)+
@@ -157044,8 +157061,8 @@ byte_6D853:
 		dc.b    9,   3
 		dc.b   $A,   3
 		dc.b   $B,   3
-		dc.b  $F8, $20
-
+		dc.b  $F8, byte_6D873-byte_6D853
+byte_6D873:
 		dc.b    9,   2
 		dc.b   $A,   2
 		dc.b   $B,   2
@@ -157066,7 +157083,7 @@ byte_6D87A:
 		dc.b   $C,   3
 		dc.b   $D,   3
 		dc.b   $E,   3
-		dc.b  $F8, $20
+		dc.b  $F8, byte_6D89A-byte_6D87A
 byte_6D89A:
 		dc.b   $C,   2
 		dc.b   $D,   2
@@ -157088,7 +157105,7 @@ byte_6D8A1:
 		dc.b  $20,   3
 		dc.b  $21,   3
 		dc.b  $22,   3
-		dc.b  $F8, $20
+		dc.b  $F8, byte_6D8C1-byte_6D8A1
 byte_6D8C1:
 		dc.b  $20,   2
 		dc.b  $21,   2
@@ -157123,7 +157140,7 @@ byte_6D8D9:
 		dc.b   $F,   3
 		dc.b  $10,   3
 		dc.b  $11,   3
-		dc.b  $F8, $20
+		dc.b  $F8, byte_6D8F9-byte_6D8D9
 byte_6D8F9:
 		dc.b   $F,   2
 		dc.b  $10,   2
@@ -157224,7 +157241,7 @@ loc_6D9A8:
 		moveq	#signextendB(cmd_FadeOut),d0
 		jsr	(Play_Music).l				; Fade out music
 		move.b	#1,(Boss_flag).w		; Lock screen
-		moveq	#$5D,d0
+		moveq	#PLCID_5D,d0
 		jsr	(Load_PLC).l					; Load CNZ Miniboss PLC
 		lea	Pal_CNZMiniboss(pc),a1		; Load CNZ Miniboss palette
 		jmp	(PalLoad_Line1).l
@@ -158192,7 +158209,7 @@ Obj_CNZEndBoss:
 		lea	word_6E476(pc),a1
 		move.b	#mus_EndBoss,boss_saved_mus(a0)
 		jsr	(Boss_FadeMusic_SetUpCamera).l
-		moveq	#$6E,d0
+		moveq	#PLCID_6E,d0
 		jsr	(Load_PLC).l
 		lea	Pal_CNZEndBoss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -158494,9 +158511,9 @@ loc_6E80C:
 		cmp.w	(Player_1+y_pos).w,d0
 		blo.w	locret_6E4C4
 		move.w	#$500,d0
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - FBZ level order
-		beq.s	loc_6E820					;
-		move.w	#$400,d0					;
+		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
+		beq.s	loc_6E820							;
+		move.w	#$400,d0							;
 
 loc_6E820:
 		jsr	(StartNewLevel).l
@@ -159383,13 +159400,13 @@ loc_6F04A:
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_FBZEmptyCapsule:								; Liliam: start from actual act 2 start
+Obj_FBZEmptyCapsule:									; Liliam: start from actual act 2 start
 		tst.b	(_unkFAA8).w
 		beq.s	Init_EmptyCapsule_FBZ
 		jmp	(Delete_And_Respawn_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Init_EmptyCapsule_FBZ:								; Liliam: start from actual act 2 start
+Init_EmptyCapsule_FBZ:									; Liliam: start from actual act 2 start
 		lea	(ObjDat_FBZEggPrison).l,a1
 
 Init_EmptyCapsule_HPZ:
@@ -159405,9 +159422,9 @@ Obj_FBZEmptyCapsule_Main:
 ; ---------------------------------------------------------------------------
 
 Obj_FBZEmptyCapsule_Button:
-		lea	ObjDat_FBZEmptyCapsule_Button(pc),a1			; Liliam: start from actual act 2 start
-		jsr	(SetUp_ObjAttributes3).l				;
-		move.l	#loc_6F056,(a0)						;
+		lea	ObjDat_FBZEmptyCapsule_Button(pc),a1				; Liliam: start from actual act 2 start
+		jsr	(SetUp_ObjAttributes3).l					;
+		move.l	#loc_6F056,(a0)							;
 
 loc_6F056:
 		bsr.w	sub_6F796
@@ -160458,7 +160475,7 @@ word_6FA58:
 word_6FA5E:
 		dc.w   $180
 		dc.b  $10,   8, $11,   0
-ObjDat_FBZEmptyCapsule_Button:							; Liliam: start from actual act 2 start
+ObjDat_FBZEmptyCapsule_Button:								; Liliam: start from actual act 2 start
 		dc.w   $280
 		dc.b  $10,   8,   5,   0
 		; Liliam: removed unused data
@@ -160489,7 +160506,7 @@ ChildObjDat_6FAB0:
 		dc.w 1-1
 		dc.l loc_6F74C
 		; Liliam: removed unused data
-ChildObjDat_FBZEmptyCapsule:							; Liliam: start from actual act 2 start
+ChildObjDat_FBZEmptyCapsule:								; Liliam: start from actual act 2 start
 		dc.w 0
 		dc.l Obj_FBZEmptyCapsule_Button
 		dc.w $E4
@@ -161243,7 +161260,10 @@ byte_70401:
 		dc.b    5,  $A
 		dc.b  $FC
 byte_70406:
-		dc.b    0,   6,   6,  $A,   7,  $A, $F8,   8
+		dc.b    0,   6,   6,  $A,   7,  $A
+		dc.b  $F8, .jump-byte_70406
+
+.jump:
 		dc.b    0,   8,  $A, $FC
 byte_70412:
 		dc.b    0,   7
@@ -161292,7 +161312,7 @@ Obj_FBZEndBoss:
 		move.b	#mus_EndBoss,subtype(a1)
 
 loc_70620:
-		moveq	#$6F,d0
+		moveq	#PLCID_6F,d0
 		jsr	(Load_PLC).l
 		lea	Pal_FBZEndBoss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -161555,9 +161575,9 @@ loc_7092A:
 
 loc_70938:
 		move.w	#$800,d0
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - FBZ level order
-		beq.s	loc_7093C					;
-		move.w	#$500,d0					;
+		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
+		beq.s	loc_7093C							;
+		move.w	#$500,d0							;
 
 loc_7093C:
 		jsr	(StartNewLevel).l
@@ -162259,7 +162279,7 @@ loc_71184:
 		jsr	(Boss_FadeMusic_SetUpCamera).l
 		move.l	#loc_711B0,(a0)
 		move.l	#loc_711B6,$34(a0)
-		moveq	#$5F,d0
+		moveq	#PLCID_5F,d0
 		jsr	(Load_PLC).l
 		lea	Pal_ICZMiniboss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -163205,7 +163225,7 @@ Obj_ICZEndBoss:
 		lea	word_71BC6(pc),a1
 		move.b	#mus_EndBoss,boss_saved_mus(a0)
 		jsr	(Boss_FadeMusic_SetUpCamera).l
-		moveq	#$70,d0
+		moveq	#PLCID_70,d0
 		jsr	(Load_PLC).l
 		lea	Pal_ICZEndBoss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -164571,8 +164591,14 @@ ChildObjDat_7297C:
 byte_72982:
 		dc.b   $F,   0,   1,   0,   2, $FC
 byte_72988:
-		dc.b    7,   3,   4,   5, $F8,   6
-		dc.b  $3F,   5,   5,   5, $F8,   6
+		dc.b    7,   3,   4,   5
+		dc.b  $F8, .jump-byte_72988
+
+.jump:
+		dc.b  $3F,   5,   5,   5
+		dc.b  $F8, .jump2-.jump
+
+.jump2:
 		dc.b    7,   5,   4,   3,   4, $FC
 Pal_LBZMiniboss:
 		binclude "Levels/LBZ/Palettes/Miniboss.bin"
@@ -164606,7 +164632,7 @@ loc_729DE:
 ;		beq.s	loc_72A2A				;
 ;		move.w	#$7F,$2E(a0)				;
 ;		st	(Update_HUD_timer).w			;
-;		moveq	#$71,d0					;
+;		moveq	#PLCID_71,d0				;
 ;		jsr	(Load_PLC).l				;
 ;		jsr	(AllocateObject).l			;
 ;		bne.s	loc_72A2A				;
@@ -165325,7 +165351,7 @@ Obj_LBZFinalBossKnux:
 		move.l	#loc_7304C,$34(a0)
 		clr.b	(_unkFAA2).w
 		clr.b	(_unkFAA3).w
-		moveq	#$71,d0
+		moveq	#PLCID_71,d0
 		jsr	(Load_PLC).l
 
 ; =============== S U B R O U T I N E =======================================
@@ -166233,7 +166259,7 @@ loc_73906:
 		jsr	(Boss_FadeMusic_SetUpCamera).l
 		lea	ChildObjDat_7414C(pc),a2
 		jsr	(CreateChild1_Normal).l
-		moveq	#$77,d0
+		moveq	#PLCID_77,d0
 		cmpi.w	#3,(Player_mode).w			; Liliam: bugfix - use Egg Robo for LBZ2 boss
 		bne.s	loc_7393A				;
 		addq.w	#2,d0					;
@@ -167698,7 +167724,7 @@ loc_74710:
 		addi.w	#$40,d2
 		move.w	d2,x_pos(a0)
 		jsr	(loc_694AA).l				; Liliam: ported from S3 - restore LBZ2 end bomb chute
-		moveq	#$71,d0					;
+		moveq	#PLCID_71,d0				;
 		jsr	(Load_PLC).l				;
 		lea	Pal_LBZFinalBoss1(pc),a1		;
 		jmp	(PalLoad_Line1).l			;
@@ -167745,7 +167771,7 @@ loc_74784:
 		bclr	#4,$38(a0)				; Liliam: ported from S3 - restore LBZ2 end bomb chute
 		lea	ChildObjDat_75186(pc),a2		;
 		jsr	(CreateChild1_Normal).l			;
-;		moveq	#$71,d0					;
+;		moveq	#PLCID_71,d0				;
 ;		jsr	(Load_PLC).l				;
 ;		lea	(ArtKosM_EggRoboHead).l,a1				; Liliam: bugfix - queue Egg Robo head
 ;		move.w	#tiles_to_bytes(ArtTile_RobotnikShip),d2		;
@@ -169550,7 +169576,7 @@ loc_75A6C:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-MHZMinibossTree_Act2:								; Liliam: start from actual act 2 start
+MHZMinibossTree_Act2:									; Liliam: start from actual act 2 start
 		move.l	#Sprite_CheckDelete,(a0)
 		move.w	respawn_addr(a0),d0
 		beq.s	.done
@@ -169564,7 +169590,7 @@ MHZMinibossTree_Act2:								; Liliam: start from actual act 2 start
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-MHZMinibossTree_FindOther:							; Liliam: start from actual act 2 start
+MHZMinibossTree_FindOther:								; Liliam: start from actual act 2 start
 		lea	(Dynamic_object_RAM).w,a1
 		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d1
 		move.l	#loc_75A94,d2
@@ -169578,7 +169604,7 @@ MHZMinibossTree_FindOther:							; Liliam: start from actual act 2 start
 ; ---------------------------------------------------------------------------
 
 MHZMinibossTree_RecordState:
-		move.b	mapping_frame(a1),(a2)					; Liliam: start from actual act 2 start
+		move.b	mapping_frame(a1),(a2)						; Liliam: start from actual act 2 start
 
 loc_75A7E:
 		jmp	(Delete_Current_Sprite).l
@@ -169587,8 +169613,8 @@ loc_75A7E:
 Obj_MHZMinibossTree:
 		lea	ObjDat_MHZMinibossTree(pc),a1
 		jsr	(SetUp_ObjAttributes).l
-		tst.b	(Current_act).w						; Liliam: start from actual act 2 start
-		bne.s	MHZMinibossTree_Act2					;
+		tst.b	(Current_act).w							; Liliam: start from actual act 2 start
+		bne.s	MHZMinibossTree_Act2						;
 		move.l	#loc_75A94,(a0)
 
 loc_75A94:
@@ -170097,7 +170123,9 @@ byte_75EF3:
 		dc.b   $A,   3
 		dc.b    8,   3
 		dc.b    6,   3
-		dc.b  $F8,  $A
+		dc.b  $F8, .jump-byte_75EF3
+
+.jump:
 		dc.b    6, $7F
 		dc.b    6, $7F
 		dc.b  $FC
@@ -170146,7 +170174,7 @@ Obj_MHZEndBoss:
 		lea	(ArtKosM_MHZEndBoss).l,a1
 		move.w	#tiles_to_bytes(ArtTile_MHZEndBoss),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$7B,d0
+		moveq	#PLCID_7B,d0
 		jsr	(Load_PLC).l
 		lea	Pal_MHZEndBoss(pc),a1
 		jsr	(PalLoad_Line1).l
@@ -170379,41 +170407,41 @@ locret_7626E:
 loc_76270:
 		tst.b	(_unkFAA8).w
 		bne.w	locret_76060
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - FBZ level order
-		beq.s	loc_76278					;
-		jsr	(Restore_PlayerControl).l			;
-		lea	(Player_2).w,a1					;
-		jsr	(Restore_PlayerControl2).l			;
-		move.w	#$4720,(Camera_stored_max_X_pos).w		;
-		move.l	#Obj_IncLevEndXGradual,(a0)			;
-		clr.l	$30(a0)						;
-		jsr	(AllocateObject).l				;
-		bne.s	.return						;
-		move.w	#$47A8,d1					;
-		move.w	#$2D4,d2					;
-		move.w	d1,x_pos(a1)					;
-		move.w	d2,y_pos(a1)					;
-		move.l	#Obj_MHZMushroomParachute,(a1)			;
-		subi.b	#$20,d2						;
-		moveq	#4-1,d3						;
-		jsr	(CreateNewSprite4).l				;
-		bne.s	.return						;
+		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
+		beq.s	loc_76278							;
+		jsr	(Restore_PlayerControl).l					;
+		lea	(Player_2).w,a1							;
+		jsr	(Restore_PlayerControl2).l					;
+		move.w	#$4720,(Camera_stored_max_X_pos).w				;
+		move.l	#Obj_IncLevEndXGradual,(a0)					;
+		clr.l	$30(a0)								;
+		jsr	(AllocateObject).l						;
+		bne.s	.return								;
+		move.w	#$47A8,d1							;
+		move.w	#$2D4,d2							;
+		move.w	d1,x_pos(a1)							;
+		move.w	d2,y_pos(a1)							;
+		move.l	#Obj_MHZMushroomParachute,(a1)					;
+		subi.b	#$20,d2								;
+		moveq	#4-1,d3								;
+		jsr	(CreateNewSprite4).l						;
+		bne.s	.return								;
 
 	.loop:
-		move.l	#Obj_StillSprite,(a1)				;
-		move.b	#$1D,subtype(a1)				;
-		move.w	d1,x_pos(a1)					;
-		move.w	d2,y_pos(a1)					;
-		subi.b	#$F,d2						;
-		jsr	(CreateNewSprite4).l				;
-		dbne	d3,.loop					;
-		tst.w	d3						;
-		bpl.s	.return						;
-		move.l	#Obj_MHZSOZTransitionControl,(a1)		;
-		move.w	d1,x_pos(a1)					;
+		move.l	#Obj_StillSprite,(a1)						;
+		move.b	#$1D,subtype(a1)						;
+		move.w	d1,x_pos(a1)							;
+		move.w	d2,y_pos(a1)							;
+		subi.b	#$F,d2								;
+		jsr	(CreateNewSprite4).l						;
+		dbne	d3,.loop							;
+		tst.w	d3								;
+		bpl.s	.return								;
+		move.l	#Obj_MHZSOZTransitionControl,(a1)				;
+		move.w	d1,x_pos(a1)							;
 
 	.return:
-		rts							;
+		rts									;
 ; ---------------------------------------------------------------------------
 
 loc_76278:
@@ -170648,21 +170676,21 @@ loc_76574:
 		bset	#2,$38(a1)
 		lea	(Normal_palette).w,a1
 		lea	(Target_palette).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d6
 
 loc_7659C:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_7659C
 		lea	(Pal_MHZEndBoss).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_765AE:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_765AE
 		lea	(Pal_MHZ1+$20).l,a1
 		lea	(Target_palette_line_3).w,a2
-		moveq	#bytesToLcnt($40),d6
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_3),d6
 
 loc_765C0:
 		move.l	(a1)+,(a2)+
@@ -171103,14 +171131,14 @@ Obj_SOZMiniboss:
 		move.w	#$9F7,y_pos(a0)
 		lea	(Pal_SOZMinibossFade).l,a1
 		lea	(Normal_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d6
 
 loc_76A30:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_76A30
 		lea	(Pal_SOZMinibossMain).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
 
 loc_76A42:
 		move.l	(a1)+,(a2)+
@@ -172113,13 +172141,13 @@ loc_7767C:
 		lea	(ArtKosM_SOZEndBoss).l,a1
 		move.w	#tiles_to_bytes(ArtTile_SOZEndBoss),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$6D,d0
+		moveq	#PLCID_6D,d0
 		jsr	(Load_PLC).l
 		lea	Pal_SOZEndBoss1(pc),a1
 		jsr	(PalLoad_Line1).l
 		lea	(Pal_SOZEndBoss2).l,a1
 		lea	(Normal_palette_line_4).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d6
 
 loc_776C6:
 		move.l	(a1)+,(a2)+
@@ -173377,16 +173405,16 @@ loc_78522:
 
 loc_78528:
 		move.l	#loc_78538,(a0)
-		st	(Palette_cycle_counters+$00).w		; Liliam: bugfix - stop palette cycle for boss
-		lea	Pal_LRZMiniboss2+$C(pc),a1		;
-		lea	(Normal_palette_line_3+$C).w,a5		;
-		moveq	#bytesToLcnt($34),d0			;
+		st	(Palette_cycle_counters+$00).w					; Liliam: bugfix - stop palette cycle for boss
+		lea	Pal_LRZMiniboss2+$C(pc),a1					;
+		lea	(Normal_palette_line_3+$C).w,a5					;
+		moveq	#bytesToLcnt(Normal_palette_end-(Normal_palette_line_3+$C)),d0	;
 
 	.loop:
-		move.l	(a1)+,(a5)+				;
-		dbf	d0,.loop				;
-;		lea	Pal_LRZMiniboss2(pc),a1			;
-;		bsr.w	sub_78B38				;
+		move.l	(a1)+,(a5)+							;
+		dbf	d0,.loop							;
+;		lea	Pal_LRZMiniboss2(pc),a1						;
+;		bsr.w	sub_78B38							;
 
 locret_78536:
 		rts
@@ -173881,17 +173909,17 @@ loc_78AA8:
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
 		clr.w	(a2)
-		clr.w	(Palette_cycle_counters+$04).w				; Liliam: start from actual act 2 start
+		clr.w	(Palette_cycle_counters+$04).w					; Liliam: start from actual act 2 start
 		move.l	#loc_78B00,(Palette_rotation_custom).w
 		move.w	#$7FFF,(Palette_cycle_counter1).w
-		move.w	#$710,(Camera_stored_min_Y_pos).w			;
-;		jsr	(AllocateObject).l					;
-;		bne.s	loc_78AE0						;
-;		move.l	#loc_78B08,(a1)						;
+		move.w	#$710,(Camera_stored_min_Y_pos).w				;
+;		jsr	(AllocateObject).l						;
+;		bne.s	loc_78AE0							;
+;		move.l	#loc_78B08,(a1)							;
 
 loc_78AE0:
-		jmp	(Run_PalRotationScript).l				;
-;		jsr	(Run_PalRotationScript).l				;
+		jmp	(Run_PalRotationScript).l					;
+;		jsr	(Run_PalRotationScript).l					;
 ; ---------------------------------------------------------------------------
 
 loc_78AE6:
@@ -173899,19 +173927,19 @@ loc_78AE6:
 		blo.s	locret_78B06				;
 		move.l	#Obj_LRZ2PaletteControl,(a0)		;
 		move.w	d7,-(sp)				;
-		moveq	#$1D,d0					;
+		moveq	#PalID_LRZ2,d0				;
 		jsr	(LoadPalette_Immediate).l		;
 		move.w	(sp)+,d7				;
 		rts						;
 ; ---------------------------------------------------------------------------
 
 Obj_LRZ2PaletteControl:
-		cmpi.w	#$2C0,(Camera_X_pos).w					; Liliam: start from actual act 2 start
-		blo.s	sub_78B38						;
-		move.w	#$710,(Camera_min_Y_pos).w				;
-		cmpi.w	#$500,(Camera_X_pos).w					;
-		blo.s	locret_78B06						;
-		clr.w	(Camera_min_Y_pos).w					;
+		cmpi.w	#$2C0,(Camera_X_pos).w						; Liliam: start from actual act 2 start
+		blo.s	sub_78B38							;
+		move.w	#$710,(Camera_min_Y_pos).w					;
+		cmpi.w	#$500,(Camera_X_pos).w						;
+		blo.s	locret_78B06							;
+		clr.w	(Camera_min_Y_pos).w						;
 		cmpi.w	#$940,(Camera_X_pos).w
 		blo.w	locret_78536
 		move.w	#$940,(Camera_min_X_pos).w
@@ -173920,9 +173948,9 @@ Obj_LRZ2PaletteControl:
 ; ---------------------------------------------------------------------------
 
 Obj_LevelIntroLRZ2:
-		bsr.s	Player_SetPriority					; Liliam: start from actual act 2 start
-		move.w	#$7FFF,(Palette_cycle_counter1).w			;
-		move.w	#$710,(Camera_min_Y_pos).w				;
+		bsr.s	Player_SetPriority						; Liliam: start from actual act 2 start
+		move.w	#$7FFF,(Palette_cycle_counter1).w				;
+		move.w	#$710,(Camera_min_Y_pos).w					;
 
 loc_78B00:
 		move.l	#loc_78AE6,(a0)
@@ -173935,10 +173963,10 @@ locret_78B06:
 		; Liliam: Encore mode - palette
 ; ---------------------------------------------------------------------------
 
-Obj_LevelIntroAIZ2:								; Liliam: start from actual act 2 start
+Obj_LevelIntroAIZ2:									; Liliam: start from actual act 2 start
 		move.l	#Delete_Current_Sprite,(a0)
 
-Player_SetPriority:								; Liliam: start from actual act 2 start
+Player_SetPriority:									; Liliam: start from actual act 2 start
 		ori.w	#high_priority,(Player_1+art_tile).w
 		tst.l	(Player_2).w
 		beq.s	.return
@@ -173951,10 +173979,10 @@ Player_SetPriority:								; Liliam: start from actual act 2 start
 
 
 sub_78B38:
-		move.l	#loc_78AE6,(a0)						; Liliam: start from actual act 2 start
-		lea	(Pal_LRZMiniboss2).l,a1					;
+		move.l	#loc_78AE6,(a0)							; Liliam: start from actual act 2 start
+		lea	(Pal_LRZMiniboss2).l,a1						;
 		lea	(Normal_palette_line_3).w,a2
-		moveq	#bytesToLcnt($40),d0
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_3),d0
 
 loc_78B3E:
 		move.l	(a1)+,(a2)+
@@ -174697,14 +174725,14 @@ loc_79416:
 		jsr	(Play_SFX).l
 		lea	(Normal_palette).w,a1
 		lea	(Target_palette).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d6
 
 loc_7943A:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_7943A
 		lea	(Pal_LRZBossFire).l,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($60),d6
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_2),d6
 
 loc_7944C:
 		move.l	(a1)+,(a2)+
@@ -174957,7 +174985,9 @@ byte_79694:
 		dc.b    5,   0
 		dc.b    6,   0
 		dc.b    5,   0
-		dc.b  $F8, $1C
+		dc.b  $F8, .jump-byte_79694
+
+.jump:
 		dc.b    6,   0
 		dc.b  $12,   0
 		dc.b  $FC
@@ -176281,7 +176311,7 @@ loc_7A100:
 		clr.w	(a2)
 		move.l	#loc_7A138,(Palette_rotation_custom).w
 		move.w	d7,-(sp)				; Liliam: HPZ - add transition from LRZ3
-		moveq	#$3F,d0					;
+		moveq	#PalID_HPZIntro,d0			;
 		jsr	(LoadPalette_Immediate_NoEncore).l	;
 		move.w	(sp)+,d7				;
 		move.l	-$84(a2),(Normal_palette_line_3+$1C).w	;
@@ -176438,25 +176468,25 @@ loc_7A244:
 		subi.w	#$40,d0
 		move.w	d0,y_pos(a0)
 		clr.w	(Ending_completion_level).w
-		moveq	#$7B,d0
+		moveq	#PLCID_7B,d0
 		jsr	(Load_PLC).l
 		lea	(ArtKosM_SSZGHZMisc).l,a1
 		move.w	#tiles_to_bytes(ArtTile_SSZGHZMisc),d2
 		jsr	(Queue_Kos_Module).l
 		lea	(Normal_palette_line_2).w,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($60),d6					; Liliam: move Egg Mobile boss flash out of palette line 1
-;		moveq	#bytesToLcnt($20),d6					;
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_2),d6	; Liliam: move Egg Mobile boss flash out of palette line 1
+;		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6	;
 
 loc_7A282:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_7A282
-		lea	(Pal_SonicTails+$20).l,a2				;
-		moveq	#9-1,d6							;
+		lea	(Pal_SonicTails+$20).l,a2					;
+		moveq	#9-1,d6								;
 
 	.loop:
-		move.w	-(a2),-(a1)						;
-		dbf	d6,.loop						;
+		move.w	-(a2),-(a1)							;
+		dbf	d6,.loop							;
 		lea	(Pal_SSZGHZMisc).l,a1
 		jmp	(PalLoad_Line1).l
 ; ---------------------------------------------------------------------------
@@ -176602,13 +176632,13 @@ loc_7A3F8:
 		st	(Events_bg+$00).w
 		lea	(Target_palette_line_2).w,a1
 		lea	(Normal_palette_line_2).w,a2
-		moveq	#bytesToLcnt($60),d6					; Liliam: move Egg Mobile boss flash out of palette line 1
-;		moveq	#bytesToLcnt($20),d6					;
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_2),d6	; Liliam: move Egg Mobile boss flash out of palette line 1
+;		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d6	;
 
 loc_7A414:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_7A414
-		moveq	#$32,d0
+		moveq	#PLCID_32,d0
 		jsr	(Load_PLC).l
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -176747,7 +176777,7 @@ loc_7A544:
 loc_7A558:
 		lea	word_7A65A(pc),a1
 		jsr	(SetUp_ObjAttributes3).l
-		move.w	#$52E,art_tile(a0)					; Liliam: move Egg Mobile boss flash out of palette line 1
+		move.w	#$52E,art_tile(a0)						; Liliam: move Egg Mobile boss flash out of palette line 1
 		move.l	#loc_7A568,(a0)
 
 loc_7A568:
@@ -176829,9 +176859,9 @@ sub_7A614:
 
 ; ---------------------------------------------------------------------------
 word_7A622:
-		dc.w Normal_palette_line_4+$0E					; Liliam: move Egg Mobile boss flash out of palette line 1
-		dc.w Normal_palette_line_4+$1C, Normal_palette_line_4+$1E	;
-;		dc.w Normal_palette+$0E, Normal_palette+$1C, Normal_palette+$1E	;
+		dc.w Normal_palette_line_4+$0E						; Liliam: move Egg Mobile boss flash out of palette line 1
+		dc.w Normal_palette_line_4+$1C, Normal_palette_line_4+$1E		;
+;		dc.w Normal_palette+$0E, Normal_palette+$1C, Normal_palette+$1E		;
 		dc.w Normal_palette_line_2+$14					; Liliam: perform Mecha Sonic boss flash
 		dc.w Normal_palette_line_2+$16					;
 		dc.w Normal_palette_line_2+$18					;
@@ -176857,8 +176887,8 @@ word_7A642:
 		dc.w     $C,   $14,   $1C,   $24,   $2C,   $3C
 ObjDat_SSZGHZBoss:
 		dc.l Map_RobotnikShip
-		dc.w make_art_tile(ArtTile_RobotnikShip,3,0)			; Liliam: move Egg Mobile boss flash out of palette line 1
-;		dc.w make_art_tile(ArtTile_RobotnikShip,0,0)			;
+		dc.w make_art_tile(ArtTile_RobotnikShip,3,0)				; Liliam: move Egg Mobile boss flash out of palette line 1
+;		dc.w make_art_tile(ArtTile_RobotnikShip,0,0)				;
 		dc.w   $200
 		dc.b  $1C, $20,  $A,  $F
 word_7A65A:
@@ -176918,25 +176948,25 @@ Obj_SSZMTZBoss:
 
 loc_7A6DC:
 		clr.w	(Ending_completion_level).w
-		moveq	#$7B,d0
+		moveq	#PLCID_7B,d0
 		jsr	(Load_PLC).l
 		lea	(ArtKosM_SSZMTZOrbs).l,a1
 		move.w	#tiles_to_bytes(ArtTile_SSZMTZOrbs),d2
 		jsr	(Queue_Kos_Module).l
 		lea	(Normal_palette_line_2).w,a1
 		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt($60),d6					; Liliam: move Egg Mobile boss flash out of palette line 1
-;		moveq	#bytesToLcnt($20),d6					;
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_2),d6	; Liliam: move Egg Mobile boss flash out of palette line 1
+;		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6	;
 
 loc_7A702:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_7A702
-		lea	(Pal_SonicTails+$20).l,a2				;
-		moveq	#9-1,d6							;
+		lea	(Pal_SonicTails+$20).l,a2					;
+		moveq	#9-1,d6								;
 
 	.loop:
-		move.w	-(a2),-(a1)						;
-		dbf	d6,.loop						;
+		move.w	-(a2),-(a1)							;
+		dbf	d6,.loop							;
 		lea	Pal_SSZMTZOrbs(pc),a1
 		jmp	(PalLoad_Line1).l
 ; ---------------------------------------------------------------------------
@@ -176961,8 +176991,8 @@ off_7A728:
 
 loc_7A72C:
 		move.l	#Map_RobotnikShip,mappings(a0)
-		move.w	#make_art_tile(ArtTile_RobotnikShip,3,0),art_tile(a0)	; Liliam: move Egg Mobile boss flash out of palette line 1
-;		move.w	#make_art_tile(ArtTile_RobotnikShip,0,0),art_tile(a0)	;
+		move.w	#make_art_tile(ArtTile_RobotnikShip,3,0),art_tile(a0)		; Liliam: move Egg Mobile boss flash out of palette line 1
+;		move.w	#make_art_tile(ArtTile_RobotnikShip,0,0),art_tile(a0)		;
 		ori.b	#4,render_flags(a0)
 		move.w	#$180,priority(a0)
 		move.w	#$1700,x_pos(a0)
@@ -177472,13 +177502,13 @@ loc_7ACA4:
 		st	(Events_bg+$02).w
 		lea	(Target_palette_line_2).w,a1
 		lea	(Normal_palette_line_2).w,a2
-		moveq	#bytesToLcnt($60),d6					; Liliam: move Egg Mobile boss flash out of palette line 1
-;		moveq	#bytesToLcnt($20),d6					;
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_2),d6	; Liliam: move Egg Mobile boss flash out of palette line 1
+;		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d6	;
 
 loc_7ACC0:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_7ACC0
-		moveq	#$32,d0
+		moveq	#PLCID_32,d0
 		jsr	(Load_PLC).l
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -177517,8 +177547,8 @@ loc_7AD1A:
 	endif
 
 loc_7AD28:
-		bsr.w	sub_7A614						; Liliam: move Egg Mobile boss flash out of palette line 1
-;		bsr.w	sub_7AD6A						;
+		bsr.w	sub_7A614							; Liliam: move Egg Mobile boss flash out of palette line 1
+;		bsr.w	sub_7AD6A							;
 
 		subq.b	#1,$20(a0)				; Liliam: bugfix - stop clobbering flash timer with player address
 ;		subq.b	#1,$1C(a0)				;
@@ -178826,7 +178856,7 @@ loc_7BC76:
 		move.b	#4,$39(a0)
 		lea	(Normal_palette).w,a1
 		lea	(Target_palette).w,a2
-		moveq	#bytesToLcnt($80),d6
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette),d6
 
 loc_7BC90:
 		move.l	(a1)+,(a2)+
@@ -178914,7 +178944,7 @@ locret_7BD4A:
 PLC_EndingMasterEmerald:							; Liliam: bugfix - queue Master Emerald for ending
 		dc.w 0
 		dc.l ArtNem_EndingMasterEmerald
-		dc.w $A5C0
+		dc.w tiles_to_bytes(ArtTile_Ending_MasterEmerald)
 ; ---------------------------------------------------------------------------
 
 Obj_SSZ2_Boss:
@@ -179024,7 +179054,7 @@ loc_7BE4E:
 		move.l	#loc_7BEA8,$34(a0)
 		lea	(Normal_palette).w,a1
 		lea	(Target_palette).w,a2
-		moveq	#bytesToLcnt($80),d6
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette),d6
 
 loc_7BE7E:
 		move.l	(a1)+,(a2)+
@@ -180675,7 +180705,7 @@ loc_7D0F6:
 		bpl.s	locret_7D0CA
 		lea	(Target_palette).w,a1
 		lea	(Normal_palette).w,a2
-		moveq	#bytesToLcnt($80),d6
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette),d6
 
 loc_7D110:
 		move.l	(a1)+,(a2)+
@@ -181180,7 +181210,9 @@ byte_7D4DE:
 		dc.b    6,   3
 		dc.b    7,   4
 		dc.b    8,   5
-		dc.b  $F8,  $E
+		dc.b  $F8, .jump-byte_7D4DE
+
+.jump:
 		dc.b    8, $7F
 		dc.b  $FC
 byte_7D4EF:
@@ -181194,14 +181226,16 @@ byte_7D4EF:
 		dc.b   $A,   4
 		dc.b   $B,   4
 		dc.b   $C,   4
-		dc.b  $F8, $16
+		dc.b  $F8, .jump-byte_7D4EF
+
+.jump:
 		dc.b   $C, $7F
 		dc.b  $FC
 byte_7D508:
 		dc.b  $13,   5
 		dc.b  $13,   5
 		dc.b    8, $7F
-		dc.b  $F8, $E4
+		dc.b  $F8, byte_7D4DE.jump-byte_7D508
 byte_7D510:
 		dc.b    1,   5
 		dc.b    1,   5
@@ -181213,7 +181247,7 @@ byte_7D519:
 		dc.b    3,   1
 		dc.b    4,   1
 		dc.b    5,   1
-		dc.b  $F8,  $A
+		dc.b  $F8, byte_7D523-byte_7D519
 byte_7D523:
 		dc.b    3,   0
 		dc.b    4,   0
@@ -181226,7 +181260,7 @@ byte_7D52A:
 		dc.b    3,   1
 		dc.b    4,   1
 		dc.b    5,   1
-		dc.b  $F8, $F9
+		dc.b  $F8, byte_7D523-byte_7D52A
 byte_7D538:
 		dc.b    6,   3
 		dc.b    6,   3
@@ -181245,7 +181279,7 @@ byte_7D54A:
 		dc.b    3,   1
 		dc.b    4,   1
 		dc.b    5,   1
-		dc.b  $F8, $D9
+		dc.b  $F8, byte_7D523-byte_7D54A
 byte_7D556:
 		dc.b  $12,   0
 		dc.b  $12,   5
@@ -181268,12 +181302,14 @@ byte_7D56C:
 		dc.b    $B,   3
 		dc.b    $C,   3
 		dc.b $40|8, $7F
-		dc.b   $F8, $80
+		dc.b   $F8, byte_7D4DE.jump-byte_7D56C
 byte_7D57C:
 		dc.b    8,   5
 		dc.b  $13,   5
 		dc.b  $14, $7F
-		dc.b  $F8,   8
+		dc.b  $F8, .jump-byte_7D57C
+
+.jump
 		dc.b  $15, $7F
 		dc.b  $FC
 byte_7D587:
@@ -181333,12 +181369,14 @@ byte_7D5D8:
 		dc.b   $A,   3
 		dc.b    9,   3
 		dc.b    8,   3
-		dc.b  $F8, $42
+		dc.b  $F8, byte_7D61A-byte_7D5D8
 byte_7D5E4:
 		dc.b   $E,   5
 		dc.b   $E,   5
 		dc.b   $F,   3
-		dc.b  $F8,   8
+		dc.b  $F8, .jump-byte_7D5E4
+
+.jump:
 		dc.b   $F, $7F
 		dc.b  $FC
 byte_7D5EF:
@@ -181367,7 +181405,7 @@ byte_7D60A:
 		dc.b    $B,   5
 		dc.b    $C,   5
 		dc.b $40|8, $7F
-		dc.b   $F8, $10
+		dc.b   $F8, byte_7D61A-byte_7D60A
 byte_7D61A:
 		dc.b    8, $7F
 		dc.b  $FC
@@ -181384,7 +181422,7 @@ byte_7D626:
 		dc.b    $B,   1
 		dc.b    $C,   0
 		dc.b $40|8, $7F
-		dc.b   $F8, $24
+		dc.b   $F8, byte_7D645.jump-byte_7D626
 byte_7D636:
 		dc.b     8,   3
 		dc.b     8,   3
@@ -181397,7 +181435,10 @@ byte_7D636:
 byte_7D645:
 		dc.b    8,   3
 		dc.b    8,  $F
-		dc.b    1,   5
+		dc.b    1
+
+.jump:
+		dc.b    5
 		dc.b  $10,  $F
 		dc.b    1,   5
 		dc.b  $11,   0
@@ -181407,7 +181448,9 @@ byte_7D652:
 		dc.b    8,   1
 		dc.b   $D,   5
 		dc.b  $12, $7F
-		dc.b  $F8,  $A
+		dc.b  $F8, .jump-byte_7D652
+
+.jump:
 		dc.b  $12, $7F
 		dc.b  $FC
 byte_7D65F:
@@ -181616,7 +181659,7 @@ loc_7DDC4:
 		jsr	CreateChild1_Normal(pc)
 		lea	ChildObjDat_7EF96(pc),a2
 		jsr	CreateChild6_Simple(pc)
-		moveq	#$7B,d0
+		moveq	#PLCID_7B,d0
 		jsr	(Load_PLC).l
 		lea	(ArtKosM_DEZMinibossMisc).l,a1
 		move.w	#tiles_to_bytes(ArtTile_DEZMiniboss),d2
@@ -182224,7 +182267,7 @@ loc_7E4A2:
 		bpl.w	locret_7DE44
 		lea	(Pal_DEZMiniboss2).l,a1
 		lea	(Normal_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d6
 
 loc_7E4B6:
 		move.l	(a1)+,(a2)+
@@ -183463,7 +183506,7 @@ Obj_DEZEndBoss:
 		move.b	#mus_EndBoss,boss_saved_mus(a0)
 		jsr	Boss_FadeMusic_SetUpCamera(pc)
 		clr.b	(_unkFAB8).w
-		moveq	#$76,d0
+		moveq	#PLCID_76,d0
 		cmpi.w	#3,(Player_mode).w			; Liliam: bugfix - use Egg Robo for DEZ2 boss
 		bne.s	loc_7F098				;
 		addq.w	#2,d0					;
@@ -185231,8 +185274,8 @@ loc_8013A:
 		lea	(ArtKosM_DEZFinalBossDebris).l,a1
 		move.w	#tiles_to_bytes(ArtTile_DEZFinalBossDebris),d2
 		jsr	(Queue_Kos_Module).l
-		lea	Pal_DEZRobotnikShip(pc),a1				; Liliam: move Egg Mobile boss flash out of palette line 1
-		jsr	PalLoad_Line1(pc)					;
+		lea	Pal_DEZRobotnikShip(pc),a1					; Liliam: move Egg Mobile boss flash out of palette line 1
+		jsr	PalLoad_Line1(pc)						;
 		jmp	(Go_Delete_Sprite_2).l
 ; ---------------------------------------------------------------------------
 
@@ -185490,7 +185533,7 @@ loc_8040C:
 ; ---------------------------------------------------------------------------
 
 ;loc_8041E:
-;		move.b	#0,(Game_mode).w			; Liliam: ending - allow start from Knuckles' ending
+;		move.b	#GameMode_SegaScreen,(Game_mode).w	; Liliam: ending - allow start from Knuckles' ending
 
 locret_80424:
 		rts
@@ -186557,9 +186600,9 @@ sub_80ED6:
 
 ; ---------------------------------------------------------------------------
 word_80EE2:
-		dc.w Normal_palette_line_2+$08				 	; Liliam: move Egg Mobile boss flash out of palette line 1
-		dc.w Normal_palette_line_2+$1C, Normal_palette_line_2+$0E	;
-;		dc.w Normal_palette+$0E, Normal_palette+$1C, Normal_palette+$1E	;
+		dc.w Normal_palette_line_2+$08				 		; Liliam: move Egg Mobile boss flash out of palette line 1
+		dc.w Normal_palette_line_2+$1C, Normal_palette_line_2+$0E		;
+;		dc.w Normal_palette+$0E, Normal_palette+$1C, Normal_palette+$1E		;
 word_80EE8:
 		dc.w      8,  $866,  $222
 		dc.w   $888,  $CCC,  $EEE
@@ -186637,12 +186680,12 @@ locret_80F9C:
 ; End of function sub_80F3A
 
 ; ---------------------------------------------------------------------------
-Pal_DEZRobotnikShip:								; Liliam: move Egg Mobile boss flash out of palette line 1
+Pal_DEZRobotnikShip:									; Liliam: move Egg Mobile boss flash out of palette line 1
 		binclude "General/Sprites/Robotnik/HPZ Ship Pal.bin"
 		even
 PLC_DEZHPZRobotnikShip: plrlistheader
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
-		plreq ArtTile_RobotnikShip+$26, ArtNem_DEZHPZRobotnikShip	; Liliam: move Egg Mobile boss flash out of palette line 1
+		plreq ArtTile_RobotnikShip+$26, ArtNem_DEZHPZRobotnikShip		; Liliam: move Egg Mobile boss flash out of palette line 1
 PLC_DEZHPZRobotnikShip_End
 
 ; =============== S U B R O U T I N E =======================================
@@ -187024,8 +187067,8 @@ ObjDat3_812EC:
 		dc.l Map_RobotnikShip
 		dc.w make_art_tile(ArtTile_RobotnikShip,0,0)
 		dc.w $200
-		dc.b  $20, $29,  $D,   0					; Liliam: move Egg Mobile boss flash out of palette line 1
-;		dc.b  $20, $20,   5,   0					;
+		dc.b  $20, $29,  $D,   0						; Liliam: move Egg Mobile boss flash out of palette line 1
+;		dc.b  $20, $20,   5,   0						;
 ObjDat3_812F8:
 		dc.l Map_KnuxFinalBossCrane
 		dc.w make_art_tile(ArtTile_DEZBossCrane,0,0)
@@ -187393,7 +187436,7 @@ loc_81726:
 		jsr	(Seek_Object_Manager).l
 		moveq	#0,d0
 		lea	(Ring_status_table).w,a1
-		move.w	#bytesToLcnt($400),d1
+		move.w	#bytesToLcnt(Ring_status_table_end-Ring_status_table),d1
 
 loc_8174E:
 		move.l	d0,(a1)+
@@ -187594,14 +187637,14 @@ loc_8197C:
 loc_819CE:
 		lea	(Pal_DDZ+$20).l,a1
 		lea	(Normal_palette_line_3).w,a2
-		moveq	#bytesToLcnt($20),d6
+		moveq	#bytesToLcnt(Normal_palette_line_4-Normal_palette_line_3),d6
 
 loc_819DA:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_819DA
 		lea	(Normal_palette).w,a1
 		lea	(Target_palette).w,a2
-		moveq	#bytesToLcnt($80),d6
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette),d6
 
 loc_819EA:
 		move.l	(a1)+,(a2)+
@@ -190655,14 +190698,14 @@ AfterBoss_Index:
 
 AfterBoss_AIZ1:
 		lea	(Pal_AIZ).l,a1
-		bsr.w	PalLoad_Line1				; Liliam: Knuckles intro - apply bomb flash to waterfall
-		cmpi.w	#3,(Player_mode).w			;
-		beq.s	locret_83CA6				;
-		lea	(Pal_AIZ+$40).l,a1			;
-		lea	(Normal_palette_line_4).w,a2		;
-;		lea	(Normal_palette_line_2).w,a2		;
-;		moveq	#bytesToLcnt($60),d0			;
-		moveq	#bytesToLcnt($20),d0			;
+		bsr.w	PalLoad_Line1							; Liliam: Knuckles intro - apply bomb flash to waterfall
+		cmpi.w	#3,(Player_mode).w						;
+		beq.s	locret_83CA6							;
+		lea	(Pal_AIZ+$40).l,a1						;
+		lea	(Normal_palette_line_4).w,a2					;
+;		lea	(Normal_palette_line_2).w,a2					;
+;		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_2),d0	;
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d0	;
 
 loc_83C88:
 		move.l	(a1)+,(a2)+
@@ -194031,7 +194074,7 @@ locret_8593E:
 
 PalLoad_Line1:
 		lea	(Normal_palette_line_2).w,a2
-		moveq	#bytesToLcnt($20),d0
+		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d0
 
 loc_85946:
 		move.l	(a1)+,(a2)+
@@ -195058,7 +195101,7 @@ CutsceneSkip_HPZSSResults:					; Liliam: cutscene skip - HPZ SS results
 ; ---------------------------------------------------------------------------
 
 	.restartLevel:
-		move.b	#$C,(Game_mode).w
+		move.b	#GameMode_Level,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
 Map_CutsceneSkip:						; Liliam: cutscene skip object
@@ -195804,12 +195847,12 @@ loc_863E6:
 ; ---------------------------------------------------------------------------
 
 Obj_MHZSOZTransitionControl:
-		tst.b	(Player_1+object_control).w			; Liliam: Encore mode - FBZ level order
-		beq.s	locret_863BE					;
-		clr.w	(Ctrl_1_logical).w				;
-		st	(Ctrl_1_locked).w				;
-		move.l	#Obj_StartNewLevel,(a0)				;
-		move.b	#$10,subtype(a0)				;
+		tst.b	(Player_1+object_control).w					; Liliam: Encore mode - FBZ level order
+		beq.s	locret_863BE							;
+		clr.w	(Ctrl_1_logical).w						;
+		st	(Ctrl_1_locked).w						;
+		move.l	#Obj_StartNewLevel,(a0)						;
+		move.b	#$10,subtype(a0)						;
 
 Obj_StartNewLevel:
 		move.w	(Camera_X_pos).w,d0			; Liliam: HPZ - improve transition from LRZ2
@@ -195866,8 +195909,8 @@ loc_86418:
 ; ---------------------------------------------------------------------------
 
 loc_86422:
-		jmp	StartNewLevel_Alternate(pc)		; Liliam: improve transition to CNZ
-;		jmp	StartNewLevel(pc)			;
+		jmp	StartNewLevel_Alternate(pc)					; Liliam: improve transition to CNZ
+;		jmp	StartNewLevel(pc)						;
 ; ---------------------------------------------------------------------------
 ;word_86426:
 		; Liliam: HPZ - improve transition from LRZ2
@@ -197804,7 +197847,9 @@ byte_876BD:
 		dc.b    8,  $F
 		dc.b    9,  $F
 		dc.b   $A,  $F
-		dc.b  $F8,  $A
+		dc.b  $F8, .jump-byte_876BD
+
+.jump:
 		dc.b    6, $7E
 		dc.b  $FC
 		even
@@ -206811,10 +206856,16 @@ byte_8CB2A:
 byte_8CB36:
 		dc.b    2,  $A,  $A,  $B,  $C,  $D,  $E,  $F, $F4
 byte_8CB3F:
-		dc.b    3, $10, $10, $11, $12, $13, $F8,   8
+		dc.b    3, $10, $10, $11, $12, $13
+		dc.b  $F8, .jump-byte_8CB3F
+
+.jump:
 		dc.b    3, $13, $13, $FC
 byte_8CB4B:
-		dc.b    3,  $A,  $A, $14, $F8,   6
+		dc.b    3,  $A,  $A, $14
+		dc.b  $F8, .jump-byte_8CB4B
+
+.jump:
 		dc.b    3, $14, $14, $FC
 		even
 ; ---------------------------------------------------------------------------
@@ -206858,7 +206909,7 @@ loc_8CB9E:
 		jsr	(Swing_Setup1).l
 		move.w	#$3820,(Camera_min_X_pos).w
 		move.w	#$3AE8,(Camera_max_X_pos).w
-		moveq	#$60,d0
+		moveq	#PLCID_60,d0
 		jsr	(Load_PLC).l
 		lea	(ArtKosM_LBZMinibossBox).l,a1
 		move.w	#tiles_to_bytes(ArtTile_LBZMinibossBox),d2
@@ -207184,31 +207235,31 @@ loc_8CF0A:
 		jmp	(Animate_Raw).l
 ; ---------------------------------------------------------------------------
 
-Obj_LBZ2MinibossBox:								; Liliam: start from actual act 2 start
+Obj_LBZ2MinibossBox:									; Liliam: start from actual act 2 start
 		tst.b	(_unkFAA8).w
 		beq.s	LBZ2MinibossBox_Init
 		jmp	(Delete_And_Respawn_Sprite).l
 ; ---------------------------------------------------------------------------
 
 loc_8CF10:
-		moveq	#$C,d0							; Liliam: start from actual act 2 start
-		bclr	#1,subtype(a0)						;
-		beq.s	LBZ2MinibossBox_CheckDelete				;
-		neg.w	d0							;
+		moveq	#$C,d0								; Liliam: start from actual act 2 start
+		bclr	#1,subtype(a0)							;
+		beq.s	LBZ2MinibossBox_CheckDelete					;
+		neg.w	d0								;
 
 LBZ2MinibossBox_CheckDelete:
-		cmpi.b	#$C,subtype(a0)						;
-		bne.s	loc_8CF5C						;
-		add.w	d0,x_pos(a0)						;
+		cmpi.b	#$C,subtype(a0)							;
+		bne.s	loc_8CF5C							;
+		add.w	d0,x_pos(a0)							;
 
 LBZ2MinibossBox_Init:
-;		move.l	#loc_8CF1E,(a0)						;
-		move.l	#Sprite_OnScreen_Test,(a0)				;
-		move.l	#Map_LBZMinibossBox,mappings(a0)			;
-		move.b	#$C,mapping_frame(a0)					;
-		move.b	#$20,width_pixels(a0)					;
-		move.b	#8,height_pixels(a0)					;
-		ori.b	#4,render_flags(a0)					;
+;		move.l	#loc_8CF1E,(a0)							;
+		move.l	#Sprite_OnScreen_Test,(a0)					;
+		move.l	#Map_LBZMinibossBox,mappings(a0)				;
+		move.b	#$C,mapping_frame(a0)						;
+		move.b	#$20,width_pixels(a0)						;
+		move.b	#8,height_pixels(a0)						;
+		ori.b	#4,render_flags(a0)						;
 		move.w	#make_art_tile(ArtTile_LBZ2MinibossBox,2,0),art_tile(a0);
 		move.w	#$380,priority(a0)
 		rts
@@ -207710,7 +207761,7 @@ LBZ2RobotnikShip_CutsceneSkip:					; Liliam: cutscene skip - LBZ2 pre-boss
 		move.l	a0,-(sp)
 		lea	(Normal_palette).w,a1
 		lea	(Target_palette).w,a2
-		moveq	#bytesToLcnt($80),d6
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette),d6
 
 	.loop:
 		move.l	(a1)+,(a2)+
@@ -207829,7 +207880,7 @@ loc_8D500:
 		move.l	#Obj_Song_Fade_Transition,(a0)		;
 		move.b	#mus_EndBoss,subtype(a0)		;
 		bset	#4,$38(a0)				;
-		moveq	#$71,d0					;
+		moveq	#PLCID_71,d0				;
 		jmp	(Load_PLC).l				;
 ;		jmp	(Go_Delete_Sprite_2).l			;
 
@@ -208804,10 +208855,16 @@ ChildObjDat_8DFB6:
 byte_8DFBC:
 		dc.b    0,   7,   9,   8,   9, $FC
 byte_8DFC2:
-		dc.b    3,   0,   1,   2,   3,   4, $F8,   8
+		dc.b    3,   0,   1,   2,   3,   4
+		dc.b  $F8, .jump-byte_8DFC2
+
+.jump:
 		dc.b  $7F,   4,   4, $FC
 byte_8DFCE:
-		dc.b    3,   4,   3,   2,   1,   0, $F8,   8
+		dc.b    3,   4,   3,   2,   1,   0
+		dc.b  $F8, .jump-byte_8DFCE
+
+.jump:
 		dc.b  $7F,   0,   0, $FC
 		even
 Map_Dragonfly:
@@ -210840,7 +210897,7 @@ byte_8F682:
 		dc.b  $10,   3
 		dc.b   $F,   4
 		dc.b   $E,   4
-		dc.b  $F8,  $C
+		dc.b  $F8, byte_8F68E-byte_8F682
 byte_8F68E:
 		dc.b    0,   3,   1,   3,   2,   4, $FC
 byte_8F695:
@@ -210850,7 +210907,8 @@ byte_8F695:
 		dc.b   $F,   4
 		dc.b   $E,   4
 		dc.b   $D,   4
-		dc.b  $F8,  $E
+		dc.b  $F8, byte_8F6A3-byte_8F695
+byte_8F6A3:
 		dc.b    5,   3
 		dc.b    6,   3
 		dc.b    7,   4
@@ -210862,7 +210920,8 @@ byte_8F6AA:
 		dc.b   $F,   4
 		dc.b   $E,   4
 		dc.b   $D,   4
-		dc.b  $F8,  $E
+		dc.b  $F8, byte_8F6B8-byte_8F6AA
+byte_8F6B8:
 		dc.b   $A,   3
 		dc.b   $B,   3
 		dc.b   $C,   4
@@ -210879,12 +210938,12 @@ byte_8F6CC:
 		dc.b    3,   7
 		dc.b    3,   7
 		dc.b    4,   7
-		dc.b  $F8, $D7
+		dc.b  $F8, byte_8F6A3-byte_8F6CC
 byte_8F6D4:
 		dc.b    8,   7
 		dc.b    8,   7
 		dc.b    9,   7
-		dc.b  $F8, $E4
+		dc.b  $F8, byte_8F6B8-byte_8F6D4
 DPLC_SOZGhosts:
 		include "General/Sprites/SOZ Ghosts/DPLC - SOZ Ghosts.asm"
 ; ---------------------------------------------------------------------------
@@ -211176,7 +211235,9 @@ byte_8FA40:
 		dc.b    1,   6
 		dc.b    2,   8
 		dc.b    3,   1
-		dc.b  $F8,  $A
+		dc.b  $F8, .jump-byte_8FA40
+
+.jump:
 		dc.b    3, $7F
 		dc.b  $FC
 byte_8FA4D:
@@ -212524,7 +212585,7 @@ Obj_HPZSuperEmerald_Encore:
 ; ---------------------------------------------------------------------------
 
 Obj_HPZSuperEmerald_EncoreActivated:
-		bsr.s	Obj_HPZSuperEmerald_Encore.flickerMain			; Liliam: Encore mode - special stage
+		bsr.s	Obj_HPZSuperEmerald_Encore.flickerMain		; Liliam: Encore mode - special stage
 
 loc_90926:
 		subq.w	#1,$2E(a0)
@@ -212534,7 +212595,7 @@ loc_90926:
 		move.b	subtype(a0),(Current_special_stage).w
 		tst.b	(Respawn_table_keep).w						; Liliam: level select - add HPZ special
 		bne.s	loc_9093A							;
-		move.b	#$34,(Game_mode).w						;
+		move.b	#GameMode_SpecialStage,(Game_mode).w				;
 		move.w	#1,(Restart_level_flag).w					;
 		move.b	#1,(SK_special_stage_flag).w					;
 		move.w	(Saved2_zone_and_act).w,(Current_zone_and_act).w		;
@@ -212544,7 +212605,7 @@ loc_90926:
 
 loc_9093A:
 		move.b	#1,(Special_bonus_entry_flag).w
-		move.b	#$34,(Game_mode).w
+		move.b	#GameMode_SpecialStage,(Game_mode).w
 		move.b	#1,(Respawn_table_keep).w
 		move.b	#1,(SK_special_stage_flag).w
 		move.b	(Saved2_last_star_post_hit).w,(Last_star_post_hit).w
@@ -212561,26 +212622,26 @@ Obj_HPZSSEntryControl:
 		lea	(ArtKosM_HPZTeleporter).l,a1
 		move.w	#tiles_to_bytes(ArtTile_HPZEntryTeleporter),d2
 		jsr	(Queue_Kos_Module).l
-;		lea	(Pal_CutsceneKnux).l,a1					; Liliam: bugfix - HPZ SS results palette screwery
-;		cmpi.w	#3,(Player_mode).w					;
-;		bne.s	loc_90998						;
-;		lea	(Pal_SonicTails).l,a1					;
+;		lea	(Pal_CutsceneKnux).l,a1						; Liliam: bugfix - HPZ SS results palette screwery
+;		cmpi.w	#3,(Player_mode).w						;
+;		bne.s	loc_90998							;
+;		lea	(Pal_SonicTails).l,a1						;
 
 ;loc_90998:
-;		lea	(Target_palette_line_2).w,a2				;
-;		moveq	#bytesToLcnt($20),d0					;
+;		lea	(Target_palette_line_2).w,a2					;
+;		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d0	;
 
 ;loc_9099E:
-;		move.l	(a1)+,(a2)+						;
-;		dbf	d0,loc_9099E						;
-;		lea	(Pal_HPZ+$20).l,a1					;
-;		lea	(Target_palette_line_3).w,a2				;
-;		moveq	#bytesToLcnt($40),d6					;
+;		move.l	(a1)+,(a2)+							;
+;		dbf	d0,loc_9099E							;
+;		lea	(Pal_HPZ+$20).l,a1						;
+;		lea	(Target_palette_line_3).w,a2					;
+;		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_3),d6	;
 
 ;loc_909B0:
-;		move.l	(a1)+,(a2)+						;
-;		dbf	d6,loc_909B0						;
-;		move.l	#$6A00660,(Target_palette_line_4+$2).w			;
+;		move.l	(a1)+,(a2)+							;
+;		dbf	d6,loc_909B0							;
+;		move.l	#$6A00660,(Target_palette_line_4+$2).w				;
 		jsr	(AllocateObject).l
 		bne.s	loc_909CC
 		move.l	#Obj_HPZMasterEmerald,(a1)
@@ -214419,209 +214480,217 @@ byte_91F06:
 		dc.b  $FC, $FF
 		even
 ; ---------------------------------------------------------------------------
-;	1st PLC		palette                          2nd 8x8 data                                     2nd 16x16 data                                      2nd 128x128 data
-;		2nd PLC           1st 8x8 data                                    1st 16x16 data                                    1st 128x128 data
+;		   1st PLC   2nd PLC   palette		1st 8x8 data           2nd 8x8 data             1st 16x16 data          2nd 16x16 data            1st 128x128 data          2nd 128x128 data
 LevelLoadBlock:
 	; Liliam: reinsert AIZ intro PLC
-	levartptrs $A,  $A,  $A,  AIZ1_8x8_Primary_KosM, AIZ1_8x8_Secondary_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_Secondary_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos			; ANGEL ISLAND ZONE ACT 1
-;	levartptrs $B,  $B,  $A,  AIZ1_8x8_Primary_KosM, AIZ1_8x8_Secondary_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_Secondary_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos			;
-	levartptrs $C,  $C,  $B,  AIZ2_8x8_Primary_KosM, AIZ2_8x8_Secondary_KosM, AIZ2_16x16_Primary_Kos, AIZ2_16x16_Secondary_Kos, AIZ2_128x128_Kos,         AIZ2_128x128_Kos			; ANGEL ISLAND ZONE ACT 2
-	levartptrs $E,  $F,  $C,  HCZ_8x8_Primary_KosM,  HCZ1_8x8_Secondary_KosM, HCZ_16x16_Primary_Kos,  HCZ1_16x16_Secondary_Kos, HCZ_128x128_Primary_Kos,  HCZ1_128x128_Secondary_Kos	; HYDROCITY ZONE ACT 1
-	levartptrs $10, $11, $D,  HCZ_8x8_Primary_KosM,  HCZ2_8x8_Secondary_KosM, HCZ_16x16_Primary_Kos,  HCZ2_16x16_Secondary_Kos, HCZ_128x128_Primary_Kos,  HCZ2_128x128_Secondary_Kos	; HYDROCITY ZONE ACT 2
-	levartptrs $12, $12, $E,  MGZ_8x8_Primary_KosM,  MGZ1_8x8_Secondary_KosM, MGZ_16x16_Primary_Kos,  MGZ1_16x16_Secondary_Kos, MGZ_128x128_Primary_Kos,  MGZ1_128x128_Secondary_Kos	; MARBLE GARDEN ZONE ACT 1
-	levartptrs $14, $14, $F,  MGZ_8x8_Primary_KosM,  MGZ2_8x8_Secondary_KosM, MGZ_16x16_Primary_Kos,  MGZ2_16x16_Secondary_Kos, MGZ_128x128_Primary_Kos,  MGZ2_128x128_Secondary_Kos	; MARBLE GARDEN ZONE ACT 2
-	levartptrs $16, $17, $10, CNZ_8x8_KosM,          CNZ_8x8_KosM,            CNZ_16x16_Kos,          CNZ_16x16_Kos,            CNZ_128x128_Kos,          CNZ_128x128_Kos			; CARNIVAL NIGHT ZONE ACT 1
-	levartptrs $18, $19, $11, CNZ_8x8_KosM,          CNZ_8x8_KosM,            CNZ_16x16_Kos,          CNZ_16x16_Kos,            CNZ_128x128_Kos,          CNZ_128x128_Kos			; CARNIVAL NIGHT ZONE ACT 2
-	levartptrs $1A, $1A, $12, ArtKosM_FBZ,           ArtKosM_FBZ,             FBZ_16x16_Kos,          FBZ_16x16_Kos,            FBZ_128x128_Kos,          FBZ_128x128_Kos			; FLYING BATTERY ZONE ACT 1
-	levartptrs $1C, $1C, $13, ArtKosM_FBZ,           ArtKosM_FBZ,             FBZ_16x16_Kos,          FBZ_16x16_Kos,            FBZ_128x128_Kos,          FBZ_128x128_Kos			; FLYING BATTERY ZONE ACT 2
-	levartptrs $1E, $1E, $14, ICZ_8x8_Primary_KosM,  ICZ1_8x8_Secondary_KosM, ICZ_16x16_Primary_Kos,  ICZ1_16x16_Secondary_Kos, ICZ_128x128_Primary_Kos,  ICZ1_128x128_Secondary_Kos	; ICECAP ZONE ACT 1
-	levartptrs $20, $20, $15, ICZ_8x8_Primary_KosM,  ICZ2_8x8_Secondary_KosM, ICZ_16x16_Primary_Kos,  ICZ2_16x16_Secondary_Kos, ICZ_128x128_Primary_Kos,  ICZ2_128x128_Secondary_Kos	; ICECAP ZONE ACT 2
+	levartptrs PLCID_0A, PLCID_0A, PalID_AIZIntro,	AIZ1_8x8_Primary_KosM, AIZ1_8x8_Secondary_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_Secondary_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos		; ANGEL ISLAND ZONE ACT 1
+;	levartptrs PLCID_0B, PLCID_0B, PalID_AIZIntro,	AIZ1_8x8_Primary_KosM, AIZ1_8x8_Secondary_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_Secondary_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos		;
+	levartptrs PLCID_0C, PLCID_0C, PalID_AIZFire,	AIZ2_8x8_Primary_KosM, AIZ2_8x8_Secondary_KosM, AIZ2_16x16_Primary_Kos, AIZ2_16x16_Secondary_Kos, AIZ2_128x128_Kos,         AIZ2_128x128_Kos		; ANGEL ISLAND ZONE ACT 2
+	levartptrs PLCID_0E, PLCID_0F, PalID_HCZ1,	HCZ_8x8_Primary_KosM,  HCZ1_8x8_Secondary_KosM, HCZ_16x16_Primary_Kos,  HCZ1_16x16_Secondary_Kos, HCZ_128x128_Primary_Kos,  HCZ1_128x128_Secondary_Kos	; HYDROCITY ZONE ACT 1
+	levartptrs PLCID_10, PLCID_11, PalID_HCZ2,	HCZ_8x8_Primary_KosM,  HCZ2_8x8_Secondary_KosM, HCZ_16x16_Primary_Kos,  HCZ2_16x16_Secondary_Kos, HCZ_128x128_Primary_Kos,  HCZ2_128x128_Secondary_Kos	; HYDROCITY ZONE ACT 2
+	levartptrs PLCID_12, PLCID_12, PalID_MGZ1,	MGZ_8x8_Primary_KosM,  MGZ1_8x8_Secondary_KosM, MGZ_16x16_Primary_Kos,  MGZ1_16x16_Secondary_Kos, MGZ_128x128_Primary_Kos,  MGZ1_128x128_Secondary_Kos	; MARBLE GARDEN ZONE ACT 1
+	levartptrs PLCID_14, PLCID_14, PalID_MGZ2,	MGZ_8x8_Primary_KosM,  MGZ2_8x8_Secondary_KosM, MGZ_16x16_Primary_Kos,  MGZ2_16x16_Secondary_Kos, MGZ_128x128_Primary_Kos,  MGZ2_128x128_Secondary_Kos	; MARBLE GARDEN ZONE ACT 2
+	levartptrs PLCID_16, PLCID_17, PalID_CNZ1,	CNZ_8x8_KosM,          CNZ_8x8_KosM,            CNZ_16x16_Kos,          CNZ_16x16_Kos,            CNZ_128x128_Kos,          CNZ_128x128_Kos		; CARNIVAL NIGHT ZONE ACT 1
+	levartptrs PLCID_18, PLCID_19, PalID_CNZ2,	CNZ_8x8_KosM,          CNZ_8x8_KosM,            CNZ_16x16_Kos,          CNZ_16x16_Kos,            CNZ_128x128_Kos,          CNZ_128x128_Kos		; CARNIVAL NIGHT ZONE ACT 2
+	levartptrs PLCID_1A, PLCID_1A, PalID_FBZ1,	ArtKosM_FBZ,           ArtKosM_FBZ,             FBZ_16x16_Kos,          FBZ_16x16_Kos,            FBZ_128x128_Kos,          FBZ_128x128_Kos		; FLYING BATTERY ZONE ACT 1
+	levartptrs PLCID_1C, PLCID_1C, PalID_FBZ2,	ArtKosM_FBZ,           ArtKosM_FBZ,             FBZ_16x16_Kos,          FBZ_16x16_Kos,            FBZ_128x128_Kos,          FBZ_128x128_Kos		; FLYING BATTERY ZONE ACT 2
+	levartptrs PLCID_1E, PLCID_1E, PalID_ICZ1,	ICZ_8x8_Primary_KosM,  ICZ1_8x8_Secondary_KosM, ICZ_16x16_Primary_Kos,  ICZ1_16x16_Secondary_Kos, ICZ_128x128_Primary_Kos,  ICZ1_128x128_Secondary_Kos	; ICECAP ZONE ACT 1
+	levartptrs PLCID_20, PLCID_20, PalID_ICZ2,	ICZ_8x8_Primary_KosM,  ICZ2_8x8_Secondary_KosM, ICZ_16x16_Primary_Kos,  ICZ2_16x16_Secondary_Kos, ICZ_128x128_Primary_Kos,  ICZ2_128x128_Secondary_Kos	; ICECAP ZONE ACT 2
 
 	; Liliam: bugfix - improve LBZ act transition
-	levartptrs $22, $22, $16, LBZ_8x8_Primary_KosM,  LBZ1_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ1_16x16_Secondary_Kos, LBZ_128x128_Primary_Kos,  LBZ1_128x128_Secondary_Kos	; LAUNCH BASE ZONE ACT 1
-	levartptrs $24, $25, $17, LBZ_8x8_Primary_KosM,  LBZ2_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ2_16x16_Secondary_Kos, LBZ_128x128_Primary_Kos,  LBZ2_128x128_Secondary_Kos	; LAUNCH BASE ZONE ACT 2
-;	levartptrs $22, $22, $16, LBZ_8x8_Primary_KosM,  LBZ1_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ1_16x16_Secondary_Kos, LBZ1_128x128_Kos,         LBZ1_128x128_Kos			;
-;	levartptrs $24, $25, $17, LBZ_8x8_Primary_KosM,  LBZ2_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ2_16x16_Secondary_Kos, LBZ2_128x128_Kos,         LBZ2_128x128_Kos			;
-	levartptrs $26, $26, $18, ArtKosM_MHZ_Primary,   ArtKosM_MHZ_Secondary,   MHZ_16x16_Primary_Kos,  MHZ_16x16_Secondary_Kos,  MHZ_128x128_Primary_Kos,  MHZ_128x128_Secondary_Kos		; MUSHROOM HILL ZONE ACT 1
-	levartptrs $28, $28, $19, ArtKosM_MHZ_Primary,   ArtKosM_MHZ_Secondary,   MHZ_16x16_Primary_Kos,  MHZ_16x16_Secondary_Kos,  MHZ_128x128_Primary_Kos,  MHZ_128x128_Secondary_Kos		; MUSHROOM HILL ZONE ACT 2
-	levartptrs $2A, $2A, $1A, ArtKosM_SOZ_Primary,   ArtKosM_SOZ1_Secondary,  SOZ_16x16_Primary_Kos,  SOZ1_16x16_Secondary_Kos, SOZ_128x128_Kos,          SOZ_128x128_Kos			; SANDOPOLIS ZONE ACT 1
-	levartptrs $2C, $2C, $1B, ArtKosM_SOZ_Primary,   ArtKosM_SOZ2_Secondary,  SOZ_16x16_Primary_Kos,  SOZ2_16x16_Secondary_Kos, SOZ_128x128_Kos,          SOZ_128x128_Kos			; SANDOPOLIS ZONE ACT 2
-	levartptrs $2E, $2F, $1C, ArtKosM_LRZ_Primary,   ArtKosM_LRZ1_Secondary,  LRZ_16x16_Primary_Kos,  LRZ1_16x16_Secondary_Kos, LRZ_128x128_Primary_Kos,  LRZ1_128x128_Secondary_Kos	; LAVA REEF ZONE ACT 1
-	levartptrs $30, $30, $1D, ArtKosM_LRZ_Primary,   ArtKosM_LRZ2_Secondary,  LRZ_16x16_Primary_Kos,  LRZ2_16x16_Secondary_Kos, LRZ_128x128_Primary_Kos,  LRZ2_128x128_Secondary_Kos	; LAVA REEF ZONE ACT 2
-	levartptrs $32, $32, $1E, ArtKosM_SSZ1_Primary,  ArtKosM_SSZ1_Secondary,  SSZ1_16x16_Primary_Kos, SSZ1_16x16_Secondary_Kos, SSZ1_128x128_Primary_Kos, SSZ1_128x128_Secondary_Kos	; SKY SANCTUARY ZONE (SONIC/TAILS)
-	levartptrs $34, $34, $1F, ArtKosM_SSZ2,          ArtKosM_SSZ2,            SSZ2_16x16_Kos,         SSZ2_16x16_Kos,           SSZ2_128x128_Kos,         SSZ2_128x128_Kos			; SKY SANCTUARY ZONE (KNUCKLES)
-	levartptrs $36, $36, $20, ArtKosM_DEZ_Primary,   ArtKosM_DEZ1_Secondary,  DEZ_16x16_Primary_Kos,  DEZ1_16x16_Secondary_Kos, DEZ_128x128_Kos,          DEZ_128x128_Kos			; DEATH EGG ZONE ACT 1
-	levartptrs $38, $38, $21, ArtKosM_DEZ_Primary,   ArtKosM_DEZ2_Secondary,  DEZ_16x16_Primary_Kos,  DEZ2_16x16_Secondary_Kos, DEZ_128x128_Kos,          DEZ_128x128_Kos			; DEATH EGG ZONE ACT 2
+	levartptrs PLCID_22, PLCID_22, PalID_LBZ1,	LBZ_8x8_Primary_KosM,  LBZ1_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ1_16x16_Secondary_Kos, LBZ_128x128_Primary_Kos,  LBZ1_128x128_Secondary_Kos	; LAUNCH BASE ZONE ACT 1
+	levartptrs PLCID_24, PLCID_25, PalID_LBZ2,	LBZ_8x8_Primary_KosM,  LBZ2_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ2_16x16_Secondary_Kos, LBZ_128x128_Primary_Kos,  LBZ2_128x128_Secondary_Kos	; LAUNCH BASE ZONE ACT 2
+;	levartptrs PLCID_22, PLCID_22, PalID_LBZ1,	LBZ_8x8_Primary_KosM,  LBZ1_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ1_16x16_Secondary_Kos, LBZ1_128x128_Kos,         LBZ1_128x128_Kos		;
+;	levartptrs PLCID_24, PLCID_25, PalID_LBZ2,	LBZ_8x8_Primary_KosM,  LBZ2_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ2_16x16_Secondary_Kos, LBZ2_128x128_Kos,         LBZ2_128x128_Kos		;
+	levartptrs PLCID_26, PLCID_26, PalID_MHZ1,	ArtKosM_MHZ_Primary,   ArtKosM_MHZ_Secondary,   MHZ_16x16_Primary_Kos,  MHZ_16x16_Secondary_Kos,  MHZ_128x128_Primary_Kos,  MHZ_128x128_Secondary_Kos	; MUSHROOM HILL ZONE ACT 1
+	levartptrs PLCID_28, PLCID_28, PalID_MHZ2,	ArtKosM_MHZ_Primary,   ArtKosM_MHZ_Secondary,   MHZ_16x16_Primary_Kos,  MHZ_16x16_Secondary_Kos,  MHZ_128x128_Primary_Kos,  MHZ_128x128_Secondary_Kos	; MUSHROOM HILL ZONE ACT 2
+	levartptrs PLCID_2A, PLCID_2A, PalID_SOZ1,	ArtKosM_SOZ_Primary,   ArtKosM_SOZ1_Secondary,  SOZ_16x16_Primary_Kos,  SOZ1_16x16_Secondary_Kos, SOZ_128x128_Kos,          SOZ_128x128_Kos		; SANDOPOLIS ZONE ACT 1
+	levartptrs PLCID_2C, PLCID_2C, PalID_SOZ2,	ArtKosM_SOZ_Primary,   ArtKosM_SOZ2_Secondary,  SOZ_16x16_Primary_Kos,  SOZ2_16x16_Secondary_Kos, SOZ_128x128_Kos,          SOZ_128x128_Kos		; SANDOPOLIS ZONE ACT 2
+	levartptrs PLCID_2E, PLCID_2F, PalID_LRZ1,	ArtKosM_LRZ_Primary,   ArtKosM_LRZ1_Secondary,  LRZ_16x16_Primary_Kos,  LRZ1_16x16_Secondary_Kos, LRZ_128x128_Primary_Kos,  LRZ1_128x128_Secondary_Kos	; LAVA REEF ZONE ACT 1
+	levartptrs PLCID_30, PLCID_30, PalID_LRZ2,	ArtKosM_LRZ_Primary,   ArtKosM_LRZ2_Secondary,  LRZ_16x16_Primary_Kos,  LRZ2_16x16_Secondary_Kos, LRZ_128x128_Primary_Kos,  LRZ2_128x128_Secondary_Kos	; LAVA REEF ZONE ACT 2
+	levartptrs PLCID_32, PLCID_32, PalID_SSZ1,	ArtKosM_SSZ1_Primary,  ArtKosM_SSZ1_Secondary,  SSZ1_16x16_Primary_Kos, SSZ1_16x16_Secondary_Kos, SSZ1_128x128_Primary_Kos, SSZ1_128x128_Secondary_Kos	; SKY SANCTUARY ZONE (SONIC/TAILS)
+	levartptrs PLCID_34, PLCID_34, PalID_SSZ2,	ArtKosM_SSZ2,          ArtKosM_SSZ2,            SSZ2_16x16_Kos,         SSZ2_16x16_Kos,           SSZ2_128x128_Kos,         SSZ2_128x128_Kos		; SKY SANCTUARY ZONE (KNUCKLES)
+	levartptrs PLCID_36, PLCID_36, PalID_DEZ1,	ArtKosM_DEZ_Primary,   ArtKosM_DEZ1_Secondary,  DEZ_16x16_Primary_Kos,  DEZ1_16x16_Secondary_Kos, DEZ_128x128_Kos,          DEZ_128x128_Kos		; DEATH EGG ZONE ACT 1
+	levartptrs PLCID_38, PLCID_38, PalID_DEZ2,	ArtKosM_DEZ_Primary,   ArtKosM_DEZ2_Secondary,  DEZ_16x16_Primary_Kos,  DEZ2_16x16_Secondary_Kos, DEZ_128x128_Kos,          DEZ_128x128_Kos		; DEATH EGG ZONE ACT 2
 
 	; Liliam: use level art for Doomsday objects
-	levartptrs $3A, $3A, $22, ArtKosM_DDZ,           ArtKosM_DDZMisc,         DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos			; DOOMSDAY ZONE
-	levartptrs $3C, $3C, $23, ArtKosM_DDZ,           ArtKosM_DDZMisc,         DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos			; DOOMSDAY ZONE (unused)
-;	levartptrs $3A, $3A, $22, ArtKosM_DDZ,           ArtKosM_DDZ,             DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos			;
-;	levartptrs $3C, $3C, $23, ArtKosM_DDZ,           ArtKosM_DDZ,             DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos			;
-	levartptrs $B,  $B,  $2A, AIZ1_8x8_Primary_KosM, AIZ1_8x8_MainLevel_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_MainLevel_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos			; SONIC/TAILS INTRO
-	levartptrs $40, $40, $25, ArtKosM_SSZ2,          ArtKosM_SSZ2,            SSZ2_16x16_Kos,         SSZ2_16x16_Kos,           SSZ2_128x128_Kos,         SSZ2_128x128_Kos			; SONIC/TAILS ENDING
+	levartptrs PLCID_3A, PLCID_3A, PalID_DDZ1,	ArtKosM_DDZ,           ArtKosM_DDZMisc,         DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos		; DOOMSDAY ZONE
+	levartptrs PLCID_3C, PLCID_3C, PalID_DDZ2,	ArtKosM_DDZ,           ArtKosM_DDZMisc,         DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos		; DOOMSDAY ZONE (unused)
+;	levartptrs PLCID_3A, PLCID_3A, PalID_DDZ1,	ArtKosM_DDZ,           ArtKosM_DDZ,             DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos		;
+;	levartptrs PLCID_3C, PLCID_3C, PalID_DDZ2,	ArtKosM_DDZ,           ArtKosM_DDZ,             DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos		;
+
+	levartptrs PLCID_0B, PLCID_0B, PalID_AIZ,	AIZ1_8x8_Primary_KosM, AIZ1_8x8_MainLevel_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_MainLevel_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos		; SONIC/TAILS INTRO
+	levartptrs PLCID_40, PLCID_40, PalID_Ending2,	ArtKosM_SSZ2,          ArtKosM_SSZ2,            SSZ2_16x16_Kos,         SSZ2_16x16_Kos,           SSZ2_128x128_Kos,         SSZ2_128x128_Kos		; SONIC/TAILS ENDING
 
 	; Liliam: Encore mode - add extra levels
-	levartptrs $42, $42, $26, ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos			; AZURE LAKE ZONE
-	levartptrs $49, $49, $27, ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos			; AZURE LAKE ZONE (ENCORE)
-	levartptrs $43, $43, $28, BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos			; BALLOON PARK ZONE
-	levartptrs $4A, $4A, $29, BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos			; BALLOON PARK ZONE (ENCORE)
-	levartptrs $44, $44, $34, DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos			; DESERT PALACE ZONE
-	levartptrs $54, $54, $3B, DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos			; DESERT PALACE ZONE (ENCORE)
-	levartptrs $45, $45, $35, CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos			; CHROME GADGET ZONE
-	levartptrs $4B, $4B, $3C, CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos			; CHROME GADGET ZONE (ENCORE)
-	levartptrs $46, $46, $36, EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos			; ENDLESS MINE ZONE
-	levartptrs $55, $55, $3D, EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos			; ENDLESS MINE ZONE (ENCORE)
-;	levartptrs $42, $42, $27, ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos			;
-;	levartptrs $43, $43, $29, BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos			;
-;	levartptrs $44, $44, $34, DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos			;
-;	levartptrs $45, $45, $35, CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos			;
-;	levartptrs $46, $46, $36, EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos			;
+	levartptrs PLCID_42, PLCID_42, PalID_ALZ,	ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos		; AZURE LAKE ZONE
+	levartptrs PLCID_49, PLCID_49, PalID_ALZ_2,	ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos		; AZURE LAKE ZONE (ENCORE)
+;	levartptrs PLCID_42, PLCID_42, PalID_ALZ_2,	ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos		;
+	levartptrs PLCID_43, PLCID_43, PalID_BPZ,	BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos		; BALLOON PARK ZONE
+	levartptrs PLCID_4A, PLCID_4A, PalID_BPZ_2,	BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos		; BALLOON PARK ZONE (ENCORE)
+;	levartptrs PLCID_43, PLCID_43, PalID_BPZ_2,	BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos		;
+	levartptrs PLCID_44, PLCID_44, PalID_DPZ,	DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos		; DESERT PALACE ZONE
+	levartptrs PLCID_54, PLCID_54, PalID_DPZ_2,	DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos		; DESERT PALACE ZONE (ENCORE)
+;	levartptrs PLCID_44, PLCID_44, PalID_DPZ,	DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos		;
+	levartptrs PLCID_45, PLCID_45, PalID_CGZ,	CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos		; CHROME GADGET ZONE
+	levartptrs PLCID_4B, PLCID_4B, PalID_CGZ_2,	CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos		; CHROME GADGET ZONE (ENCORE)
+;	levartptrs PLCID_45, PLCID_45, PalID_CGZ,	CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos		;
+	levartptrs PLCID_46, PLCID_46, PalID_EMZ,	EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos		; ENDLESS MINE ZONE
+	levartptrs PLCID_55, PLCID_55, PalID_EMZ_2,	EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos		; ENDLESS MINE ZONE (ENCORE)
+;	levartptrs PLCID_46, PLCID_46, PalID_EMZ,	EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos		;
 
 	; Liliam: Encore mode - bonus stage
-	levartptrs $4F, $4F, $33, Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos		; GUMBALL
-	levartptrs $56, $56, $33, Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos		; GUMBALL (ENCORE)
-	levartptrs $50, $50, $37, ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos		; PACHINKO
-	levartptrs $57, $57, $37, ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos		; PACHINKO (ENCORE)
-	levartptrs $51, $51, $38, ArtKosM_Slots,         ArtKosM_Slots,           Slots_16x16_Kos,        Slots_16x16_Kos,          Slots_128x128_Kos,        Slots_128x128_Kos			; SLOTS
-	levartptrs $58, $58, $24, ArtKosM_EncoreBonus,   ArtKosM_EncoreBonus,     EncoreBonus_16x16_Kos,  EncoreBonus_16x16_Kos,    EncoreBonus_128x128_Kos,  EncoreBonus_128x128_Kos		; SLOTS (ENCORE)
-;	levartptrs $47, $47, $33, Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos		;
-;	levartptrs $50, $50, $37, ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos		;
-;	levartptrs $51, $51, $38, ArtKosM_Slots,         ArtKosM_Slots,           Slots_16x16_Kos,        Slots_16x16_Kos,          Slots_128x128_Kos,        Slots_128x128_Kos			;
-	levartptrs $48, $48, $3E, ArtKosM_HPZ_Primary,   ArtKosM_LRZ3_Secondary,  HPZ_16x16_Primary_Kos,  LRZ3_16x16_Secondary_Kos, HPZ_128x128_Primary_Kos,  LRZ3_128x128_Secondary_Kos	; LAVA REEF ZONE BOSS
-	levartptrs $48, $48, $3F, ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos		; HIDDEN PALACE ZONE
-	levartptrs $4C, $4C, $40, ArtKosM_DEZ3,          ArtKosM_DEZ3,            DEZ3_16x16_Kos,         DEZ3_16x16_Kos,           DEZ3_128x128_Kos,         DEZ3_128x128_Kos			; SONIC/TAILS FINAL BOSS
+	levartptrs PLCID_4F, PLCID_4F, PalID_Gumball,	Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos		; GUMBALL
+	levartptrs PLCID_56, PLCID_56, PalID_Gumball,	Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos		; GUMBALL (ENCORE)
+;	levartptrs PLCID_47, PLCID_47, PalID_Gumball,	Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos		;
+;	levartptrs PLCID_47, PLCID_47, PalID_Gumball,	Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos		;
+	levartptrs PLCID_50, PLCID_50, PalID_Pachinko,	ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos	; PACHINKO
+	levartptrs PLCID_57, PLCID_57, PalID_Pachinko,	ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos	; PACHINKO (ENCORE)
+;	levartptrs PLCID_50, PLCID_50, PalID_Pachinko,	ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos	;
+	levartptrs PLCID_51, PLCID_51, PalID_Slots,	ArtKosM_Slots,         ArtKosM_Slots,           Slots_16x16_Kos,        Slots_16x16_Kos,          Slots_128x128_Kos,        Slots_128x128_Kos		; SLOTS
+	levartptrs PLCID_58, PLCID_58, PalID_Slots_2,	ArtKosM_EncoreBonus,   ArtKosM_EncoreBonus,     EncoreBonus_16x16_Kos,  EncoreBonus_16x16_Kos,    EncoreBonus_128x128_Kos,  EncoreBonus_128x128_Kos	; SLOTS (ENCORE)
+;	levartptrs PLCID_51, PLCID_51, PalID_Slots,	ArtKosM_Slots,         ArtKosM_Slots,           Slots_16x16_Kos,        Slots_16x16_Kos,          Slots_128x128_Kos,        Slots_128x128_Kos		;
+
+	levartptrs PLCID_48, PLCID_48, PalID_LRZBoss,	ArtKosM_HPZ_Primary,   ArtKosM_LRZ3_Secondary,  HPZ_16x16_Primary_Kos,  LRZ3_16x16_Secondary_Kos, HPZ_128x128_Primary_Kos,  LRZ3_128x128_Secondary_Kos	; LAVA REEF ZONE BOSS
+	levartptrs PLCID_48, PLCID_48, PalID_HPZIntro,	ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos	; HIDDEN PALACE ZONE
+	levartptrs PLCID_4C, PLCID_4C, PalID_DEZBoss,	ArtKosM_DEZ3,          ArtKosM_DEZ3,            DEZ3_16x16_Kos,         DEZ3_16x16_Kos,           DEZ3_128x128_Kos,         DEZ3_128x128_Kos		; SONIC/TAILS FINAL BOSS
 
 	; Liliam: bugfix - HPZ SS results palette screwery
-	levartptrs $48, $48, $41, ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos		; SPECIAL STAGE HUB
-;	levartptrs $48, $48, $3F, ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos		;
-
+	levartptrs PLCID_48, PLCID_48, PalID_HPZ,	ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos	; SPECIAL STAGE HUB
+;	levartptrs PLCID_48, PLCID_48, PalID_HPZIntro,	ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos	;
 ; ---------------------------------------------------------------------------
+
+; Macro to define PLC pointer entry
+plcptr:		macro plc,{INTLABEL}
+__LABEL__:	label	(*-Offs_PLC)/2
+		dc.w	plc-Offs_PLC
+		endm
+
 Offs_PLC:
-		dc.w PLC_00-Offs_PLC					; Liliam: Mighty life icon/universal level graphics
-		dc.w PLC_01-Offs_PLC					; Sonic life icon/universal level graphics
-		dc.w PLC_02-Offs_PLC					; Liliam: Ray life icon/universal level graphics
-		dc.w PLC_03-Offs_PLC					; Game Over text
-		dc.w PLC_04-Offs_PLC					; Liliam: Encore mode life icon/universal level graphics
-		dc.w PLC_05-Offs_PLC					; Knuckles life icon/universal level graphics
-		dc.w PLC_06-Offs_PLC					; Liliam: Amy life icon/universal level graphics
-		dc.w PLC_07-Offs_PLC					; Tails life icon/universal level graphics
-		dc.w PLC_08-Offs_PLC					; Liliam: Metal Sonic life icon/universal level graphics
-		dc.w PLC_09-Offs_PLC					; Repeat of 08
-		dc.w PLC_0A-Offs_PLC					; AIZ Intro graphics
-		dc.w PLC_0B-Offs_PLC					; AIZ 1 PLCs
-		dc.w PLC_0C_0D-Offs_PLC					; AIZ 2 PLCs
-		dc.w PLC_0C_0D-Offs_PLC
-		dc.w PLC_0E-Offs_PLC					; HCZ 1 PLC 1
-		dc.w PLC_0F-Offs_PLC					; HCZ 1 PLC 2
-		dc.w PLC_10-Offs_PLC					; HCZ 2 PLC 1
-		dc.w PLC_11-Offs_PLC					; HCZ 2 PLC 2
-		dc.w PLC_12_13-Offs_PLC					; MGZ 1
-		dc.w PLC_12_13-Offs_PLC					; MGZ 1
-		dc.w PLC_14_15-Offs_PLC					; MGZ 2
-		dc.w PLC_14_15-Offs_PLC					; MGZ 2
-		dc.w PLC_16_17_18_19-Offs_PLC				; CNZ
-		dc.w PLC_16_17_18_19-Offs_PLC
-		dc.w PLC_16_17_18_19-Offs_PLC
-		dc.w PLC_16_17_18_19-Offs_PLC
-		dc.w PLC_1A_1B-Offs_PLC
-		dc.w PLC_1A_1B-Offs_PLC
-		dc.w PLC_1C_1D-Offs_PLC
-		dc.w PLC_1C_1D-Offs_PLC
-		dc.w PLC_1E_1F-Offs_PLC
-		dc.w PLC_1E_1F-Offs_PLC
-		dc.w PLC_20_21-Offs_PLC
-		dc.w PLC_20_21-Offs_PLC
-		dc.w PLC_22_23-Offs_PLC
-		dc.w PLC_22_23-Offs_PLC
-		dc.w PLC_24-Offs_PLC
-		dc.w PLC_25-Offs_PLC			; LBZ 2 Misc art
-		dc.w PLC_26_27_28_29-Offs_PLC
-		dc.w PLC_26_27_28_29-Offs_PLC
-		dc.w PLC_26_27_28_29-Offs_PLC
-		dc.w PLC_26_27_28_29-Offs_PLC
-		dc.w PLC_2A_2B-Offs_PLC
-		dc.w PLC_2A_2B-Offs_PLC
-		dc.w PLC_2C_2D-Offs_PLC
-		dc.w PLC_2C_2D-Offs_PLC
-		dc.w PLC_2E_2F-Offs_PLC
-		dc.w PLC_2E_2F-Offs_PLC
-		dc.w PLC_30_31-Offs_PLC
-		dc.w PLC_30_31-Offs_PLC
-		dc.w PLC_32_33_34_35-Offs_PLC
-		dc.w PLC_32_33_34_35-Offs_PLC
-		dc.w PLC_32_33_34_35-Offs_PLC
-		dc.w PLC_32_33_34_35-Offs_PLC
-		dc.w PLC_36_37-Offs_PLC
-		dc.w PLC_36_37-Offs_PLC
-		dc.w PLC_38_39-Offs_PLC
-		dc.w PLC_38_39-Offs_PLC
-		dc.w PLC_3A_3B_3C_3D_3E_3F-Offs_PLC
-		dc.w PLC_3A_3B_3C_3D_3E_3F-Offs_PLC
-		dc.w PLC_3A_3B_3C_3D_3E_3F-Offs_PLC
-		dc.w PLC_3A_3B_3C_3D_3E_3F-Offs_PLC
-		dc.w PLC_3A_3B_3C_3D_3E_3F-Offs_PLC
-		dc.w PLC_3A_3B_3C_3D_3E_3F-Offs_PLC
-		dc.w PLC_40_41-Offs_PLC
-		dc.w PLC_40_41-Offs_PLC
-		dc.w PLC_42-Offs_PLC
-		dc.w PLC_43-Offs_PLC
-		dc.w PLC_44-Offs_PLC
-		dc.w PLC_45-Offs_PLC
-		dc.w PLC_46-Offs_PLC
-		dc.w PLC_47-Offs_PLC
-		dc.w PLC_48-Offs_PLC
-		dc.w PLC_49-Offs_PLC
-		dc.w PLC_4A-Offs_PLC
-		dc.w PLC_4B-Offs_PLC
-		dc.w PLC_4C_4D-Offs_PLC
-		dc.w PLC_4C_4D-Offs_PLC
-		dc.w PLC_4E_4F-Offs_PLC
-		dc.w PLC_4E_4F-Offs_PLC
-		dc.w PLC_50-Offs_PLC
-		dc.w PLC_51-Offs_PLC
-		dc.w PLC_52_53-Offs_PLC
-		dc.w PLC_52_53-Offs_PLC
-		dc.w PLC_54-Offs_PLC
-		dc.w PLC_55-Offs_PLC
-		dc.w PLC_56-Offs_PLC
-		dc.w PLC_57-Offs_PLC
-		dc.w PLC_58-Offs_PLC
-		dc.w PLC_59-Offs_PLC
-		dc.w PLC_5A-Offs_PLC
-		dc.w PLC_5B-Offs_PLC
-		dc.w PLC_5C_5D-Offs_PLC
-		dc.w PLC_5C_5D-Offs_PLC
-		dc.w PLC_5E-Offs_PLC
-		dc.w PLC_5F-Offs_PLC
-		dc.w PLC_60-Offs_PLC
-		dc.w PLC_61-Offs_PLC
-		dc.w PLC_62_Through_6A-Offs_PLC
-		dc.w PLC_62_Through_6A-Offs_PLC
-		dc.w PLC_62_Through_6A-Offs_PLC
-		dc.w PLC_62_Through_6A-Offs_PLC
-		dc.w PLC_62_Through_6A-Offs_PLC
-		dc.w PLC_62_Through_6A-Offs_PLC
-		dc.w PLC_62_Through_6A-Offs_PLC
-		dc.w PLC_62_Through_6A-Offs_PLC
-		dc.w PLC_62_Through_6A-Offs_PLC
-		dc.w PLC_6B-Offs_PLC
-		dc.w PLC_6C-Offs_PLC
-		dc.w PLC_6D-Offs_PLC
-		dc.w PLC_6E-Offs_PLC
-		dc.w PLC_6F-Offs_PLC
-		dc.w PLC_70-Offs_PLC
-		dc.w PLC_71-Offs_PLC
-		dc.w PLC_72_73_74_75_76-Offs_PLC
-		dc.w PLC_72_73_74_75_76-Offs_PLC
-		dc.w PLC_72_73_74_75_76-Offs_PLC
-		dc.w PLC_72_73_74_75_76-Offs_PLC
-		dc.w PLC_72_73_74_75_76-Offs_PLC
-		dc.w PLC_77-Offs_PLC
-		dc.w PLC_78-Offs_PLC
-		dc.w PLC_79-Offs_PLC
-		dc.w PLC_7A_7B-Offs_PLC
-		dc.w PLC_7A_7B-Offs_PLC
+PLCID_00:	plcptr PLC_00					; Liliam: Mighty life icon/universal level graphics
+PLCID_01:	plcptr PLC_01					; Sonic life icon/universal level graphics
+PLCID_02:	plcptr PLC_02					; Liliam: Ray life icon/universal level graphics
+PLCID_03:	plcptr PLC_03					; Game Over text
+PLCID_04:	plcptr PLC_04					; Liliam: Encore mode life icon/universal level graphics
+PLCID_05:	plcptr PLC_05					; Knuckles life icon/universal level graphics
+PLCID_06:	plcptr PLC_06					; Liliam: Amy life icon/universal level graphics
+PLCID_07:	plcptr PLC_07					; Tails life icon/universal level graphics
+PLCID_08:	plcptr PLC_08					; Liliam: Metal Sonic life icon/universal level graphics
+PLCID_09:	plcptr PLC_09					; Repeat of 08 (revolving spheres in Sonic 3, unused)
+PLCID_0A:	plcptr PLC_0A					; AIZ intro graphics
+PLCID_0B:	plcptr PLC_0B					; AIZ1
+PLCID_0C:	plcptr PLC_0C_0D				; AIZ2
+PLCID_0D:	plcptr PLC_0C_0D				; AIZ2 (unused)
+PLCID_0E:	plcptr PLC_0E					; HCZ1 part 1
+PLCID_0F:	plcptr PLC_0F					; HCZ1 part 2
+PLCID_10:	plcptr PLC_10					; HCZ2 part 1
+PLCID_11:	plcptr PLC_11					; HCZ2 part 2
+PLCID_12:	plcptr PLC_12_13				; MGZ1
+PLCID_13:	plcptr PLC_12_13				; MGZ1 (unused)
+PLCID_14:	plcptr PLC_14_15				; MGZ2
+PLCID_15:	plcptr PLC_14_15				; MGZ2 (unused)
+PLCID_16:	plcptr PLC_16_17_18_19				; CNZ (used for act 1)
+PLCID_17:	plcptr PLC_16_17_18_19				; CNZ (used for act 1)
+PLCID_18:	plcptr PLC_16_17_18_19				; CNZ (used for act 2)
+PLCID_19:	plcptr PLC_16_17_18_19				; CNZ (used for act 2)
+PLCID_1A:	plcptr PLC_1A_1B				; FBZ1
+PLCID_1B:	plcptr PLC_1A_1B				; FBZ1 (unused)
+PLCID_1C:	plcptr PLC_1C_1D				; FBZ2
+PLCID_1D:	plcptr PLC_1C_1D				; FBZ2 (unused)
+PLCID_1E:	plcptr PLC_1E_1F				; ICZ1
+PLCID_1F:	plcptr PLC_1E_1F				; ICZ1 (unused)
+PLCID_20:	plcptr PLC_20_21				; ICZ2
+PLCID_21:	plcptr PLC_20_21				; ICZ2 (unused)
+PLCID_22:	plcptr PLC_22_23				; LBZ1
+PLCID_23:	plcptr PLC_22_23				; LBZ1 (unused)
+PLCID_24:	plcptr PLC_24					; LBZ2
+PLCID_25:	plcptr PLC_25					; LBZ2 misc art
+PLCID_26:	plcptr PLC_26_27_28_29				; MHZ (used for act 1)
+PLCID_27:	plcptr PLC_26_27_28_29				; MHZ (act 1, unused)
+PLCID_28:	plcptr PLC_26_27_28_29				; MHZ (used for act 2)
+PLCID_29:	plcptr PLC_26_27_28_29				; MHZ (act 2, unused)
+PLCID_2A:	plcptr PLC_2A_2B				; SOZ1
+PLCID_2B:	plcptr PLC_2A_2B				; SOZ1 (unused)
+PLCID_2C:	plcptr PLC_2C_2D				; SOZ2
+PLCID_2D:	plcptr PLC_2C_2D				; SOZ2 (unused)
+PLCID_2E:	plcptr PLC_2E_2F				; LRZ1
+PLCID_2F:	plcptr PLC_2E_2F				; LRZ1 (unused)
+PLCID_30:	plcptr PLC_30_31				; LRZ2
+PLCID_31:	plcptr PLC_30_31				; LRZ2 (unused)
+PLCID_32:	plcptr PLC_32_33_34_35				; SSZ (used for act 1)
+PLCID_33:	plcptr PLC_32_33_34_35				; SSZ (act 1, unused)
+PLCID_34:	plcptr PLC_32_33_34_35				; SSZ (used for act 2)
+PLCID_35:	plcptr PLC_32_33_34_35				; SSZ (act 2, unused)
+PLCID_36:	plcptr PLC_36_37				; DEZ1
+PLCID_37:	plcptr PLC_36_37				; DEZ1 (unused)
+PLCID_38:	plcptr PLC_38_39				; DEZ2
+PLCID_39:	plcptr PLC_38_39				; DEZ2 (unused)
+PLCID_3A:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (used for act 1)
+PLCID_3B:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (unused)
+PLCID_3C:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (used for act 2)
+PLCID_3D:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (unused)
+PLCID_3E:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (ending 1, unused)
+PLCID_3F:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (ending 1, unused)
+PLCID_40:	plcptr PLC_40_41				; Ending (blank)
+PLCID_41:	plcptr PLC_40_41				; Ending (blank, unused)
+PLCID_42:	plcptr PLC_42					; ALZ
+PLCID_43:	plcptr PLC_43					; BPZ
+PLCID_44:	plcptr PLC_44					; DPZ
+PLCID_45:	plcptr PLC_45					; CGZ
+PLCID_46:	plcptr PLC_46					; EMZ
+PLCID_47:	plcptr PLC_47					; Gumball
+PLCID_48:	plcptr PLC_48					; HPZ
+PLCID_49:	plcptr PLC_49					; Liliam: Encore mode - add extra levels
+PLCID_4A:	plcptr PLC_4A					; Liliam: Encore mode - add extra levels
+PLCID_4B:	plcptr PLC_4B					; Liliam: Encore mode - add extra levels
+PLCID_4C:	plcptr PLC_4C_4D				; DEZ3
+PLCID_4D:	plcptr PLC_4C_4D				; DEZ3 (unused)
+PLCID_4E:	plcptr PLC_4E_4F				; Spikes and springs (unused)
+PLCID_4F:	plcptr PLC_4E_4F				; Spikes and springs (unused)
+PLCID_50:	plcptr PLC_50					; Glowing Bonus
+PLCID_51:	plcptr PLC_51					; Slots bonus
+PLCID_52:	plcptr PLC_52_53				; Miles life icon/universal level graphics
+PLCID_53:	plcptr PLC_52_53				; Repeat of 52 (unused)
+PLCID_54:	plcptr PLC_54					; Liliam: Encore mode - add extra levels
+PLCID_55:	plcptr PLC_55					; Liliam: Encore mode - add extra levels
+PLCID_56:	plcptr PLC_56					; Liliam: Encore mode - change character item
+PLCID_57:	plcptr PLC_57					; Liliam: Encore mode - change character item
+PLCID_58:	plcptr PLC_58					; Liliam: Encore mode - bonus stage
+PLCID_59:	plcptr PLC_59					; Liliam: bugfix - stop double-loading AIZ2 PLCs
+PLCID_5A:	plcptr PLC_5A					; AIZ1 boss
+PLCID_5B:	plcptr PLC_5B					; HCZ1 boss
+PLCID_5C:	plcptr PLC_5C_5D				; CNZ1 boss (unused)
+PLCID_5D:	plcptr PLC_5C_5D				; CNZ1 boss
+PLCID_5E:	plcptr PLC_5E					; FBZ1 boss (unused)
+PLCID_5F:	plcptr PLC_5F					; ICZ1 boss
+PLCID_60:	plcptr PLC_60					; LBZ1 Eggman
+PLCID_61:	plcptr PLC_61					; Boss explosion (unused)
+PLCID_62:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
+PLCID_63:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
+PLCID_64:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
+PLCID_65:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
+PLCID_66:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
+PLCID_67:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
+PLCID_68:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
+PLCID_69:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
+PLCID_6A:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
+PLCID_6B:	plcptr PLC_6B					; AIZ2 boss
+PLCID_6C:	plcptr PLC_6C					; HCZ2 boss
+PLCID_6D:	plcptr PLC_6D					; MGZ2 boss
+PLCID_6E:	plcptr PLC_6E					; CNZ2 boss
+PLCID_6F:	plcptr PLC_6F					; FBZ2 end boss
+PLCID_70:	plcptr PLC_70					; ICZ2 boss
+PLCID_71:	plcptr PLC_71					; LBZ2 final boss 1
+PLCID_72:	plcptr PLC_72_73_74_75_76			; DEZ2 boss (unused)
+PLCID_73:	plcptr PLC_72_73_74_75_76			; DEZ2 boss (unused)
+PLCID_74:	plcptr PLC_72_73_74_75_76			; DEZ2 boss (unused)
+PLCID_75:	plcptr PLC_72_73_74_75_76			; DEZ2 boss (unused)
+PLCID_76:	plcptr PLC_72_73_74_75_76			; DEZ2 boss
+PLCID_77:	plcptr PLC_77					; LBZ2 Eggman
+PLCID_78:	plcptr PLC_78					; Liliam: bugfix - use Egg Robo for DEZ2 boss
+PLCID_79:	plcptr PLC_79					; Liliam: bugfix - use Egg Robo for LBZ2 boss
+PLCID_7A:	plcptr PLC_7A_7B				; Boss ship and explosion (unused)
+PLCID_7B:	plcptr PLC_7A_7B				; Boss ship and explosion
 
 PLC_00: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_MightyLifeIcon		; Liliam: Mighty life icon/universal level graphics
@@ -214801,20 +214870,20 @@ PLC_20_21: plrlistheader
 PLC_20_21_End
 
 PLC_22_23: plrlistheader
-		plreq ArtTile_LBZ2MinibossBox, ArtNem_LBZMinibossBox		; Liliam: start from actual act 2 start
+		plreq ArtTile_LBZ2MinibossBox, ArtNem_LBZMinibossBox			; Liliam: start from actual act 2 start
 		plreq ArtTile_LBZMisc, ArtNem_LBZMisc
 		plreq ArtTile_LBZTubeTrans, ArtNem_LBZTubeTrans
 PLC_22_23_End
 
 PLC_24: plrlistheader
-		plreq ArtTile_LBZ2MinibossBox, ArtNem_LBZMinibossBox		; Liliam: start from actual act 2 start
+		plreq ArtTile_LBZ2MinibossBox, ArtNem_LBZMinibossBox			; Liliam: start from actual act 2 start
 		plreq ArtTile_LBZMisc, ArtNem_LBZMisc
-;		plreq ArtTile_Bubbles, ArtNem_Bubbles				;
+;		plreq ArtTile_Bubbles, ArtNem_Bubbles					;
 PLC_24_End
 
 PLC_25: plrlistheader
 		plreq ArtTile_LBZ2Misc, ArtNem_LBZ2Misc
-		plreq ArtTile_Bubbles, ArtNem_Bubbles				; Liliam: start from actual act 2 start
+		plreq ArtTile_Bubbles, ArtNem_Bubbles					; Liliam: start from actual act 2 start
 PLC_25_End
 
 PLC_26_27_28_29: plrlistheader
@@ -214825,8 +214894,8 @@ PLC_26_27_28_29_End
 
 PLC_2A_2B: plrlistheader
 		plreq ArtTile_SOZMisc, ArtNem_SOZMisc
-		plreq ArtTile_SOZMushroomParachute, ArtNem_SOZTile	; Liliam: Encore mode - FBZ level order
-;		plreq ArtTile_SOZTile, ArtNem_SOZTile			;
+		plreq ArtTile_SOZMushroomParachute, ArtNem_SOZTile			; Liliam: Encore mode - FBZ level order
+;		plreq ArtTile_SOZTile, ArtNem_SOZTile					;
 PLC_2A_2B_End
 
 PLC_2C_2D: plrlistheader
@@ -215837,7 +215906,7 @@ Pal_Amy:							; Liliam: add extra characters
 Pal_MetalSonic:							; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Palettes/MetalSonic.bin"
 		even
-Pal_Encore:							; Liliam: Encore mode - palette
+Pal_EncoreMode:							; Liliam: Encore mode - palette
 		binclude "General/Sprites/Knuckles/Palettes/Encore.bin"
 		even
 Pal_AIZIntro:
@@ -215925,7 +215994,7 @@ Pal_MHZ2:
 Pal_SOZ1:
 		binclude "Levels/SOZ/Palettes/1.bin"
 		even
-Pal_S0Z2:
+Pal_SOZ2:
 		binclude "Levels/SOZ/Palettes/2.bin"
 		even
 ;Pal_SOZ1_Clone:
@@ -216075,7 +216144,7 @@ Pal_MHZ2_Encore:						; Liliam: Encore mode - palette
 Pal_SOZ1_Encore:						; Liliam: Encore mode - palette
 		binclude "Levels/SOZ/Palettes/1.bin"
 		even
-Pal_S0Z2_Encore:						; Liliam: Encore mode - palette
+Pal_SOZ2_Encore:						; Liliam: Encore mode - palette
 		binclude "Levels/SOZ/Palettes/2.bin"
 		even
 Pal_LRZ1_Encore:						; Liliam: Encore mode - palette
@@ -216138,8 +216207,8 @@ ArtUnc_AirCountdown:
 		; Liliam: special stage - add extra characters
 ;Map_SStageKnuckles:
 		; Liliam: special stage - add extra characters
-		include "General/Special Stage/Map - Players.asm"		; Liliam: special stage - add extra characters
-		include "General/Special Stage/DPLC - Players.asm"		;
+		include "General/Special Stage/Map - Players.asm"			; Liliam: special stage - add extra characters
+		include "General/Special Stage/DPLC - Players.asm"			;
 ArtNem_SStageShadow:
 		binclude "General/Special Stage/Nemesis Art/Shadow.bin"
 		even
@@ -216690,7 +216759,7 @@ ArtNem_RobotnikShip:
 		; Liliam: move Egg Mobile boss flash out of palette line 1
 		binclude "General/Sprites/Robotnik/Ship.bin"
 		even
-ArtNem_DEZHPZRobotnikShip:							; Liliam: move Egg Mobile boss flash out of palette line 1
+ArtNem_DEZHPZRobotnikShip:								; Liliam: move Egg Mobile boss flash out of palette line 1
 		binclude "General/Sprites/Robotnik/HPZ Ship.bin"
 		even
 ArtNem_FBZRobotnikHead:
@@ -216849,7 +216918,7 @@ ArtKosM_LBZMiniboss:						; Liliam: reinsert S3 data
 ArtKosM_LBZMinibossBox:						; Liliam: reinsert S3 data
 		binclude "Levels/LBZ/KosinskiM Art/Miniboss Box.bin"
 		even
-ArtNem_LBZMinibossBox:								; Liliam: start from actual act 2 start
+ArtNem_LBZMinibossBox:									; Liliam: start from actual act 2 start
 		binclude "Levels/LBZ/Nemesis Art/Miniboss Box.bin"
 		even
 ArtNem_LBZFinalBoss1:						; Liliam: reinsert S3 data
@@ -216927,7 +216996,7 @@ ArtKosM_ANDKnuckles:
 
 		; Liliam: removed S&K lock-on code
 		org $13F280
-ArtUnc_SStagePlayers:								; Liliam: special stage - add extra characters
+ArtUnc_SStagePlayers:									; Liliam: special stage - add extra characters
 		binclude "General/Special Stage/Player Sprites.bin"
 ArtUnc_Sonic2P:							; Liliam: reinsert S3 data
 		binclude "General/Sprites/Sonic/Art/Sonic 2P.bin"
@@ -218403,7 +218472,7 @@ Pal_Save_ZoneCard_SSZ_Encore:						; Liliam: Encore mode - save data
 		binclude "General/Save Menu/Palettes/Encore Mode/Zone Card C.bin"
 Pal_Save_ZoneCard_DEZ_Encore:						; Liliam: Encore mode - save data
 		binclude "General/Save Menu/Palettes/Encore Mode/Zone Card D.bin"
-Pal_LevelSelect:								; Liliam: level select - use data select background
+Pal_LevelSelect:									; Liliam: level select - use data select background
 		binclude "General/Save Menu/Palettes/Level Select.bin"
 Map_LevelSelect:						; Liliam: level select - restore zone icons
 		include "General/Save Menu/Map - Level Select.asm"
@@ -218614,6 +218683,7 @@ ArtNem_MilesLifeIcon:
 ArtUnc_Invincibility:
 		; Liliam: HUD - Encore mode HUD
 		binclude "General/Sprites/Shields/Invincibility.bin"
+ArtUnc_Invincibility_end:
 		even
 ArtUnc_DashDust:
 		binclude "General/Sprites/Dash Dust/Dash Dust.bin"

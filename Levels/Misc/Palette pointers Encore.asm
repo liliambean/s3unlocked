@@ -1,170 +1,58 @@
 ; Liliam: Encore mode - palette
 
-		dc.l Pal_AIZIntro_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_AIZFire_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_HCZ1_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_HCZ2_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_MGZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_MGZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_CNZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_CNZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_FBZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_FBZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_ICZ1_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_ICZ2_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_LBZ1_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_LBZ2_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_MHZ1_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_MHZ2_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_SOZ1_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_S0Z2_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_LRZ1_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_LRZ2_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_SSZ1_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_SSZ2_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_DEZ1_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_DEZ2_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_DDZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_DDZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_Encore_Special
-		dc.w Normal_palette&$FFFF
-		dc.w bytesToLcnt($80)
-		dc.l Pal_Ending_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_ALZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_ALZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_BPZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_BPZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_AIZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_AIZ_Water_Encore
-		dc.w Normal_palette&$FFFF
-		dc.w bytesToLcnt($80)
-		dc.l Pal_AIZ2_Water_Encore
-		dc.w Normal_palette&$FFFF
-		dc.w bytesToLcnt($80)
-		dc.l Pal_LBZ_Water_Encore
-		dc.w Normal_palette&$FFFF
-		dc.w bytesToLcnt($80)
-		dc.l Pal_LBZ_Water_Encore
-		dc.w Normal_palette&$FFFF
-		dc.w bytesToLcnt($80)
-		dc.l Pal_LBZ_Water2_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_AIZBoss_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_HCZ1_Water_Encore
-		dc.w Normal_palette&$FFFF
-		dc.w bytesToLcnt($80)
-		dc.l Pal_HCZ2_Water_Encore
-		dc.w Normal_palette&$FFFF
-		dc.w bytesToLcnt($80)
-		dc.l Pal_Gumball_Special
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_DPZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_CGZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_EMZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_Pachinko_Special
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_Slot_Special
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_ICZ2_Water_Encore
-		dc.w Normal_palette&$FFFF
-		dc.w bytesToLcnt($80)
-		dc.l Pal_CNZ_Water_Encore
-		dc.w Normal_palette&$FFFF
-		dc.w bytesToLcnt($80)
-		dc.l Pal_DPZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_CGZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_EMZ_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_LRZBoss
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_HPZIntro
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_DEZBoss_Encore
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
-		dc.l Pal_HPZIntro
-		dc.w Normal_palette_line_2&$FFFF
-		dc.w bytesToLcnt($60)
+PalID2_AIZIntro:	palptr Pal_AIZIntro_Encore,	Normal_palette_line_2,	$60	; $0A
+PalID2_AIZFire:		palptr Pal_AIZFire_Encore,	Normal_palette_line_2,	$60	; $0B
+PalID2_HCZ1:		palptr Pal_HCZ1_Encore,		Normal_palette_line_2,	$60	; $0C
+PalID2_HCZ2:		palptr Pal_HCZ2_Encore,		Normal_palette_line_2,	$60	; $0D
+PalID2_MGZ1:		palptr Pal_MGZ_Encore,		Normal_palette_line_2,	$60	; $0E
+PalID2_MGZ2:		palptr Pal_MGZ_Encore,		Normal_palette_line_2,	$60	; $0F
+PalID2_CNZ1:		palptr Pal_CNZ_Encore,		Normal_palette_line_2,	$60	; $10
+PalID2_CNZ2:		palptr Pal_CNZ_Encore,		Normal_palette_line_2,	$60	; $11
+PalID2_FBZ1:		palptr Pal_FBZ_Encore,		Normal_palette_line_2,	$60	; $12
+PalID2_FBZ2:		palptr Pal_FBZ_Encore,		Normal_palette_line_2,	$60	; $13
+PalID2_ICZ1:		palptr Pal_ICZ1_Encore,		Normal_palette_line_2,	$60	; $14
+PalID2_ICZ2:		palptr Pal_ICZ2_Encore,		Normal_palette_line_2,	$60	; $15
+PalID2_LBZ1:		palptr Pal_LBZ1_Encore,		Normal_palette_line_2,	$60	; $16
+PalID2_LBZ2:		palptr Pal_LBZ2_Encore,		Normal_palette_line_2,	$60	; $17
+PalID2_MHZ1:		palptr Pal_MHZ1_Encore,		Normal_palette_line_2,	$60	; $18
+PalID2_MHZ2:		palptr Pal_MHZ2_Encore,		Normal_palette_line_2,	$60	; $19
+PalID2_SOZ1:		palptr Pal_SOZ1_Encore,		Normal_palette_line_2,	$60	; $1A
+PalID2_SOZ2:		palptr Pal_SOZ2_Encore,		Normal_palette_line_2,	$60	; $1B
+PalID2_LRZ1:		palptr Pal_LRZ1_Encore,		Normal_palette_line_2,	$60	; $1C
+PalID2_LRZ2:		palptr Pal_LRZ2_Encore,		Normal_palette_line_2,	$60	; $1D
+PalID2_SSZ1:		palptr Pal_SSZ1_Encore,		Normal_palette_line_2,	$60	; $1E
+PalID2_SSZ2:		palptr Pal_SSZ2_Encore,		Normal_palette_line_2,	$60	; $1F
+PalID2_DEZ1:		palptr Pal_DEZ1_Encore,		Normal_palette_line_2,	$60	; $20
+PalID2_DEZ2:		palptr Pal_DEZ2_Encore,		Normal_palette_line_2,	$60	; $21
+PalID2_DDZ1:		palptr Pal_DDZ_Encore,		Normal_palette_line_2,	$60	; $22
+PalID2_DDZ2:		palptr Pal_DDZ_Encore,		Normal_palette_line_2,	$60	; $23
+PalID2_Slots_2:		palptr Pal_Encore_Special,	Normal_palette,		$80	; $24
+PalID2_Ending2:		palptr Pal_Ending_Encore,	Normal_palette_line_2,	$60	; $25
+PalID2_ALZ:		palptr Pal_ALZ_Encore,		Normal_palette_line_2,	$60	; $26
+PalID2_ALZ_2:		palptr Pal_ALZ_Encore,		Normal_palette_line_2,	$60	; $27
+PalID2_BPZ:		palptr Pal_BPZ_Encore,		Normal_palette_line_2,	$60	; $28
+PalID2_BPZ_2:		palptr Pal_BPZ_Encore,		Normal_palette_line_2,	$60	; $29
+PalID2_AIZ:		palptr Pal_AIZ_Encore,		Normal_palette_line_2,	$60	; $2A
+PalID2_AIZ_Water:	palptr Pal_AIZ_Water_Encore,	Normal_palette,		$80	; $2B
+PalID2_AIZ2_Water:	palptr Pal_AIZ2_Water_Encore,	Normal_palette,		$80	; $2C
+PalID2_LBZ_Water:	palptr Pal_LBZ_Water_Encore,	Normal_palette,		$80	; $2D
+PalID2_LBZ2_Water:	palptr Pal_LBZ_Water_Encore,	Normal_palette,		$80	; $2E
+PalID2_LBZ_Water2:	palptr Pal_LBZ_Water2_Encore,	Normal_palette_line_2,	$60	; $2F
+PalID2_AIZBoss:		palptr Pal_AIZBoss_Encore,	Normal_palette_line_2,	$60	; $30
+PalID2_HCZ1_Water:	palptr Pal_HCZ1_Water_Encore,	Normal_palette,		$80	; $31
+PalID2_HCZ2_Water:	palptr Pal_HCZ2_Water_Encore,	Normal_palette,		$80	; $32
+PalID2_Gumball:		palptr Pal_Gumball_Special,	Normal_palette_line_2,	$60	; $33
+PalID2_DPZ:		palptr Pal_DPZ_Encore,		Normal_palette_line_2,	$60	; $34
+PalID2_CGZ:		palptr Pal_CGZ_Encore,		Normal_palette_line_2,	$60	; $35
+PalID2_EMZ:		palptr Pal_EMZ_Encore,		Normal_palette_line_2,	$60	; $36
+PalID2_Pachinko:	palptr Pal_Pachinko_Special,	Normal_palette_line_2,	$60	; $37
+PalID2_Slots:		palptr Pal_Slot_Special,	Normal_palette_line_2,	$60	; $38
+PalID2_ICZ2_Water:	palptr Pal_ICZ2_Water_Encore,	Normal_palette,		$80	; $39
+PalID2_CNZ_Water:	palptr Pal_CNZ_Water_Encore,	Normal_palette,		$80	; $3A
+PalID2_DPZ_2:		palptr Pal_DPZ_Encore,		Normal_palette_line_2,	$60	; $3B
+PalID2_CGZ_2:		palptr Pal_CGZ_Encore,		Normal_palette_line_2,	$60	; $3C
+PalID2_EMZ_2:		palptr Pal_EMZ_Encore,		Normal_palette_line_2,	$60	; $3D
+PalID2_LRZBoss:		palptr Pal_LRZBoss,		Normal_palette_line_2,	$60	; $3E
+PalID2_HPZIntro:	palptr Pal_HPZIntro,		Normal_palette_line_2,	$60	; $3F
+PalID2_DEZBoss:		palptr Pal_DEZBoss_Encore,	Normal_palette_line_2,	$60	; $40
+PalID2_HPZ:		palptr Pal_HPZIntro,		Normal_palette_line_2,	$60	; $41

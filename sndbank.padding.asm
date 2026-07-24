@@ -1911,7 +1911,7 @@ Obj_HPZEncoreCutscene:
 		lea	(ArtKosM_HPZTeleporter).l,a1
 		move.w	#tiles_to_bytes(ArtTile_HPZEncoreTeleporter),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#$47,d0
+		moveq	#PLCID_47,d0
 		jmp	(Load_PLC).l
 ; ---------------------------------------------------------------------------
 

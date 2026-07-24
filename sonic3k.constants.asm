@@ -349,9 +349,14 @@ SRAM_end	=		*
 ; ---------------------------------------------------------------------------
 ; RAM addresses
 
+Map_2PTime_P1_RAM =		ramaddr(   $FF7000 ) ; $34 bytes
+Map_2PTime_P2_RAM =		ramaddr(   $FF7080 ) ; $34 bytes
 Sprite_table_alternate =	ramaddr(   $FF7880 ) ; $280 bytes ; alternate sprite table for player 1 in competition mode
+Sprite_table_alternate_end =	Sprite_table_P2
 Sprite_table_P2 =		ramaddr(   $FF7B00 ) ; $280 bytes ; sprite table for player 2 in competition mode
+Sprite_table_P2_end =		Sprite_table_P2_alternate
 Sprite_table_P2_alternate =	ramaddr(   $FF7D80 ) ; $280 bytes ; alternate sprite table for player 2 in competition mode
+Sprite_table_P2_alternate_end =	ramaddr(   $FF8000 )
 
 	phase $FFFF0000
 RAM_start =			*
@@ -359,10 +364,14 @@ Chunk_table			ds.b $8000		; chunk (128x128) definitions, $80 bytes per definitio
 
 Level_layout_header		ds.b 8			; first word = chunks per FG row, second word = chunks per BG row, third word = FG rows, fourth word = BG rows
 Level_layout_main		ds.b $FF8		; $40 word-sized line pointers followed by actual layout data
+Level_layout_main_end =		*
 Object_respawn_table_2 :=	Level_layout_header+$400; $200 bytes ; respawn table used by glowing spheres bonus stage, because... Reasons?
+Object_respawn_table_2_end :=	Level_layout_header+$600
 Ring_status_table_2 :=		Level_layout_header+$600; $400 bytes ; ring status table used by glowing spheres bonus stage, because... Reasons?
+Ring_status_table_2_end :=	Level_layout_header+$A00
 Block_table			ds.b $1800		; block (16x16) definitions, 8 bytes per definition, space for $300 blocks
 SStage_collision_response_list := 	Block_table+$1400	; $100 bytes ; sprite collision list during a special stage
+SStage_collision_response_list_end := 	Block_table+$1500
 SStage_blue_sphere_to_ring_queue :=	Block_table+$1500	; $100 bytes ; queue used by special stages to temporarily store the positions of blue spheres that have turned into rings
 SStage_red_sphere_dfs_walk_stack :=	Block_table+$1600	; $100 bytes ; stack of (direction index bounds, direction index, position) used by special stages
 								; as part of the red sphere DFS walk to check for loops of red spheres
@@ -400,10 +409,14 @@ Conveyor_belt_load_array	ds.b $E			; each subtype of hcz conveyor belt uses a di
 
 Kos_decomp_buffer		ds.b $1000		; each module in a KosM archive is decompressed here and then DMAed to VRAM
 H_scroll_buffer			ds.b $380		; horizontal scroll table is built up here and then DMAed to VRAM
+H_scroll_buffer_end =		*
 Collision_response_list		ds.b $80		; only objects in this list are processed by the collision response routines
+Collision_response_list_end =	*
 Stat_table =			*			; used by Tails' CPU controls in a Sonic and Tails game
 Pos_table_P2			ds.b $100		; used by Player 2 in competition mode
+Pos_table_P2_end =		*
 Pos_table 			ds.b $100		;
+Pos_table_end =			*
 Competition_saved_data		ds.b $54		; saved data from Competition Mode
 			ds.b $A				; unused
 Emerald_flicker_flag		ds.w 1			; controls the emerald flicker in save screen and special stage results.
@@ -420,7 +433,9 @@ Unlock_flags			ds.b 1		; Liliam: options menu
 Encore_saved_data		ds.b $22	; Liliam: Encore mode - save game
 Saved_data			ds.b $54		; saved data from 1 player mode
 Ring_status_table		ds.b $400		; 1 word per ring
+Ring_status_table_end =		*
 Object_respawn_table		ds.b $300		; 1 byte per object, every object in the level gets an entry
+Object_respawn_table_end =	*
 
 Camera_RAM =			*			; various camera and scroll-related variables are stored here
 H_scroll_amount			ds.w 1			; number of pixels camera scrolled horizontally in the last frame * $100
@@ -542,7 +557,10 @@ _unkEEF2			ds.w 1			; used exclusively in SSZ background events code
 _unkEEF4			ds.w 1			; used exclusively in SSZ background events code
 _unkEEF6			ds.l 1			; used exclusively in SSZ background events code
 _unkEEFA			ds.w 1			; used exclusively in SSZ background events code
-			ds.b $3E			; used in some instances (see above)
+			ds.b 4
+Camera_RAM_end =		*
+
+			ds.b $3A			; used in some instances (see above)
 
 Spritemask_flag			ds.w 1			; when set, indicates that special sprites are used for sprite masking
 
@@ -588,13 +606,16 @@ Demo_number			ds.w 1			; the currently running demo
 Ring_consumption_table =	*			; $80 bytes ; stores the addresses of all rings currently being consumed
 Ring_consumption_count		ds.w 1			; the number of rings being consumed currently
 Ring_consumption_list		ds.w $3F		; the remaining part of the ring consumption table
+Ring_consumption_table_end =	*
 
 SStage_layout_buffer =		*			; $600 bytes ; yes, this area is used to for special stage layouts!
 Target_water_palette		ds.b $80		; used by palette fading routines
+Target_water_palette_end =	*
 Water_palette			ds.b $80		; this is what actually gets displayed
 Water_palette_line_2 =		Water_palette+$20	; $20 bytes
 Water_palette_line_3 =		Water_palette+$40	; $20 bytes
 Water_palette_line_4 =		Water_palette+$60	; $20 bytes
+Water_palette_end =		*
 Plane_buffer			ds.b $480		; used by level drawing routines
 VRAM_buffer			ds.b $80		; used to temporarily hold data while it is being transferred from one VRAM location to another
 
@@ -654,7 +675,7 @@ Palette_cycle_counters		ds.b $C			; various counters and variables for palette c
 Palette_frame			ds.w 1
 Palette_timer			ds.b 1
 Super_palette_status		ds.b 1			 ; appears to be a flag for the palette's current status: '0' for 'off', '1' for 'fading', -1 for 'fading done'
-_unkF660			ds.w 1
+Ending_scroll_delay		ds.w 1
 _unkF662			ds.w 1			 ; unused
 Background_collision_flag	ds.b 1			 ; if set, background collision is enabled
 Disable_death_plane		ds.b 1			 ; if set, going below the screen wont kill the player
@@ -689,6 +710,7 @@ Nem_shift_value			ds.l 1			; the number of bits the data word needs to be shifte
 Nem_patterns_left		ds.w 1			; the number of patterns remaining to be decompressed
 Nem_frame_patterns_left		ds.w 1			; the number of patterns remaining to be decompressed in the current frame
 			ds.l 1				; unused?
+Nem_decomp_vars_end =		*
 
 ; The following all the way through Sprite_table is cleared on level load.
 Tails_CPU_interact		ds.w 1			; RAM address of the last object Tails stood on while controlled by the CPU
@@ -703,7 +725,7 @@ Tails_CPU_auto_fly_timer	ds.b 1			; counts up until CPU Tails automatically flie
 Tails_CPU_auto_jump_flag	ds.b 1			; set to #1 when CPU Tails needs to jump of his own accord, regardless of whether Sonic jumped or not
 Rings_manager_routine		ds.b 1
 Level_started_flag		ds.b 1
-_unkF712			ds.b $1C		; ??? ; unknown object respawn table
+_unkF712			ds.b $1C		; Gumball Machine and HPZ Emerald throne room object respawn table
 AIZ1_palette_cycle_flag		ds.b 1			; selects which palette cycles are used in AIZ1
 Bonus_stage_flag		ds.b 1		; Liliam: Encore mode - bonus stage
 Water_flag			ds.b 1
@@ -718,8 +740,8 @@ Flying_saved_X_vel		ds.w 1
 Ctrl_1_title =			*			; copy of Ctrl_1, used on the title screen
 Ctrl_1_held_title		ds.b 1
 Ctrl_1_pressed_title		ds.b 1
-_unkF74A			ds.b 1
-_unkF74B			ds.b 1
+Competition_lap_count_flag	ds.b 1			; flag to enable/disable lap counting in competition mode for player 1, 0 for enabled, 1 for disabled
+Competition_lap_count_flag_P2	ds.b 1			; flag to enable/disable lap counting in competition mode for player 2, 0 for enabled, 1 for disabled
 Flying_saved_Y_vel		ds.w 1
 Gliding_collision_flags		ds.b 1
 Disable_wall_grab		ds.b 1			; if set, disables Knuckles wall grab
@@ -780,6 +802,7 @@ Level_trigger_array		ds.b $10		; used by buttons, etc.
 Anim_Counters			ds.b $10		; each word stores data on animated level art, including duration and current frame
 
 Sprite_table			ds.b $280
+Sprite_table_end =		*
 _unkFA80			ds.w 1			; unused
 _unkFA82			ds.b 1
 _unkFA83			ds.b 1
@@ -824,7 +847,7 @@ _unkFAC1			ds.b 1
 _unkFAC2			ds.w 1
 _unkFAC4			ds.w 1
 			ds.w 1				; unused
-_unkFAC8			ds.w 1
+Ending_scroll_speed		ds.w 1
 			ds.w 1				; unused
 _unkFACC			ds.b 1
 			ds.b 1				; unused
@@ -848,10 +871,12 @@ Normal_palette			ds.b $80
 Normal_palette_line_2 =		Normal_palette+$20	; $20 bytes
 Normal_palette_line_3 =		Normal_palette+$40	; $20 bytes
 Normal_palette_line_4 =		Normal_palette+$60	; $20 bytes
+Normal_palette_end =		*
 Target_palette			ds.b $80		; used by palette fading routines
 Target_palette_line_2 =		Target_palette+$20	; $20 bytes
 Target_palette_line_3 =		Target_palette+$40	; $20 bytes
 Target_palette_line_4 =		Target_palette+$60	; $20 bytes
+Target_palette_end =		*
 Stack_contents			ds.b $100		; stack contents
 System_stack =			*			; this is the top of the stack, it grows downwards
 
@@ -987,6 +1012,8 @@ Kos_module_queue		ds.w 3*4		; 6 bytes per entry, first longword is source locati
 Kos_module_source =		Kos_module_queue	; long ; the compressed data location for the first module in the queue
 Kos_module_destination =	Kos_module_queue+4	; word ; the VRAM destination for the first module in the queue
 
+Kos_decomp_module_end =		*
+
 _unkFF7C			ds.w 1
 _unkFF7E			ds.w 1
 Level_select_repeat		ds.w 1			; delay counter for repeating the button press. Allows the menu move even when up/down is held down
@@ -1063,6 +1090,7 @@ H_int_addr :=			H_int_jump+2		; long
 Checksum_string			ds.l 1			; set to Ref_Checksum_String once the checksum routine has run
 Ref_Checksum_String := 'BEAN'
 
+RAM_end =			*
 .check =	(*)&$FFFFFF
 	if (.check>0)&(.check<$FF0000)
 		fatal "Sonic & Knuckles RAM definitions are too large by $\{*} bytes!"
