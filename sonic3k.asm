@@ -6875,16 +6875,16 @@ loc_6000:
 		bra.s	loc_6040
 ; ---------------------------------------------------------------------------
 Player_PLCs:							; Liliam: simplify player PLC selection
-		dc.b PLCID_01
-		dc.b PLCID_01
-		dc.b PLCID_07
-		dc.b PLCID_05
-		dc.b PLCID_06
-		dc.b PLCID_00
-		dc.b PLCID_02
-		dc.b PLCID_08
-		dc.b PLCID_04
-		dc.b PLCID_52
+		dc.b PLCID_SonicLifeIcon
+		dc.b PLCID_SonicLifeIcon
+		dc.b PLCID_TailsLifeIcon
+		dc.b PLCID_KnucklesLifeIcon
+		dc.b PLCID_AmyLifeIcon
+		dc.b PLCID_MightyLifeIcon
+		dc.b PLCID_RayLifeIcon
+		dc.b PLCID_MetalLifeIcon
+		dc.b PLCID_EncoreMode
+		dc.b PLCID_MilesLifeIcon
 ; ---------------------------------------------------------------------------
 
 loc_6034:
@@ -6981,11 +6981,11 @@ loc_6068:
 		moveq	#0,d0
 		move.b	(a2,d1.w),d0			; Get the first PLC number for the level
 		beq.s	loc_6088
-		cmpi.b	#PLCID_48,d0					; Liliam: Encore mode - special stage
+		cmpi.b	#PLCID_HPZ,d0					; Liliam: Encore mode - special stage
 		bne.s	loc_6084					;
 		tst.b	(Encore_mode).w					;
 		beq.s	loc_6084					;
-		subq.w	#1,d0						;
+		subq.w	#PLCID_HPZ-PLCID_HPZ_Encore,d0			;
 
 loc_6084:
 		bsr.w	Load_PLC
@@ -26223,7 +26223,7 @@ loc_12478:
 ;		move.b	#State_GameOver,routine(a0)		; Liliam: Encore mode - expand player routines
 		move.w	#mus_GameOver,d0
 		jsr	(Play_Music).l
-		moveq	#PLCID_03,d0
+		moveq	#PLCID_GameOver,d0
 		jmp	(Load_PLC_2).l
 ; ---------------------------------------------------------------------------
 
@@ -42718,14 +42718,14 @@ loc_1C4D0:
 		move.w	#$500,(Anim_Counters+2).w
 		move.w	#$500,(Anim_Counters+4).w
 		addq.b	#2,(Dynamic_resize_routine).w		; Liliam: AIZ intro - load main level art during cutscene
-		moveq	#PLCID_0B,d0				;
+		moveq	#PLCID_AIZ1,d0				;
 		jmp	(Load_PLC).l				;
 ;		move.b	#1,(Last_star_post_hit).w		;
 ;		move.w	#$13A0,(Saved_X_pos).w			;
 ;		move.w	#$41A,(Saved_Y_pos).w			;
 ;		jsr	(Save_Level_Data).l			;
 ;		move.l	#0,(Saved_timer).w			;
-;		moveq	#PLCID_08,d0				;
+;		moveq	#PLCID_MetalLifeIcon,d0			;
 ;		jsr	(Load_PLC).l				;
 ;		addq.b	#2,(Dynamic_resize_routine).w		;
 
@@ -42766,7 +42766,7 @@ loc_1C594:
 loc_1C5AE:
 		move.w	d0,(Normal_palette_line_3+$1E).w
 		move.w	#$2D80,(Camera_min_X_pos).w
-;		moveq	#PLCID_5A,d0				; Liliam: bugfix - stop double-loading AIZ2 PLCs
+;		moveq	#PLCID_AIZMiniboss,d0			; Liliam: bugfix - stop double-loading AIZ2 PLCs
 ;		jsr	(Load_PLC).l				;
 		addq.b	#2,(Dynamic_resize_routine).w
 
@@ -42787,7 +42787,7 @@ loc_1C5C6:
 		lea	(AIZ1_8x8_Flames_KosM).l,a1
 		move.w	#tiles_to_bytes($500),d2
 		jsr	(Queue_Kos_Module).l
-;		moveq	#PLCID_0C,d0				; Liliam: bugfix - stop double-loading AIZ2 PLCs
+;		moveq	#PLCID_AIZ2,d0				; Liliam: bugfix - stop double-loading AIZ2 PLCs
 ;		jsr	(Load_PLC).l				;
 		addq.b	#2,(Dynamic_resize_routine).w
 
@@ -67089,7 +67089,7 @@ loc_2D7AC:
 		bne.s	loc_2D7FE				;
 		lea	(PLC_EggCapsule).l,a1			;
 		jsr	(Load_PLC_Raw).l			;
-;		moveq	#PLCID_25,d0				;
+;		moveq	#PLCID_LBZ2_2,d0			;
 ;		jsr	(Load_PLC).l				;
 
 loc_2D7FE:
@@ -68201,10 +68201,10 @@ loc_2E16C:
 		lea	(ArtKosM_HPZ_Secondary).l,a1
 		move.w	d4,d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_48,d0
+		moveq	#PLCID_HPZ,d0
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - special stage
 		beq.s	loc_2E1CE					;
-		subq.w	#1,d0						;
+		subq.w	#PLCID_HPZ-PLCID_HPZ_Encore,d0			;
 
 loc_2E1CE:
 		jsr	(Load_PLC).l
@@ -112405,7 +112405,7 @@ loc_50160:
 		cmpi.w	#$310,(Camera_Y_pos_BG_copy).w
 		blo.s	loc_501D6			; If fire hasn't subsided, branch
 		movem.l	d7-a0/a2-a3,-(sp)
-;		moveq	#PLCID_0C,d0				; Liliam: bugfix - stop double-loading AIZ2 PLCs
+;		moveq	#PLCID_AIZ2,d0				; Liliam: bugfix - stop double-loading AIZ2 PLCs
 ;		jsr	(Load_PLC).l				;
 		jsr	(LoadEnemyArt).l
 		movem.l	(sp)+,d7-a0/a2-a3
@@ -113308,9 +113308,9 @@ HCZ1BGE_Normal:
 		lea	(HCZ2_8x8_Secondary_KosM).l,a1	; Load secondary HCZ2 art, blocks, and chunks so as to not compromise current position
 		move.w	#tiles_to_bytes($11B),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_10,d0
+		moveq	#PLCID_HCZ2,d0
 		jsr	(Load_PLC).l
-		moveq	#PLCID_11,d0
+		moveq	#PLCID_HCZ2_2,d0
 		jsr	(Load_PLC).l					; load HCZ 2 PLCs
 		movem.l	(sp)+,d7-a0/a2-a3
 		st	(Events_bg+$16).w
@@ -113920,7 +113920,7 @@ MGZ1BGE_Normal:
 		lea	(MGZ2_8x8_Secondary_KosM).l,a1
 		move.w	#tiles_to_bytes($252),d2
 		jsr	(Queue_Kos_Module).l		; Queue art, blocks and chunks for act 2
-		moveq	#PLCID_14,d0
+		moveq	#PLCID_MGZ2,d0
 		jsr	(Load_PLC).l					; Load act 2 PLCs
 		movem.l	(sp)+,d7-a0/a2-a3
 		addq.w	#4,(Events_routine_bg).w
@@ -115503,9 +115503,9 @@ CNZ1BGE_DoTransition:
 		beq.w	loc_51F28				; Don't do anything until signpost lands
 		clr.w	(Events_fg_5).w
 		movem.l	d7-a0/a2-a3,-(sp)
-		moveq	#PLCID_18,d0
+		moveq	#PLCID_CNZ2,d0
 		jsr	(Load_PLC).l
-		moveq	#PLCID_19,d0
+		moveq	#PLCID_CNZ2_2,d0
 		jsr	(Load_PLC).l				; Load CNZ 2 PLCs
 		move.w	#$301,(Current_zone_and_act).w		; Change to act 2
 		clr.b	(Dynamic_resize_routine).w
@@ -116764,7 +116764,7 @@ FBZ1BGE_Normal:
 		beq.s	loc_529EE
 		clr.w	(Events_fg_5).w		; Check for transition flag
 		movem.l	d7-a0/a2-a3,-(sp)
-		moveq	#PLCID_1C,d0
+		moveq	#PLCID_FBZ2,d0
 		jsr	(Load_PLC).l
 		move.w	#$401,(Current_zone_and_act).w
 		clr.b	(Dynamic_resize_routine).w
@@ -118300,7 +118300,7 @@ ICZ1BGE_Normal:
 		lea	(ICZ2_8x8_Secondary_KosM).l,a1
 		move.w	#tiles_to_bytes($122),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_20,d0
+		moveq	#PLCID_ICZ2,d0
 		jsr	(Load_PLC).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		addq.w	#4,(Events_routine_bg).w
@@ -119809,7 +119809,7 @@ loc_54248:
 LBZ1BGE_DoTransition:
 		tst.b	(Kos_modules_left).w
 		bne.w	loc_5432E
-		moveq	#PLCID_25,d0							; Liliam: start from actual act 2 start
+		moveq	#PLCID_LBZ2_2,d0						; Liliam: start from actual act 2 start
 		jsr	(Load_PLC).l							;
 		move.w	#$601,(Current_zone_and_act).w
 		clr.b	(Dynamic_resize_routine).w
@@ -120920,7 +120920,7 @@ MHZ1_BackgroundEvent:
 		beq.w	loc_54C3C
 		clr.w	(Events_fg_5).w
 		movem.l	d7-a0/a2-a3,-(sp)
-		moveq	#PLCID_28,d0
+		moveq	#PLCID_MHZ2,d0
 		jsr	(Load_PLC).l
 		move.w	#$701,(Current_zone_and_act).w
 		clr.b	(Dynamic_resize_routine).w
@@ -122423,7 +122423,7 @@ loc_55C4E:
 		lea	(ArtKosM_SOZ2_Secondary).l,a1
 		move.w	#tiles_to_bytes($315),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_2C,d0
+		moveq	#PLCID_SOZ2,d0
 		jsr	(Load_PLC).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		addq.w	#4,(Events_routine_bg).w
@@ -123966,7 +123966,7 @@ loc_56BD2:
 		lea	(ArtKosM_LRZ2_Secondary).l,a1
 		move.w	#tiles_to_bytes($090),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_30,d0
+		moveq	#PLCID_LRZ2,d0
 		jsr	(Load_PLC).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		move.w	#$C,(Events_routine_bg).w
@@ -127453,7 +127453,7 @@ loc_593A8:
 		lea	(ArtKosM_DEZ2_Secondary).l,a1
 		move.w	#tiles_to_bytes($292),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_38,d0
+		moveq	#PLCID_DEZ2,d0
 		jsr	(Load_PLC).l
 		movem.l	(sp)+,d7-a0/a2-a3
 		addq.w	#4,(Events_routine_bg).w
@@ -128525,7 +128525,7 @@ LRZ3BGE_Normal:
 		lea	(ArtKosM_HPZ_Secondary).l,a1		;
 		move.w	#$16E0,d2				;
 		jsr	(Queue_Kos_Module).l			;
-		moveq	#PLCID_48,d0				;
+		moveq	#PLCID_HPZ,d0				;
 		jsr	(Load_PLC).l				;
 		jsr	(Load_PLC_MonitorsSpikesSprings).l	;
 		stopZ80						;
@@ -132278,7 +132278,7 @@ Continue_MechaSonic_Init:						; Liliam: Metal Sonic - use Mecha Sonic for conti
 
 Continue_Robotnik_Init:						; Liliam: continues - use Robotnik once Knuckles switches sides
 		move.l	#byte_70419,$30(a0)
-		moveq	#PLCID_4C,d0
+		moveq	#PLCID_DEZBoss,d0
 		jsr	(Load_PLC).l
 
 Continue_Robotnik_Init2:
@@ -149078,8 +149078,8 @@ loc_68508:
 		move.b	#$60,collision_property(a0)
 		move.w	(Camera_max_X_pos).w,(Camera_stored_max_X_pos).w
 ;		move.b	#1,(Boss_flag).w			; Liliam: bugfix - use correct music for bosses
-;		moveq	#PLCID_5A,d0				; Liliam: bugfix - stop double-loading AIZ2 PLCs
-		moveq	#PLCID_59,d0				;
+;		moveq	#PLCID_AIZMiniboss,d0			; Liliam: bugfix - stop double-loading AIZ2 PLCs
+		moveq	#PLCID_AIZMinibossCutscene,d0		;
 		jmp	(Load_PLC).l
 ; ---------------------------------------------------------------------------
 
@@ -149570,7 +149570,7 @@ loc_68A46:
 		jsr	(SetUp_ObjAttributes).l
 		move.b	#6,collision_property(a0)
 ;		move.b	#1,(Boss_flag).w			; Liliam: bugfix - use correct music for bosses
-		moveq	#PLCID_5A,d0
+		moveq	#PLCID_AIZMiniboss,d0
 		jsr	(Load_PLC).l
 		lea	Pal_AIZMiniboss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -150360,7 +150360,7 @@ loc_691D4:
 		move.b	#1,(Boss_flag).w		; Lock the screen
 		clr.b	(_unkFAA2).w
 		clr.b	(_unkFAA3).w
-		moveq	#PLCID_6B,d0
+		moveq	#PLCID_AIZEndBoss,d0
 		jsr	(Load_PLC).l					; Load Robotnik's ship and explosions
 		lea	(ArtKosM_AIZEndBoss).l,a1
 		move.w	#tiles_to_bytes(ArtTile_AIZEndBoss),d2
@@ -151579,7 +151579,7 @@ Obj_HCZMiniboss:
 		move.l	#loc_69EDA,(a0)
 ;		move.b	#1,(Boss_flag).w			; Liliam: bugfix - use correct music for bosses
 		st	(Events_bg+$16).w
-		moveq	#PLCID_5B,d0
+		moveq	#PLCID_HCZMiniboss,d0
 		jsr	(Load_PLC).l
 		move.w	#$300,(Camera_min_Y_pos).w
 		lea	ChildObjDat_6AD6E(pc),a2
@@ -153168,7 +153168,7 @@ loc_6AEC6:
 		jsr	(Boss_FadeMusic_SetUpCamera).l
 		move.l	#loc_6AEFE,(a0)
 		move.l	#loc_6AF04,$34(a0)
-		moveq	#PLCID_6C,d0
+		moveq	#PLCID_HCZEndBoss,d0
 		jsr	(Load_PLC).l
 		lea	(Pal_SonicTails).l,a1						; Liliam: add Egg Mobile boss flash
 		lea	(Normal_palette_line_3).w,a2					;
@@ -154755,7 +154755,7 @@ Obj_MGZ2DrillingRobotnik:
 		jsr	(Queue_Kos_Module).l
 		lea	(PLC_RobotnikShip).l,a1			; Liliam: bugfix - stop loading capsule art and having to reload everything again (yes, really)
 		jsr	(Load_PLC_Raw).l			;
-;		moveq	#PLCID_6D,d0				;
+;		moveq	#PLCID_MGZEndBoss,d0			;
 ;		jsr	(Load_PLC).l				;
 		lea	Pal_MGZEndBoss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -155000,7 +155000,7 @@ loc_6C200:
 		lea	(MGZ2_8x8_Secondary_KosM).l,a1
 		move.w	#tiles_to_bytes($252),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_14,d0
+		moveq	#PLCID_MGZ2,d0
 		jsr	(Load_PLC).l
 		lea	(ArtKosM_Spiker).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Spiker),d2
@@ -155121,7 +155121,7 @@ loc_6C354:
 		lea	(ArtKosM_MGZEndBossDebris).l,a1
 		move.w	#tiles_to_bytes(ArtTile_MGZEndBossDebris),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_6D,d0
+		moveq	#PLCID_MGZEndBoss,d0
 		jsr	(Load_PLC).l
 		lea	Pal_MGZEndBoss(pc),a1
 		jsr	(PalLoad_Line1).l
@@ -155366,7 +155366,7 @@ Obj_MGZEndBossKnux:
 		lea	(ArtKosM_MGZEndBossDebris).l,a1
 		move.w	#tiles_to_bytes(ArtTile_MGZEndBossDebris),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_6D,d0
+		moveq	#PLCID_MGZEndBoss,d0
 		jsr	(Load_PLC).l
 ;		cmpi.b	#2,(Player_1+character_id).w	; Liliam: ???
 		lea	Pal_MGZEndBoss(pc),a1
@@ -157241,7 +157241,7 @@ loc_6D9A8:
 		moveq	#signextendB(cmd_FadeOut),d0
 		jsr	(Play_Music).l				; Fade out music
 		move.b	#1,(Boss_flag).w		; Lock screen
-		moveq	#PLCID_5D,d0
+		moveq	#PLCID_CNZMiniboss,d0
 		jsr	(Load_PLC).l					; Load CNZ Miniboss PLC
 		lea	Pal_CNZMiniboss(pc),a1		; Load CNZ Miniboss palette
 		jmp	(PalLoad_Line1).l
@@ -158209,7 +158209,7 @@ Obj_CNZEndBoss:
 		lea	word_6E476(pc),a1
 		move.b	#mus_EndBoss,boss_saved_mus(a0)
 		jsr	(Boss_FadeMusic_SetUpCamera).l
-		moveq	#PLCID_6E,d0
+		moveq	#PLCID_CNZEndBoss,d0
 		jsr	(Load_PLC).l
 		lea	Pal_CNZEndBoss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -161312,7 +161312,7 @@ Obj_FBZEndBoss:
 		move.b	#mus_EndBoss,subtype(a1)
 
 loc_70620:
-		moveq	#PLCID_6F,d0
+		moveq	#PLCID_FBZEndBoss,d0
 		jsr	(Load_PLC).l
 		lea	Pal_FBZEndBoss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -162279,7 +162279,7 @@ loc_71184:
 		jsr	(Boss_FadeMusic_SetUpCamera).l
 		move.l	#loc_711B0,(a0)
 		move.l	#loc_711B6,$34(a0)
-		moveq	#PLCID_5F,d0
+		moveq	#PLCID_ICZMiniboss,d0
 		jsr	(Load_PLC).l
 		lea	Pal_ICZMiniboss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -163225,7 +163225,7 @@ Obj_ICZEndBoss:
 		lea	word_71BC6(pc),a1
 		move.b	#mus_EndBoss,boss_saved_mus(a0)
 		jsr	(Boss_FadeMusic_SetUpCamera).l
-		moveq	#PLCID_70,d0
+		moveq	#PLCID_ICZEndBoss,d0
 		jsr	(Load_PLC).l
 		lea	Pal_ICZEndBoss(pc),a1
 		jmp	(PalLoad_Line1).l
@@ -164632,7 +164632,7 @@ loc_729DE:
 ;		beq.s	loc_72A2A				;
 ;		move.w	#$7F,$2E(a0)				;
 ;		st	(Update_HUD_timer).w			;
-;		moveq	#PLCID_71,d0				;
+;		moveq	#PLCID_LBZFinalBoss1,d0			;
 ;		jsr	(Load_PLC).l				;
 ;		jsr	(AllocateObject).l			;
 ;		bne.s	loc_72A2A				;
@@ -165351,7 +165351,7 @@ Obj_LBZFinalBossKnux:
 		move.l	#loc_7304C,$34(a0)
 		clr.b	(_unkFAA2).w
 		clr.b	(_unkFAA3).w
-		moveq	#PLCID_71,d0
+		moveq	#PLCID_LBZFinalBoss1,d0
 		jsr	(Load_PLC).l
 
 ; =============== S U B R O U T I N E =======================================
@@ -166259,10 +166259,10 @@ loc_73906:
 		jsr	(Boss_FadeMusic_SetUpCamera).l
 		lea	ChildObjDat_7414C(pc),a2
 		jsr	(CreateChild1_Normal).l
-		moveq	#PLCID_77,d0
+		moveq	#PLCID_LBZEndBoss,d0
 		cmpi.w	#3,(Player_mode).w			; Liliam: bugfix - use Egg Robo for LBZ2 boss
 		bne.s	loc_7393A				;
-		addq.w	#2,d0					;
+		addq.w	#PLCID_LBZEndBossK-PLCID_LBZEndBoss,d0	;
 
 loc_7393A:
 		jsr	(Load_PLC).l
@@ -167724,7 +167724,7 @@ loc_74710:
 		addi.w	#$40,d2
 		move.w	d2,x_pos(a0)
 		jsr	(loc_694AA).l				; Liliam: ported from S3 - restore LBZ2 end bomb chute
-		moveq	#PLCID_71,d0				;
+		moveq	#PLCID_LBZFinalBoss1,d0			;
 		jsr	(Load_PLC).l				;
 		lea	Pal_LBZFinalBoss1(pc),a1		;
 		jmp	(PalLoad_Line1).l			;
@@ -167771,7 +167771,7 @@ loc_74784:
 		bclr	#4,$38(a0)				; Liliam: ported from S3 - restore LBZ2 end bomb chute
 		lea	ChildObjDat_75186(pc),a2		;
 		jsr	(CreateChild1_Normal).l			;
-;		moveq	#PLCID_71,d0				;
+;		moveq	#PLCID_LBZFinalBoss1,d0			;
 ;		jsr	(Load_PLC).l				;
 ;		lea	(ArtKosM_EggRoboHead).l,a1				; Liliam: bugfix - queue Egg Robo head
 ;		move.w	#tiles_to_bytes(ArtTile_RobotnikShip),d2		;
@@ -170174,7 +170174,7 @@ Obj_MHZEndBoss:
 		lea	(ArtKosM_MHZEndBoss).l,a1
 		move.w	#tiles_to_bytes(ArtTile_MHZEndBoss),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_7B,d0
+		moveq	#PLCID_EndBoss,d0
 		jsr	(Load_PLC).l
 		lea	Pal_MHZEndBoss(pc),a1
 		jsr	(PalLoad_Line1).l
@@ -172141,7 +172141,7 @@ loc_7767C:
 		lea	(ArtKosM_SOZEndBoss).l,a1
 		move.w	#tiles_to_bytes(ArtTile_SOZEndBoss),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_6D,d0
+		moveq	#PLCID_MGZEndBoss,d0
 		jsr	(Load_PLC).l
 		lea	Pal_SOZEndBoss1(pc),a1
 		jsr	(PalLoad_Line1).l
@@ -176468,7 +176468,7 @@ loc_7A244:
 		subi.w	#$40,d0
 		move.w	d0,y_pos(a0)
 		clr.w	(Ending_completion_level).w
-		moveq	#PLCID_7B,d0
+		moveq	#PLCID_EndBoss,d0
 		jsr	(Load_PLC).l
 		lea	(ArtKosM_SSZGHZMisc).l,a1
 		move.w	#tiles_to_bytes(ArtTile_SSZGHZMisc),d2
@@ -176638,7 +176638,7 @@ loc_7A3F8:
 loc_7A414:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_7A414
-		moveq	#PLCID_32,d0
+		moveq	#PLCID_SSZ1,d0
 		jsr	(Load_PLC).l
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -176948,7 +176948,7 @@ Obj_SSZMTZBoss:
 
 loc_7A6DC:
 		clr.w	(Ending_completion_level).w
-		moveq	#PLCID_7B,d0
+		moveq	#PLCID_EndBoss,d0
 		jsr	(Load_PLC).l
 		lea	(ArtKosM_SSZMTZOrbs).l,a1
 		move.w	#tiles_to_bytes(ArtTile_SSZMTZOrbs),d2
@@ -177508,7 +177508,7 @@ loc_7ACA4:
 loc_7ACC0:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_7ACC0
-		moveq	#PLCID_32,d0
+		moveq	#PLCID_SSZ1,d0
 		jsr	(Load_PLC).l
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -181659,7 +181659,7 @@ loc_7DDC4:
 		jsr	CreateChild1_Normal(pc)
 		lea	ChildObjDat_7EF96(pc),a2
 		jsr	CreateChild6_Simple(pc)
-		moveq	#PLCID_7B,d0
+		moveq	#PLCID_EndBoss,d0
 		jsr	(Load_PLC).l
 		lea	(ArtKosM_DEZMinibossMisc).l,a1
 		move.w	#tiles_to_bytes(ArtTile_DEZMiniboss),d2
@@ -183506,10 +183506,10 @@ Obj_DEZEndBoss:
 		move.b	#mus_EndBoss,boss_saved_mus(a0)
 		jsr	Boss_FadeMusic_SetUpCamera(pc)
 		clr.b	(_unkFAB8).w
-		moveq	#PLCID_76,d0
+		moveq	#PLCID_DEZEndBoss,d0
 		cmpi.w	#3,(Player_mode).w			; Liliam: bugfix - use Egg Robo for DEZ2 boss
 		bne.s	loc_7F098				;
-		addq.w	#2,d0					;
+		addq.w	#PLCID_DEZEndBossK-PLCID_DEZEndBoss,d0	;
 
 loc_7F098:
 		jsr	(Load_PLC).l
@@ -206909,7 +206909,7 @@ loc_8CB9E:
 		jsr	(Swing_Setup1).l
 		move.w	#$3820,(Camera_min_X_pos).w
 		move.w	#$3AE8,(Camera_max_X_pos).w
-		moveq	#PLCID_60,d0
+		moveq	#PLCID_LBZMiniboss,d0
 		jsr	(Load_PLC).l
 		lea	(ArtKosM_LBZMinibossBox).l,a1
 		move.w	#tiles_to_bytes(ArtTile_LBZMinibossBox),d2
@@ -207880,7 +207880,7 @@ loc_8D500:
 		move.l	#Obj_Song_Fade_Transition,(a0)		;
 		move.b	#mus_EndBoss,subtype(a0)		;
 		bset	#4,$38(a0)				;
-		moveq	#PLCID_71,d0				;
+		moveq	#PLCID_LBZFinalBoss1,d0			;
 		jmp	(Load_PLC).l				;
 ;		jmp	(Go_Delete_Sprite_2).l			;
 
@@ -214480,84 +214480,83 @@ byte_91F06:
 		dc.b  $FC, $FF
 		even
 ; ---------------------------------------------------------------------------
-;		   1st PLC   2nd PLC   palette		1st 8x8 data           2nd 8x8 data             1st 16x16 data          2nd 16x16 data            1st 128x128 data          2nd 128x128 data
+;	           1st PLC          2nd PLC          palette         1st 8x8 data           2nd 8x8 data             1st 16x16 data          2nd 16x16 data            1st 128x128 data          2nd 128x128 data
 LevelLoadBlock:
 	; Liliam: reinsert AIZ intro PLC
-	levartptrs PLCID_0A, PLCID_0A, PalID_AIZIntro,	AIZ1_8x8_Primary_KosM, AIZ1_8x8_Secondary_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_Secondary_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos		; ANGEL ISLAND ZONE ACT 1
-;	levartptrs PLCID_0B, PLCID_0B, PalID_AIZIntro,	AIZ1_8x8_Primary_KosM, AIZ1_8x8_Secondary_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_Secondary_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos		;
-	levartptrs PLCID_0C, PLCID_0C, PalID_AIZFire,	AIZ2_8x8_Primary_KosM, AIZ2_8x8_Secondary_KosM, AIZ2_16x16_Primary_Kos, AIZ2_16x16_Secondary_Kos, AIZ2_128x128_Kos,         AIZ2_128x128_Kos		; ANGEL ISLAND ZONE ACT 2
-	levartptrs PLCID_0E, PLCID_0F, PalID_HCZ1,	HCZ_8x8_Primary_KosM,  HCZ1_8x8_Secondary_KosM, HCZ_16x16_Primary_Kos,  HCZ1_16x16_Secondary_Kos, HCZ_128x128_Primary_Kos,  HCZ1_128x128_Secondary_Kos	; HYDROCITY ZONE ACT 1
-	levartptrs PLCID_10, PLCID_11, PalID_HCZ2,	HCZ_8x8_Primary_KosM,  HCZ2_8x8_Secondary_KosM, HCZ_16x16_Primary_Kos,  HCZ2_16x16_Secondary_Kos, HCZ_128x128_Primary_Kos,  HCZ2_128x128_Secondary_Kos	; HYDROCITY ZONE ACT 2
-	levartptrs PLCID_12, PLCID_12, PalID_MGZ1,	MGZ_8x8_Primary_KosM,  MGZ1_8x8_Secondary_KosM, MGZ_16x16_Primary_Kos,  MGZ1_16x16_Secondary_Kos, MGZ_128x128_Primary_Kos,  MGZ1_128x128_Secondary_Kos	; MARBLE GARDEN ZONE ACT 1
-	levartptrs PLCID_14, PLCID_14, PalID_MGZ2,	MGZ_8x8_Primary_KosM,  MGZ2_8x8_Secondary_KosM, MGZ_16x16_Primary_Kos,  MGZ2_16x16_Secondary_Kos, MGZ_128x128_Primary_Kos,  MGZ2_128x128_Secondary_Kos	; MARBLE GARDEN ZONE ACT 2
-	levartptrs PLCID_16, PLCID_17, PalID_CNZ1,	CNZ_8x8_KosM,          CNZ_8x8_KosM,            CNZ_16x16_Kos,          CNZ_16x16_Kos,            CNZ_128x128_Kos,          CNZ_128x128_Kos		; CARNIVAL NIGHT ZONE ACT 1
-	levartptrs PLCID_18, PLCID_19, PalID_CNZ2,	CNZ_8x8_KosM,          CNZ_8x8_KosM,            CNZ_16x16_Kos,          CNZ_16x16_Kos,            CNZ_128x128_Kos,          CNZ_128x128_Kos		; CARNIVAL NIGHT ZONE ACT 2
-	levartptrs PLCID_1A, PLCID_1A, PalID_FBZ1,	ArtKosM_FBZ,           ArtKosM_FBZ,             FBZ_16x16_Kos,          FBZ_16x16_Kos,            FBZ_128x128_Kos,          FBZ_128x128_Kos		; FLYING BATTERY ZONE ACT 1
-	levartptrs PLCID_1C, PLCID_1C, PalID_FBZ2,	ArtKosM_FBZ,           ArtKosM_FBZ,             FBZ_16x16_Kos,          FBZ_16x16_Kos,            FBZ_128x128_Kos,          FBZ_128x128_Kos		; FLYING BATTERY ZONE ACT 2
-	levartptrs PLCID_1E, PLCID_1E, PalID_ICZ1,	ICZ_8x8_Primary_KosM,  ICZ1_8x8_Secondary_KosM, ICZ_16x16_Primary_Kos,  ICZ1_16x16_Secondary_Kos, ICZ_128x128_Primary_Kos,  ICZ1_128x128_Secondary_Kos	; ICECAP ZONE ACT 1
-	levartptrs PLCID_20, PLCID_20, PalID_ICZ2,	ICZ_8x8_Primary_KosM,  ICZ2_8x8_Secondary_KosM, ICZ_16x16_Primary_Kos,  ICZ2_16x16_Secondary_Kos, ICZ_128x128_Primary_Kos,  ICZ2_128x128_Secondary_Kos	; ICECAP ZONE ACT 2
+	levartptrs PLCID_AIZIntro,  PLCID_AIZIntro,  PalID_AIZIntro, AIZ1_8x8_Primary_KosM, AIZ1_8x8_Secondary_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_Secondary_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos            ; ANGEL ISLAND ZONE ACT 1
+;	levartptrs PLCID_AIZ1,      PLCID_AIZ1,      PalID_AIZIntro, AIZ1_8x8_Primary_KosM, AIZ1_8x8_Secondary_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_Secondary_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos            ;
+	levartptrs PLCID_AIZ2,      PLCID_AIZ2,      PalID_AIZFire,  AIZ2_8x8_Primary_KosM, AIZ2_8x8_Secondary_KosM, AIZ2_16x16_Primary_Kos, AIZ2_16x16_Secondary_Kos, AIZ2_128x128_Kos,         AIZ2_128x128_Kos            ; ANGEL ISLAND ZONE ACT 2
+	levartptrs PLCID_HCZ1,      PLCID_HCZ1_2,    PalID_HCZ1,     HCZ_8x8_Primary_KosM,  HCZ1_8x8_Secondary_KosM, HCZ_16x16_Primary_Kos,  HCZ1_16x16_Secondary_Kos, HCZ_128x128_Primary_Kos,  HCZ1_128x128_Secondary_Kos  ; HYDROCITY ZONE ACT 1
+	levartptrs PLCID_HCZ2,      PLCID_HCZ2_2,    PalID_HCZ2,     HCZ_8x8_Primary_KosM,  HCZ2_8x8_Secondary_KosM, HCZ_16x16_Primary_Kos,  HCZ2_16x16_Secondary_Kos, HCZ_128x128_Primary_Kos,  HCZ2_128x128_Secondary_Kos  ; HYDROCITY ZONE ACT 2
+	levartptrs PLCID_MGZ1,      PLCID_MGZ1,      PalID_MGZ1,     MGZ_8x8_Primary_KosM,  MGZ1_8x8_Secondary_KosM, MGZ_16x16_Primary_Kos,  MGZ1_16x16_Secondary_Kos, MGZ_128x128_Primary_Kos,  MGZ1_128x128_Secondary_Kos  ; MARBLE GARDEN ZONE ACT 1
+	levartptrs PLCID_MGZ2,      PLCID_MGZ2,      PalID_MGZ2,     MGZ_8x8_Primary_KosM,  MGZ2_8x8_Secondary_KosM, MGZ_16x16_Primary_Kos,  MGZ2_16x16_Secondary_Kos, MGZ_128x128_Primary_Kos,  MGZ2_128x128_Secondary_Kos  ; MARBLE GARDEN ZONE ACT 2
+	levartptrs PLCID_CNZ1,      PLCID_CNZ1_2,    PalID_CNZ1,     CNZ_8x8_KosM,          CNZ_8x8_KosM,            CNZ_16x16_Kos,          CNZ_16x16_Kos,            CNZ_128x128_Kos,          CNZ_128x128_Kos             ; CARNIVAL NIGHT ZONE ACT 1
+	levartptrs PLCID_CNZ2,      PLCID_CNZ2_2,    PalID_CNZ2,     CNZ_8x8_KosM,          CNZ_8x8_KosM,            CNZ_16x16_Kos,          CNZ_16x16_Kos,            CNZ_128x128_Kos,          CNZ_128x128_Kos             ; CARNIVAL NIGHT ZONE ACT 2
+	levartptrs PLCID_FBZ1,      PLCID_FBZ1,      PalID_FBZ1,     ArtKosM_FBZ,           ArtKosM_FBZ,             FBZ_16x16_Kos,          FBZ_16x16_Kos,            FBZ_128x128_Kos,          FBZ_128x128_Kos             ; FLYING BATTERY ZONE ACT 1
+	levartptrs PLCID_FBZ2,      PLCID_FBZ2,      PalID_FBZ2,     ArtKosM_FBZ,           ArtKosM_FBZ,             FBZ_16x16_Kos,          FBZ_16x16_Kos,            FBZ_128x128_Kos,          FBZ_128x128_Kos             ; FLYING BATTERY ZONE ACT 2
+	levartptrs PLCID_ICZ1,      PLCID_ICZ1,      PalID_ICZ1,     ICZ_8x8_Primary_KosM,  ICZ1_8x8_Secondary_KosM, ICZ_16x16_Primary_Kos,  ICZ1_16x16_Secondary_Kos, ICZ_128x128_Primary_Kos,  ICZ1_128x128_Secondary_Kos  ; ICECAP ZONE ACT 1
+	levartptrs PLCID_ICZ2,      PLCID_ICZ2,      PalID_ICZ2,     ICZ_8x8_Primary_KosM,  ICZ2_8x8_Secondary_KosM, ICZ_16x16_Primary_Kos,  ICZ2_16x16_Secondary_Kos, ICZ_128x128_Primary_Kos,  ICZ2_128x128_Secondary_Kos  ; ICECAP ZONE ACT 2
 
 	; Liliam: bugfix - improve LBZ act transition
-	levartptrs PLCID_22, PLCID_22, PalID_LBZ1,	LBZ_8x8_Primary_KosM,  LBZ1_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ1_16x16_Secondary_Kos, LBZ_128x128_Primary_Kos,  LBZ1_128x128_Secondary_Kos	; LAUNCH BASE ZONE ACT 1
-	levartptrs PLCID_24, PLCID_25, PalID_LBZ2,	LBZ_8x8_Primary_KosM,  LBZ2_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ2_16x16_Secondary_Kos, LBZ_128x128_Primary_Kos,  LBZ2_128x128_Secondary_Kos	; LAUNCH BASE ZONE ACT 2
-;	levartptrs PLCID_22, PLCID_22, PalID_LBZ1,	LBZ_8x8_Primary_KosM,  LBZ1_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ1_16x16_Secondary_Kos, LBZ1_128x128_Kos,         LBZ1_128x128_Kos		;
-;	levartptrs PLCID_24, PLCID_25, PalID_LBZ2,	LBZ_8x8_Primary_KosM,  LBZ2_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ2_16x16_Secondary_Kos, LBZ2_128x128_Kos,         LBZ2_128x128_Kos		;
-	levartptrs PLCID_26, PLCID_26, PalID_MHZ1,	ArtKosM_MHZ_Primary,   ArtKosM_MHZ_Secondary,   MHZ_16x16_Primary_Kos,  MHZ_16x16_Secondary_Kos,  MHZ_128x128_Primary_Kos,  MHZ_128x128_Secondary_Kos	; MUSHROOM HILL ZONE ACT 1
-	levartptrs PLCID_28, PLCID_28, PalID_MHZ2,	ArtKosM_MHZ_Primary,   ArtKosM_MHZ_Secondary,   MHZ_16x16_Primary_Kos,  MHZ_16x16_Secondary_Kos,  MHZ_128x128_Primary_Kos,  MHZ_128x128_Secondary_Kos	; MUSHROOM HILL ZONE ACT 2
-	levartptrs PLCID_2A, PLCID_2A, PalID_SOZ1,	ArtKosM_SOZ_Primary,   ArtKosM_SOZ1_Secondary,  SOZ_16x16_Primary_Kos,  SOZ1_16x16_Secondary_Kos, SOZ_128x128_Kos,          SOZ_128x128_Kos		; SANDOPOLIS ZONE ACT 1
-	levartptrs PLCID_2C, PLCID_2C, PalID_SOZ2,	ArtKosM_SOZ_Primary,   ArtKosM_SOZ2_Secondary,  SOZ_16x16_Primary_Kos,  SOZ2_16x16_Secondary_Kos, SOZ_128x128_Kos,          SOZ_128x128_Kos		; SANDOPOLIS ZONE ACT 2
-	levartptrs PLCID_2E, PLCID_2F, PalID_LRZ1,	ArtKosM_LRZ_Primary,   ArtKosM_LRZ1_Secondary,  LRZ_16x16_Primary_Kos,  LRZ1_16x16_Secondary_Kos, LRZ_128x128_Primary_Kos,  LRZ1_128x128_Secondary_Kos	; LAVA REEF ZONE ACT 1
-	levartptrs PLCID_30, PLCID_30, PalID_LRZ2,	ArtKosM_LRZ_Primary,   ArtKosM_LRZ2_Secondary,  LRZ_16x16_Primary_Kos,  LRZ2_16x16_Secondary_Kos, LRZ_128x128_Primary_Kos,  LRZ2_128x128_Secondary_Kos	; LAVA REEF ZONE ACT 2
-	levartptrs PLCID_32, PLCID_32, PalID_SSZ1,	ArtKosM_SSZ1_Primary,  ArtKosM_SSZ1_Secondary,  SSZ1_16x16_Primary_Kos, SSZ1_16x16_Secondary_Kos, SSZ1_128x128_Primary_Kos, SSZ1_128x128_Secondary_Kos	; SKY SANCTUARY ZONE (SONIC/TAILS)
-	levartptrs PLCID_34, PLCID_34, PalID_SSZ2,	ArtKosM_SSZ2,          ArtKosM_SSZ2,            SSZ2_16x16_Kos,         SSZ2_16x16_Kos,           SSZ2_128x128_Kos,         SSZ2_128x128_Kos		; SKY SANCTUARY ZONE (KNUCKLES)
-	levartptrs PLCID_36, PLCID_36, PalID_DEZ1,	ArtKosM_DEZ_Primary,   ArtKosM_DEZ1_Secondary,  DEZ_16x16_Primary_Kos,  DEZ1_16x16_Secondary_Kos, DEZ_128x128_Kos,          DEZ_128x128_Kos		; DEATH EGG ZONE ACT 1
-	levartptrs PLCID_38, PLCID_38, PalID_DEZ2,	ArtKosM_DEZ_Primary,   ArtKosM_DEZ2_Secondary,  DEZ_16x16_Primary_Kos,  DEZ2_16x16_Secondary_Kos, DEZ_128x128_Kos,          DEZ_128x128_Kos		; DEATH EGG ZONE ACT 2
+	levartptrs PLCID_LBZ1,      PLCID_LBZ1,      PalID_LBZ1,     LBZ_8x8_Primary_KosM,  LBZ1_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ1_16x16_Secondary_Kos, LBZ_128x128_Primary_Kos,  LBZ1_128x128_Secondary_Kos  ; LAUNCH BASE ZONE ACT 1
+	levartptrs PLCID_LBZ2,      PLCID_LBZ2_2,    PalID_LBZ2,     LBZ_8x8_Primary_KosM,  LBZ2_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ2_16x16_Secondary_Kos, LBZ_128x128_Primary_Kos,  LBZ2_128x128_Secondary_Kos  ; LAUNCH BASE ZONE ACT 2
+;	levartptrs PLCID_LBZ1,      PLCID_LBZ1,      PalID_LBZ1,     LBZ_8x8_Primary_KosM,  LBZ1_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ1_16x16_Secondary_Kos, LBZ1_128x128_Kos,         LBZ1_128x128_Kos            ;
+;	levartptrs PLCID_LBZ2,      PLCID_LBZ2_2,    PalID_LBZ2,     LBZ_8x8_Primary_KosM,  LBZ2_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ2_16x16_Secondary_Kos, LBZ2_128x128_Kos,         LBZ2_128x128_Kos            ;
+	levartptrs PLCID_MHZ1,      PLCID_MHZ1,      PalID_MHZ1,     ArtKosM_MHZ_Primary,   ArtKosM_MHZ_Secondary,   MHZ_16x16_Primary_Kos,  MHZ_16x16_Secondary_Kos,  MHZ_128x128_Primary_Kos,  MHZ_128x128_Secondary_Kos   ; MUSHROOM HILL ZONE ACT 1
+	levartptrs PLCID_MHZ2,      PLCID_MHZ2,      PalID_MHZ2,     ArtKosM_MHZ_Primary,   ArtKosM_MHZ_Secondary,   MHZ_16x16_Primary_Kos,  MHZ_16x16_Secondary_Kos,  MHZ_128x128_Primary_Kos,  MHZ_128x128_Secondary_Kos   ; MUSHROOM HILL ZONE ACT 2
+	levartptrs PLCID_SOZ1,      PLCID_SOZ1,      PalID_SOZ1,     ArtKosM_SOZ_Primary,   ArtKosM_SOZ1_Secondary,  SOZ_16x16_Primary_Kos,  SOZ1_16x16_Secondary_Kos, SOZ_128x128_Kos,          SOZ_128x128_Kos             ; SANDOPOLIS ZONE ACT 1
+	levartptrs PLCID_SOZ2,      PLCID_SOZ2,      PalID_SOZ2,     ArtKosM_SOZ_Primary,   ArtKosM_SOZ2_Secondary,  SOZ_16x16_Primary_Kos,  SOZ2_16x16_Secondary_Kos, SOZ_128x128_Kos,          SOZ_128x128_Kos             ; SANDOPOLIS ZONE ACT 2
+	levartptrs PLCID_LRZ1,      PLCID_LRZ1_2,    PalID_LRZ1,     ArtKosM_LRZ_Primary,   ArtKosM_LRZ1_Secondary,  LRZ_16x16_Primary_Kos,  LRZ1_16x16_Secondary_Kos, LRZ_128x128_Primary_Kos,  LRZ1_128x128_Secondary_Kos  ; LAVA REEF ZONE ACT 1
+	levartptrs PLCID_LRZ2,      PLCID_LRZ2,      PalID_LRZ2,     ArtKosM_LRZ_Primary,   ArtKosM_LRZ2_Secondary,  LRZ_16x16_Primary_Kos,  LRZ2_16x16_Secondary_Kos, LRZ_128x128_Primary_Kos,  LRZ2_128x128_Secondary_Kos  ; LAVA REEF ZONE ACT 2
+	levartptrs PLCID_SSZ1,      PLCID_SSZ1,      PalID_SSZ1,     ArtKosM_SSZ1_Primary,  ArtKosM_SSZ1_Secondary,  SSZ1_16x16_Primary_Kos, SSZ1_16x16_Secondary_Kos, SSZ1_128x128_Primary_Kos, SSZ1_128x128_Secondary_Kos  ; SKY SANCTUARY ZONE (SONIC/TAILS)
+	levartptrs PLCID_SSZ2,      PLCID_SSZ2,      PalID_SSZ2,     ArtKosM_SSZ2,          ArtKosM_SSZ2,            SSZ2_16x16_Kos,         SSZ2_16x16_Kos,           SSZ2_128x128_Kos,         SSZ2_128x128_Kos            ; SKY SANCTUARY ZONE (KNUCKLES)
+	levartptrs PLCID_DEZ1,      PLCID_DEZ1,      PalID_DEZ1,     ArtKosM_DEZ_Primary,   ArtKosM_DEZ1_Secondary,  DEZ_16x16_Primary_Kos,  DEZ1_16x16_Secondary_Kos, DEZ_128x128_Kos,          DEZ_128x128_Kos             ; DEATH EGG ZONE ACT 1
+	levartptrs PLCID_DEZ2,      PLCID_DEZ2,      PalID_DEZ2,     ArtKosM_DEZ_Primary,   ArtKosM_DEZ2_Secondary,  DEZ_16x16_Primary_Kos,  DEZ2_16x16_Secondary_Kos, DEZ_128x128_Kos,          DEZ_128x128_Kos             ; DEATH EGG ZONE ACT 2
 
 	; Liliam: use level art for Doomsday objects
-	levartptrs PLCID_3A, PLCID_3A, PalID_DDZ1,	ArtKosM_DDZ,           ArtKosM_DDZMisc,         DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos		; DOOMSDAY ZONE
-	levartptrs PLCID_3C, PLCID_3C, PalID_DDZ2,	ArtKosM_DDZ,           ArtKosM_DDZMisc,         DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos		; DOOMSDAY ZONE (unused)
-;	levartptrs PLCID_3A, PLCID_3A, PalID_DDZ1,	ArtKosM_DDZ,           ArtKosM_DDZ,             DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos		;
-;	levartptrs PLCID_3C, PLCID_3C, PalID_DDZ2,	ArtKosM_DDZ,           ArtKosM_DDZ,             DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos		;
+	levartptrs PLCID_DDZ1,      PLCID_DDZ1,      PalID_DDZ1,     ArtKosM_DDZ,           ArtKosM_DDZMisc,         DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos             ; DOOMSDAY ZONE
+	levartptrs PLCID_DDZ2,      PLCID_DDZ2,      PalID_DDZ2,     ArtKosM_DDZ,           ArtKosM_DDZMisc,         DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos             ; DOOMSDAY ZONE (unused)
+;	levartptrs PLCID_DDZ1,      PLCID_DDZ1,      PalID_DDZ1,     ArtKosM_DDZ,           ArtKosM_DDZ,             DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos             ;
+;	levartptrs PLCID_DDZ2,      PLCID_DDZ2,      PalID_DDZ2,     ArtKosM_DDZ,           ArtKosM_DDZ,             DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos             ;
 
-	levartptrs PLCID_0B, PLCID_0B, PalID_AIZ,	AIZ1_8x8_Primary_KosM, AIZ1_8x8_MainLevel_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_MainLevel_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos		; SONIC/TAILS INTRO
-	levartptrs PLCID_40, PLCID_40, PalID_Ending2,	ArtKosM_SSZ2,          ArtKosM_SSZ2,            SSZ2_16x16_Kos,         SSZ2_16x16_Kos,           SSZ2_128x128_Kos,         SSZ2_128x128_Kos		; SONIC/TAILS ENDING
+	levartptrs PLCID_AIZ1,      PLCID_AIZ1,      PalID_AIZ,      AIZ1_8x8_Primary_KosM, AIZ1_8x8_MainLevel_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_MainLevel_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos            ; SONIC/TAILS INTRO
+	levartptrs PLCID_Ending,    PLCID_Ending,    PalID_Ending2,  ArtKosM_SSZ2,          ArtKosM_SSZ2,            SSZ2_16x16_Kos,         SSZ2_16x16_Kos,           SSZ2_128x128_Kos,         SSZ2_128x128_Kos            ; SONIC/TAILS ENDING
 
 	; Liliam: Encore mode - add extra levels
-	levartptrs PLCID_42, PLCID_42, PalID_ALZ,	ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos		; AZURE LAKE ZONE
-	levartptrs PLCID_49, PLCID_49, PalID_ALZ_2,	ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos		; AZURE LAKE ZONE (ENCORE)
-;	levartptrs PLCID_42, PLCID_42, PalID_ALZ_2,	ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos		;
-	levartptrs PLCID_43, PLCID_43, PalID_BPZ,	BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos		; BALLOON PARK ZONE
-	levartptrs PLCID_4A, PLCID_4A, PalID_BPZ_2,	BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos		; BALLOON PARK ZONE (ENCORE)
-;	levartptrs PLCID_43, PLCID_43, PalID_BPZ_2,	BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos		;
-	levartptrs PLCID_44, PLCID_44, PalID_DPZ,	DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos		; DESERT PALACE ZONE
-	levartptrs PLCID_54, PLCID_54, PalID_DPZ_2,	DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos		; DESERT PALACE ZONE (ENCORE)
-;	levartptrs PLCID_44, PLCID_44, PalID_DPZ,	DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos		;
-	levartptrs PLCID_45, PLCID_45, PalID_CGZ,	CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos		; CHROME GADGET ZONE
-	levartptrs PLCID_4B, PLCID_4B, PalID_CGZ_2,	CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos		; CHROME GADGET ZONE (ENCORE)
-;	levartptrs PLCID_45, PLCID_45, PalID_CGZ,	CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos		;
-	levartptrs PLCID_46, PLCID_46, PalID_EMZ,	EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos		; ENDLESS MINE ZONE
-	levartptrs PLCID_55, PLCID_55, PalID_EMZ_2,	EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos		; ENDLESS MINE ZONE (ENCORE)
-;	levartptrs PLCID_46, PLCID_46, PalID_EMZ,	EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos		;
+	levartptrs PLCID_ALZ,       PLCID_ALZ,       PalID_ALZ,      ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos             ; AZURE LAKE ZONE
+	levartptrs PLCID_ALZ_2,     PLCID_ALZ_2,     PalID_ALZ_2,    ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos             ; AZURE LAKE ZONE (ENCORE)
+;	levartptrs PLCID_ALZ,       PLCID_ALZ,       PalID_ALZ_2,    ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos             ;
+	levartptrs PLCID_BPZ,       PLCID_BPZ,       PalID_BPZ,      BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos             ; BALLOON PARK ZONE
+	levartptrs PLCID_BPZ_2,     PLCID_BPZ_2,     PalID_BPZ_2,    BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos             ; BALLOON PARK ZONE (ENCORE)
+;	levartptrs PLCID_BPZ,       PLCID_BPZ,       PalID_BPZ_2,    BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos             ;
+	levartptrs PLCID_DPZ,       PLCID_DPZ,       PalID_DPZ,      DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos             ; DESERT PALACE ZONE
+	levartptrs PLCID_DPZ_2,     PLCID_DPZ_2,     PalID_DPZ_2,    DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos             ; DESERT PALACE ZONE (ENCORE)
+;	levartptrs PLCID_DPZ,       PLCID_DPZ,       PalID_DPZ,      DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos             ;
+	levartptrs PLCID_CGZ,       PLCID_CGZ,       PalID_CGZ,      CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos             ; CHROME GADGET ZONE
+	levartptrs PLCID_CGZ_2,     PLCID_CGZ_2,     PalID_CGZ_2,    CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos             ; CHROME GADGET ZONE (ENCORE)
+;	levartptrs PLCID_CGZ,       PLCID_CGZ,       PalID_CGZ,      CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos             ;
+	levartptrs PLCID_EMZ,       PLCID_EMZ,       PalID_EMZ,      EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos             ; ENDLESS MINE ZONE
+	levartptrs PLCID_EMZ_2,     PLCID_EMZ_2,     PalID_EMZ_2,    EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos             ; ENDLESS MINE ZONE (ENCORE)
+;	levartptrs PLCID_EMZ,       PLCID_EMZ,       PalID_EMZ,      EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos             ;
 
 	; Liliam: Encore mode - bonus stage
-	levartptrs PLCID_4F, PLCID_4F, PalID_Gumball,	Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos		; GUMBALL
-	levartptrs PLCID_56, PLCID_56, PalID_Gumball,	Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos		; GUMBALL (ENCORE)
-;	levartptrs PLCID_47, PLCID_47, PalID_Gumball,	Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos		;
-;	levartptrs PLCID_47, PLCID_47, PalID_Gumball,	Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos		;
-	levartptrs PLCID_50, PLCID_50, PalID_Pachinko,	ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos	; PACHINKO
-	levartptrs PLCID_57, PLCID_57, PalID_Pachinko,	ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos	; PACHINKO (ENCORE)
-;	levartptrs PLCID_50, PLCID_50, PalID_Pachinko,	ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos	;
-	levartptrs PLCID_51, PLCID_51, PalID_Slots,	ArtKosM_Slots,         ArtKosM_Slots,           Slots_16x16_Kos,        Slots_16x16_Kos,          Slots_128x128_Kos,        Slots_128x128_Kos		; SLOTS
-	levartptrs PLCID_58, PLCID_58, PalID_Slots_2,	ArtKosM_EncoreBonus,   ArtKosM_EncoreBonus,     EncoreBonus_16x16_Kos,  EncoreBonus_16x16_Kos,    EncoreBonus_128x128_Kos,  EncoreBonus_128x128_Kos	; SLOTS (ENCORE)
-;	levartptrs PLCID_51, PLCID_51, PalID_Slots,	ArtKosM_Slots,         ArtKosM_Slots,           Slots_16x16_Kos,        Slots_16x16_Kos,          Slots_128x128_Kos,        Slots_128x128_Kos		;
+	levartptrs PLCID_Gumball,   PLCID_Gumball,   PalID_Gumball,  Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos         ; GUMBALL
+	levartptrs PLCID_Gumball_2, PLCID_Gumball_2, PalID_Gumball,  Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos         ; GUMBALL (ENCORE)
+;	levartptrs PLCID_Gumball,   PLCID_Gumball,   PalID_Gumball,  Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos         ;
+	levartptrs PLCID_Pachinko,  PLCID_Pachinko,  PalID_Pachinko, ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos        ; PACHINKO
+	levartptrs PLCID_Pachinko_2, PLCID_Pachinko_2, PalID_Pachinko, ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos        ; PACHINKO (ENCORE)
+;	levartptrs PLCID_Pachinko,  PLCID_Pachinko,  PalID_Pachinko, ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos        ;
+	levartptrs PLCID_Slots,     PLCID_Slots,     PalID_Slots,    ArtKosM_Slots,         ArtKosM_Slots,           Slots_16x16_Kos,        Slots_16x16_Kos,          Slots_128x128_Kos,        Slots_128x128_Kos           ; SLOTS
+	levartptrs PLCID_Slots_2,   PLCID_Slots_2,   PalID_Slots_2,  ArtKosM_EncoreBonus,   ArtKosM_EncoreBonus,     EncoreBonus_16x16_Kos,  EncoreBonus_16x16_Kos,    EncoreBonus_128x128_Kos,  EncoreBonus_128x128_Kos     ; SLOTS (ENCORE)
+;	levartptrs PLCID_Slots,     PLCID_Slots,     PalID_Slots,    ArtKosM_Slots,         ArtKosM_Slots,           Slots_16x16_Kos,        Slots_16x16_Kos,          Slots_128x128_Kos,        Slots_128x128_Kos           ;
 
-	levartptrs PLCID_48, PLCID_48, PalID_LRZBoss,	ArtKosM_HPZ_Primary,   ArtKosM_LRZ3_Secondary,  HPZ_16x16_Primary_Kos,  LRZ3_16x16_Secondary_Kos, HPZ_128x128_Primary_Kos,  LRZ3_128x128_Secondary_Kos	; LAVA REEF ZONE BOSS
-	levartptrs PLCID_48, PLCID_48, PalID_HPZIntro,	ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos	; HIDDEN PALACE ZONE
-	levartptrs PLCID_4C, PLCID_4C, PalID_DEZBoss,	ArtKosM_DEZ3,          ArtKosM_DEZ3,            DEZ3_16x16_Kos,         DEZ3_16x16_Kos,           DEZ3_128x128_Kos,         DEZ3_128x128_Kos		; SONIC/TAILS FINAL BOSS
+	levartptrs PLCID_HPZ,       PLCID_HPZ,       PalID_LRZBoss,   ArtKosM_HPZ_Primary,   ArtKosM_LRZ3_Secondary,  HPZ_16x16_Primary_Kos,  LRZ3_16x16_Secondary_Kos, HPZ_128x128_Primary_Kos,  LRZ3_128x128_Secondary_Kos  ; LAVA REEF ZONE BOSS
+	levartptrs PLCID_HPZ,       PLCID_HPZ,       PalID_HPZIntro,  ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos   ; HIDDEN PALACE ZONE
+	levartptrs PLCID_DEZBoss,   PLCID_DEZBoss,   PalID_DEZBoss,   ArtKosM_DEZ3,          ArtKosM_DEZ3,            DEZ3_16x16_Kos,         DEZ3_16x16_Kos,           DEZ3_128x128_Kos,         DEZ3_128x128_Kos            ; SONIC/TAILS FINAL BOSS
 
 	; Liliam: bugfix - HPZ SS results palette screwery
-	levartptrs PLCID_48, PLCID_48, PalID_HPZ,	ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos	; SPECIAL STAGE HUB
-;	levartptrs PLCID_48, PLCID_48, PalID_HPZIntro,	ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos	;
+	levartptrs PLCID_HPZ,       PLCID_HPZ,       PalID_HPZ,       ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos   ; SPECIAL STAGE HUB
+;	levartptrs PLCID_HPZ,       PLCID_HPZ,       PalID_HPZIntro,  ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos   ;
 ; ---------------------------------------------------------------------------
 
 ; Macro to define PLC pointer entry
@@ -214567,132 +214566,132 @@ __LABEL__:	label	(*-Offs_PLC)/2
 		endm
 
 Offs_PLC:
-PLCID_00:	plcptr PLC_00					; Liliam: Mighty life icon/universal level graphics
-PLCID_01:	plcptr PLC_01					; Sonic life icon/universal level graphics
-PLCID_02:	plcptr PLC_02					; Liliam: Ray life icon/universal level graphics
-PLCID_03:	plcptr PLC_03					; Game Over text
-PLCID_04:	plcptr PLC_04					; Liliam: Encore mode life icon/universal level graphics
-PLCID_05:	plcptr PLC_05					; Knuckles life icon/universal level graphics
-PLCID_06:	plcptr PLC_06					; Liliam: Amy life icon/universal level graphics
-PLCID_07:	plcptr PLC_07					; Tails life icon/universal level graphics
-PLCID_08:	plcptr PLC_08					; Liliam: Metal Sonic life icon/universal level graphics
-PLCID_09:	plcptr PLC_09					; Repeat of 08 (revolving spheres in Sonic 3, unused)
-PLCID_0A:	plcptr PLC_0A					; AIZ intro graphics
-PLCID_0B:	plcptr PLC_0B					; AIZ1
-PLCID_0C:	plcptr PLC_0C_0D				; AIZ2
-PLCID_0D:	plcptr PLC_0C_0D				; AIZ2 (unused)
-PLCID_0E:	plcptr PLC_0E					; HCZ1 part 1
-PLCID_0F:	plcptr PLC_0F					; HCZ1 part 2
-PLCID_10:	plcptr PLC_10					; HCZ2 part 1
-PLCID_11:	plcptr PLC_11					; HCZ2 part 2
-PLCID_12:	plcptr PLC_12_13				; MGZ1
-PLCID_13:	plcptr PLC_12_13				; MGZ1 (unused)
-PLCID_14:	plcptr PLC_14_15				; MGZ2
-PLCID_15:	plcptr PLC_14_15				; MGZ2 (unused)
-PLCID_16:	plcptr PLC_16_17_18_19				; CNZ (used for act 1)
-PLCID_17:	plcptr PLC_16_17_18_19				; CNZ (used for act 1)
-PLCID_18:	plcptr PLC_16_17_18_19				; CNZ (used for act 2)
-PLCID_19:	plcptr PLC_16_17_18_19				; CNZ (used for act 2)
-PLCID_1A:	plcptr PLC_1A_1B				; FBZ1
-PLCID_1B:	plcptr PLC_1A_1B				; FBZ1 (unused)
-PLCID_1C:	plcptr PLC_1C_1D				; FBZ2
-PLCID_1D:	plcptr PLC_1C_1D				; FBZ2 (unused)
-PLCID_1E:	plcptr PLC_1E_1F				; ICZ1
-PLCID_1F:	plcptr PLC_1E_1F				; ICZ1 (unused)
-PLCID_20:	plcptr PLC_20_21				; ICZ2
-PLCID_21:	plcptr PLC_20_21				; ICZ2 (unused)
-PLCID_22:	plcptr PLC_22_23				; LBZ1
-PLCID_23:	plcptr PLC_22_23				; LBZ1 (unused)
-PLCID_24:	plcptr PLC_24					; LBZ2
-PLCID_25:	plcptr PLC_25					; LBZ2 misc art
-PLCID_26:	plcptr PLC_26_27_28_29				; MHZ (used for act 1)
-PLCID_27:	plcptr PLC_26_27_28_29				; MHZ (act 1, unused)
-PLCID_28:	plcptr PLC_26_27_28_29				; MHZ (used for act 2)
-PLCID_29:	plcptr PLC_26_27_28_29				; MHZ (act 2, unused)
-PLCID_2A:	plcptr PLC_2A_2B				; SOZ1
-PLCID_2B:	plcptr PLC_2A_2B				; SOZ1 (unused)
-PLCID_2C:	plcptr PLC_2C_2D				; SOZ2
-PLCID_2D:	plcptr PLC_2C_2D				; SOZ2 (unused)
-PLCID_2E:	plcptr PLC_2E_2F				; LRZ1
-PLCID_2F:	plcptr PLC_2E_2F				; LRZ1 (unused)
-PLCID_30:	plcptr PLC_30_31				; LRZ2
-PLCID_31:	plcptr PLC_30_31				; LRZ2 (unused)
-PLCID_32:	plcptr PLC_32_33_34_35				; SSZ (used for act 1)
-PLCID_33:	plcptr PLC_32_33_34_35				; SSZ (act 1, unused)
-PLCID_34:	plcptr PLC_32_33_34_35				; SSZ (used for act 2)
-PLCID_35:	plcptr PLC_32_33_34_35				; SSZ (act 2, unused)
-PLCID_36:	plcptr PLC_36_37				; DEZ1
-PLCID_37:	plcptr PLC_36_37				; DEZ1 (unused)
-PLCID_38:	plcptr PLC_38_39				; DEZ2
-PLCID_39:	plcptr PLC_38_39				; DEZ2 (unused)
-PLCID_3A:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (used for act 1)
-PLCID_3B:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (unused)
-PLCID_3C:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (used for act 2)
-PLCID_3D:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (unused)
-PLCID_3E:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (ending 1, unused)
-PLCID_3F:	plcptr PLC_3A_3B_3C_3D_3E_3F			; DDZ (ending 1, unused)
-PLCID_40:	plcptr PLC_40_41				; Ending (blank)
-PLCID_41:	plcptr PLC_40_41				; Ending (blank, unused)
-PLCID_42:	plcptr PLC_42					; ALZ
-PLCID_43:	plcptr PLC_43					; BPZ
-PLCID_44:	plcptr PLC_44					; DPZ
-PLCID_45:	plcptr PLC_45					; CGZ
-PLCID_46:	plcptr PLC_46					; EMZ
-PLCID_47:	plcptr PLC_47					; Gumball
-PLCID_48:	plcptr PLC_48					; HPZ
-PLCID_49:	plcptr PLC_49					; Liliam: Encore mode - add extra levels
-PLCID_4A:	plcptr PLC_4A					; Liliam: Encore mode - add extra levels
-PLCID_4B:	plcptr PLC_4B					; Liliam: Encore mode - add extra levels
-PLCID_4C:	plcptr PLC_4C_4D				; DEZ3
-PLCID_4D:	plcptr PLC_4C_4D				; DEZ3 (unused)
-PLCID_4E:	plcptr PLC_4E_4F				; Spikes and springs (unused)
-PLCID_4F:	plcptr PLC_4E_4F				; Spikes and springs (unused)
-PLCID_50:	plcptr PLC_50					; Glowing Bonus
-PLCID_51:	plcptr PLC_51					; Slots bonus
-PLCID_52:	plcptr PLC_52_53				; Miles life icon/universal level graphics
-PLCID_53:	plcptr PLC_52_53				; Repeat of 52 (unused)
-PLCID_54:	plcptr PLC_54					; Liliam: Encore mode - add extra levels
-PLCID_55:	plcptr PLC_55					; Liliam: Encore mode - add extra levels
-PLCID_56:	plcptr PLC_56					; Liliam: Encore mode - change character item
-PLCID_57:	plcptr PLC_57					; Liliam: Encore mode - change character item
-PLCID_58:	plcptr PLC_58					; Liliam: Encore mode - bonus stage
-PLCID_59:	plcptr PLC_59					; Liliam: bugfix - stop double-loading AIZ2 PLCs
-PLCID_5A:	plcptr PLC_5A					; AIZ1 boss
-PLCID_5B:	plcptr PLC_5B					; HCZ1 boss
-PLCID_5C:	plcptr PLC_5C_5D				; CNZ1 boss (unused)
-PLCID_5D:	plcptr PLC_5C_5D				; CNZ1 boss
-PLCID_5E:	plcptr PLC_5E					; FBZ1 boss (unused)
-PLCID_5F:	plcptr PLC_5F					; ICZ1 boss
-PLCID_60:	plcptr PLC_60					; LBZ1 Eggman
-PLCID_61:	plcptr PLC_61					; Boss explosion (unused)
-PLCID_62:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
-PLCID_63:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
-PLCID_64:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
-PLCID_65:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
-PLCID_66:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
-PLCID_67:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
-PLCID_68:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
-PLCID_69:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
-PLCID_6A:	plcptr PLC_62_Through_6A			; FBZ2 subboss (unused)
-PLCID_6B:	plcptr PLC_6B					; AIZ2 boss
-PLCID_6C:	plcptr PLC_6C					; HCZ2 boss
-PLCID_6D:	plcptr PLC_6D					; MGZ2 boss
-PLCID_6E:	plcptr PLC_6E					; CNZ2 boss
-PLCID_6F:	plcptr PLC_6F					; FBZ2 end boss
-PLCID_70:	plcptr PLC_70					; ICZ2 boss
-PLCID_71:	plcptr PLC_71					; LBZ2 final boss 1
-PLCID_72:	plcptr PLC_72_73_74_75_76			; DEZ2 boss (unused)
-PLCID_73:	plcptr PLC_72_73_74_75_76			; DEZ2 boss (unused)
-PLCID_74:	plcptr PLC_72_73_74_75_76			; DEZ2 boss (unused)
-PLCID_75:	plcptr PLC_72_73_74_75_76			; DEZ2 boss (unused)
-PLCID_76:	plcptr PLC_72_73_74_75_76			; DEZ2 boss
-PLCID_77:	plcptr PLC_77					; LBZ2 Eggman
-PLCID_78:	plcptr PLC_78					; Liliam: bugfix - use Egg Robo for DEZ2 boss
-PLCID_79:	plcptr PLC_79					; Liliam: bugfix - use Egg Robo for LBZ2 boss
-PLCID_7A:	plcptr PLC_7A_7B				; Boss ship and explosion (unused)
-PLCID_7B:	plcptr PLC_7A_7B				; Boss ship and explosion
+PLCID_MightyLifeIcon:		plcptr PLC_MightyLifeIcon			; Liliam: Mighty life icon/universal level graphics
+PLCID_SonicLifeIcon:		plcptr PLC_SonicLifeIcon
+PLCID_RayLifeIcon:		plcptr PLC_RayLifeIcon				; Liliam: Ray life icon/universal level graphics
+PLCID_GameOver:			plcptr PLC_GameOver
+PLCID_EncoreMode:		plcptr PLC_EncoreMode				; Liliam: Encore mode life icon/universal level graphics
+PLCID_KnucklesLifeIcon:		plcptr PLC_KnucklesLifeIcon
+PLCID_AmyLifeIcon:		plcptr PLC_AmyLifeIcon				; Liliam: Amy life icon/universal level graphics
+PLCID_TailsLifeIcon:		plcptr PLC_TailsLifeIcon
+PLCID_MetalLifeIcon:		plcptr PLC_MetalLifeIcon			; Liliam: Metal Sonic life icon/universal level graphics
+PLCID_09:			plcptr PLC_SphereTest
+PLCID_AIZIntro:			plcptr PLC_AIZIntro
+PLCID_AIZ1:			plcptr PLC_AIZ1
+PLCID_AIZ2:			plcptr PLC_AIZ2
+PLCID_0D:			plcptr PLC_AIZ2
+PLCID_HCZ1:			plcptr PLC_HCZ1
+PLCID_HCZ1_2:			plcptr PLC_HCZ1_2
+PLCID_HCZ2:			plcptr PLC_HCZ2
+PLCID_HCZ2_2:			plcptr PLC_HCZ2_2
+PLCID_MGZ1:			plcptr PLC_MGZ1
+PLCID_13:			plcptr PLC_MGZ1
+PLCID_MGZ2:			plcptr PLC_MGZ2
+PLCID_15:			plcptr PLC_MGZ2
+PLCID_CNZ1:			plcptr PLC_CNZ
+PLCID_CNZ1_2:			plcptr PLC_CNZ
+PLCID_CNZ2:			plcptr PLC_CNZ
+PLCID_CNZ2_2:			plcptr PLC_CNZ
+PLCID_FBZ1:			plcptr PLC_FBZ1
+PLCID_1B:			plcptr PLC_FBZ1
+PLCID_FBZ2:			plcptr PLC_FBZ2
+PLCID_1D:			plcptr PLC_FBZ2
+PLCID_ICZ1:			plcptr PLC_ICZ1
+PLCID_1F:			plcptr PLC_ICZ1
+PLCID_ICZ2:			plcptr PLC_ICZ2
+PLCID_21:			plcptr PLC_ICZ2
+PLCID_LBZ1:			plcptr PLC_LBZ1
+PLCID_23:			plcptr PLC_LBZ1
+PLCID_LBZ2:			plcptr PLC_LBZ2
+PLCID_LBZ2_2:			plcptr PLC_LBZ2_2
+PLCID_MHZ1:			plcptr PLC_MHZ
+PLCID_27:			plcptr PLC_MHZ
+PLCID_MHZ2:			plcptr PLC_MHZ
+PLCID_29:			plcptr PLC_MHZ
+PLCID_SOZ1:			plcptr PLC_SOZ1
+PLCID_2B:			plcptr PLC_SOZ1
+PLCID_SOZ2:			plcptr PLC_SOZ2
+PLCID_2D:			plcptr PLC_SOZ2
+PLCID_LRZ1:			plcptr PLC_LRZ1
+PLCID_LRZ1_2:			plcptr PLC_LRZ1
+PLCID_LRZ2:			plcptr PLC_LRZ2
+PLCID_31:			plcptr PLC_LRZ2
+PLCID_SSZ1:			plcptr PLC_SSZ
+PLCID_33:			plcptr PLC_SSZ
+PLCID_SSZ2:			plcptr PLC_SSZ
+PLCID_35:			plcptr PLC_SSZ
+PLCID_DEZ1:			plcptr PLC_DEZ1
+PLCID_37:			plcptr PLC_DEZ1
+PLCID_DEZ2:			plcptr PLC_DEZ2
+PLCID_39:			plcptr PLC_DEZ2
+PLCID_DDZ1:			plcptr PLC_DDZ
+PLCID_3B:			plcptr PLC_DDZ
+PLCID_DDZ2:			plcptr PLC_DDZ
+PLCID_3D:			plcptr PLC_DDZ
+PLCID_3E:			plcptr PLC_DDZ
+PLCID_3F:			plcptr PLC_DDZ
+PLCID_Ending:			plcptr PLC_Ending
+PLCID_41:			plcptr PLC_Ending
+PLCID_ALZ:			plcptr PLC_ALZ
+PLCID_BPZ:			plcptr PLC_BPZ
+PLCID_DPZ:			plcptr PLC_DPZ
+PLCID_CGZ:			plcptr PLC_CGZ
+PLCID_EMZ:			plcptr PLC_EMZ
+PLCID_HPZ_Encore:		plcptr PLC_HPZ_Encore				; Liliam: Encore mode - special stage
+PLCID_HPZ:			plcptr PLC_HPZ
+PLCID_ALZ_2:			plcptr PLC_ALZ_2				; Liliam: Encore mode - add extra levels
+PLCID_BPZ_2:			plcptr PLC_BPZ_2				; Liliam: Encore mode - add extra levels
+PLCID_CGZ_2:			plcptr PLC_CGZ_2				; Liliam: Encore mode - add extra levels
+PLCID_DEZBoss:			plcptr PLC_DEZBoss
+PLCID_4D:			plcptr PLC_DEZBoss
+PLCID_4E:			plcptr PLC_GumballBonus
+PLCID_Gumball:			plcptr PLC_GumballBonus				; Liliam: level select - add gumball bonus
+PLCID_Pachinko:			plcptr PLC_PachinkoBonus
+PLCID_Slots:			plcptr PLC_SlotBonus
+PLCID_MilesLifeIcon:		plcptr PLC_MilesLifeIcon
+PLCID_53:			plcptr PLC_MilesLifeIcon
+PLCID_DPZ_2:			plcptr PLC_DPZ_2				; Liliam: Encore mode - add extra levels
+PLCID_EMZ_2:			plcptr PLC_EMZ_2				; Liliam: Encore mode - add extra levels
+PLCID_Gumball_2:		plcptr PLC_GumballBonus_Encore			; Liliam: Encore mode - change character item
+PLCID_Pachinko_2:		plcptr PLC_PachinkoBonus_Encore			; Liliam: Encore mode - change character item
+PLCID_Slots_2:			plcptr PLC_EncoreBonus				; Liliam: Encore mode - bonus stage
+PLCID_AIZMinibossCutscene:	plcptr PLC_AIZMinibossCutscene			; Liliam: bugfix - stop double-loading AIZ2 PLCs
+PLCID_AIZMiniboss:		plcptr PLC_AIZMiniboss
+PLCID_HCZMiniboss:		plcptr PLC_HCZMiniboss
+PLCID_5C:			plcptr PLC_CNZMiniboss
+PLCID_CNZMiniboss:		plcptr PLC_CNZMiniboss
+PLCID_5E:			plcptr PLC_FBZMiniboss
+PLCID_ICZMiniboss:		plcptr PLC_ICZMiniboss
+PLCID_LBZMiniboss:		plcptr PLC_LBZMiniboss
+PLCID_61:			plcptr PLC_SOZMiniboss
+PLCID_62:			plcptr PLC_FBZ2Subboss
+PLCID_63:			plcptr PLC_FBZ2Subboss
+PLCID_64:			plcptr PLC_FBZ2Subboss
+PLCID_65:			plcptr PLC_FBZ2Subboss
+PLCID_66:			plcptr PLC_FBZ2Subboss
+PLCID_67:			plcptr PLC_FBZ2Subboss
+PLCID_68:			plcptr PLC_FBZ2Subboss
+PLCID_69:			plcptr PLC_FBZ2Subboss
+PLCID_6A:			plcptr PLC_FBZ2Subboss
+PLCID_AIZEndBoss:		plcptr PLC_AIZEndBoss
+PLCID_HCZEndBoss:		plcptr PLC_HCZEndBoss
+PLCID_MGZEndBoss:		plcptr PLC_MGZEndBoss
+PLCID_CNZEndBoss:		plcptr PLC_CNZEndBoss
+PLCID_FBZEndBoss:		plcptr PLC_FBZEndBoss
+PLCID_ICZEndBoss:		plcptr PLC_ICZEndBoss
+PLCID_LBZFinalBoss1:		plcptr PLC_LBZFinalBoss1
+PLCID_72:			plcptr PLC_DEZEndBoss
+PLCID_73:			plcptr PLC_DEZEndBoss
+PLCID_74:			plcptr PLC_DEZEndBoss
+PLCID_75:			plcptr PLC_DEZEndBoss
+PLCID_DEZEndBoss:		plcptr PLC_DEZEndBoss
+PLCID_LBZEndBoss:		plcptr PLC_LBZEndBoss
+PLCID_DEZEndBossK:		plcptr PLC_DEZEndBoss_Knux			; Liliam: bugfix - use Egg Robo for DEZ2 boss
+PLCID_LBZEndBossK:		plcptr PLC_LBZEndBoss_Knux			; Liliam: bugfix - use Egg Robo for LBZ2 boss
+PLCID_7A:			plcptr PLC_EndBoss
+PLCID_EndBoss:			plcptr PLC_EndBoss
 
-PLC_00: plrlistheader
+PLC_MightyLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_MightyLifeIcon		; Liliam: Mighty life icon/universal level graphics
 ;		plreq ArtTile_PlayerLifeIcon, ArtNem_SonicLifeIcon		;
 		plreq ArtTile_Monitors, ArtNem_Monitors				;
@@ -214700,16 +214699,16 @@ PLC_00: plrlistheader
 		plreq ArtTile_Ring, ArtNem_RingHUDText
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
 ;		plreq ArtTile_Monitors, ArtNem_Monitors				;
-PLC_00_End
+PLC_MightyLifeIcon_End
 
-PLC_01: plrlistheader
+PLC_SonicLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_SonicLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
-PLC_01_End
+PLC_SonicLifeIcon_End
 
-PLC_02: plrlistheader
+PLC_RayLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_RayLifeIcon		; Liliam: Ray life icon/universal level graphics
 		plreq ArtTile_Monitors, ArtNem_Monitors				;
 		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon		;
@@ -214718,28 +214717,28 @@ PLC_02: plrlistheader
 ;		plreq ArtTile_Explosion, ArtNem_Explosion			;
 ;		plreq ArtTile_Animals1, ArtNem_Squirrel				;
 ;		plreq ArtTile_Animals2, ArtNem_BlueFlicky			;
-PLC_02_End
+PLC_RayLifeIcon_End
 
-PLC_03: plrlistheader
+PLC_GameOver: plrlistheader
 		plreq ArtTile_Shield, ArtNem_GameOver
-PLC_03_End
+PLC_GameOver_End
 
-PLC_04: plrlistheader
+PLC_EncoreMode: plrlistheader
 		plreq ArtTile_Monitors, ArtNem_Monitors_Encore			; Liliam: Encore mode universal level graphics
 		plreq ArtTile_Ring, ArtNem_RingHUDText				;
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost		;
 		plreq ArtTile_EncoreCursor-1, ArtNem_EncoreCursor		;
 ;		plreq ArtTile_S2Signpost, ArtNem_S2Signpost			;
-PLC_04_End
+PLC_EncoreMode_End
 
-PLC_05: plrlistheader
+PLC_KnucklesLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_KnucklesLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
-PLC_05_End
+PLC_KnucklesLifeIcon_End
 
-PLC_06: plrlistheader
+PLC_AmyLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_AmyLifeIcon		; Liliam: Amy life icon/universal level graphics
 		plreq ArtTile_Monitors, ArtNem_Monitors				;
 		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon_Amy		;
@@ -214748,41 +214747,41 @@ PLC_06: plrlistheader
 ;		plreq ArtTile_2PArt_2, ArtNem_2PArt_2				;
 ;		plreq ArtTile_2PArt_1, ArtNem_2PArt_1				;
 ;		plreq ArtTile_2PArt_3, ArtNem_2PArt_3				;
-PLC_06_End
+PLC_AmyLifeIcon_End
 
-PLC_07: plrlistheader
+PLC_TailsLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_TailsLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
-PLC_07_End
+PLC_TailsLifeIcon_End
 
-PLC_08: plrlistheader
+PLC_MetalLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_MetalLifeIcon		; Liliam: Metal Sonic life icon/universal level graphics
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon		;
 		plreq ArtTile_Ring, ArtNem_RingHUDText				;
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost		;
-PLC_08_End
+PLC_MetalLifeIcon_End
 
-PLC_09: plrlistheader
+PLC_SphereTest: plrlistheader
 		plreq ArtTile_Monitors, ArtNem_Monitors
-PLC_09_End
+PLC_SphereTest_End
 
-PLC_0A: plrlistheader
+PLC_AIZIntro: plrlistheader
 		plreq ArtTile_AIZIntroSprites, ArtNem_AIZIntroSprites
-PLC_0A_End
+PLC_AIZIntro_End
 
-PLC_0B: plrlistheader
+PLC_AIZ1: plrlistheader
 		plreq ArtTile_AIZSwingVine, ArtNem_AIZSwingVine
 		plreq ArtTile_AIZSlideRope, ArtNem_AIZSlideRope
 		plreq ArtTile_AIZMisc1, ArtNem_AIZMisc1
 		plreq ArtTile_AIZFallingLog, ArtNem_AIZFallingLog
 		plreq ArtTile_Bubbles, ArtNem_Bubbles
 		plreq ArtTile_AIZFloatingPlatform, ArtNem_AIZCorkFloor
-PLC_0B_End
+PLC_AIZ1_End
 
-PLC_0C_0D: plrlistheader
+PLC_AIZ2: plrlistheader
 		plreq ArtTile_AIZMisc2, ArtNem_AIZMisc2
 		plreq ArtTile_AIZSwingVine, ArtNem_AIZSwingVine
 ;		plreq ArtTile_AIZBackgroundTree, ArtNem_AIZBackgroundTree	; Liliam: QOL - use high precision sine tables for AIZ vines
@@ -214790,154 +214789,154 @@ PLC_0C_0D: plrlistheader
 		plreq ArtTile_GrayButton, ArtNem_GrayButton
 		plreq ArtTile_AIZ2FloatingPlatform, ArtNem_AIZCorkFloor2
 		plreq ArtTile_AIZ2BridgePost, ArtNem_AIZ2BridgePost		;
-PLC_0C_0D_End
+PLC_AIZ2_End
 
-PLC_0E: plrlistheader
+PLC_HCZ1: plrlistheader
 		plreq ArtTile_Bubbles, ArtNem_Bubbles
 		plreq ArtTile_HCZMisc, ArtNem_HCZMisc
 		plreq ArtTile_HCZButton, ArtNem_HCZButton
 		plreq ArtTile_HCZWaterRush, ArtNem_HCZWaterRush
 		plreq ArtTile_HCZWaveSplash, ArtNem_HCZWaveSplash
 		plreq ArtTile_HCZSpikeBall, ArtNem_HCZSpikeBall
-PLC_0E_End
+PLC_HCZ1_End
 
-PLC_0F: plrlistheader
+PLC_HCZ1_2: plrlistheader
 		plreq ArtTile_Buggernaut, ArtNem_HCZDragonfly
-PLC_0F_End
+PLC_HCZ1_2_End
 
-PLC_10: plrlistheader
+PLC_HCZ2: plrlistheader
 		plreq ArtTile_Bubbles, ArtNem_Bubbles
 		plreq ArtTile_HCZMisc, ArtNem_HCZMisc
 		plreq ArtTile_HCZButton, ArtNem_HCZButton
 		plreq ArtTile_HCZWaveSplash, ArtNem_HCZWaveSplash
 		plreq ArtTile_HCZSpikeBall, ArtNem_HCZSpikeBall
 		plreq ArtTile_HCZ2Slide, ArtNem_HCZ2Slide
-PLC_10_End
+PLC_HCZ2_End
 
-PLC_11: plrlistheader
+PLC_HCZ2_2: plrlistheader
 		plreq ArtTile_HCZ2KnuxWall, ArtNem_HCZ2KnuxWall
 		plreq ArtTile_HCZ2BlockPlat, ArtNem_HCZ2BlockPlat
 		plreq ArtTile_Buggernaut, ArtNem_HCZDragonfly
-PLC_11_End
+PLC_HCZ2_2_End
 
-PLC_12_13: plrlistheader
+PLC_MGZ1: plrlistheader
 		plreq ArtTile_MGZMisc1, ArtNem_MGZMisc1
 		plreq ArtTile_MGZMisc2, ArtNem_MGZMisc2
 		plreq ArtTile_MGZSigns, ArtNem_MGZSigns
 		plreq ArtTile_MGZMHZDiagonalSpring, ArtNem_DiagonalSpring
-PLC_12_13_End
+PLC_MGZ1_End
 
-PLC_14_15: plrlistheader
+PLC_MGZ2: plrlistheader
 		plreq ArtTile_MGZMisc1, ArtNem_MGZMisc1
 		plreq ArtTile_MGZMisc2, ArtNem_MGZMisc2
 		plreq ArtTile_MGZSigns, ArtNem_MGZSigns
 		plreq ArtTile_MGZMHZDiagonalSpring, ArtNem_DiagonalSpring
-PLC_14_15_End
+PLC_MGZ2_End
 
-PLC_16_17_18_19: plrlistheader
+PLC_CNZ: plrlistheader
 		plreq ArtTile_CNZMisc, ArtNem_CNZMisc
 		plreq ArtTile_Bubbles, ArtNem_Bubbles
 		plreq ArtTile_CNZPlatform, ArtNem_CNZPlatform
-PLC_16_17_18_19_End
+PLC_CNZ_End
 
-PLC_1A_1B: plrlistheader
+PLC_FBZ1: plrlistheader
 		plreq ArtTile_FBZMisc, ArtNem_FBZMisc
 		plreq ArtTile_FBZOutdoors, ArtNem_FBZOutdoors
 		plreq ArtTile_FBZEggCapsule, ArtNem_FBZEggCapsule
-PLC_1A_1B_End
+PLC_FBZ1_End
 
-PLC_1C_1D: plrlistheader
+PLC_FBZ2: plrlistheader
 		plreq ArtTile_FBZMisc, ArtNem_FBZMisc
 		plreq ArtTile_FBZMisc2, ArtNem_FBZMisc2
 		plreq ArtTile_FBZEggCapsule, ArtNem_FBZEggCapsule
-PLC_1C_1D_End
+PLC_FBZ2_End
 
-PLC_1E_1F: plrlistheader
+PLC_ICZ1: plrlistheader
 		plreq ArtTile_SnowboardDust, ArtNem_SnowboardDust
 		plreq ArtTile_DiagonalSpring, ArtNem_DiagonalSpring
 		plreq ArtTile_GrayButton, ArtNem_GrayButton
 		plreq ArtTile_ICZMisc1, ArtNem_ICZMisc1
 		plreq ArtTile_ICZIntroSprites, ArtNem_ICZIntroSprites
 		plreq ArtTile_ICZTeleport, ArtNem_ICZTeleport
-PLC_1E_1F_End
+PLC_ICZ1_End
 
-PLC_20_21: plrlistheader
+PLC_ICZ2: plrlistheader
 		plreq ArtTile_DiagonalSpring, ArtNem_DiagonalSpring
 		plreq ArtTile_GrayButton, ArtNem_GrayButton
 		plreq ArtTile_ICZMisc1, ArtNem_ICZMisc1
 		plreq ArtTile_ICZMisc2, ArtNem_ICZMisc2
 		plreq ArtTile_Bubbles, ArtNem_Bubbles
-PLC_20_21_End
+PLC_ICZ2_End
 
-PLC_22_23: plrlistheader
-		plreq ArtTile_LBZ2MinibossBox, ArtNem_LBZMinibossBox			; Liliam: start from actual act 2 start
+PLC_LBZ1: plrlistheader
+		plreq ArtTile_LBZ2MinibossBox, ArtNem_LBZMinibossBox		; Liliam: start from actual act 2 start
 		plreq ArtTile_LBZMisc, ArtNem_LBZMisc
 		plreq ArtTile_LBZTubeTrans, ArtNem_LBZTubeTrans
-PLC_22_23_End
+PLC_LBZ1_End
 
-PLC_24: plrlistheader
-		plreq ArtTile_LBZ2MinibossBox, ArtNem_LBZMinibossBox			; Liliam: start from actual act 2 start
+PLC_LBZ2: plrlistheader
+		plreq ArtTile_LBZ2MinibossBox, ArtNem_LBZMinibossBox		; Liliam: start from actual act 2 start
 		plreq ArtTile_LBZMisc, ArtNem_LBZMisc
-;		plreq ArtTile_Bubbles, ArtNem_Bubbles					;
-PLC_24_End
+;		plreq ArtTile_Bubbles, ArtNem_Bubbles				;
+PLC_LBZ2_End
 
-PLC_25: plrlistheader
+PLC_LBZ2_2: plrlistheader
 		plreq ArtTile_LBZ2Misc, ArtNem_LBZ2Misc
-		plreq ArtTile_Bubbles, ArtNem_Bubbles					; Liliam: start from actual act 2 start
-PLC_25_End
+		plreq ArtTile_Bubbles, ArtNem_Bubbles				; Liliam: start from actual act 2 start
+PLC_LBZ2_2_End
 
-PLC_26_27_28_29: plrlistheader
+PLC_MHZ: plrlistheader
 		plreq ArtTile_MGZMHZDiagonalSpring, ArtNem_DiagonalSpring
 		plreq ArtTile_MHZMisc, ArtNem_MHZMisc
 		plreq ArtTile_MHZ1CutsceneButton, ArtNem_GrayButton
-PLC_26_27_28_29_End
+PLC_MHZ_End
 
-PLC_2A_2B: plrlistheader
+PLC_SOZ1: plrlistheader
 		plreq ArtTile_SOZMisc, ArtNem_SOZMisc
-		plreq ArtTile_SOZMushroomParachute, ArtNem_SOZTile			; Liliam: Encore mode - FBZ level order
-;		plreq ArtTile_SOZTile, ArtNem_SOZTile					;
-PLC_2A_2B_End
+		plreq ArtTile_SOZMushroomParachute, ArtNem_SOZTile		; Liliam: Encore mode - FBZ level order
+;		plreq ArtTile_SOZTile, ArtNem_SOZTile				;
+PLC_SOZ1_End
 
-PLC_2C_2D: plrlistheader
+PLC_SOZ2: plrlistheader
 		plreq ArtTile_SOZMisc, ArtNem_SOZMisc
 		plreq ArtTile_SOZ2Extra, ArtNem_SOZ2Extra
-PLC_2C_2D_End
+PLC_SOZ2_End
 
-PLC_2E_2F: plrlistheader
+PLC_LRZ1: plrlistheader
 		plreq ArtTile_LRZMisc, ArtNem_LRZMisc
 		plreq ArtTile_LRZ2Misc+$2B, ArtNem_LRZSpikes
 		plreq ArtTile_LRZBigSpike, ArtNem_LRZBigSpike
-PLC_2E_2F_End
+PLC_LRZ1_End
 
-PLC_30_31: plrlistheader
+PLC_LRZ2: plrlistheader
 		plreq ArtTile_LRZ2Misc, ArtNem_LRZ2Misc
 		plreq ArtTile_LRZ2Drum, ArtNem_LRZ2Drum
-PLC_30_31_End
+PLC_LRZ2_End
 
-PLC_32_33_34_35: plrlistheader
+PLC_SSZ: plrlistheader
 		plreq ArtTile_SSZMisc, ArtNem_SSZMisc
 		plreq ArtTile_SSZCutsceneButton, ArtNem_GrayButton
-PLC_32_33_34_35_End
+PLC_SSZ_End
 
-PLC_36_37: plrlistheader
+PLC_DEZ1: plrlistheader
 		plreq ArtTile_DEZMisc, ArtNem_DEZMisc
 		plreq ArtTile_DEZMisc2, ArtNem_DEZMiniboss
-PLC_36_37_End
+PLC_DEZ1_End
 
-PLC_38_39: plrlistheader
+PLC_DEZ2: plrlistheader
 		plreq ArtTile_DEZMisc, ArtNem_DEZMisc
 		plreq ArtTile_DEZ2Extra, ArtNem_DEZ2Extra
-PLC_38_39_End
+PLC_DEZ2_End
 
-PLC_3A_3B_3C_3D_3E_3F: plrlistheader
+PLC_DDZ: plrlistheader
 ;		plreq ArtTile_DiagonalSpring, ArtNem_DiagonalSpring		; Liliam: bugfix - stop loading springs in Doomsday
-PLC_3A_3B_3C_3D_3E_3F_End
+PLC_DDZ_End
 
-PLC_40_41: plrlistheader
+PLC_Ending: plrlistheader
 		plreq ArtTile_Ending_MasterEmerald, ArtNem_EndingMasterEmerald	; Liliam: bugfix - queue Master Emerald for ending
-PLC_40_41_End
+PLC_Ending_End
 
-PLC_42: plrlistheader
+PLC_ALZ: plrlistheader
 		plreq ArtTile_DashDust, ArtNem_2PDashdust
 		plreq ArtTile_2PStartPost, ArtNem_2PStartPost
 		plreq ArtTile_2PLapNum, ArtNem_2PLapNum
@@ -214946,9 +214945,9 @@ PLC_42: plrlistheader
 		plreq ArtTile_2PArt_2, ArtNem_2PArt_2
 		plreq ArtTile_2PArt_1, ArtNem_2PArt_1
 		plreq ArtTile_2PArt_3, ArtNem_2PArt_3
-PLC_42_End
+PLC_ALZ_End
 
-PLC_43: plrlistheader
+PLC_BPZ: plrlistheader
 		plreq ArtTile_BPZMisc, ArtNem_BPZMisc
 		plreq ArtTile_DashDust, ArtNem_2PDashdust
 		plreq ArtTile_2PStartPost, ArtNem_2PStartPost
@@ -214958,9 +214957,9 @@ PLC_43: plrlistheader
 		plreq ArtTile_2PArt_2, ArtNem_2PArt_2
 		plreq ArtTile_2PArt_1, ArtNem_2PArt_1
 		plreq ArtTile_2PArt_3, ArtNem_2PArt_3
-PLC_43_End
+PLC_BPZ_End
 
-PLC_44: plrlistheader
+PLC_DPZ: plrlistheader
 		plreq ArtTile_DPZMisc, ArtNem_DPZMisc
 		plreq ArtTile_DashDust, ArtNem_2PDashdust
 		plreq ArtTile_2PStartPost, ArtNem_2PStartPost
@@ -214970,9 +214969,9 @@ PLC_44: plrlistheader
 		plreq ArtTile_2PArt_2, ArtNem_2PArt_2
 		plreq ArtTile_2PArt_1, ArtNem_2PArt_1
 		plreq ArtTile_2PArt_3, ArtNem_2PArt_3
-PLC_44_End
+PLC_DPZ_End
 
-PLC_45: plrlistheader
+PLC_CGZ: plrlistheader
 		plreq ArtTile_CGZMisc, ArtNem_CGZMisc
 		plreq ArtTile_DashDust, ArtNem_2PDashdust
 		plreq ArtTile_2PStartPost, ArtNem_2PStartPost
@@ -214982,9 +214981,9 @@ PLC_45: plrlistheader
 		plreq ArtTile_2PArt_2, ArtNem_2PArt_2
 		plreq ArtTile_2PArt_1, ArtNem_2PArt_1
 		plreq ArtTile_2PArt_3, ArtNem_2PArt_3
-PLC_45_End
+PLC_CGZ_End
 
-PLC_46: plrlistheader
+PLC_EMZ: plrlistheader
 		plreq ArtTile_EMZMisc, ArtNem_EMZMisc
 		plreq ArtTile_DashDust, ArtNem_2PDashdust
 		plreq ArtTile_2PStartPost, ArtNem_2PStartPost
@@ -214994,202 +214993,202 @@ PLC_46: plrlistheader
 		plreq ArtTile_2PArt_2, ArtNem_2PArt_2
 		plreq ArtTile_2PArt_1, ArtNem_2PArt_1
 		plreq ArtTile_2PArt_3, ArtNem_2PArt_3
-PLC_46_End
+PLC_EMZ_End
 
-PLC_47: plrlistheader
-		plreq ArtTile_HPZEmeraldMisc, ArtNem_HPZEmeraldMisc	; Liliam: Encore mode - special stage
-;		plreq ArtTile_BonusStage, ArtNem_BonusStage		;
-PLC_47_End
+PLC_HPZ_Encore: plrlistheader
+		plreq ArtTile_HPZEmeraldMisc, ArtNem_HPZEmeraldMisc		; Liliam: Encore mode - special stage
+;		plreq ArtTile_BonusStage, ArtNem_BonusStage			;
+PLC_HPZ_Encore_End
 
-PLC_48: plrlistheader
+PLC_HPZ: plrlistheader
 		plreq ArtTile_HPZEmeraldMisc, ArtNem_HPZEmeraldMisc
 		plreq ArtTile_HPZGrayEmerald, ArtNem_HPZGrayEmerald
-PLC_48_End
+PLC_HPZ_End
 
-PLC_49: plrlistheader						; Liliam: Encore mode - add extra levels
-PLC_49_End
+PLC_ALZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+PLC_ALZ_2_End
 
-PLC_4A: plrlistheader						; Liliam: Encore mode - add extra levels
-PLC_4A_End
+PLC_BPZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+PLC_BPZ_2_End
 
-PLC_4B: plrlistheader						; Liliam: Encore mode - add extra levels
-PLC_4B_End
+PLC_CGZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+PLC_CGZ_2_End
 
-PLC_4C_4D: plrlistheader
+PLC_DEZBoss: plrlistheader
 		plreq ArtTile_DEZRobotnikRun, ArtNem_FBZRobotnikRun
-PLC_4C_4D_End
+PLC_DEZBoss_End
 
-PLC_4E_4F: plrlistheader
-		plreq ArtTile_BonusStage, ArtNem_BonusStage		; Liliam: level select - add gumball bonus
+PLC_GumballBonus: plrlistheader
+		plreq ArtTile_BonusStage, ArtNem_BonusStage			; Liliam: level select - add gumball bonus
 		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
-PLC_4E_4F_End
+PLC_GumballBonus_End
 
-PLC_50: plrlistheader
+PLC_PachinkoBonus: plrlistheader
 		plreq ArtTile_PachinkoMain, ArtNem_PachinkoMain
 		plreq ArtTile_PachinkoGumballs, ArtNem_BonusStage
-PLC_50_End
+PLC_PachinkoBonus_End
 
-PLC_51: plrlistheader
+PLC_SlotBonus: plrlistheader
 		plreq ArtTile_SlotsBlocks, ArtNem_SlotsBlocks
-PLC_51_End
+PLC_SlotBonus_End
 
-PLC_52_53: plrlistheader
+PLC_MilesLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_MilesLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
-PLC_52_53_End
+PLC_MilesLifeIcon_End
 
-PLC_54: plrlistheader						; Liliam: Encore mode - add extra levels
-PLC_54_End
+PLC_DPZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+PLC_DPZ_2_End
 
-PLC_55: plrlistheader						; Liliam: Encore mode - add extra levels
-PLC_55_End
+PLC_EMZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+PLC_EMZ_2_End
 
-PLC_56: plrlistheader						; Liliam: Encore mode - change character item
+PLC_GumballBonus_Encore: plrlistheader						; Liliam: Encore mode - change character item
 		plreq ArtTile_BonusStage, ArtNem_BonusStage
 		plreq ArtTile_BonusStage+$60, ArtNem_EncoreBonusItem
 		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
 		plreq ArtTile_Explosion, ArtNem_Explosion
-PLC_56_End
+PLC_GumballBonus_Encore_End
 
-PLC_57: plrlistheader						; Liliam: Encore mode - change character item
+PLC_PachinkoBonus_Encore: plrlistheader						; Liliam: Encore mode - change character item
 		plreq ArtTile_PachinkoMain, ArtNem_PachinkoMain
 		plreq ArtTile_PachinkoGumballs, ArtNem_BonusStage
 		plreq ArtTile_PachinkoGumballs+$60, ArtNem_EncoreBonusItem
 		plreq ArtTile_Explosion, ArtNem_Explosion
-PLC_57_End
+PLC_PachinkoBonus_Encore_End
 
-PLC_58: plrlistheader							; Liliam: Encore mode - bonus stage
+PLC_EncoreBonus: plrlistheader							; Liliam: Encore mode - bonus stage
 		plreq ArtTile_SlotsBlocks, ArtNem_SlotsBlocks
 		plreq ArtTile_SlotsBlocks+$122, ArtNem_SlotsEncore
-PLC_58_End
+PLC_EncoreBonus_End
 
-PLC_59: plrlistheader						; Liliam: bugfix - stop double-loading AIZ2 PLCs
+PLC_AIZMinibossCutscene: plrlistheader						; Liliam: bugfix - stop double-loading AIZ2 PLCs
 		plreq ArtTile_AIZMiniboss, ArtNem_AIZMiniboss
 		plreq ArtTile_AIZMinibossSmall, ArtNem_AIZMinibossSmall
 		plreq ArtTile_AIZMisc2, ArtNem_AIZMisc2
 		plreq ArtTile_BossExplosion2, ArtNem_BossExplosion
-PLC_59_End
+PLC_AIZMinibossCutscene_End
 
-PLC_5A: plrlistheader
+PLC_AIZMiniboss: plrlistheader
 		plreq ArtTile_AIZMiniboss, ArtNem_AIZMiniboss
 		plreq ArtTile_AIZMinibossSmall, ArtNem_AIZMinibossSmall
 		plreq ArtTile_AIZBossFire, ArtNem_AIZBossFire
 		plreq ArtTile_BossExplosion2, ArtNem_BossExplosion
-PLC_5A_End
+PLC_AIZMiniboss_End
 
-PLC_5B: plrlistheader
+PLC_HCZMiniboss: plrlistheader
 		plreq ArtTile_HCZMiniboss, ArtNem_HCZMiniboss
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_5B_End
+PLC_HCZMiniboss_End
 
-PLC_5C_5D: plrlistheader
+PLC_CNZMiniboss: plrlistheader
 		plreq ArtTile_CNZMiniboss, ArtNem_CNZMiniboss
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_5C_5D_End
+PLC_CNZMiniboss_End
 
-PLC_5E: plrlistheader
+PLC_FBZMiniboss: plrlistheader
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_5E_End
+PLC_FBZMiniboss_End
 
-PLC_5F: plrlistheader
+PLC_ICZMiniboss: plrlistheader
 		plreq ArtTile_ICZMiniboss, ArtNem_ICZMiniboss
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_5F_End
+PLC_ICZMiniboss_End
 
-PLC_60: plrlistheader
+PLC_LBZMiniboss: plrlistheader
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
 		plreq ArtTile_LBZKnuxBomb, ArtNem_LBZKnuxBomb
-PLC_60_End
+PLC_LBZMiniboss_End
 
-PLC_61: plrlistheader
+PLC_SOZMiniboss: plrlistheader
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_61_End
+PLC_SOZMiniboss_End
 
-PLC_62_Through_6A: plrlistheader
+PLC_FBZ2Subboss: plrlistheader
 		plreq ArtTile_FBZ2Subboss, ArtNem_FBZ2Subboss
 		plreq ArtTile_FBZRobotnikStand, ArtNem_FBZRobotnikStand
 		plreq ArtTile_FBZRobotnikRun, ArtNem_FBZRobotnikRun
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_62_Through_6A_End
+PLC_FBZ2Subboss_End
 
-PLC_6B: plrlistheader
+PLC_AIZEndBoss: plrlistheader
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
 		plreq ArtTile_BossExplosion2, ArtNem_BossExplosion
-PLC_6B_End
+PLC_AIZEndBoss_End
 
-PLC_6C: plrlistheader
+PLC_HCZEndBoss: plrlistheader
 		plreq ArtTile_HCZEndBoss, ArtNem_HCZEndBoss
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
 		plreq ArtTile_EggCapsule, ArtNem_EggCapsule
-PLC_6C_End
+PLC_HCZEndBoss_End
 
-PLC_6D: plrlistheader
+PLC_MGZEndBoss: plrlistheader
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
 		plreq ArtTile_EggCapsule, ArtNem_EggCapsule
-PLC_6D_End
+PLC_MGZEndBoss_End
 
-PLC_6E: plrlistheader
+PLC_CNZEndBoss: plrlistheader
 		plreq ArtTile_CNZEndBoss, ArtNem_CNZEndBoss
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
 		plreq ArtTile_EggCapsule, ArtNem_EggCapsule
-PLC_6E_End
+PLC_CNZEndBoss_End
 
-PLC_6F: plrlistheader
+PLC_FBZEndBoss: plrlistheader
 		plreq ArtTile_FBZEndBoss, ArtNem_FBZEndBoss
-;		plreq ArtTile_FBZRobotnikHead, ArtNem_FBZRobotnikHead	; Liliam: Metal Sonic - use Mecha Sonic head for bosses
+;		plreq ArtTile_FBZRobotnikHead, ArtNem_FBZRobotnikHead		; Liliam: Metal Sonic - use Mecha Sonic head for bosses
 		plreq ArtTile_FBZEndBossFlame, ArtNem_FBZEndBossFlame
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
-		plreq ArtTile_RobotnikShip, ArtNem_FBZRobotnikHead	;
+		plreq ArtTile_RobotnikShip, ArtNem_FBZRobotnikHead		;
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
 		plreq ArtTile_EggCapsule, ArtNem_EggCapsule
-PLC_6F_End
+PLC_FBZEndBoss_End
 
-PLC_70: plrlistheader
+PLC_ICZEndBoss: plrlistheader
 		plreq ArtTile_ICZEndBoss, ArtNem_ICZEndBoss
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
 		plreq ArtTile_EggCapsule, ArtNem_EggCapsule
-PLC_70_End
+PLC_ICZEndBoss_End
 
-PLC_71: plrlistheader
+PLC_LBZFinalBoss1: plrlistheader
 		plreq ArtTile_LBZFinalBoss1, ArtNem_LBZFinalBoss1
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_71_End
+PLC_LBZFinalBoss1_End
 
-PLC_72_73_74_75_76: plrlistheader
+PLC_DEZEndBoss: plrlistheader
 		plreq ArtTile_FBZRobotnikStand, ArtNem_FBZRobotnikStand
 		plreq ArtTile_FBZRobotnikRun, ArtNem_FBZRobotnikRun
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_72_73_74_75_76_End
+PLC_DEZEndBoss_End
 
-PLC_77: plrlistheader
+PLC_LBZEndBoss: plrlistheader
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
 		plreq ArtTile_FBZRobotnikRun, ArtNem_FBZRobotnikRun
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_77_End
+PLC_LBZEndBoss_End
 
-PLC_78: plrlistheader						; Liliam: bugfix - use Egg Robo for DEZ2 boss
+PLC_DEZEndBoss_Knux: plrlistheader						; Liliam: bugfix - use Egg Robo for DEZ2 boss
 		plreq ArtTile_FBZRobotnikStand, ArtNem_EggRoboStand
 		plreq ArtTile_FBZRobotnikRun, ArtNem_EggRoboRun
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_78_End
+PLC_DEZEndBoss_Knux_End
 
-PLC_79: plrlistheader						; Liliam: bugfix - use Egg Robo for LBZ2 boss
+PLC_LBZEndBoss_Knux: plrlistheader						; Liliam: bugfix - use Egg Robo for LBZ2 boss
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
 		plreq ArtTile_RobotnikShip, ArtNem_EggRoboHead
 		plreq ArtTile_FBZRobotnikRun, ArtNem_EggRoboRun
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_79_End
+PLC_LBZEndBoss_Knux_End
 
-PLC_7A_7B: plrlistheader
+PLC_EndBoss: plrlistheader
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
 		plreq ArtTile_BossExplosion, ArtNem_BossExplosion
-PLC_7A_7B_End
+PLC_EndBoss_End
 
 ; =============== S U B R O U T I N E =======================================
 
