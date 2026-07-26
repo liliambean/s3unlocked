@@ -9605,23 +9605,16 @@ loc_7BF4:
 	endif
 		clr.l	(Collected_special_ring_array).w
 		clr.b	(Last_star_post_hit).w
+		clr.b	(Saved_last_star_post_hit).w		; Liliam: title screen - quick return by pressing B
 		clr.b	(Special_bonus_entry_flag).w
 		clr.b	(Blue_spheres_stage_flag).w
-		clr.b	(Respawn_table_keep).w			; Liliam: level select - clear flags
-		clr.w	(Debug_mode_flag).w			;
-	if DevMode
-		; Sonic 2 Beta 4 reveals that these were the original instructions.
-		; The original source code may have been able to produce debug builds with this enabled.
-;		move.w	#(1<<8)|1,(Level_select_flag).w		;
-;		move.w	#(1<<8)|1,(Debug_cheat_flag).w		;
-	else
+		clr.w	(Debug_mode_flag).w			; Liliam: level select - access all special stages from act 1
 ;		nop						;
 ;		nop						;
 ;		nop						;
 ;		nop						;
 ;		nop						;
 ;		nop						;
-	endif
 		clr.b	(Debug_cheat_input_counter).w		;
 		clr.w	(Cheat_input_counter).w
 		clr.w	(Cheat_input_counter2).w
