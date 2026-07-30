@@ -179498,7 +179498,8 @@ loc_7C37A:
 loc_7C39E:
 		move.w	#$2F,$2E(a0)
 		lea	ChildObjDat_7D4AE(pc),a2
-		jsr	CreateChild1_Normal(pc)
+		jsr	(CreateChild1_Normal).l			; Liliam: fallout
+;		jsr	CreateChild1_Normal(pc)			;
 		subq.b	#1,$39(a0)
 		bpl.w	locret_7B448
 		move.b	#8,subtype(a1)
@@ -179884,7 +179885,8 @@ loc_7C7D4:
 
 loc_7C80A:
 		lea	byte_7D683(pc),a1
-		jsr	Animate_RawNoSSTMultiDelay(pc)
+		jsr	(Animate_RawNoSSTMultiDelay).l		; Liliam: fallout
+;		jsr	Animate_RawNoSSTMultiDelay(pc)		;
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -179944,7 +179946,8 @@ loc_7C8A0:
 		jsr	Refresh_ChildPositionAdjusted(pc)
 
 loc_7C8BA:
-		jsr	Animate_RawMultiDelay(pc)
+		jsr	(Animate_RawMultiDelay).l		; Liliam: fallout
+;		jsr	Animate_RawMultiDelay(pc)		;
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -180117,7 +180120,8 @@ loc_7CA78:
 ; ---------------------------------------------------------------------------
 
 loc_7CAAA:
-		jsr	Swing_UpAndDown(pc)
+		jsr	(Swing_UpAndDown).l			; Liliam: fallout
+;		jsr	Swing_UpAndDown(pc)			;
 		jsr	(MoveSprite2).l
 		cmpi.w	#$120,x_pos(a0)
 		bhs.s	loc_7CACC
@@ -180152,7 +180156,8 @@ loc_7CAF8:
 		move.w	#$400,(Player_1+ground_vel).w		;
 
 loc_7CB18:
-		jsr	Swing_UpAndDown(pc)
+		jsr	(Swing_UpAndDown).l			; Liliam: fallout
+;		jsr	Swing_UpAndDown(pc)			;
 		jsr	(MoveSprite2).l
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -181675,7 +181680,8 @@ loc_7DDC4:
 ; ---------------------------------------------------------------------------
 
 loc_7DE28:
-		jmp	Boss_PlayMusic_WaitForCamera(pc)
+		jmp	(Boss_PlayMusic_WaitForCamera).l	; Liliam: fallout
+;		jmp	Boss_PlayMusic_WaitForCamera(pc)	;
 ; ---------------------------------------------------------------------------
 
 loc_7DE2C:
@@ -188209,7 +188215,8 @@ Obj_DDZMissile:
 		tst.b	subtype(a0)
 		bne.s	loc_82014
 		move.l	#loc_82038,(a0)
-		move.w	#-$3FFA,$3C(a0)
+		move.w	#$C00C,$3C(a0)				; Liliam: QOL - extend missile animation
+;		move.w	#$C006,$3C(a0)				;
 		bra.w	sub_82AA6
 ; ---------------------------------------------------------------------------
 
@@ -189240,9 +189247,23 @@ locret_82AA4:
 
 
 sub_82AA6:
+		tst.b	anim_frame_timer(a0)			; Liliam: QOL - extend missile animation
+		beq.s	.pickFrame				;
+		subq.b	#1,anim_frame_timer(a0)			;
+		rts						;
+; ---------------------------------------------------------------------------
+
+	.pickFrame:
 		move.b	$3C(a0),d0
-		addi.b	#$10,d0
-		lsr.b	#5,d0
+;		addi.b	#$10,d0					; Liliam: QOL - extend missile animation
+;		lsr.b	#5,d0					;
+		addq.b	#8,d0					;
+		lsr.b	#4,d0					;
+		cmp.b	$3D(a0),d0				;
+		beq.s	loc_82AB0				;
+		move.b	#7,anim_frame_timer(a0)			;
+
+loc_82AB0:
 		move.b	d0,$3D(a0)
 		addq.b	#8,d0
 		move.b	d0,mapping_frame(a0)
@@ -189269,7 +189290,8 @@ sub_82AD8:
 		movea.w	parent3(a0),a1
 		moveq	#0,d0
 		move.b	$3D(a1),d0
-		move.b	#$10,mapping_frame(a0)
+		move.b	#$40,mapping_frame(a0)			; Liliam: QOL - extend missile animation
+;		move.b	#$10,mapping_frame(a0)			;
 		add.b	d0,mapping_frame(a0)
 		add.w	d0,d0
 		move.w	byte_82AF6(pc,d0.w),child_dx(a0)	; and child_dy
@@ -189279,13 +189301,21 @@ sub_82AD8:
 ; ---------------------------------------------------------------------------
 byte_82AF6:
 		dc.b    0,-$20
+		dc.b  -$D,-$1C					; Liliam: QOL - extend missile animation
 		dc.b -$16,-$16
+		dc.b -$1C, -$D					;
 		dc.b -$20,   0
+		dc.b -$1C,  $D					;
 		dc.b -$16, $16
+		dc.b  -$D, $1C					;
 		dc.b    0, $20
+		dc.b   $D, $1C					;
 		dc.b  $16, $16
+		dc.b  $1C,  $D					;
 		dc.b  $20,   0
+		dc.b  $1C, -$D					;
 		dc.b  $16,-$16
+		dc.b   $D,-$1C					;
 		even
 
 ; =============== S U B R O U T I N E =======================================
@@ -189364,19 +189394,31 @@ loc_82BAC:
 word_82BB4:
 		dc.w      0,   $38,  -$2C,   $18
 off_82BBC:
-		dc.w word_82BCC-off_82BBC
-		dc.w word_82BD4-off_82BBC
-		dc.w word_82BDC-off_82BBC
-		dc.w word_82BD4-off_82BBC
-		dc.w word_82BCC-off_82BBC
-		dc.w word_82BD4-off_82BBC
-		dc.w word_82BDC-off_82BBC
-		dc.w word_82BD4-off_82BBC
-word_82BCC:
+		dc.w DDZMissileHitbox_Vertical-off_82BBC
+		dc.w DDZMissileHitbox_DiagVertical-off_82BBC	; Liliam: QOL - extend missile animation
+		dc.w DDZMissileHitbox_Diagonal-off_82BBC
+		dc.w DDZMissileHitbox_DiagHorizontal-off_82BBC	;
+		dc.w DDZMissileHitbox_Horizontal-off_82BBC
+		dc.w DDZMissileHitbox_DiagHorizontal-off_82BBC	;
+		dc.w DDZMissileHitbox_Diagonal-off_82BBC
+		dc.w DDZMissileHitbox_DiagVertical-off_82BBC	;
+		dc.w DDZMissileHitbox_Vertical-off_82BBC
+		dc.w DDZMissileHitbox_DiagVertical-off_82BBC	;
+		dc.w DDZMissileHitbox_Diagonal-off_82BBC
+		dc.w DDZMissileHitbox_DiagHorizontal-off_82BBC	;
+		dc.w DDZMissileHitbox_Horizontal-off_82BBC
+		dc.w DDZMissileHitbox_DiagHorizontal-off_82BBC	;
+		dc.w DDZMissileHitbox_Diagonal-off_82BBC
+		dc.w DDZMissileHitbox_DiagVertical-off_82BBC	;
+DDZMissileHitbox_Vertical:
 		dc.w   -$18,   $30,  -$24,   $48
-word_82BD4:
+DDZMissileHitbox_DiagVertical:					;
+		dc.w   -$1A,   $34,  -$20,   $40
+DDZMissileHitbox_Diagonal:
 		dc.w   -$1C,   $38,  -$1C,   $38
-word_82BDC:
+DDZMissileHitbox_DiagHorizontal:				;
+		dc.w   -$20,   $40,  -$1A,   $34
+DDZMissileHitbox_Horizontal:
 		dc.w   -$24,   $48,  -$18,   $30
 
 ; =============== S U B R O U T I N E =======================================
@@ -189988,7 +190030,8 @@ ObjDat_DDZMissile:
 		dc.b  $18, $18,   8,   0
 word_831FC:
 		dc.w   $180
-		dc.b    8,   8, $12,   0
+		dc.b    8,   8, $44,   0			; Liliam: QOL - extend missile animation
+;		dc.b    8,   8, $12,   0			;
 word_83202:
 		dc.w   $200
 		dc.b    8,   8, $18,   0
@@ -190101,6 +190144,7 @@ byte_832D9:
 		dc.b  $FC
 		even
 Map_DDZMissileAsteroid:
+		; Liliam: QOL - extend missile animation
 		include "Levels/DDZ/Misc Object Data/Map - Missile Asteroid.asm"
 ; ---------------------------------------------------------------------------
 
@@ -216060,6 +216104,7 @@ Pal_DEZ2:
 		binclude "Levels/DEZ/Palettes/2.bin"
 		even
 Pal_DDZ:
+		; Liliam: bugfix - DDZ enemy palette assignment
 		binclude "Levels/DDZ/Palettes/Main.bin"
 		even
 Pal_ALZ:
@@ -217837,6 +217882,7 @@ ArtKosM_DEZFinalBossDebris:
 		binclude "Levels/DEZ/KosinskiM Art/Final Boss Debris.bin"
 		even
 ArtKosM_DDZMisc:
+		; Liliam: QOL - extend missile animation
 		binclude "Levels/DDZ/KosinskiM Art/Misc Art.bin"
 		even
 AngleLookup_1:

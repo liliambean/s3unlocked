@@ -63,6 +63,22 @@ Map_DDZMissileAsteroid_:
 		dc.w word_8366E-Map_DDZMissileAsteroid_
 		dc.w word_83694-Map_DDZMissileAsteroid_
 		dc.w word_836BA-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_Fire0-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_Fire1-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_Fire2-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_Fire3-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_Fire4-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_Fire5-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_Fire6-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_Fire7-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_Fire8-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_Fire9-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_FireA-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_FireB-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_FireC-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_FireD-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_FireE-Map_DDZMissileAsteroid_
+		dc.w Map_DDZMissileAsteroid_FireF-Map_DDZMissileAsteroid_
 word_83362:	dc.w $C
 		dc.b  $D4,  $F,   0,   0, $FF, $F0
 		dc.b  $D4,  $F,   0, $10,   0, $10
@@ -86,127 +102,143 @@ word_833C8:	dc.w 2
 		dc.b  $E8,  $E,   1,  $C, $FF, $F0
 		dc.b    0,  $E, $11,  $C, $FF, $F0
 word_833D6:	dc.w 2
-		dc.b  $F8,   7, $11, $34, $FF, $F8
-		dc.b  $E8,   5, $11, $3C, $FF, $F8
+		dc.b  $F8,   7, $11, $54, $FF, $F8
+		dc.b  $E8,   5, $11, $5C, $FF, $F8
 word_833E4:	dc.w 3
-		dc.b  $EC,   6, $11, $24, $FF, $EC
-		dc.b  $F4,   7, $11, $2A, $FF, $FC
-		dc.b    4,   1, $11, $32,   0,  $C
-word_833F8:	dc.w 2
+		dc.b  $E8,   9, $11, $44, $FF, $F0
+		dc.b  $F8,   9, $11, $4A, $FF, $F8
+		dc.b    8,   5, $11, $50,   0,   0
+word_833F8:	dc.w 3
+		dc.b  $EC,   4, $11, $34, $FF, $EC
+		dc.b  $F4,  $D, $11, $36, $FF, $EC
+		dc.b    4,   9, $11, $3E, $FF, $FC
+word_83406:	dc.w 3
+		dc.b  $F0,  $D, $11, $24, $FF, $E8
+		dc.b    0,   4, $11, $2C, $FF, $F0
+		dc.b    0,   9, $11, $2E,   0,   0
+word_8341A:	dc.w 2
 		dc.b  $F8,  $D,   1, $18, $FF, $E8
 		dc.b  $F8,   5,   1, $20,   0,   8
-word_83406:	dc.w 3
-		dc.b  $FC,   6,   1, $24, $FF, $EC
-		dc.b  $EC,   7,   1, $2A, $FF, $FC
-		dc.b  $EC,   1,   1, $32,   0,  $C
-word_8341A:	dc.w 2
-		dc.b  $E8,   7,   1, $34, $FF, $F8
-		dc.b    8,   5,   1, $3C, $FF, $F8
 word_83428:	dc.w 3
-		dc.b  $FC,   6,   9, $24,   0,   4
-		dc.b  $EC,   7,   9, $2A, $FF, $F4
-		dc.b  $EC,   1,   9, $32, $FF, $EC
-word_8343C:	dc.w 2
+		dc.b    0,  $D,   1, $24, $FF, $E8
+		dc.b  $F8,   4,   1, $2C, $FF, $F0
+		dc.b  $F0,   9,   1, $2E,   0,   0
+word_8343C:	dc.w 3
+		dc.b   $C,   4,   1, $34, $FF, $EC
+		dc.b  $FC,  $D,   1, $36, $FF, $EC
+		dc.b  $EC,   9,   1, $3E, $FF, $FC
+word_8344A:	dc.w 3
+		dc.b    8,   9,   1, $44, $FF, $F0
+		dc.b  $F8,   9,   1, $4A, $FF, $F8
+		dc.b  $E8,   5,   1, $50,   0,   0
+word_8345E:	dc.w 2
+		dc.b  $E8,   7,   1, $54, $FF, $F8
+		dc.b    8,   5,   1, $5C, $FF, $F8
+word_83466:	dc.w 3
+		dc.b    8,   9,   9, $44, $FF, $F8
+		dc.b  $F8,   9,   9, $4A, $FF, $F0
+		dc.b  $E8,   5,   9, $50, $FF, $F0
+word_8346E:	dc.w 3
+		dc.b   $C,   4,   9, $34,   0,   4
+		dc.b  $FC,  $D,   9, $36, $FF, $F4
+		dc.b  $EC,   9,   9, $3E, $FF, $EC
+word_83476:	dc.w 3
+		dc.b    0,  $D,   9, $24, $FF, $F8
+		dc.b  $F8,   4,   9, $2C,   0,   0
+		dc.b  $F0,   9,   9, $2E, $FF, $E8
+word_8347E:	dc.w 2
 		dc.b  $F8,  $D,   9, $18, $FF, $F8
 		dc.b  $F8,   5,   9, $20, $FF, $E8
-word_8344A:	dc.w 3
-		dc.b  $EC,   6, $19, $24,   0,   4
-		dc.b  $F4,   7, $19, $2A, $FF, $F4
-		dc.b    4,   1, $19, $32, $FF, $EC
-word_8345E:	dc.w 1
-		dc.b  $F8,   5, $11, $48, $FF, $F8
-word_83466:	dc.w 1
-		dc.b  $F8,   5, $11, $44, $FF, $F8
-word_8346E:	dc.w 1
-		dc.b  $F8,   5,   1, $40, $FF, $F8
-word_83476:	dc.w 1
-		dc.b  $F8,   5,   1, $44, $FF, $F8
-word_8347E:	dc.w 1
-		dc.b  $F8,   5,   1, $48, $FF, $F8
-word_83486:	dc.w 1
-		dc.b  $F8,   5,   9, $44, $FF, $F8
-word_8348E:	dc.w 1
-		dc.b  $F8,   5,   9, $40, $FF, $F8
-word_83496:	dc.w 1
-		dc.b  $F8,   5, $19, $44, $FF, $F8
+word_83486:	dc.w 3
+		dc.b  $F0,  $D, $19, $24, $FF, $F8
+		dc.b    0,   4, $19, $2C,   0,   0
+		dc.b    0,   9, $19, $2E, $FF, $E8
+word_8348E:	dc.w 3
+		dc.b  $EC,   4, $19, $34,   0,   4
+		dc.b  $F4,  $D, $19, $36, $FF, $F4
+		dc.b    4,   9, $19, $3E, $FF, $EC
+word_83496:	dc.w 3
+		dc.b  $E8,   9, $19, $44, $FF, $F8
+		dc.b  $F8,   9, $19, $4A, $FF, $F0
+		dc.b    8,   5, $19, $50, $FF, $F0
 word_8349E:	dc.w 1
-		dc.b  $F8,   5,   1, $4C, $FF, $F8
+		dc.b  $F8,   5,   1, $74, $FF, $F8
 word_834A6:	dc.w 1
-		dc.b  $F8,   5,   1, $50, $FF, $F8
+		dc.b  $F8,   5,   1, $78, $FF, $F8
 word_834AE:	dc.w 1
-		dc.b  $F8,   5,   1, $54, $FF, $F8
+		dc.b  $F8,   5,   1, $7C, $FF, $F8
 word_834B6:	dc.w 1
-		dc.b  $F8,   5,   1, $58, $FF, $F8
+		dc.b  $F8,   5,   1, $80, $FF, $F8
 word_834BE:	dc.w 1
-		dc.b  $F8,   5, $11, $64, $FF, $F8
+		dc.b  $F8,   5, $11, $8C, $FF, $F8
 word_834C6:	dc.w 1
-		dc.b  $F8,   5, $19, $60, $FF, $F8
+		dc.b  $F8,   5, $19, $88, $FF, $F8
 word_834CE:	dc.w 1
-		dc.b  $F8,   5,   9, $5C, $FF, $F8
+		dc.b  $F8,   5,   9, $84, $FF, $F8
 word_834D6:	dc.w 1
-		dc.b  $F8,   5,   9, $60, $FF, $F8
+		dc.b  $F8,   5,   9, $88, $FF, $F8
 word_834DE:	dc.w 1
-		dc.b  $F8,   5,   1, $64, $FF, $F8
+		dc.b  $F8,   5,   1, $8C, $FF, $F8
 word_834E6:	dc.w 1
-		dc.b  $F8,   5,   1, $60, $FF, $F8
+		dc.b  $F8,   5,   1, $88, $FF, $F8
 word_834EE:	dc.w 1
-		dc.b  $F8,   5,   1, $5C, $FF, $F8
+		dc.b  $F8,   5,   1, $84, $FF, $F8
 word_834F6:	dc.w 1
-		dc.b  $F8,   5, $11, $60, $FF, $F8
+		dc.b  $F8,   5, $11, $88, $FF, $F8
 word_834FE:	dc.w 1
-		dc.b  $FC,   0,   1, $68, $FF, $FC
+		dc.b  $FC,   0,   1, $90, $FF, $FC
 word_83506:	dc.w 1
-		dc.b  $F8,   5,   1, $69, $FF, $F8
+		dc.b  $F8,   5,   1, $91, $FF, $F8
 word_8350E:	dc.w 1
-		dc.b  $F0,  $F,   1, $6D, $FF, $F0
+		dc.b  $F0,  $F,   1, $95, $FF, $F0
 word_83516:	dc.w 4
-		dc.b  $E8,  $A,   1, $7D, $FF, $E8
-		dc.b  $E8,  $A,   1, $86,   0,   0
-		dc.b    0,  $A,   1, $8F, $FF, $E8
-		dc.b    0,  $A,   1, $98,   0,   0
+		dc.b  $E8,  $A,   1, $A5, $FF, $E8
+		dc.b  $E8,  $A,   1, $AE,   0,   0
+		dc.b    0,  $A,   1, $B7, $FF, $E8
+		dc.b    0,  $A,   1, $C0,   0,   0
 word_83530:	dc.w $A
-		dc.b  $E8,  $A,   1, $86,   0, $10
-		dc.b    0,  $A,   1, $98,   0, $10
-		dc.b  $D8,  $A,   1, $7D, $FF, $E8
-		dc.b  $D8,  $A,   1, $86,   0,   0
-		dc.b  $F0,  $F,   1, $A1, $FF, $E8
-		dc.b  $F0,   7,   1, $B1,   0,   8
-		dc.b  $10,  $A,   1, $8F, $FF, $E8
-		dc.b  $10,  $A,   1, $98,   0,   0
-		dc.b  $E8,  $A,   1, $7D, $FF, $D8
-		dc.b    0,  $A,   1, $8F, $FF, $D8
+		dc.b  $E8,  $A,   1, $AE,   0, $10
+		dc.b    0,  $A,   1, $C0,   0, $10
+		dc.b  $D8,  $A,   1, $A5, $FF, $E8
+		dc.b  $D8,  $A,   1, $AE,   0,   0
+		dc.b  $F0,  $F,   1, $C9, $FF, $E8
+		dc.b  $F0,   7,   1, $D9,   0,   8
+		dc.b  $10,  $A,   1, $B7, $FF, $E8
+		dc.b  $10,  $A,   1, $C0,   0,   0
+		dc.b  $E8,  $A,   1, $A5, $FF, $D8
+		dc.b    0,  $A,   1, $B7, $FF, $D8
 word_8356E:	dc.w 1
-		dc.b  $F4,  $A,   1, $B9, $FF, $F4
+		dc.b  $F4,  $A,   1, $E1, $FF, $F4
 word_83576:	dc.w 1
-		dc.b  $F4,  $A,   1, $C2, $FF, $F4
+		dc.b  $F4,  $A,   1, $EA, $FF, $F4
 word_8357E:	dc.w 1
-		dc.b  $F3,  $A,   1, $B9, $FF, $F4
+		dc.b  $F3,  $A,   1, $E1, $FF, $F4
 word_83586:	dc.w 1
-		dc.b  $F3,  $A,   1, $C2, $FF, $F4
+		dc.b  $F3,  $A,   1, $EA, $FF, $F4
 word_8358E:	dc.w 1
-		dc.b  $FC,   0,   1, $CB, $FF, $FC
+		dc.b  $FC,   0,   1, $F3, $FF, $FC
 word_83596:	dc.w 1
-		dc.b  $FC,   0,   1, $CC, $FF, $FC
+		dc.b  $FC,   0,   1, $F4, $FF, $FC
 word_8359E:	dc.w 1
-		dc.b  $FD,   0,   1, $CB, $FF, $FC
+		dc.b  $FD,   0,   1, $F3, $FF, $FC
 word_835A6:	dc.w 1
-		dc.b  $FD,   0,   1, $CC, $FF, $FC
+		dc.b  $FD,   0,   1, $F4, $FF, $FC
 word_835AE:	dc.w 2
-		dc.b  $F4,   6,   1, $CD,   0,   0
-		dc.b  $F4,   6,   1, $D3, $FF, $F0
+		dc.b  $F4,   6,   1, $F5,   0,   0
+		dc.b  $F4,   6,   1, $FB, $FF, $F0
 word_835BC:	dc.w 2
-		dc.b  $F4,   6,   1, $CD,   0,   0
-		dc.b  $F4,   6,   1, $D9, $FF, $F0
+		dc.b  $F4,   6,   1, $F5,   0,   0
+		dc.b  $F4,   6,   2,   1, $FF, $F0
 word_835CA:	dc.w 1
-		dc.b  $F8,   5,   1, $DF, $FF, $F8
+		dc.b  $F8,   5,   2,   7, $FF, $F8
 word_835D2:	dc.w 1
-		dc.b  $F4,   5,   1, $E3, $FF, $F8
+		dc.b  $F4,   5,   2,  $B, $FF, $F8
 word_835DA:	dc.w 1
-		dc.b  $F4,   4,   1, $E7, $FF, $F8
+		dc.b  $F4,   4,   2,  $F, $FF, $F8
 word_835E2:	dc.w 1
-		dc.b  $FC,   5, $11, $E3, $FF, $F8
+		dc.b  $FC,   5, $12,  $B, $FF, $F8
 word_835EA:	dc.w 1
-		dc.b    4,   4, $11, $E7, $FF, $F8
+		dc.b    4,   4, $12,  $F, $FF, $F8
 word_835F2:	dc.w 4
 		dc.b  $D4,  $F,   0,   0, $FF, $F0
 		dc.b  $D4,  $F,   0, $10,   0, $10
@@ -252,3 +284,51 @@ word_836BA:	dc.w 6
 		dc.b  $FE,  $C,   0, $D4, $FF, $EC
 		dc.b    6,  $B,   0, $D8, $FF, $EC
 		dc.b  $CD,  $F,   0, $A3,   0,   4
+Map_DDZMissileAsteroid_Fire0:
+		dc.w 1
+		dc.b  $F8,   5, $11, $70, $FF, $F8
+Map_DDZMissileAsteroid_Fire1:
+		dc.w 1
+		dc.b  $F8,   5, $11, $6C, $FF, $F8
+Map_DDZMissileAsteroid_Fire2:
+		dc.w 1
+		dc.b  $F8,   5, $11, $68, $FF, $F8
+Map_DDZMissileAsteroid_Fire3:
+		dc.w 1
+		dc.b  $F8,   5, $11, $64, $FF, $F8
+Map_DDZMissileAsteroid_Fire4:
+		dc.w 1
+		dc.b  $F8,   5,   1, $60, $FF, $F8
+Map_DDZMissileAsteroid_Fire5:
+		dc.w 1
+		dc.b  $F8,   5,   1, $64, $FF, $F8
+Map_DDZMissileAsteroid_Fire6:
+		dc.w 1
+		dc.b  $F8,   5,   1, $68, $FF, $F8
+Map_DDZMissileAsteroid_Fire7:
+		dc.w 1
+		dc.b  $F8,   5,   1, $6C, $FF, $F8
+Map_DDZMissileAsteroid_Fire8:
+		dc.w 1
+		dc.b  $F8,   5,   1, $70, $FF, $F8
+Map_DDZMissileAsteroid_Fire9:
+		dc.w 1
+		dc.b  $F8,   5,   9, $6C, $FF, $F8
+Map_DDZMissileAsteroid_FireA:
+		dc.w 1
+		dc.b  $F8,   5,   9, $68, $FF, $F8
+Map_DDZMissileAsteroid_FireB:
+		dc.w 1
+		dc.b  $F8,   5,   9, $64, $FF, $F8
+Map_DDZMissileAsteroid_FireC:
+		dc.w 1
+		dc.b  $F8,   5,   9, $60, $FF, $F8
+Map_DDZMissileAsteroid_FireD:
+		dc.w 1
+		dc.b  $F8,   5, $19, $64, $FF, $F8
+Map_DDZMissileAsteroid_FireE:
+		dc.w 1
+		dc.b  $F8,   5, $19, $68, $FF, $F8
+Map_DDZMissileAsteroid_FireF:
+		dc.w 1
+		dc.b  $F8,   5, $19, $6C, $FF, $F8
