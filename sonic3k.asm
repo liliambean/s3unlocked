@@ -44604,12 +44604,12 @@ locret_1D694:
 SolidObject_Monitor_SonicKnux:
 		btst	d6,status(a0)		; Is Sonic/Knux standing on the monitor?
 		bne.s	Monitor_ChkOverEdge	; If so, branch
+
+loc_1D69C:
 		btst	#Status_Roll,status(a1)			; Liliam: hidden skill - drop dash (credit: MainMemory)
 		bne.s	locret_1D6BC				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		beq.s	locret_1D6BC				;
-
-loc_1D6A4:
 		cmpi.b	#2,character_id(a1)	; Is character Knuckles?
 		bne.s	loc_1D6BE		; If not, branch
 		cmpi.b	#1,double_jump_flag(a1)	; Is Knuckles gliding?
@@ -44618,6 +44618,9 @@ loc_1D6A4:
 		bne.s	loc_1D6BE		; If not, branch
 
 locret_1D6BC:
+		move.w	d6,d0					; Liliam: bugfix - stop uncurling next to monitors
+		addq.w	#pushing_bit_delta,d0			;
+		bclr	d0,status(a0)				;
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -44634,10 +44637,10 @@ SolidObject_Monitor_Tails:
 		bne.s	Monitor_ChkOverEdge	; If so, branch
 		tst.w	(Competition_mode).w	; Are we in competition mode?
 		beq.w	SolidObject_cont	; If not, branch
-		cmpi.b	#2,anim(a1)		; Is Tails in his rolling animation?
-		bne.s	loc_1D6A4				; Liliam: add extra characters
+		bra.s	loc_1D69C				; Liliam: hidden skill - drop dash (credit: MainMemory)
+;		cmpi.b	#2,anim(a1)				;
 ;		bne.w	SolidObject_cont			;
-		rts
+;		rts						;
 ; End of function SolidObject_Monitor_Tails
 
 ; ---------------------------------------------------------------------------
