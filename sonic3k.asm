@@ -28262,7 +28262,15 @@ loc_13830:
 ;		bpl.s	loc_13840				;
 ;		bra.s	loc_1384A				;
 
-;loc_1383A:
+		move.w	(Ctrl_1_logical).w,(Ctrl_2_logical).w	; Liliam: QOL - Tails assist
+		tst.w	(Tails_CPU_idle_timer).w		;
+		bne.s	loc_1383A				;
+		tst.b	(Flying_carrying_Sonic_flag).w		;
+		beq.s	loc_1383A				;
+		cmpi.w	#$C,(Tails_CPU_routine).w		;
+		blo.s	loc_1384A				;
+
+loc_1383A:
 		move.w	(Ctrl_2).w,(Ctrl_2_logical).w
 
 loc_13840:
@@ -29645,6 +29653,7 @@ locret_1459C:
 
 
 sub_1459E:
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
@@ -29894,9 +29903,31 @@ loc_1485E:
 ; ---------------------------------------------------------------------------
 
 loc_14860:
+		tst.w	(Tails_CPU_idle_timer).w		; Liliam: QOL - Tails assist
+		bne.s	.noAutoFlight				;
+		cmpa.w	#Player_1,a0				;
+		beq.s	.noAutoFlight				;
+		tst.b	(Flying_carrying_Sonic_flag).w		;
+		beq.s	.noAutoFlight				;
+		cmpi.w	#$C,(Tails_CPU_routine).w		;
+		bhs.s	.noAutoFlight				;
+
+	.autoFlight:
+		btst	#button_down,(Ctrl_2_held_logical).w	;
+		bne.s	loc_1488C				;
+		btst	#button_up,(Ctrl_2_held_logical).w	;
+		bne.s	loc_1486A				;
+		cmpi.w	#$120,y_vel(a0)				;
+		blt.s	loc_1488C				;
+		bra.s	loc_1486A				;
+; ---------------------------------------------------------------------------
+
+	.noAutoFlight:
 		move.b	(Ctrl_2_pressed_logical).w,d0
 		andi.b	#button_ABC_mask,d0
 		beq.s	loc_1488C
+
+loc_1486A:
 		cmpi.w	#-$100,y_vel(a0)
 		blt.s	loc_1488C
 		tst.b	double_jump_property(a0)
@@ -30989,6 +31020,8 @@ loc_15146:
 loc_15156:
 		tst.w	(Player_mode).w			; Liliam: bugfix - stop Tails becoming stuck in CNZ1 intro
 		bne.s	loc_1515C			;
+		btst	#button_up,(Ctrl_1_held_logical).w	; Liliam: QOL - Tails assist
+		bne.s	loc_1515C				;
 		tst.w	(Tails_CPU_idle_timer).w
 		beq.s	locret_151A2
 
@@ -35173,10 +35206,15 @@ Knux_Test_For_Glide:
 ;		beq.w	locret_178CC					;
 
 		cmpa.w	#Player_1,a0				; Liliam: Encore mode - block jump moves for player 2
-		bne.s	loc_1785E.player2			;
+		beq.s	loc_17842				;
+		tst.w	(Tails_CPU_idle_timer).w		;
+		bne.s	loc_1786C				;
+		rts						;
+; ---------------------------------------------------------------------------
 
+loc_17842:
 		tst.b	(Super_ready_flag).w				; Liliam: HUD - barrier HUD
-		beq.s	loc_1786C					;
+		beq.s	Knux_CheckTailsAssist				;
 ;		tst.b	(Super_Sonic_Knux_flag).w			;
 ;		bne.s	loc_1786C					;
 ;		cmpi.b	#7,(Super_emerald_count).w			;
@@ -35193,12 +35231,10 @@ loc_1785E:
 ;		tst.b	(Update_HUD_timer).w				;
 		btst	#button_A,d0					;
 		bne.s	Knux_Transform
-		bra.s	loc_1786C					;
-; ---------------------------------------------------------------------------
 
-	.player2:
-		tst.w	(Tails_CPU_idle_timer).w		; Liliam: Encore mode - block jump moves for player 2
-		beq.s	locret_178CC				;
+Knux_CheckTailsAssist:
+		btst	#button_up,(Ctrl_1_held_logical).w	; Liliam: QOL - Tails assist
+		bne.s	locret_178CC				;
 
 loc_1786C:
 		andi.b	#button_ABC_mask,d0				; Liliam: HUD - barrier HUD
