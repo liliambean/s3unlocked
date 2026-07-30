@@ -167,18 +167,15 @@ PLC_Tails_:
 		dc.w PLC_Tails_Pulley-PLC_Tails_
 		dc.w PLC_Tails_BarCurrent1-PLC_Tails_
 		dc.w PLC_Tails_BarCurrent2-PLC_Tails_
+		dc.w PLC_Tails_Spring1-PLC_Tails_
+		dc.w PLC_Tails_Spring2-PLC_Tails_
 		dc.w PLC_Tails_Fly1-PLC_Tails_
 		dc.w PLC_Tails_Fly2-PLC_Tails_
 		dc.w PLC_Tails_Fly3-PLC_Tails_
 		dc.w PLC_Tails_Fly4-PLC_Tails_
 		dc.w PLC_Tails_Fly5-PLC_Tails_
 		dc.w PLC_Tails_Fly6-PLC_Tails_
-		dc.w PLC_Tails_Stand1-PLC_Tails_
-		dc.w PLC_Tails_Stand2-PLC_Tails_
-		dc.w PLC_Tails_Stand3-PLC_Tails_
-		dc.w PLC_Tails_Stand4-PLC_Tails_
-		dc.w PLC_Tails_Stand5-PLC_Tails_
-		dc.w PLC_Tails_Stand6-PLC_Tails_
+		dc.w PLC_Tails_Fly7-PLC_Tails_
 		dc.w PLC_Tails_Swim1-PLC_Tails_
 		dc.w PLC_Tails_Swim2-PLC_Tails_
 		dc.w PLC_Tails_Swim3-PLC_Tails_
@@ -189,14 +186,17 @@ PLC_Tails_:
 		dc.w PLC_Tails_Swim8-PLC_Tails_
 		dc.w PLC_Tails_Swim9-PLC_Tails_
 		dc.w PLC_Tails_SwimA-PLC_Tails_
-		dc.w PLC_Tails_Dash1-PLC_Tails_
-		dc.w PLC_Tails_Dash2-PLC_Tails_
-		dc.w PLC_Tails_DiagDash1-PLC_Tails_
-		dc.w PLC_Tails_DiagDash2-PLC_Tails_
-		dc.w PLC_Tails_WallDash1-PLC_Tails_
-		dc.w PLC_Tails_WallDash2-PLC_Tails_
-		dc.w PLC_Tails_DiagWallDash1-PLC_Tails_
-		dc.w PLC_Tails_DiagWallDash2-PLC_Tails_
+		dc.w PLC_Tails_Stand0-PLC_Tails_
+		dc.w PLC_Tails_Stand1-PLC_Tails_
+		dc.w PLC_Tails_Stand2-PLC_Tails_
+		dc.w PLC_Tails_Stand3-PLC_Tails_
+		dc.w PLC_Tails_Stand4-PLC_Tails_
+		dc.w PLC_Tails_Stand5-PLC_Tails_
+		dc.w PLC_Tails_Stand6-PLC_Tails_
+		dc.w PLC_Tails_Clear1-PLC_Tails_
+		dc.w PLC_Tails_Clear2-PLC_Tails_
+		dc.w PLC_Tails_Skid1-PLC_Tails_
+		dc.w PLC_Tails_Skid2-PLC_Tails_
 		dc.w PLC_Tails_Float1-PLC_Tails_
 		dc.w PLC_Tails_Float2-PLC_Tails_
 		dc.w PLC_Tails_Float3-PLC_Tails_
@@ -212,30 +212,31 @@ PLC_Tails_:
 		dc.w PLC_Tails_Push3-PLC_Tails_
 		dc.w PLC_Tails_Push4-PLC_Tails_
 		dc.w PLC_Tails_Death-PLC_Tails_
-		dc.w PLC_Tails_Spring1-PLC_Tails_
-		dc.w PLC_Tails_Spring2-PLC_Tails_
 		dc.w PLC_Tails_LookUp-PLC_Tails_
-		dc.w PLC_Tails_Stand0-PLC_Tails_
+		dc.w PLC_Tails_Crouch-PLC_Tails_
 		dc.w PLC_Tails_SpinDash1-PLC_Tails_
 		dc.w PLC_Tails_SpinDash2-PLC_Tails_
 		dc.w PLC_Tails_SpinDash3-PLC_Tails_
 		dc.w PLC_Tails_Spin1-PLC_Tails_
 		dc.w PLC_Tails_Spin2-PLC_Tails_
 		dc.w PLC_Tails_Spin3-PLC_Tails_
-		dc.w PLC_Tails_Skid1-PLC_Tails_
-		dc.w PLC_Tails_Skid2-PLC_Tails_
-		dc.w PLC_Tails_Clear1-PLC_Tails_
-		dc.w PLC_Tails_Clear2-PLC_Tails_
-		dc.w PLC_Tails_Balance1-PLC_Tails_
-		dc.w PLC_Tails_Balance2-PLC_Tails_
+		dc.w PLC_Tails_Dash1-PLC_Tails_
+		dc.w PLC_Tails_Dash2-PLC_Tails_
+		dc.w PLC_Tails_DiagDash1-PLC_Tails_
+		dc.w PLC_Tails_DiagDash2-PLC_Tails_
+		dc.w PLC_Tails_WallDash1-PLC_Tails_
+		dc.w PLC_Tails_WallDash2-PLC_Tails_
+		dc.w PLC_Tails_DiagWallDash1-PLC_Tails_
+		dc.w PLC_Tails_DiagWallDash2-PLC_Tails_
 		dc.w PLC_Tails_Slide1-PLC_Tails_
 		dc.w PLC_Tails_Slide2-PLC_Tails_
 		dc.w PLC_Tails_Fall1-PLC_Tails_
 		dc.w PLC_Tails_Fall2-PLC_Tails_
-		dc.w PLC_Tails_Crouch-PLC_Tails_
+		dc.w PLC_Tails_Balance1-PLC_Tails_
 		dc.w PLC_Tails_Transform1-PLC_Tails_
 		dc.w PLC_Tails_Transform2-PLC_Tails_
 		dc.w PLC_Tails_Transform3-PLC_Tails_
+		dc.w PLC_Tails_Balance2-PLC_Tails_
 PLC_Tails_Blank:
 		dc.w 0
 PLC_Tails_Walk1:
@@ -980,95 +981,205 @@ PLC_Tails_BarCurrent2:
 		dc.w $28B6
 		dc.w $78B9
 		dc.w $58C1
+PLC_Tails_Spring1:
+		dc.w 2
+		dc.w $38C7
+		dc.w $B8CB
+PLC_Tails_Spring2:
+		dc.w 2
+		dc.w $38C7
+		dc.w $B8D7
 PLC_Tails_Fly1:
 		dc.w 2
-		dc.w $28C7
-		dc.w $B8CA
+		dc.w $28E3
+		dc.w $B8E6
 PLC_Tails_Fly2:
 		dc.w 2
-		dc.w $28D6
-		dc.w $B8D9
+		dc.w $28E3
+		dc.w $B8F2
 PLC_Tails_Fly3:
 		dc.w 2
-		dc.w $28D6
-		dc.w $B8E5
+		dc.w $28FE
+		dc.w $B901
 PLC_Tails_Fly4:
 		dc.w 2
-		dc.w $28C7
-		dc.w $B8F1
+		dc.w $290D
+		dc.w $B910
 PLC_Tails_Fly5:
 		dc.w 2
-		dc.w $28FD
-		dc.w $B900
+		dc.w $291C
+		dc.w $B91F
 PLC_Tails_Fly6:
 		dc.w 2
-		dc.w $290C
-		dc.w $B90F
-PLC_Tails_Stand1:
-		dc.w 1
-		dc.w $B91B
-PLC_Tails_Stand2:
-		dc.w 1
-		dc.w $B927
-PLC_Tails_Stand3:
-		dc.w 1
-		dc.w $B933
-PLC_Tails_Stand4:
-		dc.w 1
-		dc.w $B93F
-PLC_Tails_Stand5:
-		dc.w 1
-		dc.w $B94B
-PLC_Tails_Stand6:
-		dc.w 1
-		dc.w $B957
+		dc.w $290D
+		dc.w $B92B
+PLC_Tails_Fly7:
+		dc.w 2
+		dc.w $291C
+		dc.w $B937
 PLC_Tails_Swim1:
 		dc.w 3
-		dc.w $1963
-		dc.w $B965
-		dc.w $2971
+		dc.w $1943
+		dc.w $B945
+		dc.w $2951
 PLC_Tails_Swim2:
 		dc.w 3
-		dc.w $B974
-		dc.w $1980
-		dc.w $2982
+		dc.w $B954
+		dc.w $1960
+		dc.w $2962
 PLC_Tails_Swim3:
 		dc.w 2
-		dc.w $F985
-		dc.w $0995
+		dc.w $F965
+		dc.w $0975
 PLC_Tails_Swim4:
 		dc.w 4
-		dc.w $7996
-		dc.w $099E
-		dc.w $799F
-		dc.w $09A7
+		dc.w $7976
+		dc.w $097E
+		dc.w $797F
+		dc.w $0987
 PLC_Tails_Swim5:
 		dc.w 2
-		dc.w $F9A8
-		dc.w $19B8
+		dc.w $F988
+		dc.w $1998
 PLC_Tails_Swim6:
 		dc.w 3
-		dc.w $B9BA
-		dc.w $29C6
-		dc.w $19C9
+		dc.w $B99A
+		dc.w $29A6
+		dc.w $19A9
 PLC_Tails_Swim7:
 		dc.w 3
-		dc.w $19CB
-		dc.w $B9CD
-		dc.w $09C8
+		dc.w $19AB
+		dc.w $B9AD
+		dc.w $09A8
 PLC_Tails_Swim8:
 		dc.w 3
-		dc.w $19D9
-		dc.w $B9DB
-		dc.w $09C8
+		dc.w $19B9
+		dc.w $B9BB
+		dc.w $09A8
 PLC_Tails_Swim9:
 		dc.w 2
-		dc.w $19E7
-		dc.w $B9E9
+		dc.w $19C7
+		dc.w $B9C9
 PLC_Tails_SwimA:
 		dc.w 2
-		dc.w $19F5
-		dc.w $B9F7
+		dc.w $19D5
+		dc.w $B9D7
+PLC_Tails_Stand0:
+		dc.w 1
+		dc.w $B9E3
+PLC_Tails_Stand1:
+		dc.w 1
+		dc.w $B9EF
+PLC_Tails_Stand2:
+		dc.w 1
+		dc.w $B9FB
+PLC_Tails_Stand3:
+		dc.w 1
+		dc.w $BA07
+PLC_Tails_Stand4:
+		dc.w 1
+		dc.w $BA13
+PLC_Tails_Stand5:
+		dc.w 1
+		dc.w $BA1F
+PLC_Tails_Stand6:
+		dc.w 1
+		dc.w $BA2B
+PLC_Tails_Clear1:
+		dc.w 1
+		dc.w $BA37
+PLC_Tails_Clear2:
+		dc.w 4
+		dc.w $0A43
+		dc.w $7A44
+		dc.w $7A4C
+		dc.w $0A54
+PLC_Tails_Skid1:
+		dc.w 3
+		dc.w $5A55
+		dc.w $3A5B
+		dc.w $2A5F
+PLC_Tails_Skid2:
+		dc.w 3
+		dc.w $5A62
+		dc.w $3A68
+		dc.w $2A6C
+PLC_Tails_Float1:
+PLC_Tails_Float3:
+		dc.w 2
+		dc.w $8A6F
+		dc.w $3A78
+PLC_Tails_Float2:
+		dc.w 1
+		dc.w $BA7C
+PLC_Tails_Float4:
+PLC_Tails_Float8:
+		dc.w 3
+		dc.w $0A88
+		dc.w $7A89
+		dc.w $3A91
+PLC_Tails_Float5:
+PLC_Tails_Float7:
+		dc.w 3
+		dc.w $1A95
+		dc.w $7A97
+		dc.w $1A9F
+PLC_Tails_Float6:
+		dc.w 2
+		dc.w $5AA1
+		dc.w $3AA7
+PLC_Tails_Crane:
+		dc.w 2
+		dc.w $3AAB
+		dc.w $8AAF
+PLC_Tails_Bubble:
+		dc.w 3
+		dc.w $2AB8
+		dc.w $7ABB
+		dc.w $2AC3
+PLC_Tails_Push1:
+		dc.w 2
+		dc.w $8AC6
+		dc.w $3ACF
+PLC_Tails_Push2:
+		dc.w 1
+		dc.w $BAD3
+PLC_Tails_Push3:
+		dc.w 1
+		dc.w $BADF
+PLC_Tails_Push4:
+		dc.w 1
+		dc.w $BAEB
+PLC_Tails_Death:
+		dc.w 1
+		dc.w $FAF7
+PLC_Tails_LookUp:
+		dc.w 1
+		dc.w $BB07
+PLC_Tails_Crouch:
+		dc.w 1
+		dc.w $8B13
+PLC_Tails_SpinDash1:
+		dc.w 2
+		dc.w $3B1C
+		dc.w $5B20
+PLC_Tails_SpinDash2:
+		dc.w 2
+		dc.w $7B26
+		dc.w $2B2E
+PLC_Tails_SpinDash3:
+		dc.w 2
+		dc.w $3B31
+		dc.w $5B35
+PLC_Tails_Spin1:
+		dc.w 1
+		dc.w $FB3B
+PLC_Tails_Spin2:
+		dc.w 1
+		dc.w $FB4B
+PLC_Tails_Spin3:
+		dc.w 1
+		dc.w $FB5B
 PLC_Tails_Dash1:
 		dc.w 4
 		dc.w $52D8
@@ -1117,140 +1228,34 @@ PLC_Tails_DiagWallDash2:
 		dc.w $1334
 		dc.w $1336
 		dc.w $80EC
-PLC_Tails_Float1:
-PLC_Tails_Float3:
-		dc.w 2
-		dc.w $8A03
-		dc.w $3A0C
-PLC_Tails_Float2:
-		dc.w 1
-		dc.w $BA10
-PLC_Tails_Float4:
-PLC_Tails_Float8:
-		dc.w 3
-		dc.w $0A1C
-		dc.w $7A1D
-		dc.w $3A25
-PLC_Tails_Float5:
-PLC_Tails_Float7:
-		dc.w 3
-		dc.w $1A29
-		dc.w $7A2B
-		dc.w $1A33
-PLC_Tails_Float6:
-		dc.w 2
-		dc.w $5A35
-		dc.w $3A3B
-PLC_Tails_Crane:
-		dc.w 2
-		dc.w $3A3F
-		dc.w $8A43
-PLC_Tails_Bubble:
-		dc.w 3
-		dc.w $2A4C
-		dc.w $7A4F
-		dc.w $2A57
-PLC_Tails_Push1:
-		dc.w 2
-		dc.w $8A5A
-		dc.w $3A63
-PLC_Tails_Push2:
-		dc.w 1
-		dc.w $BA67
-PLC_Tails_Push3:
-		dc.w 1
-		dc.w $BA73
-PLC_Tails_Push4:
-		dc.w 1
-		dc.w $BA7F
-PLC_Tails_Death:
-		dc.w 1
-		dc.w $FA8B
-PLC_Tails_Spring1:
-		dc.w 2
-		dc.w $3A9B
-		dc.w $BA9F
-PLC_Tails_Spring2:
-		dc.w 2
-		dc.w $3A9B
-		dc.w $BAAB
-PLC_Tails_LookUp:
-		dc.w 1
-		dc.w $BAB7
-PLC_Tails_Stand0:
-		dc.w 1
-		dc.w $BAC3
-PLC_Tails_SpinDash1:
-		dc.w 2
-		dc.w $3ACF
-		dc.w $5AD3
-PLC_Tails_SpinDash2:
-		dc.w 2
-		dc.w $7AD9
-		dc.w $2AE1
-PLC_Tails_SpinDash3:
-		dc.w 2
-		dc.w $3AE4
-		dc.w $5AE8
-PLC_Tails_Spin1:
-		dc.w 1
-		dc.w $FAEE
-PLC_Tails_Spin2:
-		dc.w 1
-		dc.w $FAFE
-PLC_Tails_Spin3:
-		dc.w 1
-		dc.w $FB0E
-PLC_Tails_Skid1:
-		dc.w 3
-		dc.w $5B1E
-		dc.w $3B24
-		dc.w $2B28
-PLC_Tails_Skid2:
-		dc.w 3
-		dc.w $5B2B
-		dc.w $3B31
-		dc.w $2B35
-PLC_Tails_Clear1:
-		dc.w 1
-		dc.w $BB38
-PLC_Tails_Clear2:
-		dc.w 4
-		dc.w $0B44
-		dc.w $7B45
-		dc.w $7B4D
-		dc.w $0B55
-PLC_Tails_Balance1:
-		dc.w 3
-		dc.w $2B56
-		dc.w $7B59
-		dc.w $1B61
-PLC_Tails_Balance2:
-		dc.w 3
-		dc.w $5B63
-		dc.w $3B69
-		dc.w $2B6D
 PLC_Tails_Fall1:
 PLC_Tails_Slide1:
 		dc.w 1
-		dc.w $FB70
+		dc.w $FB6B
 PLC_Tails_Fall2:
 PLC_Tails_Slide2:
 		dc.w 1
-		dc.w $FB80
-PLC_Tails_Crouch:
-		dc.w 1
-		dc.w $8B90
+		dc.w $FB7B
+PLC_Tails_Balance1:
+		dc.w 3
+		dc.w $2B8B
+		dc.w $7B8E
+		dc.w $1B96
 PLC_Tails_Transform1:
 		dc.w 1
-		dc.w $8B99
+		dc.w $8B98
 PLC_Tails_Transform2:
 		dc.w 3
-		dc.w $2BA2
-		dc.w $7BA5
-		dc.w $5BAD
+		dc.w $2BA1
+		dc.w $7BA4
+		dc.w $5BAC
 PLC_Tails_Transform3:
 		dc.w 3
-		dc.w $2BB3
-		dc.w $7BB6
-		dc.w $5BBE
+		dc.w $2BB2
+		dc.w $7BB5
+		dc.w $5BBD
+PLC_Tails_Balance2:
+		dc.w 3
+		dc.w $5BC3
+		dc.w $3BC9
+		dc.w $2BCD

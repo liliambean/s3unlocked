@@ -29944,7 +29944,12 @@ loc_148C4:
 loc_148CC:
 		tst.b	double_jump_property(a0)
 		bne.s	loc_148F4
+		moveq	#$1F,d0					; Liliam: simplify player anim selection
+		tst.b	(Flying_carrying_Sonic_flag).w		;
+		beq.s	loc_148D4				;
 		moveq	#$24,d0
+
+loc_148D4:
 		move.b	d0,anim(a0)
 		tst.b	render_flags(a0)
 		bpl.s	locret_148F2
@@ -29981,7 +29986,7 @@ loc_14914:
 		moveq	#$26,d0
 
 loc_1491E:
-		tst.b	$25(a0)					; Liliam: simplify player anim selection
+		tst.b	double_jump_property(a0)		; Liliam: simplify player anim selection
 		bne.s	.notTired				;
 		moveq	#$1D,d0					;
 
@@ -32531,8 +32536,8 @@ Obj_Tails_Tail_AniSelection:
 		dc.b 0		; Ani_PlayerWalk	->
 		dc.b 0		; Ani_PlayerRun		->
 		dc.b 3		; Ani_TailsSpin		-> AniTails_Tail_Spin
-		dc.b 0		; Ani_TailsDash		->
-;		dc.b 3						; Liliam: simplify player anim selection
+		dc.b 0		; Ani_TailsDash			; Liliam: simplify player anim selection
+;		dc.b 3						;
 		dc.b 9		; Ani_PlayerPush	-> AniTails_Tail_Push
 		dc.b 1		; Ani_TailsStand	-> AniTails_Tail_Stand
 		dc.b 9		; Ani_TailsBalance		; Liliam: simplify player anim selection
@@ -32561,19 +32566,20 @@ Obj_Tails_Tail_AniSelection:
 		dc.b 0		; Ani_PlayerBlank	->
 		dc.b 0		; Ani_TailsSwimTired	->
 		dc.b 0		; Ani_TailsSwimCarry	->
-		dc.b $C		; Ani_TailsFlyBoost	-> AniTails_Tail_Fly
-;		dc.b 0						; Liliam: simplify player anim selection
+		dc.b $D		; Ani_TailsFlyTired		; Liliam: simplify player anim selection
+;		dc.b 0						;
 		dc.b $B		; Ani_TailsFlyFall	-> AniTails_Tail_FlyFall
 		dc.b $C		; Ani_TailsFly		-> AniTails_Tail_Fly
 		dc.b $B		; Ani_TailsFlyCarryFall	-> AniTails_Tail_FlyFall
 		dc.b $C		; Ani_TailsFlyCarry	-> AniTails_Tail_Fly
-		dc.b $D		; Ani_TailsFlyTired	-> AniTails_Tail_FlyTired
-;		dc.b $B					; Liliam: add custom animation
+		dc.b $D		; Ani_TailsFlyTiredCarry	; Liliam: add custom animation
+;		dc.b $B						;
 		dc.b 0		; Ani_TailsSwimFall	->
 		dc.b 0		; Ani_TailsSwim		->
-		even
+
 		; Liliam: simplify player anim selection
-;		dc.b    0,   0,   0,   0,   0,   0,   0,   0,   0,   0
+;		dc.b    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0
+		even
 AniTails_Tail:
 		; Liliam: add custom animation
 		include "General/Sprites/Tails/Anim - Tails Tail.asm"
@@ -217161,8 +217167,8 @@ ArtUnc_EncoreRespawn_Ray:					; Liliam: Encore mode - respawn partner character
 		binclude "General/Sprites/Encore Respawn/Ray.bin"
 ArtUnc_EncoreRespawn_MetalSonic:				; Liliam: Encore mode - respawn partner character
 		binclude "General/Sprites/Encore Respawn/Metal Sonic.bin"
-ArtUnc_CombineRing:								; Liliam: Encore mode - combine ring
-		binclude "General/Sprites/Ring/Combine Ring.bin"
+ArtUnc_BarrierHUD:							; Liliam: HUD - barrier HUD
+		binclude "General/Sprites/HUD Icon/Barrier HUD Icons.bin"
 ArtUnc_Ring:									; Liliam: QOL - extend ring animation
 		binclude "General/Sprites/Ring/Ring.bin"
 ArtUnc_PhotoPieceDigits:					; Liliam: museum - photo piece object
@@ -217265,8 +217271,8 @@ ArtUnc_Sonic_Extra:
 		binclude "General/Sprites/Sonic/Art/Sonic Extra.bin"
 ;ArtUnc_Tails_Extra:
 		; Liliam: simplify player anim selection
-ArtUnc_BarrierHUD:							; Liliam: HUD - barrier HUD
-		binclude "General/Sprites/HUD Icon/Barrier HUD Icons.bin"
+ArtUnc_CombineRing:								; Liliam: Encore mode - combine ring
+		binclude "General/Sprites/Ring/Combine Ring.bin"
 Map_Sonic:
 		; Liliam: simplify player anim selection
 		include "General/Sprites/Sonic/Map - Sonic.asm"

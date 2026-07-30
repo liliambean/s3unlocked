@@ -167,18 +167,15 @@ Map_Tails_:
 		dc.w Map_Tails_Pulley-Map_Tails_
 		dc.w Map_Tails_BarCurrent1-Map_Tails_
 		dc.w Map_Tails_BarCurrent2-Map_Tails_
+		dc.w Map_Tails_Spring1-Map_Tails_
+		dc.w Map_Tails_Spring2-Map_Tails_
 		dc.w Map_Tails_Fly1-Map_Tails_
 		dc.w Map_Tails_Fly2-Map_Tails_
 		dc.w Map_Tails_Fly3-Map_Tails_
 		dc.w Map_Tails_Fly4-Map_Tails_
 		dc.w Map_Tails_Fly5-Map_Tails_
 		dc.w Map_Tails_Fly6-Map_Tails_
-		dc.w Map_Tails_Stand1-Map_Tails_
-		dc.w Map_Tails_Stand2-Map_Tails_
-		dc.w Map_Tails_Stand3-Map_Tails_
-		dc.w Map_Tails_Stand4-Map_Tails_
-		dc.w Map_Tails_Stand5-Map_Tails_
-		dc.w Map_Tails_Stand6-Map_Tails_
+		dc.w Map_Tails_Fly7-Map_Tails_
 		dc.w Map_Tails_Swim1-Map_Tails_
 		dc.w Map_Tails_Swim2-Map_Tails_
 		dc.w Map_Tails_Swim3-Map_Tails_
@@ -189,14 +186,17 @@ Map_Tails_:
 		dc.w Map_Tails_Swim8-Map_Tails_
 		dc.w Map_Tails_Swim9-Map_Tails_
 		dc.w Map_Tails_SwimA-Map_Tails_
-		dc.w Map_Tails_Dash1-Map_Tails_
-		dc.w Map_Tails_Dash2-Map_Tails_
-		dc.w Map_Tails_DiagDash1-Map_Tails_
-		dc.w Map_Tails_DiagDash2-Map_Tails_
-		dc.w Map_Tails_WallDash1-Map_Tails_
-		dc.w Map_Tails_WallDash2-Map_Tails_
-		dc.w Map_Tails_DiagWallDash1-Map_Tails_
-		dc.w Map_Tails_DiagWallDash2-Map_Tails_
+		dc.w Map_Tails_Stand0-Map_Tails_
+		dc.w Map_Tails_Stand1-Map_Tails_
+		dc.w Map_Tails_Stand2-Map_Tails_
+		dc.w Map_Tails_Stand3-Map_Tails_
+		dc.w Map_Tails_Stand4-Map_Tails_
+		dc.w Map_Tails_Stand5-Map_Tails_
+		dc.w Map_Tails_Stand6-Map_Tails_
+		dc.w Map_Tails_Clear1-Map_Tails_
+		dc.w Map_Tails_Clear2-Map_Tails_
+		dc.w Map_Tails_Skid1-Map_Tails_
+		dc.w Map_Tails_Skid2-Map_Tails_
 		dc.w Map_Tails_Float1-Map_Tails_
 		dc.w Map_Tails_Float2-Map_Tails_
 		dc.w Map_Tails_Float3-Map_Tails_
@@ -212,30 +212,31 @@ Map_Tails_:
 		dc.w Map_Tails_Push3-Map_Tails_
 		dc.w Map_Tails_Push4-Map_Tails_
 		dc.w Map_Tails_Death-Map_Tails_
-		dc.w Map_Tails_Spring1-Map_Tails_
-		dc.w Map_Tails_Spring2-Map_Tails_
 		dc.w Map_Tails_LookUp-Map_Tails_
-		dc.w Map_Tails_Stand0-Map_Tails_
+		dc.w Map_Tails_Crouch-Map_Tails_
 		dc.w Map_Tails_SpinDash1-Map_Tails_
 		dc.w Map_Tails_SpinDash2-Map_Tails_
 		dc.w Map_Tails_SpinDash3-Map_Tails_
 		dc.w Map_Tails_Spin1-Map_Tails_
 		dc.w Map_Tails_Spin2-Map_Tails_
 		dc.w Map_Tails_Spin3-Map_Tails_
-		dc.w Map_Tails_Skid1-Map_Tails_
-		dc.w Map_Tails_Skid2-Map_Tails_
-		dc.w Map_Tails_Clear1-Map_Tails_
-		dc.w Map_Tails_Clear2-Map_Tails_
-		dc.w Map_Tails_Balance1-Map_Tails_
-		dc.w Map_Tails_Balance2-Map_Tails_
+		dc.w Map_Tails_Dash1-Map_Tails_
+		dc.w Map_Tails_Dash2-Map_Tails_
+		dc.w Map_Tails_DiagDash1-Map_Tails_
+		dc.w Map_Tails_DiagDash2-Map_Tails_
+		dc.w Map_Tails_WallDash1-Map_Tails_
+		dc.w Map_Tails_WallDash2-Map_Tails_
+		dc.w Map_Tails_DiagWallDash1-Map_Tails_
+		dc.w Map_Tails_DiagWallDash2-Map_Tails_
 		dc.w Map_Tails_Slide1-Map_Tails_
 		dc.w Map_Tails_Slide2-Map_Tails_
 		dc.w Map_Tails_Fall1-Map_Tails_
 		dc.w Map_Tails_Fall2-Map_Tails_
-		dc.w Map_Tails_Crouch-Map_Tails_
+		dc.w Map_Tails_Balance1-Map_Tails_
 		dc.w Map_Tails_Transform1-Map_Tails_
 		dc.w Map_Tails_Transform2-Map_Tails_
 		dc.w Map_Tails_Transform3-Map_Tails_
+		dc.w Map_Tails_Balance2-Map_Tails_
 Map_Tails_Blank:
 		dc.w 0
 Map_Tails_Walk1:
@@ -1003,12 +1004,18 @@ Map_Tails_BarCurrent2:
 		dc.b   $D,   8,   0,   0, $FF, $F2
 		dc.b  $FD,  $D,   0,   3, $FF, $F2
 		dc.b  $ED,   9,   0,  $B, $FF, $F2
+Map_Tails_Spring1:
+Map_Tails_Spring2:
+		dc.w 2
+		dc.b  $E9,   5,   0,   0, $FF, $F9
+		dc.b  $F9,  $B,   0,   4, $FF, $F1
 Map_Tails_Fly1:
 Map_Tails_Fly2:
 Map_Tails_Fly3:
 Map_Tails_Fly4:
 Map_Tails_Fly5:
 Map_Tails_Fly6:
+Map_Tails_Fly7:
 		dc.w 2
 		dc.b  $ED,   8,   0,   0, $FF, $F3
 		dc.b  $F5,  $E,   0,   3, $FF, $EB
@@ -1056,42 +1063,18 @@ Map_Tails_SwimA:
 		dc.w 2
 		dc.b  $E6,   4,   0,   0, $FF, $F4
 		dc.b  $EE,  $B,   0,   2, $FF, $F4
-Map_Tails_Dash2:
+Map_Tails_Clear2:
 		dc.w 4
-		dc.b  $F0,   9,   0,   0, $FF, $F8
-		dc.b    0,  $C,   0,   6, $FF, $F0
-		dc.b    8,   4,   0,  $A, $FF, $F0
-		dc.b  $F0,   7, $18,  $C, $FF, $E8
-Map_Tails_DiagDash1:
-		dc.w 4
-		dc.b  $EC,   4,   0,   0, $FF, $F8
-		dc.b  $F4,   9,   0,   2, $FF, $F0
-		dc.b    4,   5,   0,   8, $FF, $F8
-		dc.b  $FD,  $A,   0,  $C, $FF, $E9
-Map_Tails_DiagDash2:
-		dc.w 4
-		dc.b  $ED,   4,   0,   0, $FF, $F8
-		dc.b  $F5,   9,   0,   2, $FF, $F0
-		dc.b    5,   5,   0,   8, $FF, $F8
-		dc.b  $FE,  $A, $18,  $C, $FF, $EA
-Map_Tails_WallDash2:
-		dc.w 4
+		dc.b  $E8,   0,   0,   0, $FF, $FE
+		dc.b  $F0,  $D,   0,   1, $FF, $EE
+		dc.b    0,  $D,   0,   9, $FF, $E6
+		dc.b    8,   0,   0, $11,   0,   6
+Map_Tails_Skid1:
+Map_Tails_Skid2:
+		dc.w 3
 		dc.b  $F0,   9,   0,   0, $FF, $F0
 		dc.b    0,  $C,   0,   6, $FF, $F0
-		dc.b    8,   4,   0,  $A,   0,   0
-		dc.b    8,  $D, $18,  $C, $FF, $F0
-Map_Tails_DiagWallDash1:
-		dc.w 4
-		dc.b  $F8,  $D,   0,   0, $FF, $EC
-		dc.b  $F8,   1,   0,   8,   0,  $C
-		dc.b    8,   4,   0,  $A, $FF, $F4
-		dc.b  $FF,  $A,   0,  $C, $FF, $FD
-Map_Tails_DiagWallDash2:
-		dc.w 4
-		dc.b  $F8,  $D,   0,   0, $FF, $ED
-		dc.b  $F8,   1,   0,   8,   0,  $D
-		dc.b    8,   4,   0,  $A, $FF, $F5
-		dc.b  $FE,  $A, $18,  $C, $FF, $FE
+		dc.b    8,   8,   0,  $A, $FF, $F8
 Map_Tails_Float1:
 		dc.w 2
 		dc.b  $F0,  $A,   0,   0, $FF, $FC
@@ -1148,11 +1131,9 @@ Map_Tails_Push4:
 Map_Tails_Death:
 		dc.w 1
 		dc.b  $F0,  $F,   0,   0, $FF, $F1
-Map_Tails_Spring1:
-Map_Tails_Spring2:
-		dc.w 2
-		dc.b  $E9,   5,   0,   0, $FF, $F9
-		dc.b  $F9,  $B,   0,   4, $FF, $F1
+Map_Tails_Crouch:
+		dc.w 1
+		dc.b  $F8,  $A,   0,   0, $FF, $FA
 Map_Tails_SpinDash1:
 Map_Tails_SpinDash3:
 		dc.w 2
@@ -1162,35 +1143,51 @@ Map_Tails_SpinDash2:
 		dc.w 2
 		dc.b  $F8,  $D,   0,   0, $FF, $F8
 		dc.b    8,   8,   0,   8, $FF, $F8
-Map_Tails_Skid1:
-Map_Tails_Skid2:
-		dc.w 3
+Map_Tails_Dash2:
+		dc.w 4
+		dc.b  $F0,   9,   0,   0, $FF, $F8
+		dc.b    0,  $C,   0,   6, $FF, $F0
+		dc.b    8,   4,   0,  $A, $FF, $F0
+		dc.b  $F0,   7, $18,  $C, $FF, $E8
+Map_Tails_DiagDash1:
+		dc.w 4
+		dc.b  $EC,   4,   0,   0, $FF, $F8
+		dc.b  $F4,   9,   0,   2, $FF, $F0
+		dc.b    4,   5,   0,   8, $FF, $F8
+		dc.b  $FD,  $A,   0,  $C, $FF, $E9
+Map_Tails_DiagDash2:
+		dc.w 4
+		dc.b  $ED,   4,   0,   0, $FF, $F8
+		dc.b  $F5,   9,   0,   2, $FF, $F0
+		dc.b    5,   5,   0,   8, $FF, $F8
+		dc.b  $FE,  $A, $18,  $C, $FF, $EA
+Map_Tails_WallDash2:
+		dc.w 4
 		dc.b  $F0,   9,   0,   0, $FF, $F0
 		dc.b    0,  $C,   0,   6, $FF, $F0
-		dc.b    8,   8,   0,  $A, $FF, $F8
-Map_Tails_Clear2:
+		dc.b    8,   4,   0,  $A,   0,   0
+		dc.b    8,  $D, $18,  $C, $FF, $F0
+Map_Tails_DiagWallDash1:
 		dc.w 4
-		dc.b  $E8,   0,   0,   0, $FF, $FE
-		dc.b  $F0,  $D,   0,   1, $FF, $EE
-		dc.b    0,  $D,   0,   9, $FF, $E6
-		dc.b    8,   0,   0, $11,   0,   6
+		dc.b  $F8,  $D,   0,   0, $FF, $EC
+		dc.b  $F8,   1,   0,   8,   0,  $C
+		dc.b    8,   4,   0,  $A, $FF, $F4
+		dc.b  $FF,  $A,   0,  $C, $FF, $FD
+Map_Tails_DiagWallDash2:
+		dc.w 4
+		dc.b  $F8,  $D,   0,   0, $FF, $ED
+		dc.b  $F8,   1,   0,   8,   0,  $D
+		dc.b    8,   4,   0,  $A, $FF, $F5
+		dc.b  $FE,  $A, $18,  $C, $FF, $FE
+Map_Tails_Slide1:
+Map_Tails_Slide2:
+		dc.w 1
+		dc.b  $F8,  $F,   0,   0, $FF, $F0
 Map_Tails_Balance1:
 		dc.w 3
 		dc.b  $F0,   8,   0,   0, $FF, $F2
 		dc.b  $F8,  $D,   0,   3, $FF, $EA
 		dc.b    8,   4,   0,  $B, $FF, $F2
-Map_Tails_Balance2:
-		dc.w 3
-		dc.b  $F0,   9,   0,   0, $FF, $F1
-		dc.b    0,  $C,   0,   6, $FF, $E9
-		dc.b    8,   8,   0,  $A, $FF, $E9
-Map_Tails_Slide1:
-Map_Tails_Slide2:
-		dc.w 1
-		dc.b  $F8,  $F,   0,   0, $FF, $F0
-Map_Tails_Crouch:
-		dc.w 1
-		dc.b  $F8,  $A,   0,   0, $FF, $FA
 Map_Tails_Transform1:
 		dc.w 1
 		dc.b  $F4,  $A,   0,   0, $FF, $F4
@@ -1200,3 +1197,8 @@ Map_Tails_Transform3:
 		dc.b  $EC,   8,   0,   0, $FF, $F0
 		dc.b  $F4,  $D,   0,   3, $FF, $F0
 		dc.b    4,   9,   0,  $B, $FF, $F0
+Map_Tails_Balance2:
+		dc.w 3
+		dc.b  $F0,   9,   0,   0, $FF, $F1
+		dc.b    0,  $C,   0,   6, $FF, $E9
+		dc.b    8,   8,   0,  $A, $FF, $E9

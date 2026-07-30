@@ -91,12 +91,12 @@ AniTails:
 		dc.w Ani_PlayerBlank-AniTails		; 1C
 		dc.w Ani_TailsSwimTired-AniTails	; 1D
 		dc.w Ani_TailsSwimCarry-AniTails	; 1E
-		dc.w Ani_TailsFlyBoost-AniTails		; 1F
+		dc.w Ani_TailsFlyTired-AniTails		; 1F
 		dc.w Ani_TailsFlyFall-AniTails		; 20
 		dc.w Ani_TailsFly-AniTails		; 21
 		dc.w Ani_TailsFlyCarryFall-AniTails	; 22
 		dc.w Ani_TailsFlyCarry-AniTails		; 23
-		dc.w Ani_TailsFlyTired-AniTails		; 24
+		dc.w Ani_TailsFlyTiredCarry-AniTails	; 24
 		dc.w Ani_TailsSwimFall-AniTails		; 25
 		dc.w Ani_TailsSwim-AniTails		; 26
 AniKnuckles:
@@ -225,9 +225,9 @@ AniRay:
 Ani_PlayerWalk:		dc.b  $FF,   1,   2,   3,   4,   5,   6,   7,   8, $FF
 Ani_PlayerRun:		dc.b  $FF, $21, $22, $23, $24, $FF, $FF, $FF, $FF, $FF
 Ani_PlayerSpin:		dc.b  $FE, $E0, $E1, $E0, $E2, $E0, $E3, $E0, $E4, $FF
-Ani_TailsSpin:		dc.b    1, $DC, $DD, $DE, $FF
+Ani_TailsSpin:		dc.b    1, $DA, $DB, $DC, $FF
 Ani_SonicDash:		dc.b  $FF, $B6, $B7, $B8, $B9, $FF, $FF, $FF, $FF, $FF
-Ani_TailsDash:		dc.b  $FF, $BE, $BF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+Ani_TailsDash:		dc.b  $FF, $DD, $DE, $FF, $FF, $FF, $FF, $FF, $FF, $FF
 Ani_AmyDash:		dc.b    3, $BE, $BF, $C0, $C1, $C2, $C3, $C4, $C5, $FF
 Ani_MightyUncurl:	dc.b    4, $F3, $F4, $FE,   1
 Ani_PlayerPush:		dc.b  $FD, $D0, $D1, $D2, $D3, $FF, $FF, $FF, $FF, $FF
@@ -240,9 +240,9 @@ Ani_SonicStand:		dc.b    5, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $4
 Ani_SuperSonicStand:	dc.b    7, $AE, $AF, $B0, $AF, $AE, $AF, $B0, $AF, $AE, $AF, $B0, $AF, $AE, $AF, $B0, $AF, $AE, $AF, $B0
 			dc.b  $AF, $AE, $AF, $B0, $AF, $AE, $AF, $B0, $AF, $AE, $AF, $B0, $AF, $AE, $AF, $B0, $AF, $AE, $B1, $B6
 			dc.b  $B7, $B8, $B9, $FE,   4
-Ani_TailsStand:		dc.b    7, $D8, $D8, $D8, $D8, $D8, $D8, $D8, $D8, $D8, $D8, $AE, $AF, $D8, $D8, $D8, $D8, $D8, $D8, $D8
-			dc.b  $D8, $AE, $AF, $D8, $D8, $D8, $D8, $D8, $D8, $D8, $D8, $D8, $B0, $B0, $B0, $B0, $B0, $B0, $B0, $B0
-			dc.b  $B0, $B0, $B0, $B0, $B0, $B0, $B0, $B0, $B1, $B2, $B3, $B2, $B3, $B2, $B3, $B2, $B3, $B2, $B3, $B1
+Ani_TailsStand:		dc.b    7, $BB, $BB, $BB, $BB, $BB, $BB, $BB, $BB, $BB, $BB, $BC, $BD, $BB, $BB, $BB, $BB, $BB, $BB, $BB
+			dc.b  $BB, $BC, $BD, $BB, $BB, $BB, $BB, $BB, $BB, $BB, $BB, $BB, $BE, $BE, $BE, $BE, $BE, $BE, $BE, $BE
+			dc.b  $BE, $BE, $BE, $BE, $BE, $BE, $BE, $BE, $BF, $C0, $C1, $C0, $C1, $C0, $C1, $C0, $C1, $C0, $C1, $BF
 			dc.b  $FE, $1C
 Ani_KnucklesStand:	dc.b    5, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48
 			dc.b  $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48
@@ -278,7 +278,7 @@ Ani_RayStand:		dc.b    5, $56, $56, $56, $A9, $A9, $AA, $AA, $AA, $AB, $AB, $56,
 			dc.b  $AD, $AD, $B1, $B2, $B2, $B2, $B2, $B2, $B2, $B2, $B2, $B2, $B2, $B2, $B2, $FE, $34
 Ani_SonicBalance1:	dc.b    7, $F7, $F8, $F9, $FF
 Ani_SuperSonicBalance:	dc.b    7, $F7, $F8, $F9, $F8, $FA, $FB, $FC, $FB, $FF
-Ani_TailsBalance:	dc.b  $13, $E3, $E4, $FF
+Ani_TailsBalance:	dc.b  $13, $E9, $ED, $FF
 Ani_KnucklesBalance1:	dc.b    3, $F1, $F1, $F2, $F2, $F3, $F3, $F4, $F4, $F5, $F5, $F6, $F6, $F7, $F7, $F7, $F7, $F7, $F7, $F7
 			dc.b  $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F8, $F8, $F8, $F9, $F9, $F9, $FA, $FA, $FB, $FB, $FC, $FC
 			dc.b  $FE,   6
@@ -286,11 +286,11 @@ Ani_AmyBalance1:	dc.b    7, $BA, $BB, $BC, $BD, $FF
 Ani_MightyBalance1:	dc.b    7, $F5, $F6, $F7, $F8, $FF
 Ani_RayBalance1:	dc.b    7, $B3, $B4, $B5, $B6, $FF
 Ani_PlayerLookUp:	dc.b    5, $D6, $D7, $FE,   1
-Ani_TailsLookUp:	dc.b  $3F, $D7, $FF
+Ani_TailsLookUp:	dc.b  $3F, $D5, $FF
 Ani_PlayerCrouch:	dc.b    5, $D8, $D9, $FE,   1
-Ani_TailsCrouch:	dc.b  $3F, $E9, $FF
+Ani_TailsCrouch:	dc.b  $3F, $D6, $FF
 Ani_PlayerSpinDash:	dc.b    0, $DA, $DB, $DA, $DC, $DA, $DD, $DA, $DE, $DA, $DF, $FF
-Ani_TailsSpinDash:	dc.b    0, $D9, $DA, $DB, $FF
+Ani_TailsSpinDash:	dc.b    0, $D7, $D8, $D9, $FF
 Ani_PlayerSpinDash2:	dc.b    0, $A8, $A9, $A8, $AA, $A8, $AB, $A8, $AC, $A8, $AD, $FF
 Ani_AmyHammerAttack:	dc.b    1, $A8, $A9, $AA, $AB, $AC, $AD, $AE, $AF, $FF
 Ani_MightyHammerDrop:	dc.b    0, $A8, $A9, $AA, $AA, $AA, $AB, $AC, $AD, $AE, $FE,   4
@@ -301,18 +301,18 @@ Ani_KnucklesBalance2:	dc.b    3, $F3, $F3, $F4, $F4, $F5, $F5, $F6, $F6, $F7, $F
 Ani_MightyBalance2:	dc.b    7, $F9, $FA, $FB, $FC, $FF
 Ani_RayBalance2:	dc.b    7, $B7, $B8, $B9, $BA, $FF
 Ani_PlayerSkid:		dc.b    3, $EF, $F0, $F1, $F2, $FD,   0
-Ani_TailsSkid:		dc.b    3, $DF, $E0, $DF, $E0, $FD,   0
+Ani_TailsSkid:		dc.b    3, $C4, $C5, $C4, $C5, $FD,   0
 Ani_PlayerCrane:	dc.b  $1F, $CE, $FF
 Ani_KnucklesGlide:	dc.b  $1F, $C0, $FF
 Ani_PlayerFloat:	dc.b    7, $C6, $C7, $C8, $C9, $CA, $CB, $CC, $CD, $FF
 Ani_KnucklesFloat:	dc.b    5, $C0, $C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $C9, $FF
 Ani_PlayerSpring:	dc.b  $2F, $E9, $FD,   0
-Ani_TailsSpring:	dc.b    3, $D5, $D6, $D5, $D6, $D5, $D6, $D5, $D6, $D5, $D6, $D5, $D6, $FD,   0
+Ani_TailsSpring:	dc.b    3, $A8, $A9, $A8, $A9, $A8, $A9, $A8, $A9, $A8, $A9, $A8, $A9, $FD,   0
 Ani_AmySpring:		dc.b    3, $E9, $EA, $E9, $EA, $E9, $EA, $E9, $EA, $E9, $EA, $E9, $EA, $FD,   0
 Ani_PlayerPole:		dc.b    1, $A3, $A4, $FF
 Ani_PlayerBar:		dc.b    1, $A6, $A7, $FF
 Ani_SonicClear:		dc.b    7, $F3, $F5, $F5, $F5, $F5, $F5, $F5, $F4, $F5, $F6, $FE,   4
-Ani_TailsClear:		dc.b   $F, $E1, $E2, $FE,   1
+Ani_TailsClear:		dc.b   $F, $C2, $C3, $FE,   1
 Ani_KnucklesClear:	dc.b    5, $E5, $E6, $E6, $E6, $E7, $E8, $FE,   1
 Ani_AmyClear:		dc.b    2, $F3, $F4, $F5, $F6, $F7, $F8, $F8, $F7, $F6, $F5, $F4, $F3, $F9, $FE,   1
 Ani_MightyClear:	dc.b    2, $BB, $BC, $BC, $BD, $BE, $BF, $BF, $BF, $BF, $C0, $C1, $C1, $C2, $C3, $C4, $C5, $FE,   2
@@ -338,14 +338,14 @@ Ani_PlayerBlank:	dc.b  $77,   0, $FF
 Ani_KnucklesGlideFall:	dc.b    7, $CA, $CB, $FE,   1
 Ani_KnucklesGlideCrouch:dc.b   $F, $D9, $FD,   0
 Ani_KnucklesGlideLand:	dc.b   $F, $CC, $FD,   0
-Ani_TailsSwimTired:	dc.b   $B, $B9, $BA, $BB, $FF
-Ani_TailsSwimCarry:	dc.b    4, $BC, $BD, $FF
-Ani_TailsFlyBoost:	dc.b  $1F, $A8, $FF
 Ani_TailsFlyFall:
-Ani_TailsFly:		dc.b  $1F, $A9, $FF
-Ani_TailsFlyCarryFall:	dc.b  $1F, $AA, $FF
-Ani_TailsFlyCarry:	dc.b  $1F, $AB, $FF
-Ani_TailsFlyTired:	dc.b   $B, $AC, $AD, $FF
-Ani_TailsSwimFall:	dc.b    7, $B4, $B5, $B6, $B7, $B8, $FF
-Ani_TailsSwim:		dc.b    3, $B4, $B5, $B6, $B7, $B8, $FF
+Ani_TailsFly:		dc.b  $1F, $AA, $FF
+Ani_TailsFlyCarryFall:	dc.b  $1F, $AB, $FF
+Ani_TailsFlyCarry:	dc.b  $1F, $AC, $FF
+Ani_TailsFlyTired:	dc.b   $B, $AD, $AE, $FF
+Ani_TailsFlyTiredCarry:	dc.b   $B, $AF, $B0, $FF
+Ani_TailsSwimFall:	dc.b    7, $B1, $B2, $B3, $B4, $B5, $FF
+Ani_TailsSwim:		dc.b    3, $B1, $B2, $B3, $B4, $B5, $FF
+Ani_TailsSwimTired:	dc.b   $B, $B6, $B7, $B8, $FF
+Ani_TailsSwimCarry:	dc.b    4, $B9, $BA, $FF
 	even
