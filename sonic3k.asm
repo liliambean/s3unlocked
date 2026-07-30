@@ -9143,7 +9143,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		lsl.w	#6,d1
 		addi.l	#ArtUnc_BarrierHUD-$80,d1
 		move.w	#tiles_to_bytes(ArtTile_StarPost),d2
-		move.w	#$40,d3
+		moveq	#$40,d3
 		bsr.w	Add_To_DMA_Queue
 
 ; =============== S U B R O U T I N E =======================================
@@ -9198,7 +9198,7 @@ loc_7802:
 		move.b	d0,(Ring_spill_anim_frame).w
 		addi.l	#ArtUnc_Ring+$80,d1					;
 		move.w	#tiles_to_bytes(ArtTile_Ring),d2			;
-		move.w	#$40,d3							;
+		moveq	#$40,d3							;
 		bsr.w	Add_To_DMA_Queue					;
 ;		subq.b	#1,(Ring_spill_anim_counter).w				;
 
@@ -22270,10 +22270,10 @@ ShieldTouch_Height:
 		move.w	y_pos(a1),d0			; Get object's y_pos
 		sub.w	d1,d0				; Subtract object's height
 		sub.w	d3,d0				; Subtract player's bottom collision boundary
-		bcc.s	.checktop			; If bottom of player is under the object, branch
+		bhs.s	.checktop			; If bottom of player is under the object, branch
 		add.w	d1,d1				; Double object's height value
 		add.w	d1,d0				; Add object's height*2 (now at top of object)
-		bcs.w	.checkdeflect			; If carry, branch (player is within the object's boundaries)
+		blo.w	.checkdeflect			; If carry, branch (player is within the object's boundaries)
 		bra.s	ShieldTouch_NextObj		; If not, loop and check next object
 ; ---------------------------------------------------------------------------
 
@@ -29904,9 +29904,9 @@ loc_1485E:
 
 loc_14860:
 		tst.w	(Tails_CPU_idle_timer).w		; Liliam: QOL - Tails assist
-		bne.s	.noAutoFlight				;
+		bne.s	.player1				;
 		cmpa.w	#Player_1,a0				;
-		beq.s	.noAutoFlight				;
+		beq.s	.player1				;
 		tst.b	(Flying_carrying_Sonic_flag).w		;
 		beq.s	.noAutoFlight				;
 		cmpi.w	#$C,(Tails_CPU_routine).w		;
@@ -29921,6 +29921,10 @@ loc_14860:
 		blt.s	loc_1488C				;
 		bra.s	loc_1486A				;
 ; ---------------------------------------------------------------------------
+
+	.player1:
+		tst.b	(Tails_tails+routine).w			; Liliam: hidden skill - ring barrier
+		bne.s	.autoFlight				;
 
 	.noAutoFlight:
 		move.b	(Ctrl_2_pressed_logical).w,d0
@@ -29969,7 +29973,12 @@ Tails_Set_Flying_Animation:
 
 loc_148C4:
 		tst.b	(Flying_carrying_Sonic_flag).w
-		beq.s	loc_148CC
+		bne.s	loc_148CA				; Liliam: hidden skill - ring barrier
+		cmpi.b	#8,(Tails_tails+routine).w		;
+		blo.s	loc_148CC				;
+;		beq.s	loc_148CC				;
+
+loc_148CA:
 		addq.b	#2,d0
 
 loc_148CC:
@@ -29977,7 +29986,11 @@ loc_148CC:
 		bne.s	loc_148F4
 		moveq	#$1F,d0					; Liliam: simplify player anim selection
 		tst.b	(Flying_carrying_Sonic_flag).w		;
-		beq.s	loc_148D4				;
+		bne.s	loc_148D2				;
+		cmpi.b	#8,(Tails_tails+routine).w		; Liliam: hidden skill - ring barrier
+		blo.s	loc_148D4				;
+
+loc_148D2:
 		moveq	#$24,d0
 
 loc_148D4:
@@ -31048,6 +31061,9 @@ loc_1518C:
 		bclr	#Status_RollJump,status(a0)
 		move.b	#1,double_jump_flag(a0)
 		move.b	#(8*60)/2,double_jump_property(a0)
+		move.w	(Player_mode).w,d0			; Liliam: hidden skill - ring barrier
+		or.b	(Encore_mode).w,d0			;
+		bne.w	Tails_InitRingBarrier			;
 		bsr.w	Tails_Set_Flying_Animation
 
 locret_151A2:
@@ -32489,20 +32505,16 @@ locret_160A4:
 Obj_Tails_Tail:
 		; Init
 		move.l	#Map_Tails_Tail,mappings(a0)
-		moveq	#ArtTile_TailsTail-ArtTile_Player_2,d0	; Liliam: Encore mode - respawn partner character
-		tst.b	(Encore_mode).w				;
-		beq.s	loc_160AE				;
-		moveq	#ArtTile_EncoreTail-ArtTile_Player_2,d0	;
-
-loc_160AE:
 		movea.w	$30(a0),a2					; Liliam: Encore mode - pick art_tile by parent
-		add.w	art_tile(a2),d0					;
+		move.w	art_tile(a2),d0					;
+		addi.w	#ArtTile_TailsTail-ArtTile_Player_2,d0		;
 		move.w	d0,art_tile(a0)					;
 ;		move.w	#ArtTile_TailsTail,art_tile(a0)			;
 		move.w	#$100,priority(a0)
 		move.b	#$18,width_pixels(a0)
 		move.b	#$18,height_pixels(a0)
 		move.b	render_flags(a2),render_flags(a0)	; Liliam: AIZ intro - give Tails intro
+		ori.b	#$40,render_flags(a0)			;
 ;		move.b	#4,render_flags(a0)			;
 		move.l	#Obj_Tails_Tail_Main,(a0)
 		cmpi.l	#Obj_Tails,(a2)				; Liliam: Encore mode - draw Tails' tails along with him
@@ -32549,6 +32561,7 @@ loc_1612C:
 		move.b	Obj_Tails_Tail_AniSelection(pc,d0.w),anim(a0)	; Load anim relative to parent's
 
 loc_1613C:
+		bsr.w	Tails_RingBarrier			; Liliam: hidden skill - ring barrier
 		lea	(AniTails_Tail).l,a1
 		bsr.w	Animate_Tails_Part2
 ;		tst.b	(Reverse_gravity_flag).w		; Liliam: add extra characters
@@ -32616,6 +32629,287 @@ Obj_Tails_Tail_AniSelection:
 AniTails_Tail:
 		; Liliam: add custom animation
 		include "General/Sprites/Tails/Anim - Tails Tail.asm"
+; ---------------------------------------------------------------------------
+
+Tails_InitRingBarrier:						; Liliam: hidden skill - ring barrier
+		btst	#Skill_TailsRingBarrier,(Skill_options).w
+		beq.s	Tails_RingBarrier_Return
+		lea	(Tails_tails).w,a1
+		move.w	#1,mainspr_childsprites(a1)
+		move.b	#8,routine(a1)
+		bsr.w	Tails_Set_Flying_Animation
+		move.l	#ArtUnc_Ring+$80,d1
+		moveq	#$C,d2
+		add.w	art_tile(a1),d2
+		lsl.w	#5,d2
+		moveq	#$40,d3
+		jmp	(Add_To_DMA_Queue).l
+; ---------------------------------------------------------------------------
+
+Tails_RingBarrier:						; Liliam: hidden skill - ring barrier
+		tst.w	mainspr_childsprites(a0)
+		beq.s	Tails_RingBarrier_Return
+
+		move.b	(Ctrl_2_held_logical).w,d2
+		cmpa.w	#Player_1,a2
+		bne.s	.done
+		move.b	(Ctrl_1_held_logical).w,d2
+
+	.done:
+		moveq	#0,d1
+		move.b	routine(a0),d1
+		move.w	Tails_RingBarrier_Index(pc,d1.w),d1
+		jmp	Tails_RingBarrier_Index(pc,d1.w)
+; ---------------------------------------------------------------------------
+Tails_RingBarrier_Index:					; Liliam: hidden skill - ring barrier
+		dc.w Tails_RingBarrier_Hide-Tails_RingBarrier_Index
+		dc.w Tails_RingBarrier_Spin-Tails_RingBarrier_Index
+		dc.w Tails_RingBarrier_Throw-Tails_RingBarrier_Index
+		dc.w Tails_RingBarrier_Catch-Tails_RingBarrier_Index
+		dc.w Tails_RingBarrier_Wait-Tails_RingBarrier_Index
+		dc.w Tails_RingBarrier_Hold-Tails_RingBarrier_Index
+; ---------------------------------------------------------------------------
+
+Tails_RingBarrier_CheckDelete:					; Liliam: hidden skill - ring barrier
+		cmpi.b	#$1C,d0
+		bls.s	.delete
+		btst	#Status_Underwater,status(a2)
+		bne.s	.hide
+		rts
+; ---------------------------------------------------------------------------
+
+	.delete:
+		clr.w	mainspr_childsprites(a0)
+
+	.hide:
+		clr.b	sub2_mapframe(a0)
+		clr.b	angle+1(a0)
+		clr.b	routine(a0)
+		addq.w	#4,sp
+
+Tails_RingBarrier_Return:
+		rts
+; ---------------------------------------------------------------------------
+
+Tails_RingBarrier_Hide:						; Liliam: hidden skill - ring barrier
+		btst	#Status_Underwater,status(a2)
+		bne.s	Tails_RingBarrier_Return
+		addq.b	#8,routine(a0)
+		rts
+; ---------------------------------------------------------------------------
+
+Tails_RingBarrier_Wait:						; Liliam: hidden skill - ring barrier
+		andi.b	#button_ABC_mask,d2
+		bne.s	.disableButtons
+		addq.b	#2,routine(a0)
+
+	.disableButtons:
+		clr.b	d2
+
+Tails_RingBarrier_Hold:
+		bsr.s	Tails_RingBarrier_CheckDelete
+		moveq	#-$10,d1
+		tst.b	(Reverse_gravity_flag).w
+		bne.s	.setPosition
+		neg.w	d1
+
+	.setPosition:
+		move.w	x_pos(a0),sub2_x_pos(a0)
+		add.w	y_pos(a0),d1
+		move.w	d1,sub2_y_pos(a0)
+		andi.b	#button_ABC_mask,d2
+		beq.s	Tails_RingBarrier_Draw
+		move.b	#2,routine(a0)
+
+Tails_RingBarrier_Draw:
+		move.b	render_flags(a2),d0
+		andi.b	#3,d0
+		addi.b	#$2D,d0
+		move.b	d0,sub2_mapframe(a0)
+		rts
+; ---------------------------------------------------------------------------
+
+Tails_RingBarrier_Spin:						; Liliam: hidden skill - ring barrier
+		bsr.s	Tails_RingBarrier_CheckDelete
+		move.b	angle+1(a0),d0
+		jsr	(GetSineCosine).l
+		asr.w	#4,d0
+		asr.w	#4,d1
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.setPosition
+		neg.w	d1
+
+	.setPosition:
+;		subq.w	#1,d0
+		add.w	x_pos(a0),d0
+		add.w	y_pos(a0),d1
+		move.w	d0,sub2_x_pos(a0)
+		move.w	d1,sub2_y_pos(a0)
+		addq.b	#8,angle+1(a0)
+
+	.checkButtons:
+		move.b	d2,d0
+		andi.b	#button_ABC_mask,d2
+		bne.w	Tails_RingBarrier_DrawTouch
+		moveq	#7,d2
+		moveq	#3,d1
+		btst	#button_up,d0
+		bne.s	.checkGravity
+		moveq	#-3,d1
+		btst	#button_down,d0
+		bne.s	.checkGravity
+		moveq	#8,d2
+		moveq	#0,d1
+
+	.checkGravity:
+		tst.b	(Reverse_gravity_flag).w
+		bne.s	.pickDirection
+		neg.w	d1
+
+	.pickDirection:
+		btst	#0,render_flags(a0)
+		beq.s	.setSpeeds
+		neg.w	d2
+
+	.setSpeeds:
+		move.b	x_vel(a2),d0
+		ext.w	d0
+		add.w	d2,d0
+		move.w	d0,x_vel+$14(a0)
+		move.w	d1,y_vel+$14(a0)
+		move.b	angle+1(a0),d0
+		jsr	(GetSineCosine).l
+		btst	#0,render_flags(a0)
+		bne.s	.setTimer
+		neg.w	d0
+
+	.setTimer:
+		addi.w	#$80,d0
+		asr.w	#7,d0
+		addi.b	#$10,d0
+		move.b	d0,angle+1(a0)
+		addq.b	#2,routine(a0)
+		bra.s	Tails_RingBarrier_DrawTouch
+; ---------------------------------------------------------------------------
+
+Tails_RingBarrier_Throw:					; Liliam: hidden skill - ring barrier
+		move.w	x_vel+$14(a0),d0
+		move.w	y_vel+$14(a0),d1
+		add.w	d0,sub2_x_pos(a0)
+		add.w	d1,sub2_y_pos(a0)
+		subq.b	#1,angle+1(a0)
+		bne.s	Tails_RingBarrier_DrawTouch
+		addq.b	#2,routine(a0)
+		bra.s	Tails_RingBarrier_DrawTouch
+; ---------------------------------------------------------------------------
+
+Tails_RingBarrier_Catch:					; Liliam: hidden skill - ring barrier
+		moveq	#0,d4
+		cmpi.b	#$1C,d0
+		bls.s	.setPosition
+		moveq	#-$10,d4
+		tst.b	(Reverse_gravity_flag).w
+		bne.s	.setPosition
+		neg.w	d4
+
+	.setPosition:
+		move.w	x_pos(a2),d3
+		add.w	y_pos(a2),d4
+		move.w	d3,d1
+		move.w	d4,d2
+		sub.w	sub2_x_pos(a0),d1
+		sub.w	sub2_y_pos(a0),d2
+		jsr	(GetArcTan).l
+		jsr	(GetSineCosine).l
+		asr.w	#5,d1
+		asr.w	#5,d0
+		add.w	d1,sub2_x_pos(a0)
+		add.w	d0,sub2_y_pos(a0)
+		sub.w	sub2_x_pos(a0),d3
+		sub.w	sub2_y_pos(a0),d4
+		cmpi.w	#-$C,d3
+		blt.s	Tails_RingBarrier_DrawTouch
+		cmpi.w	#-$C,d4
+		blt.s	Tails_RingBarrier_DrawTouch
+		cmpi.w	#$C,d3
+		bgt.s	Tails_RingBarrier_DrawTouch
+		cmpi.w	#$C,d4
+		bgt.s	Tails_RingBarrier_DrawTouch
+		addq.b	#4,routine(a0)
+
+Tails_RingBarrier_DrawTouch:
+		lea	(Dynamic_object_RAM).w,a1
+		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d6
+
+	.loop:
+		move.b	collision_flags(a1),d2
+		beq.s	.nextObject
+		cmpi.b	#$46,d2
+		beq.s	.checkObject
+		andi.b	#$C0,d2
+		beq.s	.checkObject
+		cmpi.b	#$C0,d2
+		bne.s	.nextObject
+
+	.checkObject:
+		bsr.s	Tails_RingBarrierTouch_Width
+
+	.nextObject:
+		lea	next_object(a1),a1
+		dbf	d6,.loop
+		bra.w	Tails_RingBarrier_Draw
+; ---------------------------------------------------------------------------
+
+Tails_RingBarrierTouch_Width:					; Liliam: hidden skill - ring barrier
+		move.b	collision_flags(a1),d0
+		andi.w	#$3F,d0
+		add.w	d0,d0
+		lea	(Touch_Sizes).l,a2
+		lea	(a2,d0.w),a2
+		moveq	#0,d1
+		move.b	(a2)+,d1
+		move.w	x_pos(a1),d0
+		addq.w	#8,d0
+		sub.w	d1,d0
+		sub.w	sub2_x_pos(a0),d0
+		bhs.s	.checkRight
+		add.w	d1,d1
+		add.w	d1,d0
+		blo.s	.checkHeight
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkRight:
+		cmpi.w	#$10,d0
+		bhi.s	.return
+
+	.checkHeight:
+		moveq	#0,d1
+		move.b	(a2)+,d1
+		move.w	y_pos(a1),d0
+		addq.w	#8,d0
+		sub.w	d1,d0
+		sub.w	sub2_y_pos(a0),d0
+		bhs.s	.checkTop
+		add.w	d1,d1
+		add.w	d1,d0
+		blo.s	.checkType
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkTop:
+		cmpi.w	#$10,d0
+		bhi.s	.return
+
+	.checkType:
+		tst.b	d2
+		beq.w	Obj_SuperTailsBirds_GetDestination.enemy
+		bmi.w	HyperTouch_Special
+		move.b	#4,routine(a1)
+		move.w	$30(a0),parent(a1)
+
+	.return:
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_Tails2P_Tail:
@@ -38910,6 +39204,9 @@ Obj_EncoreRespawn:						; Liliam: Encore mode - respawn partner character
 		move.l	#Obj_EncoreRespawn_Tails,(a0)
 		move.l	#Map_EncoreRespawn_Tails,mappings(a0)
 		move.b	d0,(Tails_tails+render_flags).w
+		move.w	art_tile(a0),d0
+		addi.w	#ArtTile_EncoreTail-ArtTile_Player_2,d0
+		move.w	d0,(Tails_tails+art_tile).w
 
 	.setTailsHeight:
 		move.b	#TailsRollHeight,y_radius(a0)
@@ -38988,8 +39285,11 @@ Obj_EncoreRespawn_Tails:					; Liliam: Encore mode - respawn partner character
 		addq.b	#1,mapping_frame(a0)
 		cmpi.b	#8,mapping_frame(a0)
 		bne.s	Obj_EncoreRespawn_DrawTails
-		move.b	#$84,(Tails_tails+render_flags).w
+		move.b	#$C4,(Tails_tails+render_flags).w
 		move.w	#$100,(Tails_tails+priority).w
+		move.w	art_tile(a0),d0
+		addi.w	#ArtTile_TailsTail-ArtTile_Player_2,d0
+		move.w	d0,(Tails_tails+art_tile).w
 
 Obj_EncoreRespawn_Release:
 		move.w	(Camera_X_pos).w,d0

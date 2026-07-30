@@ -44,6 +44,10 @@ Map_Tails_Tail_:
 		dc.w Map_Tails_Tail_Hang-Map_Tails_Tail_
 		dc.w Map_Tails_Tail_Hang-Map_Tails_Tail_
 		dc.w Map_Tails_Tail_Hang-Map_Tails_Tail_
+		dc.w Map_Tails_Tail_RingBarrier0-Map_Tails_Tail_
+		dc.w Map_Tails_Tail_RingBarrier1-Map_Tails_Tail_
+		dc.w Map_Tails_Tail_RingBarrier2-Map_Tails_Tail_
+		dc.w Map_Tails_Tail_RingBarrier3-Map_Tails_Tail_
 Map_Tails_Tail_Blank:
 		dc.w 0
 Map_Tails_Tail_SpinDash:
@@ -100,3 +104,15 @@ Map_Tails_Tail_Fly2:
 Map_Tails_Tail_Hang:
 		dc.w 1
 		dc.b  $F8,   9,   0,   0, $FF, $E4
+Map_Tails_Tail_RingBarrier0:
+		dc.w 1
+		dc.b  $F8,   5, $20,  $C, $FF, $F7
+Map_Tails_Tail_RingBarrier1:
+		dc.w 1
+		dc.b  $F8,   5, $28,  $C, $FF, $F7
+Map_Tails_Tail_RingBarrier2:
+		dc.w 1
+		dc.b  $F8,   5, $30,  $C, $FF, $F7
+Map_Tails_Tail_RingBarrier3:
+		dc.w 1
+		dc.b  $F8,   5, $38,  $C, $FF, $F7
