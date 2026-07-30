@@ -24865,9 +24865,8 @@ Sonic_Transform:
 		move.b	#$81,object_control(a0)
 		move.b	#$16,anim(a0)				; Liliam: simplify player anim selection
 ;		move.b	#$1F,anim(a0)				;
-		bclr	#Status_Roll,status(a0)				; Liliam: bugfix - clear roll flag
-		bclr	#Status_RollJump,status(a0)			;
-		clr.b	jumping(a0)					;
+		movea.l	a0,a1					; Liliam: bugfix - clear roll state
+		jsr	(Player_ClearRollHeight).l		;
 		clr.b	(Super_ready_HUD_flag).w			; Liliam: HUD - barrier HUD
 
 		cmpi.b	#7,(Super_emerald_count).w		; does Sonic have all 7 Super Emeralds?
@@ -30999,8 +30998,8 @@ loc_1515C:
 		ext.w	d1
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	loc_15188
-		neg.w	d1				; Liliam: bugfix
-;		neg.w	d0				;
+		neg.w	d1					; Liliam: bugfix - clear roll state
+;		neg.w	d0					;
 
 loc_15188:
 		add.w	d1,y_pos(a0)
@@ -31023,9 +31022,8 @@ Tails_Transform:
 		move.b	#$81,object_control(a0)
 		move.b	#$16,anim(a0)				; Liliam: simplify player anim selection
 ;		move.b	#$29,anim(a0)				;
-		bclr	#Status_Roll,status(a0)				; Liliam: bugfix - clear roll flag
-		bclr	#Status_RollJump,status(a0)			;
-		clr.b	jumping(a0)					;
+		movea.l	a0,a1					; Liliam: bugfix - clear roll state
+		jsr	(Player_ClearRollHeight).l		;
 		clr.b	(Super_ready_HUD_flag).w			; Liliam: HUD - barrier HUD
 
 		move.l	#Obj_SuperSonic_Stars,(Super_stars).w		; Liliam: Hyper Tails
@@ -35239,9 +35237,8 @@ Knux_Transform:
 		move.b	#$81,object_control(a0)
 		move.b	#$16,anim(a0)				; Liliam: simplify player anim selection
 ;		move.b	#$1F,anim(a0)				;
-		bclr	#Status_Roll,status(a0)				; Liliam: bugfix - clear roll flag
-		bclr	#Status_RollJump,status(a0)			;
-		clr.b	jumping(a0)					;
+		movea.l	a0,a1					; Liliam: bugfix - clear roll state
+		jsr	(Player_ClearRollHeight).l		;
 		clr.b	(Super_ready_HUD_flag).w			; Liliam: HUD - barrier HUD
 
 		cmpi.b	#7,(Super_emerald_count).w		; does Knuckles have all 7 Super Emeralds?
@@ -47852,8 +47849,8 @@ sub_1F7CE:
 		move.l	#0,(a2)
 		bset	#6,object_control(a1)
 		bset	#1,object_control(a1)
-		bclr	#Status_Roll,status(a1)			; Liliam: bugfix - clear Tails' tails
 		move.b	#0,anim(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		cmpa.w	#Player_1,a1
 		bne.s	locret_1F85A
 		jsr	(AllocateObjectAfterCurrent).l
@@ -47902,9 +47899,10 @@ loc_1F8A0:
 
 AIZTree_FallOff:
 		bset	#Status_InAir,status(a1)
-		bclr	#Status_Roll,status(a1)
-		move.b	#$13,y_radius(a1)
-		move.b	#9,x_radius(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+;		bclr	#Status_Roll,status(a1)			;
+;		move.b	#$13,y_radius(a1)			;
+;		move.b	#9,x_radius(a1)				;
 		move.w	#1,anim(a1)
 		bclr	#Status_OnObj,status(a1)
 		bclr	d6,status(a0)
@@ -47972,6 +47970,8 @@ loc_1F93C:
 		sub.w	d2,d0
 		asl.w	#8,d0
 		move.w	d0,y_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+		clr.w	anim(a1)				;
 		moveq	#0,d0
 		move.w	(a2),d0
 		lsr.w	#1,d0
@@ -50990,6 +50990,7 @@ loc_22302:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$14,y_pos(a1)
@@ -52439,8 +52440,8 @@ loc_2345A:
 loc_2346C:
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
-		clr.b	jumping(a1)
-		clr.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+;		clr.b	jumping(a1)				;
 		move.b	#State_Control,routine(a1)
 		move.b	#0,double_jump_flag(a1)
 		moveq	#signextendB(sfx_Spring),d0
@@ -54699,6 +54700,7 @@ loc_24DEE:
 
 loc_24DFC:
 		move.w	#-$700,y_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		bset	#Status_InAir,status(a1)
 		move.b	#State_Control,routine(a1)
 		move.w	#1,ground_vel(a1)
@@ -69973,17 +69975,9 @@ loc_2FBB2:
 		move.w	#($15<<8)|0,anim(a1)			; Liliam: bugfix - fix stuck animation
 ;		move.b	#$15,anim(a1)				;
 ;		move.w	#35,move_lock(a1)			;
-		move.b	#0,jumping(a1)
+;		move.b	#0,jumping(a1)				;
 		bclr	#Status_Push,status(a1)
-		bclr	#Status_RollJump,status(a1)
-		bclr	#Status_Roll,status(a1)			; Liliam: bugfix - set correct player height
-		beq.s	loc_2FC6A				;
-		move.b	default_x_radius(a1),x_radius(a1)	;
-		move.b	default_y_radius(a1),d0			;
-		move.w	d0,d1					;
-		sub.b	y_radius(a1),d1				;
-		sub.w	d1,y_pos(a1)				;
-		move.b	d0,y_radius(a1)				;
+;		bclr	#Status_RollJump,status(a1)		; Liliam: bugfix - clear roll state
 ;		btst	#Status_Roll,status(a1)			;
 ;		beq.w	loc_2FC6A				;
 ;		cmpi.l	#Obj_Sonic,(a1)				;
@@ -69999,11 +69993,31 @@ loc_2FBB2:
 ;		move.b	#9,x_radius(a1)				;
 ;		subq.w	#1,y_pos(a1)				;
 
-loc_2FC6A:
+;loc_2FC6A:
 		cmpi.b	#6,routine(a0)
-		beq.s	locret_2FC7C
+		beq.s	Player_ClearRollHeight			;
+;		beq.s	locret_2FC7C				;
 		move.b	#6,routine(a0)
 		addq.b	#4,anim(a0)
+
+Player_ClearRollHeight:
+		clr.b	jumping(a1)				;
+		bclr	#Status_RollJump,status(a1)		;
+		bclr	#Status_Roll,status(a1)			;
+		beq.s	locret_2FC7C				;
+		move.b	y_radius(a1),d0				;
+		move.b	default_y_radius(a1),y_radius(a1)	;
+		move.b	default_x_radius(a1),x_radius(a1)	;
+		btst	#Status_InAir,status(a1)		;
+		bne.s	locret_2FC7C				;
+		sub.b	default_y_radius(a1),d0			;
+		ext.w	d0					;
+		tst.b	(Reverse_gravity_flag).w		;
+		beq.s	.setPosition				;
+		neg.w	d0					;
+
+	.setPosition:
+		add.w	d0,y_pos(a1)				;
 
 locret_2FC7C:
 		rts
@@ -70793,10 +70807,11 @@ loc_307C6:
 		asr.w	#6,d1
 		add.w	d1,y_pos(a1)
 		bset	#Status_InAir,status(a1)
-		bclr	#Status_RollJump,status(a1)
+;		bclr	#Status_RollJump,status(a1)		; Liliam: bugfix - clear roll state
 		move.w	#0,y_vel(a1)
 		move.b	#0,double_jump_flag(a1)
-		move.b	#0,jumping(a1)
+		bsr.w	Player_ClearRollHeight			;
+;		move.b	#0,jumping(a1)				;
 		btst	#6,subtype(a0)
 		bne.s	loc_30826
 		move.w	#1,ground_vel(a1)
@@ -72741,10 +72756,11 @@ loc_31EDE:
 		asr.w	#4,d1
 		add.w	d1,y_pos(a1)
 		bset	#Status_InAir,status(a1)
-		bclr	#Status_RollJump,status(a1)
+;		bclr	#Status_RollJump,status(a1)		; Liliam: bugfix - clear roll state
 		move.w	#0,y_vel(a1)
 		move.b	#0,double_jump_flag(a1)
-		move.b	#0,jumping(a1)
+		bsr.w	Player_ClearRollHeight			;
+;		move.b	#0,jumping(a1)				;
 		moveq	#1,d6
 		move.w	#1,ground_vel(a1)
 		tst.b	flip_angle(a1)
@@ -72907,7 +72923,8 @@ loc_32086:
 loc_3208A:
 		bset	#Status_InAir,status(a1)
 		move.b	#$F,anim(a1)
-		clr.b	jumping(a1)
+		bsr.w	Player_ClearRollHeight			; Liliam: bugfix - clear roll state
+;		clr.b	jumping(a1)				;
 
 locret_3209A:
 		rts
@@ -73928,9 +73945,10 @@ loc_32A30:
 		neg.b	flip_angle(a1)
 
 loc_32A5A:
-		clr.b	jumping(a1)
+;		clr.b	jumping(a1)				; Liliam: bugfix - clear roll state
 		bset	#Status_InAir,status(a1)
-		bclr	#Status_RollJump,status(a1)
+		bsr.w	Player_ClearRollHeight			;
+;		bclr	#Status_RollJump,status(a1)		;
 		bclr	#Status_Push,status(a1)
 		moveq	#signextendB(sfx_SmallBumpers),d0
 		jmp	(Play_SFX).l
@@ -86187,9 +86205,10 @@ sub_3CBCE:
 		move.w	#-$A00,y_vel(a1)
 
 loc_3CBE4:
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
-		clr.b	jumping(a1)
+;		clr.b	jumping(a1)				;
 		clr.b	spin_dash_flag(a1)
 		move.b	#$10,anim(a1)
 		move.b	#State_Control,routine(a1)
@@ -87909,11 +87928,14 @@ MHZMushroomCap_BounceCharacter:
 		addi.w	#$20,d1
 		neg.w	d1
 		move.w	d1,y_vel(a1)		; Set character's y_vel, bouncing them
-		bset	#Status_InAir,status(a1)		; Set character's 'in air' bit
-		bclr	#Status_OnObj,status(a1)	; Clear character's 'on object' bit
-		clr.b	jumping(a1)
-		clr.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
+
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+		bset	#Status_InAir,status(a1)
+		bclr	#Status_OnObj,status(a1)
+;		clr.b	jumping(a1)				;
 		clr.b	spin_dash_flag(a1)
+		clr.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
+
 		move.b	#$10,anim(a1)		; Set character to 'spring-jumping' animation
 		move.b	#State_Control,routine(a1)
 		moveq	#signextendB(sfx_MushroomBounce),d0
@@ -88963,10 +88985,11 @@ loc_3EE8C:
 		move.b	#8,2(a2)
 		andi.b	#$FC,object_control(a1)
 		bset	#Status_InAir,status(a1)
-		clr.b	jumping(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+;		clr.b	jumping(a1)				;
 		clr.b	spin_dash_flag(a1)
 		move.b	#State_Control,routine(a1)
-		bclr	#Status_RollJump,status(a1)
+;		bclr	#Status_RollJump,status(a1)		;
 		move.b	#0,double_jump_flag(a1)
 		move.b	#0,flip_angle(a1)
 		rts
@@ -89684,6 +89707,7 @@ loc_3F70C:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$25,y_pos(a1)
@@ -89972,9 +89996,11 @@ sub_3FA5A:
 		move.w	#-$D00,y_vel(a2)
 
 loc_3FA66:
+		movea.l	a2,a1					; Liliam: bugfix - clear roll state
+		jsr	(Player_ClearRollHeight).l		;
 		bset	#Status_InAir,status(a2)
 		bclr	#Status_OnObj,status(a2)
-		clr.b	jumping(a2)
+;		clr.b	jumping(a2)				;
 		clr.b	spin_dash_flag(a2)
 		move.b	#$10,anim(a2)
 		move.b	#State_Control,routine(a2)
@@ -90097,10 +90123,11 @@ loc_3FC0E:
 		asr.w	#6,d1
 		add.w	d1,y_pos(a1)
 		bset	#Status_InAir,status(a1)
-		bclr	#Status_RollJump,status(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+;		bclr	#Status_RollJump,status(a1)		;
 		move.w	#0,y_vel(a1)
 		move.b	#0,double_jump_flag(a1)
-		move.b	#0,jumping(a1)
+;		move.b	#0,jumping(a1)				;
 		move.b	(V_int_run_count+3).w,d0
 		andi.b	#$F,d0
 		bne.s	loc_3FC4A
@@ -91352,9 +91379,10 @@ loc_409BA:
 		neg.w	x_vel(a1)
 
 loc_409DE:
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
-		clr.b	jumping(a1)
+;		clr.b	jumping(a1)				;
 		move.b	#$10,anim(a1)
 		move.b	#State_Control,routine(a1)
 		move.b	#0,double_jump_flag(a1)
@@ -95410,10 +95438,11 @@ loc_443FE:
 		move.b	#20,2(a2)
 		andi.b	#$FC,object_control(a1)
 		bset	#Status_InAir,status(a1)
-		clr.b	jumping(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+;		clr.b	jumping(a1)				;
 		clr.b	spin_dash_flag(a1)
 		move.b	#State_Control,routine(a1)
-		bclr	#Status_RollJump,status(a1)
+;		bclr	#Status_RollJump,status(a1)		;
 		move.b	#0,double_jump_flag(a1)
 		move.b	#0,flip_angle(a1)
 		rts
@@ -101252,6 +101281,7 @@ loc_48F6E:
 		move.b	d1,(a2)
 		move.b	#0,2(a2)
 		move.b	#$80,flip_type(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	#1,anim(a1)
 		tst.w	ground_vel(a1)
 		bne.s	locret_48F8E
@@ -101811,10 +101841,11 @@ loc_49578:
 		asr.w	#4,d1
 		add.w	d1,y_pos(a1)
 		bset	#Status_InAir,status(a1)
-		bclr	#Status_RollJump,status(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+;		bclr	#Status_RollJump,status(a1)		;
 		move.w	#0,y_vel(a1)
 		move.b	#0,double_jump_flag(a1)
-		move.b	#0,jumping(a1)
+;		move.b	#0,jumping(a1)				;
 		move.w	#1,ground_vel(a1)
 		move.b	(Level_frame_counter+1).w,d0
 		andi.b	#$F,d0
@@ -172390,19 +172421,11 @@ loc_77974:
 		lea	(Player_1).w,a1
 		cmpi.w	#$5468,x_pos(a1)
 		blo.s	locret_77964				; Liliam: de-automate transition cutscene
-		bclr	#Status_Roll,status(a1)			;
-		beq.s	loc_77986				;
-		moveq	#0,d0					;
-		move.b	default_x_radius(a1),x_radius(a1)	;
-		move.b	default_y_radius(a1),d0			;
-		move.w	d0,d1					;
-		sub.b	y_radius(a1),d1				;
-		sub.w	d1,y_pos(a1)				;
-		move.b	d0,y_radius(a1)				;
+		jsr	(Player_ClearRollHeight).l		;
 ;		bhs.s	loc_77986				;
 ;		jmp	(loc_86334).l				;
 
-loc_77986:
+;loc_77986:
 		move.w	x_pos(a1),x_pos(a0)
 		move.w	y_pos(a1),y_pos(a0)
 		move.w	x_vel(a1),x_vel(a0)
@@ -196028,14 +196051,13 @@ Give_SuperSonic:
 		move.w	#$800,(Max_speed).w
 		move.w	#$18,(Acceleration).w
 		move.w	#$C0,(Deceleration).w
-		move.b	#$16,(Player_1+anim).w			; Liliam: simplify player anim selection
+		lea	(Player_1).w,a1				; Liliam: simplify player anim selection
+		move.b	#$16,anim(a1)				;
 ;		move.b	#$1F,(Player_1+anim).w			;
-		bclr	#Status_Roll,(Player_1+status).w		; Liliam: bugfix - clear roll flag
-		bclr	#Status_RollJump,(Player_1+status).w		;
-		clr.b	(Player_1+jumping).w				;
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		clr.b	(Super_ready_HUD_flag).w			; Liliam: HUD - barrier HUD
 
-		cmpi.b	#1,(Player_1+character_id).w		; Liliam: add extra characters
+		cmpi.b	#1,character_id(a1)			; Liliam: add extra characters
 ;		cmpi.w	#2,(Player_mode).w			;
 		bne.s	.notTails
 ;		move.b	#0,(Super_Sonic_Knux_flag).w		; Liliam: bugfix - give Sonic correct super form after credits
@@ -196082,13 +196104,16 @@ Give_SuperSonic:
 
 	.hyper:
 		move.l	#Obj_HyperSonicKnux_Trail,(Super_stars).w
-		move.b	#30,(Player_1+air_left).w			; Liliam: bugfix - replenish air on hyper transform
+		move.b	#30,air_left(a1)				; Liliam: bugfix - replenish air on hyper transform
 
 	.continued:
-		move.b	#$81,(Player_1+object_control).w
-		move.b	#0,(Player_1+invincibility_timer).w
-		bset	#Status_Invincible,(Player_1+status_secondary).w
-		btst	#Status_SpeedShoes,(Player_1+status_secondary).w	; Liliam: bugfix - player speeds fix
+		move.b	#$81,object_control(a1)					; Liliam: bugfix - player speeds fix
+		move.b	#0,invincibility_timer(a1)				;
+		bset	#Status_Invincible,status_secondary(a1)			;
+;		move.b	#$81,(Player_1+object_control).w			;
+;		move.b	#0,(Player_1+invincibility_timer).w			;
+;		bset	#Status_Invincible,(Player_1+status_secondary).w	;
+		btst	#Status_SpeedShoes,status_secondary(a1)			;
 		beq.s	locret_8653E						;
 		move.w	#$C00,(Max_speed).w					;
 
@@ -200624,7 +200649,7 @@ loc_890F2:
 		move.w	d0,ground_vel(a1)
 		move.w	#-$800,y_vel(a1)
 		bset	#Status_InAir,status(a1)
-		bclr	#Status_Roll,status(a1)			; Liliam: bugfix - clear roll flag
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		addq.w	#6,y_pos(a1)
 		move.b	#$10,anim(a1)
 		move.b	#State_Control,routine(a1)
@@ -205063,9 +205088,12 @@ loc_8B9F0:
 
 sub_8B9FA:
 		move.w	d2,y_vel(a1)
+		move.w	d0,d4					; Liliam: bugfix - clear roll state
+		jsr	(Player_ClearRollHeight).l		;
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
-		clr.b	jumping(a1)
+;		clr.b	jumping(a1)				;
+		move.w	d4,d0					;
 		move.b	#$10,anim(a1)
 		move.b	#State_Control,routine(a1)
 
