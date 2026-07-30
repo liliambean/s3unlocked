@@ -22412,7 +22412,7 @@ HyperTouch_Special:
 		bmi.s	locret_105C2				;
 		cmp.l	(a1),d0					;
 		bne.s	.loop					;
-		move.b	#$81,collision_property(a1)		;
+		move.b	#$80,collision_property(a1)		;
 
 locret_105C2:
 		rts
@@ -22420,6 +22420,8 @@ locret_105C2:
 
 ; ---------------------------------------------------------------------------
 HyperTouch_Whitelist:						; Liliam: hyper touch - only collide with enemies
+		dc.l Obj_LBZExplodingTrigger_Main
+		dc.l Obj_LRZShootingTrigger_Main
 		dc.l Obj_Jawz_Main
 		dc.l Obj_Blastoid+6
 		dc.l Obj_MegaChopper+6
@@ -38105,7 +38107,9 @@ Obj_SuperTailsBirds_GetDestination:
 		andi.b	#$C0,d0
 		beq.s	.enemy
 		cmpi.b	#$C0,d0
-		beq.s	.special
+;		beq.s	.special				; Liliam: hyper touch - stop bouncing players on defeat
+		bne.s	.no_collision				;
+		move.b	#$80,collision_property(a1)		;
 
 	.no_collision:
 		rts
@@ -38124,21 +38128,22 @@ Obj_SuperTailsBirds_GetDestination:
 		bset	#7,status(a1)
 
 	.skip:
-		bra.s	.done
+		rts						; Liliam: hyper touch - stop bouncing players on defeat
+;		bra.s	.done					;
 ; ---------------------------------------------------------------------------
 
 	.destroy_enemy:
 		jmp	(HyperTouch_DestroyEnemy).l
 ; ---------------------------------------------------------------------------
 
-	.special:
-		ori.b	#2,collision_property(a1)
+;	.special:
+;		ori.b	#2,collision_property(a1)		; Liliam: hyper touch - stop bouncing players on defeat
 
-	.done:
-		move.w	x_pos(a0),(Player_2+x_pos).w
-		move.w	y_pos(a0),(Player_2+y_pos).w
-		move.b	#2,(Player_2+anim).w
-		rts
+;	.done:
+;		move.w	x_pos(a0),(Player_2+x_pos).w		;
+;		move.w	y_pos(a0),(Player_2+y_pos).w		;
+;		move.b	#2,(Player_2+anim).w			;
+;		rts						;
 ; End of function sub_1A31E
 
 
@@ -38261,21 +38266,23 @@ Obj_SuperTailsBirds_FindTarget:
 		andi.b	#$C0,d0
 		beq.s	.valid
 		cmpi.b	#$C0,d0
-		beq.s	.valid
+		beq.s	.special				; Liliam: hyper touch - only collide with enemies
+;		beq.s	.valid					;
 
 	.invalid:
 		rts
 ; ---------------------------------------------------------------------------
 
-	.valid:
-		tst.b	(Boss_flag).w				; Liliam: QOL - prevent Tails birds from ruining bosses
-		beq.s	loc_1A44E				;
-		cmpi.w	#$800,(Current_zone_and_act).w		;
-		beq.s	.invalid				;
-		cmpi.w	#$B01,(Current_zone_and_act).w		;
-		beq.s	.invalid				;
+	.special:
+		lea	(HyperTouch_Whitelist).l,a2		; Liliam: hyper touch - only collide with enemies
 
-loc_1A44E:
+	.loop2:
+		move.l	(a2)+,d0				;
+		bmi.s	locret_1A462				;
+		cmp.l	(a1),d0					;
+		bne.s	.loop2					;
+
+	.valid:
 		move.b	#-1,$2D(a1)
 		move.w	a1,superTailsBirds_target_address(a0)
 		move.b	#1,superTailsBirds_target_found(a0)
@@ -56086,16 +56093,17 @@ Obj_LBZExplodingTrigger:
 		move.b	#$10,height_pixels(a0)
 		move.w	#$280,priority(a0)
 		move.b	#$C6,collision_flags(a0)
-		move.l	#loc_25CF0,(a0)
+		move.l	#Obj_LBZExplodingTrigger_Main,(a0)
 
-loc_25CF0:
+Obj_LBZExplodingTrigger_Main:
 		move.b	collision_property(a0),d0
 		beq.w	loc_25D26
-		move.b	subtype(a0),d0
-		andi.w	#$F,d0
-		lea	(Level_trigger_array).w,a3
-		lea	(a3,d0.w),a3
-		moveq	#0,d3
+		bmi.s	loc_25D3C				; Liliam: hyper touch - stop bouncing players on defeat
+;		move.b	subtype(a0),d0				;
+;		andi.w	#$F,d0					;
+;		lea	(Level_trigger_array).w,a3		;
+;		lea	(a3,d0.w),a3				;
+;		moveq	#0,d3					;
 		lea	(Player_1).w,a1
 		bclr	#0,collision_property(a0)
 		beq.s	loc_25D18
@@ -56124,6 +56132,9 @@ sub_25D2C:
 		bne.s	locret_25D52
 		neg.w	x_vel(a1)
 		neg.w	y_vel(a1)
+
+loc_25D3C:
+		jsr	(LRZShootingTrigger_LoadArray).l	; Liliam: hyper touch - stop bouncing players on defeat
 		bchg	d3,(a3)
 		move.l	#Obj_Explosion,(a0)
 		move.b	#2,routine(a0)
@@ -94004,9 +94015,9 @@ Obj_LRZShootingTrigger:
 		andi.w	#$F0,d0
 		lsr.w	#2,d0
 		move.w	d0,$30(a0)
-		move.l	#loc_42E00,(a0)
+		move.l	#Obj_LRZShootingTrigger_Main,(a0)
 
-loc_42E00:
+Obj_LRZShootingTrigger_Main:
 		subq.w	#1,$2E(a0)
 		bpl.s	loc_42E84
 		move.w	$30(a0),$2E(a0)
@@ -94037,17 +94048,14 @@ loc_42E7C:
 		jsr	(Play_SFX).l
 
 loc_42E84:
-;		move.b	collision_property(a0),d0		; Liliam: bugfix - prevent deadlock
-;		beq.w	loc_42EBA				;
-		move.b	subtype(a0),d0
-		andi.w	#$F,d0
-		lea	(Level_trigger_array).w,a3
-		lea	(a3,d0.w),a3
-		btst	#0,(a3)					;
-		bne.w	loc_403CA				;
-		move.b	collision_property(a0),d0		;
-		beq.s	loc_42EBA				;
-		moveq	#0,d3
+		move.b	collision_property(a0),d0
+		beq.w	loc_42EBA
+		bmi.s	loc_42ED0				; Liliam: hyper touch - stop bouncing players on defeat
+;		move.b	subtype(a0),d0				;
+;		andi.w	#$F,d0					;
+;		lea	(Level_trigger_array).w,a3		;
+;		lea	(a3,d0.w),a3				;
+;		moveq	#0,d3					;
 		lea	(Player_1).w,a1
 		bclr	#0,collision_property(a0)
 		beq.s	loc_42EAC
@@ -94070,9 +94078,13 @@ sub_42EC0:
 		bne.s	locret_42EE6
 		neg.w	x_vel(a1)
 		neg.w	y_vel(a1)
+
+loc_42ED0:
+		bsr.s	LRZShootingTrigger_LoadArray		; Liliam: hyper touch - stop bouncing players on defeat
 		bset	d3,(a3)
 		jsr	(loc_85088).l				; Liliam: bugfix - prevent deadlock
-		move.l	#Obj_Explosion,(a0)
+		move.l	#Obj_LRZShootingTrigger_Delete,(a0)	;
+;		move.l	#Obj_Explosion,(a0)			;
 		move.b	#2,routine(a0)
 		clr.b	collision_flags(a0)
 		clr.b	collision_property(a0)
@@ -94081,6 +94093,21 @@ locret_42EE6:
 		rts
 ; End of function sub_42EC0
 
+; ---------------------------------------------------------------------------
+
+Obj_LRZShootingTrigger_Delete:					; Liliam: bugfix - prevent deadlock
+		bsr.s	LRZShootingTrigger_LoadArray
+		bclr	d3,(a3)
+		jmp	(Obj_Explosion).l
+; ---------------------------------------------------------------------------
+
+LRZShootingTrigger_LoadArray:					; Liliam: hyper touch - stop bouncing players on defeat
+		move.b	subtype(a0),d0
+		andi.w	#$F,d0
+		lea	(Level_trigger_array).w,a3
+		lea	(a3,d0.w),a3
+		moveq	#0,d3
+		rts
 ; ---------------------------------------------------------------------------
 
 loc_42EE8:
