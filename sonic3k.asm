@@ -124566,6 +124566,8 @@ SSZ1_ScreenInit:
 		st	(Events_bg+$05).w
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - skip SSZ intro
 		bne.s	loc_5722C				;
+		cmpi.w	#3,(Player_mode).w			;
+		beq.s	loc_5722C				;
 		move.w	#$200,(Camera_max_X_pos).w
 		move.w	#$BC0,d0
 		move.w	d0,(Camera_max_Y_pos).w
@@ -125667,7 +125669,11 @@ Obj_57E34:
 		subq.w	#1,subtype(a0)
 		bne.s	locret_57E94
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - skip SSZ intro
-		beq.s	loc_57E40				;
+		bne.s	.done					;
+		cmpi.w	#3,(Player_mode).w			;
+		bne.s	loc_57E40				;
+
+	.done:
 		clr.b	(Events_bg+$05).w			;
 		jsr	(SSZ1_Save_StarPost).l			;
 		jmp	(Delete_Current_Sprite).l		;
@@ -176848,8 +176854,13 @@ loc_7A60E:
 sub_7A614:
 		lea	word_7A622(pc),a1
 		lea	word_7A628(pc,d0.w),a2
-		jmp	(CopyWordData_7).l					; Liliam: perform Mecha Sonic boss flash
-;		jmp	(CopyWordData_3).l					;
+		tst.b	(Encore_mode).w						; Liliam: perform Mecha Sonic boss flash
+		bne.s	loc_7A61C						;
+		jmp	(CopyWordData_7).l					;
+; ---------------------------------------------------------------------------
+
+loc_7A61C:
+		jmp	(CopyWordData_3).l
 ; End of function sub_7A614
 
 ; ---------------------------------------------------------------------------
