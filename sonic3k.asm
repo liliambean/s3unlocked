@@ -6385,7 +6385,7 @@ Obj_TitleBanner:
 		move.w	#$120,x_pos(a0)
 		tst.b	(Game_mode).w				; Liliam: title screen - quick return by pressing B
 		beq.s	loc_4852				;
-		move.w	#$E6,y_pos(a0)				;
+		move.w	#$D4,y_pos(a0)				;
 		move.w	#6,(V_scroll_value).w			;
 		move.l	#Obj_TitleBanner_Display,(a0)		;
 		move.l	#Obj_TitleTM,(Reserved_object_3).w	;
@@ -6442,10 +6442,9 @@ loc_48B4:
 loc_48C2:
 		move.w	$30(a0),d0
 		neg.w	d0
-		addi.w	#$E6,d0											; Liliam: title screen - add 'Unlocked' branding
-;		addi.w	#$D4,d0											;
+		addi.w	#$D4,d0
 		move.w	d0,y_pos(a0)
-		tst.b	anim_frame(a0)										;
+		tst.b	anim_frame(a0)										; Liliam: title screen - add 'Unlocked' branding
 		bne.s	Obj_TitleBanner_Display									;
 		btst	#0,anim_frame_timer(a0)									;
 		bne.s	Obj_TitleBanner_Display									;
@@ -6463,7 +6462,8 @@ Obj_TitleBanner_Display:
 loc_48F2:
 		moveq	#0,d0
 		move.b	anim_frame(a0),d0
-		move.l	Pal_TitleWaterRot(pc,d0.w),(Target_palette_line_3+$1A).w
+		move.l	Pal_TitleWaterRot(pc,d0.w),(Normal_palette_line_3+$1A).w	; Liliam: title screen - add fade from white
+;		move.l	Pal_TitleWaterRot(pc,d0.w),(Target_palette_line_3+$1A).w	;
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 Pal_TitleWaterRot:
@@ -6475,8 +6475,7 @@ Obj_TitleTM:
 		move.l	#Map_S3TitleBanner,mappings(a0)		;S3DATA
 		move.w	#make_art_tile(ArtTile_Title_Banner,3,1),art_tile(a0)	; Start at $A000
 		move.w	#$188,x_pos(a0)
-		move.w	#$FE,y_pos(a0)										; Liliam: title screen - add 'Unlocked' branding
-;		move.w	#$EC,y_pos(a0)										;
+		move.w	#$EC,y_pos(a0)
 		move.w	#$80,priority(a0)
 		move.b	#$C,width_pixels(a0)
 		move.b	#4,height_pixels(a0)
