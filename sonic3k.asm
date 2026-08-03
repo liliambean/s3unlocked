@@ -89961,17 +89961,8 @@ Obj_SOZMushroomParachute_CheckDelete:							; Liliam: Encore mode - FBZ level or
 		bsr.w	loc_3F572
 		tst.l	(a0)
 		bne.s	Obj_SOZMushroomParachute_Return
-		moveq	#$1A,d0
-		lea	(PalPoint_Encore-$50).l,a1
-		tst.b	(Encore_flags).w
-		bmi.s	.loadPalette
-		lea	(PalPoint).l,a1
-
-	.loadPalette:
-		lsl.w	#3,d0
-		adda.w	d0,a1
-		movea.l	(a1),a1
-		jmp	(PalLoad_Line1).l
+		moveq	#PalID_SOZ1,d0
+		jmp	(LoadPalette_Immediate_Line1).l
 ; ---------------------------------------------------------------------------
 
 Obj_MHZMushroomParachute:
@@ -147513,9 +147504,11 @@ HPZRobotnikShip_BossFlash:								; Liliam: move Egg Mobile boss flash out of pa
 		lea	HPZRobotnikShip_BossFlashColors(pc,d0.w),a2
 		jmp	(CopyWordData_3).l
 ; ---------------------------------------------------------------------------
-HPZRobotnikShip_BossFlashOffsets:
-		dc.w Normal_palette_line_2+$08, Normal_palette_line_2+$1C, Normal_palette_line_2+$0E
-HPZRobotnikShip_BossFlashColors:
+HPZRobotnikShip_BossFlashOffsets:							; Liliam: move Egg Mobile boss flash out of palette line 1
+		dc.w Normal_palette_line_2+$08
+		dc.w Normal_palette_line_2+$1C
+		dc.w Normal_palette_line_2+$0E
+HPZRobotnikShip_BossFlashColors:							; Liliam: move Egg Mobile boss flash out of palette line 1
 		dc.w   $206,  $866,  $222
 		dc.w   $888,  $CCC,  $EEE
 ObjSlot_CutsceneKnux:
@@ -154988,12 +154981,14 @@ loc_6BC1C:
 
 ; ---------------------------------------------------------------------------
 word_6BC30:
-		dc.w Normal_palette_line_2+$14, Normal_palette_line_2+$16, Normal_palette_line_2+$1C
+		dc.w Normal_palette_line_2+$14
+		dc.w Normal_palette_line_2+$16
+		dc.w Normal_palette_line_2+$1C
+		dc.w Normal_palette_line_3+$0E						; Liliam: add Egg Mobile boss flash
+		dc.w Normal_palette_line_3+$1C						;
+		dc.w Normal_palette_line_3+$1E						;
 
-		; Liliam: add Egg Mobile boss flash
-		dc.w Normal_palette_line_3+$0E, Normal_palette_line_3+$1C, Normal_palette_line_3+$1E
-
-word_6BC36:	dc.w      6,  $222,  $624,    8,  $866,  $222				; Liliam: add Egg Mobile boss flash
+word_6BC36:	dc.w      6,  $222,  $624,    8,  $866,  $222				;
 		dc.w   $CCC,  $EEE,  $888, $888,  $CCC,  $EEE				;
 ;		dc.w      6,   $20,  $624						;
 ;		dc.w   $EEE,  $EEE,  $EEE						;
@@ -166456,7 +166451,8 @@ sub_73604:
 
 ; ---------------------------------------------------------------------------
 word_73612:
-		dc.w Normal_palette_line_2+$08, Normal_palette_line_2+$1C
+		dc.w Normal_palette_line_2+$08
+		dc.w Normal_palette_line_2+$1C
 		dc.w Normal_palette_line_2+$1A			; Liliam: bugfix - LBZ2 boss flash
 word_73616:
 		dc.w    $26,   $20
@@ -167495,7 +167491,9 @@ LBZEndBoss_BossFlash:						; Liliam: bugfix - LBZ2 boss flash
 		jmp	(CopyWordData_3).l
 ; ---------------------------------------------------------------------------
 LBZEndBoss_BossFlashOffsets:					; Liliam: bugfix - LBZ2 boss flash
-		dc.w Normal_palette_line_2+$1A, Normal_palette_line_2+$1C, Normal_palette_line_2+$16
+		dc.w Normal_palette_line_2+$1A
+		dc.w Normal_palette_line_2+$1C
+		dc.w Normal_palette_line_2+$16
 LBZEndBoss_BossFlashColors:					; Liliam: bugfix - LBZ2 boss flash
 		dc.w   $A64,  $642,  $222
 		dc.w   $888,  $AAA,  $EEE
@@ -177399,8 +177397,11 @@ loc_7A61C:
 ; ---------------------------------------------------------------------------
 word_7A622:
 		dc.w Normal_palette_line_4+$0E						; Liliam: move Egg Mobile boss flash out of palette line 1
-		dc.w Normal_palette_line_4+$1C, Normal_palette_line_4+$1E		;
-;		dc.w Normal_palette+$0E, Normal_palette+$1C, Normal_palette+$1E		;
+		dc.w Normal_palette_line_4+$1C						;
+		dc.w Normal_palette_line_4+$1E						;
+;		dc.w Normal_palette+$0E							;
+;		dc.w Normal_palette+$1C							;
+;		dc.w Normal_palette+$1E							;
 		dc.w Normal_palette_line_2+$14					; Liliam: perform Mecha Sonic boss flash
 		dc.w Normal_palette_line_2+$16					;
 		dc.w Normal_palette_line_2+$18					;
@@ -182810,13 +182811,15 @@ loc_7E490:
 loc_7E4A2:
 		subq.w	#1,$2E(a0)
 		bpl.w	locret_7DE44
-		lea	(Pal_DEZMiniboss2).l,a1
-		lea	(Normal_palette_line_2).w,a2
-		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d6
+		moveq	#PalID_DEZ2,d0							; Liliam: Encore mode - palette
+		bsr.w	LoadPalette_Immediate_Line1					;
+;		lea	(Pal_DEZMiniboss2).l,a1						;
+;		lea	(Normal_palette_line_2).w,a2					;
+;		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d6	;
 
-loc_7E4B6:
-		move.l	(a1)+,(a2)+
-		dbf	d6,loc_7E4B6
+;loc_7E4B6:
+;		move.l	(a1)+,(a2)+							;
+;		dbf	d6,loc_7E4B6							;
 		clr.b	(Player_1+object_control).w
 		clr.b	(Ctrl_1_locked).w
 		clr.b	(Ctrl_2_locked).w
@@ -184029,9 +184032,8 @@ byte_7EFF4:
 Pal_DEZMiniboss1:
 		binclude "Levels/DEZ/Palettes/Miniboss 1.bin"
 		even
-Pal_DEZMiniboss2:
-		binclude "Levels/DEZ/Palettes/Miniboss 2.bin"
-		even
+;Pal_DEZMiniboss2:
+		; Liliam: Encore mode - palette
 word_7F03C:	palscriptptr .header, .data
 		dc.w 0
 .header	palscripthdr	Normal_palette_line_2+$16, 3, 11-1
@@ -187146,8 +187148,11 @@ sub_80ED6:
 ; ---------------------------------------------------------------------------
 word_80EE2:
 		dc.w Normal_palette_line_2+$08				 		; Liliam: move Egg Mobile boss flash out of palette line 1
-		dc.w Normal_palette_line_2+$1C, Normal_palette_line_2+$0E		;
-;		dc.w Normal_palette+$0E, Normal_palette+$1C, Normal_palette+$1E		;
+		dc.w Normal_palette_line_2+$1C						;
+		dc.w Normal_palette_line_2+$0E						;
+;		dc.w Normal_palette+$0E							;
+;		dc.w Normal_palette+$1C							;
+;		dc.w Normal_palette+$1E							;
 word_80EE8:
 		dc.w      8,  $866,  $222
 		dc.w   $888,  $CCC,  $EEE
@@ -187529,13 +187534,16 @@ sub_81230:
 
 ; ---------------------------------------------------------------------------
 word_8123E:
-		; Liliam: bugfix - DEZ3 boss flash
-		dc.w Normal_palette_line_2+$12
-
-		dc.w Normal_palette_line_2+$14, Normal_palette_line_2+$16, Normal_palette_line_2+$18
-		dc.w Normal_palette_line_2+$1A, Normal_palette_line_2+$1C
+		dc.w Normal_palette_line_2+$12			; Liliam: bugfix - DEZ3 boss flash
+;		dc.w Normal_palette_line_2+$14			;
+;		dc.w Normal_palette_line_2+$16			;
+		dc.w Normal_palette_line_2+$18
+		dc.w Normal_palette_line_2+$1A
+		dc.w Normal_palette_line_2+$1C
+		dc.w Normal_palette_line_2+$14			;
+		dc.w Normal_palette_line_2+$16			;
 word_81248:
-		dc.w   $CAA					; Liliam: bugfix - DEZ3 boss flash
+		dc.w   $CAA					;
 		dc.w   $888,  $666,  $444,  $222,     0
 		dc.w   $EEE					;
 		dc.w   $EEE,  $EEE,  $CCC,  $AAA,  $888
@@ -194655,6 +194663,18 @@ locret_8593E:
 		rts
 ; End of function sub_8592C
 
+; ---------------------------------------------------------------------------
+
+LoadPalette_Immediate_Line1:					; Liliam: Encore mode - palette
+		lea	(PalPoint_Encore-$48).l,a1
+		tst.b	(Encore_flags).w
+		bmi.s	.notEncore
+		lea	(PalPoint).l,a1
+
+	.notEncore:
+		lsl.w	#3,d0
+		adda.w	d0,a1
+		movea.l	(a1),a1
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -200463,14 +200483,14 @@ loc_88AD4:
 
 ; ---------------------------------------------------------------------------
 word_88AE4:
-		dc.w Normal_palette_line_2+$18, Normal_palette_line_2+$1A, Normal_palette_line_2+$1C
-
-		; Liliam: bugfix - MGZ1 boss flash
-		dc.w Normal_palette_line_2+$16
+		dc.w Normal_palette_line_2+$16			; Liliam: bugfix - MGZ1 boss flash
+		dc.w Normal_palette_line_2+$18
+		dc.w Normal_palette_line_2+$1A
+		dc.w Normal_palette_line_2+$1C
 word_88AEA:
+		dc.w    $20					;
 		dc.w   $CAA,  $866,  $644
-		dc.w    $20					; Liliam: bugfix - MGZ1 boss flash
-		dc.w   $AAA,  $CCC,  $EEE,  $EEE		;
+		dc.w   $EEE,  $AAA,  $CCC,  $EEE		;
 ;		dc.w   $EEE,  $EEE,  $EEE			;
 ObjDat_Tunnelbot:
 		dc.l Map_MGZMiniboss
@@ -206729,7 +206749,8 @@ locret_8C482:
 
 loc_8C484:
 		jsr	(MoveSprite2).l
-		jmp	Obj_Wait(pc)
+		jmp	(Obj_Wait).l				; Liliam: fallout
+;		jmp	Obj_Wait(pc)				;
 ; ---------------------------------------------------------------------------
 
 loc_8C48E:
@@ -206795,7 +206816,8 @@ loc_8C502:
 		move.l	#loc_8C522,(a0)
 		move.w	x_pos(a0),$3E(a0)
 		move.w	y_pos(a0),$40(a0)
-		jmp	Child_Draw_Sprite(pc)
+		jmp	(Child_Draw_Sprite).l			; Liliam: fallout
+;		jmp	Child_Draw_Sprite(pc)			;
 ; ---------------------------------------------------------------------------
 
 loc_8C522:
@@ -216623,6 +216645,7 @@ Pal_ContinueScreen:								; Liliam: ported from S3 - restore continue font
 		binclude "General/Continue/Palettes/Palette.bin"
 		even
 Pal_SSZ1:
+		; Liliam: bugfix - SSZ enemy palette assignment
 		binclude "Levels/SSZ/Palettes/1.bin"
 		even
 Pal_SSZ2:
@@ -216638,9 +216661,11 @@ Pal_Ending2:
 		binclude "General/Ending/Palettes/Ending 2.bin"
 		even
 Pal_DEZ1:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "Levels/DEZ/Palettes/1.bin"
 		even
 Pal_DEZ2:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "Levels/DEZ/Palettes/2.bin"
 		even
 Pal_DDZ:
@@ -216683,6 +216708,7 @@ Pal_HPZIntro:
 		binclude "Levels/HPZ/Palettes/Intro.bin"
 		even
 Pal_DEZBoss:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "Levels/DEZ/Palettes/Boss.bin"
 		even
 Pal_AIZIntro_Encore:						; Liliam: Encore mode - palette
@@ -217129,9 +217155,11 @@ ArtUnc_AniSSZ__5:
 		binclude "Levels/SSZ/Animated Tiles/5.bin"
 		even
 ArtUnc_AniDEZ__0:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "Levels/DEZ/Animated Tiles/0.bin"
 		even
 ArtUnc_AniDEZ__1:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "Levels/DEZ/Animated Tiles/1.bin"
 		even
 ArtUnc_AniDEZ__2:
@@ -217959,12 +217987,15 @@ ArtKosM_SSZSpiralRamp:
 		binclude "Levels/SSZ/KosinskiM Art/Spiral Ramp.bin"
 		even
 ArtNem_DEZMisc:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "Levels/DEZ/Nemesis Art/Misc Art.bin"
 		even
 ArtNem_DEZMiniboss:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "Levels/DEZ/Nemesis Art/Miniboss.bin"
 		even
 ArtNem_DEZ2Extra:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "Levels/DEZ/Nemesis Art/Act 2 Extra Art.bin"
 		even
 ArtNem_2PArt_1:							; Liliam: reinsert S3 data
@@ -218371,10 +218402,11 @@ ArtUnc_MechaSonic:
 		binclude "General/Sprites/Mecha Sonic/Mecha Sonic.bin"
 		even
 ArtKosM_EggRoboBadnik:
+		; Liliam: bugfix - SSZ enemy palette assignment
 		binclude "General/Sprites/Egg Robo/Egg Robo Badnik.bin"
 		even
 ArtScaled_EggRoboFly:
-		; Liliam: bugfix - remove stray pixel
+		; Liliam: bugfix - SSZ enemy palette assignment
 		binclude "General/Sprites/Egg Robo/Egg Robo Fly Scaled.bin"
 		even
 ArtKosM_MechaSonicHead:
@@ -218401,9 +218433,11 @@ ArtKosM_MechaSonicExtra:
 ;ArtKosM_EndingMasterEmerald:
 		; Liliam: bugfix - queue Master Emerald for ending
 ArtKosM_Spikebonker:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "General/Sprites/Spikebonker/Spikebonker.bin"
 		even
 ArtKosM_Chainspike:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "General/Sprites/Chainspike/Chainspike.bin"
 		even
 ArtKosM_DEZMinibossMisc:
@@ -218413,6 +218447,7 @@ ArtKosM_DEZEndBoss:
 		binclude "Levels/DEZ/KosinskiM Art/End Boss.bin"
 		even
 ArtKosM_DEZFinalBossMisc:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "Levels/DEZ/KosinskiM Art/Final Boss Misc Art.bin"
 		even
 ArtKosM_BossMasterEmerald:
@@ -219843,6 +219878,7 @@ DEZ_16x16_Primary_Kos:
 		binclude "Levels/DEZ/Blocks/Primary.bin"
 		even
 ArtKosM_DEZ_Primary:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "Levels/DEZ/Tiles/Primary.bin"
 		even
 DEZ_128x128_Kos:
@@ -219864,6 +219900,7 @@ DEZ3_16x16_Kos:
 		binclude "Levels/DEZ/Blocks/Act 3.bin"
 		even
 ArtKosM_DEZ3:
+		; Liliam: bugfix - DEZ enemy palette assignment
 		binclude "Levels/DEZ/Tiles/Final Boss Act.bin"
 		even
 DEZ3_128x128_Kos:
