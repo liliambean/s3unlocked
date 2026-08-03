@@ -20708,6 +20708,11 @@ loc_F686:
 		addi.b	#$1F,d0
 
 loc_F68A:
+		tst.b	(Reverse_gravity_flag).w		; Liliam: hidden skill - climb dash
+		beq.s	.notUpsideDown				;
+		neg.b	d0					;
+
+	.notUpsideDown:
 		andi.b	#$C0,d0
 		beq.w	CheckFloorDist_Part2
 		cmpi.b	#$80,d0
@@ -21866,6 +21871,8 @@ Touch_Enemy:
 		cmpi.b	#9,anim(a0)				; Is player in their spin dash animation?
 		beq.s	.checkhurtenemy				; If so, branch
 
+		cmpi.b	#$A,anim(a0)				; Liliam: hidden skill - climb dash
+		beq.s	.checkhurtenemy				;
 		btst	#Status_Roll,status(a0)			; Liliam: hidden skill - drop dash (credit: MainMemory)
 		bne.s	.checkhurtenemy				;
 ;		cmpi.b	#2,anim(a0)				;
@@ -23969,7 +23976,8 @@ loc_11350:
 loc_11370:
 		move.b	#$40,d1
 		tst.w	ground_vel(a0)
-		beq.s	locret_113F4
+		beq.w	locret_113F4				; Liliam: hidden skill - climb dash
+;		beq.s	locret_113F4				;
 		bmi.s	loc_1137E
 		neg.w	d1
 
@@ -24008,6 +24016,8 @@ locret_113CE:
 ; ---------------------------------------------------------------------------
 
 loc_113D0:
+		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		beq.s	Sonic_Move_Release			;
 		sub.w	d1,y_vel(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -24023,6 +24033,12 @@ loc_113D6:
 
 loc_113F0:
 		add.w	d1,y_vel(a0)
+		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		bne.s	locret_113F4				;
+
+Sonic_Move_Release:
+		bset	#Status_InAir,status(a0)		;
+		clr.w	y_vel(a0)				;
 
 locret_113F4:
 		rts
@@ -24706,7 +24722,7 @@ loc_11908:
 		move.b	character_id(a0),d0			; Liliam: add extra characters
 		bne.s	Sonic_ExtraCharacterMoves		;
 
-		move.b	#7,(Dust_P2+anim).w			; Liliam: dash dust - player 2 insta-shield
+		move.b	#5,(Dust_P2+anim).w			; Liliam: dash dust - player 2 insta-shield
 		bra.w	loc_11A04				;
 ; ---------------------------------------------------------------------------
 
@@ -25908,7 +25924,7 @@ Sonic_DropDash_Release:
 		ori.b	#1,status(a6)
 
 	.noXflip:
-		move.w	#5<<8,anim(a6)
+		move.w	#6<<8,anim(a6)
 		btst	#Status_OnObj,status(a0)
 		beq.s	.setanim
 		move.l	a0,-(sp)
@@ -25916,7 +25932,7 @@ Sonic_DropDash_Release:
 		move.w	x_pos(a0),x_vel(a6)
 		move.w	y_pos(a0),y_vel(a6)
 		move.w	a0,parent3(a6)
-		move.w	#6<<8,anim(a6)
+		move.w	#7<<8,anim(a6)
 		movea.l	(sp)+,a0
 
 	.setanim:
@@ -28914,7 +28930,7 @@ loc_13DD0:
 		blo.s	loc_13E0A
 		andi.w	#$F3F3,d1
 		ori.w	#$404,d1
-		btst	#5,$2A(a0)				; Liliam: Tails CPU - only jump when pushing
+		btst	#p1_pushing_bit,status(a0)		; Liliam: Tails CPU - only jump when pushing
 		bne.w	loc_13E9C				;
 
 loc_13E0A:
@@ -28933,7 +28949,7 @@ loc_13E26:
 		blo.s	loc_13E34
 		andi.w	#$F3F3,d1
 		ori.w	#$808,d1
-		btst	#5,$2A(a0)				; Liliam: Tails CPU - only jump when pushing
+		btst	#p1_pushing_bit,status(a0)		; Liliam: Tails CPU - only jump when pushing
 		bne.s	loc_13E9C				;
 
 loc_13E34:
@@ -30318,7 +30334,8 @@ loc_14B7A:
 loc_14B9A:
 		move.b	#$40,d1
 		tst.w	ground_vel(a0)
-		beq.s	locret_14C1E
+		beq.w	locret_14C1E				; Liliam: hidden skill - climb dash
+;		beq.s	locret_14C1E				;
 		bmi.s	loc_14BA8
 		neg.w	d1
 
@@ -30357,6 +30374,8 @@ locret_14BF8:
 ; ---------------------------------------------------------------------------
 
 loc_14BFA:
+		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		beq.s	Tails_Move_Release			;
 		sub.w	d1,y_vel(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -30372,6 +30391,12 @@ loc_14C00:
 
 loc_14C1A:
 		add.w	d1,y_vel(a0)
+		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		bne.s	locret_14C1E				;
+
+Tails_Move_Release:
+		bset	#Status_InAir,status(a0)		;
+		clr.w	y_vel(a0)				;
 
 locret_14C1E:
 		rts
@@ -33734,7 +33759,8 @@ Knuckles_Gliding_HitWall:
 		; This appears to be a bug, but, luckily, the X and Y radius are both
 		; 10, so this is harmless.
 		move.w	x_pos(a0),d3
-		move.b	y_radius(a0),d0
+		move.b	x_radius(a0),d0				; Liliam: bugfix
+;		move.b	y_radius(a0),d0				;
 		ext.w	d0
 		sub.w	d0,d3
 		subq.w	#1,d3
@@ -33774,7 +33800,8 @@ Knuckles_Gliding_HitWall:
 		; This appears to be a bug, but, luckily, the X and Y radius are both
 		; 10, so this is harmless.
 		move.w	x_pos(a0),d3
-		move.b	y_radius(a0),d0
+		move.b	x_radius(a0),d0				; Liliam: bugfix
+;		move.b	y_radius(a0),d0				;
 		ext.w	d0
 		add.w	d0,d3
 		addq.w	#1,d3
@@ -33974,6 +34001,8 @@ Knuckles_Wall_Climb:
 		move.l	(Secondary_collision_addr).w,(Collision_addr).w
 
 loc_16BFA:
+		tst.b	spin_dash_flag(a0)			; Liliam: hidden skill - climb dash
+		bne.w	Knuckles_ClimbDash			;
 		move.b	lrb_solid_bit(a0),d5
 
 		moveq	#0,d1	; Climbing animation delta: make the animation pause.
@@ -34126,7 +34155,7 @@ loc_16BFA:
 		bsr.w	sub_F828				;
 		tst.w	d1					;
 		bpl.w	.resetAnim				;
-		bra.s	.reachedFloor				;
+		bra.w	.reachedFloor				;
 ;		beq.w	.finishMoving				;
 ; ---------------------------------------------------------------------------
 
@@ -34138,10 +34167,28 @@ loc_16BFA:
 		bpl.w	.resetAnim				;
 		neg.w	d1					;
 		addq.w	#1,d1					;
-		bra.s	.reachedFloor				;
+		bra.w	.reachedFloor				;
 ; ---------------------------------------------------------------------------
 
 .climbingDown:
+		btst	#Skill_KnuxClimbDash,(Skill_options).w	; Liliam: hidden skill - climb dash
+		beq.s	.notClimbDash				;
+		move.b	(Ctrl_1_pressed_logical).w,d0		;
+		andi.b	#button_ABC_mask,d0			;
+		beq.s	.notClimbDash				;
+		clr.w	spin_dash_counter(a0)			;
+		move.b	#1,spin_dash_flag(a0)			;
+		move.b	#$A,anim(a0)				;
+		cmpi.b	#12,air_left(a0)			;
+		blo.s	.playSFX				;
+		move.w	#8<<8,anim(a6)				;
+
+.playSFX:
+		moveq	#signextendB(sfx_Spindash),d0		;
+		jmp	(Play_SFX).l				;
+; ---------------------------------------------------------------------------
+
+.notClimbDash:
 		tst.b	(Reverse_gravity_flag).w
 		bne.w	.climbingDown_ReverseGravity
 
@@ -34378,6 +34425,7 @@ Knuckles_LetGoOfWall:
 		move.b	default_y_radius(a0),y_radius(a0)
 		move.b	default_x_radius(a0),x_radius(a0)
 
+		clr.b	anim(a6)				; Liliam: hidden skill - climb dash
 		rts
 ; End of function Knuckles_Glide
 
@@ -34642,6 +34690,80 @@ Knuckles_Move_Glide:
 
 ; ---------------------------------------------------------------------------
 
+Knuckles_ClimbDash:						; Liliam: hidden skill - climb dash
+		btst	#button_down,(Ctrl_1_held_logical).w
+		beq.s	Knuckles_ClimbDash_Release
+		tst.w	spin_dash_counter(a0)
+		beq.s	.checkButtons
+		move.w	spin_dash_counter(a0),d0
+		lsr.w	#5,d0
+		sub.w	d0,spin_dash_counter(a0)
+		bcc.s	.checkButtons
+		move.w	#0,spin_dash_counter(a0)
+
+	.checkButtons:
+		move.b	(Ctrl_1_pressed_logical).w,d0
+		andi.b	#button_ABC_mask,d0
+		beq.w	.moveCamera
+		move.w	#$A<<8,anim(a0)
+		move.w	#signextendB(sfx_Spindash),d0
+		jsr	(Play_SFX).l
+		addi.w	#$200,spin_dash_counter(a0)
+		cmpi.w	#$800,spin_dash_counter(a0)
+		blo.s	.moveCamera
+		move.w	#$800,spin_dash_counter(a0)
+
+	.moveCamera:
+		move.w	(Camera_Y_pos).w,d0
+		cmp.w	(Camera_min_Y_pos).w,d0
+		beq.s	.return
+		cmp.w	(Camera_max_Y_pos).w,d0
+		beq.s	.return
+		sub.w	y_pos(a0),d0
+		andi.w	#$FFFE,d0
+		cmpi.w	#-$60,d0
+		beq.s	.return
+		blo.s	.increment
+		subq.w	#4,(Camera_Y_pos).w
+
+	.increment:
+		addq.w	#2,(Camera_Y_pos).w
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
+Knuckles_ClimbDash_Release:					; Liliam: hidden skill - climb dash
+		move.b	#$E,y_radius(a0)
+		move.b	#7,x_radius(a0)
+		move.b	#2,anim(a0)
+		bset	#Status_Roll,status(a0)
+		bclr	#Status_InAir,status(a0)
+		clr.b	jumping(a0)
+		clr.b	double_jump_flag(a0)
+		clr.b	spin_dash_flag(a0)
+		clr.b	anim(a6)
+		moveq	#0,d0
+		move.b	spin_dash_counter(a0),d0
+		add.w	d0,d0
+		lea	(word_15320).l,a1
+		tst.b	(Super_Sonic_Knux_flag).w
+		bne.s	.applySpeed
+		lea	(word_1530E).l,a1
+
+	.applySpeed:
+		move.w	(a1,d0.w),ground_vel(a0)
+		move.b	#$C0,angle(a0)
+		btst	#Status_Facing,status(a0)
+		beq.s	.playSFX
+		neg.w	ground_vel(a0)
+		move.b	#$40,angle(a0)
+
+	.playSFX:
+		moveq	#signextendB(sfx_Dash),d0
+		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
 Knux_Spin_Path:
 		tst.b	spin_dash_flag(a0)
 		bne.s	loc_170CC
@@ -34656,7 +34778,8 @@ loc_170CC:
 		bsr.w	Player_SlopeRepel
 		tst.b	(Background_collision_flag).w
 		beq.s	locret_17116
-		bsr.w	sub_F846
+		jsr	(sub_F846).l				; Liliam: fallout
+;		bsr.w	sub_F846				;
 		tst.w	d1
 		bmi.w	Kill_Character
 		movem.l	a4-a6,-(sp)
@@ -34925,7 +35048,8 @@ loc_17382:
 loc_173A2:
 		move.b	#$40,d1
 		tst.w	ground_vel(a0)
-		beq.s	locret_17426
+		beq.w	locret_17426				; Liliam: hidden skill - climb dash
+;		beq.s	locret_17426				;
 		bmi.s	loc_173B0
 		neg.w	d1
 
@@ -34965,6 +35089,8 @@ locret_17400:
 ; ---------------------------------------------------------------------------
 
 loc_17402:
+		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		beq.s	Knux_Move_Release			;
 		sub.w	d1,y_vel(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -34980,6 +35106,12 @@ loc_17408:
 
 loc_17422:
 		add.w	d1,y_vel(a0)
+		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		bne.s	locret_17426				;
+
+Knux_Move_Release:
+		bset	#Status_InAir,status(a0)		;
+		clr.w	y_vel(a0)				;
 
 locret_17426:
 		rts
@@ -35832,6 +35964,7 @@ Player_TouchFloor_CheckGlideLand:
 		bne.w	 Player_TouchFloor			;
 		tst.b	 double_jump_flag(a0)			;
 		beq.s	 Knux_TouchFloor			;
+		clr.b	spin_dash_flag(a0)			; Liliam: hidden skill - climb dash
 		cmpi.b	 #3,double_jump_flag(a0)		;
 		bls.s	 locret_17B16				;
 
@@ -37124,9 +37257,10 @@ off_18BBE:
 		dc.w DashDust_SpinDash-off_18BBE
 		dc.w DashDust_Skid-off_18BBE
 		dc.w DashDust_Snow-off_18BBE
+		dc.w DashDust_InstaShield-off_18BBE		; Liliam: dash dust - player 2 insta-shield
 		dc.w DashDust_DropDash-off_18BBE		; Liliam: hidden skill - drop dash
 		dc.w DashDust_DropDash_OnObj-off_18BBE		;
-		dc.w DashDust_InstaShield-off_18BBE		; Liliam: dash dust - player 2 insta-shield
+		dc.w DashDust_ClimbDash-off_18BBE		; Liliam: hidden skill - climb dash
 ; ---------------------------------------------------------------------------
 
 DashDust_Splash:
@@ -37196,6 +37330,7 @@ DashDust_InstaShield_Done:					; Liliam: dash dust - player 2 insta-shield
 ; ---------------------------------------------------------------------------
 
 DashDust_SpinDash:
+DashDust_ClimbDash:
 		cmpi.b	#12,air_left(a2)
 		blo.w	DashDust_Clear
 		cmpi.b	#State_Hurt,routine(a2)
@@ -194306,8 +194441,12 @@ Check_PlayerAttack:
 		bne.s	loc_85822
 		cmpi.b	#9,anim(a1)
 		beq.s	loc_85822
-		cmpi.b	#2,anim(a1)
-		beq.s	loc_85822
+		cmpi.b	#$A,anim(a1)				; Liliam: hidden skill - climb dash
+		beq.s	loc_85822				;
+		btst	#Status_Roll,status(a1)			; Liliam: hidden skill - drop dash (credit: MainMemory)
+		bne.s	loc_85822				;
+;		cmpi.b	#2,anim(a1)				;
+;		beq.s	loc_85822				;
 		moveq	#0,d0
 		move.b	character_id(a1),d0
 		add.w	d0,d0
@@ -219157,6 +219296,7 @@ ArtUnc_Invincibility:
 ArtUnc_Invincibility_end:
 		even
 ArtUnc_DashDust:
+		; Liliam: hidden skill - climb dash
 		binclude "General/Sprites/Dash Dust/Dash Dust.bin"
 		even
 ArtUnc_SuperSonic_Stars:
@@ -220466,6 +220606,7 @@ ICZ2_Rings:
 SpriteTerminat8:
 		dc.w $FFFF, 0, 0
 LBZ1_Sprites:
+		; Liliam: hidden skill - climb dash
 		binclude "Levels/LBZ/Object Pos/1.bin"
 		even
 LBZ2_Sprites:
@@ -221079,7 +221220,7 @@ LRZ1_Sprites:
 		binclude "Levels/LRZ/Object Pos/1.bin"
 		even
 LRZ2_Sprites:
-		; Liliam: bugfix - add missing solid blocks
+		; Liliam: hidden skill - climb dash
 		binclude "Levels/LRZ/Object Pos/2.bin"
 		even
 LRZ1_Sprites_Encore:						; Liliam: Encore mode - layouts

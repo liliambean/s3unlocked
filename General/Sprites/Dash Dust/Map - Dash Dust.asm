@@ -35,37 +35,35 @@ Map_DashDust_:
 		dc.w Map_DashDust_InstaShield_3-Map_DashDust_
 		dc.w Map_DashDust_InstaShield_4-Map_DashDust_
 		dc.w Map_DashDust_InstaShield_5-Map_DashDust_
+		dc.w Map_DashDust_ClimbDash_0-Map_DashDust_
+		dc.w Map_DashDust_ClimbDash_1-Map_DashDust_
+		dc.w Map_DashDust_ClimbDash_2-Map_DashDust_
+		dc.w Map_DashDust_ClimbDash_3-Map_DashDust_
+		dc.w Map_DashDust_ClimbDash_4-Map_DashDust_
+		dc.w Map_DashDust_ClimbDash_5-Map_DashDust_
+		dc.w Map_DashDust_ClimbDash_6-Map_DashDust_
 word_18E30:	dc.w 0
 word_18E32:	dc.w 1
 		dc.b  $F2,   9,   0,   0, $FF, $F0
-word_18E3A:	dc.w 1
-		dc.b  $E2,  $F,   0,   0, $FF, $F0
-word_18E42:	dc.w 1
-		dc.b  $E2,  $F,   0,   0, $FF, $F0
-word_18E4A:	dc.w 1
-		dc.b  $E2,  $F,   0,   0, $FF, $F0
+word_18E3A:
+word_18E42:
+word_18E4A:
 word_18E52:	dc.w 1
 		dc.b  $E2,  $F,   0,   0, $FF, $F0
 word_18E5A:	dc.w 1
 		dc.b  $EA,  $E,   0,   0, $FF, $F0
 word_18E62:	dc.w 1
 		dc.b  $F2,  $D,   0,   0, $FF, $F0
-word_18E6A:	dc.w 1
-		dc.b  $FA,  $C,   0,   0, $FF, $F0
+word_18E6A:
 word_18E72:	dc.w 1
 		dc.b  $FA,  $C,   0,   0, $FF, $F0
-word_18E7A:	dc.w 1
-		dc.b    4,  $D,   0,   0, $FF, $E0
-word_18E82:	dc.w 1
-		dc.b    4,  $D,   0,   0, $FF, $E0
+word_18E7A:
+word_18E82:
 word_18E8A:	dc.w 1
 		dc.b    4,  $D,   0,   0, $FF, $E0
-word_18E92:	dc.w 1
-		dc.b  $FC,  $E,   0,   0, $FF, $E0
-word_18E9A:	dc.w 1
-		dc.b  $FC,  $E,   0,   0, $FF, $E0
-word_18EA2:	dc.w 1
-		dc.b  $FC,  $E,   0,   0, $FF, $E0
+word_18E92:
+word_18E9A:
+word_18EA2:
 word_18EAA:	dc.w 1
 		dc.b  $FC,  $E,   0,   0, $FF, $E0
 word_18EB2:	dc.w 1
@@ -109,3 +107,14 @@ Map_DashDust_InstaShield_5:
 		dc.b  $F0,   4, $18,  $E, $FF, $E8
 		dc.b  $F8,  $B, $18,   2, $FF, $E8
 		dc.b  $10,   4, $18,   0,   0,   0
+Map_DashDust_ClimbDash_0:
+Map_DashDust_ClimbDash_1:
+Map_DashDust_ClimbDash_2:
+		dc.w 1
+		dc.b    0,   7,   0,   0, $FF, $FB
+Map_DashDust_ClimbDash_3:
+Map_DashDust_ClimbDash_4:
+Map_DashDust_ClimbDash_5:
+Map_DashDust_ClimbDash_6:
+		dc.w 1
+		dc.b    0,  $B,   0  , 0, $FF, $F3

@@ -34,7 +34,15 @@ DPLC_DashDust_:
 		dc.w DPLC_DashDust_InstaShield_2-DPLC_DashDust_
 		dc.w DPLC_DashDust_InstaShield_3-DPLC_DashDust_
 		dc.w DPLC_DashDust_InstaShield_4-DPLC_DashDust_
-		dc.w word_18F1E-DPLC_DashDust_
+		dc.w DPLC_DashDust_InstaShield_5-DPLC_DashDust_
+		dc.w DPLC_DashDust_ClimbDash_0-DPLC_DashDust_
+		dc.w DPLC_DashDust_ClimbDash_1-DPLC_DashDust_
+		dc.w DPLC_DashDust_ClimbDash_2-DPLC_DashDust_
+		dc.w DPLC_DashDust_ClimbDash_3-DPLC_DashDust_
+		dc.w DPLC_DashDust_ClimbDash_4-DPLC_DashDust_
+		dc.w DPLC_DashDust_ClimbDash_5-DPLC_DashDust_
+		dc.w DPLC_DashDust_ClimbDash_6-DPLC_DashDust_
+DPLC_DashDust_InstaShield_5:
 word_18F1E:	dc.w 0
 word_18F20:	dc.w 1
 		dc.w $5000
@@ -102,3 +110,24 @@ DPLC_DashDust_InstaShield_3:
 DPLC_DashDust_InstaShield_4:
 		dc.w 1
 		dc.w $F024
+DPLC_DashDust_ClimbDash_0:
+		dc.w 1
+		dc.w $70BA
+DPLC_DashDust_ClimbDash_1:
+		dc.w 1
+		dc.w $70C2
+DPLC_DashDust_ClimbDash_2:
+		dc.w 1
+		dc.w $70CA
+DPLC_DashDust_ClimbDash_3:
+		dc.w 1
+		dc.w $B0D2
+DPLC_DashDust_ClimbDash_4:
+		dc.w 1
+		dc.w $B0DE
+DPLC_DashDust_ClimbDash_5:
+		dc.w 1
+		dc.w $B0EA
+DPLC_DashDust_ClimbDash_6:
+		dc.w 1
+		dc.w $B0F6
