@@ -37677,6 +37677,9 @@ loc_19190:
 ;		bset	#7,art_tile(a0)				;
 
 loc_1919E:
+		move.l	#loc_191AC,(a0)				; Liliam: AIZ intro - add spark trail
+		tst.b	(Level_started_flag).w			;
+		beq.s	loc_191AC				;
 		move.l	#loc_191A4,(a0)
 
 loc_191A4:
@@ -148360,6 +148363,7 @@ loc_6774A:
 		movea.l	(sp)+,a1				; Liliam: bugfix - queue art before clearing super form
 		jsr	(a1)					;
 		clr.b	(Super_Sonic_Knux_flag).w
+		move.l	#Delete_Current_Sprite,(Super_stars).w	; Liliam: AIZ intro - add spark trail
 		move.b	#2,(Super_palette_status).w
 		move.w	#$1E,(Palette_frame).w
 		move.b	#0,(Palette_timer).w				; Liliam: animate super forms consistently
@@ -195349,7 +195353,7 @@ Make_CutsceneSkipObj:						; Liliam: cutscene skip object
 		ror.b	#1,d0
 		lsr.w	#6,d0
 		move.b	d0,routine(a1)
-		cmpi.b	#($1700>>6)+2,routine(a1)
+		cmpi.b	#($1700>>6)+2,d0
 		bne.s	.notHPZSS
 		move.l	#Obj_CutsceneSkip_HPZSSResults,(a1)
 		tst.w	(Ending_running_flag).w
@@ -195362,13 +195366,7 @@ Make_CutsceneSkipObj:						; Liliam: cutscene skip object
 
 	.notHPZSS:
 		tst.w	(Ending_running_flag).w
-		beq.s	.notEnding
-		move.l	#Obj_CutsceneSkip_Ending,(a1)
-		move.w	#1,(Game_paused).w
-		bra.s	CutsceneSkip_LoadArt
-; ---------------------------------------------------------------------------
-
-	.notEnding:
+		bne.s	CutsceneSkip_InitEnding
 		tst.b	(Level_started_flag).w
 		beq.s	CutsceneSkip_LoadArt
 		move.l	#Obj_CutsceneSkip_ScrollHUD,(a1)
@@ -195377,7 +195375,11 @@ CutsceneSkip_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
-CutsceneSkip_LoadArt:						; Liliam: cutscene skip object
+CutsceneSkip_InitEnding:					; Liliam: cutscene skip object
+		move.l	#Obj_CutsceneSkip_Ending,(a1)
+		move.w	#1,(Game_paused).w
+
+CutsceneSkip_LoadArt:
 		move.l	#ArtUnc_CutsceneSkip,d1
 		move.w	#tiles_to_bytes(ArtTile_Ring+$1E),d2
 		move.w	#$110,d3
@@ -213440,8 +213442,8 @@ byte_90BBC:
 		dc.b    1,   0
 		dc.b    0,   0
 Player_StandingFrames:
-		dc.b  $48, $D8, $48, $48, $56, $56, $48		;
-		dc.b  $D7, $D7, $D7, $D7, $D7, $D7, $D7		;
+		dc.b  $48, $BB, $48, $48, $56, $56, $48		;
+		dc.b  $D7, $D5, $D7, $D7, $D7, $D7, $D7		;
 ;		dc.b  $BA, $AD, $56,   0			;
 ;		dc.b  $C4, $B0, $D6,   0			;
 ; ---------------------------------------------------------------------------
