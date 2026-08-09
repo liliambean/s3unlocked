@@ -4,4 +4,4 @@ Sound_6Ba_Header:
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01
 
-	smpsHeaderSFXChannel cPSG2, Sound_6B_PSG2,	$16, $02
+	smpsHeaderSFXChannel cPSG2, Sound_6B_PSG2,	$16, $00

@@ -21593,8 +21593,10 @@ TouchResponse:
 ;		nop
 		jsr	(Test_Ring_Collisions).l
 		bsr.w	ShieldTouchResponse
-		tst.b	character_id(a0)			; Is the player Sonic?
-		bne.s	Touch_NoInstaShield
+		move.b	character_id(a0),d0			; Liliam: add extra characters
+		bne.s	Touch_CheckAmy				;
+;		tst.b	character_id(a0)			;
+;		bne.s	Touch_NoInstaShield			;
 ;		move.b	status_secondary(a0),d0			; Liliam: simplify double jump selection
 ;		andi.b	#$73,d0					;
 ;		bne.s	Touch_NoInstaShield			;
@@ -21602,6 +21604,8 @@ TouchResponse:
 		; By this point, we're focusing purely on the Insta-Shield
 		cmpi.b	#1,double_jump_flag(a0)			; Is the Insta-Shield currently in its 'attacking' mode?
 		bne.s	Touch_NoInstaShield			; If not, branch
+
+loc_FEB2:
 		move.b	status_secondary(a0),d0			; Get status_secondary...
 		move.w	d0,-(sp)				; ...and save it
 		bset	#Status_Invincible,status_secondary(a0)	; Make the player invincible
@@ -21621,6 +21625,14 @@ TouchResponse:
 		moveq	#0,d0
 		rts
 ; ---------------------------------------------------------------------------
+
+Touch_CheckAmy:
+		cmpi.b	#3,d0					; Liliam: add extra characters
+		bne.s	Touch_NoInstaShield			;
+		tst.b	double_jump_flag(a0)			;
+		bne.s	Touch_CheckAmy_HammerAttack		;
+		tst.b	double_jump_property(a0)		;
+		bne.s	loc_FEB2				;
 
 Touch_NoInstaShield:
 		move.w	x_pos(a0),d2				; Get player's x_pos
@@ -21651,6 +21663,13 @@ Touch_NextObj:
 		moveq	#0,d0
 
 locret_FF1C:
+		rts
+; ---------------------------------------------------------------------------
+
+Touch_CheckAmy_HammerAttack:					; Liliam: add extra characters
+		lea	(Collision_response_list).w,a4
+		move.w	(a4)+,d6
+		bne.w	Touch_HammerAttack
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -21847,6 +21866,14 @@ Touch_Monitor:
 ;		cmpi.b	#2,anim(a0)				;
 ;		beq.s	.okaytodestroy				;
 
+		cmpi.b	#3,character_id(a0)			; Liliam: add extra characters
+		bne.s	.checkKnuckles				;
+		tst.b	double_jump_property(a0)		;
+		bne.s	.okaytodestroy				;
+		rts						;
+; ---------------------------------------------------------------------------
+
+	.checkKnuckles:
 		cmpi.b	#2,character_id(a0)			; Is player Knuckles?
 		bne.s	.return					; If not, return
 		cmpi.b	#1,double_jump_flag(a0)			; Is Knuckles gliding?
@@ -21968,6 +21995,8 @@ Touch_EnemyNormal:
 		bsr.w	HUD_AddToScore
 		move.l	#Obj_Explosion,(a1)		; Create enemy destruction explosion
 		move.b	#0,routine(a1)
+		movea.l	a0,a2					; Liliam: add extra characters
+		jsr	(EnemyDefeat_PickSound).l		;
 		tst.w	y_vel(a0)			; Is player moving up?
 		bmi.s	.bounceplayerdown		; If so, branch
 		move.w	y_pos(a0),d0
@@ -22889,6 +22918,11 @@ Obj_Amy:							; Liliam: add extra characters
 		move.b	#$F,y_radius(a0)
 		move.b	#$F,default_y_radius(a0)
 		move.b	#5-TailsRollHeightDiff,$38(a6)
+		btst	#Skill_AmyDoubleJump,(Skill_options).w
+		beq.s	.return
+		move.b	#1,$39(a6)
+
+	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -22911,7 +22945,106 @@ Obj_Amy:							; Liliam: add extra characters
 
 Amy_Normal:
 		move.l	#Map_Amy,mappings(a0)
-		bra.w	loc_10ADE
+		bsr.w	loc_10ADE
+		tst.b	double_jump_property(a0)
+		beq.s	.return
+		tst.b	double_jump_flag(a0)
+		bne.s	.return
+		cmpi.b	#$1D,anim(a0)
+		bne.s	.cancel
+		subq.b	#1,double_jump_property(a0)
+		beq.s	.done
+		move.b	angle(a0),d0
+		addi.b	#$30,d0
+		bmi.s	.done
+		cmpi.b	#$60,d0
+		bhi.s	.done
+		move.b	(Ctrl_1_held_logical).w,d0
+		move.b	d0,d1
+		andi.b	#button_ABC_mask,d1
+		beq.s	.done
+		andi.b	#button_right_mask|button_left_mask,d0
+		beq.s	.setSpeed
+		bclr	#Status_Facing,status(a0)
+		cmpi.b	#button_right_mask,d0
+		beq.s	.setSpeed
+		bset	#Status_Facing,status(a0)
+
+	.setSpeed:
+		move.w	#-$600,ground_vel(a0)
+		bclr	#Status_Push,status(a0)
+		btst	#Status_Facing,status(a0)
+		bne.s	.return
+		move.w	#$600,ground_vel(a0)
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
+	.done:
+		clr.b	anim(a0)
+
+	.cancel:
+		clr.b	double_jump_property(a0)
+		bclr	#Status_WaterSlide,status_secondary(a0)
+		rts
+; ---------------------------------------------------------------------------
+
+Amy_TouchFloor_CheckHammerRush:					; Liliam: add extra characters
+		tst.b	double_jump_property(a0)
+		bpl.w	Amy_TouchFloor
+		bsr.w	Amy_TouchFloor
+
+Amy_HammerRush_Release:
+		move.b	#$1D,anim(a0)
+		move.b	#60,double_jump_property(a0)
+		bset	#Status_WaterSlide,status_secondary(a0)
+		moveq	#signextendB(sfx_Dash),d0
+		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
+Touch_HammerAttack:						; Liliam: add extra characters
+		move.w	d6,-(sp)
+		movea.w	(a4)+,a1
+		move.b	collision_flags(a1),d0
+		bne.s	.checkValue
+
+	.nextObject:
+		move.w	(sp)+,d6
+		subq.w	#2,d6
+		bne.s	Touch_HammerAttack
+		moveq	#0,d0
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkValue:
+		moveq	#signextendB($C0),d1
+		and.b	d0,d1
+		move.w	x_pos(a0),d2
+		move.w	y_pos(a0),d3
+		cmpi.b	#$80,d1
+		beq.s	.normalRadius
+		subi.w	#$18,d2
+		subi.w	#$18,d3
+		moveq	#$30,d4
+		moveq	#$30,d5
+		bra.s	.checkWidth
+; ---------------------------------------------------------------------------
+
+	.normalRadius:
+		subq.w	#8,d2
+		subq.w	#(TailsRollHeight-3),d3
+		moveq	#$10,d4
+		moveq	#(TailsRollHeight-3)*2,d5
+
+	.checkWidth:
+		moveq	#2,d6
+		bsr.w	Touch_Width
+		tst.w	d6
+		beq.s	.nextObject
+		move.w	(sp)+,d6
+		moveq	#0,d0
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_Mighty:							; Liliam: add extra characters
@@ -24656,7 +24789,15 @@ Sonic_RollJump:
 Sonic_JumpHeight:
 		tst.b	jumping(a0)	; is Sonic jumping?
 		beq.s	Sonic_UpVelCap	; if not, branch
+		tst.b	double_jump_flag(a0)			; Liliam: hidden skill - double jump
+		bne.s	loc_118C2				;
+		tst.b	$39(a6)					;
+		beq.s	loc_118C2				;
+		move.b	#3,anim(a0)				;
+		move.b	#1,double_jump_flag(a0)			;
+		move.b	#1,$39(a6)				;
 
+loc_118C2:
 		move.w	#-$400,d1
 		btst	#Status_Underwater,status(a0)	; is Sonic underwater?
 		beq.s	loc_118D2			; if not, branch
@@ -24687,15 +24828,20 @@ locret_118FE:
 
 Sonic_ShieldMoves:
 		tst.b	double_jump_flag(a0)
-		beq.s	loc_11908				; Liliam: hidden skill - drop dash
-		tst.b	double_jump_property(a0)		;
+;		bne.w	locret_11A14				; Liliam: hidden skill - double jump
+		beq.s	loc_11908				;
+		tst.b	$39(a6)					;
+		bgt.s	loc_11908				;
+		tst.b	double_jump_property(a0)		; Liliam: hidden skill - drop dash
 		beq.s	locret_118FE				;
-;		bne.w	locret_11A14				;
 		move.b	(Ctrl_1_logical).w,d0			;
 		andi.b	#button_ABC_mask,d0			;
 		bne.w	Sonic_DropDash_Charge			;
 		clr.b	double_jump_property(a0)		;
 		move.b	#2,anim(a0)				;
+		tst.b	character_id(a0)			;
+		beq.s	locret_118FE				;
+		move.b	#3,anim(a0)				;
 		rts						;
 ; ---------------------------------------------------------------------------
 
@@ -24873,8 +25019,28 @@ loc_11A04:
 ; ---------------------------------------------------------------------------
 
 Amy_CheckMoves:							; Liliam: add extra characters
-		move.b	#$A,anim(a0)
+		move.b	#3,anim(a0)
 		move.b	#1,double_jump_flag(a0)
+		move.b	#19,double_jump_property(a0)
+		tst.b	$39(a6)
+		beq.s	.playSFX
+		move.b	(Ctrl_1_held_logical).w,d0
+		andi.b	#button_right_mask|button_left_mask,d0
+		bne.s	.activate
+		btst	#button_up,(Ctrl_1_held_logical).w
+		bne.s	locret_11A14
+
+	.activate:
+		move.w	#-$380,d0
+		btst	#Status_Underwater,status(a0)
+		bne.s	.applySpeed
+		move.w	#-$680,d0
+
+	.applySpeed:
+		move.w	d0,y_vel(a0)
+		st	$39(a6)
+
+	.playSFX:
 		moveq	#signextendB(sfx_HammerAttack),d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
@@ -25850,6 +26016,8 @@ Sonic_TouchFloor_CheckDropDash:					; Liliam: hidden skill - drop dash (credit: 
 		bsr.w	Player_TouchFloor2
 
 Sonic_DropDash_Release:
+		tst.b	character_id(a0)
+		bne.w	Amy_HammerRush_Release
 		clr.b	double_jump_property(a0)
 		bsr.w	Reset_Player_Position_Array
 		btst	#button_right,(Ctrl_1_logical).w
@@ -25981,9 +26149,17 @@ Sonic_DropDash_Release:
 Player_TouchFloor_Check_Spindash:
 		tst.b	spin_dash_flag(a0)
 		bne.s	Player_TouchFloor2
-		tst.b	character_id(a0)			; Liliam: hidden skill - drop dash (credit: MainMemory)
+		move.b	character_id(a0),d0			; Liliam: add extra characters
+		beq.s	.checkDropDash				;
+		cmpi.b	#3,d0					;
 		bne.s	loc_12178				;
-		tst.b	double_jump_property(a0)		;
+		cmpi.b	#$1D,anim(a0)				;
+		bne.s	loc_12178				;
+		bra.s	Amy_TouchFloor				;
+; ---------------------------------------------------------------------------
+
+	.checkDropDash:
+		tst.b	double_jump_property(a0)		; Liliam: hidden skill - drop dash (credit: MainMemory)
 		bmi.s	Player_TouchFloor2			;
 
 loc_12178:
@@ -26000,6 +26176,7 @@ Player_TouchFloor:
 		cmpi.b	#2,character_id(a0)
 		beq.w	Knux_TouchFloor
 
+Amy_TouchFloor:
 		move.b	y_radius(a0),d0
 		move.b	default_y_radius(a0),y_radius(a0)
 		move.b	default_x_radius(a0),x_radius(a0)
@@ -36006,13 +36183,15 @@ locret_17B16:
 Player_TouchFloor_CheckGlideLand:
 		move.b	character_id(a0),d0			; Liliam: allow glide-landing on objects (credit: flamewing)
 		beq.w	Sonic_TouchFloor_CheckDropDash		;
-		cmpi.b	 #2,d0					;
-		bne.w	 Player_TouchFloor			;
-		tst.b	 double_jump_flag(a0)			;
-		beq.s	 Knux_TouchFloor			;
+		cmpi.b	#3,d0					;
+		beq.w	Amy_TouchFloor_CheckHammerRush		;
+		cmpi.b	#2,d0					;
+		bne.w	Player_TouchFloor			;
+		tst.b	double_jump_flag(a0)			;
+		beq.s	Knux_TouchFloor				;
 		clr.b	spin_dash_flag(a0)			; Liliam: hidden skill - climb dash
-		cmpi.b	 #3,double_jump_flag(a0)		;
-		bls.s	 locret_17B16				;
+		cmpi.b	#3,double_jump_flag(a0)			;
+		bls.s	locret_17B16				;
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -45252,6 +45431,8 @@ Obj_MonitorSpawnIcon:
 		addq.b	#2,routine(a1)			; => loc_1E61A
 		move.w	x_pos(a0),x_pos(a1)		; Set explosion's position
 		move.w	y_pos(a0),y_pos(a1)
+		movea.w	parent(a0),a2				; Liliam: add extra characters
+		jsr	(EnemyDefeat_PickSound).l		;
 
 	.skipexplosioncreation:
 		move.w	respawn_addr(a0),d0		; Get address in respawn table
@@ -45655,23 +45836,30 @@ Encore_RotateStocks:						; Liliam: Encore mode - change character item
 
 	.checkBoostMode:
 		cmpa.w	(Tails_tails_2P+parent2).w,a1
-		bne.s	.checkTailsAmy
+		bne.s	.checkTails
 		move.l	#Delete_Current_Sprite,(Tails_tails_2P).w
 		btst	#Status_SpeedShoes,status_secondary(a1)
-		bne.s	.checkTailsAmy
+		bne.s	.checkTails
 		move.w	#$600,Max_speed-Max_speed(a5)
 		move.w	#$C,Acceleration-Max_speed(a5)
 
-	.checkTailsAmy:
+	.checkTails:
 		moveq	#$13,d1
 		moveq	#$E,d2
-		clr.b	$38(a6)
-		cmpi.b	#3,d0
-		beq.s	.setTailsHeight
+		clr.w	$38(a6)
 		cmpi.b	#1,d0
-		bne.s	.checkRolling
+		bne.s	.checkAmy
 		move.l	#Obj_Tails_Tail,(Tails_tails).w
 		move.w	a1,(Tails_tails+$30).w
+		bra.s	.setTailsHeight
+; ---------------------------------------------------------------------------
+
+	.checkAmy:
+		cmpi.b	#3,d0
+		bne.s	.checkRolling
+		btst	#Skill_AmyDoubleJump,(Skill_options).w
+		beq.s	.setTailsHeight
+		move.b	#1,$39(a6)
 
 	.setTailsHeight:
 		moveq	#$F,d1
@@ -46833,6 +47021,8 @@ Explosion_Index:
 		dc.w loc_1E61A-Explosion_Index
 		dc.w loc_1E66E-Explosion_Index
 		dc.w loc_1E626-Explosion_Index
+		dc.w loc_1E5F6-Explosion_Index			; Liliam: add extra characters
+		dc.w loc_1E61A-Explosion_Index			;
 ; ---------------------------------------------------------------------------
 
 loc_1E5F6:
@@ -46845,7 +47035,12 @@ loc_1E5F6:
 		move.w	$3E(a0),$3E(a1)
 
 loc_1E61A:
+		moveq	#signextendB(sfx_HammerRush),d0		; Liliam: add extra characters
+		cmpi.b	#8,routine(a0)				;
+		bhs.s	loc_1E61C				;
 		moveq	#signextendB(sfx_Break),d0
+
+loc_1E61C:
 		jsr	(Play_SFX).l
 		addq.b	#2,routine(a0)
 
@@ -56664,10 +56859,11 @@ sub_25D2C:
 		neg.w	y_vel(a1)
 
 loc_25D3C:
-		jsr	(LRZShootingTrigger_LoadArray).l	; Liliam: hyper touch - stop bouncing players on defeat
+		jsr	(ExplodingTrigger_LoadArray).l		; Liliam: hyper touch - stop bouncing players on defeat
 		bchg	d3,(a3)
 		move.l	#Obj_Explosion,(a0)
 		move.b	#2,routine(a0)
+		jsr	(ExplodingTrigger_PickSound).l		; Liliam: add extra characters
 		clr.b	collision_flags(a0)
 		clr.b	collision_property(a0)
 
@@ -94603,12 +94799,13 @@ sub_42EC0:
 		neg.w	y_vel(a1)
 
 loc_42ED0:
-		bsr.s	LRZShootingTrigger_LoadArray		; Liliam: hyper touch - stop bouncing players on defeat
+		bsr.s	ExplodingTrigger_LoadArray		; Liliam: hyper touch - stop bouncing players on defeat
 		bset	d3,(a3)
 		jsr	(loc_85088).l				; Liliam: bugfix - prevent deadlock
 		move.l	#Obj_LRZShootingTrigger_Delete,(a0)	;
 ;		move.l	#Obj_Explosion,(a0)			;
 		move.b	#2,routine(a0)
+		jsr	(ExplodingTrigger_PickSound).l		; Liliam: add extra characters
 		clr.b	collision_flags(a0)
 		clr.b	collision_property(a0)
 
@@ -94619,12 +94816,12 @@ locret_42EE6:
 ; ---------------------------------------------------------------------------
 
 Obj_LRZShootingTrigger_Delete:					; Liliam: bugfix - prevent deadlock
-		bsr.s	LRZShootingTrigger_LoadArray
+		bsr.s	ExplodingTrigger_LoadArray
 		bclr	d3,(a3)
 		jmp	(Obj_Explosion).l
 ; ---------------------------------------------------------------------------
 
-LRZShootingTrigger_LoadArray:					; Liliam: hyper touch - stop bouncing players on defeat
+ExplodingTrigger_LoadArray:					; Liliam: hyper touch - stop bouncing players on defeat
 		move.b	subtype(a0),d0
 		andi.w	#$F,d0
 		lea	(Level_trigger_array).w,a3
@@ -194475,6 +194672,23 @@ loc_85796:
 		jsr	(HUD_AddToScore).l
 		move.l	#Obj_Explosion,(a0)
 		move.b	#0,routine(a0)
+
+ExplodingTrigger_PickSound:
+		movea.l	a0,a1					; Liliam: add extra characters
+		lea	(Player_2).w,a2				;
+		btst	#1,collision_property(a1)		;
+		bne.s	EnemyDefeat_PickSound			;
+		lea	(Player_1).w,a2				;
+
+EnemyDefeat_PickSound:
+		cmpi.b	#3,character_id(a2)			;
+		bne.s	.return					;
+		move.b	double_jump_flag(a2),d0			;
+		or.b	double_jump_property(a2),d0		;
+		beq.s	.return					;
+		addq.b	#8,routine(a1)				;
+
+	.return:
 		rts
 ; End of function EnemyDefeat_Score
 

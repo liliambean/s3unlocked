@@ -136,14 +136,14 @@ AniAmy:
 		dc.w Ani_PlayerWalk-AniAmy		; 00
 		dc.w Ani_PlayerRun-AniAmy		; 01
 		dc.w Ani_PlayerSpin-AniAmy		; 02
-		dc.w Ani_AmyDash-AniAmy			; 03
+		dc.w Ani_AmyHammerAttack-AniAmy		; 03
 		dc.w Ani_PlayerPush-AniAmy		; 04
 		dc.w Ani_AmyStand-AniAmy		; 05
 		dc.w Ani_AmyBalance1-AniAmy		; 06
 		dc.w Ani_PlayerLookUp-AniAmy		; 07
 		dc.w Ani_PlayerCrouch-AniAmy		; 08
 		dc.w Ani_PlayerSpinDash-AniAmy		; 09
-		dc.w Ani_AmyHammerAttack-AniAmy		; 0A
+		dc.w Ani_AmyHammerAttack2-AniAmy	; 0A
 		dc.w Ani_PlayerPulley-AniAmy		; 0B
 		dc.w Ani_SonicBalance2-AniAmy		; 0C
 		dc.w Ani_PlayerSkid-AniAmy		; 0D
@@ -162,6 +162,7 @@ AniAmy:
 		dc.w Ani_PlayerHurt-AniAmy		; 1A
 		dc.w Ani_PlayerFall-AniAmy		; 1B
 		dc.w Ani_PlayerBlank-AniAmy		; 1C
+		dc.w Ani_AmyHammerRush-AniAmy		; 1D
 AniMighty:
 		dc.w Ani_PlayerWalk-AniMighty		; 00
 		dc.w Ani_PlayerRun-AniMighty		; 01
@@ -196,7 +197,7 @@ AniRay:
 		dc.w Ani_PlayerWalk-AniRay		; 00
 		dc.w Ani_PlayerRun-AniRay		; 01
 		dc.w Ani_PlayerSpin-AniRay		; 02
-		dc.w Ani_PlayerSpin-AniRay		; 03
+		dc.w Ani_PlayerRun-AniRay		; 03
 		dc.w Ani_PlayerPush-AniRay		; 04
 		dc.w Ani_RayStand-AniRay		; 05
 		dc.w Ani_RayBalance1-AniRay		; 06
@@ -228,7 +229,8 @@ Ani_PlayerSpin:		dc.b  $FE, $E0, $E1, $E0, $E2, $E0, $E3, $E0, $E4, $FF
 Ani_TailsSpin:		dc.b    1, $DA, $DB, $DC, $FF
 Ani_SonicDash:		dc.b  $FF, $B6, $B7, $B8, $B9, $FF, $FF, $FF, $FF, $FF
 Ani_TailsDash:		dc.b  $FF, $DD, $DE, $FF, $FF, $FF, $FF, $FF, $FF, $FF
-Ani_AmyDash:		dc.b    3, $BE, $BF, $C0, $C1, $C2, $C3, $C4, $C5, $FF
+Ani_AmyHammerAttack:	dc.b    1, $A8, $A9, $AA, $AB, $AC, $AD, $AE, $AF, $FF
+Ani_AmyHammerAttack2:	dc.b    0, $A8, $A9, $AA, $AB, $AC, $AD, $AE, $AF, $FF
 Ani_MightyUncurl:	dc.b    4, $F3, $F4, $FE,   1
 Ani_PlayerPush:		dc.b  $FD, $D0, $D1, $D2, $D3, $FF, $FF, $FF, $FF, $FF
 Ani_SonicStand:		dc.b    5, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48
@@ -292,7 +294,6 @@ Ani_TailsCrouch:	dc.b  $3F, $D6, $FF
 Ani_PlayerSpinDash:	dc.b    0, $DA, $DB, $DA, $DC, $DA, $DD, $DA, $DE, $DA, $DF, $FF
 Ani_TailsSpinDash:	dc.b    0, $D7, $D8, $D9, $FF
 Ani_PlayerSpinDash2:	dc.b    0, $A8, $A9, $A8, $AA, $A8, $AB, $A8, $AC, $A8, $AD, $FF
-Ani_AmyHammerAttack:	dc.b    1, $A8, $A9, $AA, $AB, $AC, $AD, $AE, $AF, $FF
 Ani_MightyHammerDrop:	dc.b    0, $A8, $A9, $AA, $AA, $AA, $AB, $AC, $AD, $AE, $FE,   4
 Ani_PlayerPulley:	dc.b   $F, $A5, $FF
 Ani_SonicBalance2:	dc.b    5, $FA, $FB, $FC, $FF
@@ -335,9 +336,6 @@ Ani_PlayerHurt:		dc.b  $40, $E8, $FF
 Ani_KnucklesHurt:	dc.b  $40, $CE, $FF
 Ani_PlayerFall:		dc.b    9, $E7, $E8, $FF
 Ani_PlayerBlank:	dc.b  $77,   0, $FF
-Ani_KnucklesGlideFall:	dc.b    7, $CA, $CB, $FE,   1
-Ani_KnucklesGlideCrouch:dc.b   $F, $D9, $FD,   0
-Ani_KnucklesGlideLand:	dc.b   $F, $CC, $FD,   0
 Ani_TailsFlyFall:
 Ani_TailsFly:		dc.b  $1F, $AA, $FF
 Ani_TailsFlyCarryFall:	dc.b  $1F, $AB, $FF
@@ -348,4 +346,8 @@ Ani_TailsSwimFall:	dc.b    7, $B1, $B2, $B3, $B4, $B5, $FF
 Ani_TailsSwim:		dc.b    3, $B1, $B2, $B3, $B4, $B5, $FF
 Ani_TailsSwimTired:	dc.b   $B, $B6, $B7, $B8, $FF
 Ani_TailsSwimCarry:	dc.b    4, $B9, $BA, $FF
+Ani_KnucklesGlideFall:	dc.b    7, $CA, $CB, $FE,   1
+Ani_KnucklesGlideCrouch:dc.b   $F, $D9, $FD,   0
+Ani_KnucklesGlideLand:	dc.b   $F, $CC, $FD,   0
+Ani_AmyHammerRush:	dc.b    2, $BE, $BF, $C0, $C1, $C2, $C3, $C4, $C5, $FF
 	even
