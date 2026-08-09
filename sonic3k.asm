@@ -9047,9 +9047,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		move.b	d1,(Super_ready_flag).w
 		tst.b	(Encore_mode).w
 		bne.s	.encoreMode
-		tst.b	(Super_Sonic_Knux_flag).w
-		bne.w	.checkBarrier
-		tst.b	(Super_Tails_flag).w
+		tst.w	(Super_Sonic_Knux_flag).w
 		bne.s	.checkBarrier
 		tst.b	(Update_HUD_timer).w
 		beq.s	.notReady
@@ -21596,10 +21594,11 @@ TouchResponse:
 		jsr	(Test_Ring_Collisions).l
 		bsr.w	ShieldTouchResponse
 		tst.b	character_id(a0)			; Is the player Sonic?
-		bne.s	Touch_NoInstaShield			; If not, branch
-		move.b	status_secondary(a0),d0
-		andi.b	#$73,d0					; Does the player have any shields or is invincible?
-		bne.s	Touch_NoInstaShield			; If so, branch
+		bne.s	Touch_NoInstaShield
+;		move.b	status_secondary(a0),d0			; Liliam: simplify double jump selection
+;		andi.b	#$73,d0					;
+;		bne.s	Touch_NoInstaShield			;
+
 		; By this point, we're focusing purely on the Insta-Shield
 		cmpi.b	#1,double_jump_flag(a0)			; Is the Insta-Shield currently in its 'attacking' mode?
 		bne.s	Touch_NoInstaShield			; If not, branch
@@ -21843,7 +21842,7 @@ Touch_Monitor:
 		beq.s	.return					; If not, return
 
 	.validcharacter:
-		btst	#Status_Roll,status(a0)			; Liliam: hidden skill - drop dash (credit: MainMemory)
+		btst	#Status_Roll,status(a0)			; Liliam: simplify roll anim selection
 		bne.s	.okaytodestroy				;
 ;		cmpi.b	#2,anim(a0)				;
 ;		beq.s	.okaytodestroy				;
@@ -21872,7 +21871,7 @@ Touch_Enemy:
 
 		cmpi.b	#$A,anim(a0)				; Liliam: hidden skill - climb dash
 		beq.s	.checkhurtenemy				;
-		btst	#Status_Roll,status(a0)			; Liliam: hidden skill - drop dash (credit: MainMemory)
+		btst	#Status_Roll,status(a0)			; Liliam: simplify roll anim selection
 		bne.s	.checkhurtenemy				;
 ;		cmpi.b	#2,anim(a0)				;
 ;		beq.s	.checkhurtenemy				;
@@ -22168,12 +22167,8 @@ loc_1037C:
 		move.w	art_tile(a0),(Debug_saved_art_tile).w
 		btst	#Status_Invincible,status_secondary(a0)	; Liliam: bugfix - clear super form on death
 		beq.s	loc_103AA				;
-		tst.b	(Super_Sonic_Knux_flag).w		;
-		bne.s	.revertToNormal				;
-		tst.b	(Super_Tails_flag).w			;
+		tst.w	(Super_Sonic_Knux_flag).w		;
 		beq.s	.restoreMusic				;
-
-	.revertToNormal:
 		lea	(Max_speed).w,a4			;
 		bsr.w	SonicKnux_SuperHyper.revertToNormal	;
 
@@ -24692,7 +24687,7 @@ locret_118FE:
 
 Sonic_ShieldMoves:
 		tst.b	double_jump_flag(a0)
-		beq.s	loc_11908				; Liliam: hidden skill - drop dash (credit: MainMemory)
+		beq.s	loc_11908				; Liliam: hidden skill - drop dash
 		tst.b	double_jump_property(a0)		;
 		beq.s	locret_118FE				;
 ;		bne.w	locret_11A14				;
@@ -24744,11 +24739,12 @@ loc_1191A:
 		bne.s	Sonic_ExtraCharacterMoves		;
 
 		tst.b	(Super_Sonic_Knux_flag).w
-;		beq.s	Sonic_FireShield			; Liliam: hidden skill - drop dash (credit: MainMemory)
+;		beq.s	Sonic_FireShield			; Liliam: hidden skill - drop dash
 		bmi.w	Sonic_HyperDash
 		btst	#Status_Invincible,status_secondary(a0)	;
 		beq.s	Sonic_FireShield			;
-		move.b	#1,double_jump_flag(a0)
+		move.b	#2,double_jump_flag(a0)			; Liliam: simplify double jump selection
+;		move.b	#1,double_jump_flag(a0)			;
 
 Sonic_DropDash:
 		btst	#Skill_SonicDropDash,(Skill_options).w	;
@@ -24772,13 +24768,14 @@ ExtraCharacterMoves_Index:
 ; ---------------------------------------------------------------------------
 
 Sonic_FireShield:
-;		btst	#Status_Invincible,status_secondary(a0)	; Liliam: hidden skill - drop dash (credit: MainMemory)
+;		btst	#Status_Invincible,status_secondary(a0)	; Liliam: hidden skill - drop dash
 ;		bne.w	locret_11A14				;
 
 		btst	#Status_FireShield,status_secondary(a0)	; does Sonic have a Fire Shield?
 		beq.s	Sonic_LightningShield			; if not, branch
 		move.b	#1,(Shield+anim).w
-		move.b	#1,double_jump_flag(a0)
+		move.b	#Status_FireShield,double_jump_flag(a0)	; Liliam: simplify double jump selection
+;		move.b	#1,double_jump_flag(a0)			;
 		move.w	#$800,d0
 		btst	#Status_Facing,status(a0)		; is Sonic facing left?
 		beq.s	loc_11958				; if not, branch
@@ -24798,7 +24795,8 @@ Sonic_LightningShield:
 		btst	#Status_LtngShield,status_secondary(a0)	; does Sonic have a Lightning Shield?
 		beq.s	Sonic_BubbleShield			; if not, branch
 		move.b	#1,(Shield+anim).w
-		move.b	#1,double_jump_flag(a0)
+		move.b	#Status_LtngShield,double_jump_flag(a0)	; Liliam: simplify double jump selection
+;		move.b	#1,double_jump_flag(a0)			;
 		move.w	#-$580,y_vel(a0)	; bounce Sonic up, creating the double jump effect
 		clr.b	jumping(a0)
 		move.w	#sfx_ElectricAttack,d0
@@ -24809,7 +24807,8 @@ Sonic_BubbleShield:
 		btst	#Status_BublShield,status_secondary(a0)	; does Sonic have a Bubble Shield?
 		beq.s	Sonic_CheckTransform			; if not, branch
 		move.b	#1,(Shield+anim).w
-		move.b	#1,double_jump_flag(a0)
+		move.b	#Status_BublShield,double_jump_flag(a0)	; Liliam: simplify double jump selection
+;		move.b	#1,double_jump_flag(a0)			;
 		move.w	#0,x_vel(a0)		; halt horizontal speed...
 		move.w	#0,ground_vel(a0)	; ...both ground and air
 		move.w	#$800,y_vel(a0)		; force Sonic down
@@ -24837,7 +24836,7 @@ Sonic_CheckTransform:
 		move.b	#1,(Shield+anim).w
 
 loc_11A04:
-		bsr.w	Sonic_DropDash				; Liliam: hidden skill - drop dash (credit: MainMemory)
+		bsr.w	Sonic_DropDash				; Liliam: hidden skill - drop dash
 		move.b	#1,double_jump_flag(a0)
 		move.w	#sfx_InstaAttack,d0
 		jmp	(Play_SFX).l
@@ -24934,7 +24933,8 @@ Sonic_HyperDash:
 		bsr.w	HyperAttackTouchResponse
 		move.w	#$2000,(H_scroll_frame_offset).w
 		bsr.w	Reset_Player_Position_Array
-		move.b	#1,double_jump_flag(a0)
+		move.b	#3,double_jump_flag(a0)			; Liliam: simplify double jump selection
+;		move.b	#1,double_jump_flag(a0)			;
 		move.b	#1,(Invincibility_stars+anim).w	; This causes the screen flash, and sparks to come out of Sonic
 		moveq	#signextendB(sfx_Dash),d0
 		jsr	(Play_SFX).l
@@ -25997,14 +25997,15 @@ Player_TouchFloor2:
 		move.b	#0,flip_type(a0)
 		move.b	#0,flips_remaining(a0)
 		move.b	#0,scroll_delay_counter(a0)
-		tst.b	double_jump_flag(a0)
-		beq.s	locret_12230
+;		tst.b	double_jump_flag(a0)			; Liliam: simplify double jump selection
+;		beq.s	locret_12230				;
 		tst.b	character_id(a0)
 		bne.s	loc_1222A
-		tst.b	(Super_Sonic_Knux_flag).w
+;		tst.b	(Super_Sonic_Knux_flag).w		;
+		cmpi.b	#Status_BublShield,double_jump_flag(a0)	;
 		bne.s	loc_1222A
-		btst	#Status_BublShield,status_secondary(a0)
-		beq.s	loc_1222A
+;		btst	#Status_BublShield,status_secondary(a0)	;
+;		beq.s	loc_1222A				;
 		bsr.s	BubbleShield_Bounce
 
 loc_1222A:
@@ -36719,9 +36720,8 @@ AirCountdown_Countdown:
 		bhs.w	locret_18680
 		btst	#Status_BublShield,status_secondary(a2)
 		bne.w	locret_18680
-		tst.b	(Super_Sonic_Knux_flag).w
-		bmi.w	locret_18680					; Liliam: Hyper Tails
-		tst.b	(Super_Tails_flag).w				;
+		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Tails
+;		tst.b	(Super_Sonic_Knux_flag).w			;
 		bmi.w	locret_18680
 		btst	#Status_Underwater,status(a2)
 		beq.w	locret_18680
@@ -36847,12 +36847,8 @@ loc_18590:
 
 loc_18592:
 ;		bra.s	AirCountdown_MakeItem			;
-		tst.b	(Super_Sonic_Knux_flag).w		;
-		bne.s	.revertToNormal				;
-		tst.b	(Super_Tails_flag).w			;
+		tst.w	(Super_Sonic_Knux_flag).w		;
 		beq.s	loc_18594				;
-
-	.revertToNormal:
 		move.l	a0,-(sp)				;
 		movea.l	a2,a0					;
 		lea	(Max_speed).w,a4			;
@@ -37682,9 +37678,8 @@ loc_1919E:
 		move.l	#loc_191A4,(a0)
 
 loc_191A4:
-		tst.b	(Super_Sonic_Knux_flag).w
-		bne.s	loc_191AC					; Liliam: Hyper Tails
-		tst.b	(Super_Tails_flag).w				;
+		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Tails
+;		tst.b	(Super_Sonic_Knux_flag).w			;
 		beq.w	loc_19230
 
 loc_191AC:
@@ -38797,9 +38792,8 @@ loc_1A4AC:
 Obj_HyperSonicKnux_Trail_Main:
 		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - disable in debug mode
 		bne.s	locret_1A462				;
-		tst.b	(Super_Sonic_Knux_flag).w	; Are we in non-super/hyper state?
-		bne.s	loc_1A4D8					; Liliam: Hyper Tails
-		tst.b	(Super_Tails_flag).w				;
+		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Tails
+;		tst.b	(Super_Sonic_Knux_flag).w			;
 		beq.w	Delete_Current_Sprite		; If so, branch and delete
 
 loc_1A4D8:
@@ -45089,7 +45083,7 @@ SolidObject_Monitor_SonicKnux:
 		bne.s	Monitor_ChkOverEdge	; If so, branch
 
 loc_1D69C:
-		btst	#Status_Roll,status(a1)			; Liliam: hidden skill - drop dash (credit: MainMemory)
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
 		bne.s	locret_1D6BC				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		beq.s	locret_1D6BC				;
@@ -45120,7 +45114,7 @@ SolidObject_Monitor_Tails:
 		bne.s	Monitor_ChkOverEdge	; If so, branch
 		tst.w	(Competition_mode).w	; Are we in competition mode?
 		beq.w	SolidObject_cont	; If not, branch
-		bra.s	loc_1D69C				; Liliam: hidden skill - drop dash (credit: MainMemory)
+		bra.s	loc_1D69C				; Liliam: simplify roll anim selection
 ;		cmpi.b	#2,anim(a1)				;
 ;		bne.w	SolidObject_cont			;
 ;		rts						;
@@ -45394,9 +45388,7 @@ Monitor_Give_SpeedShoes:
 ;		cmpi.w	#2,(Player_mode).w				;
 ;		beq.s	loc_1D93A					;
 		move.w	#$C00,(Max_speed).w
-		tst.b	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - player speeds fix
-		bne.s	loc_1D94C				;
-		tst.b	(Super_Tails_flag).w			;
+		tst.w	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - player speeds fix
 		bne.s	loc_1D94C				;
 		move.w	#$18,(Acceleration).w
 		move.w	#$80,(Deceleration).w
@@ -48803,36 +48795,36 @@ loc_1FD4E:
 		move.w	d6,d0
 		andi.w	#1,d0
 		beq.w	loc_1FDEA
-		bsr.w	BreakableWall_CheckCharacter			; Liliam: Metal Sonic wall-breaking powers
-		beq.s	loc_1FDA4					;
+		bsr.w	BreakableWall_CheckKnuxBreak		; Liliam: Metal Sonic wall-breaking powers
+		beq.s	loc_1FDA4				;
 		tst.b	subtype(a0)
-		bmi.w	loc_1FDEA					;
-;		bpl.s	loc_1FD72					;
-;		cmpi.b	#2,character_id(a1)				;
-;		beq.s	loc_1FDA4					;
-;		bra.w	loc_1FDEA					;
+		bmi.s	loc_1FDEA				;
+;		bpl.s	loc_1FD72				;
+;		cmpi.b	#2,character_id(a1)			;
+;		beq.s	loc_1FDA4				;
+;		bra.w	loc_1FDEA				;
 
 ;loc_1FD72:
-		tst.b	(Super_Tails_flag).w			; Liliam: bugfix - Super Tails wall-breaking powers
-		bne.s	loc_1FDA4				;
-		tst.b	(Super_Sonic_Knux_flag).w
+		tst.w	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - Super Tails wall-breaking powers
+;		tst.b	(Super_Sonic_Knux_flag).w		;
 		bne.s	loc_1FDA4
-;		cmpi.b	#2,character_id(a1)			; Liliam: bugfix - fire shield wall-breaking powers
-;		beq.s	loc_1FDA4				;
+;		cmpi.b	#2,character_id(a1)			; Liliam: simplify double jump selection
+		tst.b	character_id(a1)			;
+		bne.s	loc_1FD88				;
+		cmpi.b	#Status_FireShield,double_jump_flag(a1)	;
+		beq.s	loc_1FDA4
 ;		btst	#Status_FireShield,status_secondary(a1)	;
 ;		bne.s	loc_1FD90				;
+
+loc_1FD88:
 		btst	#p1_pushing_bit,status(a0)
-		bne.s	loc_1FD90				;
-		tst.b	character_id(a1)			;
-		bne.s	loc_1FDEA				;
-		tst.b	double_jump_flag(a1)			;
-		beq.s	loc_1FDEA				;
-		btst	#Status_FireShield,status_secondary(a1)	;
 		beq.s	loc_1FDEA
 
-loc_1FD90:
-		cmpi.b	#2,anim(a1)
-		bne.s	loc_1FDEA
+;loc_1FD90:
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.s	loc_1FDEA				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.s	loc_1FDEA				;
 		move.w	d1,d0
 		bpl.s	loc_1FD9E
 		neg.w	d0
@@ -48847,11 +48839,13 @@ loc_1FDA4:
 		btst	#p2_pushing_bit,status(a0)
 		beq.w	loc_1FD38
 		lea	(Player_2).w,a1
-		bsr.w	BreakableWall_CheckCharacter			; Liliam: Metal Sonic wall-breaking powers
-;		cmpi.b	#2,character_id(a1)				;
+		bsr.w	BreakableWall_CheckKnuxBreak		; Liliam: Metal Sonic wall-breaking powers
+;		cmpi.b	#2,character_id(a1)			;
 		beq.s	loc_1FDCE
-		cmpi.b	#2,anim(a1)
-		bne.w	loc_1FD38
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.w	loc_1FD38				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.w	loc_1FD38				;
 
 loc_1FDCE:
 		move.w	$36(a0),x_vel(a1)
@@ -48864,25 +48858,27 @@ loc_1FDCE:
 loc_1FDEA:
 		lea	(Player_2).w,a1
 		move.w	$36(a0),d1
-		andi.b	#2,d6						; Liliam: Metal Sonic wall-breaking powers
-		beq.w	loc_1FD38					;
-		bsr.w	BreakableWall_CheckCharacter			;
-		beq.s	loc_1FE2E					;
-		tst.b	subtype(a0)					;
-		bmi.w	loc_1FD38					;
+		andi.b	#2,d6					; Liliam: Metal Sonic wall-breaking powers
+		beq.w	loc_1FD38				;
+		bsr.w	BreakableWall_CheckKnuxBreak		;
+		beq.s	loc_1FE2E				;
+		tst.b	subtype(a0)				;
+		bmi.w	loc_1FD38				;
 		btst	#p2_pushing_bit,status(a0)
 		beq.w	loc_1FD38
-;		tst.b	subtype(a0)					;
-;		bpl.s	loc_1FE0E					;
-;		cmpi.b	#2,character_id(a1)				;
-;		beq.s	loc_1FE2E					;
-;		bra.w	loc_1FD38					;
+;		tst.b	subtype(a0)				;
+;		bpl.s	loc_1FE0E				;
+;		cmpi.b	#2,character_id(a1)			;
+;		beq.s	loc_1FE2E				;
+;		bra.w	loc_1FD38				;
 
 ;loc_1FE0E:
-;		cmpi.b	#2,character_id(a1)				;
-;		beq.s	loc_1FE2E					;
-		cmpi.b	#2,anim(a1)
-		bne.w	loc_1FD38
+;		cmpi.b	#2,character_id(a1)			;
+;		beq.s	loc_1FE2E				;
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.w	loc_1FD38				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.w	loc_1FD38				;
 		move.w	d1,d0
 		bpl.s	loc_1FE26
 		neg.w	d0
@@ -50386,6 +50382,19 @@ loc_21568:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
+BreakableWall_CheckKnuxBreak:					; Liliam: Metal Sonic wall-breaking powers
+		cmpi.b	#2,character_id(a1)
+		beq.s	.return
+		cmpi.b	#6,character_id(a1)
+		bne.s	.return
+		tst.w	(Tails_tails_2P+anim_frame_timer).w
+		bne.s	.return
+		cmp.w	(Tails_tails_2P+parent2).w,a1
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
 loc_215A4:
 		swap	d6
 		andi.w	#3,d6
@@ -50401,27 +50410,29 @@ loc_215B2:
 		move.w	d6,d0
 		andi.w	#1,d0
 		beq.s	loc_2162A
-		tst.b	(Super_Tails_flag).w			; Liliam: bugfix - Super Tails wall-breaking powers
-		bne.s	loc_215F4				;
-		tst.b	(Super_Sonic_Knux_flag).w
+		tst.w	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - Super Tails wall-breaking powers
+;		tst.b	(Super_Sonic_Knux_flag).w		;
 		bne.s	loc_215F4
-		bsr.w	BreakableWall_CheckCharacter			; Liliam: Metal Sonic wall-breaking powers
-;		cmpi.b	#2,character_id(a1)				;
+		bsr.s	BreakableWall_CheckKnuxBreak		; Liliam: Metal Sonic wall-breaking powers
+;		cmpi.b	#2,character_id(a1)			;
 		beq.s	loc_215F4
-;		btst	#Status_FireShield,status_secondary(a1)	; Liliam: bugfix - fire shield wall-breaking powers
+
+		tst.b	character_id(a1)			; Liliam: simplify double jump selection
+		bne.s	loc_215D8				;
+		cmpi.b	#Status_FireShield,double_jump_flag(a1)	;
+		beq.s	loc_215F4				;
+;		btst	#Status_FireShield,status_secondary(a1)	;
 ;		bne.s	loc_215E0				;
+
+loc_215D8:
 		btst	#p1_pushing_bit,status(a0)
-		bne.s	loc_215E0				;
-		tst.b	character_id(a1)			;
-		bne.s	loc_2162A				;
-		tst.b	double_jump_flag(a1)			;
-		beq.s	loc_2162A				;
-		btst	#Status_FireShield,status_secondary(a1)	;
 		beq.s	loc_2162A
 
-loc_215E0:
-		cmpi.b	#2,anim(a1)
-		bne.s	loc_2162A
+;loc_215E0:
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.s	loc_2162A				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.s	loc_2162A				;
 		move.w	d1,d0
 		bpl.s	loc_215EE
 		neg.w	d0
@@ -50436,27 +50447,30 @@ loc_215F4:
 		btst	#p2_pushing_bit,status(a0)
 		beq.s	loc_215AC
 		lea	(Player_2).w,a1
-		cmpi.b	#2,anim(a1)
-		bne.s	loc_215AC
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.s	loc_215AC				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.s	loc_215AC				;
 		move.w	$32(a0),x_vel(a1)
 		move.w	x_vel(a1),ground_vel(a1)
 		bclr	#p2_pushing_bit,status(a0)
 		bclr	#Status_Push,status(a1)
-		bra.w	loc_215AC				; Liliam: bugfix - fire shield wall-breaking powers
-;		bra.s	loc_215AC				;
+		bra.s	loc_215AC
 ; ---------------------------------------------------------------------------
 
 loc_2162A:
 		lea	(Player_2).w,a1
 		move.w	$32(a0),d1
-		andi.b	#2,d6						; Liliam: Metal Sonic wall-breaking powers
-		beq.w	loc_215AC					;
-		bsr.w	BreakableWall_CheckCharacter			;
-		beq.s	loc_21654					;
+		andi.b	#2,d6					; Liliam: Metal Sonic wall-breaking powers
+		beq.w	loc_215AC				;
+		bsr.w	BreakableWall_CheckKnuxBreak		;
+		beq.s	loc_21654				;
 		btst	#p2_pushing_bit,status(a0)
 		beq.w	loc_215AC
-		cmpi.b	#2,anim(a1)
-		bne.w	loc_215AC
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.w	loc_215AC				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.w	loc_215AC				;
 		move.w	d1,d0
 		bpl.s	loc_2164C
 		neg.w	d0
@@ -50658,16 +50672,16 @@ loc_21862:
 		move.w	d6,d0
 		andi.w	#1,d0
 		beq.s	loc_218B0
-		bsr.w	BreakableWall_CheckCharacter			; Liliam: Metal Sonic wall-breaking powers
-;		cmpi.b	#2,character_id(a1)				;
+		bsr.w	BreakableWall_CheckKnuxBreak		; Liliam: Metal Sonic wall-breaking powers
+;		cmpi.b	#2,character_id(a1)			;
 		bne.s	loc_218B0
 		bclr	#p1_pushing_bit,status(a0)
 		bsr.s	sub_218CE
 		btst	#p2_pushing_bit,status(a0)
 		beq.s	loc_2185C
 		lea	(Player_2).w,a1
-		bsr.w	BreakableWall_CheckCharacter			;
-;		cmpi.b	#2,character_id(a1)				;
+		bsr.w	BreakableWall_CheckKnuxBreak		;
+;		cmpi.b	#2,character_id(a1)			;
 		bne.s	loc_2185C
 		move.w	$32(a0),x_vel(a1)
 		move.w	x_vel(a1),ground_vel(a1)
@@ -50679,12 +50693,12 @@ loc_21862:
 loc_218B0:
 		lea	(Player_2).w,a1
 		move.w	$32(a0),d1
-		andi.b	#2,d6						; Liliam: Metal Sonic wall-breaking powers
-		beq.s	loc_2185C					;
-;		btst	#p2_pushing_bit,status(a0)			;
-;		beq.s	loc_2185C					;
-		bsr.s	BreakableWall_CheckCharacter			;
-;		cmpi.b	#2,character_id(a1)				;
+		andi.b	#2,d6					; Liliam: Metal Sonic wall-breaking powers
+		beq.s	loc_2185C				;
+;		btst	#p2_pushing_bit,status(a0)		;
+;		beq.s	loc_2185C				;
+		bsr.w	BreakableWall_CheckKnuxBreak		;
+;		cmpi.b	#2,character_id(a1)			;
 		bne.s	loc_2185C
 		bclr	#p2_pushing_bit,status(a0)
 
@@ -50723,19 +50737,6 @@ loc_21928:
 		bra.w	loc_21692
 ; End of function sub_218CE
 
-; ---------------------------------------------------------------------------
-
-BreakableWall_CheckCharacter:						; Liliam: Metal Sonic wall-breaking powers
-		cmpi.b	#2,character_id(a1)
-		beq.s	.return
-		cmpi.b	#6,character_id(a1)
-		bne.s	.return
-		tst.w	(Tails_tails_2P+anim_frame_timer).w
-		bne.s	.return
-		cmp.w	(Tails_tails_2P+parent2).w,a1
-
-	.return:
-		rts
 ; ---------------------------------------------------------------------------
 word_2193A:
 		dc.w   $400, -$500
@@ -56607,8 +56608,10 @@ loc_25D26:
 
 
 sub_25D2C:
-		cmpi.b	#2,anim(a1)
-		bne.s	locret_25D52
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.s	locret_25D52				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.s	locret_25D52				;
 		neg.w	x_vel(a1)
 		neg.w	y_vel(a1)
 
@@ -94544,8 +94547,10 @@ loc_42EBA:
 
 
 sub_42EC0:
-		cmpi.b	#2,anim(a1)
-		bne.s	locret_42EE6
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.s	locret_42EE6				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.s	locret_42EE6				;
 		neg.w	x_vel(a1)
 		neg.w	y_vel(a1)
 
@@ -194454,7 +194459,7 @@ Check_PlayerAttack:
 		beq.s	loc_85822
 		cmpi.b	#$A,anim(a1)				; Liliam: hidden skill - climb dash
 		beq.s	loc_85822				;
-		btst	#Status_Roll,status(a1)			; Liliam: hidden skill - drop dash (credit: MainMemory)
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
 		bne.s	loc_85822				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		beq.s	loc_85822				;
@@ -195002,9 +195007,7 @@ loc_85B6C:
 		btst	#Status_Invincible,(Player_1+status_secondary).w
 		beq.s	loc_85B84
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
-		tst.b	(Super_Sonic_Knux_flag).w		;
-		bmi.s	loc_85B84				;
-		tst.b	(Super_Tails_flag).w			;
+		tst.w	(Super_Sonic_Knux_flag).w		;
 		bmi.s	loc_85B84				;
 		moveq	#signextendB(mus_Invincibility),d0
 		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
@@ -202927,14 +202930,14 @@ loc_8A280:
 		move.b	d6,d0					;
 		andi.b	#1,d0					;
 		beq.w	ICZBreakableWall_CheckPlayer2		;
-		jsr	(BreakableWall_CheckCharacter).l	;
+		jsr	(BreakableWall_CheckKnuxBreak).l	;
 		bne.s	ICZBreakableWall_CheckPlayer2		;
 		bclr	#p1_pushing_bit,status(a0)		;
 		bsr.w	ICZBreakableWall_Break			;
 		btst	#p2_pushing_bit,status(a0)		;
 		beq.s	loc_8A2A0				;
 		lea	(Player_2).w,a1				;
-		jsr	(BreakableWall_CheckCharacter).l	;
+		jsr	(BreakableWall_CheckKnuxBreak).l	;
 		bne.s	loc_8A2A0				;
 		move.w	$36(a0),x_vel(a1)			;
 		move.w	x_vel(a1),ground_vel(a1)		;
@@ -202973,7 +202976,7 @@ ICZBreakableWall_CheckPlayer2:					; Liliam: bugfix - Knuckles wall-breaking pow
 		move.w	$32(a0),d1
 		andi.b	#2,d6
 		beq.s	loc_8A2A0
-		jsr	(BreakableWall_CheckCharacter).l
+		jsr	(BreakableWall_CheckKnuxBreak).l
 		bne.s	loc_8A2A0
 		bclr	#p2_pushing_bit,status(a0)
 
