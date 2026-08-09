@@ -21663,10 +21663,10 @@ Touch_Width:
 		move.w	x_pos(a1),d0				; Get object's x_pos
 		sub.w	d1,d0					; Subtract object's width
 		sub.w	d2,d0					; Subtract player's left collision boundary
-		bcc.s	.checkrightside				; If player's left side is to the left of the object, branch
+		bhs.s	.checkrightside				; If player's left side is to the left of the object, branch
 		add.w	d1,d1					; Double object's width value
 		add.w	d1,d0					; Add object's width*2 (now at right of object)
-		bcs.s	Touch_Height				; If carry, branch (player is within the object's boundaries)
+		blo.s	Touch_Height				; If carry, branch (player is within the object's boundaries)
 		bra.s	Touch_NextObj				; If not, loop and check next object
 ; ---------------------------------------------------------------------------
 
@@ -21680,10 +21680,10 @@ Touch_Height:
 		move.w	y_pos(a1),d0				; Get object's y_pos
 		sub.w	d1,d0					; Subtract object's height
 		sub.w	d3,d0					; Subtract player's bottom collision boundary
-		bcc.s	.checktop				; If bottom of player is under the object, branch
+		bhs.s	.checktop				; If bottom of player is under the object, branch
 		add.w	d1,d1					; Double object's height value
 		add.w	d1,d0					; Add object's height*2 (now at top of object)
-		bcs.w	Touch_ChkValue				; If carry, branch (player is within the object's boundaries)
+		blo.w	Touch_ChkValue				; If carry, branch (player is within the object's boundaries)
 		bra.s	Touch_NextObj				; If not, loop and check next object
 ; ---------------------------------------------------------------------------
 
@@ -32780,15 +32780,9 @@ Tails_RingBarrier_Hold:
 		add.w	y_pos(a0),d1
 		move.w	d1,sub2_y_pos(a0)
 		andi.b	#button_ABC_mask,d2
-		beq.s	Tails_RingBarrier_Draw
+		beq.w	Tails_RingBarrier_Draw
 		move.b	#2,routine(a0)
-
-Tails_RingBarrier_Draw:
-		move.b	render_flags(a2),d0
-		andi.b	#3,d0
-		addi.b	#$2D,d0
-		move.b	d0,sub2_mapframe(a0)
-		rts
+		bra.w	Tails_RingBarrier_Draw
 ; ---------------------------------------------------------------------------
 
 Tails_RingBarrier_Spin:						; Liliam: hidden skill - ring barrier
@@ -32907,22 +32901,19 @@ Tails_RingBarrier_DrawTouch:
 		move.b	collision_flags(a1),d2
 		beq.s	.nextObject
 		cmpi.b	#$46,d2
-		beq.s	.checkObject
+		beq.s	.checkWidth
 		andi.b	#$C0,d2
-		beq.s	.checkObject
+		beq.s	.checkWidth
 		cmpi.b	#$C0,d2
-		bne.s	.nextObject
-
-	.checkObject:
-		bsr.s	Tails_RingBarrierTouch_Width
+		beq.s	.checkWidth
 
 	.nextObject:
 		lea	next_object(a1),a1
 		dbf	d6,.loop
-		bra.w	Tails_RingBarrier_Draw
+		bra.s	Tails_RingBarrier_Draw
 ; ---------------------------------------------------------------------------
 
-Tails_RingBarrierTouch_Width:					; Liliam: hidden skill - ring barrier
+	.checkWidth:
 		move.b	collision_flags(a1),d0
 		andi.w	#$3F,d0
 		add.w	d0,d0
@@ -32938,12 +32929,12 @@ Tails_RingBarrierTouch_Width:					; Liliam: hidden skill - ring barrier
 		add.w	d1,d1
 		add.w	d1,d0
 		blo.s	.checkHeight
-		rts
+		bra.s	.nextObject
 ; ---------------------------------------------------------------------------
 
 	.checkRight:
 		cmpi.w	#$10,d0
-		bhi.s	.return
+		bhi.s	.nextObject
 
 	.checkHeight:
 		moveq	#0,d1
@@ -32956,12 +32947,12 @@ Tails_RingBarrierTouch_Width:					; Liliam: hidden skill - ring barrier
 		add.w	d1,d1
 		add.w	d1,d0
 		blo.s	.checkType
-		rts
+		bra.s	.nextObject
 ; ---------------------------------------------------------------------------
 
 	.checkTop:
 		cmpi.w	#$10,d0
-		bhi.s	.return
+		bhi.s	.nextObject
 
 	.checkType:
 		tst.b	d2
@@ -32970,7 +32961,11 @@ Tails_RingBarrierTouch_Width:					; Liliam: hidden skill - ring barrier
 		move.b	#4,routine(a1)
 		move.w	#Player_1,parent(a1)
 
-	.return:
+Tails_RingBarrier_Draw:
+		move.b	render_flags(a2),d0
+		andi.b	#3,d0
+		addi.b	#$2D,d0
+		move.b	d0,sub2_mapframe(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
