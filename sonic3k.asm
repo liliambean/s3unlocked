@@ -49061,11 +49061,11 @@ loc_1FD4E:
 
 loc_1FD88:
 		btst	#p1_pushing_bit,status(a0)
+		bsr.w	BreakableWall_CheckAmyBreak		; Liliam: simplify roll anim selection
+		bmi.s	loc_1FDA4				;
 		beq.s	loc_1FDEA
 
 ;loc_1FD90:
-		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
-		beq.s	loc_1FDEA				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		bne.s	loc_1FDEA				;
 		move.w	d1,d0
@@ -49079,14 +49079,16 @@ loc_1FD9E:
 loc_1FDA4:
 		bclr	#p1_pushing_bit,status(a0)
 		bsr.w	sub_1FE34
+		lea	(Player_2).w,a1				; Liliam: simplify roll anim selection
+		bsr.w	BreakableWall_CheckKnuxBreak		;
+		beq.s	loc_1FDCE				;
 		btst	#p2_pushing_bit,status(a0)
+		bsr.w	BreakableWall_CheckAmyBreak		;
+		bmi.s	loc_1FDCE				;
 		beq.w	loc_1FD38
-		lea	(Player_2).w,a1
-		bsr.w	BreakableWall_CheckKnuxBreak		; Liliam: Metal Sonic wall-breaking powers
+;		lea	(Player_2).w,a1				;
 ;		cmpi.b	#2,character_id(a1)			;
-		beq.s	loc_1FDCE
-		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
-		beq.w	loc_1FD38				;
+;		beq.s	loc_1FDCE				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		bne.w	loc_1FD38				;
 
@@ -49108,6 +49110,8 @@ loc_1FDEA:
 		tst.b	subtype(a0)				;
 		bmi.w	loc_1FD38				;
 		btst	#p2_pushing_bit,status(a0)
+		bsr.w	BreakableWall_CheckAmyBreak		; Liliam: simplify roll anim selection
+		bmi.s	loc_1FE2E				;
 		beq.w	loc_1FD38
 ;		tst.b	subtype(a0)				;
 ;		bpl.s	loc_1FE0E				;
@@ -49118,8 +49122,6 @@ loc_1FDEA:
 ;loc_1FE0E:
 ;		cmpi.b	#2,character_id(a1)			;
 ;		beq.s	loc_1FE2E				;
-		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
-		beq.w	loc_1FD38				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		bne.w	loc_1FD38				;
 		move.w	d1,d0
@@ -50625,6 +50627,27 @@ loc_21568:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
+BreakableWall_CheckAmyBreak:					; Liliam: add extra characters
+		beq.s	.inAir
+		tst.b	double_jump_property(a1)
+		bne.s	.checkAmy
+		btst	#Status_Roll,status(a1)
+		rts
+; ---------------------------------------------------------------------------
+
+	.inAir:
+		tst.b	double_jump_flag(a1)
+		bne.s	.checkAmy
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkAmy:
+		cmpi.b	#3,character_id(a1)
+		seq	d1
+		tst.b	d1
+		rts
+; ---------------------------------------------------------------------------
+
 BreakableWall_CheckKnuxBreak:					; Liliam: Metal Sonic wall-breaking powers
 		cmpi.b	#2,character_id(a1)
 		beq.s	.return
@@ -50669,11 +50692,11 @@ loc_215B2:
 
 loc_215D8:
 		btst	#p1_pushing_bit,status(a0)
+		bsr.s	BreakableWall_CheckAmyBreak		; Liliam: simplify roll anim selection
+		bmi.s	loc_215F4				;
 		beq.s	loc_2162A
 
 ;loc_215E0:
-		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
-		beq.s	loc_2162A				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		bne.s	loc_2162A				;
 		move.w	d1,d0
@@ -50687,13 +50710,18 @@ loc_215EE:
 loc_215F4:
 		bclr	#p1_pushing_bit,status(a0)
 		bsr.s	sub_2165A
+		lea	(Player_2).w,a1				; Liliam: simplify roll anim selection
+		bsr.w	BreakableWall_CheckKnuxBreak		;
+		beq.s	loc_21610				;
 		btst	#p2_pushing_bit,status(a0)
+		bsr.w	BreakableWall_CheckAmyBreak		;
+		bmi.s	loc_21610				;
 		beq.s	loc_215AC
-		lea	(Player_2).w,a1
-		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
-		beq.s	loc_215AC				;
+;		lea	(Player_2).w,a1				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		bne.s	loc_215AC				;
+
+loc_21610:
 		move.w	$32(a0),x_vel(a1)
 		move.w	x_vel(a1),ground_vel(a1)
 		bclr	#p2_pushing_bit,status(a0)
@@ -50709,9 +50737,9 @@ loc_2162A:
 		bsr.w	BreakableWall_CheckKnuxBreak		;
 		beq.s	loc_21654				;
 		btst	#p2_pushing_bit,status(a0)
+		bsr.w	BreakableWall_CheckAmyBreak		; Liliam: simplify roll anim selection
+		bmi.s	loc_21654				;
 		beq.w	loc_215AC
-		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
-		beq.w	loc_215AC				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		bne.w	loc_215AC				;
 		move.w	d1,d0
