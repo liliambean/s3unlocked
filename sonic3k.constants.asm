@@ -188,6 +188,7 @@ Status_CombineRing  = 3				; Liliam: Encore mode - combine ring
 Status_FireShield   = 4
 Status_LtngShield   = 5
 Status_BublShield   = 6
+Status_WaterSlide   = 7
 
 ; ---------------------------------------------------------------------------
 ; Player routines

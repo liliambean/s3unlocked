@@ -8387,7 +8387,7 @@ loc_71B8:
 		tst.b	status_secondary(a1)
 		bpl.s	locret_71CA
 		move.w	#5,move_lock(a1)
-		andi.b	#$7F,status_secondary(a1)
+		andi.b	#$FF-1<<Status_WaterSlide,status_secondary(a1)
 
 locret_71CA:
 		rts
@@ -8437,7 +8437,7 @@ loc_7220:
 		tst.b	status_secondary(a1)
 		bpl.s	locret_7232
 		move.w	#5,move_lock(a1)
-		andi.b	#$7F,status_secondary(a1)
+		andi.b	#$FF-1<<Status_WaterSlide,status_secondary(a1)
 
 locret_7232:
 		rts
@@ -8476,7 +8476,7 @@ loc_726E:
 		move.b	#$19,anim(a1)
 
 loc_7282:
-		ori.b	#$80,status_secondary(a1)
+		ori.b	#1<<Status_WaterSlide,status_secondary(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -8524,7 +8524,7 @@ loc_72E0:
 
 loc_72EE:
 		move.w	d0,ground_vel(a1)
-		ori.b	#$80,status_secondary(a1)
+		ori.b	#1<<Status_WaterSlide,status_secondary(a1)
 		rts
 ; End of function sub_71E4
 
@@ -8568,7 +8568,7 @@ loc_734A:
 		tst.b	status_secondary(a1)
 		bpl.s	locret_7382
 		move.w	#5,move_lock(a1)
-		andi.b	#$7F,status_secondary(a1)
+		andi.b	#$FF-1<<Status_WaterSlide,status_secondary(a1)
 		btst	#Status_InAir,status(a1)
 		bne.s	locret_7382
 		move.b	default_y_radius(a1),y_radius(a1)
@@ -8638,7 +8638,7 @@ loc_7402:
 ;		move.b	#7,x_radius(a1)				;
 		bclr	#Status_Roll,status(a1)
 		bclr	#Status_RollJump,status(a1)
-		ori.b	#$80,status_secondary(a1)
+		ori.b	#1<<Status_WaterSlide,status_secondary(a1)
 		move.b	(V_int_run_count+3).w,d0
 		andi.b	#$F,d0
 		bne.s	locret_7446
@@ -79738,7 +79738,7 @@ loc_3681C:
 
 loc_36828:
 		move.w	#5,move_lock(a1)
-		andi.b	#$7F,status_secondary(a1)
+		andi.b	#$FF-1<<Status_WaterSlide,status_secondary(a1)
 
 loc_36834:
 		tst.b	routine(a0)
@@ -79779,7 +79779,7 @@ loc_36884:
 loc_3688E:
 		asl	ground_vel(a2)
 		move.b	#$1B,anim(a2)
-		ori.b	#$80,status_secondary(a2)
+		ori.b	#1<<Status_WaterSlide,status_secondary(a2)
 		move.w	a2,$3E(a0)
 		move.b	#$3C,$3C(a0)
 
