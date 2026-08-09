@@ -24770,9 +24770,25 @@ ExtraCharacterMoves_Index:
 Sonic_FireShield:
 ;		btst	#Status_Invincible,status_secondary(a0)	; Liliam: hidden skill - drop dash
 ;		bne.w	locret_11A14				;
+		btst	#Status_FireShield,status_secondary(a0)
+		beq.s	Sonic_LightningShield
+		move.b	(Ctrl_1_held_logical).w,d0		; Liliam: hidden skill - climb dash
+		andi.b	#button_right_mask|button_left_mask,d0	;
+		beq.s	.checkTailsAssist			;
+		bclr	#Status_Facing,status(a0)		;
+		bclr	#Status_Facing,(Shield+status).w	;
+		cmpi.b	#button_right_mask,d0			;
+		beq.s	loc_1193E				;
+		bset	#Status_Facing,status(a0)		;
+		bset	#Status_Facing,(Shield+status).w	;
+		bra.s	loc_1193E				;
+; ---------------------------------------------------------------------------
 
-		btst	#Status_FireShield,status_secondary(a0)	; does Sonic have a Fire Shield?
-		beq.s	Sonic_LightningShield			; if not, branch
+	.checkTailsAssist:
+		btst	#button_up,(Ctrl_1_held_logical).w	; Liliam: QOL - Tails assist
+		bne.s	locret_1192A				;
+
+loc_1193E:
 		move.b	#1,(Shield+anim).w
 		move.b	#Status_FireShield,double_jump_flag(a0)	; Liliam: simplify double jump selection
 ;		move.b	#1,double_jump_flag(a0)			;
@@ -24792,8 +24808,15 @@ loc_11958:
 ; ---------------------------------------------------------------------------
 
 Sonic_LightningShield:
-		btst	#Status_LtngShield,status_secondary(a0)	; does Sonic have a Lightning Shield?
-		beq.s	Sonic_BubbleShield			; if not, branch
+		btst	#Status_LtngShield,status_secondary(a0)
+		beq.s	Sonic_BubbleShield
+		move.b	(Ctrl_1_held_logical).w,d0		; Liliam: QOL - Tails assist
+		andi.b	#button_right_mask|button_left_mask,d0	;
+		bne.s	loc_11982				;
+		btst	#button_up,(Ctrl_1_held_logical).w	;
+		bne.w	locret_11A14				;
+
+loc_11982:
 		move.b	#1,(Shield+anim).w
 		move.b	#Status_LtngShield,double_jump_flag(a0)	; Liliam: simplify double jump selection
 ;		move.b	#1,double_jump_flag(a0)			;
@@ -24804,8 +24827,15 @@ Sonic_LightningShield:
 ; ---------------------------------------------------------------------------
 
 Sonic_BubbleShield:
-		btst	#Status_BublShield,status_secondary(a0)	; does Sonic have a Bubble Shield?
-		beq.s	Sonic_CheckTransform			; if not, branch
+		btst	#Status_BublShield,status_secondary(a0)
+		beq.s	Sonic_CheckTransform
+		move.b	(Ctrl_1_held_logical).w,d0		; Liliam: QOL - Tails assist
+		andi.b	#button_right_mask|button_left_mask,d0	;
+		bne.s	loc_119AA				;
+		btst	#button_up,(Ctrl_1_held_logical).w	;
+		bne.w	locret_11A14				;
+
+loc_119AA:
 		move.b	#1,(Shield+anim).w
 		move.b	#Status_BublShield,double_jump_flag(a0)	; Liliam: simplify double jump selection
 ;		move.b	#1,double_jump_flag(a0)			;
@@ -24850,6 +24880,13 @@ Amy_CheckMoves:							; Liliam: add extra characters
 ; ---------------------------------------------------------------------------
 
 Mighty_CheckMoves:						; Liliam: add extra characters
+		move.b	(Ctrl_1_held_logical).w,d0
+		andi.b	#button_right_mask|button_left_mask,d0
+		bne.s	.activate
+		btst	#button_up,(Ctrl_1_held_logical).w
+		bne.s	locret_11A14
+
+	.activate:
 		clr.w	x_vel(a0)
 		move.w	#$C00,y_vel(a0)
 		move.b	#$A,anim(a0)
@@ -32931,7 +32968,7 @@ Tails_RingBarrierTouch_Width:					; Liliam: hidden skill - ring barrier
 		beq.w	Obj_SuperTailsBirds_GetDestination.enemy
 		bmi.w	HyperTouch_Special
 		move.b	#4,routine(a1)
-		move.w	$30(a0),parent(a1)
+		move.w	#Player_1,parent(a1)
 
 	.return:
 		rts
@@ -34789,7 +34826,8 @@ loc_170CC:
 		sub.w	d1,x_pos(a0)
 
 loc_17106:
-		bsr.w	CheckRightWallDist
+		jsr	(CheckRightWallDist).l			; Liliam: fallout
+;		bsr.w	CheckRightWallDist			;
 		tst.w	d1
 		bpl.s	loc_17112
 		add.w	d1,x_pos(a0)
@@ -35640,7 +35678,7 @@ Knux_Test_For_Glide:
 
 loc_17842:
 		tst.b	(Super_ready_flag).w				; Liliam: HUD - barrier HUD
-		beq.s	Knux_CheckTailsAssist				;
+		beq.s	loc_1786C					;
 ;		tst.b	(Super_Sonic_Knux_flag).w			;
 ;		bne.s	loc_1786C					;
 ;		cmpi.b	#7,(Super_emerald_count).w			;
@@ -35651,20 +35689,33 @@ loc_17842:
 ;		bne.s	loc_1786C					;
 		ori.b	#1,(Super_ready_HUD_flag).w			;
 
-loc_1785E:
+;loc_1785E:
 ;		cmpi.w	#50,(Ring_count).w				;
 ;		blo.s	loc_1786C					;
 ;		tst.b	(Update_HUD_timer).w				;
+;		bne.s	Knux_Transform					;
 		btst	#button_A,d0					;
-		bne.s	Knux_Transform
+		bne.w	Knux_Transform					;
 
-Knux_CheckTailsAssist:
+loc_1786C:
+		andi.b	#button_ABC_mask,d0				;
+		beq.w	locret_178CC					;
+
+		move.b	(Ctrl_1_held_logical).w,d0		; Liliam: hidden skill - climb dash
+		andi.b	#button_right_mask|button_left_mask,d0	;
+		beq.s	.checkTailsAssist			;
+		bclr	#Status_Facing,status(a0)		;
+		cmpi.b	#button_right_mask,d0			;
+		beq.s	.done					;
+		bset	#Status_Facing,status(a0)		;
+		bra.s	.done					;
+; ---------------------------------------------------------------------------
+
+	.checkTailsAssist:
 		btst	#button_up,(Ctrl_1_held_logical).w	; Liliam: QOL - Tails assist
 		bne.s	locret_178CC				;
 
-loc_1786C:
-		andi.b	#button_ABC_mask,d0				; Liliam: HUD - barrier HUD
-		beq.s	locret_178CC					;
+	.done:
 		bclr	#Status_Roll,status(a0)
 		move.b	#$A,y_radius(a0)
 		move.b	#$A,x_radius(a0)
@@ -39268,6 +39319,8 @@ EncoreHelper_KnucklesPlatform:					; Liliam: Encore mode - Knuckles is platform 
 	.checkClimbing:
 		tst.b	render_flags(a2)
 		bpl.s	.return
+		tst.b	spin_dash_flag(a2)
+		bne.s	.notClimbing
 		cmpi.b	#2,character_id(a2)
 		bne.s	.notClimbing
 		cmpi.b	#4,double_jump_flag(a2)
