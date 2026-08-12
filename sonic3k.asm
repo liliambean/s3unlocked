@@ -20707,13 +20707,20 @@ loc_F686:
 loc_F68A:
 		tst.b	(Reverse_gravity_flag).w		; Liliam: hidden skill - climb dash
 		beq.s	.notUpsideDown				;
-		neg.b	d0					;
+		andi.b	#$C0,d0					;
+		beq.w	CheckCeilingDist_Part2			;
+		cmpi.b	#$80,d0					;
+		beq.w	CheckFloorDist_Part2			;
+		bra.s	loc_F69A				;
+; ---------------------------------------------------------------------------
 
 	.notUpsideDown:
 		andi.b	#$C0,d0
 		beq.w	CheckFloorDist_Part2
 		cmpi.b	#$80,d0
 		beq.w	CheckCeilingDist_Part2
+
+loc_F69A:
 		tst.w	(Competition_mode).w
 		bne.s	loc_F6A8
 		andi.b	#$38,d1
