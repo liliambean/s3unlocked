@@ -314,16 +314,17 @@ SRAM_life_count =		  8 ; byte
 SRAM_continue_count =		  9 ; byte
 SRAM_next_slot =		 $A
 
+SRAM_integrity =	'BD'
+SRAM_integrity2 =	'LD'
 SRAM_2P_num_slots =	  5
 SRAM_num_slots =	  8
 SRAM_encore_num_slots =	  3			; Liliam: Encore mode - save data
-SRAM_integrity =	'BD'
-SRAM_integrity2 =	'LD'
+SRAM_encore_slot_size =	SRAM_next_slot+4	; Liliam: Metal Sonic hologram object
 
-SRAM_competition_size =	SRAM_2P_num_slots*SRAM_2P_next_slot+4	; $54 bytes
-SRAM_main_size =	SRAM_num_slots*SRAM_next_slot+4		; $54 bytes
-SRAM_encore_size =	SRAM_encore_num_slots*SRAM_next_slot+4	; $22 bytes
-SRAM_extra_size =	$22+4					; $26 bytes
+SRAM_competition_size =	SRAM_2P_num_slots*SRAM_2P_next_slot+4		; $54 bytes
+SRAM_main_size =	SRAM_num_slots*SRAM_next_slot+4			; $54 bytes
+SRAM_encore_size =	SRAM_encore_num_slots*SRAM_encore_slot_size+4	; $2E bytes
+SRAM_extra_size =	$16+4						; $1A bytes
 
 	phase $200001
 SRAM_start	=		*
@@ -336,13 +337,13 @@ SRAM_main		ds.w SRAM_main_size		; $54 bytes
 	ds.w 2	; unused
 SRAM_main_backup	ds.w SRAM_main_size		; $54 bytes
 	ds.w 2	; unused
-SRAM_encore		ds.w SRAM_encore_size		; $22 bytes
+SRAM_encore		ds.w SRAM_encore_size		; $2E bytes
 	ds.w 2	; unused
-SRAM_encore_backup	ds.w SRAM_encore_size		; $22 bytes
+SRAM_encore_backup	ds.w SRAM_encore_size		; $2E bytes
 	ds.w 2	; unused
-SRAM_extra		ds.w SRAM_extra_size		; $26 bytes
+SRAM_extra		ds.w SRAM_extra_size		; $1A bytes
 	ds.w 2	; unused
-SRAM_extra_backup	ds.w SRAM_extra_size		; $26 bytes
+SRAM_extra_backup	ds.w SRAM_extra_size		; $1A bytes
 	ds.w 9	; unused
 SRAM_end	=		*
 	dephase
@@ -419,19 +420,18 @@ Pos_table_P2_end =		*
 Pos_table 			ds.b $100		;
 Pos_table_end =			*
 Competition_saved_data		ds.b $54		; saved data from Competition Mode
-			ds.b $A				; unused
+			ds.b 6				; unused
 Emerald_flicker_flag		ds.w 1			; controls the emerald flicker in save screen and special stage results.
+Collected_holograms_array	ds.l 1		; Liliam: Metal Sonic hologram object
 Save_pointer			ds.l 1			; pointer to the active save slot in 1 player mode
 Extra_saved_data =		*		; Liliam: options menu
 Blue_spheres_saved_level	ds.l 1		; Liliam: blue sphere - load saved level on startup
-Collected_holograms_array	ds.l 1		; Liliam: Metal Sonic hologram object
 Collected_photo_piece_array	ds.b $F		; Liliam: museum - photo piece object
 Encore_options			ds.b 1		; Liliam: Encore mode - palette
 Skill_options			ds.b 1		; Liliam: hidden skills
 Unlock_flags			ds.b 1		; Liliam: options menu
-			ds.b 8				; unused
 				ds.w 2		; Liliam: options menu
-Encore_saved_data		ds.b $22	; Liliam: Encore mode - save game
+Encore_saved_data		ds.b $2E	; Liliam: Encore mode - save game
 Saved_data			ds.b $54		; saved data from 1 player mode
 Ring_status_table		ds.b $400		; 1 word per ring
 Ring_status_table_end =		*
