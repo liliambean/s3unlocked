@@ -7732,12 +7732,10 @@ loc_6AB8:
 		tst.w	(Competition_mode).w
 		bne.w	loc_6B94
 		move.w	(Player_mode).w,d0
-;		bne.s	loc_6B1E				; Liliam: debug - allow selection of monitor contents
+;		bne.s	loc_6B1E				; Liliam: simplify player object selection
 		lea	(Player_ObjectPtrs).l,a1		;
-		move.b	#9,(Debug_monitor_subtype).w		;
 		tst.b	(Encore_mode).w				;
 		beq.w	loc_6B1E				;
-		move.b	#1,(Debug_monitor_subtype).w		;
 
 		cmpi.w	#$D01,(Current_zone_and_act).w		; Liliam: Encore mode - player swap
 		beq.s	loc_6AD0				;
@@ -7793,6 +7791,12 @@ loc_6B22:
 		move.l	#Obj_DashDust,(Dust).w
 		move.l	#Obj_InstaShield,(Shield).w
 		move.w	#Player_1,(Shield+parent).w
+
+		tst.b	(Debug_monitor_subtype).w		; Liliam: debug - allow selection of monitor contents
+		bne.s	locret_6B40				;
+		move.b	#9,(Debug_monitor_subtype).w		;
+
+locret_6B40:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -45534,8 +45538,8 @@ loc_1D86C:
 
 ; ---------------------------------------------------------------------------
 off_1D87C:
-		dc.w Monitor_Give_CombineRing-off_1D87C				; Liliam: Encore mode - combine ring
-;		dc.w Monitor_Give_Eggman-off_1D87C				;
+		dc.w Monitor_Give_ChangeCharacter-off_1D87C	; Liliam: Encore mode - change character item
+;		dc.w Monitor_Give_Eggman-off_1D87C		;
 		dc.w Monitor_Give_1up-off_1D87C
 		dc.w Monitor_Give_Eggman-off_1D87C
 		dc.w Monitor_Give_Rings-off_1D87C
@@ -45576,15 +45580,6 @@ Monitor_Give_Stock:						; Liliam: Encore mode - character stock monitor
 		move.w	#59,(Encore_HUD_stocks_timer).w
 		bclr	#Encore_SwapHUD,(Encore_mode).w
 		moveq	#signextendB(sfx_Whistle),d0
-		jmp	(Play_SFX).l
-; ---------------------------------------------------------------------------
-
-Monitor_Give_CombineRing:							; Liliam: Encore mode - combine ring
-		tst.b	(Encore_mode).w
-		beq.w	Monitor_Give_BubbleShield
-		addq.w	#1,(a2)
-		bset	#Status_CombineRing,$2B(a1)
-		moveq	#signextendB(sfx_CombineRing),d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
@@ -45752,9 +45747,14 @@ locret_1DA5E:
 
 Monitor_Give_SuperSonic:
 		addq.w	#1,(a2)
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - change character item
-		bne.s	Monitor_Give_ChangeCharacter		;
+		tst.b	(Encore_mode).w						; Liliam: Encore mode - combine ring
+		beq.s	loc_1DA62						;
+		bset	#Status_CombineRing,status_secondary(a1)		;
+		moveq	#signextendB(sfx_CombineRing),d0			;
+		jmp	(Play_SFX).l						;
+; ---------------------------------------------------------------------------
 
+loc_1DA62:
 		moveq	#50,d0					; Liliam: bugfix - clamp ring count properly
 		jsr	(AddRings).l				;
 ;		addi.w	#50,(Ring_count).w			;
@@ -45800,6 +45800,10 @@ loc_1DB26:
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_ChangeCharacter:
+		tst.b	(Encore_mode).w				; Liliam: bugfix - use safe colors for aqua barrier icon
+		beq.w	Monitor_Give_BubbleShield		;
+		addq.w	#1,(a2)					;
+
 		movea.w	parent(a0),a1				; Liliam: Encore mode - change character item
 		cmpi.b	#State_Control,routine(a1)		;
 		beq.s	Encore_RotateStocks			;
@@ -195660,6 +195664,8 @@ Child1_Act2LevelSize:
 ; ---------------------------------------------------------------------------
 
 Make_CutsceneSkipObj:						; Liliam: cutscene skip object
+		tst.w	(Debug_placement_mode).w
+		bne.s	CutsceneSkip_Return
 		jsr	(AllocateObject).l
 		bne.s	CutsceneSkip_Return
 		clr.b	(Update_HUD_timer).w
