@@ -4521,7 +4521,7 @@ SuperHyper_PalCycle_RevertMighty:					; Liliam: animate super forms consistently
 		tst.b	(Super_palette_status).w
 		bne.s	.doExtraColor
 		moveq	#0,d0
-		lea	(Pal_SaveScreen+$2A).l,a0
+		lea	(Pal_LevelSelect+$2A).l,a0
 		lea	(Normal_palette+$A).w,a1
 		lea	(Pal_WaterKnux+$C).l,a2
 		bsr.w	SuperHyper_PalCycle_Apply
@@ -22209,8 +22209,7 @@ loc_1037C:
 		beq.s	loc_103AA				;
 		tst.w	(Super_Sonic_Knux_flag).w		;
 		beq.s	.restoreMusic				;
-		lea	(Max_speed).w,a4			;
-		bsr.w	SonicKnux_SuperHyper.revertToNormal	;
+		bsr.w	SonicKnux_SuperHyper.revert		;
 
 	.restoreMusic:
 		move.b	#2,invincibility_timer(a0)		;
@@ -25243,11 +25242,20 @@ SonicKnux_SuperHyper:
 
 	.updateHUD:
 		subq.w	#1,(Ring_count).w
-		bne.s	.return	; If rings aren't depleted, we're done here
-		; If rings depleted, return to normal
+		beq.s	.revertToNormal					; Liliam: animate super forms consistently
+;		bne.s	.return						;
+		rts							;
+; ---------------------------------------------------------------------------
+
+	.revert:
+		lea	(Max_speed).w,a4				; Liliam: animate super forms consistently
+		moveq	#3,d0						;
+		tst.b	(Super_Tails_flag).w				;
+		bmi.s	.revertToNormal					;
+		moveq	#2,d0						;
 
 	.revertToNormal:
-		move.b	d0,(Super_palette_status).w			; Liliam: animate super forms consistently
+		move.b	d0,(Super_palette_status).w			;
 ;		move.b	#2,(Super_palette_status).w			;
 		move.w	#$1E,(Palette_frame).w
 		move.b	#0,(Palette_timer).w				;
@@ -37093,8 +37101,7 @@ loc_18592:
 		beq.s	loc_18594				;
 		move.l	a0,-(sp)				;
 		movea.l	a2,a0					;
-		lea	(Max_speed).w,a4			;
-		bsr.w	SonicKnux_SuperHyper.revertToNormal	;
+		bsr.w	SonicKnux_SuperHyper.revert		;
 		movea.l	(sp)+,a0				;
 
 loc_18594:
