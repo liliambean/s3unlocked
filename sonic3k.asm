@@ -30203,11 +30203,13 @@ loc_14892:
 
 
 Tails_Set_Flying_Animation:
-		btst	#Status_Underwater,status(a0)
-		bne.s	loc_14914
+;		btst	#Status_Underwater,status(a0)		; Liliam: bugfix - technically broken
+;		bne.s	loc_14914				;
 		moveq	#$20,d0
 		tst.w	(Competition_mode).w
 		bne.s	loc_148F4
+		btst	#Status_Underwater,status(a0)		;
+		bne.s	loc_14914				;
 		tst.w	y_vel(a0)
 		bpl.s	loc_148C4
 		moveq	#$21,d0
@@ -30218,6 +30220,9 @@ loc_148C4:
 		cmpi.b	#8,(Tails_tails+routine).w		;
 		blo.s	loc_148CC				;
 ;		beq.s	loc_148CC				;
+		tst.w	y_vel(a0)				;
+		bpl.s	loc_148CA				;
+		moveq	#$1F-2,d0				;
 
 loc_148CA:
 		addq.b	#2,d0
@@ -30225,7 +30230,7 @@ loc_148CA:
 loc_148CC:
 		tst.b	double_jump_property(a0)
 		bne.s	loc_148F4
-		moveq	#$1F,d0					; Liliam: simplify player anim selection
+		moveq	#$1E,d0					; Liliam: add custom animation
 		tst.b	(Flying_carrying_Sonic_flag).w		;
 		bne.s	loc_148D2				;
 		cmpi.b	#8,(Tails_tails+routine).w		; Liliam: hidden skill - ring barrier
@@ -30278,8 +30283,7 @@ loc_1491E:
 	.notTired:
 		tst.b	(Flying_carrying_Sonic_flag).w
 		beq.s	loc_14926
-		moveq	#$1E,d0					;
-;		moveq	#$27,d0					;
+		moveq	#$27,d0
 
 loc_14926:
 ;		tst.b	double_jump_property(a0)		;
@@ -32861,8 +32865,9 @@ Obj_Tails_Tail_AniSelection:
 		dc.b 0		; Ani_PlayerFall	->
 		dc.b 0		; Ani_PlayerBlank	->
 		dc.b 0		; Ani_TailsSwimTired	->
-		dc.b 0		; Ani_TailsSwimCarry	->
-		dc.b $D		; Ani_TailsFlyTired		; Liliam: simplify player anim selection
+		dc.b $D		; Ani_TailsFlyTired		; Liliam: add custom animation
+;		dc.b 0						;
+		dc.b $C		; Ani_TailsFlyRingBarrier	; Liliam: hidden skill - ring barrier
 ;		dc.b 0						;
 		dc.b $B		; Ani_TailsFlyFall	-> AniTails_Tail_FlyFall
 		dc.b $C		; Ani_TailsFly		-> AniTails_Tail_Fly
@@ -32872,9 +32877,10 @@ Obj_Tails_Tail_AniSelection:
 ;		dc.b $B						;
 		dc.b 0		; Ani_TailsSwimFall	->
 		dc.b 0		; Ani_TailsSwim		->
+		dc.b 0		; Ani_TailsSwimCarry	->
 
 		; Liliam: simplify player anim selection
-;		dc.b    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0
+;		dc.b    0,   0,   0,   0,   0,   0,   0,   0,   0,   0
 		even
 AniTails_Tail:
 		; Liliam: add custom animation

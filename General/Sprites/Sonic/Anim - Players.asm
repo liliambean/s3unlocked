@@ -90,8 +90,8 @@ AniTails:
 		dc.w Ani_PlayerFall-AniTails		; 1B
 		dc.w Ani_PlayerBlank-AniTails		; 1C
 		dc.w Ani_TailsSwimTired-AniTails	; 1D
-		dc.w Ani_TailsSwimCarry-AniTails	; 1E
-		dc.w Ani_TailsFlyTired-AniTails		; 1F
+		dc.w Ani_TailsFlyTired-AniTails		; 1E
+		dc.w Ani_TailsFlyRingBarrier-AniTails	; 1F
 		dc.w Ani_TailsFlyFall-AniTails		; 20
 		dc.w Ani_TailsFly-AniTails		; 21
 		dc.w Ani_TailsFlyCarryFall-AniTails	; 22
@@ -99,6 +99,7 @@ AniTails:
 		dc.w Ani_TailsFlyTiredCarry-AniTails	; 24
 		dc.w Ani_TailsSwimFall-AniTails		; 25
 		dc.w Ani_TailsSwim-AniTails		; 26
+		dc.w Ani_TailsSwimCarry-AniTails	; 27
 AniKnuckles:
 		dc.w Ani_PlayerWalk-AniKnuckles		; 00
 		dc.w Ani_PlayerRun-AniKnuckles		; 01
@@ -338,6 +339,7 @@ Ani_PlayerFall:		dc.b    9, $E7, $E8, $FF
 Ani_PlayerBlank:	dc.b  $77,   0, $FF
 Ani_TailsFlyFall:
 Ani_TailsFly:		dc.b  $1F, $AA, $FF
+Ani_TailsFlyRingBarrier:
 Ani_TailsFlyCarryFall:	dc.b  $1F, $AB, $FF
 Ani_TailsFlyCarry:	dc.b  $1F, $AC, $FF
 Ani_TailsFlyTired:	dc.b   $B, $AD, $AE, $FF
