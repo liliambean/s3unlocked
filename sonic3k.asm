@@ -20709,7 +20709,7 @@ loc_F686:
 		addi.b	#$1F,d0
 
 loc_F68A:
-		tst.b	(Reverse_gravity_flag).w		; Liliam: hidden skill - climb dash
+		tst.b	(Reverse_gravity_flag).w		; Liliam: extra skills - climb dash
 		beq.s	.notUpsideDown				;
 		andi.b	#$C0,d0					;
 		beq.w	CheckCeilingDist_Part2			;
@@ -21604,7 +21604,7 @@ TouchResponse:
 ;		nop
 		jsr	(Test_Ring_Collisions).l
 		bsr.w	ShieldTouchResponse
-		move.b	character_id(a0),d0			; Liliam: add extra characters
+		move.b	character_id(a0),d0			; Liliam: extra skills - hammer attack
 		bne.s	Touch_CheckAmy				;
 ;		tst.b	character_id(a0)			;
 ;		bne.s	Touch_NoInstaShield			;
@@ -21638,7 +21638,7 @@ loc_FEB2:
 ; ---------------------------------------------------------------------------
 
 Touch_CheckAmy:
-		cmpi.b	#3,d0					; Liliam: add extra characters
+		cmpi.b	#3,d0					; Liliam: extra skills - hammer attack
 		bne.s	Touch_NoInstaShield			;
 		tst.b	double_jump_flag(a0)			;
 		bne.s	Touch_CheckAmy_HammerAttack		;
@@ -21677,10 +21677,10 @@ locret_FF1C:
 		rts
 ; ---------------------------------------------------------------------------
 
-Touch_CheckAmy_HammerAttack:					; Liliam: add extra characters
+Touch_CheckAmy_HammerAttack:					; Liliam: extra skills - hammer attack
 		lea	(Collision_response_list).w,a4
 		move.w	(a4)+,d6
-		bne.w	Touch_HammerAttack
+		bne.w	Amy_HammerAttack_Touch
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -21877,7 +21877,7 @@ Touch_Monitor:
 ;		cmpi.b	#2,anim(a0)				;
 ;		beq.s	.okaytodestroy				;
 
-		cmpi.b	#3,character_id(a0)			; Liliam: add extra characters
+		cmpi.b	#3,character_id(a0)			; Liliam: extra skills - hammer attack
 		bne.s	.checkKnuckles				;
 		tst.b	double_jump_property(a0)		;
 		bne.s	.okaytodestroy				;
@@ -21907,7 +21907,7 @@ Touch_Enemy:
 		cmpi.b	#9,anim(a0)				; Is player in their spin dash animation?
 		beq.s	.checkhurtenemy				; If so, branch
 
-		cmpi.b	#$A,anim(a0)				; Liliam: hidden skill - climb dash
+		cmpi.b	#$A,anim(a0)				; Liliam: extra skills - climb dash
 		beq.s	.checkhurtenemy				;
 		btst	#Status_Roll,status(a0)			; Liliam: simplify roll anim selection
 		bne.s	.checkhurtenemy				;
@@ -22006,7 +22006,7 @@ Touch_EnemyNormal:
 		bsr.w	HUD_AddToScore
 		move.l	#Obj_Explosion,(a1)		; Create enemy destruction explosion
 		move.b	#0,routine(a1)
-		movea.l	a0,a2					; Liliam: add extra characters
+		movea.l	a0,a2					; Liliam: extra skills - hammer attack
 		jsr	(EnemyDefeat_PickSound).l		;
 		tst.w	y_vel(a0)			; Is player moving up?
 		bmi.s	.bounceplayerdown		; If so, branch
@@ -23000,7 +23000,7 @@ Amy_Normal:
 		rts
 ; ---------------------------------------------------------------------------
 
-Amy_TouchFloor_CheckHammerRush:					; Liliam: add extra characters
+Amy_TouchFloor_CheckHammerRush:					; Liliam: extra skills - hammer attack
 		tst.b	double_jump_property(a0)
 		bpl.w	Amy_TouchFloor
 		bsr.w	Amy_TouchFloor
@@ -23013,7 +23013,7 @@ Amy_HammerRush_Release:
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
-Touch_HammerAttack:						; Liliam: add extra characters
+Amy_HammerAttack_Touch:						; Liliam: extra skills - hammer attack
 		move.w	d6,-(sp)
 		movea.w	(a4)+,a1
 		move.b	collision_flags(a1),d0
@@ -23022,7 +23022,7 @@ Touch_HammerAttack:						; Liliam: add extra characters
 	.nextObject:
 		move.w	(sp)+,d6
 		subq.w	#2,d6
-		bne.s	Touch_HammerAttack
+		bne.s	Amy_HammerAttack_Touch
 		moveq	#0,d0
 		rts
 ; ---------------------------------------------------------------------------
@@ -23805,7 +23805,7 @@ Sonic_MdJump:
 
 loc_11056:
 		bsr.w	Player_JumpAngle
-		tst.b	double_jump_property(a0)		; Liliam: hidden skill - drop dash (credit: MainMemory)
+		tst.b	double_jump_property(a0)		; Liliam: extra skills - drop dash (credit: MainMemory)
 		bpl.w	SonicKnux_DoLevelCollision		;
 		cmpi.b	#$A,anim(a0)				;
 		bne.w	Sonic_DropDash_Cancel			;
@@ -24113,7 +24113,7 @@ loc_11350:
 loc_11370:
 		move.b	#$40,d1
 		tst.w	ground_vel(a0)
-		beq.w	locret_113F4				; Liliam: hidden skill - climb dash
+		beq.w	locret_113F4				; Liliam: extra skills - climb dash
 ;		beq.s	locret_113F4				;
 		bmi.s	loc_1137E
 		neg.w	d1
@@ -24153,7 +24153,7 @@ locret_113CE:
 ; ---------------------------------------------------------------------------
 
 loc_113D0:
-		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		tst.w	x_vel(a0)				; Liliam: extra skills - climb dash
 		beq.s	Sonic_Move_Release			;
 		sub.w	d1,y_vel(a0)
 		rts
@@ -24170,7 +24170,7 @@ loc_113D6:
 
 loc_113F0:
 		add.w	d1,y_vel(a0)
-		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		tst.w	x_vel(a0)				; Liliam: extra skills - climb dash
 		bne.s	locret_113F4				;
 
 Sonic_Move_Release:
@@ -24799,7 +24799,7 @@ Sonic_RollJump:
 Sonic_JumpHeight:
 		tst.b	jumping(a0)	; is Sonic jumping?
 		beq.s	Sonic_UpVelCap	; if not, branch
-		tst.b	double_jump_flag(a0)			; Liliam: hidden skill - double jump
+		tst.b	double_jump_flag(a0)			; Liliam: extra skills - double jump
 		bne.s	loc_118C2				;
 		tst.b	$39(a6)					;
 		beq.s	loc_118C2				;
@@ -24838,11 +24838,11 @@ locret_118FE:
 
 Sonic_ShieldMoves:
 		tst.b	double_jump_flag(a0)
-;		bne.w	locret_11A14				; Liliam: hidden skill - double jump
+;		bne.w	locret_11A14				; Liliam: extra skills - double jump
 		beq.s	loc_11908				;
 		tst.b	$39(a6)					;
 		bgt.s	loc_11908				;
-		tst.b	double_jump_property(a0)		; Liliam: hidden skill - drop dash
+		tst.b	double_jump_property(a0)		; Liliam: extra skills - drop dash
 		beq.s	locret_118FE				;
 		move.b	(Ctrl_1_logical).w,d0			;
 		andi.b	#button_ABC_mask,d0			;
@@ -24895,7 +24895,7 @@ loc_1191A:
 		bne.s	Sonic_ExtraCharacterMoves		;
 
 		tst.b	(Super_Sonic_Knux_flag).w
-;		beq.s	Sonic_FireShield			; Liliam: hidden skill - drop dash
+;		beq.s	Sonic_FireShield			; Liliam: extra skills - drop dash
 		bmi.w	Sonic_HyperDash
 		btst	#Status_Invincible,status_secondary(a0)	;
 		beq.s	Sonic_FireShield			;
@@ -24924,11 +24924,11 @@ ExtraCharacterMoves_Index:
 ; ---------------------------------------------------------------------------
 
 Sonic_FireShield:
-;		btst	#Status_Invincible,status_secondary(a0)	; Liliam: hidden skill - drop dash
+;		btst	#Status_Invincible,status_secondary(a0)	; Liliam: extra skills - drop dash
 ;		bne.w	locret_11A14				;
 		btst	#Status_FireShield,status_secondary(a0)
 		beq.s	Sonic_LightningShield
-		move.b	(Ctrl_1_held_logical).w,d0		; Liliam: hidden skill - climb dash
+		move.b	(Ctrl_1_held_logical).w,d0		; Liliam: extra skills - climb dash
 		andi.b	#button_right_mask|button_left_mask,d0	;
 		beq.s	.checkTailsAssist			;
 		bclr	#Status_Facing,status(a0)		;
@@ -25022,13 +25022,13 @@ Sonic_CheckTransform:
 		move.b	#1,(Shield+anim).w
 
 loc_11A04:
-		bsr.w	Sonic_DropDash				; Liliam: hidden skill - drop dash
+		bsr.w	Sonic_DropDash				; Liliam: extra skills - drop dash
 		move.b	#1,double_jump_flag(a0)
 		move.w	#sfx_InstaAttack,d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
-Amy_CheckMoves:							; Liliam: add extra characters
+Amy_CheckMoves:							; Liliam: extra skills - hammer attack
 		move.b	#3,anim(a0)
 		move.b	#1,double_jump_flag(a0)
 		move.b	#19,double_jump_property(a0)
@@ -25055,7 +25055,7 @@ Amy_CheckMoves:							; Liliam: add extra characters
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
-Mighty_CheckMoves:						; Liliam: add extra characters
+Mighty_CheckMoves:						; Liliam: extra skills - hammer drop
 		move.b	(Ctrl_1_held_logical).w,d0
 		andi.b	#button_right_mask|button_left_mask,d0
 		bne.s	.activate
@@ -25071,13 +25071,13 @@ Mighty_CheckMoves:						; Liliam: add extra characters
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
-Ray_CheckMoves:							; Liliam: add extra characters
+Ray_CheckMoves:							; Liliam: extra skills - air glide
 		move.b	#1,double_jump_flag(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 MetalSonic_CheckMoves:
-		move.b	#1,double_jump_flag(a0)			; Liliam: add extra characters
+		move.b	#1,double_jump_flag(a0)			; Liliam: extra skills - boost mode
 
 locret_11A14:
 		rts
@@ -25725,7 +25725,7 @@ locret_11EEA:
 ; ---------------------------------------------------------------------------
 
 Sonic_DropDash_Cancel:
-		clr.b	double_jump_property(a0)		; Liliam: hidden skill - drop dash
+		clr.b	double_jump_property(a0)		; Liliam: extra skills - drop dash
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -26018,7 +26018,7 @@ locret_12170:
 		rts
 ; ---------------------------------------------------------------------------
 
-Sonic_DropDash_Charge:						; Liliam: hidden skill - drop dash (credit: MainMemory)
+Sonic_DropDash_Charge:						; Liliam: extra skills - drop dash (credit: MainMemory)
 		tst.b	double_jump_property(a0)
 		bmi.s	locret_12170
 		subq.b	#1,double_jump_property(a0)
@@ -26029,7 +26029,7 @@ Sonic_DropDash_Charge:						; Liliam: hidden skill - drop dash (credit: MainMemo
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
-Sonic_TouchFloor_CheckDropDash:					; Liliam: hidden skill - drop dash (credit: MainMemory)
+Sonic_TouchFloor_CheckDropDash:					; Liliam: extra skills - drop dash (credit: MainMemory)
 		tst.b	double_jump_property(a0)
 		bpl.w	Player_TouchFloor
 		bsr.w	Player_TouchFloor2
@@ -26168,7 +26168,7 @@ Sonic_DropDash_Release:
 Player_TouchFloor_Check_Spindash:
 		tst.b	spin_dash_flag(a0)
 		bne.s	Player_TouchFloor2
-		move.b	character_id(a0),d0			; Liliam: add extra characters
+		move.b	character_id(a0),d0			; Liliam: extra skills - hammer attack
 		beq.s	.checkDropDash				;
 		cmpi.b	#3,d0					;
 		bne.s	loc_12178				;
@@ -26178,7 +26178,7 @@ Player_TouchFloor_Check_Spindash:
 ; ---------------------------------------------------------------------------
 
 	.checkDropDash:
-		tst.b	double_jump_property(a0)		; Liliam: hidden skill - drop dash (credit: MainMemory)
+		tst.b	double_jump_property(a0)		; Liliam: extra skills - drop dash (credit: MainMemory)
 		bmi.s	Player_TouchFloor2			;
 
 loc_12178:
@@ -26922,7 +26922,7 @@ loc_1270A:
 		bne.w	Animate_CheckMetalSonic			;
 		tst.b	(Super_Sonic_Knux_flag).w
 		bne.s	loc_12766
-		tst.b	(Skill_options).w			; Liliam: hidden skill - peel out
+		tst.b	(Skill_options).w			; Liliam: extra skills - peel out
 		bpl.s	loc_12710				;
 		lea	(Ani_SonicDash).l,a1			;
 		cmpi.w	#$A00,d2				;
@@ -30172,7 +30172,7 @@ loc_14860:
 ; ---------------------------------------------------------------------------
 
 	.player1:
-		tst.b	(Tails_tails+routine).w			; Liliam: hidden skill - ring barrier
+		tst.b	(Tails_tails+routine).w			; Liliam: extra skills - ring barrier
 		bne.s	.autoFlight				;
 
 	.noAutoFlight:
@@ -30224,7 +30224,7 @@ Tails_Set_Flying_Animation:
 
 loc_148C4:
 		tst.b	(Flying_carrying_Sonic_flag).w
-		bne.s	loc_148CA				; Liliam: hidden skill - ring barrier
+		bne.s	loc_148CA				; Liliam: extra skills - ring barrier
 		cmpi.b	#8,(Tails_tails+routine).w		;
 		blo.s	loc_148CC				;
 ;		beq.s	loc_148CC				;
@@ -30241,7 +30241,7 @@ loc_148CC:
 		moveq	#$1E,d0					; Liliam: add custom animation
 		tst.b	(Flying_carrying_Sonic_flag).w		;
 		bne.s	loc_148D2				;
-		cmpi.b	#8,(Tails_tails+routine).w		; Liliam: hidden skill - ring barrier
+		cmpi.b	#8,(Tails_tails+routine).w		; Liliam: extra skills - ring barrier
 		blo.s	loc_148D4				;
 
 loc_148D2:
@@ -30571,7 +30571,7 @@ loc_14B7A:
 loc_14B9A:
 		move.b	#$40,d1
 		tst.w	ground_vel(a0)
-		beq.w	locret_14C1E				; Liliam: hidden skill - climb dash
+		beq.w	locret_14C1E				; Liliam: extra skills - climb dash
 ;		beq.s	locret_14C1E				;
 		bmi.s	loc_14BA8
 		neg.w	d1
@@ -30611,7 +30611,7 @@ locret_14BF8:
 ; ---------------------------------------------------------------------------
 
 loc_14BFA:
-		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		tst.w	x_vel(a0)				; Liliam: extra skills - climb dash
 		beq.s	Tails_Move_Release			;
 		sub.w	d1,y_vel(a0)
 		rts
@@ -30628,7 +30628,7 @@ loc_14C00:
 
 loc_14C1A:
 		add.w	d1,y_vel(a0)
-		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		tst.w	x_vel(a0)				; Liliam: extra skills - climb dash
 		bne.s	locret_14C1E				;
 
 Tails_Move_Release:
@@ -31323,7 +31323,7 @@ loc_1518C:
 		bclr	#Status_RollJump,status(a0)
 		move.b	#1,double_jump_flag(a0)
 		move.b	#(8*60)/2,double_jump_property(a0)
-		move.w	(Player_mode).w,d0			; Liliam: hidden skill - ring barrier
+		move.w	(Player_mode).w,d0			; Liliam: extra skills - ring barrier
 		or.b	(Encore_mode).w,d0			;
 		bne.w	Tails_InitRingBarrier			;
 		bsr.w	Tails_Set_Flying_Animation
@@ -32823,7 +32823,7 @@ loc_1612C:
 		move.b	Obj_Tails_Tail_AniSelection(pc,d0.w),anim(a0)	; Load anim relative to parent's
 
 loc_1613C:
-		bsr.w	Tails_RingBarrier			; Liliam: hidden skill - ring barrier
+		bsr.w	Tails_RingBarrier			; Liliam: extra skills - ring barrier
 		lea	(AniTails_Tail).l,a1
 		bsr.w	Animate_Tails_Part2
 ;		tst.b	(Reverse_gravity_flag).w		; Liliam: add extra characters
@@ -32875,7 +32875,7 @@ Obj_Tails_Tail_AniSelection:
 		dc.b 0		; Ani_TailsSwimTired	->
 		dc.b $D		; Ani_TailsFlyTired		; Liliam: add custom animation
 ;		dc.b 0						;
-		dc.b $C		; Ani_TailsFlyRingBarrier	; Liliam: hidden skill - ring barrier
+		dc.b $C		; Ani_TailsFlyRingBarrier	; Liliam: extra skills - ring barrier
 ;		dc.b 0						;
 		dc.b $B		; Ani_TailsFlyFall	-> AniTails_Tail_FlyFall
 		dc.b $C		; Ani_TailsFly		-> AniTails_Tail_Fly
@@ -32895,7 +32895,7 @@ AniTails_Tail:
 		include "General/Sprites/Tails/Anim - Tails Tail.asm"
 ; ---------------------------------------------------------------------------
 
-Tails_InitRingBarrier:						; Liliam: hidden skill - ring barrier
+Tails_InitRingBarrier:						; Liliam: extra skills - ring barrier
 		btst	#Skill_TailsRingBarrier,(Skill_options).w
 		beq.s	Tails_RingBarrier_Return
 		lea	(Tails_tails).w,a1
@@ -32910,7 +32910,7 @@ Tails_InitRingBarrier:						; Liliam: hidden skill - ring barrier
 		jmp	(Add_To_DMA_Queue).l
 ; ---------------------------------------------------------------------------
 
-Tails_RingBarrier:						; Liliam: hidden skill - ring barrier
+Tails_RingBarrier:						; Liliam: extra skills - ring barrier
 		tst.w	mainspr_childsprites(a0)
 		beq.s	Tails_RingBarrier_Return
 
@@ -32925,7 +32925,7 @@ Tails_RingBarrier:						; Liliam: hidden skill - ring barrier
 		move.w	Tails_RingBarrier_Index(pc,d1.w),d1
 		jmp	Tails_RingBarrier_Index(pc,d1.w)
 ; ---------------------------------------------------------------------------
-Tails_RingBarrier_Index:					; Liliam: hidden skill - ring barrier
+Tails_RingBarrier_Index:					; Liliam: extra skills - ring barrier
 		dc.w Tails_RingBarrier_Hide-Tails_RingBarrier_Index
 		dc.w Tails_RingBarrier_Spin-Tails_RingBarrier_Index
 		dc.w Tails_RingBarrier_Throw-Tails_RingBarrier_Index
@@ -32934,7 +32934,7 @@ Tails_RingBarrier_Index:					; Liliam: hidden skill - ring barrier
 		dc.w Tails_RingBarrier_Hold-Tails_RingBarrier_Index
 ; ---------------------------------------------------------------------------
 
-Tails_RingBarrier_CheckDelete:					; Liliam: hidden skill - ring barrier
+Tails_RingBarrier_CheckDelete:					; Liliam: extra skills - ring barrier
 		cmpi.b	#$1C,d0
 		bls.s	.delete
 		btst	#Status_Underwater,status(a2)
@@ -32955,14 +32955,14 @@ Tails_RingBarrier_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
-Tails_RingBarrier_Hide:						; Liliam: hidden skill - ring barrier
+Tails_RingBarrier_Hide:						; Liliam: extra skills - ring barrier
 		btst	#Status_Underwater,status(a2)
 		bne.s	Tails_RingBarrier_Return
 		addq.b	#8,routine(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
-Tails_RingBarrier_Wait:						; Liliam: hidden skill - ring barrier
+Tails_RingBarrier_Wait:						; Liliam: extra skills - ring barrier
 		andi.b	#button_ABC_mask,d2
 		bne.s	.disableButtons
 		addq.b	#2,routine(a0)
@@ -32987,7 +32987,7 @@ Tails_RingBarrier_Hold:
 		bra.w	Tails_RingBarrier_Draw
 ; ---------------------------------------------------------------------------
 
-Tails_RingBarrier_Spin:						; Liliam: hidden skill - ring barrier
+Tails_RingBarrier_Spin:						; Liliam: extra skills - ring barrier
 		bsr.s	Tails_RingBarrier_CheckDelete
 		move.b	angle+1(a0),d0
 		jsr	(GetSineCosine).l
@@ -33050,7 +33050,7 @@ Tails_RingBarrier_Spin:						; Liliam: hidden skill - ring barrier
 		bra.s	Tails_RingBarrier_DrawTouch
 ; ---------------------------------------------------------------------------
 
-Tails_RingBarrier_Throw:					; Liliam: hidden skill - ring barrier
+Tails_RingBarrier_Throw:					; Liliam: extra skills - ring barrier
 		move.w	x_vel+$14(a0),d0
 		move.w	y_vel+$14(a0),d1
 		add.w	d0,sub2_x_pos(a0)
@@ -33061,7 +33061,7 @@ Tails_RingBarrier_Throw:					; Liliam: hidden skill - ring barrier
 		bra.s	Tails_RingBarrier_DrawTouch
 ; ---------------------------------------------------------------------------
 
-Tails_RingBarrier_Catch:					; Liliam: hidden skill - ring barrier
+Tails_RingBarrier_Catch:					; Liliam: extra skills - ring barrier
 		moveq	#0,d4
 		cmpi.b	#$1C,d0
 		bls.s	.setPosition
@@ -34235,7 +34235,7 @@ Knuckles_Wall_Climb:
 		move.l	(Secondary_collision_addr).w,(Collision_addr).w
 
 loc_16BFA:
-		tst.b	spin_dash_flag(a0)			; Liliam: hidden skill - climb dash
+		tst.b	spin_dash_flag(a0)			; Liliam: extra skills - climb dash
 		bne.w	Knuckles_ClimbDash			;
 		move.b	lrb_solid_bit(a0),d5
 
@@ -34405,7 +34405,7 @@ loc_16BFA:
 ; ---------------------------------------------------------------------------
 
 .climbingDown:
-		btst	#Skill_KnuxClimbDash,(Skill_options).w	; Liliam: hidden skill - climb dash
+		btst	#Skill_KnuxClimbDash,(Skill_options).w	; Liliam: extra skills - climb dash
 		beq.s	.notClimbDash				;
 		move.b	(Ctrl_1_pressed_logical).w,d0		;
 		andi.b	#button_ABC_mask,d0			;
@@ -34659,7 +34659,7 @@ Knuckles_LetGoOfWall:
 		move.b	default_y_radius(a0),y_radius(a0)
 		move.b	default_x_radius(a0),x_radius(a0)
 
-		clr.b	anim(a6)				; Liliam: hidden skill - climb dash
+		clr.b	anim(a6)				; Liliam: extra skills - climb dash
 		rts
 ; End of function Knuckles_Glide
 
@@ -34924,7 +34924,7 @@ Knuckles_Move_Glide:
 
 ; ---------------------------------------------------------------------------
 
-Knuckles_ClimbDash:						; Liliam: hidden skill - climb dash
+Knuckles_ClimbDash:						; Liliam: extra skills - climb dash
 		btst	#button_down,(Ctrl_1_held_logical).w
 		beq.s	Knuckles_ClimbDash_Release
 		tst.w	spin_dash_counter(a0)
@@ -34967,7 +34967,7 @@ Knuckles_ClimbDash:						; Liliam: hidden skill - climb dash
 		rts
 ; ---------------------------------------------------------------------------
 
-Knuckles_ClimbDash_Release:					; Liliam: hidden skill - climb dash
+Knuckles_ClimbDash_Release:					; Liliam: extra skills - climb dash
 		move.b	#$E,y_radius(a0)
 		move.b	#7,x_radius(a0)
 		move.b	#2,anim(a0)
@@ -35283,7 +35283,7 @@ loc_17382:
 loc_173A2:
 		move.b	#$40,d1
 		tst.w	ground_vel(a0)
-		beq.w	locret_17426				; Liliam: hidden skill - climb dash
+		beq.w	locret_17426				; Liliam: extra skills - climb dash
 ;		beq.s	locret_17426				;
 		bmi.s	loc_173B0
 		neg.w	d1
@@ -35324,7 +35324,7 @@ locret_17400:
 ; ---------------------------------------------------------------------------
 
 loc_17402:
-		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		tst.w	x_vel(a0)				; Liliam: extra skills - climb dash
 		beq.s	Knux_Move_Release			;
 		sub.w	d1,y_vel(a0)
 		rts
@@ -35341,7 +35341,7 @@ loc_17408:
 
 loc_17422:
 		add.w	d1,y_vel(a0)
-		tst.w	x_vel(a0)				; Liliam: hidden skill - climb dash
+		tst.w	x_vel(a0)				; Liliam: extra skills - climb dash
 		bne.s	locret_17426				;
 
 Knux_Move_Release:
@@ -35898,7 +35898,7 @@ loc_1786C:
 		andi.b	#button_ABC_mask,d0				;
 		beq.w	locret_178CC					;
 
-		move.b	(Ctrl_1_held_logical).w,d0		; Liliam: hidden skill - climb dash
+		move.b	(Ctrl_1_held_logical).w,d0		; Liliam: extra skills - climb dash
 		andi.b	#button_right_mask|button_left_mask,d0	;
 		beq.s	.checkTailsAssist			;
 		bclr	#Status_Facing,status(a0)		;
@@ -36214,7 +36214,7 @@ Player_TouchFloor_CheckGlideLand:
 		bne.w	Player_TouchFloor			;
 		tst.b	double_jump_flag(a0)			;
 		beq.s	Knux_TouchFloor				;
-		clr.b	spin_dash_flag(a0)			; Liliam: hidden skill - climb dash
+		clr.b	spin_dash_flag(a0)			; Liliam: extra skills - climb dash
 		cmpi.b	#3,double_jump_flag(a0)			;
 		bls.s	locret_17B16				;
 
@@ -37502,9 +37502,9 @@ off_18BBE:
 		dc.w DashDust_Skid-off_18BBE
 		dc.w DashDust_Snow-off_18BBE
 		dc.w DashDust_InstaShield-off_18BBE		; Liliam: dash dust - player 2 insta-shield
-		dc.w DashDust_DropDash-off_18BBE		; Liliam: hidden skill - drop dash
+		dc.w DashDust_DropDash-off_18BBE		; Liliam: extra skills - drop dash
 		dc.w DashDust_DropDash_OnObj-off_18BBE		;
-		dc.w DashDust_ClimbDash-off_18BBE		; Liliam: hidden skill - climb dash
+		dc.w DashDust_ClimbDash-off_18BBE		; Liliam: extra skills - climb dash
 ; ---------------------------------------------------------------------------
 
 DashDust_Splash:
@@ -37578,7 +37578,7 @@ DashDust_ClimbDash:
 		cmpi.b	#12,air_left(a2)
 		blo.w	DashDust_Clear
 		cmpi.b	#State_Hurt,routine(a2)
-		bhs.w	DashDust_Clear				; Liliam: hidden skill - drop dash
+		bhs.w	DashDust_Clear				; Liliam: extra skills - drop dash
 ;		bhs.s	DashDust_Clear				;
 		tst.b	spin_dash_flag(a2)
 		beq.w	DashDust_Clear				;
@@ -37625,7 +37625,7 @@ DashDust_Common:
 ; ---------------------------------------------------------------------------
 
 DashDust_DropDash_OnObj:
-		movea.w	parent3(a0),a1				; Liliam: hidden skill - drop dash
+		movea.w	parent3(a0),a1				; Liliam: extra skills - drop dash
 		move.w	x_vel(a0),d0				;
 		sub.w	x_pos(a1),d0				;
 		sub.w	d0,x_pos(a0)				;
@@ -39111,7 +39111,7 @@ Obj_HyperTails_Trail_Main:
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
-Obj_BoostMode:							; Liliam: add extra characters
+Obj_BoostMode:							; Liliam: extra skills - boost mode
 		move.l	#Obj_BoostMode_Main,(a0)
 		move.l	#Map_MetalSonic,mappings(a0)
 		movea.w	parent2(a0),a2
@@ -45455,7 +45455,7 @@ Obj_MonitorSpawnIcon:
 		addq.b	#2,routine(a1)			; => loc_1E61A
 		move.w	x_pos(a0),x_pos(a1)		; Set explosion's position
 		move.w	y_pos(a0),y_pos(a1)
-		movea.w	parent(a0),a2				; Liliam: add extra characters
+		movea.w	parent(a0),a2				; Liliam: extra skills - hammer attack
 		jsr	(EnemyDefeat_PickSound).l		;
 
 	.skipexplosioncreation:
@@ -47045,7 +47045,7 @@ Explosion_Index:
 		dc.w loc_1E61A-Explosion_Index
 		dc.w loc_1E66E-Explosion_Index
 		dc.w loc_1E626-Explosion_Index
-		dc.w loc_1E5F6-Explosion_Index			; Liliam: add extra characters
+		dc.w loc_1E5F6-Explosion_Index			; Liliam: extra skills - hammer attack
 		dc.w loc_1E61A-Explosion_Index			;
 ; ---------------------------------------------------------------------------
 
@@ -47059,7 +47059,7 @@ loc_1E5F6:
 		move.w	$3E(a0),$3E(a1)
 
 loc_1E61A:
-		moveq	#signextendB(sfx_HammerRush),d0		; Liliam: add extra characters
+		moveq	#signextendB(sfx_HammerRush),d0		; Liliam: extra skills - hammer attack
 		cmpi.b	#8,routine(a0)				;
 		bhs.s	loc_1E61C				;
 		moveq	#signextendB(sfx_Break),d0
@@ -49062,7 +49062,7 @@ loc_1FD4E:
 		move.w	d6,d0
 		andi.w	#1,d0
 		beq.w	loc_1FDEA
-		bsr.w	BreakableWall_CheckKnuxBreak		; Liliam: Metal Sonic wall-breaking powers
+		bsr.w	BreakableWall_CheckKnuxBreak		; Liliam: extra skills - boost mode
 		beq.s	loc_1FDA4				;
 		tst.b	subtype(a0)
 		bmi.s	loc_1FDEA				;
@@ -49127,7 +49127,7 @@ loc_1FDCE:
 loc_1FDEA:
 		lea	(Player_2).w,a1
 		move.w	$36(a0),d1
-		andi.b	#2,d6					; Liliam: Metal Sonic wall-breaking powers
+		andi.b	#2,d6					; Liliam: extra skills - boost mode
 		beq.w	loc_1FD38				;
 		bsr.w	BreakableWall_CheckKnuxBreak		;
 		beq.s	loc_1FE2E				;
@@ -50651,7 +50651,7 @@ loc_21568:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
-BreakableWall_CheckAmyBreak:					; Liliam: add extra characters
+BreakableWall_CheckAmyBreak:					; Liliam: extra skills - hammer attack
 		beq.s	.inAir
 		tst.b	double_jump_property(a1)
 		bne.s	.checkAmy
@@ -50672,7 +50672,7 @@ BreakableWall_CheckAmyBreak:					; Liliam: add extra characters
 		rts
 ; ---------------------------------------------------------------------------
 
-BreakableWall_CheckKnuxBreak:					; Liliam: Metal Sonic wall-breaking powers
+BreakableWall_CheckKnuxBreak:					; Liliam: extra skills - boost mode
 		cmpi.b	#2,character_id(a1)
 		beq.s	.return
 		cmpi.b	#6,character_id(a1)
@@ -50703,7 +50703,7 @@ loc_215B2:
 		tst.w	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - Super Tails wall-breaking powers
 ;		tst.b	(Super_Sonic_Knux_flag).w		;
 		bne.s	loc_215F4
-		bsr.s	BreakableWall_CheckKnuxBreak		; Liliam: Metal Sonic wall-breaking powers
+		bsr.s	BreakableWall_CheckKnuxBreak		; Liliam: extra skills - boost mode
 ;		cmpi.b	#2,character_id(a1)			;
 		beq.s	loc_215F4
 
@@ -50756,7 +50756,7 @@ loc_21610:
 loc_2162A:
 		lea	(Player_2).w,a1
 		move.w	$32(a0),d1
-		andi.b	#2,d6					; Liliam: Metal Sonic wall-breaking powers
+		andi.b	#2,d6					; Liliam: extra skills - boost mode
 		beq.w	loc_215AC				;
 		bsr.w	BreakableWall_CheckKnuxBreak		;
 		beq.s	loc_21654				;
@@ -50967,7 +50967,7 @@ loc_21862:
 		move.w	d6,d0
 		andi.w	#1,d0
 		beq.s	loc_218B0
-		bsr.w	BreakableWall_CheckKnuxBreak		; Liliam: Metal Sonic wall-breaking powers
+		bsr.w	BreakableWall_CheckKnuxBreak		; Liliam: extra skills - boost mode
 ;		cmpi.b	#2,character_id(a1)			;
 		bne.s	loc_218B0
 		bclr	#p1_pushing_bit,status(a0)
@@ -50988,7 +50988,7 @@ loc_21862:
 loc_218B0:
 		lea	(Player_2).w,a1
 		move.w	$32(a0),d1
-		andi.b	#2,d6					; Liliam: Metal Sonic wall-breaking powers
+		andi.b	#2,d6					; Liliam: extra skills - boost mode
 		beq.s	loc_2185C				;
 ;		btst	#p2_pushing_bit,status(a0)		;
 ;		beq.s	loc_2185C				;
@@ -56915,7 +56915,7 @@ loc_25D3C:
 		bchg	d3,(a3)
 		move.l	#Obj_Explosion,(a0)
 		move.b	#2,routine(a0)
-		jsr	(ExplodingTrigger_PickSound).l		; Liliam: add extra characters
+		jsr	(ExplodingTrigger_PickSound).l		; Liliam: extra skills - hammer attack
 		clr.b	collision_flags(a0)
 		clr.b	collision_property(a0)
 
@@ -94857,7 +94857,7 @@ loc_42ED0:
 		move.l	#Obj_LRZShootingTrigger_Delete,(a0)	;
 ;		move.l	#Obj_Explosion,(a0)			;
 		move.b	#2,routine(a0)
-		jsr	(ExplodingTrigger_PickSound).l		; Liliam: add extra characters
+		jsr	(ExplodingTrigger_PickSound).l		; Liliam: extra skills - hammer attack
 		clr.b	collision_flags(a0)
 		clr.b	collision_property(a0)
 
@@ -123369,7 +123369,7 @@ sub_55D94:
 		cmpi.w	#$280,(_unkEE9C).w
 		blt.s	sub_55DB6
 		move.w	#8,(Screen_shake_flag).w
-		moveq	#signextendB(sfx_Crash),d0		;
+		moveq	#signextendB(sfx_Crash),d0		; Liliam: QOL - add sound effect
 		jsr	(Play_SFX).l				;
 ; End of function sub_55D94
 
@@ -133488,7 +133488,7 @@ ArtNem_ContinueDigits:
 plane_width =	40*2
 plane_height =	28
 
-UnlockScreen:							; Liliam: hidden skills
+UnlockScreen:							; Liliam: extra skills
 		move.b	(Demo_mode_flag).w,(Game_mode).w
 		tst.b	(Encore_mode).w
 		bne.s	.encoreMode
@@ -133599,7 +133599,7 @@ UnlockScreen_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_UnlockScreen:						; Liliam: hidden skills
+Obj_UnlockScreen:						; Liliam: extra skills
 		move.w	$2E(a0),d0
 		addq.w	#1,d0
 		lsr.w	#1,d0
@@ -133612,7 +133612,7 @@ Obj_UnlockScreen:						; Liliam: hidden skills
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
-UnlockScreen_Congratulations:					; Liliam: hidden skills
+UnlockScreen_Congratulations:					; Liliam: extra skills
 		lea	(MapEni_UnlockScreen).l,a0
 		lea	(RAM_start+(plane_width*3)+(2*6)).l,a1
 		move.w	#make_art_tile(ArtTile_OptionsBG,0,0),d0
@@ -133632,7 +133632,7 @@ UnlockScreen_Congratulations:					; Liliam: hidden skills
 		rts
 ; ---------------------------------------------------------------------------
 
-UnlockScreen_BuildPlaneMap:					; Liliam: hidden skills
+UnlockScreen_BuildPlaneMap:					; Liliam: extra skills
 		movea.l	UnlockScreen_TextPtrs+8(pc,d5.w),a0
 		move.l	#RAM_start+(plane_width*9)+(2*5),d0
 		moveq	#-1,d1
@@ -133645,7 +133645,7 @@ UnlockScreen_WriteToVRAM:
 		moveq	#plane_height-1,d2
 		jmp	(Plane_Map_To_VRAM_2).l
 ; ---------------------------------------------------------------------------
-UnlockScreen_TextPtrs:						; Liliam: hidden skills
+UnlockScreen_TextPtrs:						; Liliam: extra skills
 		dc.l HelpText_EncoreMode
 		dc.l HelpText_EncorePalette
 		dc.l HelpText_EncoreMusic
@@ -138066,7 +138066,7 @@ locret_5F0D8:
 ; ---------------------------------------------------------------------------
 
 loc_5F0DA:
-		move.b	#GameMode_UnlockScreen,(Game_mode).w	; Liliam: hidden skills
+		move.b	#GameMode_UnlockScreen,(Game_mode).w	; Liliam: extra skills
 ;		move.b	#GameMode_SegaScreen,(Game_mode).w	;
 		rts
 ; ---------------------------------------------------------------------------
@@ -138267,7 +138267,7 @@ loc_5F2F8:
 ; ---------------------------------------------------------------------------
 
 loc_5F314:
-		move.b	#GameMode_UnlockScreen,(Game_mode).w	; Liliam: hidden skills
+		move.b	#GameMode_UnlockScreen,(Game_mode).w	; Liliam: extra skills
 ;		move.b	#GameMode_SegaScreen,(Game_mode).w	;
 ;		rts						; Liliam: bugfix - sprite draw bug
 		jmp	(Draw_Sprite).l				;
@@ -138763,7 +138763,7 @@ loc_5F8A8:
 		bpl.s	locret_5F8C4
 
 loc_5F8BE:
-		move.b	#GameMode_UnlockScreen,(Game_mode).w	; Liliam: hidden skills
+		move.b	#GameMode_UnlockScreen,(Game_mode).w	; Liliam: extra skills
 ;		move.b	#GameMode_SegaScreen,(Game_mode).w	;
 
 locret_5F8C4:
@@ -157585,7 +157585,7 @@ loc_6D51A:
 		neg.w	x_vel(a0)
 
 loc_6D576:
-		move.w	#8,(Screen_shake_flag).w		; Liliam: add screen shake
+		move.w	#8,(Screen_shake_flag).w		; Liliam: QOL - add screen shake
 		moveq	#signextendB(sfx_Collapse),d0
 		jsr	(Play_SFX).l
 		lea	ChildObjDat_6D83E(pc),a2
@@ -169129,7 +169129,7 @@ loc_74D90:
 		asr.w	#1,d0
 		neg.w	d0
 		move.w	d0,y_vel(a0)
-		moveq	#signextendB(sfx_FloorThump),d0		; Liliam: add sound effect
+		moveq	#signextendB(sfx_FloorThump),d0		; Liliam: QOL - add sound effect
 		jmp	(Play_SFX).l				;
 ;		rts						;
 ; ---------------------------------------------------------------------------
@@ -169155,7 +169155,7 @@ loc_74DA4:
 ;		move.w	#0,(Camera_stored_min_Y_pos).w		;
 ;		lea	(Child1_Act2LevelSize).l,a2		;
 ;		jmp	(CreateChild1_Normal).l			;
-		moveq	#signextendB(sfx_MissileExplode),d0	; Liliam: add sound effect
+		moveq	#signextendB(sfx_MissileExplode),d0	; Liliam: QOL - add sound effect
 		jmp	(Play_SFX).l				;
 ; ---------------------------------------------------------------------------
 
@@ -194726,7 +194726,7 @@ loc_85796:
 		move.b	#0,routine(a0)
 
 ExplodingTrigger_PickSound:
-		movea.l	a0,a1					; Liliam: add extra characters
+		movea.l	a0,a1					; Liliam: extra skills - hammer attack
 		lea	(Player_2).w,a2				;
 		btst	#1,collision_property(a1)		;
 		bne.s	EnemyDefeat_PickSound			;
@@ -194771,7 +194771,7 @@ Check_PlayerAttack:
 		bne.s	loc_85822
 		cmpi.b	#9,anim(a1)
 		beq.s	loc_85822
-		cmpi.b	#$A,anim(a1)				; Liliam: hidden skill - climb dash
+		cmpi.b	#$A,anim(a1)				; Liliam: extra skills - climb dash
 		beq.s	loc_85822				;
 		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
 		bne.s	loc_85822				;
@@ -219589,10 +219589,10 @@ ArtKos_LevelSelectZoneArt:					; Liliam: level select - restore zone icons
 ArtKos_OptionsScreen:						; Liliam: options menu
 		binclude "General/Save Menu/Kosinski Art/Options Menu.bin"
 		even
-ArtNem_UnlockScreen:						; Liliam: hidden skills
+ArtNem_UnlockScreen:						; Liliam: extra skills
 		binclude "General/Save Menu/Nemesis Art/Unlock Screen.bin"
 		even
-MapEni_UnlockScreen:						; Liliam: hidden skills
+MapEni_UnlockScreen:						; Liliam: extra skills
 		binclude "General/Save Menu/Enigma Map/Unlock Screen.eni"
 		even
 ArtNem_Museum:							; Liliam: museum
@@ -219651,7 +219651,7 @@ ArtUnc_Invincibility:
 ArtUnc_Invincibility_end:
 		even
 ArtUnc_DashDust:
-		; Liliam: hidden skill - climb dash
+		; Liliam: extra skills - climb dash
 		binclude "General/Sprites/Dash Dust/Dash Dust.bin"
 		even
 ArtUnc_SuperSonic_Stars:
@@ -220963,7 +220963,7 @@ ICZ2_Rings:
 SpriteTerminat8:
 		dc.w $FFFF, 0, 0
 LBZ1_Sprites:
-		; Liliam: hidden skill - climb dash
+		; Liliam: extra skills - climb dash
 		binclude "Levels/LBZ/Object Pos/1.bin"
 		even
 LBZ2_Sprites:
@@ -221577,7 +221577,7 @@ LRZ1_Sprites:
 		binclude "Levels/LRZ/Object Pos/1.bin"
 		even
 LRZ2_Sprites:
-		; Liliam: hidden skill - climb dash
+		; Liliam: extra skills - climb dash
 		binclude "Levels/LRZ/Object Pos/2.bin"
 		even
 LRZ1_Sprites_Encore:						; Liliam: Encore mode - layouts

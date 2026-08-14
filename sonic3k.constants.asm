@@ -221,7 +221,7 @@ EncoreFlags_Music2      = 2
 EncoreFlags_Initial     = (1<<EncoreFlags_Palette)|(1<<EncoreFlags_Music)
 
 ; ---------------------------------------------------------------------------
-; Liliam: hidden skills
+; Liliam: extra skills
 Unlock_MetalSonic       = 0
 Skill_SonicDropDash     = 1
 Skill_TailsRingBarrier  = 2
@@ -428,7 +428,7 @@ Extra_saved_data =		*		; Liliam: options menu
 Blue_spheres_saved_level	ds.l 1		; Liliam: blue sphere - load saved level on startup
 Collected_photo_piece_array	ds.b $F		; Liliam: museum - photo piece object
 Encore_options			ds.b 1		; Liliam: Encore mode - palette
-Skill_options			ds.b 1		; Liliam: hidden skills
+Skill_options			ds.b 1		; Liliam: extra skills
 Unlock_flags			ds.b 1		; Liliam: options menu
 				ds.w 2		; Liliam: options menu
 Encore_saved_data		ds.b $2E	; Liliam: Encore mode - save game
@@ -1588,7 +1588,7 @@ ArtTile_StarPost                      = $05EA	;
 ;ArtTile_StarPost                     = $05E4	;
 ArtTile_EncoreCursor                  = $05FE	;
 ArtTile_Player_1                      = $0680
-ArtTile_SignpostStub                  = $05EE	; Liliam: add extra characters
+ArtTile_SignpostStub                  = $05EE	; Liliam: extra skills - hammer attack
 ;ArtTile_SignpostStub                 = $069E	;
 ArtTile_Player_2                      = $06A0
 ArtTile_TailsTail                     = $06B0
@@ -1814,21 +1814,21 @@ sfx_Signpost			ds.b 1		; $B8
 sfx_RingLoss			ds.b 1		; $B9
 sfx_Flying			ds.b 1		; $BA
 sfx_FlyTired			ds.b 1		; $BB
-sfx_DropDash			ds.b 1		; $BE	; Liliam: hidden skill - drop dash
-sfx_DashRelease			ds.b 1		; $BF	; Liliam: hidden skill - peel out
-sfx_HammerAttack		ds.b 1		; $BC	; Liliam: add extra characters
-sfx_HammerRush			ds.b 1		; $BD	; Liliam: add extra characters
-sfx_SpikeBounce			ds.b 1		; $C0	; Liliam: add extra characters
-sfx_HammerDrop			ds.b 1		; $C1	; Liliam: add extra characters
-sfx_MetalCharge			ds.b 1		; $C2	; Liliam: add extra characters
-sfx_MetalBarrier		ds.b 1		; $C3	; Liliam: add extra characters
-sfx_TrickAction			ds.b 1		; $C4	; Liliam: add extra characters
+sfx_DropDash			ds.b 1		; $BE	; Liliam: extra skills - drop dash
+sfx_DashRelease			ds.b 1		; $BF	; Liliam: extra skills - peel out
+sfx_HammerAttack		ds.b 1		; $BC	; Liliam: extra skills - hammer attack
+sfx_HammerRush			ds.b 1		; $BD	; Liliam: extra skills - hammer attack
+sfx_SpikeBounce			ds.b 1		; $C0	; Liliam: spikes - bounce off Mighty if rolling
+sfx_HammerDrop			ds.b 1		; $C1	; Liliam: extra skills - hammer drop
+sfx_MetalCharge			ds.b 1		; $C2	; Liliam: extra skills - boost mode
+sfx_MetalBarrier		ds.b 1		; $C3	; Liliam: extra skills - boost mode
+sfx_TrickAction			ds.b 1		; $C4	; Liliam: extra skills - boost mode
 sfx_TimeStone			ds.b 1		; $C5	; Liliam: Metal Sonic hologram object
 sfx_AirCountdown		ds.b 1		; $C6	; Liliam: no drowning music in Encore mode
 
 sfx__FirstContinuous =		*		; ID of the first continuous sound effect
-sfx_PeelOut			ds.b 1		; $C7	; Liliam: hidden skill - peel out
-sfx_MetalOverdrive		ds.b 1		; $C8	; Liliam: add extra characters
+sfx_PeelOut			ds.b 1		; $C7	; Liliam: extra skills - peel out
+sfx_MetalOverdrive		ds.b 1		; $C8	; Liliam: extra skills - boost mode
 sfx_LargeShip			ds.b 1		; $C9
 sfx_RobotnikSiren		ds.b 1		; $CA
 sfx_BossRotate			ds.b 1		; $CB
