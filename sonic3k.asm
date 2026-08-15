@@ -32884,7 +32884,9 @@ AniTails_Tail:
 
 Tails_InitRingBarrier:						; Liliam: extra skills - ring barrier
 		btst	#Skill_TailsRingBarrier,(Skill_options).w
-		beq.s	Tails_RingBarrier_Return
+		beq.w	Tails_Set_Flying_Animation
+		cmpi.w	#$C,(Tails_CPU_routine).w
+		bhs.w	Tails_Set_Flying_Animation
 		lea	(Tails_tails).w,a1
 		move.w	#1,mainspr_childsprites(a1)
 		move.b	#8,routine(a1)
