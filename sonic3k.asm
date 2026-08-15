@@ -217307,6 +217307,7 @@ Solid_CNZ:							; Liliam: reinsert S3 data
 		binclude "Levels/CNZ/Collision/1.bin"
 		even
 Solid_FBZ:
+		; Liliam: spikes - allow Metal Sonic destruction
 		binclude "Levels/FBZ/Collision/1.bin"
 		even
 Solid_ICZ1:							; Liliam: reinsert S3 data
@@ -217329,10 +217330,11 @@ Solid_SOZ:
 		binclude "Levels/SOZ/Collision/1.bin"
 		even
 Solid_LRZ1:
-		; Liliam: bugfix - prevent getting snagged on tube blocks
+		; Liliam: bugfix - remove level collision from lava blocks
 		binclude "Levels/LRZ/Collision/1.bin"
 		even
 Solid_LRZ2:
+		; Liliam: bugfix - remove level collision from lava blocks
 		binclude "Levels/LRZ/Collision/2.bin"
 		even
 Solid_SSZ1:
@@ -217367,6 +217369,7 @@ Solid_Slots_Special:
 		binclude "Levels/Slots/Collision/1.bin"
 		even
 Solid_LRZBoss:
+		; Liliam: bugfix - remove level collision from lava blocks
 		binclude "Levels/LRZ/Collision/3.bin"
 		even
 Solid_HPZ:
