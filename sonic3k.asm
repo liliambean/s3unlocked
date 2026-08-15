@@ -52873,6 +52873,7 @@ loc_22B3C:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$14,y_pos(a1)
@@ -56537,6 +56538,7 @@ loc_25484:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$24,y_pos(a1)
 		move.b	#$14,anim(a1)
@@ -58248,6 +58250,7 @@ loc_267B2:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$24,y_pos(a1)
@@ -62789,6 +62792,7 @@ loc_291A2:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$94,y_pos(a1)
@@ -85376,6 +85380,7 @@ loc_3AA18:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$9C,y_pos(a1)
@@ -85665,6 +85670,7 @@ loc_3AD10:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$12,y_pos(a1)
 		move.b	#$14,anim(a1)
@@ -89679,6 +89685,7 @@ loc_3E690:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$42,y_pos(a1)
@@ -93146,6 +93153,7 @@ loc_4101C:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	sub2_y_pos(a0),y_pos(a1)
 		addi.w	#$30,y_pos(a1)
@@ -100336,6 +100344,7 @@ loc_47124:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$28,y_pos(a1)
@@ -105729,6 +105738,7 @@ loc_4B13E:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$14,y_pos(a1)
