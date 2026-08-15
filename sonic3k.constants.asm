@@ -189,6 +189,7 @@ Status_FireShield   = 4
 Status_LtngShield   = 5
 Status_BublShield   = 6
 Status_WaterSlide   = 7
+Status_HammerDrop = Status_WaterSlide		; Liliam: extra skills - hammer drop
 
 ; ---------------------------------------------------------------------------
 ; Player routines

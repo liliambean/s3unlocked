@@ -6,11 +6,11 @@ Obj_LevelSelect:
 		jmp	LevelSelect_Index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 LevelSelect_Index:
-		dc.w	Obj_LevelSelect_Init-LevelSelect_Index
-		dc.w	Obj_LevelSelect_LeftScroll-LevelSelect_Index
-		dc.w	Obj_LevelSelect_LeftPage-LevelSelect_Index
-		dc.w	Obj_LevelSelect_RightScroll-LevelSelect_Index
-		dc.w	Obj_LevelSelect_RightPage-LevelSelect_Index
+		dc.w Obj_LevelSelect_Init-LevelSelect_Index
+		dc.w Obj_LevelSelect_LeftScroll-LevelSelect_Index
+		dc.w Obj_LevelSelect_LeftPage-LevelSelect_Index
+		dc.w Obj_LevelSelect_RightScroll-LevelSelect_Index
+		dc.w Obj_LevelSelect_RightPage-LevelSelect_Index
 ; ---------------------------------------------------------------------------
 
 Obj_LevelSelect_Init:
@@ -20,13 +20,13 @@ Obj_LevelSelect_Init:
 		move.b	#$C,mapping_frame(a0)
 		move.w	#-1,(V_scroll_value_FG).w
 		clr.w	(H_scroll_buffer).w
-		move.b	#4,routine(a0)
+		addq.b	#4,routine(a0)
 		cmpi.b	#$1E,(Level_select_option+1).w
 		blo.s	Obj_LevelSelect_Return
 		move.w	#-$13*8,(H_scroll_buffer).w
 		move.w	#$90,x_pos(a0)
 		subq.b	#1,mapping_frame(a0)
-		move.b	#8,routine(a0)
+		addq.b	#4,routine(a0)
 
 Obj_LevelSelect_Return:
 		rts
@@ -370,9 +370,9 @@ PhotoPiece_LoadArray:
 
 Obj_PhotoPiece_DrawDigits:
 		move.l	#Obj_PhotoPiece_MoveSprite,(a0)
-		move.b	#$30,anim_frame_timer(a0)
-		move.b	#1,mapping_frame(a0)
 		move.w	#$80,priority(a0)
+		addq.b	#1,mapping_frame(a0)
+		move.b	#$30,anim_frame_timer(a0)
 		move.l	#vdpComm(tiles_to_bytes(ArtTile_PhotoPiece),VRAM,WRITE),d0
 		moveq	#0,d1
 		move.b	subtype(a0),d1
@@ -426,10 +426,10 @@ Obj_MetalSonicHologram_Wait:
 Obj_MetalSonicHologram_Init:
 		move.l	#Obj_MetalSonicHologram_Main,(a0)
 		move.l	#Map_MetalSonicHologram,mappings(a0)
-		move.b	#1,mapping_frame(a0)
 		move.w	#make_art_tile(ArtTile_Explosion,0,0),art_tile(a0)
-		move.b	#$4,render_flags(a0)
 		move.w	#$180,priority(a0)
+		move.b	#4,render_flags(a0)
+		move.b	#1,mapping_frame(a0)
 		moveq	#$C,d0
 		move.b	d0,width_pixels(a0)
 		move.b	d0,height_pixels(a0)
@@ -444,21 +444,23 @@ Obj_MetalSonicHologram_Init:
 ; ---------------------------------------------------------------------------
 
 Obj_MetalSonicHologram_Main:
-		move.b	(Player_1+anim).w,$30(a0)
-		move.b	(Player_2+anim).w,$31(a0)
+		move.b	(Player_1+double_jump_flag).w,$30(a0)
+		move.b	(Player_2+double_jump_flag).w,$31(a0)
+		move.b	(Player_1+status).w,$32(a0)
+		move.b	(Player_2+status).w,$33(a0)
 		moveq	#$16,d1
 		moveq	#$B,d2
 		moveq	#$C,d3
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull).l
 
-		cmpi.b	#2,$30(a0)
-		bne.s	.checkP2
+		btst	#Status_Roll,$32(a0)
+		beq.s	.checkP2
 		btst	#p1_standing_bit,status(a0)
 		beq.s	.checkP1pushing
 		lea	(Player_1).w,a1
-		jsr	(sub_1FBAE).l
-		bra.s	.destroy
+		move.b	$30(a0),d0
+		bra.s	.okaytodestroy
 ; ---------------------------------------------------------------------------
 
 	.checkP1pushing:
@@ -466,13 +468,13 @@ Obj_MetalSonicHologram_Main:
 		bne.s	.destroy
 
 	.checkP2:
-		cmpi.b	#2,$31(a0)
-		bne.s	.checkDelete
+		btst	#Status_Roll,$33(a0)
+		beq.s	.checkDelete
 		btst	#p2_standing_bit,status(a0)
 		beq.s	.checkP2pushing
 		lea	(Player_2).w,a1
-		jsr	(sub_1FBAE).l
-		bra.s	.destroy
+		move.b	$31(a0),d0
+		bra.s	.okaytodestroy
 ; ---------------------------------------------------------------------------
 
 	.checkP2pushing:
@@ -489,6 +491,9 @@ Obj_MetalSonicHologram_Main:
 		clr.b	mapping_frame(a0)
 		jmp	(Delete_And_Respawn_Sprite).l
 ; ---------------------------------------------------------------------------
+
+	.okaytodestroy:
+		jsr	(BreakableRock_Break).l
 
 	.destroy:
 		move.l	#Obj_MetalSonicHologram_DrawCount,(a0)
@@ -1308,8 +1313,6 @@ Obj_EncoreCapsule_Wait:
 		subq.w	#1,$2E(a0)
 		bne.s	EncoreCapsule_DrawTouch
 		jsr	(Go_Delete_Sprite).l
-		st	(Ctrl_2_locked).w
-		clr.w	(Ctrl_2_logical).w
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d1
 		bsr.s	EncoreCapsule_DisplacePlayerOffObject
@@ -1330,15 +1333,6 @@ EncoreCapsule_DrawTouch:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-EncoreCapsule_DisplacePlayerOffObject2:
-		move.b	subtype(a0),d0
-		cmpi.b	#7,d0
-		bls.s	EncoreCapsule_GiveStock
-		bsr.s	EncoreCapsule_DisplacePlayerOffObject
-		lea	ChildObjDat_EncoreCapsule2(pc),a2
-		jmp	(CreateChild1_Normal).l
-; ---------------------------------------------------------------------------
-
 EncoreCapsule_DisplacePlayerOffObject:
 		btst	d1,status(a0)
 		bne.s	EncoreCapsule_HurtCharacter
@@ -1346,6 +1340,15 @@ EncoreCapsule_DisplacePlayerOffObject:
 		btst	d1,status(a2)
 		bne.s	EncoreCapsule_HurtCharacter
 		rts
+; ---------------------------------------------------------------------------
+
+EncoreCapsule_DisplacePlayerOffObject2:
+		move.b	subtype(a0),d0
+		cmpi.b	#7,d0
+		bls.s	EncoreCapsule_GiveStock
+		bsr.s	EncoreCapsule_DisplacePlayerOffObject
+		lea	ChildObjDat_EncoreCapsule2(pc),a2
+		jmp	(CreateChild1_Normal).l
 ; ---------------------------------------------------------------------------
 
 EncoreCapsule_GiveStock:
@@ -1358,6 +1361,8 @@ EncoreCapsule_GiveStock:
 		move.b	d0,(P2_character).w
 		move.b	#1,(Update_HUD_life_count).w
 		move.w	#1,(Encore_HUD_stocks_timer).w
+		st	(Ctrl_2_locked).w
+		clr.w	(Ctrl_2_logical).w
 		tst.l	(a1)
 		bne.s	EncoreCapsule_RotateStocks
 		move.b	#1,(Encore_stocks).w
@@ -1380,7 +1385,7 @@ EncoreCapsule_HurtCharacter:
 ; ---------------------------------------------------------------------------
 
 EncoreCapsule_RotateStocks:
-		bsr.s	EncoreCapsule_DisplacePlayerOffObject
+		bsr.w	EncoreCapsule_DisplacePlayerOffObject
 		lea	(Encore_stocks).w,a1
 		move.b	(a1),d2
 		addq.b	#1,(a1)+
@@ -1404,7 +1409,6 @@ EncoreCapsule_RotateStocks:
 	.append:
 		move.b	(Player_2+character_id).w,(a1)
 		move.l	#Obj_EncoreHandoff_Hurt,(a0)
-		bclr	#Encore_SwapHUD,(Encore_mode).w
 		jmp	(Encore_RepackStocks).l
 ; ---------------------------------------------------------------------------
 

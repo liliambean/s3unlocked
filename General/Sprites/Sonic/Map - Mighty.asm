@@ -1063,8 +1063,8 @@ Map_Mighty_HammerDrop1:
 		dc.b  $EC,   2,   0,  $C,   0,  $C
 Map_Mighty_HammerDrop2:
 		dc.w 2
-		dc.b  $F8,  $D,   0,   0, $FF, $ED
-		dc.b  $F8,   1,   0,   8,   0,  $D
+		dc.b  $F0,  $D,   0,   0, $FF, $ED
+		dc.b  $F0,   1,   0,   8,   0,  $D
 Map_Mighty_HammerDrop3:
 		dc.w 4
 		dc.b  $EF,  $B,   0,   0, $FF, $F5

@@ -21872,19 +21872,17 @@ Touch_Monitor:
 		beq.s	.return					; If not, return
 
 	.validcharacter:
+		cmpi.b	#Status_HammerDrop,double_jump_flag(a0)	; Liliam: extra skills - hammer drop
+		beq.s	.destroy				;
+
 		btst	#Status_Roll,status(a0)			; Liliam: simplify roll anim selection
 		bne.s	.okaytodestroy				;
 ;		cmpi.b	#2,anim(a0)				;
 ;		beq.s	.okaytodestroy				;
 
 		cmpi.b	#3,character_id(a0)			; Liliam: extra skills - hammer attack
-		bne.s	.checkKnuckles				;
-		tst.b	double_jump_property(a0)		;
-		bne.s	.okaytodestroy				;
-		rts						;
-; ---------------------------------------------------------------------------
+		beq.s	.checkHammerRush			;
 
-	.checkKnuckles:
 		cmpi.b	#2,character_id(a0)			; Is player Knuckles?
 		bne.s	.return					; If not, return
 		cmpi.b	#1,double_jump_flag(a0)			; Is Knuckles gliding?
@@ -21894,11 +21892,19 @@ Touch_Monitor:
 
 	.okaytodestroy:
 		neg.w	y_vel(a0)
+
+	.destroy:
 		move.b	#4,routine(a1)
 		move.w	a0,parent(a1)
 
 	.return:
 		rts
+; ---------------------------------------------------------------------------
+
+	.checkHammerRush:
+		tst.b	double_jump_property(a0)		; Liliam: extra skills - hammer attack
+		bne.s	.destroy				;
+		rts						;
 ; ---------------------------------------------------------------------------
 
 Touch_Enemy:
@@ -21955,6 +21961,9 @@ Touch_Enemy:
 		bset	#7,status(a1)
 
 	.bossnotdefeated:
+		cmpi.b	#Status_HammerDrop,double_jump_flag(a0)	; Liliam: extra skills - hammer drop
+		beq.w	Mighty_HammerDrop_BossHit		;
+
 		cmpi.b	#2,character_id(a0)		; Is player Knuckles?
 		bne.s	.return				; If not, return
 		cmpi.b	#1,double_jump_flag(a0)		; Is Knuckles gliding?
@@ -22008,12 +22017,16 @@ Touch_EnemyNormal:
 		move.b	#0,routine(a1)
 		movea.l	a0,a2					; Liliam: extra skills - hammer attack
 		jsr	(EnemyDefeat_PickSound).l		;
+		cmpi.b	#Status_HammerDrop,double_jump_flag(a0)	;
+		beq.s	.return					;
 		tst.w	y_vel(a0)			; Is player moving up?
 		bmi.s	.bounceplayerdown		; If so, branch
 		move.w	y_pos(a0),d0
 		cmp.w	y_pos(a1),d0			; Was player above, or at the same height as, the enemy when it was destroyed?
 		bhs.s	.bounceplayerup			; If so, branch
 		neg.w	y_vel(a0)			; Totally negate velocity (???)
+
+	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -22057,6 +22070,8 @@ Touch_ChkHurt_Return:
 ; ---------------------------------------------------------------------------
 
 Touch_ChkHurt_NoPowerUp:
+		cmpi.b	#Status_HammerDrop,double_jump_flag(a0)	; Liliam: extra skills - hammer drop
+		beq.s	Touch_ChkHurt_HaveShield		;
 		cmpi.b	#1,double_jump_flag(a0)			; Is player Insta-Shield-attacking (Sonic), flying (Tails) or gliding (Knuckles)?
 		bne.s	Touch_ChkHurt2				; If not, branch
 
@@ -22130,6 +22145,7 @@ loc_102DA:
 loc_102E0:
 		move.b	#State_Hurt,routine(a0)
 		jsr	(Player_TouchFloor).l
+		clr.b	double_jump_property(a0)		; Liliam: extra skills - drop dash
 		bset	#Status_InAir,status(a0)
 		move.w	#-$400,y_vel(a0)
 		move.w	#-$200,x_vel(a0)
@@ -22345,8 +22361,24 @@ ShieldTouch_Height:
 
 Boss_DefeatEnemies:						; Liliam: bugfix - kill enemies on boss start
 		tst.b	(Boss_flag).w
-		ble.s	HyperTouch_ChkValue.return
+		ble.s	.return
 		st	(Boss_flag).w
+		lea	(Collision_response_list).w,a4
+		move.w	(a4)+,d6
+		beq.s	.return
+
+	.loop:
+		movea.w	(a4)+,a1
+		move.b	collision_flags(a1),d0
+		beq.s	.nextObject
+		bsr.s	HyperTouch_ChkValue.checkValue
+
+	.nextObject:
+		subq.w	#2,d6
+		bne.s	.loop
+
+	.return:
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -22382,6 +22414,8 @@ HyperTouch_Exit:
 HyperTouch_ChkValue:
 		tst.b	render_flags(a1)		; Is object on-screen?
 		bpl.s	.return				; If not, return (screen-nuke only affects what's on-screen)
+
+	.checkValue:
 		andi.b	#$C0,d0				; Get collision_flags type data
 		beq.s	HyperTouch_Enemy		; If 00, enemy, branch
 		cmpi.b	#$C0,d0
@@ -23081,6 +23115,70 @@ Obj_Mighty:							; Liliam: add extra characters
 Mighty_Normal:
 		move.l	#Map_Mighty,mappings(a0)
 		bra.w	loc_10ADE
+; ---------------------------------------------------------------------------
+
+Mighty_HammerDrop:						; Liliam: extra skills - hammer drop
+		clr.b	double_jump_flag(a0)
+		lea	(Dust_P2).w,a6
+		cmpa.w	#Player_1,a0
+		bne.s	.createDust
+		lea	(Dust).w,a6
+		tst.b	(Super_Sonic_Knux_flag).w
+		bpl.s	.createDust
+		move.w	#$14,(Glide_screen_shake).w
+
+	.createDust:
+		clr.w	parent2(a6)
+		move.b	#8,routine(a6)
+		btst	#Status_OnObj,status(a0)
+		beq.s	.bounce
+		move.w	interact(a0),parent2(a6)
+
+	.bounce:
+		move.l	a1,-(sp)
+		movea.w	a0,a1
+		moveq	#signextendB(sfx_HammerDrop),d0
+		jsr	(Mighty_HammerDrop_Rebound).l
+		move.l	(sp)+,a1
+		rts
+; ---------------------------------------------------------------------------
+
+Mighty_HammerDrop_Touch:					; Liliam: extra skills - hammer drop
+		movea.w	(a4)+,a1
+		move.b	collision_flags(a1),d0
+		beq.s	.nextObject
+		tst.b	render_flags(a1)
+		bpl.s	.nextObject
+		bsr.s	.checkValue
+
+	.nextObject:
+		subq.w	#2,d6
+		bne.s	Mighty_HammerDrop_Touch
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkValue:
+		cmpi.b	#$46,d0
+		beq.w	Touch_Monitor.monitorfall
+		tst.b	(Super_Sonic_Knux_flag).w
+		bmi.w	HyperTouch_ChkValue.checkValue
+		rts
+; ---------------------------------------------------------------------------
+
+Mighty_HammerDrop_Cancel:					; Liliam: extra skills - hammer drop
+		cmpi.b	#Status_HammerDrop,double_jump_flag(a1)
+		beq.s	Mighty_HammerDrop_BossHit.cancel
+		rts
+; ---------------------------------------------------------------------------
+
+Mighty_HammerDrop_BossHit:					; Liliam: extra skills - hammer drop
+		movea.w	a0,a1
+
+	.cancel:
+		move.b	#2,double_jump_flag(a1)
+		move.b	#2,anim(a1)
+		asr.w	#1,y_vel(a1)
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_Ray:							; Liliam: add extra characters
@@ -25029,9 +25127,9 @@ loc_11A04:
 ; ---------------------------------------------------------------------------
 
 Amy_CheckMoves:							; Liliam: extra skills - hammer attack
-		move.b	#3,anim(a0)
 		move.b	#1,double_jump_flag(a0)
 		move.b	#19,double_jump_property(a0)
+		move.b	#3,anim(a0)
 		tst.b	$39(a6)
 		beq.s	.playSFX
 		move.b	(Ctrl_1_held_logical).w,d0
@@ -25063,21 +25161,26 @@ Mighty_CheckMoves:						; Liliam: extra skills - hammer drop
 		bne.s	locret_11A14
 
 	.activate:
-		clr.w	x_vel(a0)
-		move.w	#$C00,y_vel(a0)
+		move.b	#Status_HammerDrop,double_jump_flag(a0)
 		move.b	#$A,anim(a0)
-		move.b	#1,double_jump_flag(a0)
+		move.w	#$600,y_vel(a0)
+		clr.w	x_vel(a0)
+		btst	#Status_Underwater,status(a0)
+		bne.s	.playSFX
+		move.w	#$C00,y_vel(a0)
+
+	.playSFX:
 		moveq	#signextendB(sfx_Dash),d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
 Ray_CheckMoves:							; Liliam: extra skills - air glide
-		move.b	#1,double_jump_flag(a0)
+		st	double_jump_flag(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 MetalSonic_CheckMoves:
-		move.b	#1,double_jump_flag(a0)			; Liliam: extra skills - boost mode
+		move.b	#2,double_jump_flag(a0)			; Liliam: extra skills - boost mode
 
 locret_11A14:
 		rts
@@ -26112,10 +26215,8 @@ Sonic_DropDash_Release:
 		move.w	d2,ground_vel(a0)
 
 	.checkplayer:
-		lea	(Dust_P2).w,a6
 		cmpa.w	#Player_1,a0
 		bne.s	.checkair
-		lea	(Dust).w,a6
 		move.w	ground_vel(a0),d1
 		bpl.s	.calcoffset
 		neg.w	d1
@@ -26152,9 +26253,9 @@ Sonic_DropDash_Release:
 		beq.s	.setanim
 		move.l	a0,-(sp)
 		movea.w	interact(a0),a0
-		move.w	x_pos(a0),x_vel(a6)
-		move.w	y_pos(a0),y_vel(a6)
-		move.w	a0,parent3(a6)
+		move.w	x_pos(a0),ground_vel(a6)
+		move.w	y_pos(a0),y_radius(a6)
+		move.w	a0,parent2(a6)
 		move.w	#7<<8,anim(a6)
 		movea.l	(sp)+,a0
 
@@ -26232,27 +26333,57 @@ Player_TouchFloor2:
 		move.b	#0,scroll_delay_counter(a0)
 ;		tst.b	double_jump_flag(a0)			; Liliam: simplify double jump selection
 ;		beq.s	locret_12230				;
-		tst.b	character_id(a0)
-		bne.s	loc_1222A
+;		tst.b	character_id(a0)			;
+;		bne.s	loc_1222A				;
 ;		tst.b	(Super_Sonic_Knux_flag).w		;
-		cmpi.b	#Status_BublShield,double_jump_flag(a0)	;
-		bne.s	loc_1222A
+;		bne.s	loc_1222A				;
 ;		btst	#Status_BublShield,status_secondary(a0)	;
 ;		beq.s	loc_1222A				;
-		bsr.s	BubbleShield_Bounce
+;		bsr.s	BubbleShield_Bounce			;
+		cmpi.b	#Status_BublShield,double_jump_flag(a0)	;
+		beq.s	BubbleShield_Bounce			;
+		cmpi.b	#Status_HammerDrop,double_jump_flag(a0)	; Liliam: extra skills - hammer drop
+		bne.s	loc_1222A				;
+		cmpi.b	#State_Hurt,routine(a0)			;
+		bhs.s	loc_1222A				;
+		bsr.s	BubbleShield_CheckOnObj			;
+		bmi.w	Mighty_HammerDrop			;
 
 loc_1222A:
 		move.b	#0,double_jump_flag(a0)
 
-locret_12230:
+;locret_12230:
 		rts
 ; End of function Player_TouchFloor
 
+; ---------------------------------------------------------------------------
+
+BubbleShield_CheckOnObj:					; Liliam: bugfix - release player from object
+		movem.l	a1-a2,-(sp)
+		moveq	#-1,d0
+		btst	#Status_OnObj,status(a0)
+		beq.s	.return
+		movea.w	interact(a0),a1
+		lea	BubbleShield_Blacklist(pc),a2
+
+	.loop:
+		move.l	(a2)+,d0
+		bmi.s	.return
+		cmp.l	(a1),d0
+		bne.s	.loop
+		moveq	#0,d0
+
+	.return:
+		movem.l	(sp)+,a1-a2
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 
 BubbleShield_Bounce:
+		bsr.s	BubbleShield_CheckOnObj			; Liliam: bugfix - release player from object
+		bpl.s	loc_1222A				;
+		clr.b	double_jump_flag(a0)			;
 		movem.l	d1-d2,-(sp)
 		move.w	#$780,d2
 		btst	#Status_Underwater,status(a0)
@@ -26293,6 +26424,11 @@ loc_122AA:
 		jmp	(Play_SFX).l
 ; End of function BubbleShield_Bounce
 
+; ---------------------------------------------------------------------------
+BubbleShield_Blacklist:						; Liliam: bugfix - release player from object
+		dc.l Obj_MHZMushroomCap_Main
+		dc.l Obj_SSZBouncyCloud_Main
+		dc.l Obj_SSZSwingingCarrier_Cup
 ; ---------------------------------------------------------------------------
 
 Sonic_Hurt:
@@ -26551,164 +26687,13 @@ Sonic_GameOver:
 		subq.w	#1,$3E(a0)
 		bne.s	locret_1258E
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - restart level
-		bne.s	Encore_CheckRestart			;
+		bne.w	Encore_CheckRestart			;
 		move.w	#1,(Restart_level_flag).w
 		tst.b	(Last_star_post_hit).w			; Liliam: bugfix - restart from act 1 if skipped all star posts and died to ICZ1 boss (yes, really)
 		bne.s	locret_1258E				;
 		move.b	(Apparent_act).w,(Current_act).w	;
 
 locret_1258E:
-		rts
-; ---------------------------------------------------------------------------
-
-Encore_CheckRestart:						; Liliam: Encore mode - restart level
-		move.b	character_id(a0),d3
-		bset	d3,(Encore_available_chars).w
-		move.b	(P2_character).w,d3
-		lea	(Encore_stocks).w,a1
-		subq.b	#1,(a1)
-		move.b	(a1)+,d2
-		subq.b	#1,d2
-		bmi.s	.done
-		moveq	#0,d3
-		move.b	(a1),d3
-		subq.b	#1,d2
-		bmi.s	.repack
-
-	.loop:
-		move.b	1(a1),(a1)+
-		subq.b	#1,d2
-		bpl.s	.loop
-		move.b	#$C,(Encore_HUD_stocks_scroll+1).w
-
-	.repack:
-		jsr	(Encore_RepackStocks).l
-
-	.done:
-		move.b	d3,(P1_character).w
-		lea	(Player_2).w,a1
-		tst.b	render_flags(a1)
-		bpl.s	Encore_RestartLevel
-		cmpi.b	#State_NoControl,routine(a1)
-		bhs.s	Encore_RestartLevel
-		tst.b	(Boss_flag).w
-		bne.s	.clearPlayer
-		tst.b	invincibility_timer(a0)
-		beq.s	.clearPlayer
-		move.w	(Current_music).w,d0
-		jsr	(Play_Music).l
-
-	.clearPlayer:
-		jsr	(Delete_Current_Sprite).l
-		clr.b	(Dust+$38).w
-		cmpa.w	(Tails_tails+$30).w,a0
-		bne.s	.checkBoostMode
-		move.l	#Delete_Current_Sprite,(Tails_tails).w
-
-	.checkBoostMode:
-		cmpa.w	(Tails_tails_2P+parent2).w,a0
-		bne.s	.checkSpawn
-		move.l	#Delete_Current_Sprite,(Tails_tails_2P).w
-
-	.checkSpawn:
-		st	(Reserved_object_3+routine).w
-		cmp.b	(P2_character).w,d3
-		beq.s	.swapPlayers
-		lsl.w	#2,d3
-		lea	(Player_ObjectPtrs).l,a1
-		move.l	(a1,d3.w),(a0)
-		move.b	#1,(Reserved_object_3+routine).w
-
-	.swapPlayers:
-		clr.b	(Scroll_lock).w
-		clr.b	(Deform_lock).w
-		move.b	#1,(Update_HUD_life_count).w
-		subq.w	#2,(Encore_HUD_stocks_frame).w
-		bclr	#Encore_SwapHUD,(Encore_mode).w
-		jmp	(Draw_Sprite).l
-; ---------------------------------------------------------------------------
-
-Encore_RestartLevel:						; Liliam: Encore mode - restart level
-		move.b	(P2_character).w,(P1_character).w
-		move.b	d3,(P2_character).w
-		move.w	#1,(Restart_level_flag).w
-		move.b	#1,(Act3_flag).w
-		st	(Encore_restart_flag).w
-		tst.b	invincibility_timer(a0)
-		bne.s	.checkStarpost
-		tst.b	(Boss_flag).w
-		bne.s	.checkStarpost
-		st	(Act3_flag).w
-
-	.checkStarpost:
-		move.w	(Current_zone_and_act).w,d0
-		tst.b	(Last_star_post_hit).w
-		beq.s	.notSaved
-		cmp.w	(Saved_zone_and_act),d0
-		bne.s	.reloadLevelData
-
-	.checkAIZ2:
-		cmpi.w	#1,d0
-		bne.s	.checkMGZ2
-		move.b	(Dynamic_resize_routine).w,d0
-		cmpi.b	#$16,d0
-		bhs.s	.reloadLevelData
-		cmpi.b	#$12,d0
-		bhs.s	.return
-		cmpi.b	#$A,d0
-		bhs.s	.reloadLevelData
-		rts
-; ---------------------------------------------------------------------------
-
-	.checkMGZ2:
-		cmpi.w	#$201,d0
-		bne.s	.checkLBZ2
-		tst.b	(Boss_flag).w
-		bne.s	.reloadLevelData
-		rts
-; ---------------------------------------------------------------------------
-
-	.checkLBZ2:
-		cmpi.w	#$601,d0
-		bne.s	.checkMHZ2
-		tst.b	(Dynamic_resize_routine).w
-		bne.s	.reloadLevelData
-		rts
-; ---------------------------------------------------------------------------
-
-	.checkMHZ2:
-		cmpi.w	#$701,d0
-		bne.s	.checkSOZ1
-		cmpi.w	#$10,(Events_routine_bg).w
-		bhs.s	.reloadLevelData
-		rts
-; ---------------------------------------------------------------------------
-
-	.checkSOZ1:
-		cmpi.w	#$800,d0
-		bne.s	.checkSOZ2
-		cmpi.w	#8,(Events_routine_bg).w
-		bhs.s	.reloadLevelData
-		rts
-; ---------------------------------------------------------------------------
-
-	.checkSOZ2:
-		cmpi.w	#$801,d0
-		bne.s	.return
-		cmpi.w	#$24,(Events_routine_bg).w
-		bhs.s	.reloadLevelData
-		rts
-; ---------------------------------------------------------------------------
-
-	.notSaved:
-		cmp.w	(Apparent_zone_and_act).w,d0
-		beq.s	.checkAIZ2
-		move.b	(Apparent_act).w,(Current_act).w
-
-	.reloadLevelData:
-		move.b	#1,(Encore_restart_flag).w
-
-	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -36376,13 +36361,164 @@ Knuckles_GameOver:
 		subq.w	#1,$3E(a0)
 		bne.s	locret_17CCC
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - restart level
-		bne.w	Encore_CheckRestart			;
+		bne.s	Encore_CheckRestart			;
 		move.w	#1,(Restart_level_flag).w
 		tst.b	(Last_star_post_hit).w			; Liliam: bugfix - restart from act 1 if skipped all star posts and died to ICZ1 boss (yes, really)
 		bne.s	locret_17CCC				;
 		move.b	(Apparent_act).w,(Current_act).w	;
 
 locret_17CCC:
+		rts
+; ---------------------------------------------------------------------------
+
+Encore_CheckRestart:						; Liliam: Encore mode - restart level
+		move.b	character_id(a0),d3
+		bset	d3,(Encore_available_chars).w
+		move.b	(P2_character).w,d3
+		lea	(Encore_stocks).w,a1
+		subq.b	#1,(a1)
+		move.b	(a1)+,d2
+		subq.b	#1,d2
+		bmi.s	.done
+		moveq	#0,d3
+		move.b	(a1),d3
+		subq.b	#1,d2
+		bmi.s	.repack
+
+	.loop:
+		move.b	1(a1),(a1)+
+		subq.b	#1,d2
+		bpl.s	.loop
+		move.b	#$C,(Encore_HUD_stocks_scroll+1).w
+
+	.repack:
+		jsr	(Encore_RepackStocks_NoHUD).l
+
+	.done:
+		move.b	d3,(P1_character).w
+		lea	(Player_2).w,a1
+		tst.b	render_flags(a1)
+		bpl.s	Encore_RestartLevel
+		cmpi.b	#State_NoControl,routine(a1)
+		bhs.s	Encore_RestartLevel
+		tst.b	(Boss_flag).w
+		bne.s	.clearPlayer
+		tst.b	invincibility_timer(a0)
+		beq.s	.clearPlayer
+		move.w	(Current_music).w,d0
+		jsr	(Play_Music).l
+
+	.clearPlayer:
+		jsr	(Delete_Current_Sprite).l
+		clr.b	(Dust+$38).w
+		cmpa.w	(Tails_tails+$30).w,a0
+		bne.s	.checkBoostMode
+		move.l	#Delete_Current_Sprite,(Tails_tails).w
+
+	.checkBoostMode:
+		cmpa.w	(Tails_tails_2P+parent2).w,a0
+		bne.s	.checkSpawn
+		move.l	#Delete_Current_Sprite,(Tails_tails_2P).w
+
+	.checkSpawn:
+		st	(Reserved_object_3+routine).w
+		cmp.b	(P2_character).w,d3
+		beq.s	.swapPlayers
+		lsl.w	#2,d3
+		lea	(Player_ObjectPtrs).l,a1
+		move.l	(a1,d3.w),(a0)
+		move.b	#1,(Reserved_object_3+routine).w
+
+	.swapPlayers:
+		clr.b	(Scroll_lock).w
+		clr.b	(Deform_lock).w
+		move.b	#1,(Update_HUD_life_count).w
+		subq.w	#2,(Encore_HUD_stocks_frame).w
+		bclr	#Encore_SwapHUD,(Encore_mode).w
+		jmp	(Draw_Sprite).l
+; ---------------------------------------------------------------------------
+
+Encore_RestartLevel:						; Liliam: Encore mode - restart level
+		move.b	(P2_character).w,(P1_character).w
+		move.b	d3,(P2_character).w
+		move.w	#1,(Restart_level_flag).w
+		move.b	#1,(Act3_flag).w
+		st	(Encore_restart_flag).w
+		tst.b	invincibility_timer(a0)
+		bne.s	.checkStarpost
+		tst.b	(Boss_flag).w
+		bne.s	.checkStarpost
+		st	(Act3_flag).w
+
+	.checkStarpost:
+		move.w	(Current_zone_and_act).w,d0
+		tst.b	(Last_star_post_hit).w
+		beq.s	.notSaved
+		cmp.w	(Saved_zone_and_act),d0
+		bne.s	.reloadLevelData
+
+	.checkAIZ2:
+		cmpi.w	#1,d0
+		bne.s	.checkMGZ2
+		move.b	(Dynamic_resize_routine).w,d0
+		cmpi.b	#$16,d0
+		bhs.s	.reloadLevelData
+		cmpi.b	#$12,d0
+		bhs.s	.return
+		cmpi.b	#$A,d0
+		bhs.s	.reloadLevelData
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkMGZ2:
+		cmpi.w	#$201,d0
+		bne.s	.checkLBZ2
+		tst.b	(Boss_flag).w
+		bne.s	.reloadLevelData
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkLBZ2:
+		cmpi.w	#$601,d0
+		bne.s	.checkMHZ2
+		tst.b	(Dynamic_resize_routine).w
+		bne.s	.reloadLevelData
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkMHZ2:
+		cmpi.w	#$701,d0
+		bne.s	.checkSOZ1
+		cmpi.w	#$10,(Events_routine_bg).w
+		bhs.s	.reloadLevelData
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkSOZ1:
+		cmpi.w	#$800,d0
+		bne.s	.checkSOZ2
+		cmpi.w	#8,(Events_routine_bg).w
+		bhs.s	.reloadLevelData
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkSOZ2:
+		cmpi.w	#$801,d0
+		bne.s	.return
+		cmpi.w	#$24,(Events_routine_bg).w
+		bhs.s	.reloadLevelData
+		rts
+; ---------------------------------------------------------------------------
+
+	.notSaved:
+		cmp.w	(Apparent_zone_and_act).w,d0
+		beq.s	.checkAIZ2
+		move.b	(Apparent_act).w,(Current_act).w
+
+	.reloadLevelData:
+		move.b	#1,(Encore_restart_flag).w
+
+	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -37463,13 +37599,14 @@ Obj_DashDust:
 		jmp	DashDust_Index(pc,d1.w)
 ; ---------------------------------------------------------------------------
 DashDust_Index:
-		dc.w loc_18B54-DashDust_Index
-		dc.w loc_18BAA-DashDust_Index
-		dc.w loc_18CB2-DashDust_Index
-		dc.w loc_18CB6-DashDust_Index
+		dc.w DashDust_Init-DashDust_Index
+		dc.w DashDust_Main-DashDust_Index
+		dc.w DashDust_Delete-DashDust_Index
+		dc.w DashDust_Skid-DashDust_Index
+		dc.w DashDust_HammerDrop-DashDust_Index		; Liliam: extra skills - hammer drop
 ; ---------------------------------------------------------------------------
 
-loc_18B54:
+DashDust_Init:
 		addq.b	#2,routine(a0)
 		move.l	#Map_DashDust,mappings(a0)
 		ori.b	#4,render_flags(a0)
@@ -37479,15 +37616,15 @@ loc_18B54:
 		move.w	#Player_1,parent(a0)
 		move.w	#tiles_to_bytes(ArtTile_DashDust),vram_art(a0)
 		cmpa.w	#Dust,a0
-		beq.s	loc_18BAA
+		beq.s	DashDust_Main
 ;		move.b	#1,$38(a0)				; Liliam: dash dust - pick vertical pos by character ID
 ;		cmpi.w	#2,(Player_mode).w			;
-;		beq.s	loc_18BAA				;
+;		beq.s	DashDust_Main				;
 		move.w	#make_art_tile(ArtTile_DashDust_P2,0,0),art_tile(a0)
 		move.w	#Player_2,parent(a0)
 		move.w	#tiles_to_bytes(ArtTile_DashDust_P2),vram_art(a0)
 
-loc_18BAA:
+DashDust_Main:
 		movea.w	parent(a0),a2
 		moveq	#0,d0
 		move.b	anim(a0),d0
@@ -37499,12 +37636,13 @@ off_18BBE:
 		dc.w DashDust_Common-off_18BBE
 		dc.w DashDust_Splash-off_18BBE
 		dc.w DashDust_SpinDash-off_18BBE
-		dc.w DashDust_Skid-off_18BBE
+		dc.w DashDust_Smoke-off_18BBE
 		dc.w DashDust_Snow-off_18BBE
 		dc.w DashDust_InstaShield-off_18BBE		; Liliam: dash dust - player 2 insta-shield
 		dc.w DashDust_DropDash-off_18BBE		; Liliam: extra skills - drop dash
 		dc.w DashDust_DropDash_OnObj-off_18BBE		;
 		dc.w DashDust_ClimbDash-off_18BBE		; Liliam: extra skills - climb dash
+		dc.w DashDust_Smoke_OnObj-off_18BBE		; Liliam: extra skills - hammer drop
 ; ---------------------------------------------------------------------------
 
 DashDust_Splash:
@@ -37568,21 +37706,21 @@ DashDust_InstaShield:						; Liliam: dash dust - player 2 insta-shield
 
 DashDust_InstaShield_Done:					; Liliam: dash dust - player 2 insta-shield
 		tst.b	double_jump_flag(a2)
-		beq.w	DashDust_Clear
+		beq.w	DashDust_Reset
 		move.b	#2,double_jump_flag(a2)
-		bra.w	DashDust_Clear
+		bra.w	DashDust_Reset
 ; ---------------------------------------------------------------------------
 
 DashDust_SpinDash:
 DashDust_ClimbDash:
 		cmpi.b	#12,air_left(a2)
-		blo.w	DashDust_Clear
+		blo.w	DashDust_Reset
 		cmpi.b	#State_Hurt,routine(a2)
-		bhs.w	DashDust_Clear				; Liliam: extra skills - drop dash
-;		bhs.s	DashDust_Clear				;
+		bhs.w	DashDust_Reset				; Liliam: extra skills - drop dash
+;		bhs.s	DashDust_Reset				;
 		tst.b	spin_dash_flag(a2)
-		beq.w	DashDust_Clear				;
-;		beq.s	DashDust_Clear				;
+		beq.w	DashDust_Reset				;
+;		beq.s	DashDust_Reset				;
 		move.w	x_pos(a2),x_pos(a0)
 		move.w	y_pos(a2),y_pos(a0)
 		move.b	status(a2),status(a0)
@@ -37608,14 +37746,18 @@ loc_18C6A:
 		bra.s	DashDust_Common
 ; ---------------------------------------------------------------------------
 
-DashDust_Skid:
+DashDust_Smoke_OnObj:
+		bsr.s	DashDust_RefreshPosition		; Liliam: extra skills - hammer drop
+
+DashDust_Smoke:
+		bsr.w	MoveSprite2				;
 		cmpi.b	#12,air_left(a2)
-		blo.s	DashDust_Clear
+		blo.s	DashDust_Reset
 		movea.w	parent3(a0),a1				; Liliam: dash dust - wait for water splash
 		cmpi.b	#1,anim(a1)				;
-		beq.s	DashDust_Clear				;
+		beq.s	DashDust_Reset				;
 ;		btst	#6,status(a0)				;
-;		bne.s	DashDust_Clear				;
+;		bne.s	DashDust_Reset				;
 
 DashDust_Common:
 		lea	(Ani_DashDust).l,a1
@@ -37625,32 +37767,103 @@ DashDust_Common:
 ; ---------------------------------------------------------------------------
 
 DashDust_DropDash_OnObj:
-		movea.w	parent3(a0),a1				; Liliam: extra skills - drop dash
-		move.w	x_vel(a0),d0				;
-		sub.w	x_pos(a1),d0				;
-		sub.w	d0,x_pos(a0)				;
-		move.w	y_vel(a0),d0				;
-		sub.w	y_pos(a1),d0				;
-		sub.w	d0,y_pos(a0)				;
-		move.w	x_pos(a1),x_vel(a0)			;
-		move.w	y_pos(a1),y_vel(a0)			;
+		bsr.s	DashDust_RefreshPosition		; Liliam: extra skills - drop dash
 
 DashDust_DropDash:
 		cmpi.b	#12,air_left(a2)			;
 		bhs.s	loc_18C6A				;
 
-DashDust_Clear:
+DashDust_Reset:
 		move.b	#0,anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_18CB2:
+DashDust_Delete:
 		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 
-loc_18CB6:
+DashDust_RefreshPosition:					; Liliam: hidden skill - drop dash
+		movea.w	parent2(a0),a1
+		move.w	ground_vel(a0),d0
+		sub.w	x_pos(a1),d0
+		sub.w	d0,x_pos(a0)
+		move.w	y_radius(a0),d0
+		sub.w	y_pos(a1),d0
+		sub.w	d0,y_pos(a0)
+		move.w	x_pos(a1),ground_vel(a0)
+		move.w	y_pos(a1),y_radius(a0)
+		rts
+; ---------------------------------------------------------------------------
+
+DashDust_HammerDrop:						; Liliam: extra skills - hammer drop
+		movea.w	parent(a0),a2
+		cmpi.b	#Status_HammerDrop,double_jump_flag(a2)
+		beq.w	loc_18CD6
+		cmpi.b	#State_Hurt,routine(a2)
+		bhs.w	loc_18CD6
+		cmpi.b	#12,air_left(a2)
+		blo.w	loc_18CD6
+		lea	(Collision_response_list).w,a4
+		move.w	(a4)+,d6
+		beq.s	.createDust
+		jsr	(Mighty_HammerDrop_Touch).l
+		movea.w	parent(a0),a2
+
+	.createDust:
+		move.b	#$15,mapping_frame(a0)
+		move.w	#-$1E0,d2
+		moveq	#-$10,d1
+		tst.b	(Reverse_gravity_flag).w
+		bne.s	.notUpsideDown
+		neg.w	d1
+
+	.notUpsideDown:
+		add.w	y_pos(a2),d1
+		move.w	parent2(a0),d0
+		bne.s	.init
+		move.w	#Reserved_object_3,d0
+
+	.init:
+		move.l	a0,-(sp)
+		movea.w	d0,a0
+		bsr.w	AllocateObjectAfterCurrent
+		bne.s	.done
+		move.l	(sp)+,a0
+		moveq	#4-1,d3
+
+	.loop:
+		bsr.w	sub_18D26
+		addi.w	#$C0,d2
+		move.w	d2,x_vel(a1)
+		move.w	#$40,y_vel(a1)
+		tst.b	(Reverse_gravity_flag).w
+		bne.s	.checkOnObj
+		neg.w	y_vel(a1)
+
+	.checkOnObj:
+		tst.w	parent2(a0)
+		beq.s	.nextObject
+		movea.w	parent2(a0),a3
+		move.w	a3,parent2(a1)
+		move.w	x_pos(a3),ground_vel(a1)
+		move.w	y_pos(a3),y_radius(a1)
+		move.b	#9,anim(a1)
+
+	.nextObject:
+		bsr.w	CreateNewSprite4
+		dbne	d3,.loop
+		bsr.w	DashDust_Load_DPLC
+		bra.s	loc_18CD6
+; ---------------------------------------------------------------------------
+
+	.done:
+		move.l	(sp)+,a0
+		bra.s	loc_18CD6
+; ---------------------------------------------------------------------------
+
+DashDust_Skid:
 		tst.b	anim(a0)				; Liliam: dash dust - wait for water splash
-		bne.w	loc_18BAA				;
+		bne.w	DashDust_Main				;
 		move.b	#$15,mapping_frame(a0)			;
 		movea.w	parent(a0),a2
 		moveq	#$10,d1
@@ -37665,12 +37878,16 @@ loc_18CB6:
 loc_18CD6:
 		move.b	#2,routine(a0)
 		move.b	#0,$36(a0)
+
+locret_18CE2:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_18CE4:
 		subq.b	#1,$36(a0)
-		bpl.s	loc_18D66
+;		bpl.s	loc_18D66				; Liliam: extra skills - hammer drop
+		bpl.s	locret_18CE2				;
+		moveq	#0,d2					;
 		move.b	#3,$36(a0)
 ;		btst	#Status_Underwater,status(a2)		; Liliam: dash dust - don't spawn underwater
 ;		bne.s	loc_18D66				;
@@ -37690,16 +37907,18 @@ loc_18D14:
 
 loc_18D1C:
 		add.w	y_pos(a2),d1				; Liliam: dash dust - don't spawn underwater
+;		add.w	d1,y_pos(a1)				;
+;		move.b	#0,status(a1)				;
 		cmp.w	(Water_level).w,d1			;
-		bhs.s	loc_18D66				;
+		bhs.s	locret_18CE2				;
 		bsr.w	AllocateObject				;
-		bne.s	loc_18D66				;
+		bne.s	locret_18CE2				;
+
+sub_18D26:
 		move.l	(a0),(a1)				;
 		move.w	a0,parent3(a1)				;
 		move.w	x_pos(a2),x_pos(a1)			;
 		move.w	d1,y_pos(a1)				;
-;		add.w	d1,y_pos(a1)				;
-;		move.b	#0,status(a1)				;
 		move.b	#3,anim(a1)
 		addq.b	#2,routine(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -37714,8 +37933,10 @@ loc_18D1C:
 		ori.w	#high_priority,art_tile(a1)
 
 loc_18D66:
-;		bsr.s	DashDust_Load_DPLC		;
-;		rts					;
+		tst.w	d2					;
+		beq.s	DashDust_Load_DPLC			;
+;		bsr.s	DashDust_Load_DPLC			;
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -45591,7 +45812,6 @@ Monitor_Give_Stock:						; Liliam: Encore mode - character stock monitor
 		bsr.w	Encore_RepackStocks
 		move.b	#1,(Update_HUD_life_count).w
 		move.w	#59,(Encore_HUD_stocks_timer).w
-		bclr	#Encore_SwapHUD,(Encore_mode).w
 		moveq	#signextendB(sfx_Whistle),d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
@@ -45853,7 +46073,6 @@ Encore_RotateStocks:						; Liliam: Encore mode - change character item
 		move.b	d0,(a3)
 		move.b	#1,(Update_HUD_life_count).w
 		move.b	#$A,(Encore_HUD_stocks_scroll+1).w
-		bclr	#Encore_SwapHUD,(Encore_mode).w
 		cmpa.w	(Tails_tails+$30).w,a1
 		bne.s	.checkBoostMode
 		move.l	#Delete_Current_Sprite,(Tails_tails).w
@@ -45932,6 +46151,9 @@ Encore_RotateStocks:						; Liliam: Encore mode - change character item
 		jsr	(Play_SFX).l
 
 Encore_RepackStocks:
+		bclr	#Encore_SwapHUD,(Encore_mode).w
+
+Encore_RepackStocks_NoHUD:
 		moveq	#0,d0
 		lea	(Encore_stocks).w,a1
 		move.b	(a1)+,d2
@@ -47401,6 +47623,8 @@ AutoSpin_AdjustRollHeight:					; Liliam: bugfix - set correct player height
 		sub.w	d0,y_pos(a1)
 		move.b	#$F,y_radius(a1)
 		move.b	#9,x_radius(a1)
+		move.b	#2,anim(a1)
+		clr.b	double_jump_flag(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -48824,8 +49048,10 @@ loc_1FACA:
 
 loc_1FAF2:
 		move.w	(Chain_bonus_counter).w,$38(a0)
-		move.b	(Player_1+anim).w,$32(a0)
-		move.b	(Player_2+anim).w,$33(a0)
+;		move.b	(Player_1+anim).w,$32(a0)		; Liliam: extra skills - hammer drop
+;		move.b	(Player_2+anim).w,$33(a0)		;
+		move.b	(Player_1+double_jump_flag).w,$32(a0)	;
+		move.b	(Player_2+double_jump_flag).w,$33(a0)	;
 		move.b	(Player_1+status).w,$3A(a0)
 		move.b	(Player_2+status).w,$3B(a0)
 		moveq	#0,d1
@@ -48860,48 +49086,61 @@ loc_1FB5C:
 ; ---------------------------------------------------------------------------
 
 loc_1FB62:
-		cmpi.b	#$18,d0
+		cmpi.b	#p1_standing|p2_standing,d0
 		bne.s	loc_1FB90
-		cmpi.b	#2,$32(a0)
-		beq.s	loc_1FB78
-		cmpi.b	#2,$33(a0)
-		bne.s	loc_1FB4C
+		btst	#Status_Roll,$3A(a0)			; Liliam: simplify roll anim selection
+		bne.s	loc_1FB78				;
+		btst	#Status_Roll,$3B(a0)			;
+		beq.s	loc_1FB4C				;
+;		cmpi.b	#2,$32(a0)				;
+;		beq.s	loc_1FB78				;
+;		cmpi.b	#2,$33(a0)				;
+;		bne.s	loc_1FB4C				;
 
 loc_1FB78:
 		lea	(Player_1).w,a1
 		move.b	$32(a0),d0
-		bsr.s	sub_1FBA8
+		move.b	$3A(a0),d1				;
+		bsr.s	BreakableRock_CheckBreak
 		lea	(Player_2).w,a1
 		move.b	$33(a0),d0
-		bsr.s	sub_1FBA8
+		move.b	$3B(a0),d1				;
+		bsr.s	BreakableRock_CheckBreak
 		bra.w	loc_1FBF8
 ; ---------------------------------------------------------------------------
 
 loc_1FB90:
 		move.b	d0,d1
-		andi.b	#8,d1
+		andi.b	#p1_standing,d1
 		beq.s	loc_1FBE0
-		cmpi.b	#2,$32(a0)
-		bne.s	loc_1FB4C
+		btst	#Status_Roll,$3A(a0)			; Liliam: simplify roll anim selection
+		beq.s	loc_1FB4C				;
+;		cmpi.b	#2,$32(a0)				;
+;		bne.s	loc_1FB4C				;
 		lea	(Player_1).w,a1
-		bsr.s	sub_1FBAE
+		move.b	$32(a0),d0				;
+		bsr.s	BreakableRock_Break
 		bra.s	loc_1FBF8
 
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_1FBA8:
-		cmpi.b	#2,d0
-		bne.s	loc_1FBCC
-; End of function sub_1FBA8
+BreakableRock_CheckBreak:
+		btst	#Status_Roll,d1				; Liliam: simplify roll anim selection
+		beq.s	loc_1FBCC				;
+;		cmpi.b	#2,d0					;
+;		bne.s	loc_1FBCC				;
+; End of function BreakableRock_CheckBreak
 
 
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_1FBAE:
+BreakableRock_Break:
+		cmpi.b	#Status_HammerDrop,d0			; Liliam: extra skills - hammer drop
+		beq.w	BreakableRock_ResumeHammerDrop		;
 		bset	#Status_Roll,status(a1)
-		bsr.w	Player_SetRollHeight			; Liliam: bugfix - set correct player height
+		bsr.w	BreakableRock_SetRollHeight		; Liliam: bugfix - set correct player height
 ;		move.b	#$E,y_radius(a1)			;
 ;		move.b	#7,x_radius(a1)				;
 		move.b	#2,anim(a1)
@@ -48912,17 +49151,20 @@ loc_1FBCC:
 		bclr	#Status_OnObj,status(a1)
 		move.b	#State_Control,routine(a1)
 		rts
-; End of function sub_1FBAE
+; End of function BreakableRock_Break
 
 ; ---------------------------------------------------------------------------
 
 loc_1FBE0:
-		andi.b	#$10,d0
+		andi.b	#p2_standing,d0
 		beq.w	loc_1FB4C
-		cmpi.b	#2,$33(a0)
-		bne.w	loc_1FB4C
+		btst	#Status_Roll,$3B(a0)			; Liliam: simplify roll anim selection
+		beq.w	loc_1FB4C				;
+;		cmpi.b	#2,$33(a0)				;
+;		bne.w	loc_1FB4C				;
 		lea	(Player_2).w,a1
-		bsr.s	sub_1FBAE
+		move.b	$33(a0),d0				;
+		bsr.s	BreakableRock_Break
 
 loc_1FBF8:
 		move.w	$38(a0),(Chain_bonus_counter).w
@@ -49255,6 +49497,8 @@ locret_1FF46:
 ; ---------------------------------------------------------------------------
 
 loc_1FF48:
+		move.b	(Player_1+double_jump_flag).w,$34(a0)	; Liliam: extra skills - hammer drop
+		move.b	(Player_2+double_jump_flag).w,$35(a0)	;
 		move.w	(Player_1+y_vel).w,$30(a0)
 		move.w	(Player_2+y_vel).w,$36(a0)
 		moveq	#0,d1
@@ -49269,6 +49513,9 @@ loc_1FF48:
 		swap	d6
 		andi.w	#4|8,d6
 		bne.s	loc_1FF84
+		move.b	status(a0),d0				; Liliam: extra skills - hammer drop
+		andi.b	#standing_mask,d0			;
+		bne.s	BreakableRock_CheckHammerDrop		;
 		move.w	$2E(a0),d0
 		jmp	(Sprite_OnScreen_Test2).l
 ; ---------------------------------------------------------------------------
@@ -49294,6 +49541,33 @@ loc_1FFA8:
 		bra.s	loc_1FFC4
 ; ---------------------------------------------------------------------------
 
+BreakableRock_CheckHammerDrop:					; Liliam: extra skills - hammer drop
+		btst	#p1_standing_bit,d0
+		beq.s	.player2
+		lea	(Player_1).w,a1
+		cmpi.b	#Status_HammerDrop,$34(a0)
+		beq.s	.destroy
+
+	.player2:
+		btst	#p2_standing_bit,d0
+		beq.s	loc_1FFBA
+		lea	(Player_2).w,a1
+		cmpi.b	#Status_HammerDrop,$35(a0)
+		bne.s	loc_1FFBA
+
+	.destroy:
+		move.l	#loc_1FFC4,-(sp)
+
+BreakableRock_ResumeHammerDrop:
+		bset	#Status_InAir,status(a1)
+		bset	#Status_Roll,status(a1)
+		bclr	#Status_OnObj,status(a1)
+		move.b	#Status_HammerDrop,double_jump_flag(a1)
+		move.w	#$A<<8,anim(a1)
+		move.w	#$C00,y_vel(a1)
+		bra.s	Player_SetRollHeight
+; ---------------------------------------------------------------------------
+
 loc_1FFBA:
 		move.w	$2E(a0),d0
 		jmp	(Sprite_OnScreen_Test2).l
@@ -49317,6 +49591,26 @@ loc_1FFF4:
 		move.l	#loc_1FC16,(a0)
 		bsr.w	sub_2011E
 		bra.w	loc_1FC16
+; ---------------------------------------------------------------------------
+
+BreakableRock_SetRollHeight:					; Liliam: bugfix - set correct player height
+		cmpi.b	#7,Dust-Player_1+anim(a1)
+		bne.s	Player_SetRollHeight
+		clr.b	Dust-Player_1+anim(a1)
+		move.w	x_vel(a1),ground_vel(a1)
+		cmpa.w	#Player_1,a1
+		bne.s	Player_SetRollHeight
+		clr.w	(H_scroll_frame_offset).w
+
+Player_SetRollHeight:
+		move.b	#TailsRollHeight,y_radius(a1)
+		move.b	#7,x_radius(a1)
+		tst.b	Dust-Player_1+$38(a1)
+		bne.s	.return
+		move.b	#$E,y_radius(a1)
+
+	.return:
+		rts
 ; ---------------------------------------------------------------------------
 
 loc_20002:
@@ -49359,24 +49653,13 @@ sub_20056:
 ;		move.b	#7,x_radius(a1)				;
 		move.b	#2,anim(a1)
 		move.w	#-$300,y_vel(a1)
+		clr.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
-		clr.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
 		move.b	#State_Control,routine(a1)
 		rts
 ; End of function sub_20056
 
-; ---------------------------------------------------------------------------
-
-Player_SetRollHeight:						; Liliam: bugfix - set correct player height
-		move.b	#TailsRollHeight,y_radius(a1)
-		move.b	#7,x_radius(a1)
-		tst.b	Dust-Player_1+$38(a1)
-		bne.s	.return
-		move.b	#$E,y_radius(a1)
-
-	.return:
-		rts
 ; ---------------------------------------------------------------------------
 
 loc_20088:
@@ -49416,7 +49699,7 @@ sub_200CC:
 		beq.s	locret_2011C
 		cmp.w	x_pos(a1),d2
 		bhs.s	locret_2011C
-		btst	#5,d0
+		btst	#Status_Push,d0
 		beq.s	locret_2011C
 		subq.w	#1,$40(a0)
 		bpl.s	locret_2011C
@@ -50879,7 +51162,7 @@ loc_2172E:
 		andi.b	#1,d0
 		beq.s	loc_217BC
 		lea	(Player_1).w,a1
-		bclr	#6,$37(a1)
+		bclr	#6,status_tertiary(a1)
 		beq.s	loc_217BC
 		move.w	$30(a0),x_vel(a1)
 		move.w	x_vel(a1),ground_vel(a1)
@@ -50889,7 +51172,7 @@ loc_2172E:
 		andi.b	#2,d6
 		beq.s	loc_217E8
 		lea	(Player_2).w,a1
-		bclr	#6,$37(a1)
+		bclr	#6,status_tertiary(a1)
 		beq.s	loc_217E8
 		move.w	$32(a0),x_vel(a1)
 		move.w	x_vel(a1),ground_vel(a1)
@@ -50902,7 +51185,7 @@ loc_217BC:
 		andi.b	#2,d6
 		beq.s	loc_217E8
 		lea	(Player_2).w,a1
-		bclr	#6,$37(a1)
+		bclr	#6,status_tertiary(a1)
 		beq.s	loc_217E8
 		move.w	$32(a0),x_vel(a1)
 		move.w	x_vel(a1),ground_vel(a1)
@@ -54522,16 +54805,32 @@ VerticalSpikes_CheckHurt:
 		bne.s	.return
 		cmpi.b	#4,character_id(a1)
 		bne.w	Spikes_CheckHurt_PlaySFX
+		cmpi.b	#$A,d1
+		beq.w	Spikes_HammerDrop
 		cmpi.b	#2,d1
 		bne.w	Spikes_CheckHurt_PlaySFX
+		moveq	#signextendB(sfx_SpikeBounce),d0
 		cmp.b	(Reverse_gravity_flag).w,d2
 		bne.s	.upsideDown
-		cmpi.w	#$400,x_vel(a1)
-		bge.s	.continueRolling
-		cmpi.w	#-$400,x_vel(a1)
-		ble.s	.continueRolling
+		move.w	x_vel(a1),d1
+		addi.w	#$400,d1
+		cmpi.w	#$800,d1
+		bhi.s	Mighty_HammerDrop_Rebound
+		tst.b	invulnerability_timer(a1)
+		bne.s	.noRebound
 		btst	#Status_Invincible,status_secondary(a1)
-		beq.s	.uncurl
+		bne.s	.noRebound
+		move.b	#3,anim(a1)
+		moveq	#signextendB(sfx_BubbleAttack),d0
+		bra.s	Mighty_HammerDrop_Rebound.noRoll
+; ---------------------------------------------------------------------------
+
+	.upsideDown:
+		move.w	#$300,y_vel(a1)
+		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
+	.noRebound:
 		btst	#Status_Roll,status(a1)
 		bne.s	.return
 		clr.w	anim(a1)
@@ -54540,30 +54839,35 @@ VerticalSpikes_CheckHurt:
 		rts
 ; ---------------------------------------------------------------------------
 
-	.continueRolling:
+Mighty_HammerDrop_Rebound:					; Liliam: spikes - bounce off Mighty if rolling
 		move.b	#2,anim(a1)
-		moveq	#signextendB(sfx_SpikeBounce),d0
-		bra.s	.bounce
-; ---------------------------------------------------------------------------
+		move.b	#7,x_radius(a1)
+		move.b	#$E,y_radius(a1)
+		bset	#Status_Roll,status(a1)
 
-	.upsideDown:
-		move.b	#2,anim(a1)
-		moveq	#signextendB(sfx_SpikeBounce),d0
-		move.w	#$300,y_vel(a1)
-		bra.s	.done
-; ---------------------------------------------------------------------------
-
-	.uncurl:
-		move.b	#3,anim(a1)
-		moveq	#signextendB(sfx_BubbleAttack),d0
-
-	.bounce:
-		move.w	#-$300,y_vel(a1)
-
-	.done:
-		bclr	#Status_OnObj,status(a1)
+	.noRoll:
 		bset	#Status_InAir,status(a1)
+		bclr	#Status_OnObj,status(a1)
+		move.w	#-$200,y_vel(a1)
+		btst	#Status_Underwater,status(a1)
+		bne.s	.playSFX
+		move.w	#-$280,y_vel(a1)
+
+	.playSFX:
 		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
+Spikes_HammerDrop:						; Liliam: spikes - bounce off Mighty if rolling
+		bset	#7,status_tertiary(a1)
+		moveq	#1,d1
+		bsr.s	loc_24280
+		bclr	#7,status_tertiary(a1)
+		rts
+; ---------------------------------------------------------------------------
+
+Spikes_CheckHurt_PlaySFX:					; Liliam: spikes - play correct sound
+		moveq	#1,d1
+		bra.s	loc_24280
 ; ---------------------------------------------------------------------------
 
 HorizontalSpikes_CheckHurt:					; Liliam: spikes - only damage from pointy side
@@ -54582,17 +54886,14 @@ HorizontalSpikes_CheckHurt:					; Liliam: spikes - only damage from pointy side
 		beq.s	locret_242B4
 		cmpi.b	#4,character_id(a1)
 		bne.s	Spikes_CheckHurt_PlaySFX
+		cmpi.b	#$A,anim(a1)
+		beq.s	Spikes_HammerDrop
 		cmpi.b	#2,anim(a1)
 		bne.s	Spikes_CheckHurt_PlaySFX
 		subi.w	#$300,y_vel(a1)
 		move.w	d1,x_vel(a1)
 		moveq	#signextendB(sfx_SpikeBounce),d0
 		jmp	(Play_SFX).l
-; ---------------------------------------------------------------------------
-
-Spikes_CheckHurt_PlaySFX:					; Liliam: spikes - play correct sound
-		moveq	#1,d1
-		bra.s	loc_24280
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -56907,6 +57208,7 @@ sub_25D2C:
 		beq.s	locret_25D52				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		bne.s	locret_25D52				;
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		neg.w	x_vel(a1)
 		neg.w	y_vel(a1)
 
@@ -64006,8 +64308,12 @@ loc_2A4FC:
 
 loc_2A502:
 		move.w	(Chain_bonus_counter).w,$38(a0)
-		move.b	(Player_1+anim).w,$34(a0)
-		move.b	(Player_2+anim).w,$36(a0)
+;		move.b	(Player_1+anim).w,$34(a0)		; Liliam: extra skills - hammer drop
+;		move.b	(Player_2+anim).w,$36(a0)		;
+		move.b	(Player_1+double_jump_flag).w,$34(a0)	;
+		move.b	(Player_2+double_jump_flag).w,$36(a0)	;
+		move.b	(Player_1+status).w,$35(a0)		;
+		move.b	(Player_2+status).w,$37(a0)		;
 		moveq	#0,d1
 		move.b	width_pixels(a0),d1
 		addi.w	#$B,d1
@@ -64028,28 +64334,37 @@ loc_2A53C:
 loc_2A542:
 		cmpi.b	#p1_standing|p2_standing,d0
 		bne.s	loc_2A570
-		cmpi.b	#2,$34(a0)
-		beq.s	loc_2A558
-		cmpi.b	#2,$36(a0)
-		bne.s	loc_2A53C
+		btst	#Status_Roll,$35(a0)			; Liliam: simplify roll anim selection
+		bne.s	loc_2A558				;
+		btst	#Status_Roll,$37(a0)			;
+		beq.s	loc_2A53C				;
+;		cmpi.b	#2,$34(a0)				;
+;		beq.s	loc_2A558				;
+;		cmpi.b	#2,$36(a0)				;
+;		bne.s	loc_2A53C				;
 
 loc_2A558:
 		lea	(Player_1).w,a1
 		move.b	$34(a0),d0
+		move.b	$35(a0),d1				;
 		bsr.s	sub_2A588
 		lea	(Player_2).w,a1
 		move.b	$36(a0),d0
+		move.b	$37(a0),d1				;
 		bsr.s	sub_2A588
 		bra.w	loc_2A5D8
 ; ---------------------------------------------------------------------------
 
 loc_2A570:
 		move.b	d0,d1
-		andi.b	#8,d1
+		andi.b	#p1_standing,d1
 		beq.s	loc_2A5C0
-		cmpi.b	#2,$34(a0)
-		bne.s	loc_2A53C
+		btst	#Status_Roll,$35(a0)			; Liliam: simplify roll anim selection
+		beq.s	loc_2A53C				;
+;		cmpi.b	#2,$34(a0)				;
+;		bne.s	loc_2A53C				;
 		lea	(Player_1).w,a1
+		move.b	$34(a0),d0				;
 		bsr.s	sub_2A58E
 		bra.s	loc_2A5D8
 
@@ -64057,8 +64372,8 @@ loc_2A570:
 
 
 sub_2A588:
-		cmpi.b	#2,d0
-		bne.s	loc_2A5AC
+		; Liliam: removed original implementation
+		jmp	(BreakableRock_CheckBreak).l		; Liliam: simplify roll anim selection
 ; End of function sub_2A588
 
 
@@ -64066,28 +64381,21 @@ sub_2A588:
 
 
 sub_2A58E:
-		bset	#Status_Roll,status(a1)
-		jsr	(Player_SetRollHeight).l		; Liliam: bugfix - set correct player height
-;		move.b	#$E,y_radius(a1)			;
-;		move.b	#7,x_radius(a1)				;
-		move.b	#2,anim(a1)
-		move.w	#-$300,y_vel(a1)
-
-loc_2A5AC:
-		bset	#Status_InAir,status(a1)
-		bclr	#Status_OnObj,status(a1)
-		move.b	#State_Control,routine(a1)
-		rts
+		; Liliam: removed original implementation
+		jmp	(BreakableRock_Break).l			; Liliam: simplify roll anim selection
 ; End of function sub_2A58E
 
 ; ---------------------------------------------------------------------------
 
 loc_2A5C0:
-		andi.b	#$10,d0
+		andi.b	#p2_standing,d0
 		beq.w	loc_2A53C
-		cmpi.b	#2,$36(a0)
-		bne.w	loc_2A53C
+		btst	#Status_Roll,$37(a0)			; Liliam: simplify roll anim selection
+		beq.s	loc_2A53C				;
+;		cmpi.b	#2,$36(a0)				;
+;		bne.w	loc_2A53C				;
 		lea	(Player_2).w,a1
+		move.b	$36(a0),d0				;
 		bsr.s	sub_2A58E
 
 loc_2A5D8:
@@ -64111,6 +64419,8 @@ loc_2A612:
 ; ---------------------------------------------------------------------------
 
 loc_2A618:
+		move.b	(Player_1+double_jump_flag).w,$34(a0)	; Liliam: extra skills - hammer drop
+		move.b	(Player_2+double_jump_flag).w,$35(a0)	;
 		move.w	(Player_1+y_vel).w,$30(a0)
 		move.w	(Player_2+y_vel).w,$32(a0)
 		moveq	#0,d1
@@ -64125,6 +64435,9 @@ loc_2A618:
 		swap	d6
 		andi.w	#4|8,d6
 		bne.s	loc_2A650
+		move.b	status(a0),d0				; Liliam: extra skills - hammer drop
+		andi.b	#standing_mask,d0			;
+		bne.s	CorkFloor_CheckHammerDrop		;
 		jmp	(Sprite_OnScreen_Test).l
 ; ---------------------------------------------------------------------------
 
@@ -64147,6 +64460,27 @@ loc_2A674:
 		lea	(Player_2).w,a1
 		move.w	$32(a0),y_vel(a1)
 		bra.s	loc_2A68C
+; ---------------------------------------------------------------------------
+
+CorkFloor_CheckHammerDrop:					; Liliam: extra skills - hammer drop
+		btst	#p1_standing_bit,d0
+		beq.s	.player2
+		lea	(Player_1).w,a1
+		cmpi.b	#Status_HammerDrop,$34(a0)
+		beq.s	.destroy
+
+	.player2:
+		btst	#p2_standing_bit,d0
+		beq.s	loc_2A686
+		lea	(Player_2).w,a1
+		cmpi.b	#Status_HammerDrop,$35(a0)
+		bne.s	loc_2A686
+
+	.destroy:
+		move.l	#loc_2A68C,-(sp)
+
+CorkFloor_ResumeHammerDrop:
+		jmp	(BreakableRock_ResumeHammerDrop).l
 ; ---------------------------------------------------------------------------
 
 loc_2A686:
@@ -64177,8 +64511,12 @@ loc_2A6BC:
 
 loc_2A6D4:
 		move.w	(Chain_bonus_counter).w,$38(a0)
-		move.b	(Player_1+anim).w,$34(a0)
-		move.b	(Player_2+anim).w,$36(a0)
+;		move.b	(Player_1+anim).w,$34(a0)		; Liliam: extra skills - hammer drop
+;		move.b	(Player_2+anim).w,$36(a0)		;
+		move.b	(Player_1+double_jump_flag).w,$34(a0)	;
+		move.b	(Player_2+double_jump_flag).w,$36(a0)	;
+		move.b	(Player_1+status).w,$35(a0)		;
+		move.b	(Player_2+status).w,$37(a0)		;
 		lea	(byte_2A894).l,a2
 		moveq	#0,d1
 		move.b	width_pixels(a0),d1
@@ -64198,18 +64536,25 @@ loc_2A710:
 loc_2A716:
 		cmpi.b	#p1_standing|p2_standing,d0
 		bne.s	loc_2A77A
-		cmpi.b	#2,$34(a0)
-		bne.s	loc_2A732
+		btst	#Status_Roll,$35(a0)			; Liliam: simplify roll anim selection
+		beq.s	loc_2A732				;
+;		cmpi.b	#2,$34(a0)				;
+;		bne.s	loc_2A732				;
 		tst.b	subtype(a0)
 		bmi.s	loc_2A762
 		cmpi.b	#$E,(Player_1+top_solid_bit).w
 		beq.s	loc_2A762
+		cmpi.b	#Status_HammerDrop,$34(a0)		; Liliam: extra skills - hammer drop
+		beq.s	loc_2A762				;
+
 
 loc_2A732:
 		move.b	#$C,(Player_1+top_solid_bit).w
 		move.b	#$D,(Player_1+lrb_solid_bit).w
-		cmpi.b	#2,$36(a0)
-		bne.s	loc_2A754
+		btst	#Status_Roll,$37(a0)			;
+		beq.s	loc_2A754				;
+;		cmpi.b	#2,$36(a0)				;
+;		bne.s	loc_2A754				;
 		tst.b	subtype(a0)
 		bmi.s	loc_2A762
 		cmpi.b	#$E,(Player_2+top_solid_bit).w
@@ -64224,23 +64569,29 @@ loc_2A754:
 loc_2A762:
 		lea	(Player_1).w,a1
 		move.b	$34(a0),d0
+		move.b	$35(a0),d1				;
 		bsr.s	sub_2A7B0
 		lea	(Player_2).w,a1
 		move.b	$36(a0),d0
+		move.b	$37(a0),d1				;
 		bsr.s	sub_2A7B0
 		bra.w	loc_2A816
 ; ---------------------------------------------------------------------------
 
 loc_2A77A:
 		move.b	d0,d1
-		andi.b	#8,d1
+		andi.b	#p1_standing,d1
 		beq.s	loc_2A7E2
-		cmpi.b	#2,$34(a0)
-		bne.s	loc_2A798
+		btst	#Status_Roll,$35(a0)			; Liliam: simplify roll anim selection
+		beq.s	loc_2A798				;
+;		cmpi.b	#2,$34(a0)				;
+;		bne.s	loc_2A798				;
 		tst.b	subtype(a0)
 		bmi.s	loc_2A7A8
 		cmpi.b	#$E,(Player_1+top_solid_bit).w
 		beq.s	loc_2A7A8
+		cmpi.b	#Status_HammerDrop,$34(a0)		; Liliam: extra skills - hammer drop
+		beq.s	loc_2A7A8				;
 
 loc_2A798:
 		move.b	#$C,(Player_1+top_solid_bit).w
@@ -64250,6 +64601,7 @@ loc_2A798:
 
 loc_2A7A8:
 		lea	(Player_1).w,a1
+		move.b	$34(a0),d0				; Liliam: simplify roll anim selection
 		bsr.s	sub_2A7B6
 		bra.s	loc_2A816
 
@@ -64257,8 +64609,8 @@ loc_2A7A8:
 
 
 sub_2A7B0:
-		cmpi.b	#2,d0
-		bne.s	loc_2A7CE
+		; Liliam: removed original implementation
+		jmp	(BreakableRock_CheckBreak).l		; Liliam: simplify roll anim selection
 ; End of function sub_2A7B0
 
 
@@ -64266,8 +64618,10 @@ sub_2A7B0:
 
 
 sub_2A7B6:
+		cmpi.b	#Status_HammerDrop,d0			; Liliam: extra skills - hammer drop
+		beq.w	CorkFloor_ResumeHammerDrop		;
 		bset	#Status_Roll,status(a1)
-		jsr	(Player_SetRollHeight).l		; Liliam: bugfix - set correct player height
+		jsr	(BreakableRock_SetRollHeight).l		; Liliam: bugfix - set correct player height
 ;		move.b	#$E,y_radius(a1)			;
 ;		move.b	#7,x_radius(a1)				;
 		move.b	#2,anim(a1)
@@ -64282,14 +64636,18 @@ loc_2A7CE:
 ; ---------------------------------------------------------------------------
 
 loc_2A7E2:
-		andi.b	#$10,d0
+		andi.b	#p2_standing,d0
 		beq.w	loc_2A710
-		cmpi.b	#2,$36(a0)
-		bne.s	loc_2A800
+		btst	#Status_Roll,$37(a0)			; Liliam: simplify roll anim selection
+		beq.s	loc_2A800				;
+;		cmpi.b	#2,$36(a0)				;
+;		bne.s	loc_2A800				;
 		tst.b	subtype(a0)
 		bmi.s	loc_2A810
 		cmpi.b	#$E,(Player_2+top_solid_bit).w
 		beq.s	loc_2A810
+		cmpi.b	#Status_HammerDrop,$36(a0)		; Liliam: extra skills - hammer drop
+		beq.s	loc_2A810				;
 
 loc_2A800:
 		move.b	#$C,(Player_2+top_solid_bit).w
@@ -64299,6 +64657,7 @@ loc_2A800:
 
 loc_2A810:
 		lea	(Player_2).w,a1
+		move.b	$36(a0),d0				; Liliam: simplify roll anim selection
 		bsr.s	sub_2A7B6
 
 loc_2A816:
@@ -70758,6 +71117,7 @@ loc_2FBB2:
 		jsr	(Player_ResetAirTimer).l
 		moveq	#signextendB(sfx_Bubble),d0
 		jsr	(Play_SFX).l
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
@@ -72936,6 +73296,7 @@ loc_31776:
 
 
 sub_317AE:
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		move.w	#-$700,y_vel(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_RollJump,status(a1)
@@ -74301,6 +74662,9 @@ loc_325B6:
 		addi.w	#-$680,y_vel(a1)
 		move.w	#0,x_vel(a1)
 		move.w	#0,ground_vel(a1)
+		btst	#Status_Underwater,status(a1)		; Liliam: bugfix - player speeds fix
+		beq.s	loc_325F2				;
+		addi.w	#$280,y_vel(a1)				;
 
 loc_325F2:
 		bset	#Status_InAir,status(a1)
@@ -74702,6 +75066,7 @@ locret_329E4:
 ; ---------------------------------------------------------------------------
 
 loc_329E6:
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		move.w	#-$800,x_vel(a1)
 		move.w	#-$800,y_vel(a1)
 		bset	#Status_Facing,status(a1)
@@ -75202,6 +75567,7 @@ loc_32F50:
 
 
 sub_32F56:
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		move.w	x_pos(a0),d1
 		move.w	y_pos(a0),d2
 		sub.w	x_pos(a1),d1
@@ -92997,8 +93363,12 @@ Obj_SOZBreakableSandRock:
 		move.l	#loc_4172E,(a0)
 
 loc_4172E:
-		move.b	(Player_1+anim).w,$30(a0)
-		move.b	(Player_2+anim).w,$31(a0)
+;		move.b	(Player_1+anim).w,$30(a0)		; Liliam: extra skills - hammer drop
+;		move.b	(Player_2+anim).w,$31(a0)		;
+		move.b	(Player_1+double_jump_flag).w,$30(a0)	;
+		move.b	(Player_2+double_jump_flag).w,$31(a0)	;
+		move.b	(Player_1+status).w,$32(a0)		;
+		move.b	(Player_2+status).w,$33(a0)		;
 		move.w	#$23,d1
 		move.w	#$10,d2
 		move.w	#$11,d3
@@ -93013,30 +93383,39 @@ loc_4175A:
 ; ---------------------------------------------------------------------------
 
 loc_41760:
-		cmpi.b	#$18,d0
+		cmpi.b	#p1_standing|p2_standing,d0
 		bne.s	loc_4178E
-		cmpi.b	#2,$30(a0)
-		beq.s	loc_41776
-		cmpi.b	#2,$31(a0)
-		bne.s	loc_4175A
+		btst	#Status_Roll,$32(a0)			; Liliam: simplify roll anim selection
+		bne.s	loc_41776				;
+		btst	#Status_Roll,$33(a0)			;
+		beq.s	loc_4175A				;
+;		cmpi.b	#2,$30(a0)				;
+;		beq.s	loc_41776				;
+;		cmpi.b	#2,$31(a0)				;
+;		bne.s	loc_4175A				;
 
 loc_41776:
 		lea	(Player_1).w,a1
 		move.b	$30(a0),d0
+		move.b	$32(a0),d1				;
 		bsr.s	sub_417A6
 		lea	(Player_2).w,a1
 		move.b	$31(a0),d0
+		move.b	$33(a0),d1				;
 		bsr.s	sub_417A6
 		bra.w	loc_417F6
 ; ---------------------------------------------------------------------------
 
 loc_4178E:
 		move.b	d0,d1
-		andi.b	#8,d1
+		andi.b	#p1_standing,d1
 		beq.s	loc_417DE
-		cmpi.b	#2,$30(a0)
-		bne.s	loc_4175A
+		btst	#Status_Roll,$32(a0)			; Liliam: simplify roll anim selection
+		beq.s	loc_4175A				;
+;		cmpi.b	#2,$30(a0)				;
+;		bne.s	loc_4175A				;
 		lea	(Player_1).w,a1
+		move.b	$30(a0),d0				;
 		bsr.s	sub_417AC
 		bra.s	loc_417F6
 
@@ -93044,8 +93423,8 @@ loc_4178E:
 
 
 sub_417A6:
-		cmpi.b	#2,d0
-		bne.s	loc_417CA
+		; Liliam: removed original implementation
+		jmp	(BreakableRock_CheckBreak).l		; Liliam: simplify roll anim selection
 ; End of function sub_417A6
 
 
@@ -93053,28 +93432,21 @@ sub_417A6:
 
 
 sub_417AC:
-		bset	#Status_Roll,status(a1)
-		jsr	(Player_SetRollHeight).l		; Liliam: bugfix - set correct player height
-;		move.b	#$E,y_radius(a1)			;
-;		move.b	#7,x_radius(a1)				;
-		move.b	#2,anim(a1)
-		move.w	#-$300,y_vel(a1)
-
-loc_417CA:
-		bset	#Status_InAir,status(a1)
-		bclr	#Status_OnObj,status(a1)
-		move.b	#State_Control,routine(a1)
-		rts
+		; Liliam: removed original implementation
+		jmp	(BreakableRock_Break).l			; Liliam: simplify roll anim selection
 ; End of function sub_417AC
 
 ; ---------------------------------------------------------------------------
 
 loc_417DE:
-		andi.b	#$10,d0
+		andi.b	#p2_standing,d0
 		beq.w	loc_4175A
-		cmpi.b	#2,$31(a0)
-		bne.w	loc_4175A
+		btst	#Status_Roll,$33(a0)			; Liliam: simplify roll anim selection
+		beq.s	loc_4175A				;
+;		cmpi.b	#2,$31(a0)				;
+;		bne.w	loc_4175A				;
 		lea	(Player_2).w,a1
+		move.b	$31(a0),d0				;
 		bsr.s	sub_417AC
 
 loc_417F6:
@@ -93575,8 +93947,11 @@ loc_41D56:
 
 
 sub_41D5C:
-		cmpi.b	#2,anim(a1)
-		bne.w	locret_41DF2
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.w	locret_41DF2				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.w	locret_41DF2				;
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		neg.w	x_vel(a1)
 		neg.w	y_vel(a1)
 		move.b	subtype(a0),d4
@@ -94847,6 +95222,7 @@ sub_42EC0:
 		beq.s	locret_42EE6				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		bne.s	locret_42EE6				;
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		neg.w	x_vel(a1)
 		neg.w	y_vel(a1)
 
@@ -97062,7 +97438,7 @@ loc_4509E:
 ; ---------------------------------------------------------------------------
 
 Obj_SSZBouncyCloud:
-		move.l	#loc_450EC,(a0)
+		move.l	#Obj_SSZBouncyCloud_Main,(a0)
 		move.b	#4,render_flags(a0)
 		move.b	#$10,height_pixels(a0)
 		move.b	#$20,width_pixels(a0)
@@ -97076,7 +97452,7 @@ Obj_SSZBouncyCloud:
 		addi.w	#$C00,d0
 		move.w	d0,$30(a0)
 
-loc_450EC:
+Obj_SSZBouncyCloud_Main:
 		move.l	#$1C00,d0
 		move.l	#$80,d1
 		jsr	Gradual_SwingOffset(pc)
@@ -97599,9 +97975,12 @@ loc_45660:
 		sub.w	x_pos(a0),d0
 		addi.w	#$C,d0
 		cmpi.w	#$18,d0
-		bhs.s	loc_456EE
+		bhs.w	loc_456EE				; Liliam: bugfix - release player from object
+;		bhs.s	loc_456EE				;
 		tst.b	object_control(a2)
 		bne.w	loc_456EE
+		btst	#Status_InAir,status(a2)		;
+		bne.w	loc_456EE				;
 		cmpi.b	#State_Hurt,routine(a2)
 		bhs.w	loc_456EE
 		tst.w	(Debug_placement_mode).w
@@ -98436,8 +98815,8 @@ sub_45E6E:
 ; ---------------------------------------------------------------------------
 
 loc_45E82:
-		cmpi.b	#State_Hurt,routine(a1)			; Liliam: bugfix - release player from object
-		bhs.s	loc_45EB6				;
+		btst	#Status_InAir,status(a1)		; Liliam: bugfix - release player from object
+		bne.s	loc_45EB6				;
 ;		tst.b	(a3)					;
 ;		bmi.s	loc_45E90				;
 		btst	d6,status(a0)
@@ -98454,7 +98833,7 @@ loc_45E90:
 		clr.w	x_vel(a1)
 		clr.w	ground_vel(a1)
 		clr.b	spin_dash_flag(a1)
-		clr.b	anim(a1)
+;		clr.b	anim(a1)				; Liliam: bugfix - release player from object
 		bclr	#Status_Roll,status(a1)
 		move.b	default_y_radius(a1),d0			; Liliam: allow glide-landing on objects
 		sub.b	y_radius(a1),d0				;
@@ -98478,9 +98857,9 @@ loc_45EB6:
 		clr.b	(a3)
 ;		move.w	#-$680,y_vel(a1)			; Liliam: bugfix - release player from object
 		clr.b	object_control(a1)
-;		bset	#Status_Roll,status(a1)			;
-		bset	#Status_InAir,status(a1)
 		rts						;
+;		bset	#Status_Roll,status(a1)			;
+;		bset	#Status_InAir,status(a1)		;
 ;		move.b	#1,jumping(a1)				;
 ;		move.b	#2,anim(a1)				;
 ;		move.b	#$E,y_radius(a1)			;
@@ -98593,8 +98972,8 @@ loc_45FD4:
 ; ---------------------------------------------------------------------------
 
 loc_45FD6:
-		cmpi.b	#State_Hurt,routine(a1)			; Liliam: bugfix - release player from object
-		bhs.w	loc_45EB6				;
+		btst	#Status_InAir,status(a1)		; Liliam: bugfix - release player from object
+		bne.w	loc_45EB6				;
 ;		tst.b	(a3)					;
 ;		bmi.s	loc_45FE4				;
 		btst	d6,status(a0)
@@ -98612,7 +98991,7 @@ loc_45FE6:
 		clr.w	x_vel(a1)
 		clr.w	ground_vel(a1)
 		clr.b	spin_dash_flag(a1)
-		clr.b	anim(a1)
+;		clr.b	anim(a1)				; Liliam: bugfix - release player from object
 		bclr	#Status_Roll,status(a1)
 		move.b	default_y_radius(a1),d0			; Liliam: allow glide-landing on objects
 		sub.b	y_radius(a1),d0				;
@@ -98849,7 +99228,7 @@ loc_46262:
 ; ---------------------------------------------------------------------------
 
 loc_46284:
-		move.l	#loc_462B6,(a0)
+		move.l	#Obj_SSZSwingingCarrier_Cup,(a0)
 		move.b	#4,render_flags(a0)
 		move.b	#$C,height_pixels(a0)
 		move.b	#$18,width_pixels(a0)
@@ -98858,7 +99237,7 @@ loc_46284:
 		move.l	#Map_SSZElevatorBar,mappings(a0)
 		move.b	#3,mapping_frame(a0)
 
-loc_462B6:
+Obj_SSZSwingingCarrier_Cup:
 		tst.b	routine(a0)
 		beq.s	loc_462C2
 		jmp	(Delete_Current_Sprite).l
@@ -98903,8 +99282,8 @@ loc_462C2:
 sub_46324:
 		tst.b	(a3)
 		beq.s	loc_46328				; Liliam: bugfix - release player from object
-		cmpi.b	#State_Hurt,routine(a1)			;
-		bhs.s	SSZSwingingCarrier_ReleasePlayer	;
+		btst	#Status_InAir,status(a1)		;
+		bne.s	SSZSwingingCarrier_ReleasePlayer	;
 		btst	d5,status(a0)				;
 		bne.s	loc_4639A
 
@@ -172497,6 +172876,7 @@ loc_76FA6:
 ; ---------------------------------------------------------------------------
 
 loc_76FC2:
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		neg.w	x_vel(a1)
 		neg.w	y_vel(a1)
 		neg.w	ground_vel(a1)
@@ -173912,8 +174292,10 @@ sub_780BE:
 		move.w	x_pos(a0),d0
 		sub.w	x_pos(a1),d0
 		bcs.s	loc_7811A
-		cmpi.b	#2,anim(a1)
-		beq.s	loc_780E4
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		bne.s	loc_780E4				;
+;		cmpi.b	#2,anim(a1)				;
+;		beq.s	loc_780E4				;
 		cmpi.b	#2,character_id(a1)
 		bne.s	loc_780E4
 		cmpi.b	#1,double_jump_flag(a1)
@@ -173922,6 +174304,7 @@ sub_780BE:
 loc_780E4:
 		move.w	y_pos(a1),(Events_bg+$0A).w
 		move.l	#loc_77D0C,(a0)
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		move.w	#-$400,x_vel(a1)
 		move.w	#-$300,y_vel(a1)
 		movea.w	parent3(a0),a2
@@ -185192,8 +185575,10 @@ locret_7F8FE:
 sub_7F900:
 		jsr	Check_PlayerCollision(pc)
 		beq.w	locret_7F9A6
-		cmpi.b	#2,anim(a1)
-		beq.s	loc_7F926
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		bne.s	loc_7F926				;
+;		cmpi.b	#2,anim(a1)				;
+;		beq.s	loc_7F926				;
 		tst.b	invulnerability_timer(a1)
 		bne.w	locret_7F9A6
 		btst	#Status_InAir,status_secondary(a1)
@@ -185204,13 +185589,9 @@ sub_7F900:
 loc_7F926:
 		btst	#Status_InAir,status(a1)
 		beq.s	loc_7F95C
-		bset	#Status_Roll,status(a1)
-		jsr	(Player_SetRollHeight).l		; Liliam: bugfix - set correct player height
-;		move.b	#$E,y_radius(a1)			;
-;		move.b	#7,x_radius(a1)				;
-		move.b	#2,anim(a1)
-		move.w	#-$300,y_vel(a1)
-		bset	#Status_InAir,status(a1)
+		; Liliam: removed original implementation
+		move.b	double_jump_flag(a1),d0			; Liliam: simplify roll anim selection
+		jsr	(BreakableRock_Break).l			;
 		bsr.w	sub_7F4AC
 		adda.w	#8,sp
 		rts
@@ -185370,6 +185751,7 @@ locret_7FA7C:
 sub_7FA7E:
 		jsr	Check_PlayerCollision(pc)
 		beq.s	locret_7FACA
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		move.b	$3C(a0),d0
 		move.b	(V_int_run_count+3).w,d1
 		andi.b	#3,d1
@@ -194678,12 +195060,16 @@ Swing_MoveWaitNoFall:
 EnemyDefeated:
 		bsr.w	EnemyDefeat_Score
 		movea.w	$44(a0),a1
+		cmpi.b	#Status_HammerDrop,double_jump_flag(a1)	; Liliam: extra skills - hammer drop
+		beq.s	locret_8574E				;
 		tst.w	y_vel(a1)
 		bmi.s	loc_85750
 		move.w	y_pos(a1),d0
 		cmp.w	y_pos(a0),d0
 		bhs.s	loc_85758
 		neg.w	y_vel(a1)
+
+locret_8574E:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -201120,6 +201506,7 @@ loc_88D98:
 
 
 sub_88DA6:
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		clr.w	y_vel(a1)
 		bset	#Status_InAir,status(a1)
 		addq.w	#6,y_pos(a1)
@@ -201462,6 +201849,8 @@ loc_8908C:
 loc_890AA:
 		bsr.w	Check_PlayerCollision
 		beq.s	loc_890C4
+		cmpi.b	#Status_HammerDrop,double_jump_flag(a1)	; Liliam: extra skills - hammer drop
+		beq.s	loc_890C4				;
 		move.l	#loc_890C8,(a0)
 		bsr.w	sub_890D8
 		movea.w	parent3(a0),a1
@@ -202634,7 +203023,7 @@ loc_89CDE:
 		jmp	Sprite_CheckDelete(pc)
 ; ---------------------------------------------------------------------------
 
-FBZSpring_LaunchUp:					; Liliam: bugfix - horrors beyond comprehension
+FBZSpring_LaunchUp:						; Liliam: bugfix - horrors beyond comprehension
 		move.b	#State_Control,routine(a1)
 		move.b	#$10,anim(a1)
 		move.w	#-$A00,y_vel(a1)
@@ -205244,49 +205633,78 @@ Obj_ICZIceCube:
 ; ---------------------------------------------------------------------------
 
 loc_8B384:
-		move.b	(Player_1+anim).w,$3A(a0)
-		move.b	(Player_2+anim).w,$3B(a0)
+;		move.b	(Player_1+anim).w,$3A(a0)		; Liliam: extra skills - hammer drop
+;		move.b	(Player_2+anim).w,$3B(a0)		;
+		move.b	(Player_1+double_jump_flag).w,$3A(a0)	;
+		move.b	(Player_2+double_jump_flag).w,$3B(a0)	;
+		move.b	(Player_1+status).w,$32(a0)		;
+		move.b	(Player_2+status).w,$33(a0)		;
 		moveq	#$23,d1
 		moveq	#$10,d2
 		moveq	#$10,d3
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull).l
-		bsr.w	sub_8B3AA
+		move.b	status(a0),d0				; Liliam: bugfix - release player from object
+		andi.b	#standing_mask,d0			;
+		bne.s	ICZIceCube_CheckPlayers			;
+;		bsr.w	sub_8B3AA				;
+
+loc_9CAA0:
 		jmp	(Sprite_OnScreen_Test).l
+; ---------------------------------------------------------------------------
+
+ICZIceCube_CheckPlayers:					; Liliam: bugfix - release player from object
+		cmpi.b	#p1_standing|p2_standing,d0
+		bne.s	ICZIceCube_CheckPlayer1
+		btst	#Status_Roll,$32(a0)
+		bne.s	.bothPlayers
+		btst	#Status_Roll,$33(a0)
+		beq.s	loc_9CAA0
+
+	.bothPlayers:
+		lea	(Player_1).w,a1
+		move.b	$3A(a0),d0
+		move.b	$32(a0),d1
+		bsr.s	sub_8B3AA
+		lea	(Player_2).w,a1
+		move.b	$3B(a0),d0
+		move.b	$33(a0),d1
+		bsr.s	sub_8B3AA
+		bra.s	loc_8B41A
+; ---------------------------------------------------------------------------
+
+ICZIceCube_CheckPlayer1:					; Liliam: bugfix - release player from object
+		move.b	d0,d1
+		andi.b	#p1_standing,d1
+		beq.s	ICZIceCube_CheckPlayer2
+		btst	#Status_Roll,$32(a0)
+		beq.s	loc_9CAA0
+		lea	(Player_1).w,a1
+		move.b	$3A(a0),d0
+		bsr.s	loc_8B3D2
+		bra.s	loc_8B41A
 
 ; =============== S U B R O U T I N E =======================================
 
 
 sub_8B3AA:
-		move.b	status(a0),d0
-		btst	#p1_standing_bit,d0
-		beq.s	loc_8B3C0
-		lea	(Player_1).w,a1
-		cmpi.b	#2,$3A(a0)
-		beq.s	loc_8B3D2
-
-loc_8B3C0:
-		btst	#p2_standing_bit,d0
-		beq.s	locret_8B430
-		lea	(Player_2).w,a1
-		cmpi.b	#2,$3B(a0)
-		bne.s	locret_8B430
+		; Liliam: removed original implementation
+		jmp	(BreakableRock_CheckBreak).l		; Liliam: bugfix - release player from object
+; ---------------------------------------------------------------------------
 
 loc_8B3D2:
-		bset	#Status_Roll,status(a1)
-		jsr	(Player_SetRollHeight).l		; Liliam: bugfix - set correct player height
-;		move.b	#$E,y_radius(a1)			;
-;		move.b	#7,x_radius(a1)				;
-		move.b	#2,anim(a1)
-		move.w	#-$300,y_vel(a1)
-		bset	#Status_InAir,status(a1)
-		bclr	#Status_OnObj,status(a1)
-		move.b	#State_Control,routine(a1)
-		btst	#p2_standing_bit,status(a0)
-		beq.s	loc_8B41A
-		lea	(Player_2).w,a1
-		bset	#Status_InAir,status(a1)
-		bclr	#Status_OnObj,status(a1)
+		; Liliam: removed original implementation
+		jmp	(BreakableRock_Break).l			; Liliam: bugfix - release player from object
+; ---------------------------------------------------------------------------
+
+ICZIceCube_CheckPlayer2:
+		andi.b	#p2_standing,d0				; Liliam: bugfix - release player from object
+		beq.s	loc_9CAA0				;
+		btst	#Status_Roll,$33(a0)			;
+		beq.s	loc_9CAA0				;
+		lea	(Player_2).w,a1				;
+		move.b	$3B(a0),d0				;
+		bsr.s	loc_8B3D2				;
 
 loc_8B41A:
 		lea	ChildObjDat_8B480(pc),a2
@@ -207043,7 +207461,8 @@ loc_8C436:
 		jsr	(MoveSprite).l
 		tst.w	y_vel(a0)
 		bmi.w	locret_8C482
-		jmp	ObjHitFloor_DoRoutine(pc)
+		jmp	(ObjHitFloor_DoRoutine).l		; Liliam: fallout
+;		jmp	ObjHitFloor_DoRoutine(pc)		;
 ; ---------------------------------------------------------------------------
 
 loc_8C456:
@@ -209237,6 +209656,8 @@ sub_8D8E6:
 		move.b	#6,routine(a0)
 		moveq	#signextendB(sfx_Flipper),d0
 		jsr	(Play_SFX).l
+		movea.w	a2,a1					; Liliam: extra skills - hammer drop
+		jsr	(Mighty_HammerDrop_Cancel).l		;
 		move.w	x_vel(a0),d0
 		lsl.w	#1,d0
 		move.w	d0,x_vel(a2)
@@ -209278,6 +209699,8 @@ sub_8D94A:
 		move.l	#loc_8D846,$34(a0)
 		moveq	#signextendB(sfx_Flipper),d0
 		jsr	(Play_SFX).l
+		movea.w	a2,a1					; Liliam: extra skills - hammer drop
+		jsr	(Mighty_HammerDrop_Cancel).l		;
 		bset	#Status_InAir,status(a2)
 		move.b	#1,object_control(a2)
 		move.b	#$1A,anim(a2)
@@ -209494,6 +209917,7 @@ loc_8DC9C:
 		clr.b	collision_property(a0)
 		move.b	#$20,$20(a0)
 		bset	#6,status(a0)
+		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		neg.w	x_vel(a1)
 		neg.w	y_vel(a1)
 		neg.w	ground_vel(a1)
@@ -216430,13 +216854,14 @@ locret_92C52:
 
 
 sub_92C54:
-		move.b	d0,(Player_prev_frame).w	; Liliam: bugfix - clear player sprite if clobbered by debug
-		move.b	d0,mapping_frame(a1)		;
+		move.b	d0,(Player_prev_frame).w		; Liliam: bugfix - clear player sprite if clobbered by debug
+		move.b	d0,mapping_frame(a1)			;
 		move.b	d0,anim(a1)
 		move.w	d0,x_pos+2(a1)
 		move.w	d0,y_pos+2(a1)
 		move.b	d0,object_control(a1)
 		move.b	d0,spin_dash_flag(a1)
+		move.b	d0,double_jump_flag(a1)			; Liliam: debug - clear flags
 		move.w	d0,x_vel(a1)
 		move.w	d0,y_vel(a1)
 		move.w	d0,ground_vel(a1)
