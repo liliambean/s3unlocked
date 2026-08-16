@@ -1791,14 +1791,15 @@ Obj_HPZKnucklesCutsceneCameraLock:
 		bne.s	.rumble
 		move.w	(Camera_X_pos).w,d0
 		cmp.w	(Camera_min_X_pos).w,d0
-		beq.s	.checkRumble
+		beq.s	.rumble
 		move.l	#.scroll,(a0)
 		subi.w	#8,d0
 		move.w	d0,(Camera_X_pos).w
-		bra.s	.checkRumble
+		bra.s	.rumble
 ; ---------------------------------------------------------------------------
 
 	.scroll:
+		clr.w	(H_scroll_frame_offset).w
 		move.w	(Player_1+x_pos).w,d0
 		subi.w	#$A0,d0
 		cmp.w	x_pos(a0),d0
@@ -1819,11 +1820,8 @@ Obj_HPZKnucklesCutsceneCameraLock:
 		bne.s	HPZKnucklesCutscene_Return
 
 	.rumble:
-		move.b	(V_int_run_count+3).w,d0
-		andi.b	#$F,d0
-		bne.s	HPZKnucklesCutscene_Return
 		moveq	#signextendB(sfx_Rumble2),d0
-		jmp	(Play_SFX).l
+		jmp	(Play_SFX_Continuous).l
 ; ---------------------------------------------------------------------------
 
 Obj_HPZKnucklesCutsceneDebris_Init:
