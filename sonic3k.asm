@@ -23144,6 +23144,11 @@ Mighty_Normal:
 		bsr.w	loc_10ADE
 		tst.b	double_jump_property(a0)
 		bne.w	MightyRay_TriangleJump
+		cmpi.b	#Status_HammerDrop,double_jump_flag(a0)
+		bne.s	Mighty_CheckMoves_Return
+		cmpi.w	#$1000,y_vel(a0)
+		ble.s	Mighty_CheckMoves_Return
+		move.w	#$1000,y_vel(a0)
 
 Mighty_CheckMoves_Return:
 		rts
