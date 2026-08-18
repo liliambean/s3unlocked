@@ -34140,6 +34140,7 @@ Knuckles_Gliding_HitWall:
 		; 'x_pos+2' holds the X coordinate that Knuckles was at when he first
 		; latched onto the wall.
 		move.w	x_pos(a0),x_pos+2(a0)
+		move.w	y_pos(a0),y_pos+2(a0)			; Liliam: bugfix - release Knuckles from wall
 		rts
 ; ---------------------------------------------------------------------------
 ; loc_16A00:
@@ -34374,6 +34375,9 @@ Knuckles_Wall_Climb:
 		move.w	x_pos(a0),d0
 		cmp.w	x_pos+2(a0),d0
 		bne.w	Knuckles_LetGoOfWall
+		move.w	y_pos(a0),d0				; Liliam: bugfix - release Knuckles from wall
+		cmp.w	y_pos+2(a0),d0				;
+		bne.w	Knuckles_LetGoOfWall			;
 
 		; If an object is now carrying Knuckles, then detach him from the
 		; wall.
@@ -34730,6 +34734,7 @@ loc_16BFA:
 		; If Knuckles has not moved, skip this.
 		tst.w	d1
 		beq.s	.notMoving
+		move.w	y_pos(a0),y_pos+2(a0)			; Liliam: bugfix - release Knuckles from wall
 
 		; Only animate every 4 frames.
 		subq.b	#1,double_jump_property(a0)
@@ -34786,6 +34791,8 @@ loc_16BFA:
 		move.b	#2,anim(a0)
 		bset	#Status_Roll,status(a0)
 		move.b	#0,double_jump_flag(a0)
+		clr.w	x_pos+2(a0)				; Liliam: bugfix - release Knuckles from wall
+		clr.w	y_pos+2(a0)				;
 ; locret_16EB8:
 .hasNotJumped:
 		rts
@@ -34793,6 +34800,8 @@ loc_16BFA:
 ; loc_16EBA:
 Knuckles_ClimbUp:
 		move.b	#5,double_jump_flag(a0)
+		clr.w	x_pos+2(a0)				; Liliam: bugfix - release Knuckles from wall
+		clr.w	y_pos+2(a0)				;
 
 		cmpi.b	#$BD,mapping_frame(a0)
 		beq.s	locret_16ED0
@@ -34806,6 +34815,8 @@ locret_16ED0:
 ; loc_16ED2:
 Knuckles_LetGoOfWall:
 		move.b	#2,double_jump_flag(a0)
+		clr.w	x_pos+2(a0)				; Liliam: bugfix - release Knuckles from wall
+		clr.w	y_pos+2(a0)				;
 
 		move.w	#($1D<<8)|$1D,anim(a0)			; Liliam: simplify player anim selection
 ;		move.w	#($21<<8)|$21,anim(a0)			;
@@ -35129,12 +35140,14 @@ Knuckles_ClimbDash_Release:					; Liliam: extra skills - climb dash
 		move.b	#$E,y_radius(a0)
 		move.b	#7,x_radius(a0)
 		move.b	#2,anim(a0)
-		bset	#Status_Roll,status(a0)
 		bclr	#Status_InAir,status(a0)
-		clr.b	jumping(a0)
-		clr.b	double_jump_flag(a0)
-		clr.b	spin_dash_flag(a0)
+		bset	#Status_Roll,status(a0)
 		clr.b	anim(a6)
+		clr.b	spin_dash_flag(a0)
+		clr.b	double_jump_flag(a0)
+		clr.b	jumping(a0)
+		clr.w	x_pos+2(a0)
+		clr.w	y_pos+2(a0)
 		moveq	#0,d0
 		move.b	spin_dash_counter(a0),d0
 		add.w	d0,d0
