@@ -22991,9 +22991,9 @@ Amy_Normal:
 		move.l	#Map_Amy,mappings(a0)
 		bsr.w	loc_10ADE
 		tst.b	double_jump_property(a0)
-		beq.s	.return
+		beq.s	Amy_CheckMoves_Return
 		tst.b	double_jump_flag(a0)
-		bne.s	.return
+		bne.s	Amy_CheckMoves_Return
 		cmpi.b	#$1D,anim(a0)
 		bne.s	.cancel
 		subq.b	#1,double_jump_property(a0)
@@ -23018,10 +23018,8 @@ Amy_Normal:
 		move.w	#-$600,ground_vel(a0)
 		bclr	#Status_Push,status(a0)
 		btst	#Status_Facing,status(a0)
-		bne.s	.return
+		bne.s	Amy_CheckMoves_Return
 		move.w	#$600,ground_vel(a0)
-
-	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -23031,19 +23029,35 @@ Amy_Normal:
 	.cancel:
 		clr.b	double_jump_property(a0)
 		bclr	#Status_WaterSlide,status_secondary(a0)
+
+Amy_CheckMoves_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
-Amy_TouchFloor_CheckHammerRush:					; Liliam: extra skills - hammer attack
-		tst.b	double_jump_property(a0)
-		bpl.w	Amy_TouchFloor
-		bsr.w	Amy_TouchFloor
+Amy_CheckMoves:							; Liliam: extra skills - hammer attack
+		move.b	#1,double_jump_flag(a0)
+		move.b	#19,double_jump_property(a0)
+		move.b	#3,anim(a0)
+		tst.b	$39(a6)
+		beq.s	.playSFX
+		move.b	(Ctrl_1_held_logical).w,d0
+		andi.b	#button_right_mask|button_left_mask,d0
+		bne.s	.activate
+		btst	#button_up,(Ctrl_1_held_logical).w
+		bne.s	Amy_CheckMoves_Return
 
-Amy_HammerRush_Release:
-		move.b	#$1D,anim(a0)
-		move.b	#60,double_jump_property(a0)
-		bset	#Status_WaterSlide,status_secondary(a0)
-		moveq	#signextendB(sfx_Dash),d0
+	.activate:
+		move.w	#-$380,d0
+		btst	#Status_Underwater,status(a0)
+		bne.s	.applySpeed
+		move.w	#-$680,d0
+
+	.applySpeed:
+		move.w	d0,y_vel(a0)
+		st	$39(a6)
+
+	.playSFX:
+		moveq	#signextendB(sfx_HammerAttack),d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
@@ -23091,6 +23105,19 @@ Amy_HammerAttack_Touch:						; Liliam: extra skills - hammer attack
 		rts
 ; ---------------------------------------------------------------------------
 
+Amy_TouchFloor_CheckHammerRush:					; Liliam: extra skills - hammer attack
+		tst.b	double_jump_property(a0)
+		bpl.w	Amy_TouchFloor
+		bsr.w	Amy_TouchFloor
+
+Amy_HammerRush_Release:
+		move.b	#$1D,anim(a0)
+		move.b	#60,double_jump_property(a0)
+		bset	#Status_WaterSlide,status_secondary(a0)
+		moveq	#signextendB(sfx_Dash),d0
+		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
 Obj_Mighty:							; Liliam: add extra characters
 		move.l	#.main,(a0)
 		move.b	#4,character_id(a0)
@@ -23117,7 +23144,32 @@ Mighty_Normal:
 		bsr.w	loc_10ADE
 		tst.b	double_jump_property(a0)
 		bne.w	MightyRay_TriangleJump
+
+Mighty_CheckMoves_Return:
 		rts
+; ---------------------------------------------------------------------------
+
+Mighty_CheckMoves:						; Liliam: extra skills - hammer drop
+		move.b	(Ctrl_1_held_logical).w,d0
+		andi.b	#button_right_mask|button_left_mask,d0
+		bne.s	.activate
+		btst	#button_up,(Ctrl_1_held_logical).w
+		bne.s	Mighty_CheckMoves_Return
+
+	.activate:
+		moveq	#Skill_MightyWallJump,d1
+		bsr.w	MightyRay_TriangleJump_CheckAttach
+		move.b	#Status_HammerDrop,double_jump_flag(a0)
+		move.b	#$A,anim(a0)
+		move.w	#$600,y_vel(a0)
+		clr.w	x_vel(a0)
+		btst	#Status_Underwater,status(a0)
+		bne.s	.playSFX
+		move.w	#$C00,y_vel(a0)
+
+	.playSFX:
+		moveq	#signextendB(sfx_Dash),d0
+		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
 Mighty_HammerDrop:						; Liliam: extra skills - hammer drop
@@ -23353,6 +23405,22 @@ Ray_Normal:
 		bsr.w	loc_10ADE
 		tst.b	double_jump_property(a0)
 		bne.w	MightyRay_TriangleJump
+
+Ray_CheckMoves_Return:
+		rts
+; ---------------------------------------------------------------------------
+
+Ray_CheckMoves:							; Liliam: extra skills - air glide
+		move.b	(Ctrl_1_held_logical).w,d0
+		andi.b	#button_right_mask|button_left_mask,d0
+		bne.s	.activate
+		btst	#button_up,(Ctrl_1_held_logical).w
+		bne.s	Ray_CheckMoves_Return
+
+	.activate:
+		moveq	#Skill_RayWallJump,d1
+		bsr.w	MightyRay_TriangleJump_CheckAttach
+		st	double_jump_flag(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -23382,6 +23450,11 @@ Obj_MetalSonic:							; Liliam: add extra characters
 MetalSonic_Normal:
 		move.l	#Map_MetalSonic,mappings(a0)
 		bra.w	loc_10ADE
+; ---------------------------------------------------------------------------
+
+MetalSonic_CheckMoves:
+		move.b	#2,double_jump_flag(a0)			; Liliam: extra skills - boost mode
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_Sonic:
@@ -25217,7 +25290,7 @@ Sonic_LightningShield:
 		andi.b	#button_right_mask|button_left_mask,d0	;
 		bne.s	loc_11982				;
 		btst	#button_up,(Ctrl_1_held_logical).w	;
-		bne.w	locret_11A14				;
+		bne.s	locret_11A14				;
 
 loc_11982:
 		move.b	#1,(Shield+anim).w
@@ -25236,7 +25309,7 @@ Sonic_BubbleShield:
 		andi.b	#button_right_mask|button_left_mask,d0	;
 		bne.s	loc_119AA				;
 		btst	#button_up,(Ctrl_1_held_logical).w	;
-		bne.w	locret_11A14				;
+		bne.s	locret_11A14				;
 
 loc_119AA:
 		move.b	#1,(Shield+anim).w
@@ -25274,73 +25347,6 @@ loc_11A04:
 		move.w	#sfx_InstaAttack,d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
-
-Amy_CheckMoves:							; Liliam: extra skills - hammer attack
-		move.b	#1,double_jump_flag(a0)
-		move.b	#19,double_jump_property(a0)
-		move.b	#3,anim(a0)
-		tst.b	$39(a6)
-		beq.s	.playSFX
-		move.b	(Ctrl_1_held_logical).w,d0
-		andi.b	#button_right_mask|button_left_mask,d0
-		bne.s	.activate
-		btst	#button_up,(Ctrl_1_held_logical).w
-		bne.w	locret_11A14
-
-	.activate:
-		move.w	#-$380,d0
-		btst	#Status_Underwater,status(a0)
-		bne.s	.applySpeed
-		move.w	#-$680,d0
-
-	.applySpeed:
-		move.w	d0,y_vel(a0)
-		st	$39(a6)
-
-	.playSFX:
-		moveq	#signextendB(sfx_HammerAttack),d0
-		jmp	(Play_SFX).l
-; ---------------------------------------------------------------------------
-
-Mighty_CheckMoves:						; Liliam: extra skills - hammer drop
-		move.b	(Ctrl_1_held_logical).w,d0
-		andi.b	#button_right_mask|button_left_mask,d0
-		bne.s	.activate
-		btst	#button_up,(Ctrl_1_held_logical).w
-		bne.s	locret_11A14
-
-	.activate:
-		moveq	#Skill_MightyWallJump,d1
-		bsr.w	MightyRay_TriangleJump_CheckAttach
-		move.b	#Status_HammerDrop,double_jump_flag(a0)
-		move.b	#$A,anim(a0)
-		move.w	#$600,y_vel(a0)
-		clr.w	x_vel(a0)
-		btst	#Status_Underwater,status(a0)
-		bne.s	.playSFX
-		move.w	#$C00,y_vel(a0)
-
-	.playSFX:
-		moveq	#signextendB(sfx_Dash),d0
-		jmp	(Play_SFX).l
-; ---------------------------------------------------------------------------
-
-Ray_CheckMoves:							; Liliam: extra skills - air glide
-		move.b	(Ctrl_1_held_logical).w,d0
-		andi.b	#button_right_mask|button_left_mask,d0
-		bne.s	.activate
-		btst	#button_up,(Ctrl_1_held_logical).w
-		bne.s	locret_11A14
-
-	.activate:
-		moveq	#Skill_RayWallJump,d1
-		bsr.w	MightyRay_TriangleJump_CheckAttach
-		st	double_jump_flag(a0)
-		rts
-; ---------------------------------------------------------------------------
-
-MetalSonic_CheckMoves:
-		move.b	#2,double_jump_flag(a0)			; Liliam: extra skills - boost mode
 
 locret_11A14:
 		rts
