@@ -1285,8 +1285,8 @@ Map_Mighty_Spring:
 		dc.b    7,   5,   0,  $B, $FF, $F5
 Map_Mighty_WallGrab:
 		dc.w 2
-		dc.b  $F0,  $B,   0,   0, $FF, $FB
-		dc.b  $F8,   2,   0,  $C, $FF, $F3
+		dc.b  $F0,  $B,   0,   0, $FF, $ED
+		dc.b  $F8,   2,   0,  $C,   0,   5
 Map_Mighty_Transform1:
 		dc.w 2
 		dc.b  $F2,  $B,   0,   0, $FF, $F1

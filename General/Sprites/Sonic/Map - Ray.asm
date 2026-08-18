@@ -1425,9 +1425,9 @@ Map_Ray_Spring:
 		dc.b    7,   5,   0,  $F, $FF, $F4
 Map_Ray_WallGrab:
 		dc.w 3
-		dc.b  $EA,  $B,   0,   0, $FF, $FD
-		dc.b  $F2,   3,   0,  $C, $FF, $F5
-		dc.b   $A,   8,   0, $10, $FF, $FD
+		dc.b  $EA,  $B,   0,   0, $FF, $EB
+		dc.b   $A,   8,   0,  $C, $FF, $EB
+		dc.b  $F2,   3,   0,  $F,   0,   3
 Map_Ray_Transform1:
 		dc.w 2
 		dc.b  $F5,  $B,   0,   0, $FF, $F6

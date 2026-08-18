@@ -1465,8 +1465,8 @@ DPLC_Ray_Spring:
 DPLC_Ray_WallGrab:
 		dc.w 3
 		dc.w $BE94
-		dc.w $3EA0
-		dc.w $2EA4
+		dc.w $2EA0
+		dc.w $3EA3
 DPLC_Ray_Transform1:
 		dc.w 2
 		dc.w $BEA7

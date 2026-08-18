@@ -8536,10 +8536,10 @@ loc_72EE:
 
 loc_72FA:
 		lea	(Player_1).w,a1
-		move.b	(Ctrl_1_logical).w,d2
+		move.b	(Ctrl_1_held_logical).w,d2
 		bsr.s	sub_730C
 		lea	(Player_2).w,a1
-		move.b	(Ctrl_2_logical).w,d2
+		move.b	(Ctrl_2_held_logical).w,d2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -22701,7 +22701,7 @@ loc_107F6:
 		cmpi.b	#$1E,anim_frame(a0)
 		blo.s	loc_10844
 		bsr.w	Player_SlopeResist
-		move.b	(Ctrl_1_logical).w,d0
+		move.b	(Ctrl_1_held_logical).w,d0
 		andi.b	#button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask,d0
 		beq.s	loc_1085E
 		move.b	#$A,anim(a0)
@@ -22785,7 +22785,7 @@ sub_108E6:
 loc_108F4:
 		cmpi.w	#$80,d0
 		blo.s	locret_1090C
-		move.b	(Ctrl_1_logical).w,d0
+		move.b	(Ctrl_1_held_logical).w,d0
 		andi.b	#button_left_mask|button_right_mask,d0
 		bne.s	locret_1090C
 		btst	#button_down,(Ctrl_1_held_logical).w
@@ -22848,7 +22848,7 @@ locret_10996:
 ; ---------------------------------------------------------------------------
 
 loc_10998:
-		move.b	(Ctrl_1_logical).w,d0
+		move.b	(Ctrl_1_held_logical).w,d0
 		btst	#button_down,d0
 		bne.w	loc_10A38
 		move.b	#7,y_radius(a0)
@@ -23114,7 +23114,10 @@ Obj_Mighty:							; Liliam: add extra characters
 
 Mighty_Normal:
 		move.l	#Map_Mighty,mappings(a0)
-		bra.w	loc_10ADE
+		bsr.w	loc_10ADE
+		tst.b	double_jump_property(a0)
+		bne.w	MightyRay_TriangleJump
+		rts
 ; ---------------------------------------------------------------------------
 
 Mighty_HammerDrop:						; Liliam: extra skills - hammer drop
@@ -23181,6 +23184,149 @@ Mighty_HammerDrop_BossHit:					; Liliam: extra skills - hammer drop
 		rts
 ; ---------------------------------------------------------------------------
 
+MightyRay_TriangleJump_CheckAttach:				; Liliam: extra skills - triangle jump
+		btst	d1,(Skill_options).w
+		beq.s	.return
+		btst	#button_right,d0
+		beq.s	.checkLeft
+		bclr	#Status_Facing,render_flags(a0)
+		bclr	#Status_Facing,status(a0)
+		move.b	lrb_solid_bit(a0),d5
+		movem.l	a4-a6,-(sp)
+		bsr.w	CheckRightWallDist
+		movem.l	(sp)+,a4-a6
+		tst.w	d1
+		beq.s	.attach
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkLeft:
+		btst	#button_left,d0
+		beq.s	.return
+		bset	#Status_Facing,render_flags(a0)
+		bset	#Status_Facing,status(a0)
+		move.b	lrb_solid_bit(a0),d5
+		movem.l	a4-a6,-(sp)
+		bsr.w	CheckLeftWallDist
+		movem.l	(sp)+,a4-a6
+		tst.w	d1
+		bne.s	.return
+		addq.w	#1,x_pos(a0)
+
+	.attach:
+		addq.w	#4,sp
+		move.w	(Camera_min_Y_pos).w,d0
+		cmp.w	y_pos(a0),d0
+		bgt.s	.return
+		addq.w	#4,sp
+		clr.w	y_pos+2(a0)
+		tst.b	(Reverse_gravity_flag).w
+		bne.s	.activate
+		subi.l	#$2000,y_pos(a0)
+
+	.activate:
+		move.b	#$20,double_jump_property(a0)
+		move.b	#3,object_control(a0)
+		bclr	#Status_Roll,status(a0)
+		clr.b	(Ctrl_1_pressed_logical).w
+		clr.b	prev_anim(a0)
+		clr.b	jumping(a0)
+		clr.w	x_vel(a0)
+		move.w	#$40,y_vel(a0)
+		move.w	x_pos(a0),x_pos+2(a0)
+		move.w	y_pos(a0),ground_vel(a0)
+		move.b	#$EA,mapping_frame(a0)
+		bsr.w	Sonic_Load_PLC_Extra
+		moveq	#signextendB(sfx_Grab),d0
+		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
+MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
+		move.w	x_pos(a0),d0
+		cmp.w	x_pos+2(a0),d0
+		bne.s	.detach
+		move.w	y_pos(a0),d0
+		cmp.w	ground_vel(a0),d0
+		bne.s	.detach
+		jsr	(MoveSprite_TestGravity2).l
+		bsr.w	SonicKnux_DoLevelCollision
+		btst	#Status_InAir,status(a0)
+		beq.s	.return
+		move.w	y_pos(a0),ground_vel(a0)
+		subq.b	#1,double_jump_property(a0)
+		beq.s	.detach
+		move.b	(Ctrl_1_pressed_logical).w,d0
+		andi.b	#button_ABC_mask,d0
+		beq.s	.return
+		move.b	(Ctrl_1_held_logical).w,d0
+		andi.w	#button_up_mask|button_down_mask|button_left_mask|button_right_mask,d0
+		beq.s	.noInput
+		cmpi.b	#$B,d0
+		blo.s	.checkUp
+
+	.noInput:
+		moveq	#7,d0
+
+	.checkFlip:
+		btst	#Status_Facing,status(a0)
+		bne.s	.lookup
+		moveq	#3,d0
+
+	.lookup:
+		lsl.w	#2,d0
+		lea	MightyRay_TriangleJump_Speeds-4(pc,d0.w),a1
+		move.w	(a1)+,x_vel(a0)
+		move.w	(a1)+,y_vel(a0)
+		move.b	#1,jumping(a0)
+		btst	#Status_Underwater,status(a0)
+		beq.s	.detach
+		asr.w	#1,x_vel(a0)
+		asr.w	#1,y_vel(a0)
+
+	.detach:
+		bset	#Status_Roll,status(a0)
+		clr.b	double_jump_property(a0)
+		clr.b	object_control(a0)
+		clr.w	x_pos+2(a0)
+		clr.w	ground_vel(a0)
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
+	.checkUp:
+		btst	#button_up,d0
+		bne.s	.lookup
+		bset	#Status_Facing,status(a0)
+		bne.s	.checkLeft
+		btst	#button_right,d0
+		beq.s	.lookup
+		moveq	#5,d0
+		bra.s	.lookup
+; ---------------------------------------------------------------------------
+
+	.checkLeft:
+		btst	#button_left,d0
+		beq.s	.lookup
+		moveq	#9,d0
+		bra.s	.lookup
+; ---------------------------------------------------------------------------
+
+MightyRay_TriangleJump_Speeds:					; Liliam: extra skills - triangle jump
+		dc.w      0, -$600	; 01: up
+		dc.w      0,  $400	; 02: down
+		dc.w  -$400, -$380	; 03: no input
+		dc.w  -$700,     0	; 04: left
+		dc.w  -$500, -$600	; 05: left + up
+		dc.w  -$700,  $400	; 06: left + down
+		dc.w   $400, -$380	; 07: no input
+		dc.w   $700,     0	; 08: right
+		dc.w   $500, -$600	; 09: right + up
+		dc.w   $700,  $400	; 10: right + down
+; ---------------------------------------------------------------------------
+
 Obj_Ray:							; Liliam: add extra characters
 		move.l	#.main,(a0)
 		move.b	#5,character_id(a0)
@@ -23204,7 +23350,10 @@ Obj_Ray:							; Liliam: add extra characters
 
 Ray_Normal:
 		move.l	#Map_Ray,mappings(a0)
-		bra.w	loc_10ADE
+		bsr.w	loc_10ADE
+		tst.b	double_jump_property(a0)
+		bne.w	MightyRay_TriangleJump
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_MetalSonic:							; Liliam: add extra characters
@@ -24942,7 +25091,7 @@ Sonic_ShieldMoves:
 		bgt.s	loc_11908				;
 		tst.b	double_jump_property(a0)		; Liliam: extra skills - drop dash
 		beq.s	locret_118FE				;
-		move.b	(Ctrl_1_logical).w,d0			;
+		move.b	(Ctrl_1_held_logical).w,d0		;
 		andi.b	#button_ABC_mask,d0			;
 		bne.w	Sonic_DropDash_Charge			;
 		clr.b	double_jump_property(a0)		;
@@ -25136,7 +25285,7 @@ Amy_CheckMoves:							; Liliam: extra skills - hammer attack
 		andi.b	#button_right_mask|button_left_mask,d0
 		bne.s	.activate
 		btst	#button_up,(Ctrl_1_held_logical).w
-		bne.s	locret_11A14
+		bne.w	locret_11A14
 
 	.activate:
 		move.w	#-$380,d0
@@ -25161,6 +25310,8 @@ Mighty_CheckMoves:						; Liliam: extra skills - hammer drop
 		bne.s	locret_11A14
 
 	.activate:
+		moveq	#Skill_MightyWallJump,d1
+		bsr.w	MightyRay_TriangleJump_CheckAttach
 		move.b	#Status_HammerDrop,double_jump_flag(a0)
 		move.b	#$A,anim(a0)
 		move.w	#$600,y_vel(a0)
@@ -25175,6 +25326,15 @@ Mighty_CheckMoves:						; Liliam: extra skills - hammer drop
 ; ---------------------------------------------------------------------------
 
 Ray_CheckMoves:							; Liliam: extra skills - air glide
+		move.b	(Ctrl_1_held_logical).w,d0
+		andi.b	#button_right_mask|button_left_mask,d0
+		bne.s	.activate
+		btst	#button_up,(Ctrl_1_held_logical).w
+		bne.s	locret_11A14
+
+	.activate:
+		moveq	#Skill_RayWallJump,d1
+		bsr.w	MightyRay_TriangleJump_CheckAttach
 		st	double_jump_flag(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -25254,7 +25414,7 @@ Sonic_HyperDash:
 		move.b	#1,(Invincibility_stars+anim).w	; This causes the screen flash, and sparks to come out of Sonic
 		moveq	#signextendB(sfx_Dash),d0
 		jsr	(Play_SFX).l
-		move.b	(Ctrl_1_logical).w,d0
+		move.b	(Ctrl_1_held_logical).w,d0
 		andi.w	#button_up_mask|button_down_mask|button_left_mask|button_right_mask,d0	; Get D-pad input
 		beq.s	.noInput
 		; Any values totaling $B or above are produced by holding
@@ -28829,7 +28989,7 @@ loc_13B18:
 Tails_Catch_Up_Flying:
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - respawn partner character
 		bne.s	loc_13B50				;
-		move.b	(Ctrl_2_logical).w,d0
+		move.b	(Ctrl_2_held_logical).w,d0
 		andi.b	#button_ABC_mask|button_start_mask,d0
 		bne.s	loc_13B50
 		move.w	(Level_frame_counter).w,d0
@@ -33847,7 +34007,7 @@ Knuckles_Glide:
 		btst	#Status_Push,(Gliding_collision_flags).w
 		bne.w	Knuckles_Gliding_HitWall
 
-		move.b	(Ctrl_1_logical).w,d0
+		move.b	(Ctrl_1_held_logical).w,d0
 		andi.b	#button_ABC_mask,d0
 		bne.s	.continueGliding
 
@@ -34105,7 +34265,7 @@ Knuckles_Fall_From_Glide:
 ; ---------------------------------------------------------------------------
 
 Knuckles_Sliding:
-		move.b	(Ctrl_1_logical).w,d0
+		move.b	(Ctrl_1_held_logical).w,d0
 		andi.b	#button_ABC_mask,d0
 		beq.s	.getUp
 
@@ -34375,7 +34535,7 @@ loc_16BFA:
 		bne.s	.notClimbing_ReverseGravity		;
 		addi.w	#9,d2					;
 		move.b	top_solid_bit(a0),d5			;
-		bsr.w	sub_F828				;
+		jsr	(sub_F828).l				;
 		tst.w	d1					;
 		bpl.w	.resetAnim				;
 		bra.w	.reachedFloor				;
@@ -34441,7 +34601,8 @@ loc_16BFA:
 		move.w	y_pos(a0),d2
 		addi.w	#9,d2
 		move.w	x_pos(a0),d3
-		bsr.w	sub_F828
+		jsr	(sub_F828).l				; Liliam: fallout
+;		bsr.w	sub_F828				;
 
 		; Check if Knuckles has room below him.
 		tst.w	d1
@@ -34497,7 +34658,8 @@ loc_16BFA:
 		move.w	y_pos(a0),d2
 		addq.w	#8,d2
 		move.w	x_pos(a0),d3
-		bsr.w	sub_F828
+		jsr	(sub_F828).l				; Liliam: fallout
+;		bsr.w	sub_F828				;
 
 		; Check if Knuckles has room above him.
 		tst.w	d1
@@ -34710,7 +34872,8 @@ GetDistanceFromWall:
 
 ;.facingRight:
 		move.w	x_pos(a0),d3
-		bra.w	loc_FAA4
+		jmp	(loc_FAA4).l				; Liliam: fallout
+;		bra.w	loc_FAA4				;
 ; ---------------------------------------------------------------------------
 ; loc_16F62:
 .facingLeft:
@@ -35006,13 +35169,14 @@ loc_170CC:
 		tst.w	d1
 		bmi.w	Kill_Character
 		movem.l	a4-a6,-(sp)
-		bsr.w	CheckLeftWallDist
+		jsr	(CheckLeftWallDist).l			;
+;		bsr.w	CheckLeftWallDist			;
 		tst.w	d1
 		bpl.s	loc_17106
 		sub.w	d1,x_pos(a0)
 
 loc_17106:
-		jsr	(CheckRightWallDist).l			; Liliam: fallout
+		jsr	(CheckRightWallDist).l			;
 ;		bsr.w	CheckRightWallDist			;
 		tst.w	d1
 		bpl.s	loc_17112
@@ -35226,7 +35390,7 @@ loc_1732E:
 		move.w	#$C,d5
 
 loc_17338:
-		move.b	(Ctrl_1_logical).w,d0
+		move.b	(Ctrl_1_held_logical).w,d0
 		andi.b	#button_left_mask|button_right_mask,d0
 		bne.s	loc_17364
 		move.w	ground_vel(a0),d0
@@ -106457,7 +106621,7 @@ off_4BA90:
 ; ---------------------------------------------------------------------------
 
 RotatingSlotBonus_MdJump:					; Liliam: QOL - variable jump height in slot bonus
-		move.b	(Ctrl_1_logical).w,d0
+		move.b	(Ctrl_1_held_logical).w,d0
 		andi.b	#button_ABC_mask,d0
 		bne.s	RotatingSlotBonus_MdAir
 
@@ -106542,7 +106706,7 @@ loc_4BAC8:
 		bsr.w	sub_4BB84
 
 loc_4BAD4:
-		move.b	(Ctrl_1_logical).w,d0
+		move.b	(Ctrl_1_held_logical).w,d0
 		andi.b	#button_left_mask|button_right_mask,d0
 		bne.s	loc_4BB04
 		move.w	ground_vel(a0),d0
