@@ -4180,7 +4180,7 @@ zDoVolEnv:
 		; In order to get here, the flutter value would have to be:
 		; (1) negative;
 		; (2) not 80h, 81h or 83h.
-		; VolEnv_0A contains such a value, but luckily isn't used by any songs or sounds.
+		; VolEnv_0B contains such a value, but luckily isn't used by any songs or sounds.
 		ld	a, (bc)				; Get value from wherever the hell bc is pointing to
 		jr	zDoVolEnvSetValue		; Use this as new envelope index
 ; ---------------------------------------------------------------------------
@@ -4492,26 +4492,26 @@ ModEnv_07:	db    1,   2,   3,   4,   3,   2,   1,   0,  -1,  -2,  -3,  -4,  -3, 
 ; ===========================================================================
 ;z80_PSGTonePointers
 z80_VolEnvPointers:
-		dw	VolEnv_00,VolEnv_01,VolEnv_02,VolEnv_03,VolEnv_04,VolEnv_05
-		dw	VolEnv_06,VolEnv_07,VolEnv_08,VolEnv_09,VolEnv_0A,VolEnv_0B
-		dw	VolEnv_0C,VolEnv_0D,VolEnv_0E,VolEnv_0F,VolEnv_10,VolEnv_11
-		dw	VolEnv_12,VolEnv_13,VolEnv_14,VolEnv_15,VolEnv_16,VolEnv_17
-		dw	VolEnv_18,VolEnv_19,VolEnv_1A,VolEnv_1B,VolEnv_1C,VolEnv_1D
-		dw	VolEnv_1E,VolEnv_1F,VolEnv_20,VolEnv_21,VolEnv_22,VolEnv_23
-		dw	VolEnv_24,VolEnv_25,VolEnv_26
+		dw	VolEnv_01,VolEnv_02,VolEnv_03,VolEnv_04,VolEnv_05,VolEnv_06
+		dw	VolEnv_07,VolEnv_08,VolEnv_09,VolEnv_0A,VolEnv_0B,VolEnv_0C
+		dw	VolEnv_0D,VolEnv_0E,VolEnv_0F,VolEnv_10,VolEnv_11,VolEnv_12
+		dw	VolEnv_13,VolEnv_14,VolEnv_15,VolEnv_16,VolEnv_17,VolEnv_18
+		dw	VolEnv_19,VolEnv_1A,VolEnv_1B,VolEnv_1C,VolEnv_1D,VolEnv_1E
+		dw	VolEnv_1F,VolEnv_20,VolEnv_21,VolEnv_22,VolEnv_23,VolEnv_24
+		dw	VolEnv_25,VolEnv_26,VolEnv_27
 
-VolEnv_00:	db    2, 83h
-VolEnv_01:	db    0,   2,   4,   6,   8, 10h, 83h
-VolEnv_02:	db    2,   1,   0,   0,   1,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2
+VolEnv_01:	db    2, 83h
+VolEnv_02:	db    0,   2,   4,   6,   8, 10h, 83h
+VolEnv_03:	db    2,   1,   0,   0,   1,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2
 		db    2,   3,   3,   3,   4,   4,   4,   5, 81h
-VolEnv_03:	db    0,   0,   2,   3,   4,   4,   5,   5,   5,   6,   6, 81h
-VolEnv_04:	db    3,   0,   1,   1,   1,   2,   3,   4,   4,   5, 81h
-VolEnv_05:	db    0,   0,   1,   1,   2,   3,   4,   5,   5,   6,   8,   7,   7,   6, 81h
-VolEnv_06:	db    1, 0Ch,   3, 0Fh,   2,   7,   3, 0Fh, 80h
-VolEnv_07:	db    0,   0,   0,   2,   3,   3,   4,   5,   6,   7,   8,   9, 0Ah, 0Bh, 0Eh, 0Fh
+VolEnv_04:	db    0,   0,   2,   3,   4,   4,   5,   5,   5,   6,   6, 81h
+VolEnv_05:	db    3,   0,   1,   1,   1,   2,   3,   4,   4,   5, 81h
+VolEnv_06:	db    0,   0,   1,   1,   2,   3,   4,   5,   5,   6,   8,   7,   7,   6, 81h
+VolEnv_07:	db    1, 0Ch,   3, 0Fh,   2,   7,   3, 0Fh, 80h
+VolEnv_08:	db    0,   0,   0,   2,   3,   3,   4,   5,   6,   7,   8,   9, 0Ah, 0Bh, 0Eh, 0Fh
 		db  83h
-VolEnv_08:	db    3,   2,   1,   1,   0,   0,   1,   2,   3,   4, 81h
-VolEnv_09:	db    1,   0,   0,   0,   0,   1,   1,   1,   2,   2,   2,   3,   3,   3,   3,   4
+VolEnv_09:	db    3,   2,   1,   1,   0,   0,   1,   2,   3,   4, 81h
+VolEnv_0A:	db    1,   0,   0,   0,   0,   1,   1,   1,   2,   2,   2,   3,   3,   3,   3,   4
 		db    4,   4,   5,   5, 81h
 ; The -10h in this FM volume envelope appears to be erroneous:
 ; negative volume attenuations aren't supported, and instead
@@ -4521,43 +4521,43 @@ VolEnv_09:	db    1,   0,   0,   0,   0,   1,   1,   1,   2,   2,   2,   3,   3, 
 ; Oddly, this same envelope appears in Ristar (whose driver
 ; *does* support negative attenuations), despite SMPS 68k not
 ; supporting FM volume envelopes.
-VolEnv_0A:	db  10h, 20h, 30h, 40h, 30h, 20h, 10h,   0,-10h, 80h
-VolEnv_0B:	db    0,   0,   1,   1,   3,   3,   4,   5, 83h
-VolEnv_0C:	db    0, 81h
-VolEnv_0D:	db    2, 83h
-VolEnv_0E:	db    0,   2,   4,   6,   8, 10h, 83h
-VolEnv_0F:	db    9,   9,   9,   8,   8,   8,   7,   7,   7,   6,   6,   6,   5,   5,   5,   4
+VolEnv_0B:	db  10h, 20h, 30h, 40h, 30h, 20h, 10h,   0,-10h, 80h
+VolEnv_0C:	db    0,   0,   1,   1,   3,   3,   4,   5, 83h
+VolEnv_0D:	db    0, 81h
+VolEnv_0E:	db    2, 83h
+VolEnv_0F:	db    0,   2,   4,   6,   8, 10h, 83h
+VolEnv_10:	db    9,   9,   9,   8,   8,   8,   7,   7,   7,   6,   6,   6,   5,   5,   5,   4
 		db    4,   4,   3,   3,   3,   2,   2,   2,   1,   1,   1,   0,   0,   0, 81h
-VolEnv_10:	db    1,   1,   1,   0,   0,   0, 81h
-VolEnv_11:	db    3,   0,   1,   1,   1,   2,   3,   4,   4,   5, 81h
-VolEnv_12:	db    0,   0,   1,   1,   2,   3,   4,   5,   5,   6,   8,   7,   7,   6, 81h
-VolEnv_13:	db  0Ah,   5,   0,   4,   8, 83h
-VolEnv_14:	db    0,   0,   0,   2,   3,   3,   4,   5,   6,   7,   8,   9, 0Ah, 0Bh, 0Eh, 0Fh
+VolEnv_11:	db    1,   1,   1,   0,   0,   0, 81h
+VolEnv_12:	db    3,   0,   1,   1,   1,   2,   3,   4,   4,   5, 81h
+VolEnv_13:	db    0,   0,   1,   1,   2,   3,   4,   5,   5,   6,   8,   7,   7,   6, 81h
+VolEnv_14:	db  0Ah,   5,   0,   4,   8, 83h
+VolEnv_15:	db    0,   0,   0,   2,   3,   3,   4,   5,   6,   7,   8,   9, 0Ah, 0Bh, 0Eh, 0Fh
 		db  83h
-VolEnv_15:	db    3,   2,   1,   1,   0,   0,   1,   2,   3,   4, 81h
-VolEnv_16:	db    1,   0,   0,   0,   0,   1,   1,   1,   2,   2,   2,   3,   3,   3,   3,   4
+VolEnv_16:	db    3,   2,   1,   1,   0,   0,   1,   2,   3,   4, 81h
+VolEnv_17:	db    1,   0,   0,   0,   0,   1,   1,   1,   2,   2,   2,   3,   3,   3,   3,   4
 		db    4,   4,   5,   5, 81h
-VolEnv_17:	db  10h, 20h, 30h, 40h, 30h, 20h, 10h,   0, 10h, 20h, 30h, 40h, 30h, 20h, 10h,   0
+VolEnv_18:	db  10h, 20h, 30h, 40h, 30h, 20h, 10h,   0, 10h, 20h, 30h, 40h, 30h, 20h, 10h,   0
 		db  10h, 20h, 30h, 40h, 30h, 20h, 10h,   0, 80h
-VolEnv_18:	db    0,   0,   1,   1,   3,   3,   4,   5, 83h
-VolEnv_19:	db    0,   2,   4,   6,   8, 16h, 83h
-VolEnv_1A:	db    0,   0,   1,   1,   3,   3,   4,   5, 83h
-VolEnv_1B:	db    4,   4,   4,   4,   3,   3,   3,   3,   2,   2,   2,   2,   1,   1,   1,   1
+VolEnv_19:	db    0,   0,   1,   1,   3,   3,   4,   5, 83h
+VolEnv_1A:	db    0,   2,   4,   6,   8, 16h, 83h
+VolEnv_1B:	db    0,   0,   1,   1,   3,   3,   4,   5, 83h
+VolEnv_1C:	db    4,   4,   4,   4,   3,   3,   3,   3,   2,   2,   2,   2,   1,   1,   1,   1
 		db  83h
-VolEnv_1C:	db    0,   0,   0,   0,   1,   1,   1,   1,   2,   2,   2,   2,   3,   3,   3,   3
+VolEnv_1D:	db    0,   0,   0,   0,   1,   1,   1,   1,   2,   2,   2,   2,   3,   3,   3,   3
 		db    4,   4,   4,   4,   5,   5,   5,   5,   6,   6,   6,   6,   7,   7,   7,   7
 		db    8,   8,   8,   8,   9,   9,   9,   9, 0Ah, 0Ah, 0Ah, 0Ah, 81h
-VolEnv_1D:	db    0, 0Ah, 83h
-VolEnv_1E:	db    0,   2,   4, 81h
-VolEnv_1F:	db  30h, 20h, 10h,   0,   0,   0,   0,   0,   8, 10h, 20h, 30h, 81h
-VolEnv_20:	db    0,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   6,   6,   6,   8,   8
+VolEnv_1E:	db    0, 0Ah, 83h
+VolEnv_1F:	db    0,   2,   4, 81h
+VolEnv_20:	db  30h, 20h, 10h,   0,   0,   0,   0,   0,   8, 10h, 20h, 30h, 81h
+VolEnv_21:	db    0,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   6,   6,   6,   8,   8
 		db  0Ah, 83h
-VolEnv_21:	db    0,   2,   3,   4,   6,   7, 81h
-VolEnv_22:	db    2,   1,   0,   0,   0,   2,   4,   7, 81h
-VolEnv_23:	db  0Fh,   1,   5, 83h
-VolEnv_24:	db    8,   6,   2,   3,   4,   5,   6,   7,   8,   9, 0Ah, 0Bh, 0Ch, 0Dh, 0Eh, 0Fh
+VolEnv_22:	db    0,   2,   3,   4,   6,   7, 81h
+VolEnv_23:	db    2,   1,   0,   0,   0,   2,   4,   7, 81h
+VolEnv_24:	db  0Fh,   1,   5, 83h
+VolEnv_25:	db    8,   6,   2,   3,   4,   5,   6,   7,   8,   9, 0Ah, 0Bh, 0Ch, 0Dh, 0Eh, 0Fh
 		db  10h, 83h
-VolEnv_25:	db    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1
+VolEnv_26:	db    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1
 		db    1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3
 		db    3,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4,   4,   4,   4,   4
 		db    4,   4,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   6,   6,   6,   6
@@ -4569,7 +4569,7 @@ VolEnv_25:	db    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1, 
 	else
 		db    9,   9, 83h
 	endif
-VolEnv_26:	db    0,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5,   5, 83h
+VolEnv_27:	db    0,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5,   5, 83h
 
 ; ---------------------------------------------------------------------------
 ; ===========================================================================
