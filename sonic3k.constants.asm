@@ -71,6 +71,7 @@ stick_to_convex =	$3C ; byte ; used to make character stick to convex surfaces s
 spin_dash_flag =	$3D ; byte ; bit 1 indicates spin dash, bit 7 indicates forced roll
 spin_dash_counter =	$3E ; word
 jumping =		$40 ; byte
+AIZ_loop_timer =	$41 ; byte
 interact =		$42 ; word ; RAM address of the last object the character stood on
 default_y_radius =	$44 ; byte ; default value of y_radius
 default_x_radius =	$45 ; byte ; default value of x_radius
@@ -1848,8 +1849,8 @@ sfx_Rumble			ds.b 1		; $D7
 sfx_BigRumble			ds.b 1		; $D8
 sfx_DeathEggRiseLoud		ds.b 1		; $D9
 sfx_WindQuiet			ds.b 1		; $DA
-sfx_Rising			ds.b 1		; $DB
-sfx_UnknownFlutter2		ds.b 1		; $DC
+sfx_WindLoud			ds.b 1		; $DB
+sfx_Rising			ds.b 1		; $DC
 sfx_GumballTab			ds.b 1		; $DD
 sfx_DeathEggRiseQuiet		ds.b 1		; $DE
 sfx_TurbineHum			ds.b 1		; $DF

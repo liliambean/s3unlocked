@@ -1478,14 +1478,14 @@ Map_Ray_Skid4:
 		dc.b  $EA,  $B,   0,   0, $FF, $F3
 		dc.b  $F2,   3,   0,  $C,   0,  $B
 		dc.b   $A,   8,   0, $10, $FF, $F3
-Map_Ray_Fly1:
+Map_Ray_Fly2:
 		dc.w 5
 		dc.b  $E7,   3,   0,   0, $FF, $FA
 		dc.b  $EF,   5,   0,   4,   0,   2
 		dc.b  $F7,   6,   0,   8, $FF, $EA
 		dc.b  $FF,   0,   0,  $E,   0,   2
 		dc.b    7,   0,   0,  $F, $FF, $FA
-Map_Ray_Fly2:
+Map_Ray_Fly1:
 		dc.w 6
 		dc.b  $E7,   3,   0,   0, $FF, $FA
 		dc.b  $F7,   2,   0,   4, $FF, $F2

@@ -1522,14 +1522,14 @@ DPLC_Ray_Skid4:
 		dc.w $BF36
 		dc.w $3F42
 		dc.w $2F46
-DPLC_Ray_Fly1:
+DPLC_Ray_Fly2:
 		dc.w 5
 		dc.w $3F49
 		dc.w $3F4D
 		dc.w $5F51
 		dc.w $0F57
 		dc.w $0F58
-DPLC_Ray_Fly2:
+DPLC_Ray_Fly1:
 		dc.w 6
 		dc.w $3F59
 		dc.w $2F5D

@@ -2800,12 +2800,12 @@ GetSineCosine:
 
 GetSineCosine_Fine:
 		move.w	d0,d1				; Liliam: QOL - use high precision sine tables in slot bonus
-		addi.b	#$40,d1				;
 		add.w	d0,d0
 ;		addi.w	#$40*2,d0			;
 ;		move.w	SineTable(pc,d0.w),d1		;
 ;		subi.w	#$40*2,d0			;
 		move.w	SineTable(pc,d0.w),d0
+		addi.b	#$40,d1				;
 		add.w	d1,d1				;
 		move.w	SineTable(pc,d1.w),d1		;
 		rts
@@ -7884,8 +7884,27 @@ loc_6C04:
 ; ---------------------------------------------------------------------------
 
 Obj_ResetCollisionResponseList:
-		jsr	(Boss_DefeatEnemies).l			; Liliam: bugfix - kill enemies on boss start
+		tst.b	(Boss_flag).w				; Liliam: bugfix - kill enemies on boss start
+		ble.s	loc_6C2C				;
+		st	(Boss_flag).w				;
+		lea	(Collision_response_list).w,a4		;
+		move.w	(a4)+,d6				;
+		beq.s	locret_6C32				;
+
+	.loop:
+		movea.w	(a4)+,a1				;
+		move.b	collision_flags(a1),d0			;
+		beq.s	.nextObject				;
+		jsr	(HyperTouch_ChkValue.checkValue).l	;
+
+	.nextObject:
+		subq.w	#2,d6					;
+		bne.s	.loop					;
+
+loc_6C2C:
 		move.w	#0,(Collision_response_list).w
+
+locret_6C32:
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -19900,7 +19919,7 @@ Player_WalkVertR:
 		bpl.s	loc_EE22
 		cmpi.w	#-$E,d1
 		blt.s	loc_EE0E
-		tst.b	$41(a0)
+		tst.b	AIZ_loop_timer(a0)
 		bne.s	loc_EE02
 		add.w	d1,x_pos(a0)
 
@@ -19909,7 +19928,7 @@ locret_EE00:
 ; ---------------------------------------------------------------------------
 
 loc_EE02:
-		subq.b	#1,$41(a0)
+		subq.b	#1,AIZ_loop_timer(a0)
 		move.b	#$C0,angle(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -19918,7 +19937,7 @@ loc_EE0E:
 		tst.w	(Current_zone_and_act).w
 		bne.s	locret_EE00
 		move.b	#$C0,angle(a0)
-		move.b	#3,$41(a0)
+		move.b	#3,AIZ_loop_timer(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -22357,28 +22376,6 @@ ShieldTouch_Height:
 		rts
 ; End of function ShieldTouchResponse
 
-; ---------------------------------------------------------------------------
-
-Boss_DefeatEnemies:						; Liliam: bugfix - kill enemies on boss start
-		tst.b	(Boss_flag).w
-		ble.s	.return
-		st	(Boss_flag).w
-		lea	(Collision_response_list).w,a4
-		move.w	(a4)+,d6
-		beq.s	.return
-
-	.loop:
-		movea.w	(a4)+,a1
-		move.b	collision_flags(a1),d0
-		beq.s	.nextObject
-		bsr.s	HyperTouch_ChkValue.checkValue
-
-	.nextObject:
-		subq.w	#2,d6
-		bne.s	.loop
-
-	.return:
-		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -22944,7 +22941,6 @@ loc_10A8E:
 ; End of function sub_1094C
 
 ; ---------------------------------------------------------------------------
-
 	if VariableRollHeight
 TailsRollHeight = $B
 TailsRollHeightDiff = 4
@@ -22952,6 +22948,43 @@ TailsRollHeightDiff = 4
 TailsRollHeight = $E
 TailsRollHeightDiff = 1
 	endif
+
+Extra_Spindash_Release:						; Liliam: add extra characters
+		cmpi.b	#3,d0
+		beq.s	Amy_Spindash_Release
+		move.b	#$E,y_radius(a0)
+		move.b	#7,x_radius(a0)
+		move.b	#2,anim(a0)
+		addq.w	#5,y_pos(a0)
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	Amy_Spindash_Release.checkSpeed
+		subi.w	#2*5,y_pos(a0)
+		bra.s	Amy_Spindash_Release.checkSpeed
+; ---------------------------------------------------------------------------
+
+Amy_Spindash_Release:						; Liliam: add extra characters
+		move.b	#TailsRollHeight,y_radius(a0)
+		move.b	#7,x_radius(a0)
+		move.b	#2,anim(a0)
+		addq.w	#TailsRollHeightDiff,y_pos(a0)
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.checkSpeed
+		subi.w	#2*TailsRollHeightDiff,y_pos(a0)
+
+	.checkSpeed:
+		clr.b	spin_dash_flag(a0)
+		moveq	#0,d0
+		move.b	spin_dash_counter(a0),d0
+		add.w	d0,d0
+		lea	word_15320(pc),a1
+		tst.b	(Super_Sonic_Knux_flag).w
+		bne.s	.applySpeed
+		lea	word_1530E(pc),a1
+
+	.applySpeed:
+		move.w	(a1,d0.w),ground_vel(a0)
+		bra.w	loc_11CAC
+; ---------------------------------------------------------------------------
 
 Obj_Amy:							; Liliam: add extra characters
 		move.l	#.main,(a0)
@@ -23178,7 +23211,6 @@ Mighty_CheckMoves:						; Liliam: extra skills - hammer drop
 ; ---------------------------------------------------------------------------
 
 Mighty_HammerDrop:						; Liliam: extra skills - hammer drop
-		clr.b	double_jump_flag(a0)
 		lea	(Dust_P2).w,a6
 		cmpa.w	#Player_1,a0
 		bne.s	.createDust
@@ -23414,8 +23446,14 @@ Ray_Normal:
 Ray_CheckMoves_Return:
 		rts
 ; ---------------------------------------------------------------------------
+ability_timer = $2D
+glide_speed_cap = $28
+glide_anim_timer = $30
+glide_sfx_timer = $31
+AirGlide_Dive = 1
+AirGlide_AnimUp = 0
 
-Ray_CheckMoves:							; Liliam: extra skills - air glide
+Ray_CheckMoves:							; Liliam: extra skills - air glide (credit: Rubberduckycooly)
 		move.b	(Ctrl_1_held_logical).w,d0
 		andi.b	#button_right_mask|button_left_mask,d0
 		bne.s	.activate
@@ -23425,8 +23463,394 @@ Ray_CheckMoves:							; Liliam: extra skills - air glide
 	.activate:
 		moveq	#Skill_RayWallJump,d1
 		bsr.w	MightyRay_TriangleJump_CheckAttach
+		bclr	#Status_Roll,status(a0)
 		st	double_jump_flag(a0)
+		move.w	#$300,glide_anim_timer(a0)
+		move.b	#$F8,mapping_frame(a0)
+		addq.w	#4,sp
+
+		move.w	x_vel(a0),d0
+		move.w	d0,d1
+		asr.w	#3,d1
+		sub.w	d1,d0
+		move.w	d0,x_vel(a0)
+		btst	#Status_Facing,status(a0)
+		beq.s	.calcSpeed
+		neg.w	d0
+
+	.calcSpeed:
+		move.w	#$300,d1
+		cmp.w	d0,d1
+		ble.s	.checkControls
+		btst	#Status_Underwater,status(a0)
+		beq.s	.setSpeed
+		move.w	#$180,d1
+		cmp.w	d0,d1
+		ble.s	.checkControls
+
+	.setSpeed:
+		move.w	d1,x_vel(a0)
+		btst	#Status_Facing,status(a0)
+		beq.s	.checkControls
+		neg.w	x_vel(a0)
+
+	.checkControls:
+		bsr.w	Ray_AirGlide_CheckControls
+		clr.w	ground_vel(a0)
+		btst	#AirGlide_AnimUp,double_jump_flag(a0)
+		beq.s	.done
+		bclr	#AirGlide_Dive,double_jump_flag(a0)
+		asr.w	#1,x_vel(a0)
+		move.w	x_vel(a0),d0
+		bmi.s	.calcAbilitySpeed
+		neg.w	d0
+
+	.calcAbilitySpeed:
+		move.w	d0,d1
+		move.w	d0,d2
+		asr.w	#1,d0
+		asr.w	#2,d1
+		asr.w	#4,d2
+		add.w	d2,d0
+		add.w	d1,d0
+		btst	#Status_Underwater,status(a0)
+		beq.s	.setAbilitySpeed
+		asr.w	#1,d0
+
+	.setAbilitySpeed:
+		move.w	d0,ground_vel(a0)
+		cmpi.w	#$400,d0
+		ble.s	.done
+		move.w	#$400,ground_vel(a0)	; This seems impossible
+
+	.done:
+		asr.w	#1,y_vel(a0)
+		move.b	#$40,angle(a0)
+		move.b	#$40,ability_timer(a0)
+		move.w	x_vel(a0),glide_speed_cap(a0)
+		bpl.s	.return
+		neg.w	glide_speed_cap(a0)
+
+	.return:
 		rts
+; ---------------------------------------------------------------------------
+
+Ray_AirGlide:							; Liliam: extra skills - air glide (credit: Rubberduckycooly)
+		btst	#AirGlide_Dive,double_jump_flag(a0)
+		bne.s	.isDiving
+		cmpi.b	#$70,angle(a0)
+		bge.s	.checkAbilitySpeed
+		addq.b	#8,angle(a0)
+		bra.s	.checkAbilitySpeed
+; ---------------------------------------------------------------------------
+
+	.isDiving:
+		cmpi.b	#$10,angle(a0)
+		ble.s	.checkAbilitySpeed
+		subq.b	#8,angle(a0)
+
+	.checkAbilitySpeed:
+		move.w	ground_vel(a0),d0
+		beq.s	.noAbilitySpeed
+		move.w	d0,d1
+		asr.w	#1,d1
+		btst	#Status_Underwater,status(a0)
+		bne.s	.setYSpeed
+		asr.w	#1,d1
+
+	.setYSpeed:
+		add.w	d1,y_vel(a0)
+		cmp.w	y_vel(a0),d0
+		ble.s	.checkLimit
+		move.w	d0,y_vel(a0)
+		clr.w	ground_vel(a0)
+		bra.s	.checkLimit
+; ---------------------------------------------------------------------------
+
+	.noAbilitySpeed:
+		moveq	#0,d0
+		move.b	angle(a0),d0
+		lsl.w	#1,d0
+		move.b	angle(a0),d0		; Technically this could be lsr.b #2,d0
+		asr.b	#1,d0			; because angle is never negative
+		jsr	(GetSineCosine_Fine).l
+		lsl.w	#1,d1
+		moveq	#$18,d0
+		btst	#Status_Underwater,status(a0)
+		bne.s	.applyGravity
+		moveq	#$38,d0
+
+	.applyGravity:
+		muls.w	d0,d1
+		moveq	#9,d0
+		asr.w	d0,d1
+		add.w	d1,y_vel(a0)
+
+	.checkLimit:
+		cmpi.w	#-$600,y_vel(a0)
+		bge.s	.checkLimit2
+		move.w	#-$600,y_vel(a0)
+
+	.checkLimit2:
+		btst	#AirGlide_Dive,double_jump_flag(a0)
+		bne.s	.calcAcceleration
+		cmpi.w	#$100,y_vel(a0)
+		ble.s	.calcAcceleration
+		move.w	y_vel(a0),d0
+		asr.w	#2,d0
+		sub.w	d0,y_vel(a0)
+
+	.calcAcceleration:
+		moveq	#$50,d0
+		sub.b	angle(a0),d0
+		jsr	(GetSineCosine).l
+		muls.w	#22,d0
+		asr.l	#8,d0
+		move.w	glide_speed_cap(a0),d1
+		move.w	y_vel(a0),d2
+		bgt.s	.isFalling
+		sub.w	d0,glide_speed_cap(a0)
+		cmpi.w	#$400,d1
+		bgt.s	.adjustAcceleration
+		move.w	#$400,d1
+		bra.s	.setSpeedCap
+; ---------------------------------------------------------------------------
+
+	.isFalling:
+		cmp.w	d2,d1
+		bge.s	.adjustAcceleration
+		move.w	d2,d1
+		asr.w	#6,d2
+		sub.w	d2,d1
+
+	.setSpeedCap:
+		move.w	d1,glide_speed_cap(a0)
+
+	.adjustAcceleration:
+		btst	#Status_Underwater,status(a0)
+		beq.s	.checkDirection
+		asr.w	#1,d0
+
+	.checkDirection:
+		tst.w	x_vel(a0)
+		beq.s	.checkControls		; This seems impossible
+		btst	#Status_Facing,status(a0)
+		beq.s	.facingRight
+		neg.w	d1
+		sub.w	d0,x_vel(a0)
+		cmpi.w	#-$100,x_vel(a0)
+		ble.s	.checkLimit3
+		move.w	#-$100,x_vel(a0)
+
+	.checkLimit3:
+		cmp.w	x_vel(a0),d1
+		ble.s	.checkControls
+		move.w	d1,x_vel(a0)
+		bra.s	.checkControls
+; ---------------------------------------------------------------------------
+
+	.facingRight:
+		add.w	d0,x_vel(a0)
+		cmpi.w	#$100,x_vel(a0)
+		bge.s	.checkLimit4
+		move.w	#$100,x_vel(a0)
+
+	.checkLimit4:
+		cmp.w	x_vel(a0),d1
+		bge.s	.checkControls
+		move.w	d1,x_vel(a0)
+
+	.checkControls:
+		bsr.w	Ray_AirGlide_CheckControls
+		btst	#AirGlide_AnimUp,double_jump_flag(a0)
+		bne.s	.checkStartSwoop
+		cmpi.b	#$70,angle(a0)
+		bne.w	.done
+		btst	#AirGlide_Dive,double_jump_flag(a0)
+		bne.w	.done
+		bset	#AirGlide_Dive,double_jump_flag(a0)
+		clr.w	ground_vel(a0)
+		bra.w	.done
+; ---------------------------------------------------------------------------
+
+	.checkStartSwoop:
+		cmpi.b	#$10,angle(a0)
+		bne.s	.done
+		btst	#AirGlide_Dive,double_jump_flag(a0)
+		beq.s	.done
+		bclr	#AirGlide_Dive,double_jump_flag(a0)
+		cmpi.w	#$280,y_vel(a0)
+		bgt.s	.updateAbilitySpeed
+		cmpi.b	#$40,ability_timer(a0)
+		beq.s	.updateAbilitySpeed
+		btst	#Status_Underwater,status(a0)
+		beq.s	.done
+		cmpi.w	#$180,y_vel(a0)
+		ble.s	.done
+
+	.updateAbilitySpeed:
+		move.w	x_vel(a0),d0
+		bmi.s	.calcAbilitySpeed
+		neg.w	d0
+
+	.calcAbilitySpeed:
+		move.w	d0,d1
+		move.w	d0,d2
+		asr.w	#1,d0
+		asr.w	#2,d1
+		asr.w	#4,d2
+		add.w	d2,d0
+		add.w	d1,d0
+		moveq	#0,d1
+		move.b	ability_timer(a0),d1
+		lsl.w	#2,d1
+		muls.w	d1,d0
+		asr.l	#8,d0
+		btst	#Status_Underwater,status(a0)
+		beq.s	.setAbilitySpeed
+		move.w	d0,d1
+		asr.w	#1,d1
+		asr.w	#3,d0
+		add.w	d1,d0
+
+	.setAbilitySpeed:
+		move.w	d0,ground_vel(a0)
+		cmpi.b	#4,ability_timer(a0)
+		ble.s	.checkLimit5
+		subq.b	#8,ability_timer(a0)
+
+	.checkLimit5:
+		cmpi.w	#-$600,ground_vel(a0)
+		bge.s	.done
+		move.w	#-$600,ground_vel(a0)
+
+	.done:
+		bsr.w	Player_LevelBound
+		jsr	(MoveSprite_TestGravity2).l
+		bset	#Status_Roll,status(a0)
+		bsr.w	SonicKnux_DoLevelCollision
+		bclr	#Status_Roll,status(a0)
+		beq.s	.return
+		tst.w	x_vel(a0)
+		beq.s	.hitWall
+		move.b	(Ctrl_1_held_logical).w,d0
+		andi.b	#button_ABC_mask,d0
+		beq.s	.cancelGlide
+		move.w	(Camera_min_Y_pos).w,d0
+		cmp.w	y_pos(a0),d0
+		ble.s	.return
+
+	.cancelGlide:
+		clr.b	prev_anim(a0)
+		tst.b	double_jump_flag(a0)
+		beq.s	.return
+		move.b	#2,double_jump_flag(a0)
+		cmpi.b	#2,anim(a0)
+		bne.s	.return
+		bset	#Status_Roll,status(a0)
+		tst.b	(Super_Sonic_Knux_flag).w
+		bpl.s	.return
+		clr.b	double_jump_flag(a0)
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
+	.hitWall:
+		bsr.s	.cancelGlide
+		bsr.s	.setUpTriangleJump
+		rts
+; ---------------------------------------------------------------------------
+
+	.setUpTriangleJump:
+		moveq	#Skill_RayWallJump,d1
+		moveq	#button_left_mask,d0
+		btst	#Status_Facing,status(a0)
+		bne.s	.checkAttach
+		moveq	#button_right_mask,d0
+
+	.checkAttach:
+		bsr.w	MightyRay_TriangleJump_CheckAttach
+		rts
+; ---------------------------------------------------------------------------
+
+Ray_AirGlide_TouchFloor:					; Liliam: extra skills - air glide
+		clr.b	double_jump_flag(a0)
+		clr.b	anim(a0)
+		rts
+; ---------------------------------------------------------------------------
+
+Ray_AirGlide_CheckControls:					; Liliam: extra skills - air glide
+		move.b	#1,anim_frame_timer(a0)
+		move.b	(Ctrl_1_held_logical).w,d0
+		andi.b	#button_right_mask|button_left_mask,d0
+		beq.s	.setAnimation
+		lsr.b	#button_right-AirGlide_AnimUp,d0
+		btst	#Status_Facing,status(a0)
+		beq.s	.checkUpdate
+		eori.b	#1<<AirGlide_AnimUp,d0
+
+	.checkUpdate:
+		move.b	double_jump_flag(a0),d1
+		ori.b	#1<<AirGlide_AnimUp,d1
+		eor.b	d1,d0
+		cmp.b	double_jump_flag(a0),d0
+		beq.s	.setAnimation
+		move.b	d0,double_jump_flag(a0)
+		clr.w	glide_anim_timer(a0)
+		cmpi.b	#$F8-5,mapping_frame(a0)
+		bne.s	.checkLimit
+		addq.b	#1,mapping_frame(a0)
+		bra.s	.setAnimation
+; ---------------------------------------------------------------------------
+
+	.checkLimit:
+		cmpi.b	#$F8+5,mapping_frame(a0)
+		bne.s	.setAnimation
+		subq.b	#1,mapping_frame(a0)
+
+	.setAnimation:
+		btst	#AirGlide_AnimUp,double_jump_flag(a0)
+		beq.s	.isDiving
+		moveq	#signextendB(sfx_WindQuiet),d0
+		subq.b	#1,glide_anim_timer(a0)
+		bpl.s	.checkPlaySFX
+		subq.b	#1,mapping_frame(a0)
+		cmpi.b	#$F8-5,mapping_frame(a0)
+		bhs.s	.loadPLC
+		addq.b	#2,mapping_frame(a0)
+		bra.s	.loadPLC
+; ---------------------------------------------------------------------------
+
+	.isDiving:
+		moveq	#signextendB(sfx_WindLoud),d0
+		subq.b	#1,glide_anim_timer(a0)
+		bpl.s	.checkPlaySFX
+		addq.b	#1,mapping_frame(a0)
+		cmpi.b	#$F8+5,mapping_frame(a0)
+		bls.s	.loadPLC
+		subq.b	#2,mapping_frame(a0)
+
+	.loadPLC:
+		move.w	d0,-(sp)
+		bsr.w	Sonic_Load_PLC_Extra
+		move.w	(sp)+,d0
+		move.b	#2,glide_anim_timer(a0)
+
+	.checkPlaySFX:
+		btst	#Status_Underwater,status(a0)
+		beq.s	.playSFX
+		clr.b	glide_sfx_timer(a0)
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
+	.playSFX:
+		subq.b	#1,glide_sfx_timer(a0)
+		bpl.s	.return
+		move.b	#$F,glide_sfx_timer(a0)
+		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
 Obj_MetalSonic:							; Liliam: add extra characters
@@ -24063,6 +24487,8 @@ Call_Player_AnglePos:
 ; Called if Sonic is airborne, but not in a ball (thus, probably not jumping)
 
 Sonic_MdAir:
+		tst.b	double_jump_flag(a0)			; Liliam: extra skills - air glide
+		bmi.w	Ray_AirGlide				;
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Player_LevelBound
@@ -25744,43 +26170,6 @@ locret_11DA4:
 ; End of function SonicKnux_Spindash
 
 ; ---------------------------------------------------------------------------
-
-Extra_Spindash_Release:						; Liliam: add extra characters
-		cmpi.b	#3,d0
-		beq.s	Amy_Spindash_Release
-		move.b	#$E,y_radius(a0)
-		move.b	#7,x_radius(a0)
-		move.b	#2,anim(a0)
-		addq.w	#5,y_pos(a0)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	Amy_Spindash_Release.checkSpeed
-		subi.w	#2*5,y_pos(a0)
-		bra.s	Amy_Spindash_Release.checkSpeed
-; ---------------------------------------------------------------------------
-
-Amy_Spindash_Release:						; Liliam: add extra characters
-		move.b	#TailsRollHeight,y_radius(a0)
-		move.b	#7,x_radius(a0)
-		move.b	#2,anim(a0)
-		addq.w	#TailsRollHeightDiff,y_pos(a0)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.checkSpeed
-		subi.w	#2*TailsRollHeightDiff,y_pos(a0)
-
-	.checkSpeed:
-		clr.b	spin_dash_flag(a0)
-		moveq	#0,d0
-		move.b	spin_dash_counter(a0),d0
-		add.w	d0,d0
-		lea	word_15320(pc),a1
-		tst.b	(Super_Sonic_Knux_flag).w
-		bne.s	.applySpeed
-		lea	word_1530E(pc),a1
-
-	.applySpeed:
-		move.w	(a1,d0.w),ground_vel(a0)
-		bra.w	loc_11CAC
-; ---------------------------------------------------------------------------
 ; Subroutine to slow Sonic walking up a slope
 ; ---------------------------------------------------------------------------
 
@@ -26513,19 +26902,21 @@ Player_TouchFloor2:
 ;		btst	#Status_BublShield,status_secondary(a0)	;
 ;		beq.s	loc_1222A				;
 ;		bsr.s	BubbleShield_Bounce			;
-		cmpi.b	#Status_BublShield,double_jump_flag(a0)	;
+		move.b	double_jump_flag(a0),d0			; Liliam: extra skills - air glide
+		bmi.w	Ray_AirGlide_TouchFloor			;
+
+;loc_1222A:
+		move.b	#0,double_jump_flag(a0)
+		cmpi.b	#Status_BublShield,d0			; Liliam: simplify double jump selection
 		beq.s	BubbleShield_Bounce			;
-		cmpi.b	#Status_HammerDrop,double_jump_flag(a0)	; Liliam: extra skills - hammer drop
-		bne.s	loc_1222A				;
+		cmpi.b	#Status_HammerDrop,d0			; Liliam: extra skills - hammer drop
+		bne.s	locret_12230				;
 		cmpi.b	#State_Hurt,routine(a0)			;
-		bhs.s	loc_1222A				;
+		bhs.s	locret_12230				;
 		bsr.s	BubbleShield_CheckOnObj			;
 		bmi.w	Mighty_HammerDrop			;
 
-loc_1222A:
-		move.b	#0,double_jump_flag(a0)
-
-;locret_12230:
+locret_12230:
 		rts
 ; End of function Player_TouchFloor
 
@@ -26555,8 +26946,7 @@ BubbleShield_CheckOnObj:					; Liliam: bugfix - release player from object
 
 BubbleShield_Bounce:
 		bsr.s	BubbleShield_CheckOnObj			; Liliam: bugfix - release player from object
-		bpl.s	loc_1222A				;
-		clr.b	double_jump_flag(a0)			;
+		bpl.s	locret_12230				;
 		movem.l	d1-d2,-(sp)
 		move.w	#$780,d2
 		btst	#Status_Underwater,status(a0)
@@ -34560,7 +34950,7 @@ loc_16BFA:
 .notClimbing_ReverseGravity:
 		subq.w	#8,d2					; Liliam: bugfix - Knuckles climbing animation
 		move.b	lrb_solid_bit(a0),d5			;
-		bsr.w	CheckCeilingDist_WithRadius		;
+		jsr	(CheckCeilingDist_WithRadius).l		;
 		tst.w	d1					;
 		bpl.w	.resetAnim				;
 		neg.w	d1					;
@@ -34901,7 +35291,8 @@ GetDistanceFromWall:
 .facingLeft:
 		move.w	x_pos(a0),d3
 		subq.w	#1,d3
-		bra.w	loc_FDC8
+		jmp	(loc_FDC8).l				; Liliam: fallout
+;		bra.w	loc_FDC8				;
 ; End of function GetDistanceFromWall
 
 ; ---------------------------------------------------------------------------
@@ -39768,8 +40159,7 @@ Obj_EncoreHelper:						; Liliam: Encore mode - player swap
 		move.w	d1,Encore_HUD_stocks_frame-Reserved_object_3(a0)
 
 Obj_EncoreHelper_Main:
-		jsr	(Boss_DefeatEnemies).l
-		clr.w	(Collision_response_list).w
+		jsr	(Obj_ResetCollisionResponseList).l
 		tst.w	Encore_HUD_stocks_scroll-Reserved_object_3(a0)
 		beq.s	.checkStocks
 		subq.w	#2,Encore_HUD_stocks_scroll-Reserved_object_3(a0)
@@ -43429,8 +43819,12 @@ MoveCameraY:
 		eor.w	d2,d0					;
 
 loc_1C132:
+		tst.b	double_jump_flag(a0)			; Liliam: extra skills - air glide
+		bmi.s	.checkGravity				;
 		btst	#Status_Roll,status(a0)
 		beq.s	loc_1C13C
+
+	.checkGravity:
 		moveq	#5,d1					; Liliam: bugfix - set correct camera height
 		sub.b	(Dust+$38).w,d1				;
 		tst.b	(Reverse_gravity_flag).w		;
@@ -136068,8 +136462,8 @@ locret_240B1A:
 S3CreditsText:													; Liliam: use S3 staff roll for hack credits
 		dc.w S3CreditsText_TitleCard-S3CreditsText
 		dc.w S3CreditsText_Author-S3CreditsText
-		dc.w S3CreditsText_SoundDriver-S3CreditsText
 		dc.w S3CreditsText_AdditionalGraphics-S3CreditsText
+		dc.w S3CreditsText_AdditionalCode-S3CreditsText
 		dc.w S3CreditsText_DisasmAuthor-S3CreditsText
 		dc.w S3CreditsText_DisasmContributors1-S3CreditsText
 		dc.w S3CreditsText_DisasmContributors2-S3CreditsText
@@ -136119,22 +136513,14 @@ S3CreditsText_TitleCard_Genesis:
 		even
 S3CreditsText_Author:
 		dc.w 2
-		dc.w $416
+		dc.w $414
 		dc.b "design_ programming",0
 		even
 		dc.w $512
-		dc.b "and additional graphics",0
+		dc.b "and original graphics",0
 		even
 		dc.w $70E
 		dc.b "L,IL,IAM  BRONZE",0
-		even
-S3CreditsText_SoundDriver:
-		dc.w 1
-		dc.w $50E
-		dc.b "upgraded s]^k sound driver",0
-		even
-		dc.w $716
-		dc.b "FLAMEWING",0
 		even
 S3CreditsText_AdditionalGraphics:
 		dc.w 3
@@ -136149,6 +136535,20 @@ S3CreditsText_AdditionalGraphics:
 		even
 		dc.w $992
 		dc.b "DELTA CONDUIT",0
+		even
+S3CreditsText_AdditionalCode:
+		dc.w 3
+		dc.w $28E
+		dc.b "ray air glide decompilation",0
+		even
+		dc.w $488
+		dc.b "RUBBERDUCKYCOOLY",0
+		even
+		dc.w $78E
+		dc.b "upgraded s]^k sound driver",0
+		even
+		dc.w $996
+		dc.b "FLAMEWING",0
 		even
 S3CreditsText_DisasmAuthor:
 		dc.w 2
@@ -136179,63 +136579,66 @@ S3CreditsText_DisasmContributors1:
 		dc.b "CLOWNACY",0
 		even
 		dc.w $B1E
-		dc.b "FILTER",0
+		dc.b "DEVON",0
 		even
 S3CreditsText_DisasmContributors2:
 		dc.w 5
 		dc.w $110
 		dc.b "disassembly contributors",0
 		even
-		dc.w $316
-		dc.b "FLAMEWING",0
+		dc.w $31E
+		dc.b "FILTER",0
 		even
 		dc.w $516
+		dc.b "FLAMEWING",0
+		even
+		dc.w $716
 		dc.b "FOURHAWK",0
 		even
-		dc.w $71C
+		dc.w $91C
 		dc.b "FRAGAG",0
 		even
-		dc.w $916
+		dc.w $B16
 		dc.b "GERBILSOFT",0
-		even
-		dc.w $B12
-		dc.b "INFERNO,GEAR",0
 		even
 S3CreditsText_DisasmContributors3:
 		dc.w 5
 		dc.w $110
 		dc.b "disassembly contributors",0
 		even
-		dc.w $316
+		dc.w $312
+		dc.b "INFERNO,GEAR",0
+		even
+		dc.w $516
 		dc.b "JMAN2050",0
 		even
-		dc.w $514
+		dc.w $714
 		dc.b "LAVAGAMING1",0
 		even
-		dc.w $70E
+		dc.w $90E
 		dc.b "L,IL,IAM  BRONZE",0
 		even
-		dc.w $91A
+		dc.w $B1A
 		dc.b "L,INNCAKI",0
 		even
-		dc.w $B12
-		dc.b "MAINMEMORY",0
-		even
 S3CreditsText_DisasmContributors4:
-		dc.w 4
-		dc.w $210
+		dc.w 5
+		dc.w $110
 		dc.b "disassembly contributors",0
 		even
-		dc.w $41A
-		dc.b "MALACH,I",0
+		dc.w $312
+		dc.b "MAINMEMORY",0
 		even
-		dc.w $610
+		dc.w $51C
+		dc.b "MALACHI",0
+		even
+		dc.w $710
 		dc.b "MARKEYJ,ESTER",0
 		even
-		dc.w $81A
+		dc.w $91A
 		dc.b "NATSUM,I",0
 		even
-		dc.w $A1C
+		dc.w $B1E
 		dc.b "NO,TAZ",0
 		even
 S3CreditsText_DisasmContributors5:
@@ -136249,7 +136652,7 @@ S3CreditsText_DisasmContributors5:
 		dc.w $616
 		dc.b "POKEPUNCH",0
 		even
-		dc.w $81C
+		dc.w $81E
 		dc.b "SHOBIZ",0
 		even
 		dc.w $A18
@@ -138366,7 +138769,7 @@ loc_5EB5C:
 
 Obj_SonicPlaneHead_TailsHead:
 		move.b	#$A,mapping_frame(a0)		; Liliam: animate Tails' head on the plane sprite
-		btst	#2,(V_int_run_count+3).w	;
+		btst	#2,(Level_frame_counter+1).w	;
 		beq.s	Obj_SonicPlaneHead_Main		;
 		move.b	#$B,mapping_frame(a0)		;
 
@@ -217339,6 +217742,7 @@ sub_92C54:
 		move.b	d0,object_control(a1)
 		move.b	d0,spin_dash_flag(a1)
 		move.b	d0,double_jump_flag(a1)			; Liliam: debug - clear flags
+		move.b	d0,angle(a1)				;
 		move.w	d0,x_vel(a1)
 		move.w	d0,y_vel(a1)
 		move.w	d0,ground_vel(a1)
