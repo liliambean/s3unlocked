@@ -36532,6 +36532,9 @@ Knux_Transform:
 		move.b	#-1,(Super_Sonic_Knux_flag).w		; set flag to Hyper Knuckles
 		move.l	#Obj_HyperSonicKnux_Trail,(Super_stars).w
 		move.b	#30,air_left(a0)				; Liliam: bugfix - replenish air on hyper transform
+		cmpi.b	#5,character_id(a0)				;
+		bne.s	.continued					;
+		move.l	#Obj_HyperRayBirds,(Invincibility_stars).w	;
 		bra.s	.continued
 ; ---------------------------------------------------------------------------
 
@@ -39504,9 +39507,18 @@ superTailsBirds_search_delay = $32
 superTailsBirds_angle = $34
 superTailsBirds_target_address = $42
 
+Obj_HyperRayBirds:						; Liliam: add extra characters
+		move.b	#7,anim_frame(a0)
+		move.l	#ArtUnc_HyperRayBirds,d1
+		bra.s	loc_1A176
+; ---------------------------------------------------------------------------
+
 Obj_SuperTailsBirds:
-		move.l	#ArtUnc_SuperTailsBirds,d1		; Liliam: cutscene knux - convert palette
+		move.b	#1,anim_frame(a0)			; Liliam: cutscene knux - convert palette
+		move.l	#ArtUnc_SuperTailsBirds,d1		;
 ;		lea	(ArtKosM_SuperTailsBirds).l,a1		;
+
+loc_1A176:
 		move.w	#tiles_to_bytes(ArtTile_Player_2),d2			; Liliam: use player 2 VRAM for Tails birds
 ;		move.w	#tiles_to_bytes(ArtTile_Player_1),d2			;
 		move.w	#$80,d3					;
@@ -39518,6 +39530,7 @@ Obj_SuperTailsBirds:
 
 	.loop:
 		move.l	#Obj_SuperTailsBirds_Init,(a1)
+		move.b	anim_frame(a0),anim_frame(a1)		; Liliam: add extra characters
 		move.b	d0,superTailsBirds_angle(a1)
 		addi.b	#$40,d0	; 90 degrees
 		lea	next_object(a1),a1
@@ -39545,9 +39558,9 @@ Obj_SuperTailsBirds_Init:
 		move.l	#Obj_SuperTailsBirds_Main,(a0)
 
 Obj_SuperTailsBirds_Main:
-		tst.b	(Super_Tails_flag).w
-		bmi.s	.tails_still_super			; Liliam: bugfix - give Sonic correct super form after credits
-;		bne.s	.tails_still_super			;
+		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Tails
+;		tst.b	(Super_Tails_flag).w				;
+		bne.s	.tails_still_super
 
 		; Tails has returned to normal - make the birds fly away
 		moveq	#0,d0
@@ -39570,20 +39583,17 @@ Obj_SuperTailsBirds_Main:
 	.move:
 		bsr.w	Obj_SuperTailsBirds_Move
 		addi.b	#2,superTailsBirds_angle(a0)
-		; Update which way the sprite faces
-		tst.w	x_vel(a0)
-		beq.s	.x_flip_done
-		bpl.s	.face_right
-
-		bset	#0,render_flags(a0)
-		bra.s	.x_flip_done
+;		tst.w	x_vel(a0)				; Liliam: QOL - improve animation on Tails birds
+;		beq.s	.x_flip_done				;
+;		bpl.s	.face_right				;
+;		bset	#Status_Facing,render_flags(a0)		;
+;		bra.s	.x_flip_done				;
 ; ---------------------------------------------------------------------------
 
-	.face_right:
-		bclr	#0,render_flags(a0)
+;	.face_right:
+;		bclr	#Status_Facing,render_flags(a0)		; Liliam: QOL - improve animation on Tails birds
 
-	.x_flip_done:
-		; Update whether the sprite should be upside down
+;	.x_flip_done:
 		andi.b	#~2,render_flags(a0)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.not_upside_down
@@ -39592,9 +39602,19 @@ Obj_SuperTailsBirds_Main:
 	.not_upside_down:
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	.timer_not_over
-		move.b	#1,anim_frame_timer(a0)
+		move.b	anim_frame(a0),anim_frame_timer(a0)	; Liliam: add extra characters
+;		move.b	#1,anim_frame_timer(a0)			;
 		addq.b	#1,mapping_frame(a0)
 		andi.b	#1,mapping_frame(a0)
+		tst.w	x_vel(a0)				; Liliam: QOL - improve animation on Tails birds
+		beq.s	.timer_not_over				;
+		bpl.s	.face_right				;
+		bset	#Status_Facing,render_flags(a0)		;
+		bra.s	.timer_not_over				;
+; ---------------------------------------------------------------------------
+
+	.face_right:
+		bclr	#Status_Facing,render_flags(a0)		; Liliam: QOL - improve animation on Tails birds
 
 	.timer_not_over:
 		jmp	(Draw_Sprite).l
@@ -197250,9 +197270,6 @@ CutsceneSkip_HPZSSResults:					; Liliam: cutscene skip - HPZ SS results
 		move.b	#GameMode_Level,(Game_mode).w
 		rts
 ; ---------------------------------------------------------------------------
-Map_CutsceneSkip:						; Liliam: cutscene skip object
-		include "General/Sprites/HUD Icon/Map - Cutscene Skip Hint.asm"
-; ---------------------------------------------------------------------------
 
 StartNewLevel_Alternate:					; Liliam: Encore mode - player starts
 		move.b	#1,(Alternate_start_flag).w
@@ -198175,6 +198192,9 @@ Give_SuperSonic:
 	.hyper:
 		move.l	#Obj_HyperSonicKnux_Trail,(Super_stars).w
 		move.b	#30,air_left(a1)				; Liliam: bugfix - replenish air on hyper transform
+		cmpi.b	#5,character_id(a1)				;
+		bne.s	.continued					;
+		move.l	#Obj_HyperRayBirds,(Invincibility_stars).w	;
 
 	.continued:
 		move.b	#$81,object_control(a1)					; Liliam: bugfix - player speeds fix
@@ -219371,6 +219391,8 @@ ArtKosM_HPZEncoreRobotnik:					; Liliam: HPZ - add Encore mode cutscene
 ; ---------------------------------------------------------------------------
 ArtUnc_Mighty:							; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Art/Mighty.bin"
+ArtUnc_HyperRayBirds:						; Liliam: add extra characters
+		binclude "General/Sprites/Sonic/Art/Hyper Ray Birds.bin"
 ArtUnc_CutsceneSkip:						; Liliam: cutscene skip object
 		binclude "General/Sprites/HUD Icon/Cutscene Skip Hint.bin"
 ArtUnc_CutsceneRobotnik:						; Liliam: Encore mode - use Robotnik for cutscenes
@@ -220242,6 +220264,8 @@ Map_LBZKnuxBomb:						; Liliam: reinsert S3 data
 DPLC_CutsceneKnux:						; Liliam: reinsert S3 data
 		; Liliam: Encore mode - special Knuckles art for palette
 		include "General/Sprites/Knuckles/Cutscene/DPLC - Cutscene Knuckles.asm"
+Map_CutsceneSkip:						; Liliam: cutscene skip object
+		include "General/Sprites/HUD Icon/Map - Cutscene Skip Hint.asm"
 Map_CutsceneRobotnik:							; Liliam: Encore mode - use Robotnik for cutscenes
 		include "General/Sprites/Robotnik/Map - Cutscene Main.asm"
 DPLC_CutsceneRobotnik:							; Liliam: Encore mode - use Robotnik for cutscenes
