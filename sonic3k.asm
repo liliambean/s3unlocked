@@ -15925,11 +15925,13 @@ SaveData_EncoreDefault:							; Liliam: Encore mode - save data
 		dc.w   $30C,   %1111111001000<<3,     0, $FFFC, %111110101100011
 		dc.w      7,    %111111000010<<3,     0,     0,       %110101010
 		dc.w  $8000,                1<<9,     0,     0,                0
+		dc.l      0,     0,     0
 		dc.w  SRAM_integrity
 	else
 		dc.w  $8000,  1<<9,     0,     0,     0
 		dc.w  $8000,  1<<9,     0,     0,     0
 		dc.w  $8000,  1<<9,     0,     0,     0
+		dc.l      0,     0,     0
 		dc.w  SRAM_integrity
 	endif
 ;SaveData_S3LevRef:
@@ -17495,11 +17497,11 @@ loc_D3B0:
 		movea.l	saveslot_save_pointer(a0),a1			;
 		move.w	SRAM_player_mode(a1),d1				;
 		lsr.w	#3,d1						;
-		moveq	#3,d0						;
+		moveq	#7,d0						;
 		and.b	d1,d0						;
 		mulu.w	#7,d0						;
 		lsr.w	#3,d1						;
-		andi.b	#3,d1						;
+		andi.b	#7,d1						;
 		add.b	d1,d0						;
 		bra.s	loc_D3CC					;
 ; ---------------------------------------------------------------------------

@@ -433,7 +433,7 @@ Encore_options			ds.b 1		; Liliam: Encore mode - palette
 Skill_options			ds.b 1		; Liliam: extra skills
 Unlock_flags			ds.b 1		; Liliam: options menu
 				ds.w 2		; Liliam: options menu
-Encore_saved_data		ds.b $2E	; Liliam: Encore mode - save game
+Encore_saved_data		ds.b $2E	; Liliam: Encore mode - save data
 Saved_data			ds.b $54		; saved data from 1 player mode
 Ring_status_table		ds.b $400		; 1 word per ring
 Ring_status_table_end =		*
@@ -1036,7 +1036,7 @@ Respawn_table_keep		ds.b 1			; if set, respawn table is not reset during level l
 			ds.w 1				; unused
 Saved_apparent_zone_and_act	ds.w 1
 Saved2_apparent_zone_and_act	ds.w 1
-Saved_encore_stocks		ds.l 1		; Liliam: Encore mode - save game
+Saved_encore_stocks		ds.l 1		; Liliam: Encore mode - save data
 Blue_spheres_current_stage	ds.b 4			; the layout parts that make up the current stage
 Blue_spheres_current_level	ds.l 1			; number shown at the top of the full game menu
 Blue_spheres_option		ds.b 1			; 0 = level, 1 = start, 2 = code
@@ -1080,9 +1080,9 @@ Cheat_input_counter2		ds.w 1			; progress entering cheat codes
 Competition_mode		ds.w 1
 P1_character			ds.b 1			; 0 = Sonic, 1 = Tails, 2 = Knuckles
 P2_character			ds.b 1
-Encore_stocks_packed		ds.w 1		; Liliam: Encore mode - save game
+Encore_stocks_packed		ds.w 1		; Liliam: Encore mode - save data
 Encore_available_chars		ds.b 1		; Liliam: Encore mode - character stock monitor
-Encore_unlocked_chars		ds.b 1		; Liliam: Encore mode - save game
+Encore_unlocked_chars		ds.b 1		; Liliam: Encore mode - save data
 
 CrossResetRAM_End =		*
 
