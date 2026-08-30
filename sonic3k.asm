@@ -192991,7 +192991,7 @@ AfterBoss_None:
 PLC_AfterMiniboss_AIZ: plrlistheader
 ;		plreq ArtTile_Monitors, ArtNem_Monitors		; Liliam: bugfix - stop double-loading AIZ2 PLCs
 ;		plreq ArtTile_AIZMisc2, ArtNem_AIZMisc2		;
-		plreq ArtTile_AIZSwingVine, ArtNem_AIZSwingVine			; Liliam: QOL - use high precision sine tables for AIZ vines
+		plreq ArtTile_AIZSwingVine, ArtNem_AIZSwingVine2		; Liliam: QOL - use high precision sine tables for AIZ vines
 ;		plreq ArtTile_AIZBackgroundTree, ArtNem_AIZSwingVine		;
 ;		plreq ArtTile_AIZBackgroundTree, ArtNem_AIZBackgroundTree	;
 		plreq ArtTile_Bubbles, ArtNem_Bubbles
@@ -217082,7 +217082,8 @@ PLC_AIZ1_End
 
 PLC_AIZ2: plrlistheader
 		plreq ArtTile_AIZMisc2, ArtNem_AIZMisc2
-		plreq ArtTile_AIZSwingVine, ArtNem_AIZSwingVine
+		plreq ArtTile_AIZSwingVine, ArtNem_AIZSwingVine2		; Liliam: bugfix - use safe colors for AIZ vines
+;		plreq ArtTile_AIZSwingVine, ArtNem_AIZSwingVine			;
 ;		plreq ArtTile_AIZBackgroundTree, ArtNem_AIZBackgroundTree	; Liliam: QOL - use high precision sine tables for AIZ vines
 		plreq ArtTile_Bubbles, ArtNem_Bubbles
 		plreq ArtTile_GrayButton, ArtNem_GrayButton
@@ -219547,6 +219548,9 @@ ArtNem_AIZFallingLog:						; Liliam: reinsert S3 data
 ArtNem_AIZMisc2:						; Liliam: reinsert S3 data
 		; Liliam: QOL - use high precision sine tables for AIZ vines
 		binclude "Levels/AIZ/Nemesis Art/Misc Art 2.bin"
+		even
+ArtNem_AIZSwingVine2:								; Liliam: bugfix - use safe colors for AIZ vines
+		binclude "Levels/AIZ/Nemesis Art/Swing Vine 2.bin"
 		even
 ArtNem_AIZ2BridgePost:								; Liliam: QOL - use high precision sine tables for AIZ vines
 		binclude "Levels/AIZ/Nemesis Art/Act 2 Bridge Post.bin"

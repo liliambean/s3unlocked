@@ -67,199 +67,199 @@ Map_AIZRideVine_:
 		dc.w Map_AIZRideVine_28C-Map_AIZRideVine_
 Map_AIZRideVine_84:
 		dc.w 1
-		dc.b    0,   1,   0, $2F, $FF, $F9
+		dc.b    0,   1, $40, $2F, $FF, $F9
 Map_AIZRideVine_8C:
 		dc.w 1
-		dc.b    0,   1,   0, $2D, $FF, $F9
+		dc.b    0,   1, $40, $2D, $FF, $F9
 Map_AIZRideVine_94:
 		dc.w 1
-		dc.b    0,   1,   0, $2B, $FF, $F9
+		dc.b    0,   1, $40, $2B, $FF, $F9
 Map_AIZRideVine_9C:
 		dc.w 1
-		dc.b    0,   1,   0, $29, $FF, $F9
+		dc.b    0,   1, $40, $29, $FF, $F9
 Map_AIZRideVine_A4:
 		dc.w 1
-		dc.b    0,   1,   0, $27, $FF, $F9
+		dc.b    0,   1, $40, $27, $FF, $F9
 Map_AIZRideVine_AC:
 		dc.w 1
-		dc.b    0,   1,   0, $25, $FF, $F9
+		dc.b    0,   1, $40, $25, $FF, $F9
 Map_AIZRideVine_B4:
 		dc.w 1
-		dc.b    0,   5,   0, $21, $FF, $F1
+		dc.b    0,   5, $40, $21, $FF, $F1
 Map_AIZRideVine_BC:
 		dc.w 1
-		dc.b    0,   5,   0, $1D, $FF, $F1
+		dc.b    0,   5, $40, $1D, $FF, $F1
 Map_AIZRideVine_C4:
 		dc.w 1
-		dc.b    0,   5,   0, $19, $FF, $F1
+		dc.b    0,   5, $40, $19, $FF, $F1
 Map_AIZRideVine_CC:
 		dc.w 1
-		dc.b    0,   5,   0, $15, $FF, $F1
+		dc.b    0,   5, $40, $15, $FF, $F1
 Map_AIZRideVine_D4:
 		dc.w 1
-		dc.b    0,   5,   0, $11, $FF, $F1
+		dc.b    0,   5, $40, $11, $FF, $F1
 Map_AIZRideVine_DC:
 		dc.w 1
-		dc.b    0,   4,   0,  $F, $FF, $F1
+		dc.b    0,   4, $40,  $F, $FF, $F1
 Map_AIZRideVine_E4:
 		dc.w 1
-		dc.b    0,   4,   0,  $D, $FF, $F1
+		dc.b    0,   4, $40,  $D, $FF, $F1
 Map_AIZRideVine_EC:
 		dc.w 1
-		dc.b    0,   4,   0,  $B, $FF, $F1
+		dc.b    0,   4, $40,  $B, $FF, $F1
 Map_AIZRideVine_F4:
 		dc.w 1
-		dc.b    0,   4,   0,   9, $FF, $F1
+		dc.b    0,   4, $40,   9, $FF, $F1
 Map_AIZRideVine_FC:
 		dc.w 1
-		dc.b    0,   4,   0,   7, $FF, $F1
+		dc.b    0,   4, $40,   7, $FF, $F1
 Map_AIZRideVine_104:
 		dc.w 1
-		dc.b    0,   4,   0,   5, $FF, $F1
+		dc.b    0,   4, $40,   5, $FF, $F1
 Map_AIZRideVine_10C:
 		dc.w 1
-		dc.b  $F9,   4, $10,   7, $FF, $F1
+		dc.b  $F9,   4, $50,   7, $FF, $F1
 Map_AIZRideVine_114:
 		dc.w 1
-		dc.b  $F9,   4, $10,   9, $FF, $F1
+		dc.b  $F9,   4, $50,   9, $FF, $F1
 Map_AIZRideVine_11C:
 		dc.w 1
-		dc.b  $F9,   4, $10,  $B, $FF, $F1
+		dc.b  $F9,   4, $50,  $B, $FF, $F1
 Map_AIZRideVine_124:
 		dc.w 1
-		dc.b  $F9,   4, $10,  $D, $FF, $F1
+		dc.b  $F9,   4, $50,  $D, $FF, $F1
 Map_AIZRideVine_12C:
 		dc.w 1
-		dc.b  $F9,   4, $10,  $F, $FF, $F1
+		dc.b  $F9,   4, $50,  $F, $FF, $F1
 Map_AIZRideVine_134:
 		dc.w 1
-		dc.b  $F1,   5, $10, $11, $FF, $F1
+		dc.b  $F1,   5, $50, $11, $FF, $F1
 Map_AIZRideVine_13C:
 		dc.w 1
-		dc.b  $F1,   5, $10, $15, $FF, $F1
+		dc.b  $F1,   5, $50, $15, $FF, $F1
 Map_AIZRideVine_144:
 		dc.w 1
-		dc.b  $F1,   5, $10, $19, $FF, $F1
+		dc.b  $F1,   5, $50, $19, $FF, $F1
 Map_AIZRideVine_14C:
 		dc.w 1
-		dc.b  $F1,   5, $10, $1D, $FF, $F1
+		dc.b  $F1,   5, $50, $1D, $FF, $F1
 Map_AIZRideVine_154:
 		dc.w 1
-		dc.b  $F1,   5, $10, $21, $FF, $F1
+		dc.b  $F1,   5, $50, $21, $FF, $F1
 Map_AIZRideVine_15C:
 		dc.w 1
-		dc.b  $F1,   1, $10, $25, $FF, $F9
+		dc.b  $F1,   1, $50, $25, $FF, $F9
 Map_AIZRideVine_164:
 		dc.w 1
-		dc.b  $F1,   1, $10, $27, $FF, $F9
+		dc.b  $F1,   1, $50, $27, $FF, $F9
 Map_AIZRideVine_16C:
 		dc.w 1
-		dc.b  $F1,   1, $10, $29, $FF, $F9
+		dc.b  $F1,   1, $50, $29, $FF, $F9
 Map_AIZRideVine_174:
 		dc.w 1
-		dc.b  $F1,   1, $10, $2B, $FF, $F9
+		dc.b  $F1,   1, $50, $2B, $FF, $F9
 Map_AIZRideVine_17C:
 		dc.w 1
-		dc.b  $F1,   1, $10, $2D, $FF, $F9
+		dc.b  $F1,   1, $50, $2D, $FF, $F9
 Map_AIZRideVine_184:
 		dc.w 1
-		dc.b  $F1,   1, $10, $2F, $FF, $F9
+		dc.b  $F1,   1, $50, $2F, $FF, $F9
 Map_AIZRideVine_18C:
 		dc.w 1
-		dc.b  $F1,   1, $18, $2D, $FF, $FF
+		dc.b  $F1,   1, $58, $2D, $FF, $FF
 Map_AIZRideVine_194:
 		dc.w 1
-		dc.b  $F1,   1, $18, $2B, $FF, $FF
+		dc.b  $F1,   1, $58, $2B, $FF, $FF
 Map_AIZRideVine_19C:
 		dc.w 1
-		dc.b  $F1,   1, $18, $29, $FF, $FF
+		dc.b  $F1,   1, $58, $29, $FF, $FF
 Map_AIZRideVine_1A4:
 		dc.w 1
-		dc.b  $F1,   1, $18, $27, $FF, $FF
+		dc.b  $F1,   1, $58, $27, $FF, $FF
 Map_AIZRideVine_1AC:
 		dc.w 1
-		dc.b  $F1,   1, $18, $25, $FF, $FF
+		dc.b  $F1,   1, $58, $25, $FF, $FF
 Map_AIZRideVine_1B4:
 		dc.w 1
-		dc.b  $F1,   5, $18, $21, $FF, $FF
+		dc.b  $F1,   5, $58, $21, $FF, $FF
 Map_AIZRideVine_1BC:
 		dc.w 1
-		dc.b  $F1,   5, $18, $1D, $FF, $FF
+		dc.b  $F1,   5, $58, $1D, $FF, $FF
 Map_AIZRideVine_1C4:
 		dc.w 1
-		dc.b  $F1,   5, $18, $19, $FF, $FF
+		dc.b  $F1,   5, $58, $19, $FF, $FF
 Map_AIZRideVine_1CC:
 		dc.w 1
-		dc.b  $F1,   5, $18, $15, $FF, $FF
+		dc.b  $F1,   5, $58, $15, $FF, $FF
 Map_AIZRideVine_1D4:
 		dc.w 1
-		dc.b  $F1,   5, $18, $11, $FF, $FF
+		dc.b  $F1,   5, $58, $11, $FF, $FF
 Map_AIZRideVine_1DC:
 		dc.w 1
-		dc.b  $F9,   4, $18,  $F, $FF, $FF
+		dc.b  $F9,   4, $58,  $F, $FF, $FF
 Map_AIZRideVine_1E4:
 		dc.w 1
-		dc.b  $F9,   4, $18,  $D, $FF, $FF
+		dc.b  $F9,   4, $58,  $D, $FF, $FF
 Map_AIZRideVine_1EC:
 		dc.w 1
-		dc.b  $F9,   4, $18,  $B, $FF, $FF
+		dc.b  $F9,   4, $58,  $B, $FF, $FF
 Map_AIZRideVine_1F4:
 		dc.w 1
-		dc.b  $F9,   4, $18,   9, $FF, $FF
+		dc.b  $F9,   4, $58,   9, $FF, $FF
 Map_AIZRideVine_1FC:
 		dc.w 1
-		dc.b  $F9,   4, $18,   7, $FF, $FF
+		dc.b  $F9,   4, $58,   7, $FF, $FF
 Map_AIZRideVine_204:
 		dc.w 1
-		dc.b    0,   4,   8,   5, $FF, $FF
+		dc.b    0,   4, $48,   5, $FF, $FF
 Map_AIZRideVine_20C:
 		dc.w 1
-		dc.b    0,   4,   8,   7, $FF, $FF
+		dc.b    0,   4, $48,   7, $FF, $FF
 Map_AIZRideVine_214:
 		dc.w 1
-		dc.b    0,   4,   8,   9, $FF, $FF
+		dc.b    0,   4, $48,   9, $FF, $FF
 Map_AIZRideVine_21C:
 		dc.w 1
-		dc.b    0,   4,   8,  $B, $FF, $FF
+		dc.b    0,   4, $48,  $B, $FF, $FF
 Map_AIZRideVine_224:
 		dc.w 1
-		dc.b    0,   4,   8,  $D, $FF, $FF
+		dc.b    0,   4, $48,  $D, $FF, $FF
 Map_AIZRideVine_22C:
 		dc.w 1
-		dc.b    0,   4,   8,  $F, $FF, $FF
+		dc.b    0,   4, $48,  $F, $FF, $FF
 Map_AIZRideVine_234:
 		dc.w 1
-		dc.b    0,   5,   8, $11, $FF, $FF
+		dc.b    0,   5, $48, $11, $FF, $FF
 Map_AIZRideVine_23C:
 		dc.w 1
-		dc.b    0,   5,   8, $15, $FF, $FF
+		dc.b    0,   5, $48, $15, $FF, $FF
 Map_AIZRideVine_244:
 		dc.w 1
-		dc.b    0,   5,   8, $19, $FF, $FF
+		dc.b    0,   5, $48, $19, $FF, $FF
 Map_AIZRideVine_24C:
 		dc.w 1
-		dc.b    0,   5,   8, $1D, $FF, $FF
+		dc.b    0,   5, $48, $1D, $FF, $FF
 Map_AIZRideVine_254:
 		dc.w 1
-		dc.b    0,   5,   8, $21, $FF, $FF
+		dc.b    0,   5, $48, $21, $FF, $FF
 Map_AIZRideVine_25C:
 		dc.w 1
-		dc.b    0,   1,   8, $25, $FF, $FF
+		dc.b    0,   1, $48, $25, $FF, $FF
 Map_AIZRideVine_264:
 		dc.w 1
-		dc.b    0,   1,   8, $27, $FF, $FF
+		dc.b    0,   1, $48, $27, $FF, $FF
 Map_AIZRideVine_26C:
 		dc.w 1
-		dc.b    0,   1,   8, $29, $FF, $FF
+		dc.b    0,   1, $48, $29, $FF, $FF
 Map_AIZRideVine_274:
 		dc.w 1
-		dc.b    0,   1,   8, $2B, $FF, $FF
+		dc.b    0,   1, $48, $2B, $FF, $FF
 Map_AIZRideVine_27C:
 		dc.w 1
-		dc.b    0,   1,   8, $2D, $FF, $FF
+		dc.b    0,   1, $48, $2D, $FF, $FF
 Map_AIZRideVine_284:
 		dc.w 1
-		dc.b  $FC,   8,   0,   0, $FF, $F4
+		dc.b  $FC,   8, $20,   0, $FF, $F4
 Map_AIZRideVine_28C:
 		dc.w 1
-		dc.b  $FC,   4,   0,   3, $FF, $F8
+		dc.b  $FC,   4, $40,   3, $FF, $F8
