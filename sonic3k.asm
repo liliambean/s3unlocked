@@ -7768,6 +7768,7 @@ loc_6AB8:
 
 		cmpi.w	#$D01,(Current_zone_and_act).w		; Liliam: Encore mode - player swap
 		beq.s	loc_6AD0				;
+		move.b	#1,(Disable_A_button_flag).w		;
 		move.l	#Obj_EncoreHelper,(Reserved_object_3).w	;
 
 loc_6AD0:
@@ -23059,6 +23060,53 @@ Obj_Amy:							; Liliam: add extra characters
 Amy_Normal:
 		move.l	#Map_Amy,mappings(a0)
 		bsr.w	loc_10ADE
+		move.b	(Disable_A_button_flag).w,d1
+		bpl.s	.checkHammerRush
+		addq.b	#1,d1
+		beq.s	.checkButton
+		addq.b	#1,d1
+		beq.s	.throwBuffered
+		move.b	d1,(Disable_A_button_flag).w
+
+	.checkButton:
+		tst.b	(Ctrl_1_locked).w
+		bne.s	.checkHammerRush
+		btst	#button_A,(Ctrl_1_pressed).w
+		beq.s	.checkHammerRush
+		cmpi.b	#8,anim(a0)
+		blo.s	.checkTimer
+		cmpi.b	#$A,anim(a0)
+		blo.s	.checkHammerRush
+		cmpi.b	#$16,anim(a0)
+		beq.s	.checkHammerRush
+
+	.checkTimer:
+		bclr	#0,d1
+		tst.b	d1
+		bne.s	.updateTimer
+
+	.throwBuffered:
+		moveq	#-1,d1
+		jsr	(AllocateObject).l
+		bne.s	.updateTimer
+		moveq	#-$1F,d1
+		move.l	#Obj_HyperAmyHammer,(a1)
+		move.w	x_pos(a0),x_pos(a1)
+		move.w	y_pos(a0),y_pos(a1)
+		move.w	x_vel(a0),x_vel(a1)
+		btst	#Status_Facing,status(a0)
+		beq.s	.checkGravity
+		bset	#0,render_flags(a1)
+
+	.checkGravity:
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.updateTimer
+		bset	#1,render_flags(a1)
+
+	.updateTimer:
+		move.b	d1,(Disable_A_button_flag).w
+
+	.checkHammerRush:
 		tst.b	double_jump_property(a0)
 		beq.s	Amy_CheckMoves_Return
 		tst.b	double_jump_flag(a0)
@@ -23408,7 +23456,7 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 
 	.lookup:
 		lsl.w	#2,d0
-		lea	MightyRay_TriangleJump_Speeds-4(pc,d0.w),a1
+		lea	MightyRay_TriangleJumpSpeeds-4(pc,d0.w),a1
 		move.w	(a1)+,x_vel(a0)
 		move.w	(a1)+,y_vel(a0)
 		move.b	#1,jumping(a0)
@@ -23445,8 +23493,7 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 		moveq	#9,d0
 		bra.s	.lookup
 ; ---------------------------------------------------------------------------
-
-MightyRay_TriangleJump_Speeds:					; Liliam: extra skills - triangle jump
+MightyRay_TriangleJumpSpeeds:					; Liliam: extra skills - triangle jump
 		dc.w      0, -$600	; 01: up
 		dc.w      0,  $400	; 02: down
 		dc.w  -$400, -$380	; 03: no input
@@ -24069,7 +24116,7 @@ Sonic_Control:
 		bne.s	loc_10BF0.controlP2			;
 		tst.w	(Debug_mode_flag).w		; is debug cheat enabled?
 		beq.s	loc_10BF0			; if not, branch
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - disable A button
+		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		bne.s	loc_10BCE				;
 		tst.b	(Super_ready_HUD_flag).w		;
 		bmi.s	loc_10BCE				;
@@ -24096,7 +24143,7 @@ loc_10BF0:
 		bne.s	loc_10BFC			; if yes, branch
 		move.w	(Ctrl_1).w,(Ctrl_1_logical).w	; copy new held buttons, to enable joypad control
 
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - disable A button
+		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		beq.s	loc_10BFC				;
 		cmpi.b	#8,anim(a0)				;
 		blo.s	.disable				;
@@ -25998,10 +26045,11 @@ SonicKnux_SuperHyper:
 		moveq	#2,d0						;
 
 	.revertToNormal:
-		move.b	d0,(Super_palette_status).w			;
 ;		move.b	#2,(Super_palette_status).w			;
+		move.b	d0,(Super_palette_status).w			;
 		move.w	#$1E,(Palette_frame).w
-		move.b	#0,(Palette_timer).w				;
+		clr.b	(Palette_timer).w				;
+		clr.b	(Disable_A_button_flag).w			; Liliam: Hyper Amy
 		move.b	#0,(Super_Sonic_Knux_flag).w
 		move.b	#0,(Super_Tails_flag).w
 		move.b	#-1,prev_anim(a0)			; Liliam: bugfix - fix stuck animation
@@ -29041,7 +29089,7 @@ Tails_Control:
 
 		tst.w	(Debug_mode_flag).w
 		beq.s	loc_13808
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - disable A button
+		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		bne.s	loc_137E0				;
 		tst.b	(Super_ready_HUD_flag).w		;
 		bmi.s	loc_137E0				;
@@ -29074,7 +29122,7 @@ loc_13808:
 		bne.s	loc_1384A
 
 		move.w	(Ctrl_1).w,d0				; Liliam: Encore mode - disable A button
-		tst.b	(Encore_mode).w				;
+		tst.b	(Disable_A_button_flag).w		;
 		beq.s	loc_13826				;
 		cmpi.b	#8,anim(a0)				;
 		blo.s	.disable				;
@@ -33604,9 +33652,15 @@ Tails_RingBarrier_Hold:
 		add.w	y_pos(a0),d1
 		move.w	d1,sub2_y_pos(a0)
 		andi.b	#button_ABC_mask,d2
-		beq.w	Tails_RingBarrier_Draw
+		beq.s	Tails_RingBarrier_Draw
 		move.b	#2,routine(a0)
-		bra.w	Tails_RingBarrier_Draw
+
+Tails_RingBarrier_Draw:
+		move.b	render_flags(a2),d0
+		andi.b	#3,d0
+		addi.b	#$2D,d0
+		move.b	d0,sub2_mapframe(a0)
+		rts
 ; ---------------------------------------------------------------------------
 
 Tails_RingBarrier_Spin:						; Liliam: extra skills - ring barrier
@@ -33718,23 +33772,28 @@ Tails_RingBarrier_Catch:					; Liliam: extra skills - ring barrier
 		addq.b	#4,routine(a0)
 
 Tails_RingBarrier_DrawTouch:
+		bsr.w	Tails_RingBarrier_Draw
+		move.w	sub2_x_pos(a0),d2
+		move.w	sub2_y_pos(a0),d3
+
+Tails_RingBarrier_Touch:
 		lea	(Dynamic_object_RAM).w,a1
 		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d6
 
 	.loop:
-		move.b	collision_flags(a1),d2
+		move.b	collision_flags(a1),d4
 		beq.s	.nextObject
-		cmpi.b	#$46,d2
+		cmpi.b	#$46,d4
 		beq.s	.checkWidth
-		andi.b	#$C0,d2
+		andi.b	#$C0,d4
 		beq.s	.checkWidth
-		cmpi.b	#$C0,d2
+		cmpi.b	#$C0,d4
 		beq.s	.checkWidth
 
 	.nextObject:
 		lea	next_object(a1),a1
 		dbf	d6,.loop
-		bra.s	Tails_RingBarrier_Draw
+		rts
 ; ---------------------------------------------------------------------------
 
 	.checkWidth:
@@ -33748,7 +33807,7 @@ Tails_RingBarrier_DrawTouch:
 		move.w	x_pos(a1),d0
 		addq.w	#8,d0
 		sub.w	d1,d0
-		sub.w	sub2_x_pos(a0),d0
+		sub.w	d2,d0
 		bhs.s	.checkRight
 		add.w	d1,d1
 		add.w	d1,d0
@@ -33766,7 +33825,7 @@ Tails_RingBarrier_DrawTouch:
 		move.w	y_pos(a1),d0
 		addq.w	#8,d0
 		sub.w	d1,d0
-		sub.w	sub2_y_pos(a0),d0
+		sub.w	d3,d0
 		bhs.s	.checkTop
 		add.w	d1,d1
 		add.w	d1,d0
@@ -33779,17 +33838,11 @@ Tails_RingBarrier_DrawTouch:
 		bhi.s	.nextObject
 
 	.checkType:
-		tst.b	d2
+		tst.b	d4
 		beq.w	Obj_SuperTailsBirds_GetDestination.enemy
 		bmi.w	HyperTouch_Special
 		move.b	#4,routine(a1)
 		move.w	#Player_1,parent(a1)
-
-Tails_RingBarrier_Draw:
-		move.b	render_flags(a2),d0
-		andi.b	#3,d0
-		addi.b	#$2D,d0
-		move.b	d0,sub2_mapframe(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -34107,7 +34160,7 @@ Knuckles_Control:
 		bne.s	loc_165A2.controlP2			;
 		tst.w	(Debug_mode_flag).w
 		beq.s	loc_165A2
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - disable A button
+		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		bne.s	loc_16580				;
 		tst.b	(Super_ready_HUD_flag).w		;
 		bmi.s	loc_16580				;
@@ -34134,7 +34187,7 @@ loc_165A2:
 		bne.s	loc_165AE
 		move.w	(Ctrl_1).w,(Ctrl_1_logical).w
 
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - disable A button
+		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		beq.s	loc_165AE				;
 		cmpi.b	#8,anim(a0)				;
 		blo.s	.disable				;
@@ -34969,7 +35022,8 @@ loc_16BFA:
 		move.w	y_pos(a0),d2
 		subi.w	#9,d2
 		move.w	x_pos(a0),d3
-		bsr.w	CheckCeilingDist_WithRadius
+		jsr	(CheckCeilingDist_WithRadius).l		;
+;		bsr.w	CheckCeilingDist_WithRadius		;
 
 		; Check if Knuckles has room below him.
 		tst.w	d1
@@ -36608,7 +36662,19 @@ Knux_Transform:
 		move.b	#-1,(Super_Sonic_Knux_flag).w		; set flag to Hyper Knuckles
 		move.l	#Obj_HyperSonicKnux_Trail,(Super_stars).w
 		move.b	#30,air_left(a0)				; Liliam: bugfix - replenish air on hyper transform
-		cmpi.b	#5,character_id(a0)				;
+
+		cmpi.b	#3,character_id(a0)				; Liliam: Hyper Amy
+		bne.s	.notAmy						;
+		bsr.s	.continued					;
+		st	(Disable_A_button_flag).w			;
+		move.l	#ArtUnc_HyperAmyHammer,d1			;
+		move.w	#tiles_to_bytes(ArtTile_Shield),d2		;
+		move.w	#$1B0,d3					;
+		jmp	(Add_To_DMA_Queue).l				;
+; ---------------------------------------------------------------------------
+
+	.notAmy:
+		cmpi.b	#5,character_id(a0)				; Liliam: Hyper Ray
 		bne.s	.continued					;
 		move.l	#Obj_HyperRayBirds,(Invincibility_stars).w	;
 		bra.s	.continued
@@ -39583,7 +39649,7 @@ superTailsBirds_search_delay = $32
 superTailsBirds_angle = $34
 superTailsBirds_target_address = $42
 
-Obj_HyperRayBirds:						; Liliam: add extra characters
+Obj_HyperRayBirds:							; Liliam: Hyper Ray
 		move.b	#7,anim_frame(a0)
 		move.l	#ArtUnc_HyperRayBirds,d1
 		bra.s	loc_1A176
@@ -39606,7 +39672,7 @@ loc_1A176:
 
 	.loop:
 		move.l	#Obj_SuperTailsBirds_Init,(a1)
-		move.b	anim_frame(a0),anim_frame(a1)		; Liliam: add extra characters
+		move.b	anim_frame(a0),anim_frame(a1)			; Liliam: Hyper Ray
 		move.b	d0,superTailsBirds_angle(a1)
 		addi.b	#$40,d0	; 90 degrees
 		lea	next_object(a1),a1
@@ -39634,7 +39700,7 @@ Obj_SuperTailsBirds_Init:
 		move.l	#Obj_SuperTailsBirds_Main,(a0)
 
 Obj_SuperTailsBirds_Main:
-		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Tails
+		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Ray
 ;		tst.b	(Super_Tails_flag).w				;
 		bne.s	.tails_still_super
 
@@ -39678,8 +39744,8 @@ Obj_SuperTailsBirds_Main:
 	.not_upside_down:
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	.timer_not_over
-		move.b	anim_frame(a0),anim_frame_timer(a0)	; Liliam: add extra characters
-;		move.b	#1,anim_frame_timer(a0)			;
+		move.b	anim_frame(a0),anim_frame_timer(a0)		; Liliam: Hyper Ray
+;		move.b	#1,anim_frame_timer(a0)				;
 		addq.b	#1,mapping_frame(a0)
 		andi.b	#1,mapping_frame(a0)
 		tst.w	x_vel(a0)				; Liliam: QOL - improve animation on Tails birds
@@ -39981,6 +40047,50 @@ HyperTouch_Whitelist:						; Liliam: hyper touch - only collide with enemies
 		; Liliam: removed unused data
 ; ---------------------------------------------------------------------------
 
+Obj_HyperAmyHammer:							; Liliam: Hyper Amy
+		move.l	#Obj_HyperAmyHammer_Main,(a0)
+		move.l	#Map_HyperAmyHammer,mappings(a0)
+		move.w	#make_art_tile(ArtTile_Shield,0,1),art_tile(a0)
+		move.b	#$C,width_pixels(a0)
+		move.b	#$C,height_pixels(a0)
+		ori.b	#4,render_flags(a0)
+		moveq	#signextendB(sfx_ChopTree),d0
+		jsr	(Play_SFX).l
+		subq.w	#2,x_pos(a0)
+		add.w	#$280,x_vel(a0)
+		move.w	#-$500,y_vel(a0)
+		btst	#0,render_flags(a0)
+		beq.w	Draw_Sprite
+		addq.w	#4,x_pos(a0)
+		sub.w	#$500,x_vel(a0)
+		bra.w	Draw_Sprite
+; ---------------------------------------------------------------------------
+
+Obj_HyperAmyHammer_Main:						; Liliam: Hyper Amy
+		move.w	x_pos(a0),d2
+		move.w	y_pos(a0),d3
+		bsr.w	Tails_RingBarrier_Touch
+		tst.w	d6
+		bpl.w	Delete_Current_Sprite
+		subq.b	#1,anim_frame_timer(a0)
+		bpl.w	Delete_Current_Sprite
+		bsr.w	Draw_Sprite
+		btst	#0,anim_frame_timer(a0)
+		bne.s	.checkGravity
+		addq.b	#1,mapping_frame(a0)
+		cmpi.b	#8,mapping_frame(a0)
+		blo.s	.checkGravity
+		clr.b	mapping_frame(a0)
+
+	.checkGravity:
+		btst	#1,render_flags(a0)
+		beq.w	MoveSprite
+		bra.w	MoveSprite_ReverseGravity
+; ---------------------------------------------------------------------------
+Map_HyperAmyHammer:							; Liliam: Hyper Amy
+		include "General/Sprites/Sonic/Map - Hyper Amy Hammer.asm"
+; ---------------------------------------------------------------------------
+
 Obj_HyperSonicKnux_Trail:
 ;		move.l	#Map_Knuckles,mappings(a0)		; Liliam: add extra characters
 ;		cmpi.w	#3,(Player_mode).w			;
@@ -40003,7 +40113,7 @@ loc_1A4AC:
 
 Obj_HyperSonicKnux_Trail_Main:
 		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - disable in debug mode
-		bne.s	locret_1A462				;
+		bne.w	locret_1A462				;
 		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Tails
 ;		tst.b	(Super_Sonic_Knux_flag).w			;
 		beq.w	Delete_Current_Sprite		; If so, branch and delete
@@ -95105,7 +95215,7 @@ loc_420A6:
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.b	#button_ABC_mask,d0
 		beq.s	locret_420FA				; Liliam: Encore mode - disable A button
-		tst.b	(Encore_mode).w				;
+		tst.b	(Disable_A_button_flag).w		;
 		beq.s	loc_420CA				;
 		andi.b	#button_B_mask|button_C_mask,d0		;
 		bne.s	loc_420CA
@@ -120668,7 +120778,7 @@ loc_53A5A:
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.w	#button_ABC_mask,d0
 		beq.s	locret_53AD2				; Liliam: Encore mode - disable A button
-		tst.b	(Encore_mode).w				;
+		tst.b	(Disable_A_button_flag).w		;
 		beq.s	loc_53A9C				;
 		andi.b	#button_B_mask|button_C_mask,d0		;
 		beq.s	locret_53AD2
@@ -198296,7 +198406,7 @@ Give_SuperSonic:
 		beq.w	.continued					;
 		move.l	#Obj_SuperSonic_Stars,(Super_stars).w		;
 		move.b	d1,(Super_Tails_flag).w				;
-		bpl.s	.continued					;
+		bpl.w	.continued					;
 		move.l	#Obj_SuperTailsBirds,(Invincibility_stars).w
 		move.l	#Obj_HyperTails_Trail,(Dust_P2).w		; Liliam: Hyper Tails
 		bra.s	.hyper						;
@@ -198330,7 +198440,19 @@ Give_SuperSonic:
 	.hyper:
 		move.l	#Obj_HyperSonicKnux_Trail,(Super_stars).w
 		move.b	#30,air_left(a1)				; Liliam: bugfix - replenish air on hyper transform
-		cmpi.b	#5,character_id(a1)				;
+
+		cmpi.b	#3,character_id(a1)				; Liliam: Hyper Amy
+		bne.s	.notAmy						;
+		bsr.s	.continued					;
+		st	(Disable_A_button_flag).w			;
+		move.l	#ArtUnc_HyperAmyHammer,d1			;
+		move.w	#tiles_to_bytes(ArtTile_Shield),d2		;
+		move.w	#$1B0,d3					;
+		jmp	(Add_To_DMA_Queue).l				;
+; ---------------------------------------------------------------------------
+
+	.notAmy:
+		cmpi.b	#5,character_id(a1)				; Liliam: Hyper Ray
 		bne.s	.continued					;
 		move.l	#Obj_HyperRayBirds,(Invincibility_stars).w	;
 
@@ -207958,7 +208080,8 @@ loc_8BF64:
 
 loc_8BF74:
 		lea	byte_8BFA8(pc),a1
-		jsr	Animate_RawNoSST(pc)
+		jsr	(Animate_RawNoSST).l			; Liliam: fallout
+;		jsr	Animate_RawNoSST(pc)			;
 		jmp	Sprite_CheckDeleteTouchXY(pc)
 
 ; =============== S U B R O U T I N E =======================================
@@ -219464,7 +219587,7 @@ ArtUnc_Tails:							; Liliam: reinsert S3 data
 		binclude "General/Sprites/Tails/Art/Tails.bin"
 ArtUnc_SuperTailsBirds:						; Liliam: cutscene knux - convert palette
 		binclude "General/Sprites/Tails/Art/Super Tails birds.bin"
-ArtUnc_HyperRayBirds:						; Liliam: add extra characters
+ArtUnc_HyperRayBirds:							; Liliam: Hyper Ray
 		binclude "General/Sprites/Sonic/Art/Hyper Ray Birds.bin"
 ArtUnc_HyperSonicStars:						; Liliam: cutscene knux - convert palette
 		binclude "General/Sprites/Sonic/Art/Hyper Sonic Stars.bin"
@@ -219514,7 +219637,7 @@ ArtUnc_EncoreKnux:						; Liliam: Encore mode - special Knuckles art for palette
 ; ---------------------------------------------------------------------------
 ArtUnc_Amy:							; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Art/Amy.bin"
-ArtUnc_HyperAmyHammer:						; Liliam: add extra characters
+ArtUnc_HyperAmyHammer:							; Liliam: Hyper Amy
 		binclude "General/Sprites/Sonic/Art/Hyper Amy Hammer.bin"
 ArtUnc_EncoreCapsule:						; Liliam: Encore mode - add extra levels
 		binclude "General/Sprites/Egg Capsule/Encore Capsule.bin"

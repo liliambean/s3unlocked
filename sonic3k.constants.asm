@@ -733,8 +733,9 @@ AIZ1_palette_cycle_flag		ds.b 1			; selects which palette cycles are used in AIZ
 Tails_CPU_palette_flag		ds.b 1		; Liliam: convert to 1P Ray palette
 Water_flag			ds.b 1
 Bonus_stage_flag		ds.b 1		; Liliam: Encore mode - bonus stage
+Disable_A_button_flag		ds.b 1		; Liliam: Encore mode - disable A button
 Encore_flags			ds.b 1		; Liliam: Encore mode - palette
-			ds.b $B				; unused
+			ds.b $A				; unused
 Flying_carrying_Sonic_flag	ds.b 1			; set when Tails carries Sonic in a Sonic and Tails game
 Flying_picking_Sonic_timer	ds.b 1			; until this is 0 Tails can't pick Sonic up
 _unkF740			ds.w 1
