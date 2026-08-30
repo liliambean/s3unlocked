@@ -22642,9 +22642,11 @@ loc_1070C:
 loc_10724:
 		move.b	#0,flips_remaining(a0)
 		move.b	#4,flip_speed(a0)
-		move.b	#0,(Super_Sonic_Knux_flag).w
+;		move.b	#0,(Super_Sonic_Knux_flag).w		; Liliam: competition - fix code path for jump moves
 		move.b	#30,air_left(a0)
-		bsr.w	Reset_Player_Position_Array
+		move.w	#0,(Tails_CPU_routine).w		;
+		move.w	#10*60,(Tails_CPU_idle_timer).w		;
+;		bsr.w	Reset_Player_Position_Array		;
 
 Sonic2P_Control:
 		tst.w	(Debug_mode_flag).w
@@ -25692,11 +25694,8 @@ Sonic_ShieldMoves:
 
 loc_11908:
 		move.b	(Ctrl_1_pressed_logical).w,d0
-;		andi.b	#button_ABC_mask,d0				; Liliam: HUD - barrier HUD
-;		beq.w	locret_11A14					;
-
 		cmpa.w	#Player_1,a0				; Liliam: Encore mode - block jump moves for player 2
-		beq.s	.player1				;
+		beq.s	loc_1190C				;
 		tst.w	(Tails_CPU_idle_timer).w		;
 		beq.s	locret_1192A				;
 
@@ -25707,12 +25706,23 @@ loc_11908:
 		move.b	character_id(a0),d0			; Liliam: add extra characters
 		bne.s	Sonic_ExtraCharacterMoves		;
 
-		move.b	#5,(Dust_P2+anim).w			; Liliam: dash dust - player 2 insta-shield
-		bra.w	loc_11A04				;
+		tst.w	(Competition_mode).w			; Liliam: dash dust - player 2 insta-shield
+		bne.s	Knuckles_InstaShield			;
+		move.b	#5,(Dust_P2+anim).w			;
+
+Sonic_InstaShield:
+		bsr.s	Sonic_DropDash				;
+
+Knuckles_InstaShield:
+		move.b	#1,double_jump_flag(a0)			;
+		moveq	#sfx_InstaAttack,d0			;
+		jmp	(Play_SFX).l				;
 ; ---------------------------------------------------------------------------
 
-	.player1:
-		tst.b	(Super_ready_flag).w				; Liliam: HUD - barrier HUD
+loc_1190C:
+;		andi.b	#button_ABC_mask,d0				; Liliam: HUD - barrier HUD
+;		beq.w	locret_11A14					;
+		tst.b	(Super_ready_flag).w				;
 		beq.s	loc_1191A					;
 		ori.b	#1,(Super_ready_HUD_flag).w			;
 
@@ -25738,6 +25748,8 @@ loc_1191A:
 ;		move.b	#1,double_jump_flag(a0)			;
 
 Sonic_DropDash:
+		tst.w	(Competition_mode).w			; Liliam: extra skills - drop dash
+		bne.s	locret_1192A				;
 		btst	#Skill_SonicDropDash,(Skill_options).w	;
 		beq.s	locret_1192A				;
 		move.b	#19,double_jump_property(a0)		;
@@ -25748,10 +25760,11 @@ locret_1192A:
 
 Sonic_ExtraCharacterMoves:					; Liliam: add extra characters
 		add.w	d0,d0
-		move.w	ExtraCharacterMoves_Index-6(pc,d0.w),d0
+		move.w	ExtraCharacterMoves_Index-4(pc,d0.w),d0
 		jmp	ExtraCharacterMoves_Index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 ExtraCharacterMoves_Index:
+		dc.w Knuckles_InstaShield-ExtraCharacterMoves_Index
 		dc.w Amy_CheckMoves-ExtraCharacterMoves_Index
 		dc.w Mighty_CheckMoves-ExtraCharacterMoves_Index
 		dc.w Ray_CheckMoves-ExtraCharacterMoves_Index
@@ -25855,12 +25868,10 @@ Sonic_CheckTransform:
 ;		btst	#Status_Shield,status_secondary(a0)		;
 ;		bne.s	locret_11A14					;
 		move.b	#1,(Shield+anim).w
-
-loc_11A04:
-		bsr.w	Sonic_DropDash				; Liliam: extra skills - drop dash
-		move.b	#1,double_jump_flag(a0)
-		move.w	#sfx_InstaAttack,d0
-		jmp	(Play_SFX).l
+		bra.w	Sonic_InstaShield			; Liliam: extra skills - drop dash
+;		move.b	#1,double_jump_flag(a0)			;
+;		move.w	#sfx_InstaAttack,d0			;
+;		jmp	(Play_SFX).l				;
 ; ---------------------------------------------------------------------------
 
 locret_11A14:
@@ -28541,7 +28552,7 @@ loc_13250:
 		move.b	#30,air_left(a0)
 		move.w	#0,(Tails_CPU_routine).w
 		move.w	#10*60,(Tails_CPU_idle_timer).w
-		move.w	#0,(Tails_CPU_flight_timer).w
+;		move.w	#0,(Tails_CPU_flight_timer).w		; Liliam: competition - fix code path for jump moves
 
 Tails2P_Control:
 		tst.w	(Debug_mode_flag).w
