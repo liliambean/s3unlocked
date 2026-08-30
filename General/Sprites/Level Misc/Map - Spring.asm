@@ -24,43 +24,43 @@ Map_Spring2_:
 		dc.w word_238CA-Map_Spring2_
 		dc.w word_238EA-Map_Spring2_
 word_23788:	dc.w 2
-		dc.b  $F8,  $C,   0,   0, $FF, $F0
-		dc.b    0,   4,   0,   8, $FF, $F8
+		dc.b  $F8,  $C,   0, $10, $FF, $F0
+		dc.b    0,   4,   0, $20, $FF, $F8
 word_23796:	dc.w 1
-		dc.b    0,  $C,   0,   0, $FF, $F0
+		dc.b    0,  $C,   0, $10, $FF, $F0
 word_2379E:	dc.w 2
-		dc.b  $E8,  $C,   0,   0, $FF, $F0
-		dc.b  $F0,   6,   0,  $A, $FF, $F8
+		dc.b  $E8,  $C,   0, $10, $FF, $F0
+		dc.b  $F0,   6,   0, $22, $FF, $F8
 word_237AC:	dc.w 2
-		dc.b  $F8,  $C, $20,   4, $FF, $F0
-		dc.b    0,   4,   0,   8, $FF, $F8
+		dc.b  $F8,  $C, $20, $18, $FF, $F0
+		dc.b    0,   4,   0, $20, $FF, $F8
 word_237BA:	dc.w 1
-		dc.b    0,  $C, $20,   4, $FF, $F0
+		dc.b    0,  $C, $20, $18, $FF, $F0
 word_237C2:	dc.w 2
-		dc.b  $E8,  $C, $20,   4, $FF, $F0
-		dc.b  $F0,   6,   0,  $A, $FF, $F8
+		dc.b  $E8,  $C, $20, $18, $FF, $F0
+		dc.b  $F0,   6,   0, $22, $FF, $F8
 word_237D0:	dc.w 2
-		dc.b  $F0,   3,   0,   0,   0,   0
-		dc.b  $F8,   1,   0,   8, $FF, $F8
+		dc.b  $F0,   3,   0, $14,   0,   0
+		dc.b  $F8,   1,   0, $28, $FF, $F8
 word_237DE:	dc.w 1
-		dc.b  $F0,   3,   0,   0, $FF, $F8
+		dc.b  $F0,   3,   0, $14, $FF, $F8
 word_237E6:	dc.w 2
-		dc.b  $F0,   3,   0,   0,   0, $10
-		dc.b  $F8,   9,   0,  $A, $FF, $F8
+		dc.b  $F0,   3,   0, $14,   0, $10
+		dc.b  $F8,   9,   0, $2A, $FF, $F8
 word_237F4:	dc.w 2
-		dc.b  $F0,   3, $20,   4,   0,   0
-		dc.b  $F8,   1,   0,   8, $FF, $F8
+		dc.b  $F0,   3, $20, $1C,   0,   0
+		dc.b  $F8,   1,   0, $28, $FF, $F8
 word_23802:	dc.w 1
-		dc.b  $F0,   3, $20,   4, $FF, $F8
+		dc.b  $F0,   3, $20, $1C, $FF, $F8
 word_2380A:	dc.w 2
-		dc.b  $F0,   3, $20,   4,   0, $10
-		dc.b  $F8,   9,   0,  $A, $FF, $F8
+		dc.b  $F0,   3, $20, $1C,   0, $10
+		dc.b  $F8,   9,   0, $2A, $FF, $F8
 word_23818:	dc.w 2
-		dc.b    0,  $C, $10,   0, $FF, $F0
-		dc.b  $F8,   4, $10,   8, $FF, $F8
+		dc.b    0,  $C, $10, $10, $FF, $F0
+		dc.b  $F8,   4, $10, $20, $FF, $F8
 word_23826:	dc.w 2
-		dc.b    0,  $C, $30,   4, $FF, $F0
-		dc.b  $F8,   4, $10,   8, $FF, $F8
+		dc.b    0,  $C, $30, $18, $FF, $F0
+		dc.b  $F8,   4, $10, $20, $FF, $F8
 word_23834:	dc.w 4
 		dc.b  $F1,   8,   0,   0, $FF, $EB
 		dc.b  $F9,   8,   0,   3, $FF, $F3

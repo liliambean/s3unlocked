@@ -53701,7 +53701,8 @@ Map_MHZRideVine:
 
 Obj_Spring:
 		move.l	#Map_Spring,mappings(a0)
-		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_SpikesSprings,0,0),art_tile(a0)		; Liliam: QOL - allow taking DEZ1 Tails route
+;		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,0),art_tile(a0)	;
 		ori.b	#4,render_flags(a0)
 		move.b	#$10,width_pixels(a0)
 		move.b	#$10,height_pixels(a0)
@@ -53727,8 +53728,9 @@ Spring_Index:
 
 
 sub_22D54:
-		move.l	#Map_Spring,mappings(a0)
-		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,0),art_tile(a0)
+		move.l	#Map_Spring,mappings(a0);
+		move.w	#make_art_tile(ArtTile_SpikesSprings,0,0),art_tile(a0)		; Liliam: QOL - allow taking DEZ1 Tails route
+;		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,0),art_tile(a0)	;
 		ori.b	#4,render_flags(a0)
 		move.b	#$10,width_pixels(a0)
 		move.b	#$10,height_pixels(a0)
@@ -53759,7 +53761,7 @@ off_22DA0:
 Spring_Horizontal:
 		move.b	#2,anim(a0)
 		move.b	#3,mapping_frame(a0)
-		move.w	#make_art_tile(ArtTile_SpikesSprings+$20,0,0),art_tile(a0)
+;		move.w	#make_art_tile(ArtTile_SpikesSprings+$20,0,0),art_tile(a0)	; Liliam: QOL - allow taking DEZ1 Tails route
 		move.b	#8,width_pixels(a0)
 		move.l	#Obj_Spring_Horizontal,(a0)
 		tst.w	(Competition_mode).w
@@ -54649,6 +54651,7 @@ byte_23706:
 Ani_Spring:
 		include "General/Sprites/Level Misc/Anim - Spring.asm"
 Map_Spring:
+		; Liliam: convert to 1P Ray palette
 		include "General/Sprites/Level Misc/Map - Spring.asm"
 Map_2PSpring:
 		include "General/Sprites/Level Misc/Map - 2P Spring.asm"
@@ -69230,13 +69233,14 @@ loc_2D8AE:
 		beq.s	loc_2D8CA				;
 
 loc_2D8BE:
-		lea	(PLC_SpikesSprings).l,a1	; Reload spikes in all but DEZ boss and Doomsday
-		jsr	(Load_PLC_Raw).l
+		jsr	(Load_PLC_SpikesSprings).l		; Liliam: convert to 1P Ray palette
+;		lea	(PLC_SpikesSprings).l,a1		;
+;		jsr	(Load_PLC_Raw).l			;
 
 loc_2D8CA:
 ;		cmpi.w	#$1700,(Current_zone_and_act).w		; Liliam: HPZ - add Knuckles LRZ2 results
 ;		beq.s	loc_2D8DC				;
-		jsr	LoadEnemyArt(pc)		; Load animals and enemies in all but DEZ boss
+		jsr	LoadEnemyArt(pc)
 		jsr	(PLCLoad_AnimalsAndExplosion).l
 		cmpi.b	#$15,(Current_zone).w					; Liliam: QOL - extend ring animation
 		bne.s	loc_2D8DC						;
@@ -102297,10 +102301,10 @@ word_4808A:
 ; ---------------------------------------------------------------------------
 
 Obj_DEZRetractingSpring:
-		move.l	#Map_DEZRetractingSpring3,mappings(a0)			; Liliam: QOL - allow escaping Tails route
-		move.w	#make_art_tile(ArtTile_DEZMisc2,1,0),art_tile(a0)	;
-		tst.b	(Current_act).w						;
-		beq.s	loc_4809C						;
+		move.l	#Map_DEZRetractingSpring3,mappings(a0)				; Liliam: QOL - allow taking DEZ1 Tails route
+		move.w	#make_art_tile(ArtTile_DEZMisc2,1,0),art_tile(a0)		;
+		tst.b	(Current_act).w							;
+		beq.s	loc_4809C							;
 		move.l	#Map_DEZRetractingSpring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_DEZ2Extra,1,0),art_tile(a0)
 
@@ -102402,11 +102406,8 @@ loc_4818C:
 Ani_DEZRetractingSpring:
 		include "Levels/DEZ/Misc Object Data/Anim - Retracting Spring.asm"
 Map_DEZRetractingSpring:
+		; Liliam: convert to 1P Ray palette
 		include "Levels/DEZ/Misc Object Data/Map - Retracting Spring.asm"
-Map_DEZRetractingSpring2:					; Liliam: bugfix - use correct spring color
-		include "Levels/DEZ/Misc Object Data/Map - Retracting Spring 2.asm"
-Map_DEZRetractingSpring3:							; Liliam: QOL - allow escaping Tails route
-		include "Levels/DEZ/Misc Object Data/Map - Retracting Spring 3.asm"
 ; ---------------------------------------------------------------------------
 
 Obj_DEZTunnelLauncher:
@@ -113991,8 +113992,9 @@ loc_4FC74:
 		lea	(AIZ2_8x8_Secondary_KosM).l,a1
 		move.w	#tiles_to_bytes($1FC),d2
 		jsr	(Queue_Kos_Module).l
-		lea	(PLC_SpikesSprings).l,a1
-		jsr	(Load_PLC_Raw).l
+		jsr	(Load_PLC_SpikesSprings).l		; Liliam: convert to 1P Ray palette
+;		lea	(PLC_SpikesSprings).l,a1		;
+;		jsr	(Load_PLC_Raw).l			;
 		movem.l	(sp)+,d7-a0/a2-a3
 		jsr	(AllocateObject).l
 		bne.s	loc_4FD10
@@ -142163,7 +142165,8 @@ ObjDat3_613BC:
 		dc.b  $14, $14,   2,   0
 ObjDat3_613C8:
 		dc.l Map_Spring
-		dc.w make_art_tile(ArtTile_SpikesSprings+$10,0,0)
+		dc.w make_art_tile(ArtTile_SpikesSprings,0,0)				; Liliam: QOL - allow taking DEZ1 Tails route
+;		dc.w make_art_tile(ArtTile_SpikesSprings+$10,0,0)			;
 		dc.w   $100
 		dc.b  $10, $10,   0,   0
 ObjDat3_613D4:
@@ -182196,7 +182199,8 @@ loc_7C744:
 		bsr.w	sub_7D192
 
 loc_7C756:
-		jsr	Animate_Raw(pc)
+		jsr	(Animate_Raw).l				; Liliam: fallout
+;		jsr	Animate_Raw(pc)				;
 		jsr	Refresh_ChildPositionAdjusted(pc)
 		jmp	(Child_DrawTouch_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -182530,7 +182534,8 @@ loc_7CB18:
 ; ---------------------------------------------------------------------------
 
 loc_7CB28:
-		jsr	Swing_UpAndDown(pc)
+		jsr	(Swing_UpAndDown).l			; Liliam: fallout
+;		jsr	Swing_UpAndDown(pc)			;
 		jsr	(MoveSprite2).l
 		cmpi.w	#$120,x_pos(a0)
 		blo.s	loc_7CB5E
@@ -192813,14 +192818,30 @@ loc_8395E:
 ; ---------------------------------------------------------------------------
 
 loc_83988:
-		lea	PLC_SpikesSprings(pc),a1
-		jsr	(Load_PLC_Raw).l
+		bsr.s	Load_PLC_SpikesSprings			; Liliam: convert to 1P Ray palette
+;		lea	PLC_SpikesSprings(pc),a1		;
+;		jsr	(Load_PLC_Raw).l			;
 		jsr	Remove_From_TrackingSlot(pc)
 		jmp	Go_Delete_Sprite(pc)
+; ---------------------------------------------------------------------------
+
+Load_PLC_SpikesSprings:						; Liliam: convert to 1P Ray palette
+		lea	PLC_SpikesSprings_Ray(pc),a1
+		cmpi.w	#6,(Player_mode).w
+		beq.s	.done
+		lea	PLC_SpikesSprings(pc),a1
+
+	.done:
+		jmp	(Load_PLC_Raw).l
 ; ---------------------------------------------------------------------------
 PLC_SpikesSprings: plrlistheader
 		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
 PLC_SpikesSprings_End
+
+PLC_SpikesSprings_Ray: plrlistheader				; Liliam: convert to 1P Ray palette
+		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
+		plreq ArtTile_SpikesSprings+$10, ArtNem_RedSpring_Ray
+PLC_SpikesSprings_Ray_End
 ; ---------------------------------------------------------------------------
 
 Obj_SignpostSparkle:
@@ -193254,6 +193275,7 @@ PLC_MonitorsSpikesSprings_Amy_End
 PLC_MonitorsSpikesSprings_Ray: plrlistheader			; Liliam: convert to 1P Ray palette
 		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
 		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
+		plreq ArtTile_SpikesSprings+$10, ArtNem_RedSpring_Ray
 PLC_MonitorsSpikesSprings_Ray_End
 
 PLC_Monitors: plrlistheader
@@ -221384,6 +221406,7 @@ ArtNem_GrayButton:
 		binclude "General/Sprites/Buttons/Gray Button.bin"
 		even
 ArtNem_DiagonalSpring:
+		; Liliam: QOL - improve red spring colors
 		binclude "General/Sprites/Level Misc/Diagonal Spring.bin"
 		even
 ArtNem_SonicLifeIcon:
@@ -221442,7 +221465,11 @@ ArtNem_Explosion:
 		even
 		; Liliam: removed unused data
 ArtNem_SpikesSprings:
+		; Liliam: QOL - allow taking DEZ1 Tails route
 		binclude "General/Sprites/Level Misc/SpikesSprings.bin"
+		even
+ArtNem_RedSpring_Ray:						; Liliam: convert to 1P Ray palette
+		binclude "General/Sprites/Level Misc/Red Spring Ray.bin"
 		even
 ArtNem_RingHUDText:
 		; Liliam: QOL - extend ring animation
@@ -223252,7 +223279,7 @@ SSZ2_Rings:
 SpriteTerminatD:
 		dc.w $FFFF, 0, 0
 DEZ1_Sprites:
-		; Liliam: QOL - allow escaping Tails route
+		; Liliam: QOL - allow taking DEZ1 Tails route
 		binclude "Levels/DEZ/Object Pos/1.bin"
 		even
 DEZ2_Sprites:
