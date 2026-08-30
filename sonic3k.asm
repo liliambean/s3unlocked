@@ -14865,7 +14865,7 @@ Pal_Competition2:						; Liliam: reinsert S3 data
 		binclude "General/Competition Menu/Palettes/2.bin"
 		even
 Pal_Competition3:						; Liliam: reinsert S3 data
-		; Liliam: competition - add missing gray color for level previews
+		; Liliam: competition - use 1P player palettes
 		binclude "General/Competition Menu/Palettes/3.bin"
 		even
 ObjDat_B6C8:
