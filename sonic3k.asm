@@ -9066,6 +9066,8 @@ Osc_Data2_end
 ; ---------------------------------------------------------------------------
 
 ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
+		cmpi.b	#State_Dead,(Player_1+routine).w
+		bhs.w	locret_7810
 		moveq	#0,d1
 		move.b	d1,(Super_ready_flag).w
 		tst.b	(Encore_mode).w
@@ -9092,7 +9094,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		tst.b	(Player_1+double_jump_flag).w
 		bne.s	.setSuperIcon
 		tst.b	(Super_ready_HUD_flag).w
-		bmi.s	.done
+		bmi.w	.done
 		move.l	#ArtUnc_CutsceneSkip+$100,d1
 		move.w	#tiles_to_bytes(ArtTile_Player_1+$17),d2
 		move.w	#$90,d3
@@ -9136,10 +9138,14 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		beq.s	.checkCombineRing
 		tst.b	(Encore_mode).w
 		bne.s	.done
+		cmpi.w	#3,(Player_mode).w
+		beq.s	.done
+		cmpi.w	#4,(Player_mode).w
+		beq.s	.done
 		tst.b	(Super_palette_status).w
-		beq.w	.setIcon
+		beq.s	.setIcon
 		tst.b	(Super_Tails_flag).w
-		bgt.w	.setIcon
+		bpl.s	.setIcon
 
 	.done:
 		addq.w	#2,d1
@@ -9170,8 +9176,6 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 
 
 ChangeRingFrame:
-		cmpi.b	#State_Dead,(Player_1+routine).w	; Liliam: Encore mode - expand player routines
-		bhs.w	locret_7810				;
 		subq.b	#1,(Rings_frame_timer).w
 		bpl.s	loc_77E8
 		move.b	#3,(Rings_frame_timer).w				; Liliam: QOL - extend ring animation
@@ -46012,7 +46016,7 @@ Obj_Monitor_CheckSuperPalette:					; Liliam: bugfix - use safe colors for aqua b
 		tst.b	(Super_palette_status).w
 		beq.w	Obj_Monitor
 		tst.b	(Super_Tails_flag).w
-		bgt.w	Obj_Monitor
+		bpl.w	Obj_Monitor
 		move.w	#$707,anim(a0)
 		bra.w	Obj_Monitor
 ; ---------------------------------------------------------------------------
