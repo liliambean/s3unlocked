@@ -24057,10 +24057,10 @@ loc_10BF0:
 
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - disable A button
 		beq.s	loc_10BFC				;
-		cmpi.b	#7,anim(a0)				;
-		bls.s	.disable				;
+		cmpi.b	#8,anim(a0)				;
+		blo.s	.disable				;
 		cmpi.b	#$A,anim(a0)				;
-		bls.s	loc_10BFC				;
+		blo.s	loc_10BFC				;
 
 	.disable:
 		andi.w	#$BFBF,(Ctrl_1_logical).w		;
@@ -29035,10 +29035,10 @@ loc_13808:
 		move.w	(Ctrl_1).w,d0				; Liliam: Encore mode - disable A button
 		tst.b	(Encore_mode).w				;
 		beq.s	loc_13826				;
-		cmpi.b	#7,anim(a0)				;
-		bls.s	.disable				;
+		cmpi.b	#8,anim(a0)				;
+		blo.s	.disable				;
 		cmpi.b	#$A,anim(a0)				;
-		bls.s	loc_13826				;
+		blo.s	loc_13826				;
 
 	.disable:
 		andi.w	#$BFBF,d0				;
@@ -29629,21 +29629,7 @@ loc_13D4A:
 ; ---------------------------------------------------------------------------
 
 	.encoreMode:
-		move.b	(Update_HUD_timer).w,d1			; Liliam: Encore mode - respawn partner character
-		or.b	(Bonus_stage_flag).w,d1			;
-		beq.s	loc_13D78				;
-		tst.b	render_flags(a0)			;
-		bmi.s	loc_13D78				;
-		tst.b	(Ctrl_2_logical).w			;
-		bmi.w	Tails_CPU_EncoreRespawn			;
-		tst.w	(Debug_placement_mode).w		;
-		bne.s	loc_13D78				;
-		btst	#button_A,(Ctrl_1_pressed).w		;
-		beq.s	loc_13D78				;
-		cmpi.b	#7,anim(a1)				;
-		bls.w	Tails_CPU_EncoreCall			;
-		cmpi.b	#$A,anim(a1)				;
-		bhi.w	Tails_CPU_EncoreCall			;
+		bsr.w	Tails_CPU_Main_EncoreCall		; Liliam: Encore mode - respawn partner character
 
 loc_13D78:
 		bsr.w	sub_13EFC
@@ -29797,6 +29783,51 @@ loc_13EBE:
 
 locret_13EC8:
 		rts
+; ---------------------------------------------------------------------------
+
+Tails_CPU_Spindash_EncoreCall:					; Liliam: Encore mode - respawn partner character
+		tst.b	(Encore_mode).w
+		beq.s	locret_13EC8
+
+Tails_CPU_Main_EncoreCall:
+		move.b	(Update_HUD_timer).w,d1
+		or.b	(Bonus_stage_flag).w,d1
+		beq.s	locret_13EC8
+		tst.b	render_flags(a0)
+		bmi.s	locret_13EC8
+		tst.b	(Ctrl_2_logical).w
+		bmi.s	.jumpToP1
+		tst.w	(Debug_placement_mode).w
+		bne.s	locret_13EC8
+		btst	#button_A,(Ctrl_1_pressed).w
+		beq.s	locret_13EC8
+		cmpi.b	#8,anim(a1)
+		blo.s	.callP2
+		cmpi.b	#$A,anim(a1)
+		blo.s	locret_13EC8
+		beq.s	.checkKnuckles
+		cmpi.b	#4,double_jump_flag(a0)
+		bne.s	.callP2
+		btst	#button_down,(Ctrl_1_held).w
+		beq.s	.callP2
+
+	.checkKnuckles:
+		cmpi.b	#2,character_id(a1)
+		beq.s	locret_13EC8
+
+	.callP2:
+		bsr.s	Tails_CPU_Respawn
+
+	.done:
+		addq.w	#4,sp
+		moveq	#signextendB(sfx_EncoreRespawn),d0
+		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
+	.jumpToP1:
+		bsr.s	Tails_CPU_Respawn
+		move.w	#10*60,(Tails_CPU_idle_timer).w
+		bra.s	.done
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -29852,38 +29883,8 @@ locret_13F3E:
 
 ; ---------------------------------------------------------------------------
 
-Tails_CPU_EncoreCall:						; Liliam: Encore mode - respawn partner character
-		bsr.s	Tails_CPU_Respawn
-		moveq	#signextendB(sfx_EncoreRespawn),d0
-		jmp	(Play_SFX).l
-; ---------------------------------------------------------------------------
-
-Tails_CPU_EncoreRespawn:					; Liliam: Encore mode - respawn partner character
-		bsr.s	Tails_CPU_EncoreCall
-		move.w	#10*60,(Tails_CPU_idle_timer).w
-		rts
-; ---------------------------------------------------------------------------
-
 loc_13F40:
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - respawn partner character
-		beq.s	.done					;
-		move.b	(Update_HUD_timer).w,d1			;
-		or.b	(Bonus_stage_flag).w,d1			;
-		beq.s	.done					;
-		tst.b	render_flags(a0)			;
-		bmi.s	.done					;
-		tst.b	(Ctrl_2_logical).w			;
-		bmi.s	Tails_CPU_EncoreRespawn			;
-		tst.w	(Debug_placement_mode).w		;
-		bne.s	.done					;
-		btst	#button_A,(Ctrl_1_pressed).w		;
-		beq.s	.done					;
-		cmpi.b	#7,anim(a1)				;
-		bls.s	Tails_CPU_EncoreCall			;
-		cmpi.b	#$A,anim(a1)				;
-		bhi.s	Tails_CPU_EncoreCall			;
-
-	.done:
+		bsr.w	Tails_CPU_Spindash_EncoreCall		; Liliam: Encore mode - respawn partner character
 		bsr.w	sub_13EFC
 		tst.w	(Tails_CPU_idle_timer).w
 		bne.w	locret_13FBE
@@ -34066,10 +34067,14 @@ loc_165A2:
 
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - disable A button
 		beq.s	loc_165AE				;
-		cmpi.b	#7,anim(a0)				;
-		bls.s	.disable				;
+		cmpi.b	#8,anim(a0)				;
+		blo.s	.disable				;
 		cmpi.b	#$A,anim(a0)				;
 		bls.s	loc_165AE				;
+		cmpi.b	#4,double_jump_flag(a0)			;
+		bne.s	.disable				;
+		btst	#button_down,(Ctrl_1_held).w		;
+		bne.s	loc_165AE				;
 
 	.disable:
 		andi.w	#$BFBF,(Ctrl_1_logical).w		;
@@ -40214,10 +40219,19 @@ Obj_EncoreHelper_Main:
 		btst	#button_A,(Ctrl_1_pressed).w
 		beq.s	.return
 		lea	(Player_1).w,a1
-		cmpi.b	#7,anim(a1)
-		bls.s	.checkPlayer2
+		cmpi.b	#8,anim(a1)
+		blo.s	.checkPlayer2
 		cmpi.b	#$A,anim(a1)
-		bhi.s	.checkPlayer2
+		blo.s	.return
+		beq.s	.checkKnuckles
+		cmpi.b	#4,double_jump_flag(a0)
+		bne.s	.checkPlayer2
+		btst	#button_down,(Ctrl_1_held).w
+		beq.s	.checkPlayer2
+
+	.checkKnuckles:
+		cmpi.b	#2,character_id(a1)
+		bne.s	.checkPlayer2
 
 	.return:
 		rts
