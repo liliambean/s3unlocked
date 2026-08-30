@@ -28,13 +28,13 @@ Map_SlotRing8:	dc.w 1
 		dc.b  $F8,   5,   0, $3C, $FF, $F8
 Map_SlotRingSparkle1:
 		dc.w 1
-		dc.b  $F8,   5,   1, $28, $FF, $F8
+		dc.b  $F8,   5,   1, $88, $FF, $F8
 Map_SlotRingSparkle2:
 		dc.w 1
-		dc.b  $F8,   5, $19, $28, $FF, $F8
+		dc.b  $F8,   5, $19, $88, $FF, $F8
 Map_SlotRingSparkle3:
 		dc.w 1
-		dc.b  $F8,   5,   9, $28, $FF, $F8
+		dc.b  $F8,   5,   9, $88, $FF, $F8
 Map_SlotRingSparkle4:
 		dc.w 1
-		dc.b  $F8,   5, $11, $28, $FF, $F8
+		dc.b  $F8,   5, $11, $88, $FF, $F8

@@ -82,29 +82,29 @@
 	dc.l Map_SB_Bumper+(0<<24)				; 28  Extra Life
 	dc.w make_art_tile(ArtTile_Player_2,0,0)
 	dc.l Map_SB_Up+(0<<24)					; 29  Up
-	dc.w make_art_tile(ArtTile_SlotsBlocks+$159,2,0)
+	dc.w make_art_tile(ArtTile_EncoreBonus,2,0)
 	dc.l Map_SB_Down+(0<<24)				; 2A  Down
-	dc.w make_art_tile(ArtTile_SlotsBlocks+$159,2,0)
+	dc.w make_art_tile(ArtTile_EncoreBonus,2,0)
 	dc.l Map_SB_R_and_Peppermint+(0<<24)			; 2B  Reverse
 	dc.w make_art_tile(ArtTile_SlotsBlocks+$13D,1,0)
 	dc.l Map_SB_R_and_Peppermint+(0<<24)			; 2C  Peppermint
 	dc.w make_art_tile(ArtTile_SlotsBlocks+$122,2,0)
 	dc.l Map_SB_Diamond+(0<<24)				; 2D  Diamond Blue
-	dc.w make_art_tile(ArtTile_SlotsBlocks+$174,3,0)
+	dc.w make_art_tile(ArtTile_EncoreBonus+$1B,3,0)
 	dc.l Map_SB_Diamond+(0<<24)				; 2E  Diamond Green
-	dc.w make_art_tile(ArtTile_SlotsBlocks+$174,2,0)
+	dc.w make_art_tile(ArtTile_EncoreBonus+$1B,2,0)
 	dc.l Map_SB_Diamond+(0<<24)				; 2F  Diamond Yellow
-	dc.w make_art_tile(ArtTile_SlotsBlocks+$174,1,0)
+	dc.w make_art_tile(ArtTile_EncoreBonus+$1B,1,0)
 	dc.l Map_SB_Diamond+(0<<24)				; 30  Diamond Red
-	dc.w make_art_tile(ArtTile_SlotsBlocks+$174,0,0)
+	dc.w make_art_tile(ArtTile_EncoreBonus+$1B,0,0)
 	dc.l Map_SB_Diamond+(0<<24)				; 31  ANIM Diamond Blue
-	dc.w make_art_tile(ArtTile_SlotsBlocks+$174,3,0)
+	dc.w make_art_tile(ArtTile_EncoreBonus+$1B,3,0)
 	dc.l Map_SB_Diamond+(0<<24)				; 32  ANIM Diamond Green
-	dc.w make_art_tile(ArtTile_SlotsBlocks+$174,2,0)
+	dc.w make_art_tile(ArtTile_EncoreBonus+$1B,2,0)
 	dc.l Map_SB_Diamond+(0<<24)				; 33  ANIM Diamond Yellow
-	dc.w make_art_tile(ArtTile_SlotsBlocks+$174,1,0)
+	dc.w make_art_tile(ArtTile_EncoreBonus+$1B,1,0)
 	dc.l Map_SB_Diamond+(0<<24)				; 34  ANIM Diamond Red
-	dc.w make_art_tile(ArtTile_SlotsBlocks+$174,0,0)
+	dc.w make_art_tile(ArtTile_EncoreBonus+$1B,0,0)
 	dc.l Map_SB_Bumper+(2<<24)				; 35  ANIM Bumper 2
 	dc.w make_art_tile(ArtTile_SlotsBlocks+$F9,2,0)
 	dc.l Map_SB_Ring+(1<<24)				; 36  ANIM Ring Sparkle 1

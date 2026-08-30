@@ -7847,15 +7847,9 @@ loc_6B76:
 		jsr	(Slots_LoadLayout).l
 		st	(Deform_lock).w
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - bonus stage
-		beq.s	loc_6B92					;
+		beq.s	locret_6B40					;
 		st	(Bonus_stage_flag).w				;
-
-loc_6B92:
-		move.l	#ArtUnc_Ring,d1						; Liliam: QOL - extend ring animation
-		move.w	#tiles_to_bytes(ArtTile_Explosion),d2			;
-		move.w	#$400,d3						;
-		bra.w	Add_To_DMA_Queue					;
-;		rts								;
+		rts
 ; ---------------------------------------------------------------------------
 
 loc_6B94:
@@ -69211,14 +69205,14 @@ loc_2D86E:
 		move.l	#Obj_SOZGhosts,(a1)	; If new level is Sandopolis 2, then load the ghosts
 
 loc_2D88A:
-		cmpi.b	#$16,(Current_zone).w
-		beq.s	loc_2D8A2
-		cmpi.w	#$1700,(Current_zone_and_act).w
-		beq.s	loc_2D8A2
-		cmpi.b	#$13,(Current_zone).w
-		bhs.s	loc_2D8DC
+;		cmpi.b	#$16,(Current_zone).w			; Liliam: Encore mode - add extra levels
+;		beq.s	loc_2D8A2				;
+;		cmpi.w	#$1700,(Current_zone_and_act).w		;
+;		beq.s	loc_2D8A2				;
+;		cmpi.b	#$13,(Current_zone).w			;
+;		bhs.s	loc_2D8DC				;
 
-loc_2D8A2:
+;loc_2D8A2:
 		tst.w	$3E(a0)
 		beq.s	loc_2D8AE
 		st	(End_of_level_flag).w	; If in-level, set end of title card flag. No need to reload PLCs
@@ -69244,6 +69238,12 @@ loc_2D8CA:
 ;		beq.s	loc_2D8DC				;
 		jsr	LoadEnemyArt(pc)		; Load animals and enemies in all but DEZ boss
 		jsr	(PLCLoad_AnimalsAndExplosion).l
+		cmpi.b	#$15,(Current_zone).w					; Liliam: QOL - extend ring animation
+		bne.s	loc_2D8DC						;
+		move.l	#ArtUnc_Ring,d1						;
+		move.w	#tiles_to_bytes(ArtTile_SlotRing),d2			;
+		move.w	#$400,d3						;
+		jsr	(Add_To_DMA_Queue).l					;
 
 loc_2D8DC:
 		jmp	(Delete_Current_Sprite).l
@@ -71607,16 +71607,16 @@ Map_Results:
 
 LoadEnemyArt:
 		lea	Offs_LoadEnemyArt(pc),a6
-		move.w	#$D00,d0
-		cmpi.b	#$16,(Current_zone).w
-		beq.s	loc_2F798
-		move.w	#$E00,d0
-		cmpi.w	#$1700,(Current_zone_and_act).w
-		bne.s	loc_2F79E
+;		move.w	#$D00,d0				; Liliam: Encore mode - add extra levels
+;		cmpi.b	#$16,(Current_zone).w			;
+;		beq.s	loc_2F798				;
+;		move.w	#$E00,d0				;
+;		cmpi.w	#$1700,(Current_zone_and_act).w		;
+;		bne.s	loc_2F79E				;
 
-loc_2F798:
-		move.b	(Current_act).w,d0
-		bra.s	loc_2F7A2
+;loc_2F798:
+;		move.b	(Current_act).w,d0			;
+;		bra.s	loc_2F7A2				;
 ; ---------------------------------------------------------------------------
 
 loc_2F79E:
@@ -71667,10 +71667,28 @@ Offs_LoadEnemyArt:
 		dc.w PLCKosM_DEZ-Offs_LoadEnemyArt
 		dc.w PLCKosM_DDZ-Offs_LoadEnemyArt
 		dc.w PLCKosM_DDZ-Offs_LoadEnemyArt
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		; Liliam: Encore mode - add extra levels
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt		;
 		dc.w PLCKosM_HPZ-Offs_LoadEnemyArt
 		dc.w PLCKosM_HPZ-Offs_LoadEnemyArt
-		dc.w PLCKosM_DEZ3-Offs_LoadEnemyArt
-		dc.w PLCKosM_DEZ3-Offs_LoadEnemyArt
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt
+		dc.w PLCKosM_Null-Offs_LoadEnemyArt
 
 PLCKosM_AIZ: plrlistheader
 		plreq ArtTile_MonkeyDude, ArtKosM_AIZ_MonkeyDude
@@ -71770,8 +71788,8 @@ PLCKosM_HPZ: plrlistheader
 		plreq ArtTile_HPZTeleporter, ArtKosM_HPZTeleporter
 PLCKosM_HPZ_End
 
-PLCKosM_DEZ3: plrlistheader
-PLCKosM_DEZ3_End
+PLCKosM_Null: plrlistheader
+PLCKosM_Null_End
 
 ; ---------------------------------------------------------------------------
 
@@ -108257,7 +108275,7 @@ loc_4C172:
 		bne.w	locret_4C21A
 		move.l	#Obj_SlotRing,(a1)
 		move.l	#Map_SlotRing,mappings(a1)				; Liliam: QOL - extend ring animation
-		move.w	#make_art_tile(ArtTile_Explosion,1,0),art_tile(a1)	;
+		move.w	#make_art_tile(ArtTile_SlotRing,1,0),art_tile(a1)	;
 ;		move.l	#Map_Ring,mappings(a1)					;
 ;		move.w	#make_art_tile(ArtTile_Ring,1,0),art_tile(a1)		;
 		move.b	#4,render_flags(a1)
@@ -217552,14 +217570,11 @@ PLC_EMZ_2_End
 
 PLC_GumballBonus: plrlistheader
 		plreq ArtTile_BonusStage, ArtNem_BonusStage
-		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings		; Liliam: level select - add gumball bonus
 PLC_GumballBonus_End
 
 PLC_GumballBonus_Encore: plrlistheader						; Liliam: Encore mode - change character item
 		plreq ArtTile_BonusStage, ArtNem_BonusStage
 		plreq ArtTile_BonusStage+$60, ArtNem_EncoreBonusItem
-		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
-		plreq ArtTile_Explosion, ArtNem_Explosion
 PLC_GumballBonus_Encore_End
 
 PLC_HPZ: plrlistheader
@@ -217587,7 +217602,6 @@ PLC_PachinkoBonus_Encore: plrlistheader						; Liliam: Encore mode - change char
 		plreq ArtTile_PachinkoMain, ArtNem_PachinkoMain
 		plreq ArtTile_PachinkoGumballs, ArtNem_BonusStage
 		plreq ArtTile_PachinkoGumballs+$60, ArtNem_EncoreBonusItem
-		plreq ArtTile_Explosion, ArtNem_Explosion
 PLC_PachinkoBonus_Encore_End
 
 PLC_SlotBonus: plrlistheader

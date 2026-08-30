@@ -1565,14 +1565,16 @@ ArtTile_CGZMisc                       = $0300
 ArtTile_EMZMisc                       = $0300
 
 ArtTile_BonusStage                    = $015B
+ArtTile_EncoreBonus                   = $01D3	; Liliam: ported from S1 - restore full item set
 ArtTile_PachinkoMain                  = $02CD
 ArtTile_SlotsBlocks                   = $033B
 ArtTile_PachinkoGumballs              = $0388
+ArtTile_SlotRing                      = $0540	; Liliam: QOL - extend ring animation
 
-ArtTile_SSZ2EggRoboStand              = $1BE	; Liliam: Metal Sonic - final boss
-ArtTile_SSZ2EggRoboRun                = $1FC	; Liliam: Metal Sonic - final boss
-ArtTile_SSZ2Extra                     = $241	; Liliam: Metal Sonic - final boss
-ArtTile_SSZ2DeathEggRobot             = $254	; Liliam: Metal Sonic - final boss
+ArtTile_SSZ2EggRoboStand              = $01BE	; Liliam: Metal Sonic - final boss
+ArtTile_SSZ2EggRoboRun                = $01FC	; Liliam: Metal Sonic - final boss
+ArtTile_SSZ2Extra                     = $0241	; Liliam: Metal Sonic - final boss
+ArtTile_SSZ2DeathEggRobot             = $0254	; Liliam: Metal Sonic - final boss
 
 ; Universal (used on all standard levels).
 ArtTile_DiagonalSpring                = $043A
