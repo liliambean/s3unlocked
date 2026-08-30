@@ -137452,7 +137452,7 @@ loc_5DCC4:
 		move.w	#-$80,x_vel(a0)
 		clr.w	y_vel(a0)
 		move.b	#5,mapping_frame(a0)
-		cmpi.b	#1,(Player_1+character_id).w		; Liliam: ending - add extra characters
+		bsr.w	EndingPlane_PickHead			; Liliam: ending - add extra characters
 ;		cmpi.w	#2,(Player_mode).w			;
 		bne.s	loc_5DD0E
 		move.b	#6,mapping_frame(a0)
@@ -138795,8 +138795,8 @@ loc_5EB5C:
 		; Liliam: removed original implementation
 		cmpi.w	#3,(Player_mode).w			; Liliam: ending - add extra characters
 		beq.s	.knuxEnding				;
-		cmpi.b	#1,(Player_1+character_id).w		;
-		beq.s	.tails					;
+		bsr.s	EndingPlane_PickHead			;
+		beq.s	.useSonicHead				;
 		move.l	#Obj_SonicPlaneHead_TailsHead,(a0)	;
 		rts						;
 ; ---------------------------------------------------------------------------
@@ -138804,9 +138804,18 @@ loc_5EB5C:
 	.knuxEnding:
 		ori.b	#$20,art_tile(a0)			;
 
-	.tails:
+	.useSonicHead:
 		move.b	#9,mapping_frame(a0)			;
 		rts						;
+; ---------------------------------------------------------------------------
+
+EndingPlane_PickHead:						; Liliam: ending - add extra characters
+		moveq	#0,d0
+		move.b	(Player_1+character_id).w,d0
+		add.w	d0,d0
+		lea	byte_5ED0E(pc),a1
+		cmpi.b	#$13,(a1,d0.w)
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_SonicPlaneHead_TailsHead:
@@ -138949,8 +138958,8 @@ byte_5ED0E:
 		dc.b  $13,  $A					;
 		dc.b  $12,  $B					;
 		dc.b  $12,  $C					;
-		dc.b  $12,  $D					;
-		dc.b  $12,  $E					;
+		dc.b  $13,  $D					;
+		dc.b  $13,  $E					;
 		dc.b  $12,  $F					;
 		dc.b  $14,  $B					;
 		dc.b  $14, $15					;
