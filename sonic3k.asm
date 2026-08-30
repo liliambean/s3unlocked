@@ -53491,7 +53491,9 @@ loc_22B3C:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
-		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+		move.w	d0,-(sp)				; Liliam: bugfix - clear roll state
+		jsr	(Player_ClearRollHeight).l		;
+		move.w	(sp)+,d0				;
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$14,y_pos(a1)
@@ -88171,10 +88173,10 @@ sub_3CBCE:
 		move.w	#-$A00,y_vel(a1)
 
 loc_3CBE4:
-		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
-;		clr.b	jumping(a1)				;
+		clr.b	jumping(a1)
+		clr.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
 		clr.b	spin_dash_flag(a1)
 		move.b	#$10,anim(a1)
 		move.b	#State_Control,routine(a1)
@@ -207270,12 +207272,12 @@ loc_8B9F0:
 
 sub_8B9FA:
 		move.w	d2,y_vel(a1)
-		move.w	d0,d4					; Liliam: bugfix - clear roll state
+		move.w	d0,-(sp)				; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight).l		;
+		move.w	(sp)+,d0				;
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
 ;		clr.b	jumping(a1)				;
-		move.w	d4,d0					;
 		move.b	#$10,anim(a1)
 		move.b	#State_Control,routine(a1)
 
