@@ -15,8 +15,8 @@ PalID_Tails:		palptr Pal_SonicTails,		Normal_palette,		$20	;
 ;PalID_S2Menu:		palptr Pal_S2Menu,		Normal_palette,		$80	;
 PalID_Knuckles:		palptr Pal_Knuckles,		Normal_palette,		$20	;
 PalID_Amy:		palptr Pal_Amy,			Normal_palette,		$20	;
-PalID_Mighty:		palptr Pal_LevelSelect+$20,	Normal_palette,		$20	;
-PalID_Ray:		palptr Pal_LevelSelect+$20,	Normal_palette,		$20	;
+PalID_Mighty:		palptr Pal_Mighty,		Normal_palette,		$20	;
+PalID_Ray:		palptr Pal_Ray,			Normal_palette,		$20	;
 PalID_MetalSonic:	palptr Pal_MetalSonic,		Normal_palette,		$20	;
 
 PalID_EncoreMode:	palptr Pal_EncoreMode,		Normal_palette,		$20	; Liliam: Encore mode - palette

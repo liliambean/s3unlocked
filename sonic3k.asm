@@ -2536,6 +2536,24 @@ Process_Kos_Module_Queue:
 		add.w	d3,d0
 		add.w	d3,d0
 		move.w	d0,(Kos_module_destination).w	; set new destination
+
+		bclr	#0,d2					; Liliam: convert to 1P Ray palette
+		beq.s	+					;
+		cmpi.w	#6,(Player_mode).w			;
+		bne.s	+					;
+		lea	(PalTable_Ray).l,a0			;
+		lea	(Kos_decomp_buffer).w,a1		;
+		move.w	d3,d0					;
+		lsl.w	#1,d0					;
+		subq.w	#1,d0					;
+		moveq	#0,d1					;
+
+-
+		move.b	(a1),d1					;
+		move.b	(a0,d1.w),(a1)+				;
+		dbf	d0,-					;
+
++
 		move.l	(Kos_module_queue).w,d0
 		move.l	(Kos_decomp_queue).w,d1
 		sub.l	d1,d0
@@ -4521,7 +4539,7 @@ SuperHyper_PalCycle_RevertMighty:					; Liliam: animate super forms consistently
 		tst.b	(Super_palette_status).w
 		bne.s	.doExtraColor
 		moveq	#0,d0
-		lea	(Pal_LevelSelect+$2A).l,a0
+		lea	(Pal_Mighty+$A).l,a0
 		lea	(Normal_palette+$A).w,a1
 		lea	(Pal_WaterKnux+$C).l,a2
 		bsr.w	SuperHyper_PalCycle_Apply
@@ -4533,6 +4551,18 @@ SuperHyper_PalCycle_RevertMighty:					; Liliam: animate super forms consistently
 		tst.b	(Water_flag).w
 		beq.s	locret_37EC
 		move.w	PalCycle_SuperMighty_Water-PalCycle_SuperMighty(a0,d0.w),(Water_palette+$14).w
+		rts
+; ---------------------------------------------------------------------------
+
+SuperHyper_PalCycle_RevertRay:						; Liliam: animate super forms consistently
+		moveq	#0,d0
+		move.w	(Palette_frame).w,d1
+		subq.w	#6,(Palette_frame).w
+		bhs.s	loc_384A
+		move.w	d0,(Palette_frame).w
+		move.w	d0,(Palette_frame_Tails).w
+		move.b	d0,(Super_palette_status).w
+		move.l	(Pal_Ray+$10).l,(Normal_palette+$10).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -4558,7 +4588,6 @@ SuperHyper_PalCycle_ApplyRevert:
 
 SuperHyper_PalCycle_RevertTails:
 SuperHyper_PalCycle_RevertAmy:
-SuperHyper_PalCycle_RevertRay:
 		moveq	#0,d0
 		move.w	(Palette_frame).w,d1				; Liliam: animate super forms consistently
 		subq.w	#6,(Palette_frame).w				;
@@ -7777,6 +7806,11 @@ locret_6B1C:
 ; ---------------------------------------------------------------------------
 
 loc_6B1E:
+		cmpi.w	#6,d0					; Liliam: convert to 1P Ray palette
+		bne.s	.done					;
+		st	(Tails_CPU_palette_flag).w		;
+
+	.done:
 		subq.w	#1,d0
 		bpl.s	loc_6B22				; Liliam: simplify player object selection
 		moveq	#0,d0					;
@@ -9160,10 +9194,15 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		beq.s	ChangeRingFrame
 		move.b	d1,(Barrier_HUD_DMA_flag).w
 		tst.b	(Encore_mode).w
-		beq.s	.queueDMA
+		beq.s	.checkRay
 		cmpi.b	#$A,d1
 		bne.s	.queueDMA
 		subq.b	#2,d1
+
+	.checkRay:
+		cmpi.w	#6,(Player_mode).w
+		bne.s	.queueDMA
+		addi.b	#$C,d1
 
 	.queueDMA:
 		lsl.w	#6,d1
@@ -9584,9 +9623,9 @@ LevelSelect:
 		lea	(Target_palette).w,a2						;
 		tst.b	(Encore_mode).w							;
 		beq.s	loc_7BEC							;
-		lea	Pal_SaveScreen_Encore(pc),a1					;
 ;		lea	(Normal_palette_line_3).w,a1					;
 ;		lea	(Target_palette_line_3).w,a2					;
+		lea	Pal_SaveScreen_Encore(pc),a1					;
 		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d1
 
 loc_7BE4:
@@ -9594,15 +9633,21 @@ loc_7BE4:
 ;		move.l	(a1),(a2)+							;
 ;		clr.l	(a1)+								;
 		dbf	d1,loc_7BE4
-		lea	(Pal_EncoreMode).l,a1						;
-		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_2),d1	;
+		lea	(Pal_Ray).l,a1							;
+		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d1	;
+
+	.loop:
+		move.l	(a1)+,(a2)+							;
+		dbf	d1,.loop							;
+		lea	(Pal_LevelSelect2).l,a1						;
+		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_3),d1	;
 
 		moveq	#signextendB(mus_ProtoMenu),d0		; Liliam: Encore mode - music
 		bra.s	loc_7BEE				;
 ; ---------------------------------------------------------------------------
 
 loc_7BEC:
-		lea	(Pal_LevelSelect).l,a1						; Liliam: level select - use data select background
+		lea	(Pal_LevelSelectBG).l,a1					; Liliam: level select - use data select background
 		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette),d1		;
 		moveq	#signextendB(mus_DataSelect),d0
 
@@ -17953,7 +17998,7 @@ SaveScreen_PickCharFrame:						; Liliam: data select - add extra characters
 		rts
 ; ---------------------------------------------------------------------------
 SaveScreen_CharFrames:							; Liliam: data select - add extra characters
-		dc.b    6, $24, $2C,   7, $55, $44, $4C, $54
+		dc.b    6, $24, $2C,   7, $55, $56, $57, $54
 ; ---------------------------------------------------------------------------
 
 Obj_SaveScreen_Emeralds_NoSave:						; Liliam: Encore mode - save data
@@ -18067,7 +18112,7 @@ Obj_SaveScreen_EncoreStocks:						; Liliam: Encore mode - save data
 		mulu.w	#5,d0
 		subq.w	#1,d0
 		move.b	d0,width_pixels(a0)
-		addi.b	#$55,d1
+		addi.b	#$57,d1
 		move.b	d1,mapping_frame(a0)
 		move.b	#1,objoff_30(a0)
 
@@ -21649,8 +21694,10 @@ loc_FEB2:
 		move.w	y_pos(a0),d3				; Get player's y_pos
 		subi.w	#$18,d2					; Subtract width of Insta-Shield
 		subi.w	#$18,d3					; Subtract height of Insta-Shield
-		move.w	#$30,d4					; Player's width
-		move.w	#$30,d5					; Player's height
+		moveq	#$30,d4					; Liliam: extra skills - hammer attack
+		moveq	#$30,d5					;
+;		move.w	#$30,d4					;
+;		move.w	#$30,d5					;
 		bsr.s	Touch_Process
 		move.w	(sp)+,d0				; Get the backed-up status_secondary
 		btst	#Status_Invincible,d0			; Was the player already invincible (wait, what? An earlier check ensures that this can't happen)
@@ -21666,7 +21713,7 @@ Touch_CheckAmy:
 		cmpi.b	#3,d0					; Liliam: extra skills - hammer attack
 		bne.s	Touch_NoInstaShield			;
 		tst.b	double_jump_flag(a0)			;
-		bne.s	Touch_CheckAmy_HammerAttack		;
+		bne.w	Amy_HammerAttack_Touch			;
 		tst.b	double_jump_property(a0)		;
 		bne.s	loc_FEB2				;
 
@@ -21699,13 +21746,6 @@ Touch_NextObj:
 		moveq	#0,d0
 
 locret_FF1C:
-		rts
-; ---------------------------------------------------------------------------
-
-Touch_CheckAmy_HammerAttack:					; Liliam: extra skills - hammer attack
-		lea	(Collision_response_list).w,a4
-		move.w	(a4)+,d6
-		bne.w	Amy_HammerAttack_Touch
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -22482,7 +22522,7 @@ HyperTouch_Harmful:
 
 HyperTouch_Special:
 		; Liliam: removed original implementation
-		lea	HyperTouch_Whitelist(pc),a2		; Liliam: hyper touch - only collide with enemies
+		lea	(HyperTouch_Whitelist).l,a2		; Liliam: hyper touch - only collide with enemies
 
 	.loop:
 		move.l	(a2)+,d0				;
@@ -22495,16 +22535,6 @@ locret_105C2:
 		rts
 ; End of function HyperTouch_ChkValue
 
-; ---------------------------------------------------------------------------
-HyperTouch_Whitelist:						; Liliam: hyper touch - only collide with enemies
-		dc.l Obj_LBZExplodingTrigger_Main
-		dc.l Obj_LRZShootingTrigger_Main
-		dc.l Obj_Jawz_Main
-		dc.l Obj_Blastoid+6
-		dc.l Obj_MegaChopper+6
-		dc.l Obj_Mushmeanie+6
-		dc.l Obj_Rockn+6
-		dc.l Obj_Iwamodoki+6
 ; ---------------------------------------------------------------------------
 
 Obj_Sonic2P:
@@ -23101,6 +23131,11 @@ Amy_CheckMoves:							; Liliam: extra skills - hammer attack
 ; ---------------------------------------------------------------------------
 
 Amy_HammerAttack_Touch:						; Liliam: extra skills - hammer attack
+		lea	(Collision_response_list).w,a4
+		move.w	(a4)+,d6
+		beq.s	.return
+
+	.loop:
 		move.w	d6,-(sp)
 		movea.w	(a4)+,a1
 		move.b	collision_flags(a1),d0
@@ -23109,8 +23144,10 @@ Amy_HammerAttack_Touch:						; Liliam: extra skills - hammer attack
 	.nextObject:
 		move.w	(sp)+,d6
 		subq.w	#2,d6
-		bne.s	Amy_HammerAttack_Touch
+		bne.s	.loop
 		moveq	#0,d0
+
+	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -32890,7 +32927,33 @@ loc_15AA6:
 		; Liliam: simplify player anim selection
 ; ---------------------------------------------------------------------------
 
+CutsceneTails_LoadPLC:						; Liliam: convert to 1P Ray palette
+		tst.b	(Kos_modules_left).w
+		bne.s	.return
+		tst.w	(_unkF740).w
+		beq.s	.convert
+		clr.w	(_unkF740).w
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
+	.convert:
+		move.l	#PalTable_Ray,-(sp)
+		move.l	(DMA_queue_slot).w,-(sp)
+		bsr.s	sub_15C3E
+		moveq	#0,d0
+		movea.w	$30(a0),a1
+		move.b	mapping_frame(a1),d0
+		bsr.s	Tails_Load_PLC2
+		jmp	(DPLC_Convert_Palette).l
+; ---------------------------------------------------------------------------
+
 Tails_Tail_Load_PLC:
+		tst.b	(Tails_CPU_palette_flag).w		; Liliam: convert to 1P Ray palette
+		bne.s	CutsceneTails_LoadPLC			;
+
+sub_15C3E:
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0
 		cmp.b	(Player_prev_frame_P2_tail).w,d0
@@ -32913,6 +32976,8 @@ Tails_Tail_Load_PLC:
 
 
 Tails_Load_PLC:
+		tst.b	(Tails_CPU_palette_flag).w		; Liliam: convert to 1P Ray palette
+		bne.s	locret_15CCE				;
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0
 		movea.l	a0,a1						; Liliam: Encore mode - pick DPLC slot by art_tile
@@ -39881,7 +39946,7 @@ Obj_SuperTailsBirds_FindTarget:
 ; ---------------------------------------------------------------------------
 
 	.special:
-		lea	(HyperTouch_Whitelist).l,a2		; Liliam: hyper touch - only collide with enemies
+		lea	HyperTouch_Whitelist(pc),a2		; Liliam: hyper touch - only collide with enemies
 
 	.loop2:
 		move.l	(a2)+,d0				;
@@ -39904,7 +39969,15 @@ locret_1A462:
 Map_SuperTails_Birds:
 		; Liliam: cutscene knux - convert palette
 		include "General/Sprites/Tails/Map - Super Tails birds.asm"
-
+HyperTouch_Whitelist:						; Liliam: hyper touch - only collide with enemies
+		dc.l Obj_LBZExplodingTrigger_Main
+		dc.l Obj_LRZShootingTrigger_Main
+		dc.l Obj_Jawz_Main
+		dc.l Obj_Blastoid+6
+		dc.l Obj_MegaChopper+6
+		dc.l Obj_Mushmeanie+6
+		dc.l Obj_Rockn+6
+		dc.l Obj_Iwamodoki+6
 		; Liliam: removed unused data
 ; ---------------------------------------------------------------------------
 
@@ -68516,6 +68589,7 @@ locret_2D336:
 Ani_Starpost:
 		include "General/Sprites/Starpost/Anim - Starpost.asm"
 Map_StarPost:
+		; Liliam: convert to 1P Ray palette
 		include "General/Sprites/Starpost/Map - Starpost.asm"
 Map_StarpostStars:
 		include "General/Sprites/Starpost/Map - Starpost Stars.asm"
@@ -68865,6 +68939,7 @@ Obj_TitleCardInit:
 		lea	(ArtKosM_TitleCardRedAct).l,a1
 		move.w	#tiles_to_bytes($510),d2	; Liliam: title cards - move 'ZONE' letters for sprite limit
 ;		move.w	#tiles_to_bytes($500),d2	;
+		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l
 		; Liliam: removed S&K alone mode
 		tst.b	(Encore_mode).w				; Liliam: title cards - add 'Unlocked' branding
@@ -68891,6 +68966,7 @@ loc_2D6F4:
 ;loc_2D716:
 		move.w	#tiles_to_bytes($500),d2	; Liliam: title cards - move 'ZONE' letters for sprite limit
 ;		move.w	#tiles_to_bytes($53D),d2	;
+		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l
 		lea	TitleCard_LevelGfx(pc),a1
 		moveq	#9,d0
@@ -69352,6 +69428,7 @@ Obj_LevelResultsInit:
 loc_2DB1C:
 		move.w	d0,subtype(a0)
 		move.w	#tiles_to_bytes($568),d2
+		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l
 		; Liliam: removed original implementation
 		moveq	#0,d0					; Liliam: simplify results art selection
@@ -69363,6 +69440,7 @@ loc_2DB1C:
 		move.w	#tiles_to_bytes($5A0),d2
 
 loc_2DB66:
+		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l		; Load character name graphics
 		clr.b	(Update_HUD_timer).w		; Ensure timer isn't being updated currently
 		moveq	#0,d0
@@ -69978,10 +70056,12 @@ loc_2E04E:
 
 loc_2E06A:
 		move.w	#tiles_to_bytes($50F),d2
+		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l
 		; Liliam: removed original implementation
 		bsr.w	SSResults_CharNamePickArt		; Liliam: simplify results art selection
 		move.w	#tiles_to_bytes($4F1),d2
+		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l
 		lea	(ArtKosM_SSResults).l,a1
 		move.w	#tiles_to_bytes($523),d2
@@ -107872,7 +107952,7 @@ Obj_EncoreBonusHelper_Delay:						; Liliam: Encore mode - bonus stage
 		bpl.w	locret_4C012
 		move.b	#3,$14(a0)
 		movea.l	$10(a0),a1
-		move.l	#PalTable_PlayerGrayscale,-(sp)
+		move.l	#PalTable_EncoreGray,-(sp)
 		move.l	(DMA_queue_slot).w,-(sp)
 		jsr	(a1)
 		jmp	(DPLC_Convert_Palette).l
@@ -135008,7 +135088,7 @@ OptionsScreen:							; Liliam: options menu
 		beq.s	.loop2
 		tst.b	(Encore_mode).w
 		bne.s	.encoreBG
-		lea	(Pal_LevelSelect).l,a0
+		lea	(Pal_LevelSelectBG).l,a0
 
 	.loop1:
 		move.l	(a0)+,(a1)+
@@ -137180,6 +137260,7 @@ loc_5D9B8:
 ;		jsr	(Queue_Kos_Module).l					;
 		lea	(ArtKosM_SonicPlane).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_Plane),d2
+		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l
 		lea	(ArtKosM_SonicPlaneEnding).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_PlaneExtra),d2
@@ -137970,6 +138051,7 @@ loc_5E23E:
 loc_5E258:
 		lea	(ArtKosM_SonicPlane).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_Plane),d2
+		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l
 		lea	(ArtKosM_SonicPlaneEnding).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_PlaneExtra),d2
@@ -138502,6 +138584,7 @@ loc_5E7CC:
 		jsr	(Queue_Kos_Module).l
 		lea	(ArtKosM_SonicPlane).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_Plane),d2
+		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l
 		lea	(ArtKosM_SonicPlaneEnding).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_PlaneExtra),d2
@@ -140413,15 +140496,6 @@ sub_5FCCE:
 
 ; ---------------------------------------------------------------------------
 
-Obj_PalCycle_SuperTailsEndPose:
-		move.l	#loc_5FCEC,(a0)
-		lea	PalSPtr_EndingSuperTails(pc),a1
-		jsr	(sub_7C678).l
-		lea	PalSPtr_EndingSuperTails2(pc),a1	; Liliam: ending - improve ending pose palette
-		jsr	(sub_7C67C).l				;
-		bra.s	loc_5FCEC				;
-; ---------------------------------------------------------------------------
-
 Obj_PalCycle_SuperAmyEndPose:					; Liliam: simplify ending pose selection
 		move.l	#loc_5FCEC,(a0)
 		lea	PalSPtr_EndingSuperAmy(pc),a1
@@ -140433,6 +140507,15 @@ Obj_PalCycle_SuperRayEndPose:					; Liliam: simplify ending pose selection
 		move.l	#loc_5FCEC,(a0)
 		lea	PalSPtr_EndingSuperTails(pc),a1
 		jsr	(sub_7C678).l
+		bra.s	loc_5FCEC
+; ---------------------------------------------------------------------------
+
+Obj_PalCycle_SuperTailsEndPose:
+		move.l	#loc_5FCEC,(a0)
+		lea	PalSPtr_EndingSuperTails(pc),a1
+		jsr	(sub_7C678).l
+		lea	PalSPtr_EndingSuperTails2(pc),a1	; Liliam: ending - improve ending pose palette
+		jsr	(sub_7C67C).l				;
 
 loc_5FCEC:
 		btst	#3,(_unkFAB8).w
@@ -149997,6 +150080,7 @@ loc_677A4:
 		lea	(ArtKosM_SonicPlane).l,a1		; Liliam: AIZ intro - use ending plane sprite
 ;		lea	(ArtKosM_AIZIntroPlane).l,a1		;
 		move.w	#tiles_to_bytes(ArtTile_AIZIntroPlane),d2
+		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l
 		lea	(ArtKosM_AIZIntroEmeralds).l,a1
 		move.w	#tiles_to_bytes(ArtTile_AIZIntroEmeralds),d2
@@ -192926,11 +193010,14 @@ Load_PLC_Monitors:
 		lea	PLC_Monitors_Encore(pc),a1		; Liliam: Encore mode - special Robotnik icon for palette
 		tst.b	(Encore_mode).w				;
 		bne.s	loc_83C8E				;
-		lea	PLC_Monitors_Extra(pc),a1		;
-		cmpi.w	#4,(Player_mode).w			;
-		bhi.s	loc_83C8E				;
-		lea	PLC_Monitors_Amy(pc),a1			;
+		lea	PLC_Monitors_Ray(pc),a1			;
+		cmpi.w	#6,(Player_mode).w			;
 		beq.s	loc_83C8E				;
+		lea	PLC_Monitors_Amy(pc),a1			;
+		cmpi.w	#4,(Player_mode).w			;
+		beq.s	loc_83C8E				;
+		lea	PLC_Monitors_Extra(pc),a1		;
+		bhi.s	loc_83C8E				;
 		lea	PLC_Monitors(pc),a1			;
 
 loc_83C8E:
@@ -192958,11 +193045,14 @@ Load_PLC_MonitorsSpikesSprings:
 		lea	PLC_MonitorsSpikesSprings_Encore(pc),a1	; Liliam: Encore mode - special Robotnik icon for palette
 		tst.b	(Encore_mode).w				;
 		bne.s	loc_83CAC				;
-		lea	PLC_MonitorsSpikesSprings_Extra(pc),a1	;
-		cmpi.w	#4,(Player_mode).w			;
-		bhi.s	loc_83CAC				;
-		lea	PLC_MonitorsSpikesSprings_Amy(pc),a1	;
+		lea	PLC_MonitorsSpikesSprings_Ray(pc),a1	;
+		cmpi.w	#6,(Player_mode).w			;
 		beq.s	loc_83CAC				;
+		lea	PLC_MonitorsSpikesSprings_Amy(pc),a1	;
+		cmpi.w	#4,(Player_mode).w			;
+		beq.s	loc_83CAC				;
+		lea	PLC_MonitorsSpikesSprings_Extra(pc),a1	;
+		bhi.s	loc_83CAC				;
 		lea	PLC_MonitorsSpikesSprings(pc),a1
 
 loc_83CAC:
@@ -193033,6 +193123,11 @@ PLC_MonitorsSpikesSprings_Amy: plrlistheader			; Liliam: Encore mode - special R
 		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
 PLC_MonitorsSpikesSprings_Amy_End
 
+PLC_MonitorsSpikesSprings_Ray: plrlistheader			; Liliam: convert to 1P Ray palette
+		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
+		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
+PLC_MonitorsSpikesSprings_Ray_End
+
 PLC_Monitors: plrlistheader
 		plreq ArtTile_Monitors, ArtNem_Monitors
 PLC_Monitors_End
@@ -193050,6 +193145,10 @@ PLC_Monitors_Amy: plrlistheader					; Liliam: Encore mode - special Robotnik ico
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon_Amy
 PLC_Monitors_Amy_End
+
+PLC_Monitors_Ray: plrlistheader					; Liliam: convert to 1P Ray palette
+		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
+PLC_Monitors_Ray_End
 
 		; Liliam: removed unused data
 
@@ -196697,17 +196796,22 @@ PLC_EndSignStuff_Encore: plrlistheader				; Liliam: Encore mode - change charact
 		plreq ArtTile_Monitors, ArtNem_Monitors_Encore
 PLC_EndSignStuff_Encore_End
 
-PLC_EndSignStuff_Extra: plrlistheader			; Liliam: Encore mode - special Robotnik icon for palette
+PLC_EndSignStuff_Extra: plrlistheader				; Liliam: Encore mode - special Robotnik icon for palette
 		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
 PLC_EndSignStuff_Extra_End
 
-PLC_EndSignStuff_Amy: plrlistheader			; Liliam: Encore mode - special Robotnik icon for palette
+PLC_EndSignStuff_Amy: plrlistheader				; Liliam: Encore mode - special Robotnik icon for palette
 		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon_Amy
 PLC_EndSignStuff_Amy_End
+
+PLC_EndSignStuff_Ray: plrlistheader				; Liliam: convert to 1P Ray palette
+		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
+		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
+PLC_EndSignStuff_Ray_End
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlWait:
@@ -196724,11 +196828,14 @@ loc_85BEC:
 		lea	PLC_EndSignStuff_Encore(pc),a1		; Liliam: Encore mode - special Robotnik icon for palette
 		tst.b	(Encore_mode).w				;
 		bne.s	loc_85BF0				;
-		lea	PLC_EndSignStuff_Extra(pc),a1		;
-		cmpi.w	#4,(Player_mode).w			;
-		bhi.s	loc_85BF0				;
-		lea	PLC_EndSignStuff_Amy(pc),a1		;
+		lea	PLC_EndSignStuff_Ray(pc),a1		;
+		cmpi.w	#6,(Player_mode).w			;
 		beq.s	loc_85BF0				;
+		lea	PLC_EndSignStuff_Amy(pc),a1		;
+		cmpi.w	#4,(Player_mode).w			;
+		beq.s	loc_85BF0				;
+		lea	PLC_EndSignStuff_Extra(pc),a1		;
+		bhi.s	loc_85BF0				;
 		lea	PLC_EndSignStuff(pc),a1
 
 loc_85BF0:
@@ -208038,7 +208145,8 @@ loc_8C11E:
 off_8C134:
 		dc.w loc_8C13A-off_8C134
 		dc.w loc_8C144-off_8C134
-		dc.w Animate_RawMultiDelay-off_8C134
+		dc.w loc_8ED3E-off_8C134			; Liliam: fallout
+;		dc.w Animate_RawMultiDelay-off_8C134		;
 ; ---------------------------------------------------------------------------
 
 loc_8C13A:
@@ -217022,10 +217130,10 @@ PLC_MightyLifeIcon_End
 
 PLC_RayLifeIcon: plrlistheader							; Liliam: Ray life icon/universal level graphics
 		plreq ArtTile_PlayerLifeIcon, ArtNem_RayLifeIcon
-		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
+		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
 		plreq ArtTile_Ring, ArtNem_RingHUDText
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+		plreq ArtTile_StarPost+$C, ArtNem_RayStarPost
 PLC_RayLifeIcon_End
 
 PLC_MetalLifeIcon: plrlistheader						; Liliam: Metal Sonic life icon/universal level graphics
@@ -218218,6 +218326,9 @@ Pal_Knuckles:
 Pal_Amy:							; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Palettes/Amy.bin"
 		even
+Pal_Mighty:							; Liliam: add extra characters
+		binclude "General/Sprites/Sonic/Palettes/Mighty.bin"
+		even
 Pal_MetalSonic:							; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Palettes/MetalSonic.bin"
 		even
@@ -219003,6 +219114,15 @@ Pal_EraseDataMenuBG:						; Liliam: options menu
 Pal_MuseumChecklistBG:						; Liliam: museum
 		binclude "General/Save Menu/Palettes/Museum Checklist BG.bin"
 		even
+Pal_LevelSelectBG:									; Liliam: level select - use data select background
+		binclude "General/Save Menu/Palettes/Level Select BG.bin"
+		even
+Pal_Ray:							; Liliam: add extra characters
+		binclude "General/Sprites/Sonic/Palettes/Ray.bin"
+		even
+Pal_LevelSelect2:									; Liliam: level select - use data select background
+		binclude "General/Save Menu/Palettes/Level Select 2.bin"
+		even
 Pal_CompetitionMenuBG:						; Liliam: reinsert S3 data
 		binclude "General/Competition Menu/Palettes/BG.bin"
 		even
@@ -219047,6 +219167,7 @@ MapEni_SaveScreen_Layout:					; Liliam: reinsert S3 data
 		binclude "General/Save Menu/Enigma Map/Save Screen Layout.eni"
 		even
 MapUnc_SaveScreenNEW:						; Liliam: reinsert S3 data
+		; Liliam: museum - add kana character set
 		binclude "General/Save Menu/Uncompressed Map/NEW.bin"
 		even
 MapPtrs_SaveScreenStatic:					; Liliam: reinsert S3 data
@@ -219055,15 +219176,19 @@ MapPtrs_SaveScreenStatic:					; Liliam: reinsert S3 data
 		dc.l MapUnc_SaveScreenStatic3
 		dc.l MapUnc_SaveScreenStatic4
 MapUnc_SaveScreenStatic1:					; Liliam: reinsert S3 data
+		; Liliam: museum - add kana character set
 		binclude "General/Save Menu/Uncompressed Map/Static 1.bin"
 		even
 MapUnc_SaveScreenStatic2:					; Liliam: reinsert S3 data
+		; Liliam: museum - add kana character set
 		binclude "General/Save Menu/Uncompressed Map/Static 2.bin"
 		even
 MapUnc_SaveScreenStatic3:					; Liliam: reinsert S3 data
+		; Liliam: museum - add kana character set
 		binclude "General/Save Menu/Uncompressed Map/Static 3.bin"
 		even
 MapUnc_SaveScreenStatic4:					; Liliam: reinsert S3 data
+		; Liliam: museum - add kana character set
 		binclude "General/Save Menu/Uncompressed Map/Static 4.bin"
 		even
 ArtKos_SaveScreenMisc:						; Liliam: reinsert S3 data
@@ -219339,6 +219464,8 @@ ArtUnc_Tails:							; Liliam: reinsert S3 data
 		binclude "General/Sprites/Tails/Art/Tails.bin"
 ArtUnc_SuperTailsBirds:						; Liliam: cutscene knux - convert palette
 		binclude "General/Sprites/Tails/Art/Super Tails birds.bin"
+ArtUnc_HyperRayBirds:						; Liliam: add extra characters
+		binclude "General/Sprites/Sonic/Art/Hyper Ray Birds.bin"
 ArtUnc_HyperSonicStars:						; Liliam: cutscene knux - convert palette
 		binclude "General/Sprites/Sonic/Art/Hyper Sonic Stars.bin"
 ArtUnc_EncoreRespawn_Sonic:					; Liliam: Encore mode - respawn partner character
@@ -219351,12 +219478,20 @@ ArtUnc_EncoreRespawn_Ray:					; Liliam: Encore mode - respawn partner character
 		binclude "General/Sprites/Encore Respawn/Ray.bin"
 ArtUnc_EncoreRespawn_MetalSonic:				; Liliam: Encore mode - respawn partner character
 		binclude "General/Sprites/Encore Respawn/Metal Sonic.bin"
-ArtUnc_BarrierHUD:							; Liliam: HUD - barrier HUD
-		binclude "General/Sprites/HUD Icon/Barrier HUD Icons.bin"
-ArtUnc_Ring:									; Liliam: QOL - extend ring animation
-		binclude "General/Sprites/Ring/Ring.bin"
 ArtUnc_PhotoPieceDigits:					; Liliam: museum - photo piece object
 		binclude "General/Sprites/Ring/Photo Piece Digits.bin"
+ArtUnc_CutsceneSkip:						; Liliam: cutscene skip object
+		binclude "General/Sprites/HUD Icon/Cutscene Skip Hint.bin"
+ArtUnc_BarrierHUD:							; Liliam: HUD - barrier HUD
+		binclude "General/Sprites/HUD Icon/Barrier HUD Icons.bin"
+ArtUnc_StarPostStars1:							; Liliam: HUD - barrier HUD
+		binclude "General/Sprites/Starpost/Starpost Stars 1.bin"
+ArtUnc_StarPostStars2:							; Liliam: HUD - barrier HUD
+		binclude "General/Sprites/Starpost/Starpost Stars 2.bin"
+ArtUnc_StarPostStars3:							; Liliam: HUD - barrier HUD
+		binclude "General/Sprites/Starpost/Starpost Stars 3.bin"
+ArtUnc_StarPostStars_Encore:						; Liliam: Encore mode - bonus stage
+		binclude "General/Sprites/Starpost/Starpost Stars Encore.bin"
 		align $20000
 ; ---------------------------------------------------------------------------
 ArtUnc_Knux:
@@ -219366,9 +219501,9 @@ ArtUnc_BossExplosion:						; Liliam: Metal Sonic hologram object
 		binclude "General/Sprites/Metal Sonic Hologram/Boss Explosion.bin"
 		binclude "General/Sprites/Metal Sonic Hologram/Hologram Count.bin"
 PalTable_CutsceneKnux_S3:					; Liliam: cutscene knux - convert palette
-		binclude  "General/Sprites/Knuckles/Cutscene/Pal - S3.bin"
+		binclude "Levels/Misc/Pal - Cutscene Knux S3.bin"
 PalTable_CutsceneKnux_SK:					; Liliam: cutscene knux - convert palette
-		binclude  "General/Sprites/Knuckles/Cutscene/Pal - SK.bin"
+		binclude "Levels/Misc/Pal - Cutscene Knux SK.bin"
 		align $20000
 ; ---------------------------------------------------------------------------
 ArtUnc_CutsceneKnux:						; Liliam: Encore mode - special Knuckles art for palette
@@ -219423,12 +219558,12 @@ ArtKosM_HPZEncoreRobotnik:					; Liliam: HPZ - add Encore mode cutscene
 ; ---------------------------------------------------------------------------
 ArtUnc_Mighty:							; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Art/Mighty.bin"
-ArtUnc_HyperRayBirds:						; Liliam: add extra characters
-		binclude "General/Sprites/Sonic/Art/Hyper Ray Birds.bin"
-ArtUnc_CutsceneSkip:						; Liliam: cutscene skip object
-		binclude "General/Sprites/HUD Icon/Cutscene Skip Hint.bin"
 ArtUnc_CutsceneRobotnik:						; Liliam: Encore mode - use Robotnik for cutscenes
 		binclude "General/Sprites/Robotnik/Cutscene Main.bin"
+PalTable_EncoreGray:							; Liliam: Encore mode - bonus stage
+		binclude "Levels/Misc/Pal - Encore Gray.bin"
+PalTable_Ray:							; Liliam: convert to 1P Ray palette
+		binclude "Levels/Misc/Pal - Ray.bin"
 Ani_Player:							; Liliam: simplify player anim selection
 		include "General/Sprites/Sonic/Anim - Players.asm"
 		align $20000
@@ -219439,16 +219574,8 @@ ArtUnc_Ray:							; Liliam: add extra characters
 ; ---------------------------------------------------------------------------
 ArtUnc_MetalSonic:						; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Art/Metal Sonic.bin"
-ArtUnc_StarPostStars1:							; Liliam: HUD - barrier HUD
-		binclude "General/Sprites/Starpost/Starpost Stars 1.bin"
-ArtUnc_StarPostStars2:							; Liliam: HUD - barrier HUD
-		binclude "General/Sprites/Starpost/Starpost Stars 2.bin"
-ArtUnc_StarPostStars3:							; Liliam: HUD - barrier HUD
-		binclude "General/Sprites/Starpost/Starpost Stars 3.bin"
-ArtUnc_StarPostStars_Encore:						; Liliam: Encore mode - bonus stage
-		binclude "General/Sprites/Starpost/Starpost Stars Encore.bin"
-PalTable_PlayerGrayscale:						; Liliam: Encore mode - bonus stage
-		binclude  "Levels/Slots/Misc Object Data/Pal - Grayscale.bin"
+ArtUnc_CombineRing:								; Liliam: Encore mode - combine ring
+		binclude "General/Sprites/Ring/Combine Ring.bin"
 		include "strings.asm"				; Liliam: options menu
 		align $20000
 ; ---------------------------------------------------------------------------
@@ -219457,8 +219584,8 @@ ArtUnc_Sonic_Extra:
 		binclude "General/Sprites/Sonic/Art/Sonic Extra.bin"
 ;ArtUnc_Tails_Extra:
 		; Liliam: simplify player anim selection
-ArtUnc_CombineRing:								; Liliam: Encore mode - combine ring
-		binclude "General/Sprites/Ring/Combine Ring.bin"
+ArtUnc_Ring:									; Liliam: QOL - extend ring animation
+		binclude "General/Sprites/Ring/Ring.bin"
 Map_Sonic:
 		; Liliam: simplify player anim selection
 		include "General/Sprites/Sonic/Map - Sonic.asm"
@@ -220805,8 +220932,6 @@ Pal_Save_ZoneCard_SSZ_Encore:						; Liliam: Encore mode - save data
 		binclude "General/Save Menu/Palettes/Encore Mode/Zone Card C.bin"
 Pal_Save_ZoneCard_DEZ_Encore:						; Liliam: Encore mode - save data
 		binclude "General/Save Menu/Palettes/Encore Mode/Zone Card D.bin"
-Pal_LevelSelect:									; Liliam: level select - use data select background
-		binclude "General/Save Menu/Palettes/Level Select.bin"
 Map_LevelSelect:						; Liliam: level select - restore zone icons
 		include "General/Save Menu/Map - Level Select.asm"
 LevelSelectOptions:						; Liliam: level select - expand options
@@ -221157,6 +221282,12 @@ ArtNem_Monitors:
 		even
 ArtNem_Monitors_Encore:						; Liliam: Encore mode - change character item
 		binclude "General/Sprites/Monitors/Monitors Encore.bin"
+		even
+ArtNem_Monitors_Ray:						; Liliam: convert to 1P Ray palette
+		binclude "General/Sprites/Monitors/Monitors Ray.bin"
+		even
+ArtNem_RayStarPost:						; Liliam: convert to 1P Ray palette
+		binclude "General/Sprites/Starpost/Ray Starpost.bin"
 		even
 ArtNem_EncoreCursor:						; Liliam: Encore mode - player swap
 		binclude "General/Sprites/Enemy Misc/Encore Cursor.bin"
@@ -222034,7 +222165,9 @@ SlotBonusLayoutPtrs:							; Liliam: Encore mode - bonus stage
 		dc.l EncoreBonusLayout4
 		dc.l EncoreBonusLayout5
 		dc.l EncoreBonusLayout6
-SlotBonusLayout:binclude "Levels/Slots/SSLayout/Bonus Player Start.bin"
+SlotBonusLayout:
+		; Liliam: Encore mode - bonus stage
+		binclude "Levels/Slots/SSLayout/Bonus Player Start.bin"
 		binclude "Levels/Slots/SSLayout/Bonus Layout.bin"
 		even
 EncoreBonusLayout1:							; Liliam: Encore mode - bonus stage

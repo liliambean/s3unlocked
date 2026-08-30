@@ -730,10 +730,11 @@ Rings_manager_routine		ds.b 1
 Level_started_flag		ds.b 1
 _unkF712			ds.b $1C		; Gumball Machine and HPZ Emerald throne room object respawn table
 AIZ1_palette_cycle_flag		ds.b 1			; selects which palette cycles are used in AIZ1
-Bonus_stage_flag		ds.b 1		; Liliam: Encore mode - bonus stage
+Tails_CPU_palette_flag		ds.b 1		; Liliam: convert to 1P Ray palette
 Water_flag			ds.b 1
+Bonus_stage_flag		ds.b 1		; Liliam: Encore mode - bonus stage
 Encore_flags			ds.b 1		; Liliam: Encore mode - palette
-			ds.b $C				; unused
+			ds.b $B				; unused
 Flying_carrying_Sonic_flag	ds.b 1			; set when Tails carries Sonic in a Sonic and Tails game
 Flying_picking_Sonic_timer	ds.b 1			; until this is 0 Tails can't pick Sonic up
 _unkF740			ds.w 1
@@ -1233,9 +1234,11 @@ ArtTile_Competition_Text              = $058D
 ArtTile_Competition_CharSel           = $05C9
 
 ; Save screen.
-ArtTile_Save_Misc                     = $029F
-ArtTile_Save_Extra                    = $0454
-ArtTile_Save_Text                     = $0540	; Liliam: museum - add kana character set
+ArtTile_Save_Misc                     = $02CA	; Liliam: museum - add kana character set
+ArtTile_Save_Extra                    = $047F	;
+ArtTile_Save_Text                     = $029F	;
+;ArtTile_Save_Misc                    = $029F	;
+;ArtTile_Save_Extra                   = $0454	;
 ;ArtTile_Save_Text                    = $0562	;
 ArtTile_Save_ZoneIcon                 = $05BA	; Liliam: data select - add extra characters
 
