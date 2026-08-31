@@ -317,7 +317,11 @@ LevelSelectZoneIcon_ExtraIcons:
 
 Obj_PhotoPiece:
 		tst.b	(Encore_mode).w
+	if NoMuseum
+		bra.s	PhotoPiece_Delete
+	else
 		bne.s	PhotoPiece_Delete
+	endif
 		moveq	#0,d0
 		move.b	subtype(a0),d0
 		cmpi.b	#120,d0
@@ -405,7 +409,7 @@ Map_PhotoPiece:
 
 Obj_MetalSonicHologram:
 		tst.b	(Encore_mode).w
-	if NoMetalSonic
+	if NoHolograms
 		bra.w	MetalSonicHologram_Delete
 	else
 		beq.w	MetalSonicHologram_Delete
@@ -524,7 +528,7 @@ Obj_MetalSonicHologram_DrawCount:
 		subq.w	#1,d1
 		bsr.w	MetalSonicHologram_DrawDigits
 		st	(SRAM_mask_interrupts_flag).w
-		jsr	(Write_SaveExtra).l
+		jsr	(SaveGame_MetalSonicHologram).l
 
 Obj_MetalSonicHologram_MoveSprite:
 		subq.w	#1,y_pos(a0)
@@ -559,7 +563,7 @@ Obj_MetalSonicHologram_WaitForExplosions:
 		moveq	#signextendB(sfx_TimeStone),d0
 		moveq	#0,d1
 		move.b	subtype(a0),d1
-	if EncoreSkip2PZones
+	if No2PZones
 		cmpi.b	#28-5,d1
 	else
 		cmpi.b	#28,d1
@@ -1352,7 +1356,7 @@ EncoreCapsule_DisplacePlayerOffObject2:
 ; ---------------------------------------------------------------------------
 
 EncoreCapsule_GiveStock:
-	if EncoreSkip2PZones
+	if No2PZones
 		bsr.w	EncoreCapsule_UnlockCharacters
 	else
 		bset	d0,(Encore_unlocked_chars).w
@@ -1536,9 +1540,9 @@ Obj_EncoreHandoff:
 		move.b	subtype(a1),d0
 		cmpi.b	#7,d0
 		bhi.w	Obj_EncoreCapsuleAnimal_Animate
+		bsr.s	EncoreHandoff_LoadMappings
 		move.l	#Obj_EncoreHandoff_Animate,(a0)
 		move.w	#make_art_tile(ArtTile_BossExplosion,0,1),art_tile(a0)
-		bsr.s	EncoreHandoff_LoadMappings
 		move.b	#$18,anim(a0)
 		bsr.s	EncoreHandoff_LoadPLC
 
@@ -1701,11 +1705,16 @@ Obj_EncoreHandoff_SwapPlayers:
 		sub.b	y_radius(a1),d0
 		ext.w	d0
 		sub.w	d0,y_pos(a0)
-		move.b	objoff_37(a0),d0
+		move.b	objoff_37(a0),d1
+		move.b	d1,d0
 		bsr.w	EncoreHandoff_LoadMappings
 		bset	#Status_Facing,status(a0)
 		clr.b	flip_angle(a0)
 		clr.b	anim(a0)
+		cmpi.b	#1,d1
+		bne.s	Obj_EncoreHandoff_WalkOffScreen
+		lea	(Tails_tails),a1
+		jsr	(Delete_Referenced_Sprite).l
 
 Obj_EncoreHandoff_WalkOffScreen:
 		tst.b	render_flags(a0)
@@ -4246,5 +4255,3 @@ Ani_DeathEggRobot_Bomb0:
 		dc.b    3, $12, $13, $14, $15, $16,   0,   0, $FF
 Ani_DeathEggRobot_Bomb1:
 		dc.b    7,   0,   1,   2,   3,   4, $FB
-; ---------------------------------------------------------------------------
-		org $178000

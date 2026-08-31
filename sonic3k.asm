@@ -31,19 +31,16 @@ FixBugs = 1
 FixMusicAndSFXDataBugs = 1
 ; If 1, fixes multiple bugs within the game
 
+VariableRollHeight = 1
+; If 1, Tails and Amy's roll heights are adjusted
+
 DevMode = 1
 ; If 1, enables some cheats to help with development
 
-EncoreSkip2PZones = 1
-; If 1, Encore mode starts in Angel Island Zone
-
-NoMetalSonic = 0
-; If 1, Metal Sonic is removed from the game
-
-VariableRollHeight = 2
-; If 0, all characters have the same height while rolling.
-; If 1, Tails and Amy are three pixels closer to the floor.
-; If 2, character heights are overridden for autospin tunnels.
+NoMuseum = 0
+NoHolograms = 0
+No2PZones = 1
+; If 1, disables features that are under construction
 
 Size_of_Snd_driver_guess = $1180
 ; Approximate size of compressed sound driver. Change when appropriate
@@ -5656,7 +5653,7 @@ LoadPalette_LevelLoad:										; Liliam: fade in player palette if title card s
 		beq.s	LoadPalette_NoEncore
 		tst.w	(Current_zone_and_act).w
 		bne.s	LoadPalette_Immediate_NoEncore
-	if EncoreSkip2PZones
+	if No2PZones
 		tst.b	(AIZ_skip_intro_flag).w
 	else
 		tst.w	(Encore_mode).w
@@ -6056,6 +6053,7 @@ loc_41D4:
 		moveq	#$7F,d0					; Liliam: title screen - expand options
 		and.b	(Title_screen_option).w,d0		;
 		move.b	TitleScreen_GameModes(pc,d0.w),d0	;
+		bmi.s	TitleScreen_DenySelection		;
 		move.b	d0,(Game_mode).w			;
 		cmpi.b	#GameMode_LevelSelect,d0		;
 		beq.s	TitleScreen_LevelSelect			;
@@ -6067,11 +6065,20 @@ TitleScreen_LevelSelect:
 		bra.w	Play_Music				;
 ; ---------------------------------------------------------------------------
 
+TitleScreen_DenySelection:					; Liliam: title screen - expand options
+		moveq	#signextendB(sfx_Error),d0
+		bsr.w	Play_SFX
+		bra.s	loc_41D4
+; ---------------------------------------------------------------------------
 TitleScreen_GameModes:						; Liliam: title screen - expand options
 		dc.b GameMode_SaveScreen
 		dc.b GameMode_EncoreMode
 		dc.b GameMode_Competition
+	if NoMuseum
+		dc.b $80
+	else
 		dc.b GameMode_Museum
+	endif
 		dc.b GameMode_BlueSpheres
 		dc.b GameMode_S3Credits
 		dc.b GameMode_LevelSelect
@@ -6953,7 +6960,7 @@ loc_6040:
 	.skipPLC:
 		move.w	(Current_zone_and_act).w,d0
 		bne.s	loc_6058
-	if EncoreSkip2PZones
+	if No2PZones
 		tst.b	(AIZ_skip_intro_flag).w			; Liliam: AIZ intro - give other characters intro
 	else
 		tst.w	(Encore_mode).w				;
@@ -7121,7 +7128,7 @@ loc_620E:
 		bsr.w	Play_Music
 		tst.w	(Current_zone_and_act).w
 		bne.s	loc_6268
-	if EncoreSkip2PZones
+	if No2PZones
 		tst.b	(AIZ_skip_intro_flag).w			; Liliam: AIZ intro - give other characters intro
 	else
 		tst.w	(Encore_mode).w				;
@@ -7465,7 +7472,7 @@ SpawnLevelMainSprites:
 		bne.s	loc_6834
 		tst.b	(Encore_mode).w					; Liliam: AIZ intro - Encore mode intro
 		beq.s	loc_681E					;
-	if EncoreSkip2PZones
+	if No2PZones
 		tst.b	(AIZ_skip_intro_flag).w				;
 		bne.s	locret_6832					;
 		move.l	#Obj_AIZSurfboardIntro,(Level_intro_object).w	;
@@ -9293,7 +9300,7 @@ LoadLevelLoadBlock:
 loc_7812:
 		move.w	(Current_zone_and_act).w,d0
 		bne.s	loc_782A
-	if EncoreSkip2PZones
+	if No2PZones
 		tst.b	(AIZ_skip_intro_flag).w			; Liliam: AIZ intro - give other characters intro
 	else
 		tst.w	(Encore_mode).w				;
@@ -9664,8 +9671,11 @@ loc_7BF4:
 	if DevMode
 		nop
 		nop
+		nop
+		nop
 	else
 		clr.l	(Save_pointer).w
+		clr.l	(Collected_holograms_array).w		; Liliam: Metal Sonic hologram object
 	endif
 		clr.l	(Collected_special_ring_array).w
 		clr.b	(Last_star_post_hit).w
@@ -9798,7 +9808,7 @@ LevelSelect_CheckCNZSOZ:
 		cmpi.w	#$300,d0				; Liliam: Encore mode - player starts
 		beq.s	LevelSelect_AlternateStart		;
 		cmpi.w	#$800,d0				;
-	if EncoreSkip2PZones
+	if No2PZones
 		bne.s	loc_7DAC				;
 	else
 		bne.s	loc_7DB4				;
@@ -9820,7 +9830,7 @@ loc_7DAC:
 		cmpi.w	#$E00,d0				; Liliam: Encore mode - add extra levels
 		blo.s	loc_7DB4				;
 		cmpi.w	#$1300,d0				;
-	if EncoreSkip2PZones
+	if No2PZones
 		blo.s	loc_7D92				;
 	else
 		blo.s	LevelSelect_DenySelection		;
@@ -15966,10 +15976,10 @@ SaveData_MainDefault:
 	endif
 SaveData_EncoreDefault:							; Liliam: Encore mode - save data
 	if DevMode
-		dc.w   $30C,   %1111111001000<<3,     0, $FFFC, %111110101100011
-		dc.w      7,    %111111000010<<3,     0,     0,       %110101010
+		dc.w   $30C,   %1111111010000<<3,     0, $FFFC, %111110101100010
+		dc.w      7,    %111111100101<<3,     0,     0,       %011010001
 		dc.w  $8000,                1<<9,     0,     0,                0
-		dc.l      0,     0,     0
+		dc.l     -1,     0,     0
 		dc.w  SRAM_integrity
 	else
 		dc.w  $8000,  1<<9,     0,     0,     0
@@ -16350,21 +16360,20 @@ locret_C530:
 
 
 SaveGame_LivesContinues:
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - save data
-		bne.s	locret_C56C					;
 		; Liliam: removed S&K alone mode
 		move.l	(Save_pointer).w,d0
 		beq.s	locret_C56C
 		movea.l	d0,a1
-		move.b	(Life_count).w,d0
-		cmpi.b	#99,d0
-		bls.s	loc_C54C
-		moveq	#99,d0
+		move.b	#3,SRAM_life_count(a1)			; Liliam: continues - stop awarding in saved games
+;		move.b	(Life_count).w,d0			;
+;		cmpi.b	#99,d0					;
+;		bls.s	loc_C54C				;
+;		moveq	#99,d0					;
 
-loc_C54C:
-		move.b	d0,SRAM_life_count(a1)			; Save number of lives
-		move.b	d0,(Life_count).w
-;		move.b	(Continue_count).w,d0			; Liliam: continues - stop awarding in saved games
+;loc_C54C:
+;		move.b	d0,SRAM_life_count(a1)			;
+;		move.b	d0,(Life_count).w			;
+;		move.b	(Continue_count).w,d0			;
 ;		cmpi.b	#99,d0					;
 ;		bls.s	loc_C560				;
 ;		moveq	#99,d0					;
@@ -16380,6 +16389,23 @@ locret_C56C:
 ; End of function SaveGame_LivesContinues
 
 ; ---------------------------------------------------------------------------
+
+SaveGame_MetalSonicHologram:					; Liliam: Metal Sonic hologram object
+		move.l	(Save_pointer).w,d0
+		beq.s	locret_C56E
+		bsr.s	MetalSonicHologram_LoadSRAM
+		move.l	(Collected_holograms_array).w,(a1)
+		bra.w	Write_SaveEncore
+; ---------------------------------------------------------------------------
+
+SaveScreen_LoadHologramSRAM:
+		move.l	(Save_pointer).w,d0			; Liliam: Metal Sonic hologram object
+
+MetalSonicHologram_LoadSRAM:
+		subi.w	#Encore_saved_data,d0			;
+		andi.b	#$18,d0					;
+		addi.w	#Encore_saved_data+SRAM_next_slot*3,d0	;
+		movea.l	d0,a1					;
 
 locret_C56E:
 		rts
@@ -17459,7 +17485,8 @@ Obj_SaveScreen_NoSave_Slot:
 
 loc_D31C:
 		tst.b	(Dataselect_entry).w
-		bne.s	loc_D396
+		bne.w	loc_D396					;
+;		bne.s	loc_D396					;
 		move.w	(Player_2+object_control).w,d0
 		or.w	(Events_bg+$12).w,d0
 		bne.s	loc_D396
@@ -17467,7 +17494,7 @@ loc_D31C:
 		andi.w	#button_confirm_mask,d0
 		beq.s	loc_D376
 		move.b	#GameMode_Level,(Game_mode).w
-		clr.w	(Player_mode).w					; Liliam: Encore mode - save data
+		clr.w	(Player_mode).w					;
 		tst.b	(Encore_mode).w					;
 		bne.s	loc_D342					;
 		move.w	(Dataselect_nosave_player).w,(Player_option).w
@@ -17481,6 +17508,7 @@ loc_D342:
 		clr.l	(Collected_emeralds_array).w
 		clr.w	(Collected_emeralds_array+4).w
 		clr.b	(Collected_emeralds_array+6).w
+		clr.l	(Collected_holograms_array).w		; Liliam: Metal Sonic hologram object
 		clr.l	(Collected_special_ring_array).w
 		clr.b	(Emeralds_converted_flag).w
 		clr.l	(Save_pointer).w
@@ -17668,7 +17696,7 @@ loc_D4A4:
 ; ---------------------------------------------------------------------------
 
 loc_D4D0:
-	if EncoreSkip2PZones
+	if No2PZones
 		moveq	#$C,d6						; Liliam: Encore mode - save data
 	else
 		moveq	#$12,d6					; Liliam: Encore mode - add extra levels
@@ -17815,6 +17843,8 @@ loc_D57E:
 		clr.l	(Player_mode).w					;
 		lsr.w	#3,d1						;
 		move.b	d1,(Encore_unlocked_chars).w			;
+		bsr.w	SaveScreen_LoadHologramSRAM			;
+		move.l	(a1),(Collected_holograms_array).w		;
 		move.l	(P1_character).w,(Saved_encore_stocks).w	;
 		move.b	#GameMode_Level,(Game_mode).w			;
 		jmp	(Draw_Sprite).l					;
@@ -17876,6 +17906,7 @@ loc_D604:
 		clr.l	(Collected_emeralds_array).w
 		clr.w	(Collected_emeralds_array+4).w
 		clr.b	(Collected_emeralds_array+6).w
+		clr.l	(Collected_holograms_array).w		; Liliam: Metal Sonic hologram object
 		clr.l	(Collected_special_ring_array).w
 		clr.b	(Emeralds_converted_flag).w
 		move.l	a1,(Save_pointer).w
@@ -29384,7 +29415,7 @@ loc_13A10:
 		bne.w	loc_13AF4
 		cmpi.w	#0,(Current_zone_and_act).w
 		bne.s	loc_13A32
-	if EncoreSkip2PZones
+	if No2PZones
 		tst.b	(AIZ_skip_intro_flag).w				; Liliam: AIZ intro - Encore mode intro
 	else
 		tst.w	(Encore_mode).w					;
@@ -40792,7 +40823,7 @@ Obj_EncoreRespawn_Release:
 		btst	#Status_Roll,status(a1)
 		beq.s	.release
 		move.b	d0,spin_dash_flag(a0)
-	if VariableRollHeight = 2
+	if VariableRollHeight
 		move.b	#$F,y_radius(a0)
 		move.b	#9,x_radius(a0)
 	else
@@ -43709,7 +43740,7 @@ loc_1BE7A:
 		bne.w	loc_1BF74
 		cmpi.w	#0,(Current_zone_and_act).w
 		bne.s	loc_1BEC6
-	if EncoreSkip2PZones
+	if No2PZones
 		nop
 		nop
 		nop
@@ -44288,7 +44319,7 @@ j_LevelSetup:
 LoadLevelLoadBlock2:
 		move.w	(Current_zone_and_act).w,d0
 		bne.s	loc_1C2C8
-	if EncoreSkip2PZones
+	if No2PZones
 		tst.b	(AIZ_skip_intro_flag).w			; Liliam: AIZ intro - give other characters intro
 	else
 		tst.w	(Encore_mode).w				;
@@ -48396,7 +48427,7 @@ loc_1E930:
 
 loc_1E934:
 		btst	#4,subtype(a0)
-	if VariableRollHeight = 2
+	if VariableRollHeight
 		beq.w	AutoSpin_RestoreRollHeight		; Liliam: bugfix - set correct player height
 	else
 		bne.s	locret_1E9B4
@@ -48441,7 +48472,7 @@ loc_1E9A4:
 
 loc_1E9A6:
 		btst	#4,subtype(a0)
-	if VariableRollHeight = 2
+	if VariableRollHeight
 		beq.s	AutoSpin_RestoreRollHeight		; Liliam: bugfix - set correct player height
 	else
 		bne.s	locret_1E9B4
@@ -48453,7 +48484,7 @@ locret_1E9B4:
 ; ---------------------------------------------------------------------------
 
 loc_1E9B6:
-	if VariableRollHeight = 2
+	if VariableRollHeight
 		tst.b	spin_dash_flag(a1)			; Liliam: bugfix - set correct player height
 		bne.s	AutoSpin_ForceRollHeight		;
 	endif
@@ -48477,7 +48508,7 @@ loc_1E9D2:
 		rts
 ; End of function sub_1E8C6
 
-	if VariableRollHeight = 2
+	if VariableRollHeight
 ; ---------------------------------------------------------------------------
 
 AutoSpin_ForceRollHeight:					; Liliam: bugfix - set correct player height
@@ -48581,7 +48612,7 @@ loc_1EA9A:
 
 loc_1EA9E:
 		btst	#4,subtype(a0)
-	if VariableRollHeight = 2
+	if VariableRollHeight
 		beq.w	AutoSpin_RestoreRollHeight		; Liliam: bugfix - set correct player height
 	else
 		bne.w	locret_1EB30
@@ -48631,7 +48662,7 @@ loc_1EB1E:
 
 loc_1EB22:
 		btst	#4,subtype(a0)
-	if VariableRollHeight = 2
+	if VariableRollHeight
 		beq.w	AutoSpin_RestoreRollHeight		; Liliam: bugfix - set correct player height
 	else
 		bne.s	locret_1EB30
@@ -68935,20 +68966,24 @@ Obj_GameOver:
 ; ---------------------------------------------------------------------------
 
 loc_2D5CE:
-		moveq	#3,d4							; Liliam: expand dynamic object RAM
-		tst.b	(Time_over_flag).w					;
+		moveq	#3,d0							; Liliam: expand dynamic object RAM
 ;		tst.b	mapping_frame(a0)					;
+		tst.b	(Time_over_flag).w					;
 		bne.s	loc_2D5DE
+		tst.b	(Encore_mode).w					; Liliam: Encore mode - save data
+		bne.s	.notTimeOver					;
 		st	(SRAM_mask_interrupts_flag).w
 		jsr	(SaveGame_LivesContinues).l
-		moveq	#1,d4							;
+
+	.notTimeOver:
+		moveq	#1,d0							; Liliam: expand dynamic object RAM
 
 loc_2D5DE:
 		move.b	#$40,render_flags(a0)					;
 		move.w	#1,mainspr_childsprites(a0)				;
-		move.b	d4,mapping_frame(a0)					;
-		addq.b	#1,d4							;
-		move.b	d4,sub2_mapframe(a0)					;
+		move.b	d0,mapping_frame(a0)					;
+		addq.b	#1,d0							;
+		move.b	d0,sub2_mapframe(a0)					;
 		move.w	#$50,x_pos(a0)
 ;		btst	#0,mapping_frame(a0)					;
 ;		beq.s	loc_2D5F2						;
@@ -134975,7 +135010,7 @@ UnlockScreen:							; Liliam: extra skills
 
 	.encoreMode:
 		btst	#Unlock_MetalSonic,(Unlock_flags).w
-	if NoMetalSonic
+	if NoHolograms
 		bra.w	UnlockScreen_Return
 	else
 		bne.w	UnlockScreen_Return
@@ -134983,17 +135018,12 @@ UnlockScreen:							; Liliam: extra skills
 		move.l	(Collected_holograms_array).w,d0
 		moveq	#0,d1
 		jsr	(PopCount32).l
-	if EncoreSkip2PZones
+	if No2PZones
 		cmpi.b	#28-5,d1
 	else
 		cmpi.b	#28,d1
 	endif
-	if DevMode
-		nop
-		nop
-	else
 		blo.w	UnlockScreen_Return
-	endif
 		move.w	#8,-(sp)
 		bset	#Unlock_MetalSonic,(Unlock_flags).w
 
@@ -135199,7 +135229,7 @@ OptionsScreen:							; Liliam: options menu
 		move.w	#$120,x_pos(a0)
 		move.w	#$14C,y_pos(a0)
 		move.b	(Encore_mode).w,$1C(a0)
-		move.b	#6,$2C(a0)
+		move.b	#5,$2C(a0)
 		cmp.b	#GameMode_EraseData,(Game_mode).w
 		beq.s	.initSprites
 		move.b	#$40,render_flags(a0)
@@ -135471,7 +135501,6 @@ EraseDataScreen_Index:						; Liliam: options menu
 		dc.w EraseDataScreen_EraseEncoreMode-EraseDataScreen_Index
 		dc.w EraseDataScreen_EraseCompetition-EraseDataScreen_Index
 		dc.w EraseDataScreen_ErasePhotoPieces-EraseDataScreen_Index
-		dc.w EraseDataScreen_EraseHolograms-EraseDataScreen_Index
 		dc.w EraseDataScreen_EraseBlueSphere-EraseDataScreen_Index
 		dc.w EraseDataScreen_EraseUnlockFlags-EraseDataScreen_Index
 ; ---------------------------------------------------------------------------
@@ -135513,17 +135542,17 @@ EraseDataScreen_EraseCompetition:				; Liliam: options menu
 ; ---------------------------------------------------------------------------
 
 EraseDataScreen_ErasePhotoPieces:				; Liliam: options menu
-		move.b	(Encore_options).w,d0
-		clr.l	(Collected_photo_piece_array).w
-		clr.l	(Collected_photo_piece_array+4).w
-		clr.l	(Collected_photo_piece_array+8).w
-		clr.l	(Collected_photo_piece_array+$C).w
-		move.b	d0,(Encore_options).w
-		bra.s	OptionsScreen_SaveData
-; ---------------------------------------------------------------------------
-
-EraseDataScreen_EraseHolograms:					; Liliam: options menu
-		clr.l	(Collected_holograms_array).w
+		lea	(Collected_photo_piece_array).w,a0
+	if DevMode
+		moveq	#-1,d0
+	else
+		moveq	#0,d0
+	endif
+		move.l	d0,(a0)+
+		move.l	d0,(a0)+
+		move.l	d0,(a0)+
+		move.w	d0,(a0)+
+		move.b	d0,(a0)+
 		bra.s	OptionsScreen_SaveData
 ; ---------------------------------------------------------------------------
 
@@ -135553,7 +135582,7 @@ OptionsScreen_UnmarkFields:
 		cmp.b	#GameMode_EraseData,(Game_mode).w
 		bne.s	.notEraseMenu
 		add.w	d0,d0
-		addq.w	#5,d0
+		addq.w	#6,d0
 		bra.s	.calc
 ; ---------------------------------------------------------------------------
 
@@ -135598,7 +135627,7 @@ OptionsScreen_BuildPlaneMap:					; Liliam: options menu
 	.checkEraseMenu:
 		cmp.b	#GameMode_EraseData,(Game_mode).w
 		bne.s	.notEraseMenu
-		addi.w	#(plane_width*4),d0
+		addi.w	#(plane_width*5),d0
 		lea	(OptionText_EraseDataScreen).l,a0
 		bra.s	OptionsScreen_DrawText
 ; ---------------------------------------------------------------------------
@@ -151354,7 +151383,7 @@ Map_FBZRobotnikStand:
 Obj_AIZMinibossCutscene:
 		move.l	#loc_684EC,(a0)				; Liliam: Encore mode - add extra levels
 		tst.b	(Encore_mode).w				;
-	if EncoreSkip2PZones
+	if No2PZones
 		beq.s	loc_684EC				;
 	else
 		bra.s	loc_684EC				;
