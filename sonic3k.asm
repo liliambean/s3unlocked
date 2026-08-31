@@ -2467,9 +2467,9 @@ Queue_Kos_Module:
 
 Process_Kos_Module_Queue_Init:
 		move.w	(a1)+,d3	; get uncompressed size
-		cmpi.w	#$A000,d3
-		bne.s	+
-		move.w	#$8000,d3	; $A000 means $8000 for some reason
+;		cmpi.w	#$A000,d3				; Liliam: removed dead code
+;		bne.s	+					;
+;		move.w	#$8000,d3				;
 
 +
 		lsr.w	#1,d3
