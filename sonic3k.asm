@@ -70860,7 +70860,7 @@ loc_2E746:
 		move.w	#$10,(Screen_shake_flag).w			;
 		cmpi.b	#7,(Super_emerald_count).w			;
 		bhs.s	loc_2E772					;
-		move.w	#45,$2E(a0)					;
+		move.w	#60,$2E(a0)					;
 		move.b	#$14,routine(a0)				;
 		rts							;
 ; ---------------------------------------------------------------------------
