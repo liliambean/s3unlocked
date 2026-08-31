@@ -579,11 +579,11 @@ Map_SaveScreen_Ray1P:
 		dc.b  $E0,  $F, $22, $95, $FF, $F0
 Map_SaveScreen_Options1:
 		dc.w 3
-		dc.b  $F8,  $D, $22, $A5, $FF, $D8
-		dc.b  $F8,   9, $22, $AD, $FF, $F8
-		dc.b  $F4,  $A, $22, $B3,   0, $10
+		dc.b  $F8,  $D, $22, $A6, $FF, $D8
+		dc.b  $F8,   9, $22, $AE, $FF, $F8
+		dc.b  $F4,  $A, $22, $B4,   0, $10
 Map_SaveScreen_Options2:
 		dc.w 3
-		dc.b  $F8,  $D, $42, $A5, $FF, $D8
-		dc.b  $F8,   9, $42, $AD, $FF, $F8
-		dc.b  $F4,  $A, $22, $B3,   0, $10
+		dc.b  $F8,  $D, $42, $A6, $FF, $D8
+		dc.b  $F8,   9, $42, $AE, $FF, $F8
+		dc.b  $F4,  $A, $22, $B4,   0, $10

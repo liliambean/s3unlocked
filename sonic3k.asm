@@ -16783,7 +16783,14 @@ loc_C8E6:
 		subq.w	#2,d0
 		jsr	SaveScreen_MakeVDPCommand(pc)
 		move.l	d0,VDP_control_port-VDP_data_port(a6)
-		move.w	#make_art_tile(ArtTile_Save_Misc+$12,0,1),(a6)
+;		move.w	#make_art_tile(ArtTile_Save_Misc+$12,0,1),(a6)	;
+		move.w	#make_art_tile(ArtTile_Save_Misc+$12,0,1),d0	;
+		tst.b	saveslot_hologram_perfect(a3)			;
+		beq.s	loc_C8F6					;
+		move.w	#make_art_tile(ArtTile_Save_Misc+$2A5,0,1),d0	;
+
+loc_C8F6:
+		move.w	d0,(a6)						;
 		lea	SaveScreenText_New(pc),a1
 		tst.b	(a0)
 		bmi.s	loc_C946
@@ -17533,7 +17540,7 @@ loc_D39A:
 		bra.w	SaveScreen_SetChildSprites
 ; ---------------------------------------------------------------------------
 saveslot_id = $2E
-
+saveslot_hologram_perfect = $2F
 saveslot_save_pointer = $30
 saveslot_player_mode = $34
 saveslot_selected_zone = $36
@@ -17544,6 +17551,12 @@ saveslot_chaos_emerald_count = $3C
 saveslot_super_emerald_count = $3D
 saveslot_life_count = $3E
 saveslot_continue_count = $3F
+
+	if No2PZones
+HologramPerfectCount = 28-5
+	else
+HologramPerfectCount = 28
+	endif
 
 Obj_SaveScreen_Save_Slot:
 		jsr	(AllocateObjectAfterCurrent).l
@@ -17559,6 +17572,15 @@ loc_D3B0:
 		beq.s	loc_D3BA					;
 		addi.l	#Encore_saved_data,d0				;
 		move.l	d0,saveslot_save_pointer(a0)			;
+		bsr.w	MetalSonicHologram_LoadSRAM			;
+		move.l	(a1),d0						;
+		moveq	#0,d1						;
+		jsr	(PopCount32).l					;
+		cmpi.b	#HologramPerfectCount,d1			;
+		blo.s	.allocateObj					;
+		move.b	#1,saveslot_hologram_perfect(a0)		;
+
+	.allocateObj:
 		jsr	(AllocateObjectAfterCurrent).l			;
 		bne.s	.unpackChars					;
 		move.l	#Obj_SaveScreen_EncoreStocks,(a1)		;
@@ -135018,11 +135040,7 @@ UnlockScreen:							; Liliam: extra skills
 		move.l	(Collected_holograms_array).w,d0
 		moveq	#0,d1
 		jsr	(PopCount32).l
-	if No2PZones
-		cmpi.b	#28-5,d1
-	else
-		cmpi.b	#28,d1
-	endif
+		cmpi.b	#HologramPerfectCount,d1
 		blo.w	UnlockScreen_Return
 		move.w	#8,-(sp)
 		bset	#Unlock_MetalSonic,(Unlock_flags).w

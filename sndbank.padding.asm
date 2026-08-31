@@ -563,11 +563,7 @@ Obj_MetalSonicHologram_WaitForExplosions:
 		moveq	#signextendB(sfx_TimeStone),d0
 		moveq	#0,d1
 		move.b	subtype(a0),d1
-	if No2PZones
-		cmpi.b	#28-5,d1
-	else
-		cmpi.b	#28,d1
-	endif
+		cmpi.b	#HologramPerfectCount,d1
 		blo.s	.updateCount
 		move.l	#Obj_MetalSonicHologram_FlickerSprite,(a0)
 		moveq	#sfx_Perfect,d0
