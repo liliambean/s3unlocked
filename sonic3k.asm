@@ -39346,6 +39346,7 @@ Obj_FireShield:
 		move.w	#1,anim(a0)				; Clear anim and set prev_anim to 1
 		move.b	#-1,shield_prev_frame(a0)		; Reset shield_prev_frame (used by PLCLoad_Shields)
 		move.l	#Obj_FireShield_Main,(a0)
+		bsr.w	Sonic_ClearShieldJump			; Liliam: simplify double jump selection
 
 Obj_FireShield_Main:
 		movea.w	parent(a0),a2
@@ -39429,6 +39430,7 @@ Obj_LightningShield:
 		move.w	#1,anim(a0)				; Clear anim and set prev_anim to 1
 		move.b	#-1,shield_prev_frame(a0)		; Reset shield_prev_frame (used by PLCLoad_Shields)
 		move.l	#Obj_LightningShield_Main,(a0)
+		bsr.w	Sonic_ClearShieldJump			; Liliam: simplify double jump selection
 
 Obj_LightningShield_Main:
 		movea.w	parent(a0),a2
@@ -39595,6 +39597,7 @@ Obj_BubbleShield:
 		movea.w	parent(a0),a1
 		bsr.w	Player_ResetAirTimer
 		move.l	#Obj_BubbleShield_Main,(a0)
+		bsr.w	Sonic_ClearShieldJump			; Liliam: simplify double jump selection
 
 Obj_BubbleShield_Main:
 		movea.w	parent(a0),a2
@@ -39671,6 +39674,21 @@ locret_199E8:
 		rts
 ; End of function PLCLoad_Shields
 
+; ---------------------------------------------------------------------------
+
+Sonic_ClearShieldJump:						; Liliam: simplify double jump selection
+		movea.w	parent(a0),a2
+		tst.b	character_id(a2)
+		bne.s	.return
+		cmpi.b	#Status_LtngShield,double_jump_flag(a2)
+		bne.s	.clear
+		move.b	#1,jumping(a2)
+
+	.clear:
+		clr.b	double_jump_flag(a2)
+
+	.return:
+		rts
 ; ---------------------------------------------------------------------------
 Ani_InstaShield:
 		include "General/Sprites/Shields/Anim - Insta-Shield.asm"
