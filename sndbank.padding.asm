@@ -2380,6 +2380,7 @@ Obj_HPZEncoreTeleporter_Move:
 Obj_HPZEncoreTeleporter_DisableLevelCollision:
 		movea.w	parent3(a0),a1
 		lea	y_vel(a1),a1
+		moveq	#$1A,d0
 		lea	(Player_1).w,a2
 		bsr.s	HPZEncoreTeleporter_ProcessPlayer
 		lea	(Player_2).w,a2
@@ -2394,11 +2395,18 @@ Obj_HPZEncoreTeleporter_DisableLevelCollision:
 ; ---------------------------------------------------------------------------
 
 HPZEncoreTeleporter_ProcessPlayer:
+		cmp.b	anim(a2),d0
+		bne.s	.disableObjCollision
+		cmp.b	prev_anim(a2),d0
+		bne.s	.checkInAir
+
+	.disableObjCollision:
 		move.w	(a1)+,y_vel(a2)
+
+	.checkInAir:
 		btst	#Status_InAir,status(a2)
 		beq.s	HPZEncoreTeleporter_Return
-		move.b	#$E,top_solid_bit(a2)
-		move.b	#$F,lrb_solid_bit(a2)
+		move.w	#$E0F,top_solid_bit(a2)
 
 HPZEncoreTeleporter_Return:
 		rts

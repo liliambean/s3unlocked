@@ -215204,8 +215204,6 @@ loc_907DE:
 HPZSuperEmerald_Encore:							; Liliam: Encore mode - special stage
 		move.l	#Obj_HPZSuperEmerald_Encore,(a0)
 		move.b	d0,sub2_mapframe(a0)
-		tst.w	respawn_addr(a0)
-		bne.s	.disable
 		bset	#0,$38(a0)
 
 	.disable:
@@ -215302,16 +215300,32 @@ loc_908DE:
 		move.w	#$10,d3
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectTop).l
+		tst.w	mainspr_childsprites(a0)			; Liliam: Encore mode - special stage
+		beq.s	loc_908F4					;
+		btst	#0,$38(a0)					;
+		beq.s	loc_90920					;
+		move.b	status(a0),d6					;
+		andi.b	#standing_mask,d6				;
+		beq.s	loc_90920					;
+		btst	#p1_standing_bit,d6				;
+		beq.s	.player2					;
+		lea	(Player_1).w,a1					;
+		bsr.s	HPZSuperEmerald_HurtCharacter			;
+
+	.player2:
+		btst	#p2_standing_bit,d6				;
+		beq.s	loc_90920					;
+		lea	(Player_2).w,a1					;
+		bsr.s	HPZSuperEmerald_HurtCharacter			;
+		bra.s	loc_90920					;
+; ---------------------------------------------------------------------------
+
+loc_908F4:
 		btst	#p1_standing_bit,status(a0)
 		beq.s	loc_90920
 		btst	#0,$38(a0)
 		beq.s	loc_90920
 		move.l	#loc_90926,(a0)
-		tst.w	mainspr_childsprites(a0)			; Liliam: Encore mode - special stage
-		beq.s	loc_9090A					;
-		move.l	#Obj_HPZSuperEmerald_EncoreActivated,(a0)	;
-
-loc_9090A:
 		move.w	#$F,$2E(a0)
 		lea	(Player_1).w,a1
 		move.b	y_radius(a1),d0				; Liliam: allow glide-landing on objects
@@ -215326,11 +215340,18 @@ loc_90920:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
+HPZSuperEmerald_HurtCharacter:						; Liliam: Encore mode - special stage
+		bset	#7,status_tertiary(a1)
+		jsr	(Spikes_CheckHurt).l
+		bclr	#7,status_tertiary(a1)
+		rts
+; ---------------------------------------------------------------------------
+
 Obj_HPZSuperEmerald_EncoreShattered:					; Liliam: Encore mode - special stage
 		move.b	#$26,mapping_frame(a0)
 		move.b	#$25,sub2_mapframe(a0)
 		tst.w	respawn_addr(a0)
-		bne.s	loc_908DE
+		bne.w	loc_908DE
 		move.b	#$1D,mapping_frame(a0)
 		move.b	(_unkFAC0).w,d0
 		bpl.w	loc_908DE
@@ -215364,9 +215385,6 @@ Obj_HPZSuperEmerald_Encore:
 	.return:
 		rts
 ; ---------------------------------------------------------------------------
-
-Obj_HPZSuperEmerald_EncoreActivated:
-		bsr.s	Obj_HPZSuperEmerald_Encore.flickerMain		; Liliam: Encore mode - special stage
 
 loc_90926:
 		subq.w	#1,$2E(a0)
