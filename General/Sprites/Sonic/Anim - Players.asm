@@ -224,6 +224,22 @@ AniRay:
 		dc.w Ani_PlayerHurt-AniRay		; 1A
 		dc.w Ani_PlayerFall-AniRay		; 1B
 		dc.w Ani_PlayerBlank-AniRay		; 1C
+AniTailsTail:
+AniTails_Tail:
+		dc.w AniTails_Tail_Blank-AniTailsTail	; 00
+		dc.w AniTails_Tail_Stand-AniTailsTail	; 01
+		dc.w AniTails_Tail_LookUp-AniTailsTail	; 02
+		dc.w AniTails_Tail_Spin-AniTailsTail	; 03
+		dc.w AniTails_Tail_Spin2-AniTailsTail	; 04
+		dc.w AniTails_Tail_Spin3-AniTailsTail	; 05
+		dc.w AniTails_Tail_Spin4-AniTailsTail	; 06
+		dc.w AniTails_Tail_SpinDash-AniTailsTail; 07
+		dc.w AniTails_Tail_Skid-AniTailsTail	; 08
+		dc.w AniTails_Tail_Push-AniTailsTail	; 09
+		dc.w AniTails_Tail_Hang-AniTailsTail	; 0A
+		dc.w AniTails_Tail_FlyFall-AniTailsTail	; 0B
+		dc.w AniTails_Tail_Fly-AniTailsTail	; 0C
+		dc.w AniTails_Tail_FlyTired-AniTailsTail; 0D
 Ani_PlayerWalk:		dc.b  $FF,   1,   2,   3,   4,   5,   6,   7,   8, $FF
 Ani_PlayerRun:		dc.b  $FF, $21, $22, $23, $24, $FF, $FF, $FF, $FF, $FF
 Ani_PlayerSpin:		dc.b  $FE, $E0, $E1, $E0, $E2, $E0, $E3, $E0, $E4, $FF
@@ -352,4 +368,18 @@ Ani_KnucklesGlideFall:	dc.b    7, $CA, $CB, $FE,   1
 Ani_KnucklesGlideCrouch:dc.b   $F, $D9, $FD,   0
 Ani_KnucklesGlideLand:	dc.b   $F, $CC, $FD,   0
 Ani_AmyHammerRush:	dc.b    2, $BE, $BF, $C0, $C1, $C2, $C3, $C4, $C5, $FF
+AniTails_Tail_Blank:	dc.b  $20,   0, $FF
+AniTails_Tail_Stand:	dc.b    7, $22, $23, $24, $25, $26, $FF
+AniTails_Tail_LookUp:	dc.b    3, $22, $23, $24, $25, $26, $FD,   1
+AniTails_Tail_Spin:	dc.b  $FC,   5,   6,   7,   8, $FF
+AniTails_Tail_Spin2:	dc.b    3,   9,  $A,  $B,  $C, $FF
+AniTails_Tail_Spin3:	dc.b    3,  $D,  $E,  $F, $10, $FF
+AniTails_Tail_Spin4:	dc.b    3, $11, $12, $13, $14, $FF
+AniTails_Tail_SpinDash:	dc.b    2,   1,   2,   3,   4, $FF
+AniTails_Tail_Skid:	dc.b    2, $1A, $1B, $1C, $1D, $FF
+AniTails_Tail_Push:	dc.b    9, $1E, $1F, $20, $21, $FF
+AniTails_Tail_Hang:	dc.b    9, $29, $2A, $2B, $2C, $FF
+AniTails_Tail_FlyFall:	dc.b    1, $27, $28, $FF
+AniTails_Tail_Fly:	dc.b    0, $27, $28, $FF
+AniTails_Tail_FlyTired:	dc.b    2, $15, $16, $17, $18, $19, $FF
 	even

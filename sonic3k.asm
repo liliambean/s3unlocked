@@ -1244,6 +1244,12 @@ Play_Music_Tempo:						; Liliam: bugfix - keep correct tempo
 ; ---------------------------------------------------------------------------
 		; Liliam: removed dead code
 ; ---------------------------------------------------------------------------
+
+Play_SFX_StopContinuous:					; Liliam: extra skills - peel out (credit: Tiddles)
+		stopZ80
+		move.b	#0,(Z80_RAM+zContinuousSFX).l
+		bra.s	+
+; ---------------------------------------------------------------------------
 ; Can handle up to two different indexes in one frame
 ; ---------------------------------------------------------------------------
 
@@ -1252,6 +1258,8 @@ Play_Music_Tempo:						; Liliam: bugfix - keep correct tempo
 
 Play_SFX:
 		stopZ80
+
++
 		cmp.b	(Z80_RAM+zSFXNumber0).l,d0
 		beq.s	++
 		tst.b	(Z80_RAM+zSFXNumber0).l
@@ -24569,6 +24577,7 @@ loc_10F22:
 ; ---------------------------------------------------------------------------
 
 Sonic_MdNormal:
+		jsr	(Sonic_PeelOut).l			; Liliam: extra skills - peel out (credit: Tiddles)
 		bsr.w	SonicKnux_Spindash
 		bsr.w	Sonic_Jump
 		bsr.w	Player_SlopeResist
@@ -24628,6 +24637,7 @@ Call_Player_AnglePos:
 Sonic_MdAir:
 		tst.b	double_jump_flag(a0)			; Liliam: extra skills - air glide
 		bmi.w	Ray_AirGlide				;
+		jsr	(Sonic_PeelOut_SFX).l			; Liliam: extra skills - peel out
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Player_LevelBound
@@ -24685,6 +24695,7 @@ locret_11034:
 ;        Why they gave it a separate copy of the code, I don't know.
 
 Sonic_MdJump:
+		jsr	(Sonic_PeelOut_SFX).l			; Liliam: extra skills - peel out
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Player_LevelBound
@@ -25760,13 +25771,11 @@ loc_11908:
 		bne.s	Sonic_ExtraCharacterMoves		;
 
 		tst.w	(Competition_mode).w			; Liliam: dash dust - player 2 insta-shield
-		bne.s	Knuckles_InstaShield			;
+		bne.s	Sonic_InstaShield			;
 		move.b	#5,(Dust_P2+anim).w			;
+		bsr.s	Sonic_DropDash_2P			;
 
 Sonic_InstaShield:
-		bsr.s	Sonic_DropDash				;
-
-Knuckles_InstaShield:
 		move.b	#1,double_jump_flag(a0)			;
 		moveq	#sfx_InstaAttack,d0			;
 		jmp	(Play_SFX).l				;
@@ -25803,6 +25812,8 @@ loc_1191A:
 Sonic_DropDash:
 		tst.w	(Competition_mode).w			; Liliam: extra skills - drop dash
 		bne.s	locret_1192A				;
+
+Sonic_DropDash_2P:
 		btst	#Skill_SonicDropDash,(Skill_options).w	;
 		beq.s	locret_1192A				;
 		move.b	#19,double_jump_property(a0)		;
@@ -25817,7 +25828,7 @@ Sonic_ExtraCharacterMoves:					; Liliam: add extra characters
 		jmp	ExtraCharacterMoves_Index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 ExtraCharacterMoves_Index:
-		dc.w Knuckles_InstaShield-ExtraCharacterMoves_Index
+		dc.w Sonic_InstaShield-ExtraCharacterMoves_Index
 		dc.w Amy_CheckMoves-ExtraCharacterMoves_Index
 		dc.w Mighty_CheckMoves-ExtraCharacterMoves_Index
 		dc.w Ray_CheckMoves-ExtraCharacterMoves_Index
@@ -25921,7 +25932,8 @@ Sonic_CheckTransform:
 ;		btst	#Status_Shield,status_secondary(a0)		;
 ;		bne.s	locret_11A14					;
 		move.b	#1,(Shield+anim).w
-		bra.w	Sonic_InstaShield			; Liliam: extra skills - drop dash
+		bsr.w	Sonic_DropDash				; Liliam: extra skills - drop dash
+		bra.w	Sonic_InstaShield			;
 ;		move.b	#1,double_jump_flag(a0)			;
 ;		move.w	#sfx_InstaAttack,d0			;
 ;		jmp	(Play_SFX).l				;
@@ -27601,8 +27613,12 @@ loc_126DC:
 		andi.b	#$FC,render_flags(a0)
 		eor.b	d1,d2
 		or.b	d2,render_flags(a0)
+		tst.w	spin_dash_counter(a0)			; Liliam: extra skills - peel out (credit: Tiddles)
+		bmi.s	loc_126F2				;
 		btst	#Status_Push,status(a0)
 		bne.w	Anim_Push
+
+loc_126F2:
 		lsr.b	#4,d0
 		andi.b	#6,d0
 		move.w	ground_vel(a0),d2
@@ -33616,9 +33632,8 @@ Obj_Tails_Tail_AniSelection:
 		; Liliam: simplify player anim selection
 ;		dc.b    0,   0,   0,   0,   0,   0,   0,   0,   0,   0
 		even
-AniTails_Tail:
-		; Liliam: add custom animation
-		include "General/Sprites/Tails/Anim - Tails Tail.asm"
+;AniTails_Tail:
+		; Liliam: simplify player anim selection
 ; ---------------------------------------------------------------------------
 
 Tails_InitRingBarrier:						; Liliam: extra skills - ring barrier
@@ -172949,6 +172964,7 @@ loc_763D8:
 		move.w	#(button_C_mask<<8)|button_C_mask,(Ctrl_1_logical).w
 		lea	(Player_1).w,a1
 		move.w	#$200,x_vel(a1)
+		move.w	#$500,anim(a1)				; Liliam: extra skills - peel out (credit: Tiddles)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -181352,12 +181368,12 @@ loc_7BCC2:
 		jmp	(SaveGame).l
 ; ---------------------------------------------------------------------------
 
-Obj_SSZ2_Ending:						; Liliam: ending - allow start from Knuckles' ending (credit: Tiddles)
-		move.l	#loc_7BCFC,(a0)
-		move.w	#$12,(_unkEE9C).w
-		st	(Events_fg_4+1).w
-		lea	PLC_EndingMasterEmerald(pc),a1
-		jsr	(Load_PLC_Raw).l
+Obj_SSZ2_Ending:
+		move.l	#loc_7BCFC,(a0)				; Liliam: ending - allow start from Knuckles' ending (credit: Tiddles)
+		move.w	#$12,(_unkEE9C).w			;
+		st	(Events_fg_4+1).w			;
+		lea	PLC_EndingMasterEmerald(pc),a1		;
+		jsr	(Load_PLC_Raw).l			;
 
 loc_7BCFC:
 		bsr.w	sub_7BD30
