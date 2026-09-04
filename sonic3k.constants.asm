@@ -1049,9 +1049,7 @@ Blue_spheres_target_difficulty	ds.b 1			; value read from the layout
 Emerald_counts =		*			; both Chaos and Super emeralds
 Chaos_emerald_count		ds.b 1
 Super_emerald_count		ds.b 1
-Collected_emeralds_array	ds.b 7			; 1 byte per emerald, 0 = not collected, 1 = Chaos Emerald collected, 2 = grey Super Emerald, 3 = Super Emerald collected
-			ds.b 1				; unused
-
+Collected_emeralds_array	ds.b 8			; 1 byte per emerald, 0 = not collected, 1 = Chaos Emerald collected, 2 = grey Super Emerald, 3 = Super Emerald collected
 Emeralds_converted_flag		ds.b 1			; set if at least one emerald has been converted to a Super Emerald
 SK_special_stage_flag		ds.b 1			; set if a Sonic & Knuckles special stage is being run
 Title_anim_buffer		ds.b 1			; status of the title animation buffer. Changes 2 different nametables in VDP while the other is being processed

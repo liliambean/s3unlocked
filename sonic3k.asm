@@ -12830,25 +12830,35 @@ loc_9C80:
 		bne.s	locret_9D1C
 		tst.b	(Blue_spheres_stage_flag).w
 		bne.s	loc_9CE6
-		lea	(Chaos_emerald_count).w,a2
+		clr.w	(Chaos_emerald_count).w			; Liliam: bugfix - always recalculate emerald counts
+;		lea	(Chaos_emerald_count).w,a2		;
 		move.b	(SK_special_stage_flag).w,d2
-		beq.s	loc_9CCE
-		lea	(Super_emerald_count).w,a2
+;		beq.s	loc_9CCE				;
+;		lea	(Super_emerald_count).w,a2		;
 
-loc_9CCE:
-		cmpi.b	#7,(a2)
-		bhs.s	loc_9CE6
-		addq.b	#1,(a2)
+;loc_9CCE:
+		moveq	#7-1,d1					;
+;		cmpi.b	#7,(a2)					;
+;		bhs.s	loc_9CE6				;
+;		addq.b	#1,(a2)					;
 		lea	(Collected_emeralds_array).w,a1
 		moveq	#0,d0
 		move.b	(Current_special_stage).w,d0
-		add.b	d2,d2					; Liliam: bugfix - select next special stage
+		add.b	d2,d2					; Liliam: bugfix - properly enable super emeralds
 		addq.b	#1,d2					;
 		move.b	d2,(a1,d0.w)				;
 ;		bset	#0,(a1,d0.w)				;
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - special stage
-		beq.s	loc_9CE6					;
-		move.b	(a2),(Chaos_emerald_count).w			;
+
+	.loop:
+		move.b	(a1)+,d0				; Liliam: bugfix - always recalculate emerald counts
+		beq.s	.checkDone				;
+		addq.b	#1,(Chaos_emerald_count).w		;
+		cmpi.b	#3,d0					;
+		blo.s	.checkDone				;
+		addq.b	#1,(Super_emerald_count).w		;
+
+	.checkDone:
+		dbf	d1,.loop				;
 
 loc_9CE6:
 		addq.b	#1,(Special_stage_clear_routine).w
@@ -215142,7 +215152,7 @@ Obj_HPZSuperEmerald:
 ; ---------------------------------------------------------------------------
 off_9079A:
 		dc.w loc_907A2-off_9079A
-		dc.w loc_907A2-off_9079A			; Liliam: bugfix - stop incorrectly enabling supers
+		dc.w loc_907A2-off_9079A			; Liliam: bugfix - properly enable super emeralds
 ;		dc.w loc_907A8-off_9079A			;
 		dc.w loc_907A8-off_9079A
 		dc.w loc_907DE-off_9079A
@@ -215160,7 +215170,7 @@ loc_907A8:
 		move.l	#loc_908DE,(a0)
 ;		move.w	#make_art_tile(ArtTile_HPZGrayEmerald,0,1),art_tile(a0)	; Liliam: restore yellow chaos emerald
 
-		tst.w	respawn_addr(a0)			; Liliam: bugfix - stop incorrectly enabling supers
+		tst.w	respawn_addr(a0)			; Liliam: bugfix - properly enable super emeralds
 		bne.s	loc_907BA				;
 		bset	#0,$38(a0)
 
