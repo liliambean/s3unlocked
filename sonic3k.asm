@@ -26267,6 +26267,16 @@ loc_11CDC:
 		move.b	#0,anim(a6)
 		moveq	#signextendB(sfx_Dash),d0
 		jsr	(Play_SFX).l
+
+Spindash_Release_SetSpeed:
+		move.b	angle(a0),d0				; Liliam: bugfix - fix spindash release (credit: flamewing)
+		jsr	(GetSineCosine).l			;
+		muls.w	ground_vel(a0),d1			;
+		asr.l	#8,d1					;
+		move.w	d1,x_vel(a0)				;
+		muls.w	ground_vel(a0),d0			;
+		asr.l	#8,d0					;
+		move.w	d0,y_vel(a0)				;
 		bra.s	loc_11D5E
 ; ---------------------------------------------------------------------------
 word_11CF2:
@@ -28936,7 +28946,8 @@ sub_13520:
 ;		move.b	#2,anim(a6)				;
 
 loc_13566:
-		bsr.w	Tails_LevelBound
+		bsr.w	Player_LevelBound			; Liliam: bugfix - fix spindash release
+;		bsr.w	Tails_LevelBound			;
 		bsr.w	Player_AnglePos
 
 locret_1356E:
@@ -30800,7 +30811,8 @@ loc_14760:
 		bsr.w	Player_SlopeResist
 		bsr.w	Tails_Move
 		bsr.w	Tails_Roll
-		bsr.w	Tails_LevelBound
+		bsr.w	Player_LevelBound			; Liliam: bugfix - fix spindash release
+;		bsr.w	Tails_LevelBound			;
 		jsr	(MoveSprite_TestGravity2).l
 		bsr.w	Call_Player_AnglePos
 		bsr.w	Player_SlopeRepel
@@ -30833,7 +30845,8 @@ Tails_Stand_Freespace:
 		bne.s	Tails_FlyingSwimming
 		bsr.w	Tails_JumpHeight
 		bsr.w	Tails_ChgJumpDir
-		bsr.w	Tails_LevelBound
+		bsr.w	Player_LevelBound			; Liliam: bugfix - fix spindash release
+;		bsr.w	Tails_LevelBound			;
 		jsr	(MoveSprite_TestGravity).l
 		btst	#Status_Underwater,status(a0)
 		beq.s	loc_147DE
@@ -30848,7 +30861,8 @@ loc_147DE:
 Tails_FlyingSwimming:
 		bsr.w	Tails_Move_FlySwim
 		bsr.w	Tails_ChgJumpDir
-		bsr.w	Tails_LevelBound
+		bsr.w	Player_LevelBound			; Liliam: bugfix - fix spindash release
+;		bsr.w	Tails_LevelBound			;
 		jsr	(MoveSprite_TestGravity2).l
 		bsr.w	Player_JumpAngle
 		movem.l	a4-a6,-(sp)
@@ -31068,7 +31082,8 @@ loc_1494C:
 loc_14956:
 		bsr.w	Player_RollRepel
 		bsr.w	Tails_RollSpeed
-		bsr.w	Tails_LevelBound
+		bsr.w	Player_LevelBound			; Liliam: bugfix - fix spindash release
+;		bsr.w	Tails_LevelBound			;
 		jsr	(MoveSprite_TestGravity2).l
 		bsr.w	Call_Player_AnglePos
 		bsr.w	Player_SlopeRepel
@@ -31112,7 +31127,8 @@ loc_149AC:
 loc_149BA:
 		bsr.w	Tails_JumpHeight
 		bsr.w	Tails_ChgJumpDir
-		bsr.w	Tails_LevelBound
+		bsr.w	Player_LevelBound			; Liliam: bugfix - fix spindash release
+;		bsr.w	Tails_LevelBound			;
 		jsr	(MoveSprite_TestGravity).l
 		btst	#Status_Underwater,status(a0)
 		beq.s	loc_149DA
@@ -31775,65 +31791,11 @@ locret_14F06:
 		rts
 ; End of function Tails_ChgJumpDir
 
-
-; =============== S U B R O U T I N E =======================================
-
-
-Tails_LevelBound:
-		move.l	x_pos(a0),d1
-		move.w	x_vel(a0),d0
-		ext.l	d0
-		asl.l	#8,d0
-		add.l	d0,d1
-		bmi.s	Tails_Boundary_OutOfBounds		; Liliam: camera - prevent wrapping
-		swap	d1
-		move.w	(Camera_min_X_pos).w,d0
-		addi.w	#$10,d0
-		cmp.w	d1,d0
-		bhi.s	loc_14F5C
-		move.w	(Camera_max_X_pos).w,d0
-		addi.w	#$130,d0				; Liliam: camera - match left and right boundaries
-;		addi.w	#$128,d0				;
-		cmp.w	d1,d0
-		blo.s	loc_14F5C
-
-loc_14F30:
-		tst.b	(Disable_death_plane).w
-		bne.s	locret_14F4A
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_14F4C
-		move.w	(Camera_max_Y_pos).w,d0
-		addi.w	#$E0,d0
-		cmp.w	y_pos(a0),d0
-		blt.s	loc_14F56
-
-locret_14F4A:
-		rts
 ; ---------------------------------------------------------------------------
 
-loc_14F4C:
-		move.w	(Camera_min_Y_pos).w,d0
-		cmp.w	y_pos(a0),d0
-		blt.s	locret_14F4A
-
-loc_14F56:
-		jmp	(Kill_Character).l
+;Tails_LevelBound:
+		; Liliam: bugfix - fix spindash release
 ; ---------------------------------------------------------------------------
-
-Tails_Boundary_OutOfBounds:
-		moveq	#$10,d0					; Liliam: camera - prevent wrapping
-
-loc_14F5C:
-		move.w	d0,x_pos(a0)
-		move.w	#0,2+x_pos(a0)
-		move.w	#0,x_vel(a0)
-		move.w	#0,ground_vel(a0)
-		bra.s	loc_14F30
-; End of function Tails_LevelBound
-
-
-; =============== S U B R O U T I N E =======================================
-
 
 Tails_Roll:
 		tst.b	status_secondary(a0)
@@ -32150,7 +32112,8 @@ Tails_Spindash:
 ;		move.b	#2,anim(a6)				;
 
 loc_15242:
-		bsr.w	Tails_LevelBound
+		bsr.w	Player_LevelBound			; Liliam: bugfix - fix spindash release
+;		bsr.w	Tails_LevelBound			;
 		bsr.w	Call_Player_AnglePos
 		tst.b	(Background_collision_flag).w
 		beq.s	locret_1527A
@@ -32225,7 +32188,8 @@ loc_152F8:
 		move.b	#0,anim(a6)
 		moveq	#signextendB(sfx_Dash),d0
 		jsr	(Play_SFX).l
-		bra.s	loc_1537A
+		bra.w	Spindash_Release_SetSpeed		; Liliam: bugfix - fix spindash release (credit: flamewing)
+;		bra.s	loc_1537A				;
 ; ---------------------------------------------------------------------------
 word_1530E:
 		dc.w   $800
@@ -32281,7 +32245,8 @@ loc_15386:
 		subq.w	#2,(a5)
 
 loc_15388:
-		bsr.w	Tails_LevelBound
+		bsr.w	Player_LevelBound			; Liliam: bugfix - fix spindash release
+;		bsr.w	Tails_LevelBound			;
 		bsr.w	Call_Player_AnglePos
 		tst.b	(Background_collision_flag).w
 		beq.s	locret_153C0
@@ -32660,7 +32625,8 @@ loc_156F0:
 
 loc_15700:
 		bsr.w	sub_15716
-		bsr.w	Tails_LevelBound
+		bsr.w	Player_LevelBound			; Liliam: bugfix - fix spindash release
+;		bsr.w	Tails_LevelBound			;
 		bsr.w	Player_RecordPos
 		bsr.w	Tails_UpdateSprite
 		jmp	(Draw_Sprite).l

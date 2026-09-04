@@ -32,7 +32,7 @@ Sonic_PeelOut:
 		move.w	d0,ground_vel(a0)
 		moveq	#signextendB(sfx_PeelOut),d0
 		jsr	(Play_SFX_StopContinuous).l
-		bra.w	.done
+		jmp	(loc_11D5E).l
 ; ---------------------------------------------------------------------------
 
 	.return:
@@ -40,12 +40,10 @@ Sonic_PeelOut:
 ; ---------------------------------------------------------------------------
 
 	.checkRelease:
-		tst.b	spin_dash_flag(a0)
-		beq.s	.cancel
 		btst	#button_up+8,d0
 		bne.s	.keepCharging
 		cmpi.w	#$8618,spin_dash_counter(a0)
-		bne.s	.notEnoughCharge
+		bne.w	.notEnoughCharge
 		move.w	#$C00,d1
 		tst.b	(Super_Sonic_Knux_flag).w
 		beq.s	.checkUnderwater
@@ -79,20 +77,12 @@ Sonic_PeelOut:
 		clr.l	stick_to_convex(a0)
 		moveq	#signextendB(sfx_DashRelease),d0
 		jsr	(Play_SFX).l
-		bra.s	.resetScroll
-; ---------------------------------------------------------------------------
-
-	.notEnoughCharge:
-		clr.w	ground_vel(a0)
-		clr.b	spin_dash_flag(a0)
-
-	.cancel:
-		clr.b	spin_dash_counter(a0)
-		moveq	#signextendB(cmd_StopSFX),d0
-		jmp	(Play_Music).l
+		jmp	(Spindash_Release_SetSpeed).l
 ; ---------------------------------------------------------------------------
 
 	.keepCharging:
+		tst.b	spin_dash_flag(a0)
+		beq.s	.cancel
 		cmpi.b	#1,prev_anim(a0)
 		bne.s	.cancel
 		cmpi.w	#$8618,spin_dash_counter(a0)
@@ -123,26 +113,24 @@ Sonic_PeelOut:
 	.setSpeed2:
 		move.w	d1,ground_vel(a0)
 		bsr.s	Sonic_PeelOut_SFX.playSFX
+		jmp	(loc_11D5E).l
+; ---------------------------------------------------------------------------
 
-	.resetScroll:
-		cmpi.w	#$60,(a5)
-		beq.s	.done
-		bhs.s	.decrement
-		addq.w	#4,(a5)
- 
-	.decrement:
-		subq.w	#2,(a5)
+	.notEnoughCharge:
+		clr.w	ground_vel(a0)
+		clr.b	spin_dash_flag(a0)
 
-	.done:
-		addq.w	#4,sp
-		jmp	(loc_11C24).l
+	.cancel:
+		clr.b	spin_dash_counter(a0)
+		moveq	#signextendB(cmd_StopSFX),d0
+		jmp	(Play_Music).l
 ; ---------------------------------------------------------------------------
 
 Sonic_PeelOut_SFX:
 		tst.w	spin_dash_counter(a0)
 		bpl.w	Sonic_PeelOut.return
 		tst.b	spin_dash_flag(a0)
-		beq.w	Sonic_PeelOut.cancel
+		beq.s	Sonic_PeelOut.cancel
 
 	.playSFX:
 		move.b	(Level_frame_counter+1).w,d0
