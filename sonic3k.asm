@@ -24231,9 +24231,18 @@ loc_10BF0:
 loc_10BFC:
 		btst	#0,object_control(a0)	; is Sonic interacting with another object that holds him in place or controls his movement somehow?
 		beq.s	loc_10C0C		; if yes, branch to skip Sonic's control
-		move.b	#0,double_jump_flag(a0)	; enable double jump
-		bra.s	loc_10C26
-; ---------------------------------------------------------------------------
+		move.b	#0,double_jump_flag(a0)
+		tst.b	(Flying_carrying_Sonic_flag).w		; Liliam: bugfix - release player from Tails
+		beq.s	loc_10C26				;
+;		bra.s	loc_10C26				;
+		move.w	a0,d0					;
+		eori.b	#$4A,d0					;
+		movea.w	d0,a1					;
+		tst.b	double_jump_flag(a1)			;
+		bne.s	loc_10C26				;
+		bset	#Status_InAir,status(a0)		;
+		clr.b	object_control(a0)			;
+		clr.w	(Flying_carrying_Sonic_flag).w		;
 
 loc_10C0C:
 		movem.l	a4-a6,-(sp)
@@ -30109,7 +30118,7 @@ loc_13FC2:
 		move.w	#0,y_vel(a0)
 		move.w	#0,ground_vel(a0)
 		lea	(Player_1).w,a1
-		bsr.w	sub_1459E
+		bsr.w	Tails_Carry_GrabPlayer
 		move.b	#1,(Flying_carrying_Sonic_flag).w
 		move.w	#$E,(Tails_CPU_routine).w
 
@@ -30196,7 +30205,7 @@ loc_140CE:
 		move.w	#0,y_vel(a0)
 		move.w	#0,ground_vel(a0)
 		lea	(Player_1).w,a1
-		bsr.w	sub_1459E
+		bsr.w	Tails_Carry_GrabPlayer
 		move.b	#1,(Flying_carrying_Sonic_flag).w
 		move.w	#$16,(Tails_CPU_routine).w
 
@@ -30604,7 +30613,7 @@ loc_1456C:
 		bne.s	locret_1459C
 		tst.b	spin_dash_flag(a1)
 		bne.s	locret_1459C
-		bsr.s	sub_1459E
+		bsr.s	Tails_Carry_GrabPlayer
 		moveq	#signextendB(sfx_Grab),d0
 		jsr	(Play_SFX).l
 		move.b	#1,(a2)
@@ -30617,7 +30626,7 @@ locret_1459C:
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_1459E:
+Tails_Carry_GrabPlayer:
 		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
@@ -30653,8 +30662,17 @@ sub_1459E:
 
 locret_14630:
 		rts
-; End of function sub_1459E
+; End of function Tails_Carry_GrabPlayer
 
+; ---------------------------------------------------------------------------
+
+Tails_Carry_ReleasePlayer:					; Liliam: bugfix - release player from Tails
+		cmpi.b	#1,character_id(a1)
+		beq.s	.return
+		clr.w	(Flying_carrying_Sonic_flag).w
+
+	.return:
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -32009,8 +32027,8 @@ loc_15146:
 ; ---------------------------------------------------------------------------
 
 loc_15156:
-		tst.w	(Player_mode).w			; Liliam: bugfix - stop Tails becoming stuck in CNZ1 intro
-		bne.s	loc_1515C			;
+		tst.w	(Player_mode).w				; Liliam: bugfix - stop Tails becoming stuck in CNZ1 intro
+		bne.s	loc_1515C				;
 		btst	#button_up,(Ctrl_1_held_logical).w	; Liliam: QOL - Tails assist
 		bne.s	loc_1515C				;
 		tst.w	(Tails_CPU_idle_timer).w
@@ -34296,8 +34314,17 @@ loc_165AE:
 		btst	#0,object_control(a0)
 		beq.s	loc_165BE
 		move.b	#0,double_jump_flag(a0)
-		bra.s	loc_165D8
-; ---------------------------------------------------------------------------
+		tst.b	(Flying_carrying_Sonic_flag).w		; Liliam: bugfix - release player from Tails
+		beq.s	loc_165D8				;
+;		bra.s	loc_165D8				;
+		move.w	a0,d0					;
+		eori.b	#$4A,d0					;
+		movea.w	d0,a1					;
+		tst.b	double_jump_flag(a1)			;
+		bne.s	loc_165D8				;
+		bset	#Status_InAir,status(a0)		;
+		clr.b	object_control(a0)			;
+		clr.w	(Flying_carrying_Sonic_flag).w		;
 
 loc_165BE:
 		movem.l	a4-a6,-(sp)
@@ -63699,6 +63726,7 @@ loc_291A2:
 		bhs.s	locret_29214
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_29214
+		jsr	(Tails_Carry_ReleasePlayer).l		; Liliam: bugfix - release player from Tails
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
@@ -74560,6 +74588,7 @@ sub_319F4:
 		bclr	#Status_OnObj,status(a1)
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	#$380,priority(a1)
+		jsr	(Tails_Carry_ReleasePlayer).l		; Liliam: bugfix - release player from Tails
 		move.w	#0,x_vel(a1)
 		move.w	#0,y_vel(a1)
 		move.w	#0,ground_vel(a1)
@@ -84692,7 +84721,7 @@ loc_39586:
 		move.w	#$14,(Screen_shake_flag).w
 		moveq	#signextendB(sfx_Crash),d0
 		jsr	(Play_SFX).l
-;		move.w	#2,(Tails_CPU_routine).w		; Liliam: Encore mode - lock player 2 controls consistently
+;		move.w	#2,(Tails_CPU_routine).w		; Liliam: bugfix - lock player 2 controls consistently
 
 loc_395CC:
 		btst	#Status_InAir,status(a2)
@@ -86347,7 +86376,8 @@ loc_3A9B4:
 		cmpi.w	#$18,d1
 		bhs.w	locret_3AA58
 		tst.b	object_control(a1)
-		bmi.s	locret_3AA58
+		bmi.w	locret_3AA58				; Liliam: bugfix - release player from Tails
+;		bmi.s	locret_3AA58				;
 		cmpi.b	#State_Hurt,routine(a1)
 		bhs.s	locret_3AA58
 		tst.w	(Debug_placement_mode).w
@@ -86368,6 +86398,7 @@ loc_3A9B4:
 loc_3AA18:
 		move.w	a0,interact(a1)
 		bset	#Status_OnObj,status(a1)
+		jsr	(Tails_Carry_ReleasePlayer).l		; Liliam: bugfix - release player from Tails
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
@@ -86658,6 +86689,7 @@ loc_3AD10:
 		move.w	d0,x_pos(a1)
 		move.w	a0,interact(a1)
 		bset	#3,status(a1)
+		jsr	(Tails_Carry_ReleasePlayer).l		; Liliam: bugfix - release player from Tails
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
@@ -88937,6 +88969,7 @@ loc_3D12A:
 		move.b	#$C1,object_control(a1)
 		jsr	(Player_ClearSpinDash).l		; Liliam: bugfix - clear flags
 ;		clr.b	spin_dash_flag(a1)			;
+		jsr	(Tails_Carry_ReleasePlayer).l		; Liliam: bugfix - release player from Tails
 		moveq	#0,d0
 		move.b	d0,status(a1)
 		move.w	d0,x_vel(a1)
@@ -94147,6 +94180,7 @@ loc_4101C:
 		bhs.s	locret_4108E
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_4108E
+		jsr	(Tails_Carry_ReleasePlayer).l		; Liliam: bugfix - release player from Tails
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
@@ -101344,6 +101378,7 @@ loc_47124:
 		bhs.s	locret_4717C
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_4717C
+		jsr	(Tails_Carry_ReleasePlayer).l		; Liliam: bugfix - release player from Tails
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
@@ -104336,6 +104371,7 @@ sub_4964A:
 		bhs.s	locret_496A6
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_496A6
+		jsr	(Tails_Carry_ReleasePlayer).l		; Liliam: bugfix - release player from Tails
 		move.b	#1,flip_angle(a1)
 		move.b	#0,anim(a1)
 		move.b	#-1,flips_remaining(a1)
@@ -117732,7 +117768,7 @@ loc_51BAA:
 		moveq	#0,d1
 		clr.w	(Events_bg+$04).w
 		moveq	#4-1,d3
-		addi.w	#$250,d5				; Liliam: CNZ1 boss - resize level on line clear
+		addi.w	#$260,d5				; Liliam: CNZ1 boss - resize level on line clear
 		cmp.w	(Camera_target_max_Y_pos).w,d5		;
 		bls.s	loc_51C38				;
 		move.w	d5,(Camera_target_max_Y_pos).w		;
@@ -117813,7 +117849,7 @@ loc_51CD2:
 		jsr	Reset_TileOffsetPositionEff(pc)
 		lea	(Pal_CNZMiniboss).l,a1
 		jsr	(PalLoad_Line1).l
-		move.w	#$250,d0				; Liliam: CNZ1 boss - raise entry lock
+		move.w	#$260,d0				; Liliam: CNZ1 boss - raise entry lock
 		move.w	d0,(Camera_max_Y_pos).w			;
 		move.w	d0,(Camera_target_max_Y_pos).w		;
 		move.w	#$1C0,d0
@@ -118338,7 +118374,7 @@ loc_521EC:
 ;		jsr	(Restore_LevelMusic).l			;
 ;		lea	(a6),a2					;
 		jsr	(Restore_PlayerControl).l
-		lea	(Player_2).w,a1				; Liliam: Encore mode - lock player 2 controls consistently
+		lea	(Player_2).w,a1				; Liliam: bugfix - lock player 2 controls consistently
 		jsr	(Restore_PlayerControl2).l		;
 		addq.w	#4,(Events_routine_fg).w
 
@@ -143587,7 +143623,7 @@ loc_62528:
 		clr.w	(Ctrl_1_logical).w
 		st	(Ctrl_1_locked).w
 		move.b	#$80,(Player_1+object_control).w
-		jsr	(AllocateObject).l			; Liliam: Encore mode - lock player 2 controls consistently
+		jsr	(AllocateObject).l			; Liliam: bugfix - lock player 2 controls consistently
 		bne.s	loc_62540				;
 		move.l	#Obj_CutsceneLockPlayer2,(a1)		;
 
@@ -143682,7 +143718,7 @@ loc_6261A:
 
 loc_62630:
 		clr.b	(Ctrl_1_locked).w
-		clr.b	(Ctrl_2_locked).w			; Liliam: Encore mode - lock player 2 controls consistently
+		clr.b	(Ctrl_2_locked).w			; Liliam: bugfix - lock player 2 controls consistently
 		jsr	(Remove_From_TrackingSlot).l
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -145510,7 +145546,7 @@ Obj_LRZ2CutsceneKnuckles:
 ;		cmpi.b	#2,(Player_1+character_id).w		;
 		beq.w	CutsceneKnux_Delete
 		move.l	#loc_63B40,(a0)
-;		jsr	(AllocateObject).l			; Liliam: Encore mode - lock player 2 controls consistently
+;		jsr	(AllocateObject).l			; Liliam: bugfix - lock player 2 controls consistently
 ;		bne.s	loc_63B40				;
 ;		move.l	#Obj_CutsceneLockPlayer2,(a1)		;
 
@@ -145550,7 +145586,7 @@ loc_63B9C:
 		st	(Ctrl_1_locked).w
 		jsr	(Stop_Object).l
 		clr.w	(Ctrl_1_logical).w
-		jsr	(AllocateObject).l			; Liliam: Encore mode - lock player 2 controls consistently
+		jsr	(AllocateObject).l			; Liliam: bugfix - lock player 2 controls consistently
 		bne.s	locret_63BBC				;
 		move.l	#Obj_CutsceneLockPlayer2,(a1)		;
 		jmp	(Make_CutsceneSkipObj).l		; Liliam: cutscene skip - LRZ pre-boss
@@ -145568,7 +145604,7 @@ loc_63BBE:
 		bset	#0,(_unkFAB8).w
 		move.w	#0,(Camera_min_X_pos).w
 		st	(Scroll_lock).w
-;		clr.b	(Ctrl_1_locked).w			; Liliam: Encore mode - lock player 2 controls consistently
+;		clr.b	(Ctrl_1_locked).w			; Liliam: bugfix - lock player 2 controls consistently
 		move.b	#$81,object_control(a1)
 		move.b	#7,anim(a1)
 		rts
@@ -160969,7 +161005,7 @@ loc_6E7B6:
 		move.w	d0,(Camera_target_max_Y_pos).w
 		move.w	#$BF,$2E(a0)
 		st	(Ctrl_1_locked).w
-		jsr	(AllocateObject).l			; Liliam: Encore mode - lock player 2 controls consistently
+		jsr	(AllocateObject).l			; Liliam: bugfix - lock player 2 controls consistently
 		bne.s	locret_6E7B4				;
 		move.l	#Obj_CutsceneLockPlayer2,(a1)		;
 		rts
@@ -170229,7 +170265,7 @@ loc_7473A:
 		jsr	(Restore_PlayerControl).l
 		clr.w	(Ctrl_1_logical).w
 		st	(Ctrl_1_locked).w
-		lea	(Player_2).w,a1				; Liliam: Encore mode - lock player 2 controls consistently
+		lea	(Player_2).w,a1				; Liliam: bugfix - lock player 2 controls consistently
 		jsr	(Restore_PlayerControl2).l		;
 		jsr	(AllocateObject).l			;
 		bne.s	loc_74768				;
@@ -170293,7 +170329,7 @@ loc_7481C:
 		jsr	(Swing_UpAndDown).l
 		jsr	(MoveSprite2).l
 		move.w	x_pos(a0),d0
-		jsr	(SonicTails_ChangeFlipX).l		; Liliam: Encore mode - lock player 2 controls consistently
+		jsr	(SonicTails_ChangeFlipX).l		; Liliam: bugfix - lock player 2 controls consistently
 ;		lea	(Player_1).w,a1				;
 ;		bclr	#0,render_flags(a1)			;
 ;		bclr	#Status_Facing,status(a1)		;
@@ -170388,7 +170424,7 @@ locret_74950:
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_CutsceneLock_LBZFinalBossKnux:				; Liliam: Encore mode - lock player 2 controls consistently
+Obj_CutsceneLock_LBZFinalBossKnux:				; Liliam: bugfix - lock player 2 controls consistently
 		tst.l	(Player_2).w
 		beq.s	loc_749A8
 		move.l	#Obj_CutsceneLock_LBZFinalBossKnux_Wait,(a0)
@@ -170404,7 +170440,7 @@ Obj_CutsceneLock_LBZFinalBossKnux_Wait:
 		bra.s	loc_7491C
 ; ---------------------------------------------------------------------------
 
-Obj_CutsceneLock_LBZFinalBossKnux_JumpOff:			; Liliam: Encore mode - lock player 2 controls consistently
+Obj_CutsceneLock_LBZFinalBossKnux_JumpOff:			; Liliam: bugfix - lock player 2 controls consistently
 		jsr	(MoveSprite_LightGravity).l
 		lea	(Player_2).w,a1
 		move.w	x_pos(a0),x_pos(a1)
@@ -192916,6 +192952,7 @@ loc_838D6:
 ;		move.b	(Player_mode+1).w,d0				;
 ;		move.b	FrameArray_EndSign(pc,d0.w),mapping_frame(a0)	;
 		st	(Ctrl_2_locked).w
+		clr.w	(Ctrl_2_logical).w			; Liliam: bugfix - lock player 2 controls consistently
 
 EndSign_PickArt:							; Liliam: simplify end sign selection
 		move.b	(Player_1+character_id).w,d0
@@ -198743,7 +198780,7 @@ sub_865DE:
 		cmpi.b	#2,(Current_zone).w
 		beq.s	loc_865EA
 		st	(Ctrl_2_locked).w
-		clr.w	(Ctrl_2_logical).w			; Liliam: Encore mode - lock player 2 controls consistently
+		clr.w	(Ctrl_2_logical).w			; Liliam: bugfix - lock player 2 controls consistently
 
 loc_865EA:
 		move.b	#1,mapping_frame(a0)
@@ -199106,12 +199143,12 @@ locret_86930:
 Check_TailsEndPose:
 		tst.b	(_unkFAA8).w
 		beq.w	locret_8661C
-		cmpi.b	#3,(Current_zone).w
-		bne.s	loc_8694A
-		lea	(Player_1).w,a1
-		bsr.w	Set_PlayerEndingPose
+;		cmpi.b	#3,(Current_zone).w			; Liliam: bugfix - release player from object
+;		bne.s	loc_8694A				;
+;		lea	(Player_1).w,a1				;
+;		bsr.w	Set_PlayerEndingPose			;
 
-loc_8694A:
+;loc_8694A:
 		btst	#7,$38(a0)
 		bne.w	locret_8661C
 		lea	(Player_2).w,a1
@@ -199162,9 +199199,12 @@ locret_869C4:
 
 
 Set_PlayerEndingPose:
-		move.b	#$81,object_control(a1)
+		clr.w	(Flying_carrying_Sonic_flag).w		; Liliam: bugfix - release player from Tails
+		move.b	#1,object_control(a1)			;
+;		move.b	#$81,object_control(a1)			;
 		move.b	#$13,anim(a1)
-		clr.b	spin_dash_flag(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+;		clr.b	spin_dash_flag(a1)			;
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
