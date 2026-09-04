@@ -32608,7 +32608,12 @@ loc_1565E:
 		move.b	#0,flip_type(a0)
 		move.b	#0,flips_remaining(a0)
 		move.b	#0,scroll_delay_counter(a0)
+		tst.b	double_jump_flag(a0)			; Liliam: bugfix - fix stuck animation
+		beq.s	locret_1569A				;
 		move.b	#0,double_jump_flag(a0)
+		move.b	#0,anim(a0)				;
+
+locret_1569A:
 		rts
 ; End of function Tails_TouchFloor
 
@@ -47654,17 +47659,24 @@ loc_1E094:
 		moveq	#1,d4
 		rts
 ; ---------------------------------------------------------------------------
+SolidObject_AnimReset:						; Liliam: bugfix - fix stuck animation
+		dc.b    1,   1, $02,   1,   1,   1,   1,   1,   1, $09,   1,   1,   1,   1,   1,   1
+		dc.b    1,   1,   1, $13,   1,   1, $16, $17, $18,   1, $1A,   1,   1,   1,   1,   1
+		dc.b    1,   1,   1,   1,   1,   1,   1,   1
+; ---------------------------------------------------------------------------
 
 loc_1E0A2:
 		move.l	d6,d4
 		addq.b	#pushing_bit_delta,d4
 		btst	d4,status(a0)
 		beq.s	loc_1E0D0
-		cmpi.b	#2,anim(a1)
-		beq.s	sub_1E0C2
-		cmpi.b	#9,anim(a1)
-		beq.s	sub_1E0C2
-		move.w	#1,anim(a1)
+		move.b	anim(a1),d4				; Liliam: bugfix - fix stuck animation
+		move.b	SolidObject_AnimReset(pc,d4.w),anim(a1)	;
+;		cmpi.b	#2,anim(a1)				;
+;		beq.s	sub_1E0C2				;
+;		cmpi.b	#9,anim(a1)				;
+;		beq.s	sub_1E0C2				;
+;		move.w	#1,anim(a1)				;
 ; End of function SolidObjectFull_Offset_1P
 
 
@@ -55521,9 +55533,7 @@ Obj_HorizontalSpikes:
 		lea	(Player_1).w,a1
 		bsr.w	HorizontalSpikes_CheckHurt		; Liliam: spikes - only damage from pointy side
 ;		bsr.w	Spikes_CheckHurt			;
-		cmpi.b	#State_NoControl,routine(a1)		;
-		blo.s	loc_24120				;
-		bclr	#p1_pushing_bit,status(a0)
+;		bclr	#p1_pushing_bit,status(a0)		;
 
 loc_24120:
 		andi.b	#2,d6
@@ -55531,9 +55541,7 @@ loc_24120:
 		lea	(Player_2).w,a1
 		bsr.w	HorizontalSpikes_CheckHurt		; Liliam: spikes - only damage from pointy side
 ;		bsr.w	Spikes_CheckHurt			;
-		cmpi.b	#State_NoControl,routine(a1)		;
-		blo.s	loc_24134				;
-		bclr	#p2_pushing_bit,status(a0)
+;		bclr	#p2_pushing_bit,status(a0)		;
 
 loc_24134:
 		move.w	$30(a0),d0
