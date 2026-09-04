@@ -16424,7 +16424,8 @@ SaveScreen_LoadHologramSRAM:
 
 MetalSonicHologram_LoadSRAM:
 		subi.w	#Encore_saved_data,d0			;
-		andi.b	#$18,d0					;
+		andi.b	#6,d0					;
+		lsl.b	#1,d0					;
 		addi.w	#Encore_saved_data+SRAM_next_slot*3,d0	;
 		movea.l	d0,a1					;
 
@@ -17875,11 +17876,11 @@ loc_D57E:
 		beq.s	loc_D5DE					;
 		move.w	SRAM_player_mode(a1),d1				;
 		lsr.w	#3,d1						;
-		moveq	#3,d0						;
+		moveq	#7,d0						;
 		and.b	d1,d0						;
 		move.b	d0,(P1_character).w				;
 		lsr.w	#3,d1						;
-		moveq	#3,d0						;
+		moveq	#7,d0						;
 		and.b	d1,d0						;
 		move.b	d0,(P2_character).w				;
 		move.w	SRAM_life_count(a1),(Encore_stocks_packed).w	;
