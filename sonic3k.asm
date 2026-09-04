@@ -18806,15 +18806,12 @@ loc_DCE2:
 		cmp.l	(Next_extra_life_score).w,d0	; If score is greater than next 50000 point increment
 		blo.s	locret_DD04
 		addi.l	#5000,(Next_extra_life_score).w
-		addq.b	#1,(Life_count).w	; Give an additional extra life
-		addq.b	#1,(Update_HUD_life_count).w
-		move.w	#mus_ExtraLife,d0
-		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
-		beq.s	loc_DCFE				;
-		move.w	#mus_ExtraLifeK,d0			;
-
-loc_DCFE:
-		jmp	(Play_Music).l
+		jmp	(Give_1up).l				; Liliam: bugfix - cap lives properly
+;		addq.b	#1,(Life_count).w			;
+;		addq.b	#1,(Update_HUD_life_count).w		;
+;		move.w	#mus_ExtraLife,d0			;
+;		jmp	(Play_Music).l				;
+; ---------------------------------------------------------------------------
 
 locret_DD04:
 		rts
@@ -41031,23 +41028,19 @@ GiveRing_1P:
 		cmpi.w	#100,(Ring_count).w		; does the player 1 have less than 100 rings?
 		blo.s	JmpTo_Play_SFX			; if yes, play the ring sound
 		bset	#1,(Extra_life_flags).w		; test and set the flag for the first extra life
-		beq.s	loc_1A5D8			; if it was clear before, branch
+		beq.w	Give_1up				; Liliam: bugfix - cap lives properly
+;		beq.s	loc_1A5D8				;
 		cmpi.w	#200,(Ring_count).w		; does the player 1 have less than 200 rings?
 		blo.s	JmpTo_Play_SFX			; if yes, play the ring sound
 		bset	#2,(Extra_life_flags).w		; test and set the flag for the second extra life
-		bne.s	JmpTo_Play_SFX			; if it was set before, play the ring sound
+		beq.w	Give_1up				; Liliam: bugfix - cap lives properly
+;		bne.s	JmpTo_Play_SFX				;
 
-loc_1A5D8:
-		addq.b	#1,(Life_count).w		; add 1 to the life count
-		addq.b	#1,(Update_HUD_life_count).w	; add 1 to the displayed life count
-		moveq	#signextendB(mus_ExtraLife),d0
-		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
-		beq.s	loc_1A5E2				;
-		moveq	#signextendB(mus_ExtraLifeK),d0		;
-
-loc_1A5E2:
-		jmp	(Play_Music).l			; Sonic 2 wound up putting music in the stereo sound queue, this would have fixed it
-; ---------------------------------------------------------------------------
+;loc_1A5D8:
+;		addq.b	#1,(Life_count).w			;
+;		addq.b	#1,(Update_HUD_life_count).w		;
+;		moveq	#signextendB(mus_ExtraLife),d0		;
+;		jmp	(Play_Music).l				;
 
 JmpTo_Play_SFX:
 		jmp	(Play_SFX).l
@@ -41070,27 +41063,21 @@ loc_1A608:
 		beq.s	GiveRing_1P
 ;		ori.b	#1,(Update_HUD_ring_count_P2).w		; Liliam: museum - photo piece object
 		move.w	#sfx_RingRight,d0
-		cmpi.w	#100,(Ring_count_P2).w
-		blo.s	loc_1A644
-		bset	#1,(Extra_life_flags_P2).w
-		beq.s	loc_1A638
-		cmpi.w	#200,(Ring_count_P2).w
-		blo.s	loc_1A644
-		bset	#2,(Extra_life_flags_P2).w
-		bne.s	loc_1A644
+;		cmpi.w	#100,(Ring_count_P2).w			;
+;		blo.s	loc_1A644				;
+;		bset	#1,(Extra_life_flags_P2).w		;
+;		beq.s	loc_1A638				;
+;		cmpi.w	#200,(Ring_count_P2).w			;
+;		blo.s	loc_1A644				;
+;		bset	#2,(Extra_life_flags_P2).w		;
+;		bne.s	loc_1A644				;
 
-loc_1A638:
-		addq.b	#1,(Life_count_P2).w
-		moveq	#signextendB(mus_ExtraLife),d0
-		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
-		beq.s	loc_1A63E				;
-		moveq	#signextendB(mus_ExtraLifeK),d0		;
+;loc_1A638:
+;		addq.b	#1,(Life_count_P2).w			;
+;		moveq	#signextendB(mus_ExtraLife),d0		;
+;		jmp	(Play_Music).l				;
 
-loc_1A63E:
-		jmp	(Play_Music).l
-; ---------------------------------------------------------------------------
-
-loc_1A644:
+;loc_1A644:
 		jmp	(Play_SFX).l
 ; End of function GiveRing
 
@@ -46824,8 +46811,14 @@ Monitor_Give_Eggman:
 Monitor_Give_1up:
 		addq.w	#1,(a2)					; Liliam: bugfix - count monitors properly
 ;		addq.w	#1,(Monitors_broken).w			;
+
+Give_1up:
+		cmpi.b	#99,(Life_count).w			; Liliam: bugfix - cap lives properly
+		bhs.s	loc_1D8A4				;
 		addq.b	#1,(Life_count).w
 		addq.b	#1,(Update_HUD_life_count).w
+
+loc_1D8A4:
 		moveq	#signextendB(mus_ExtraLife),d0
 		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
 		beq.s	loc_1D8A6				;
@@ -142061,15 +142054,11 @@ off_6110E:
 Gumball_Give_1up:
 		tst.b	(Current_act).w				; Liliam: Encore mode - change character item
 		bne.s	Gumball_Give_ChangeCharacter		;
-		addq.b	#1,(Life_count).w
-		addq.b	#1,(Update_HUD_life_count).w
-		moveq	#signextendB(mus_ExtraLife),d0
-		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
-		beq.s	loc_6112A				;
-		moveq	#signextendB(mus_ExtraLifeK),d0		;
-
-loc_6112A:
-		jmp	(Play_Music).l
+		jmp	(Give_1up).l				; Liliam: bugfix - cap lives properly
+;		addq.b	#1,(Life_count).w			;
+;		addq.b	#1,(Update_HUD_life_count).w		;
+;		moveq	#signextendB(mus_ExtraLife),d0		;
+;		jmp	(Play_Music).l				;
 ; ---------------------------------------------------------------------------
 
 Gumball_Give_ChangeCharacter:					; Liliam: Encore mode - change character item
@@ -198161,15 +198150,11 @@ loc_86132:
 
 loc_8613A:
 ;		addq.w	#1,(Monitors_broken).w			; Liliam: bugfix - count monitors properly
-		addq.b	#1,(Life_count).w
-		addq.b	#1,(Update_HUD_life_count).w
-		moveq	#signextendB(mus_ExtraLife),d0
-		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
-		beq.s	loc_86148				;
-		moveq	#signextendB(mus_ExtraLifeK),d0		;
-
-loc_86148:
-		jmp	(Play_Music).l
+		jmp	(Give_1up).l				; Liliam: bugfix - cap lives properly
+;		addq.b	#1,(Life_count).w			;
+;		addq.b	#1,(Update_HUD_life_count).w		;
+;		moveq	#signextendB(mus_ExtraLife),d0		;
+;		jmp	(Play_Music).l				;
 
 ; =============== S U B R O U T I N E =======================================
 
