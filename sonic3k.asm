@@ -24240,6 +24240,7 @@ loc_10BFC:
 		btst	#0,object_control(a0)	; is Sonic interacting with another object that holds him in place or controls his movement somehow?
 		beq.s	loc_10C0C		; if yes, branch to skip Sonic's control
 		move.b	#0,double_jump_flag(a0)
+		bsr.w	Player_ResetScroll			; Liliam: bugfix - recenter camera during object control
 		tst.b	(Flying_carrying_Sonic_flag).w		; Liliam: bugfix - release player from Tails
 		beq.s	loc_10C26				;
 ;		bra.s	loc_10C26				;
@@ -25561,6 +25562,40 @@ Player_Boundary_Sides:
 		bra.s	Player_Boundary_CheckBottom
 ; End of function Player_LevelBound
 
+; ---------------------------------------------------------------------------
+
+Player_ResetScroll:						; Liliam: bugfix - recenter camera during object control
+		tst.b	(Scroll_lock).w
+		bne.s	Debug_ResetScroll.return
+		cmpa.w	#Player_1,a0
+		bne.s	Debug_ResetScroll.return
+
+Debug_ResetScroll:
+		moveq	#2,d0
+		cmpi.w	#$60,(Distance_from_top).w
+		beq.s	.return
+		bhs.s	.resetScroll
+		moveq	#-2,d0
+
+	.resetScroll:
+		sub.w	d0,(Distance_from_top).w
+		btst	#Status_InAir,status(a0)
+		beq.s	.moveCamera
+		cmpi.w	#$40,(Distance_from_top).w
+		bls.s	.moveCamera
+		cmpi.w	#$80,(Distance_from_top).w
+		blo.s	.return
+
+	.moveCamera:
+		add.w	(Camera_Y_pos).w,d0
+		cmp.w	(Camera_min_Y_pos).w,d0
+		blt.s	.return
+		cmp.w	(Camera_max_Y_pos).w,d0
+		bgt.s	.return
+		move.w	d0,(Camera_Y_pos).w
+
+	.return:
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -29274,6 +29309,7 @@ loc_1384A:
 		btst	#0,object_control(a0)
 		beq.s	loc_13872
 		move.b	#0,double_jump_flag(a0)
+		bsr.w	Player_ResetScroll			; Liliam: bugfix - recenter camera during object control
 		tst.b	(Flying_carrying_Sonic_flag).w
 		beq.s	loc_1388C
 		lea	(Player_2).w,a1				; Liliam: Encore mode - allow carrying player 2
@@ -34293,6 +34329,7 @@ loc_165AE:
 		btst	#0,object_control(a0)
 		beq.s	loc_165BE
 		move.b	#0,double_jump_flag(a0)
+		bsr.w	Player_ResetScroll			; Liliam: bugfix - recenter camera during object control
 		tst.b	(Flying_carrying_Sonic_flag).w		; Liliam: bugfix - release player from Tails
 		beq.s	loc_165D8				;
 ;		bra.s	loc_165D8				;
@@ -218043,6 +218080,7 @@ loc_92AA0:
 		move.b	#1,(Debug_camera_speed).w
 
 loc_92AB0:
+		jsr	(Debug_ResetScroll).l			; Liliam: bugfix - recenter camera during object control
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#1,d0
