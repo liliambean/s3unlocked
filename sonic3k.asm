@@ -136398,6 +136398,7 @@ MuseumChecklist:						; Liliam: museum
 		disableDisplay
 
 		move.w	#VDP_PlnSize|PlaneSize_512x512,(VDP_control_port).l
+		move.w	#VDP_Plane_A|(VRAM_Window_Name_Table>>10),(VDP_control_port).l
 		clearRAM	H_scroll_buffer,(Collision_response_list_end-H_scroll_buffer)
 		clearRAM	Sprite_table_input,(Sprite_table_input_end-Sprite_table_input)
 		clearRAM	Object_RAM,(Kos_decomp_buffer-Object_RAM)
@@ -136426,7 +136427,6 @@ MuseumChecklist:						; Liliam: museum
 		move.w	#make_art_tile(ArtTile_OptionsBG,0,0),art_tile(a0)
 		move.w	#$120,x_pos(a0)
 		move.w	#$F0,y_pos(a0)
-		move.w	#3,(V_scroll_value_FG).w
 		move.b	#7,(Rings_frame).w
 		clr.b	(Rings_frame_timer).w
 		clr.b	(Photo_piece_disable_flag).w
@@ -136467,15 +136467,14 @@ MuseumChecklist_Return:
 
 Obj_MuseumChecklist:						; Liliam: museum
 		move.w	(V_scroll_value_FG).w,d0
-		subq.w	#3,d0
 		btst	#button_down,(Ctrl_1_held).w
 		beq.s	.checkUp
-		addq.w	#2,d0
+		addq.w	#3,d0
 
 	.checkUp:
 		btst	#button_up,(Ctrl_1_held).w
 		beq.s	.checkScroll
-		subq.w	#2,d0
+		subq.w	#3,d0
 
 	.checkScroll:
 		move.b	#3,mapping_frame(a0)
@@ -136483,13 +136482,12 @@ Obj_MuseumChecklist:						; Liliam: museum
 		beq.s	.scroll
 		bmi.s	.checkDraw
 		move.b	#4,mapping_frame(a0)
-		cmpi.w	#8*(40-28),d0
+		cmpi.w	#8*(52-28),d0
 		beq.s	.scroll
 		bhi.s	.checkDraw
 		move.b	#5,mapping_frame(a0)
 
 	.scroll:
-		addq.w	#3,d0
 		move.w	d0,(V_scroll_value_FG).w
 
 	.checkDraw:
@@ -136526,8 +136524,8 @@ MuseumChecklist_MarkCollected:					; Liliam: museum
 		addq.w	#1,d1
 		cmpi.w	#120,d1
 		blo.s	.loop
-		move.l	#vdpComm(VRAM_Plane_A_Name_Table,VRAM,WRITE),d0
-		moveq	#41-1,d2
+		move.l	#vdpComm(VRAM_Window_Name_Table,VRAM,WRITE),d0
+		moveq	#52-1,d2
 
 MuseumChecklist_WriteToVRAM:
 		lea	(RAM_start).l,a1
@@ -136535,126 +136533,126 @@ MuseumChecklist_WriteToVRAM:
 		jmp	(Plane_Map_To_VRAM).l
 ; ---------------------------------------------------------------------------
 MuseumChecklist_PhotoPieceLocs:					; Liliam: museum
-		dc.w ($0*3+1)*$50+$22	; AIZ 1
-		dc.w ($0*3+1)*$50+$26	; AIZ 2
-		dc.w ($0*3+1)*$50+$2A	; AIZ 3
-		dc.w ($0*3+1)*$50+$2E	; AIZ 4
-		dc.w ($0*3+1)*$50+$32	; AIZ 5
-		dc.w ($0*3+1)*$50+$38	; AIZ 6
-		dc.w ($0*3+1)*$50+$3C	; AIZ 7
-		dc.w ($0*3+1)*$50+$40	; AIZ 8
-		dc.w ($0*3+1)*$50+$44	; AIZ 9
-		dc.w ($0*3+1)*$50+$48	; AIZ 10
-		dc.w ($1*3+1)*$50+$22	; HCZ 1
-		dc.w ($1*3+1)*$50+$26	; HCZ 2
-		dc.w ($1*3+1)*$50+$2A	; HCZ 3
-		dc.w ($1*3+1)*$50+$2E	; HCZ 4
-		dc.w ($1*3+1)*$50+$32	; HCZ 5
-		dc.w ($1*3+1)*$50+$38	; HCZ 6
-		dc.w ($1*3+1)*$50+$3C	; HCZ 7
-		dc.w ($1*3+1)*$50+$40	; HCZ 8
-		dc.w ($1*3+1)*$50+$44	; HCZ 9
-		dc.w ($1*3+1)*$50+$48	; HCZ 10
-		dc.w ($2*3+1)*$50+$22	; MGZ 1
-		dc.w ($2*3+1)*$50+$26	; MGZ 2
-		dc.w ($2*3+1)*$50+$2A	; MGZ 3
-		dc.w ($2*3+1)*$50+$2E	; MGZ 4
-		dc.w ($2*3+1)*$50+$32	; MGZ 5
-		dc.w ($2*3+1)*$50+$38	; MGZ 6
-		dc.w ($2*3+1)*$50+$3C	; MGZ 7
-		dc.w ($2*3+1)*$50+$40	; MGZ 8
-		dc.w ($2*3+1)*$50+$44	; MGZ 9
-		dc.w ($2*3+1)*$50+$48	; MGZ 10
-		dc.w ($3*3+1)*$50+$22	; CNZ 1
-		dc.w ($3*3+1)*$50+$26	; CNZ 2
-		dc.w ($3*3+1)*$50+$2A	; CNZ 3
-		dc.w ($3*3+1)*$50+$2E	; CNZ 4
-		dc.w ($3*3+1)*$50+$32	; CNZ 5
-		dc.w ($3*3+1)*$50+$38	; CNZ 6
-		dc.w ($3*3+1)*$50+$3C	; CNZ 7
-		dc.w ($3*3+1)*$50+$40	; CNZ 8
-		dc.w ($3*3+1)*$50+$44	; CNZ 9
-		dc.w ($3*3+1)*$50+$48	; CNZ 10
-		dc.w ($4*3+1)*$50+$22	; ICZ 1
-		dc.w ($4*3+1)*$50+$26	; ICZ 2
-		dc.w ($4*3+1)*$50+$2A	; ICZ 3
-		dc.w ($4*3+1)*$50+$2E	; ICZ 4
-		dc.w ($4*3+1)*$50+$32	; ICZ 5
-		dc.w ($4*3+1)*$50+$38	; ICZ 6
-		dc.w ($4*3+1)*$50+$3C	; ICZ 7
-		dc.w ($4*3+1)*$50+$40	; ICZ 8
-		dc.w ($4*3+1)*$50+$44	; ICZ 9
-		dc.w ($4*3+1)*$50+$48	; ICZ 10
-		dc.w ($5*3+1)*$50+$22	; LBZ 1
-		dc.w ($5*3+1)*$50+$26	; LBZ 2
-		dc.w ($5*3+1)*$50+$2A	; LBZ 3
-		dc.w ($5*3+1)*$50+$2E	; LBZ 4
-		dc.w ($5*3+1)*$50+$32	; LBZ 5
-		dc.w ($5*3+1)*$50+$38	; LBZ 6
-		dc.w ($5*3+1)*$50+$3C	; LBZ 7
-		dc.w ($5*3+1)*$50+$40	; LBZ 8
-		dc.w ($5*3+1)*$50+$44	; LBZ 9
-		dc.w ($5*3+1)*$50+$48	; LBZ 10
-		dc.w ($6*3+1)*$50+$22	; MHZ 1
-		dc.w ($6*3+1)*$50+$26	; MHZ 2
-		dc.w ($6*3+1)*$50+$2A	; MHZ 3
-		dc.w ($6*3+1)*$50+$2E	; MHZ 4
-		dc.w ($6*3+1)*$50+$32	; MHZ 5
-		dc.w ($6*3+1)*$50+$38	; MHZ 6
-		dc.w ($6*3+1)*$50+$3C	; MHZ 7
-		dc.w ($6*3+1)*$50+$40	; MHZ 8
-		dc.w ($6*3+1)*$50+$44	; MHZ 9
-		dc.w ($6*3+1)*$50+$48	; MHZ 10
-		dc.w ($7*3+1)*$50+$22	; FBZ 1
-		dc.w ($7*3+1)*$50+$26	; FBZ 2
-		dc.w ($7*3+1)*$50+$2A	; FBZ 3
-		dc.w ($7*3+1)*$50+$2E	; FBZ 4
-		dc.w ($7*3+1)*$50+$32	; FBZ 5
-		dc.w ($7*3+1)*$50+$38	; FBZ 6
-		dc.w ($7*3+1)*$50+$3C	; FBZ 7
-		dc.w ($7*3+1)*$50+$40	; FBZ 8
-		dc.w ($7*3+1)*$50+$44	; FBZ 9
-		dc.w ($7*3+1)*$50+$48	; FBZ 10
-		dc.w ($8*3+1)*$50+$22	; SOZ 1
-		dc.w ($8*3+1)*$50+$26	; SOZ 2
-		dc.w ($8*3+1)*$50+$2A	; SOZ 3
-		dc.w ($8*3+1)*$50+$2E	; SOZ 4
-		dc.w ($8*3+1)*$50+$32	; SOZ 5
-		dc.w ($8*3+1)*$50+$38	; SOZ 6
-		dc.w ($8*3+1)*$50+$3C	; SOZ 7
-		dc.w ($8*3+1)*$50+$40	; SOZ 8
-		dc.w ($8*3+1)*$50+$44	; SOZ 9
-		dc.w ($8*3+1)*$50+$48	; SOZ 10
-		dc.w ($9*3+1)*$50+$1C	; LRZ 1
-		dc.w ($9*3+1)*$50+$20	; LRZ 2
-		dc.w ($9*3+1)*$50+$24	; LRZ 3
-		dc.w ($9*3+1)*$50+$28	; LRZ 4
-		dc.w ($9*3+1)*$50+$2C	; LRZ 5
-		dc.w ($9*3+1)*$50+$32	; LRZ 6
-		dc.w ($9*3+1)*$50+$36	; LRZ 7
-		dc.w ($9*3+1)*$50+$3A	; LRZ 8
-		dc.w ($9*3+1)*$50+$3E	; LRZ 9
-		dc.w ($9*3+1)*$50+$42	; LRZ 10
-		dc.w ($9*3+1)*$50+$48	; LRZ Boss
-		dc.w ($A*3+1)*$50+$32	; SSZ 1
-		dc.w ($A*3+1)*$50+$36	; SSZ 2
-		dc.w ($A*3+1)*$50+$3A	; SSZ 3
-		dc.w ($A*3+1)*$50+$3E	; SSZ 4
-		dc.w ($A*3+1)*$50+$42	; SSZ 5
-		dc.w ($A*3+1)*$50+$48	; SSZ Boss
-		dc.w ($B*3+1)*$50+$1C	; DEZ 1
-		dc.w ($B*3+1)*$50+$20	; DEZ 2
-		dc.w ($B*3+1)*$50+$24	; DEZ 3
-		dc.w ($B*3+1)*$50+$28	; DEZ 4
-		dc.w ($B*3+1)*$50+$2C	; DEZ 5
-		dc.w ($B*3+1)*$50+$32	; DEZ 6
-		dc.w ($B*3+1)*$50+$36	; DEZ 7
-		dc.w ($B*3+1)*$50+$3A	; DEZ 8
-		dc.w ($B*3+1)*$50+$3E	; DEZ 9
-		dc.w ($B*3+1)*$50+$42	; DEZ 10
-		dc.w ($B*3+1)*$50+$48	; DEZ Boss
-		dc.w ($C*3+1)*$50+$20	; DDZ
-		dc.w ($C*3+1)*$50+$48	; HPZ
+		dc.w ($0*4+1)*$50+$22	; AIZ 1
+		dc.w ($0*4+1)*$50+$26	; AIZ 2
+		dc.w ($0*4+1)*$50+$2A	; AIZ 3
+		dc.w ($0*4+1)*$50+$2E	; AIZ 4
+		dc.w ($0*4+1)*$50+$32	; AIZ 5
+		dc.w ($0*4+1)*$50+$38	; AIZ 6
+		dc.w ($0*4+1)*$50+$3C	; AIZ 7
+		dc.w ($0*4+1)*$50+$40	; AIZ 8
+		dc.w ($0*4+1)*$50+$44	; AIZ 9
+		dc.w ($0*4+1)*$50+$48	; AIZ 10
+		dc.w ($1*4+1)*$50+$22	; HCZ 1
+		dc.w ($1*4+1)*$50+$26	; HCZ 2
+		dc.w ($1*4+1)*$50+$2A	; HCZ 3
+		dc.w ($1*4+1)*$50+$2E	; HCZ 4
+		dc.w ($1*4+1)*$50+$32	; HCZ 5
+		dc.w ($1*4+1)*$50+$38	; HCZ 6
+		dc.w ($1*4+1)*$50+$3C	; HCZ 7
+		dc.w ($1*4+1)*$50+$40	; HCZ 8
+		dc.w ($1*4+1)*$50+$44	; HCZ 9
+		dc.w ($1*4+1)*$50+$48	; HCZ 10
+		dc.w ($2*4+1)*$50+$22	; MGZ 1
+		dc.w ($2*4+1)*$50+$26	; MGZ 2
+		dc.w ($2*4+1)*$50+$2A	; MGZ 3
+		dc.w ($2*4+1)*$50+$2E	; MGZ 4
+		dc.w ($2*4+1)*$50+$32	; MGZ 5
+		dc.w ($2*4+1)*$50+$38	; MGZ 6
+		dc.w ($2*4+1)*$50+$3C	; MGZ 7
+		dc.w ($2*4+1)*$50+$40	; MGZ 8
+		dc.w ($2*4+1)*$50+$44	; MGZ 9
+		dc.w ($2*4+1)*$50+$48	; MGZ 10
+		dc.w ($3*4+1)*$50+$22	; CNZ 1
+		dc.w ($3*4+1)*$50+$26	; CNZ 2
+		dc.w ($3*4+1)*$50+$2A	; CNZ 3
+		dc.w ($3*4+1)*$50+$2E	; CNZ 4
+		dc.w ($3*4+1)*$50+$32	; CNZ 5
+		dc.w ($3*4+1)*$50+$38	; CNZ 6
+		dc.w ($3*4+1)*$50+$3C	; CNZ 7
+		dc.w ($3*4+1)*$50+$40	; CNZ 8
+		dc.w ($3*4+1)*$50+$44	; CNZ 9
+		dc.w ($3*4+1)*$50+$48	; CNZ 10
+		dc.w ($4*4+1)*$50+$22	; ICZ 1
+		dc.w ($4*4+1)*$50+$26	; ICZ 2
+		dc.w ($4*4+1)*$50+$2A	; ICZ 3
+		dc.w ($4*4+1)*$50+$2E	; ICZ 4
+		dc.w ($4*4+1)*$50+$32	; ICZ 5
+		dc.w ($4*4+1)*$50+$38	; ICZ 6
+		dc.w ($4*4+1)*$50+$3C	; ICZ 7
+		dc.w ($4*4+1)*$50+$40	; ICZ 8
+		dc.w ($4*4+1)*$50+$44	; ICZ 9
+		dc.w ($4*4+1)*$50+$48	; ICZ 10
+		dc.w ($5*4+1)*$50+$22	; LBZ 1
+		dc.w ($5*4+1)*$50+$26	; LBZ 2
+		dc.w ($5*4+1)*$50+$2A	; LBZ 3
+		dc.w ($5*4+1)*$50+$2E	; LBZ 4
+		dc.w ($5*4+1)*$50+$32	; LBZ 5
+		dc.w ($5*4+1)*$50+$38	; LBZ 6
+		dc.w ($5*4+1)*$50+$3C	; LBZ 7
+		dc.w ($5*4+1)*$50+$40	; LBZ 8
+		dc.w ($5*4+1)*$50+$44	; LBZ 9
+		dc.w ($5*4+1)*$50+$48	; LBZ 10
+		dc.w ($6*4+1)*$50+$22	; MHZ 1
+		dc.w ($6*4+1)*$50+$26	; MHZ 2
+		dc.w ($6*4+1)*$50+$2A	; MHZ 3
+		dc.w ($6*4+1)*$50+$2E	; MHZ 4
+		dc.w ($6*4+1)*$50+$32	; MHZ 5
+		dc.w ($6*4+1)*$50+$38	; MHZ 6
+		dc.w ($6*4+1)*$50+$3C	; MHZ 7
+		dc.w ($6*4+1)*$50+$40	; MHZ 8
+		dc.w ($6*4+1)*$50+$44	; MHZ 9
+		dc.w ($6*4+1)*$50+$48	; MHZ 10
+		dc.w ($7*4+1)*$50+$22	; FBZ 1
+		dc.w ($7*4+1)*$50+$26	; FBZ 2
+		dc.w ($7*4+1)*$50+$2A	; FBZ 3
+		dc.w ($7*4+1)*$50+$2E	; FBZ 4
+		dc.w ($7*4+1)*$50+$32	; FBZ 5
+		dc.w ($7*4+1)*$50+$38	; FBZ 6
+		dc.w ($7*4+1)*$50+$3C	; FBZ 7
+		dc.w ($7*4+1)*$50+$40	; FBZ 8
+		dc.w ($7*4+1)*$50+$44	; FBZ 9
+		dc.w ($7*4+1)*$50+$48	; FBZ 10
+		dc.w ($8*4+1)*$50+$22	; SOZ 1
+		dc.w ($8*4+1)*$50+$26	; SOZ 2
+		dc.w ($8*4+1)*$50+$2A	; SOZ 3
+		dc.w ($8*4+1)*$50+$2E	; SOZ 4
+		dc.w ($8*4+1)*$50+$32	; SOZ 5
+		dc.w ($8*4+1)*$50+$38	; SOZ 6
+		dc.w ($8*4+1)*$50+$3C	; SOZ 7
+		dc.w ($8*4+1)*$50+$40	; SOZ 8
+		dc.w ($8*4+1)*$50+$44	; SOZ 9
+		dc.w ($8*4+1)*$50+$48	; SOZ 10
+		dc.w ($9*4+1)*$50+$1A	; LRZ 1
+		dc.w ($9*4+1)*$50+$1E	; LRZ 2
+		dc.w ($9*4+1)*$50+$22	; LRZ 3
+		dc.w ($9*4+1)*$50+$26	; LRZ 4
+		dc.w ($9*4+1)*$50+$2A	; LRZ 5
+		dc.w ($9*4+1)*$50+$30	; LRZ 6
+		dc.w ($9*4+1)*$50+$34	; LRZ 7
+		dc.w ($9*4+1)*$50+$38	; LRZ 8
+		dc.w ($9*4+1)*$50+$3C	; LRZ 9
+		dc.w ($9*4+1)*$50+$40	; LRZ 10
+		dc.w ($9*4+1)*$50+$48	; LRZ Boss
+		dc.w ($A*4+1)*$50+$30	; SSZ 1
+		dc.w ($A*4+1)*$50+$34	; SSZ 2
+		dc.w ($A*4+1)*$50+$38	; SSZ 3
+		dc.w ($A*4+1)*$50+$3C	; SSZ 4
+		dc.w ($A*4+1)*$50+$40	; SSZ 5
+		dc.w ($A*4+1)*$50+$48	; SSZ Boss
+		dc.w ($B*4+1)*$50+$1A	; DEZ 1
+		dc.w ($B*4+1)*$50+$1E	; DEZ 2
+		dc.w ($B*4+1)*$50+$22	; DEZ 3
+		dc.w ($B*4+1)*$50+$26	; DEZ 4
+		dc.w ($B*4+1)*$50+$2A	; DEZ 5
+		dc.w ($B*4+1)*$50+$30	; DEZ 6
+		dc.w ($B*4+1)*$50+$34	; DEZ 7
+		dc.w ($B*4+1)*$50+$38	; DEZ 8
+		dc.w ($B*4+1)*$50+$3C	; DEZ 9
+		dc.w ($B*4+1)*$50+$40	; DEZ 10
+		dc.w ($B*4+1)*$50+$48	; DEZ Boss
+		dc.w ($C*4+1)*$50+$22	; HPZ
+		dc.w ($C*4+1)*$50+$48	; DDZ
 ; ---------------------------------------------------------------------------
 
 Obj_MuseumPlayer:						; Liliam: museum
