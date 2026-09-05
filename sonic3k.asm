@@ -23525,7 +23525,8 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 
 	.lookup:
 		lsl.w	#2,d0
-		lea	MightyRay_TriangleJumpSpeeds-4(pc,d0.w),a1
+		lea	(MightyRay_TriangleJumpSpeeds-4).l,a1
+		lea	(a1,d0.w),a1
 		move.w	(a1)+,x_vel(a0)
 		move.w	(a1)+,y_vel(a0)
 		move.b	#1,jumping(a0)
@@ -23561,18 +23562,6 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 		beq.s	.lookup
 		moveq	#9,d0
 		bra.s	.lookup
-; ---------------------------------------------------------------------------
-MightyRay_TriangleJumpSpeeds:					; Liliam: extra skills - triangle jump
-		dc.w      0, -$600	; 01: up
-		dc.w      0,  $400	; 02: down
-		dc.w  -$400, -$380	; 03: no input
-		dc.w  -$700,     0	; 04: left
-		dc.w  -$500, -$600	; 05: left + up
-		dc.w  -$700,  $400	; 06: left + down
-		dc.w   $400, -$380	; 07: no input
-		dc.w   $700,     0	; 08: right
-		dc.w   $500, -$600	; 09: right + up
-		dc.w   $700,  $400	; 10: right + down
 ; ---------------------------------------------------------------------------
 
 Obj_Ray:							; Liliam: add extra characters
@@ -24520,6 +24509,8 @@ Sonic_InWater:
 
 		bset	#Status_Underwater,status(a0)	; set underwater flag
 		bne.s	locret_10E2C	; if already underwater, branch
+		tst.w	y_vel(a0)				; Liliam: bugfix - player speeds fix
+		bmi.s	locret_10E2C				;
 
 		addq.b	#1,(Water_entered_counter).w
 		movea.l	a0,a1
@@ -30747,6 +30738,8 @@ loc_1463A:
 		bge.s	loc_146BA
 		bset	#Status_Underwater,status(a0)
 		bne.s	locret_14638
+		tst.w	y_vel(a0)				; Liliam: bugfix - player speeds fix
+		bmi.s	locret_14638				;
 		addq.b	#1,(Water_entered_counter).w
 		movea.l	a0,a1
 		bsr.w	Player_ResetAirTimer
@@ -34494,6 +34487,8 @@ loc_166F6:
 		bge.s	loc_1676E
 		bset	#Status_Underwater,status(a0)
 		bne.s	locret_166F4
+		tst.w	y_vel(a0)				; Liliam: bugfix - player speeds fix
+		bmi.s	locret_166F4				;
 		addq.b	#1,(Water_entered_counter).w
 		movea.l	a0,a1
 		bsr.w	Player_ResetAirTimer
@@ -38498,6 +38493,8 @@ DashDust_Splash:
 		tst.b	character_id(a2)			; Liliam: dash dust - player 2 insta-shield
 		bne.s	.done					;
 		tst.b	double_jump_flag(a2)			;
+		beq.s	.done					;
+		cmpa.w	#Player_1,a2				;
 		beq.s	.done					;
 		move.b	#2,double_jump_flag(a2)			;
 
@@ -219986,6 +219983,17 @@ PalTable_EncoreGray:							; Liliam: Encore mode - bonus stage
 		binclude "Levels/Misc/Pal - Encore Gray.bin"
 PalTable_Ray:							; Liliam: convert to 1P Ray palette
 		binclude "Levels/Misc/Pal - Ray.bin"
+MightyRay_TriangleJumpSpeeds:					; Liliam: extra skills - triangle jump
+		dc.w      0, -$600	; 01: up
+		dc.w      0,  $400	; 02: down
+		dc.w  -$400, -$380	; 03: no input
+		dc.w  -$700,     0	; 04: left
+		dc.w  -$500, -$600	; 05: left + up
+		dc.w  -$700,  $400	; 06: left + down
+		dc.w   $400, -$380	; 07: no input
+		dc.w   $700,     0	; 08: right
+		dc.w   $500, -$600	; 09: right + up
+		dc.w   $700,  $400	; 10: right + down
 Ani_Player:							; Liliam: simplify player anim selection
 		include "General/Sprites/Sonic/Anim - Players.asm"
 		align $20000
