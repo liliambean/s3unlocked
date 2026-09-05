@@ -39,6 +39,7 @@ DevMode = 1
 
 NoMuseum = 0
 NoHolograms = 0
+NoJPOptions = 1
 No2PZones = 1
 ; If 1, disables features that are under construction
 
@@ -135620,7 +135621,11 @@ OptionsScreen_SetupDrawOnOff:					; Liliam: options menu
 		moveq	#0,d1
 		move.l	#Options_buffer+(plane_width*1)+(2*30),d4
 		tst.b	(Graphics_flags).w
+	if NoJPOptions
+		bra.s	OptionsScreen_Return
+	else
 		bmi.s	OptionsScreen_Return
+	endif
 		subq.w	#3*2,d4
 
 OptionsScreen_Return:
@@ -135790,7 +135795,11 @@ OptionsScreen_BuildPlaneMap:					; Liliam: options menu
 		moveq	#0,d1
 		move.l	#Options_buffer+(plane_width*2)+(2*5),d0
 		tst.b	(Graphics_flags).w
+	if NoJPOptions
+		bra.s	.checkEraseMenu
+	else
 		bmi.s	.checkEraseMenu
+	endif
 		addq.w	#2*3,d0
 
 	.checkEraseMenu:
@@ -135846,7 +135855,11 @@ OptionsScreen_DrawText:
 		move.w	(a1)+,d3
 		ori.w	#palette_line_1,d1
 		tst.b	(Graphics_flags).w
+	if NoJPOptions
+		bra.s	.nextLine
+	else
 		bmi.s	.nextLine
+	endif
 		addq.w	#2,a1
 
 	.nextLine:
