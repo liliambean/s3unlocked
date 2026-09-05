@@ -51094,9 +51094,11 @@ loc_205DA:
 ; ---------------------------------------------------------------------------
 
 loc_205DE:
-		bsr.w	sub_205B6
+;		bsr.w	sub_205B6				; Liliam: bugfix - fix platforms leaving garbage RAM
 		subq.b	#1,$38(a0)
-		bne.s	locret_2061E
+;		bne.s	locret_2061E				;
+		bne.s	sub_205B6				;
+		bsr.w	Draw_Sprite				;
 		move.l	#loc_20620,(a0)
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
