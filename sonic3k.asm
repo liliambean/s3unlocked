@@ -51436,12 +51436,14 @@ loc_209FC:
 		bclr	#p1_standing_bit,status(a0)
 		beq.s	loc_20A12
 		lea	(Player_1).w,a1
+		bset	#Status_InAir,status(a1)		; Liliam: bugfix - release player from object
 		bclr	#Status_OnObj,status(a1)
 
 loc_20A12:
 		bclr	#p2_standing_bit,status(a0)
 		beq.s	loc_20A24
 		lea	(Player_2).w,a1
+		bset	#Status_InAir,status(a1)		; Liliam: bugfix - release player from object
 		bclr	#Status_OnObj,status(a1)
 
 loc_20A24:
@@ -52088,6 +52090,20 @@ loc_2167A:
 		addq.b	#1,mapping_frame(a0)
 		bsr.s	BreakObjectToPieces
 
+BreakableWall_ReleasePlayers:
+		bclr	#p1_standing_bit,status(a0)		; Liliam: bugfix - release player from object
+		beq.s	.player2				;
+		lea	(Player_1).w,a1				;
+		bset	#Status_InAir,status(a1)		;
+		bclr	#Status_OnObj,status(a1)		;
+
+	.player2:
+		bclr	#p2_standing_bit,status(a0)		;
+		beq.s	loc_21692				;
+		lea	(Player_2).w,a1				;
+		bset	#Status_InAir,status(a1)		;
+		bclr	#Status_OnObj,status(a1)		;
+
 loc_21692:
 		jsr	(MoveSprite2).l
 		addi.w	#$70,y_vel(a0)
@@ -52219,7 +52235,8 @@ loc_21806:
 		move.l	#loc_21692,(a0)
 		addq.b	#1,mapping_frame(a0)
 		bsr.w	BreakObjectToPieces
-		bra.w	loc_21692
+		bra.w	BreakableWall_ReleasePlayers		; Liliam: bugfix - release player from object
+;		bra.w	loc_21692				;
 ; End of function sub_217EE
 
 ; ---------------------------------------------------------------------------
@@ -52320,7 +52337,8 @@ loc_21928:
 		move.l	#loc_21692,(a0)
 		addq.b	#1,mapping_frame(a0)
 		bsr.w	BreakObjectToPieces
-		bra.w	loc_21692
+		bra.w	BreakableWall_ReleasePlayers		; Liliam: bugfix - release player from object
+;		bra.w	loc_21692				;
 ; End of function sub_218CE
 
 ; ---------------------------------------------------------------------------
