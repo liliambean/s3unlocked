@@ -22,6 +22,8 @@ namespace S3KObjectDefinitions.CNZ
 		public override void Init(ObjectData data)
 		{
 			BuildSpritesSubtypes("../Levels/CNZ/Nemesis Art/Misc Art.bin", -6304, 1, 0, 2);
+			sprites[1][2] = sprites[1][0];
+			sprites[1][3] = sprites[1][1];
 		}
 	}
 }
@@ -44,7 +46,7 @@ namespace S3KObjectDefinitions.Common
 		private PropertySpec[] properties;
 		private ReadOnlyCollection<byte> subtypes;
 		private IDictionary<byte, string> subtypeNames;
-		private Sprite[][] sprites;
+		protected Sprite[][] sprites;
 
 		private byte verticalSubtype;
 		private byte horizontalSubtype;

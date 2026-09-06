@@ -73663,6 +73663,8 @@ Obj_Door:
 		add.w	d0,d0
 		add.w	d0,d0
 		lea	byte_30E18(pc,d0.w),a1
+		moveq	#0,d3					; Liliam: bugfix - scale activation radius with width
+		move.b	(a1),d3					;
 		move.b	(a1)+,width_pixels(a0)
 		move.b	(a1)+,height_pixels(a0)
 		move.w	(a1)+,art_tile(a0)
@@ -73670,22 +73672,29 @@ Obj_Door:
 		ori.b	#4,render_flags(a0)
 		move.w	#$300,priority(a0)
 		move.w	y_pos(a0),$32(a0)
-		move.w	x_pos(a0),d2
-		move.w	d2,d3
-		subi.w	#$200,d2
-		addi.w	#$18,d3
-		btst	#0,status(a0)
+		move.w	#-$80,d2				;
+		addi.w	#$10,d3					;
+;		move.w	x_pos(a0),d2				;
+;		move.w	d2,d3					;
+;		subi.w	#$200,d2				;
+;		addi.w	#$18,d3					;
+		btst	#Status_Facing,status(a0)
 		beq.s	loc_30E7E
-		subi.w	#-$1E8,d2
-		addi.w	#$1E8,d3
+		neg.w	d3					;
+		move.w	d3,d2					;
+		move.w	#$80,d3					;
+;		subi.w	#-$1E8,d2				;
+;		addi.w	#$1E8,d3				;
 
 loc_30E7E:
+		add.w	x_pos(a0),d2				;
+		add.w	x_pos(a0),d3				;
 		move.w	d2,$34(a0)
 		move.w	d3,$36(a0)
 		move.l	#loc_30E8C,(a0)
 
 loc_30E8C:
-		btst	#0,status(a0)
+		btst	#Status_Facing,status(a0)
 		bne.s	loc_30EA8
 		move.w	$34(a0),d2
 		move.w	x_pos(a0),d3
@@ -73718,14 +73727,15 @@ loc_30EBA:
 		beq.s	loc_30F34
 		addq.w	#8,$30(a0)
 		cmpi.w	#$40,$30(a0)
-		bne.s	loc_30F28
-		moveq	#signextendB(sfx_FanLatch),d0
-		cmpi.b	#$B,(Current_zone).w			; are we on DEZ?
-		bne.s	loc_30F02				; if not, branch
-		moveq	#signextendB(sfx_FanLatch),d0		; this check and sfx selection is not really necessary?
+		beq.s	loc_30F20			; Liliam: ???
+;		bne.s	loc_30F28			;
+;		moveq	#signextendB(sfx_FanLatch),d0	;
+;		cmpi.b	#$B,(Current_zone).w		;
+;		bne.s	loc_30F02			;
+;		moveq	#signextendB(sfx_FanLatch),d0	;
 
-loc_30F02:
-		jsr	(Play_SFX).l
+;loc_30F02:
+;		jsr	(Play_SFX).l			;
 		bra.s	loc_30F28
 ; ---------------------------------------------------------------------------
 
@@ -73734,12 +73744,14 @@ loc_30F0A:
 		beq.s	loc_30F34
 		subq.w	#8,$30(a0)
 		bne.s	loc_30F28
-		moveq	#signextendB(sfx_FanLatch),d0
-		cmpi.b	#$B,(Current_zone).w			; are we on DEZ?
-		bne.s	loc_30F22				; if not, branch
-		moveq	#signextendB(sfx_FanLatch),d0		; this check and sfx selection is not really necessary?
+;		moveq	#signextendB(sfx_FanLatch),d0	; Liliam: ???
+;		cmpi.b	#$B,(Current_zone).w		;
+;		bne.s	loc_30F22			;
 
-loc_30F22:
+loc_30F20:
+		moveq	#signextendB(sfx_FanLatch),d0
+
+;loc_30F22:
 		jsr	(Play_SFX).l
 
 loc_30F28:
@@ -73800,6 +73812,7 @@ loc_30FD2:
 		move.b	(a1)+,height_pixels(a0)
 		move.w	(a1)+,art_tile(a0)
 		move.l	#Map_CNZDoorHorizontal,mappings(a0)
+		andi.b	#$FD,render_flags(a0)			; Liliam: QOL - always draw upright
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
 		move.w	x_pos(a0),$32(a0)
@@ -73857,6 +73870,9 @@ loc_31096:
 		tst.w	$30(a0)
 		beq.s	loc_310B6
 		subq.w	#8,$30(a0)
+		bne.s	loc_310A0				; Liliam: QOL - add sound effect
+		moveq	#signextendB(sfx_FanLatch),d0		;
+		jsr	(Play_SFX).l				;
 
 loc_310A0:
 		move.w	$30(a0),d0
