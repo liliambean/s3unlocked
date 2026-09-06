@@ -9114,7 +9114,7 @@ Osc_Data2_end
 ; ---------------------------------------------------------------------------
 
 ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
-		cmpi.b	#State_Dead,(Player_1+routine).w
+		cmpi.b	#State_NoControl,(Player_1+routine).w
 		bhs.w	locret_7810
 		moveq	#0,d1
 		move.b	d1,(Super_ready_flag).w
@@ -9254,15 +9254,15 @@ loc_77D8:
 ;		andi.b	#3,(Rings_frame).w					;
 
 loc_77E8:
-		moveq	#0,d0						; Liliam: bugfix - delete scattered rings consistently
+		moveq	#0,d0					; Liliam: bugfix - delete bouncing rings consistently
 		tst.b	(Ring_spill_anim_counter).w
-		beq.s	loc_7802					;
-;		beq.s	loc_780A					;
-;		moveq	#0,d0						;
+		beq.s	loc_7802				;
+;		beq.s	loc_780A				;
+;		moveq	#0,d0					;
 		move.b	(Ring_spill_anim_counter).w,d0
 		add.w	(Ring_spill_anim_accum).w,d0
 		move.w	d0,(Ring_spill_anim_accum).w
-		subq.b	#1,(Ring_spill_anim_counter).w			;
+		subq.b	#1,(Ring_spill_anim_counter).w		;
 		andi.w	#$700,d0						; Liliam: QOL - extend ring animation
 ;		rol.w	#7,d0							;
 ;		andi.w	#3,d0							;
@@ -19675,7 +19675,8 @@ loc_EABE:
 		bne.s	Test_Ring_Collisions_AttractRing
 
 loc_EAC6:
-		move.w	#$604,(a4)
+		move.w	#$704,(a4)				; Liliam: bugfix - delete bouncing rings consistently
+;		move.w	#$604,(a4)				;
 		bsr.s	sub_EAE6
 		lea	(Ring_consumption_list).w,a3
 
@@ -21943,7 +21944,9 @@ Touch_ChkValue:
 	.notcompetition:
 		cmpi.b	#90,d0					; Is there more than 90 frames on the timer remaining?
 		bhs.w	.return					; If so, branch
-		move.b	#4,routine(a1)				; Set target object's routine to 4 (must be reserved for collision response)
+
+		move.l	#Obj_RingCollect,(a1)			; Liliam: QOL - speed up ring loss
+;		move.b	#4,routine(a1)				;
 
 	.return:
 		rts
@@ -22273,7 +22276,7 @@ loc_102A8:
 		beq.w	loc_10350
 		jsr	(AllocateObject).l
 		bne.s	loc_102DA
-		move.l	#Obj_Bouncing_Ring,(a1)
+		move.l	#Obj_BouncingRing_Create,(a1)
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		move.w	a0,$3E(a1)
@@ -39391,10 +39394,10 @@ Obj_InstaShield_Main:
 		move.b	#2,double_jump_flag(a2)		; Mark attack as over
 
 	.notover:
-;		tst.b	mapping_frame(a0)					; Liliam: Encore mode - combine ring
-;		beq.s	.loadnewDPLC						;
-;		cmpi.b	#3,mapping_frame(a0)					;
-;		bne.s	.skipDPLC						;
+;		tst.b	mapping_frame(a0)				; Liliam: Encore mode - combine ring
+;		beq.s	.loadnewDPLC					;
+;		cmpi.b	#3,mapping_frame(a0)				;
+;		bne.s	.skipDPLC					;
 
 ;	.loadnewDPLC:
 		bsr.w	PLCLoad_Shields
@@ -41000,21 +41003,11 @@ Obj_SSZ2Ring:
 		beq.w	Delete_Current_Sprite			;
 
 Obj_Ring:
-		moveq	#0,d0
-		move.b	routine(a0),d0
-		move.w	Ring_Index(pc,d0.w),d1
-		jmp	Ring_Index(pc,d1.w)
-; ---------------------------------------------------------------------------
-Ring_Index:
-		dc.w Obj_RingInit-Ring_Index
-		dc.w Obj_RingAnimate-Ring_Index
-		dc.w Obj_RingCollect-Ring_Index
-		dc.w Obj_RingSparkle-Ring_Index
-		dc.w Obj_RingDelete-Ring_Index
-; ---------------------------------------------------------------------------
+		; Liliam: QOL - speed up ring loss
 
-Obj_RingInit:
-		addq.b	#2,routine(a0)
+;Obj_RingInit:
+;		addq.b	#2,routine(a0)				; Liliam: QOL - speed up ring loss
+		move.l	#Sprite_CheckDeleteTouch3,(a0)		;
 		move.l	#Map_Ring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_PhotoPiece+4,1,1),art_tile(a0)	; Liliam: QOL - extend ring animation
 ;		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)		;
@@ -41023,29 +41016,40 @@ Obj_RingInit:
 		move.b	#$47,collision_flags(a0)
 		move.b	#8,width_pixels(a0)
 		tst.w	(Competition_mode).w
-		beq.s	Obj_RingAnimate
+		beq.s	loc_1A568
 		move.w	#make_art_tile(ArtTile_2PArt_3+$C,3,0),art_tile(a0)
 
-Obj_RingAnimate:
+loc_1A568:
 ;		move.b	(Rings_frame).w,mapping_frame(a0)			; Liliam: QOL - extend ring animation
 		bra.w	Sprite_CheckDeleteTouch3
 ; ---------------------------------------------------------------------------
 
 Obj_RingCollect:
-		addq.b	#2,routine(a0)
-		move.b	#0,collision_flags(a0)
-		move.w	#$80,priority(a0)
+;		addq.b	#2,routine(a0)				; Liliam: QOL - speed up ring loss
+;		move.b	#0,collision_flags(a0)			;
+		move.l	#Obj_RingSparkle,(a0)			;
 		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)		; Liliam: QOL - extend ring animation
+		move.w	#$80,priority(a0)
+		move.w	$46(a0),d0					; Liliam: Encore mode - combine ring
+		beq.s	loc_1A582					;
+		jsr	(AddRings).l					;
+		move.w	#$101,anim(a0)					;
+		bra.s	Obj_RingSparkle					;
+; ---------------------------------------------------------------------------
+
+loc_1A582:
 		bsr.s	GiveRing
 
 Obj_RingSparkle:
 		lea	(Ani_RingSparkle).l,a1
 		bsr.w	Animate_Sprite
+		tst.b	routine(a0)				; Liliam: QOL - speed up ring loss
+		bne.w	Delete_Current_Sprite			;
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
-Obj_RingDelete:
-		bra.w	Delete_Current_Sprite
+;Obj_RingDelete:
+		; Liliam: QOL - speed up ring loss
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -41122,144 +41126,22 @@ loc_1A608:
 
 ; ---------------------------------------------------------------------------
 
-Obj_Bouncing_Ring:
-		moveq	#0,d0
-		move.b	routine(a0),d0
-		move.w	Bouncing_Ring_Index(pc,d0.w),d1
-		jmp	Bouncing_Ring_Index(pc,d1.w)
-; ---------------------------------------------------------------------------
-Bouncing_Ring_Index:
-		dc.w loc_1A67A-Bouncing_Ring_Index
-		dc.w loc_1A75C-Bouncing_Ring_Index
-		dc.w loc_1A7C2-Bouncing_Ring_Index
-		dc.w loc_1A7D6-Bouncing_Ring_Index
-		dc.w loc_1A7E4-Bouncing_Ring_Index
-		dc.w CombineRing_NormalGravity-Bouncing_Ring_Index		; Liliam: Encore mode - combine ring
-; ---------------------------------------------------------------------------
+Obj_BouncingRing_Create:
+		; Liliam: QOL - speed up ring loss
 
-Obj_Bouncing_Ring_Reverse_Gravity:
-		moveq	#0,d0
-		move.b	routine(a0),d0
-		move.w	Bouncing_Ring_Index_2(pc,d0.w),d1
-		jmp	Bouncing_Ring_Index_2(pc,d1.w)
-; ---------------------------------------------------------------------------
-Bouncing_Ring_Index_2:
-		dc.w loc_1A67A-Bouncing_Ring_Index_2
-		dc.w loc_1A7E8-Bouncing_Ring_Index_2
-		dc.w loc_1A7C2-Bouncing_Ring_Index_2
-		dc.w loc_1A7D6-Bouncing_Ring_Index_2
-		dc.w loc_1A7E4-Bouncing_Ring_Index_2
-		dc.w CombineRing_ReverseGravity-Bouncing_Ring_Index_2		; Liliam: Encore mode - combine ring
-; ---------------------------------------------------------------------------
-
-loc_1A67A:
-		move.l	#Obj_Bouncing_Ring,d6
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_1A68C
-		move.l	#Obj_Bouncing_Ring_Reverse_Gravity,d6
-
-loc_1A68C:
-		movea.l	a0,a1
+;loc_1A68C:
+;		movea.l	a0,a1					; Liliam: QOL - speed up ring loss
 		moveq	#0,d5
 		move.w	(Ring_count).w,d5
-		movea.w	$3E(a0),a2						; Liliam: Encore mode - combine ring
-		cmpa.w	#Player_1,a2						;
-;		tst.b	$3F(a0)							;
+		movea.w	$3E(a0),a2					; Liliam: Encore mode - combine ring
+		cmpa.w	#Player_1,a2					;
+;		tst.b	$3F(a0)						;
 		beq.s	loc_1A69E
 		move.w	(Ring_count_P2).w,d5
 
 loc_1A69E:
-		bclr	#Status_CombineRing,status_secondary(a2)		;
-		beq.w	CombineRing_Done					;
-		move.w	d5,$42(a0)						;
-		move.l	d6,(a0)							;
-		move.b	#$A,routine(a0)						;
-		move.b	#$C,x_radius(a0)					;
-		move.b	#$C,y_radius(a0)					;
-		move.l	#Map_CombineRing,mappings(a0)				;
-		move.l	#DPLC_CombineRing,shield_plc(a0)			;
-		move.l	#ArtUnc_CombineRing,shield_art(a0)			;
-		move.w	#tiles_to_bytes(ArtTile_CombineRing),vram_art(a0)	;
-		move.w	#make_art_tile(ArtTile_CombineRing,1,1),art_tile(a0)	;
-		move.b	#$84,render_flags(a0)					;
-		move.w	#$180,priority(a0)					;
-		move.b	#$47,collision_flags(a0)				;
-		move.b	#$C,width_pixels(a0)					;
-		move.b	#$C,height_pixels(a0)					;
-		move.b	#150,$45(a0)						;
-		move.b	#4,$46(a0)						;
-		move.w	#$88,d0							;
-		jsr	(GetSineCosine_Fine).l					;
-		asl.w	#2,d0							;
-		asl.w	#2,d1							;
-		tst.w	x_vel(a2)						;
-		bpl.s	.applySpeeds						;
-		neg.w	d0							;
-
-	.applySpeeds:
-		move.w	d0,x_vel(a0)						;
-		move.w	d1,y_vel(a0)						;
-		move.w	#signextendB(sfx_RingLoss),d0				;
-		jsr	(Play_SFX).l						;
-		clr.w	(Ring_count).w						;
-		move.b	#$80,(Update_HUD_ring_count).w				;
-		tst.b	(Reverse_gravity_flag).w				;
-		bne.s	CombineRing_ReverseGravity				;
-
-CombineRing_NormalGravity:
-		bsr.s	CombineRing_Common					;
-		bsr.w	MoveSprite2						;
-		addi.w	#$18,y_vel(a0)						;
-		bpl.w	loc_1A780						;
-		bra.w	loc_1A7B0						;
-; ---------------------------------------------------------------------------
-
-CombineRing_ReverseGravity:							; Liliam: Encore mode - combine ring
-		bsr.s	CombineRing_Common
-		bsr.w	MoveSprite_ReverseGravity2
-		addi.w	#$18,y_vel(a0)
-		bpl.w	loc_1A80C
-		bra.w	loc_1A83C
-; ---------------------------------------------------------------------------
-
-CombineRing_Common:								; Liliam: Encore mode - combine ring
-		move.w	$44(a0),d0
-		andi.b	#7,d0
-		bne.s	.checkDelete
-		bsr.w	AllocateObjectAfterCurrent
-		bne.s	.checkDelete
-		move.l	#loc_1A920,(a1)
-		move.l	#Map_Ring,mappings(a1)
-		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a1)
-		move.w	#$200,priority(a1)
-		move.b	#4,render_flags(a1)
-		move.b	#8,width_pixels(a1)
-		move.b	#8,height_pixels(a1)
-		move.w	x_pos(a0),x_pos(a1)
-		move.w	y_pos(a0),y_pos(a1)
-
-	.checkDelete:
-		tst.b	(Player_1+status_secondary).w
-		bne.s	CombineRing_Explode
-		move.w	$44(a0),d0
-		beq.s	CombineRing_Explode
-		add.w	$46(a0),d0
-		move.w	d0,$46(a0)
-		subq.w	#1,$44(a0)
-		andi.w	#$700,d0
-		lsr.w	#8,d0
-		move.b	d0,mapping_frame(a0)
-		bra.w	PLCLoad_Shields
-; ---------------------------------------------------------------------------
-
-CombineRing_Explode:
-		move.l	(a0),d6							; Liliam: Encore mode - combine ring
-		move.w	$42(a0),d5						;
-		clr.w	$42(a0)							;
-		clr.b	mapping_frame(a0)					;
-		clr.b	routine(a0)						;
-		movea.l	a0,a1							;
-		addq.w	#4,sp							;
+		bclr	#Status_CombineRing,status_secondary(a2)	;
+		bne.w	CombineRing_Create				;
 
 CombineRing_Done:
 		moveq	#$20,d0
@@ -41270,7 +41152,13 @@ CombineRing_Done:
 loc_1A6A6:
 		subq.w	#1,d5
 		move.w	#$288,d4
-		bra.s	loc_1A6B6
+		move.l	#Obj_BouncingRing,d6			; Liliam: QOL - speed up ring loss
+		move.b	#-1,(Ring_spill_anim_counter).w		;
+		movea.l	a0,a1					;
+		tst.b	(Reverse_gravity_flag).w		;
+		beq.s	loc_1A6B6				;
+		move.l	#Obj_BouncingRing_ReverseGravity,d6	;
+		bra.s	loc_1A6B6				;
 ; ---------------------------------------------------------------------------
 
 loc_1A6AE:
@@ -41279,7 +41167,7 @@ loc_1A6AE:
 
 loc_1A6B6:
 		move.l	d6,(a1)
-		addq.b	#2,routine(a1)
+;		addq.b	#2,routine(a1)				; Liliam: QOL - speed up ring loss
 		move.b	#8,y_radius(a1)
 		move.b	#8,x_radius(a1)
 		move.w	x_pos(a0),x_pos(a1)
@@ -41290,7 +41178,8 @@ loc_1A6B6:
 		move.w	#$180,priority(a1)
 		move.b	#$47,collision_flags(a1)
 		move.b	#8,width_pixels(a1)
-		move.b	#-1,(Ring_spill_anim_counter).w
+		move.b	#8,height_pixels(a1)			;
+;		move.b	#-1,(Ring_spill_anim_counter).w		;
 		tst.w	d4
 		bmi.s	loc_1A728
 		move.w	d4,d0
@@ -41321,16 +41210,17 @@ loc_1A738:
 		move.b	#$80,(Update_HUD_ring_count).w
 		move.b	#0,(Extra_life_flags).w
 		tst.b	(Reverse_gravity_flag).w
-		bne.w	loc_1A7E8
+		bne.w	Obj_BouncingRing_ReverseGravity
 
-loc_1A75C:
-		tst.b	(Ring_spill_anim_counter).w			; Liliam: bugfix - delete scattered rings consistently
-		beq.w	loc_1A7E4					;
-;		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)	;
+Obj_BouncingRing:
+;		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)		; Liliam: QOL - extend ring animation
+		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
+		beq.w	Delete_Current_Sprite			;
 		bsr.w	MoveSprite2
 		addi.w	#$18,y_vel(a0)
 		bmi.s	loc_1A7B0
-		move.b	(V_int_run_count+3).w,d0
+;		move.b	(V_int_run_count+3).w,d0		; Liliam: bugfix - delete bouncing rings consistently
+		move.b	(Level_frame_counter+1).w,d0		;
 		add.b	d7,d0
 		andi.b	#7,d0
 		bne.s	loc_1A7B0
@@ -41348,62 +41238,45 @@ loc_1A780:
 		neg.w	y_vel(a0)
 
 loc_1A79C:
-;		tst.b	(Ring_spill_anim_counter).w			; Liliam: bugfix - delete scattered rings consistently
-;		beq.s	loc_1A7E4					;
-		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
-		bne.s	loc_1A7A2				;
-		move.w	(Screen_Y_wrap_value).w,d0		;
-		and.w	d0,y_pos(a0)				;
-
-loc_1A7A2:
+;		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
+;		beq.s	loc_1A7E4				;
 		move.w	(Camera_max_Y_pos).w,d0
 		addi.w	#$E0,d0
 		cmp.w	y_pos(a0),d0
-		blo.s	loc_1A7E4
+		blo.w	Delete_Current_Sprite			; Liliam: QOL - speed up ring loss
+;		blo.s	loc_1A7E4				;
 
 loc_1A7B0:
 		jsr	(Add_SpriteToCollisionResponseList).l
+		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
+		bne.s	.wrapHorizontal				;
+		move.w	(Screen_Y_wrap_value).w,d0		;
+		and.w	d0,y_pos(a0)				;
+
+	.wrapHorizontal:
 		move.w	(Level_repeat_offset).w,d0
 		sub.w	d0,x_pos(a0)
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
-loc_1A7C2:
-		addq.b	#2,routine(a0)
-		move.b	#0,collision_flags(a0)
-		move.w	#$80,priority(a0)
-		move.w	$42(a0),d0						; Liliam: Encore mode - combine ring
-		beq.s	loc_1A7D2						;
-		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)		;
-		move.w	#$101,anim(a0)						;
-		jsr	(AddRings).l						;
-		bra.s	loc_1A7D6						;
+;loc_1A7C2:
+		; Liliam: QOL - speed up ring loss
 ; ---------------------------------------------------------------------------
 
-loc_1A7D2:
-		bsr.w	GiveRing
-
-loc_1A7D6:
-		lea	(Ani_RingSparkle).l,a1
-		bsr.w	Animate_Sprite
-		bra.w	Draw_Sprite
+;loc_1A7E4:
+		; Liliam: QOL - speed up ring loss
 ; ---------------------------------------------------------------------------
 
-loc_1A7E4:
-		bra.w	Delete_Current_Sprite
-; ---------------------------------------------------------------------------
-
-loc_1A7E8:
-		tst.b	(Ring_spill_anim_counter).w			; Liliam: bugfix - delete scattered rings consistently
-		beq.s	loc_1A7E4					;
-;		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)	;
-
-loc_1A7EE:
-		bsr.w	MoveSprite_ReverseGravity2			;
-;		bsr.w	MoveSprite_TestGravity2				;
+Obj_BouncingRing_ReverseGravity:
+;		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)		; Liliam: QOL - extend ring animation
+		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
+		beq.w	Delete_Current_Sprite			;
+;		bsr.w	MoveSprite_TestGravity2			; Liliam: QOL - speed up ring loss
+		bsr.w	MoveSprite_ReverseGravity2		;
 		addi.w	#$18,y_vel(a0)
 		bmi.s	loc_1A83C
-		move.b	(V_int_run_count+3).w,d0
+;		move.b	(V_int_run_count+3).w,d0		; Liliam: bugfix - delete bouncing rings consistently
+		move.b	(Level_frame_counter+1).w,d0		;
 		add.b	d7,d0
 		andi.b	#7,d0
 		bne.s	loc_1A83C
@@ -41421,28 +41294,28 @@ loc_1A80C:
 		neg.w	y_vel(a0)
 
 loc_1A828:
-;		tst.b	(Ring_spill_anim_counter).w			; Liliam: bugfix - delete scattered rings consistently
-;		beq.s	loc_1A7E4					;
-		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
-		bne.s	loc_1A82E				;
-		move.w	(Screen_Y_wrap_value).w,d0		;
-		and.w	d0,y_pos(a0)				;
-
-loc_1A82E:
+;		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
+;		beq.s	loc_1A7E4				;
 		move.w	(Camera_max_Y_pos).w,d0
 		addi.w	#$E0,d0
 		cmp.w	y_pos(a0),d0
-		blo.s	loc_1A7E4
+		blo.w	Delete_Current_Sprite			; Liliam: QOL - speed up ring loss
+;		blo.s	loc_1A7E4				;
 
 loc_1A83C:
 		jsr	(Add_SpriteToCollisionResponseList).l
+		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
+		bne.s	.wrapHorizontal				;
+		move.w	(Screen_Y_wrap_value).w,d0		;
+		and.w	d0,y_pos(a0)				;
+
+	.wrapHorizontal:
 		move.w	(Level_repeat_offset).w,d0
 		sub.w	d0,x_pos(a0)
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 Obj_Attracted_Ring:
-		; init
 		move.l	#Map_Ring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_PhotoPiece+4,1,1),art_tile(a0)	; Liliam: QOL - extend ring animation
 ;		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)		;
@@ -41456,19 +41329,14 @@ Obj_Attracted_Ring:
 		move.l	#loc_1A88C,(a0)
 
 loc_1A88C:
-		tst.b	routine(a0)
-		bne.s	AttractedRing_GiveRing
+;		tst.b	routine(a0)				; Liliam: QOL - speed up ring loss
+;		bne.s	AttractedRing_GiveRing			;
 		bsr.w	AttractedRing_Move
-		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
-		bne.s	loc_1A896				;
-		move.w	(Screen_Y_wrap_value).w,d0		;
-		and.w	d0,y_pos(a0)				;
-
-loc_1A896:
 		btst	#Status_LtngShield,(Player_1+status_secondary).w
 		bne.s	Obj_Attracted_RingAnimate
-		move.l	#Obj_Bouncing_Ring,(a0)
-		move.b	#2,routine(a0)
+		move.l	#Obj_BouncingRing,(a0)			; Liliam: QOL - speed up ring loss
+;		move.l	#Obj_BouncingRing_Create,(a0)		;
+;		move.b	#2,routine(a0)				;
 		move.b	#-1,(Ring_spill_anim_counter).w
 		move.b	(Rings_frame).w,(Ring_spill_anim_frame).w		; Liliam: QOL - extend ring animation
 		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)		;
@@ -41480,7 +41348,12 @@ Obj_Attracted_RingAnimate:
 ;		addq.b	#1,mapping_frame(a0)					;
 ;		andi.b	#3,mapping_frame(a0)					;
 
-;loc_1A8C6:
+		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
+		bne.s	loc_1A8C6				;
+		move.w	(Screen_Y_wrap_value).w,d0		;
+		and.w	d0,y_pos(a0)				;
+
+loc_1A8C6:
 		move.w	x_pos(a0),d0
 		andi.w	#$FF80,d0
 		sub.w	(Camera_X_pos_coarse_back).w,d0
@@ -41513,25 +41386,8 @@ loc_1A8FC:
 		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 
-AttractedRing_GiveRing:
-		move.b	#0,collision_flags(a0)
-		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)		; Liliam: QOL - extend ring animation
-		move.w	#$80,priority(a0)
-;		subq.w	#1,(Perfect_rings_left).w			; Liliam: Encore mode - save data
-		bsr.w	GiveRing
-		move.l	#loc_1A920,(a0)
-		move.b	#0,routine(a0)
-
-loc_1A920:
-		tst.b	routine(a0)
-		bne.s	loc_1A934
-		lea	(Ani_RingSparkle).l,a1
-		bsr.w	Animate_Sprite
-		bra.w	Draw_Sprite
-; ---------------------------------------------------------------------------
-
-loc_1A934:
-		bra.w	Delete_Current_Sprite
+;AttractedRing_GiveRing:
+		; Liliam: QOL - speed up ring loss
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -41597,15 +41453,105 @@ AttractedRing_ApplyMovementY:
 ; End of function AttractedRing_Move
 
 ; ---------------------------------------------------------------------------
+
+CombineRing_Create:							; Liliam: Encore mode - combine ring
+		move.b	#$C,x_radius(a0)
+		move.b	#$C,y_radius(a0)
+		move.l	#Map_CombineRing,mappings(a0)
+		move.l	#DPLC_CombineRing,shield_plc(a0)
+		move.l	#ArtUnc_CombineRing,shield_art(a0)
+		move.w	#tiles_to_bytes(ArtTile_CombineRing),vram_art(a0)
+		move.w	#make_art_tile(ArtTile_CombineRing,1,1),art_tile(a0)
+		move.b	#$84,render_flags(a0)
+		move.w	#$180,priority(a0)
+		move.b	#$47,collision_flags(a0)
+		move.b	#$C,width_pixels(a0)
+		move.b	#$C,height_pixels(a0)
+		move.b	#150,$43(a0)
+		move.b	#4,$44(a0)
+		move.w	d5,$46(a0)
+		move.w	#$88,d0
+		jsr	(GetSineCosine_Fine).l
+		asl.w	#2,d0
+		asl.w	#2,d1
+		tst.w	x_vel(a2)
+		bpl.s	.applySpeeds
+		neg.w	d0
+
+	.applySpeeds:
+		move.w	d0,x_vel(a0)
+		move.w	d1,y_vel(a0)
+		move.w	#signextendB(sfx_RingLoss),d0
+		jsr	(Play_SFX).l
+		clr.w	(Ring_count).w
+		move.b	#$80,(Update_HUD_ring_count).w
+		move.l	#Obj_CombineRing_ReverseGravity,(a0)
+		tst.b	(Reverse_gravity_flag).w
+		bne.s	Obj_CombineRing_ReverseGravity
+		move.l	#Obj_CombineRing,(a0)
+
+Obj_CombineRing:
+		bsr.s	CombineRing_Common
+		bsr.w	MoveSprite2
+		addi.w	#$18,y_vel(a0)
+		bpl.w	loc_1A780
+		bra.w	loc_1A7B0
+; ---------------------------------------------------------------------------
+
+Obj_CombineRing_ReverseGravity:						; Liliam: Encore mode - combine ring
+		bsr.s	CombineRing_Common
+		bsr.w	MoveSprite_ReverseGravity2
+		addi.w	#$18,y_vel(a0)
+		bpl.w	loc_1A80C
+		bra.w	loc_1A83C
+; ---------------------------------------------------------------------------
+
+CombineRing_Common:							; Liliam: Encore mode - combine ring
+		move.w	$42(a0),d0
+		andi.b	#7,d0
+		bne.s	.checkDelete
+		bsr.w	AllocateObjectAfterCurrent
+		bne.s	.checkDelete
+		move.l	#Obj_RingSparkle,(a1)
+		move.l	#Map_Ring,mappings(a1)
+		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a1)
+		move.w	#$200,priority(a1)
+		move.b	#4,render_flags(a1)
+		move.b	#8,width_pixels(a1)
+		move.b	#8,height_pixels(a1)
+		move.w	x_pos(a0),x_pos(a1)
+		move.w	y_pos(a0),y_pos(a1)
+
+	.checkDelete:
+		tst.b	(Player_1+status_secondary).w
+		bne.s	CombineRing_Explode
+		move.w	$42(a0),d0
+		beq.s	CombineRing_Explode
+		add.w	$44(a0),d0
+		move.w	d0,$44(a0)
+		subq.w	#1,$42(a0)
+		andi.w	#$700,d0
+		lsr.w	#8,d0
+		move.b	d0,mapping_frame(a0)
+		bra.w	PLCLoad_Shields
+; ---------------------------------------------------------------------------
+
+CombineRing_Explode:							; Liliam: Encore mode - combine ring
+		addq.w	#4,sp
+		move.w	$46(a0),d5
+		clr.w	$46(a0)
+		clr.b	mapping_frame(a0)
+		bra.w	CombineRing_Done
+; ---------------------------------------------------------------------------
 Ani_RingSparkle:
 		; Liliam: Encore mode - combine ring
 		include "General/Sprites/Ring/Anim - Ring Sparkle.asm"
 Map_Ring:
 		; Liliam: QOL - extend ring animation
 		include "General/Sprites/Ring/Map - Ring.asm"
-Map_CombineRing:						; Liliam: Encore mode - combine ring
+Map_CombineRing:							; Liliam: Encore mode - combine ring
 		include "General/Sprites/Ring/Map - Combine Ring.asm"
-DPLC_CombineRing:						; Liliam: Encore mode - combine ring
+DPLC_CombineRing:							; Liliam: Encore mode - combine ring
 		include "General/Sprites/Ring/DPLC - Combine Ring.asm"
 ; ---------------------------------------------------------------------------
 
@@ -47042,11 +46988,11 @@ locret_1DA5E:
 
 Monitor_Give_SuperSonic:
 		addq.w	#1,(a2)
-		tst.b	(Encore_mode).w						; Liliam: Encore mode - combine ring
-		beq.s	loc_1DA62						;
-		bset	#Status_CombineRing,status_secondary(a1)		;
-		moveq	#signextendB(sfx_CombineRing),d0			;
-		jmp	(Play_SFX).l						;
+		tst.b	(Encore_mode).w					; Liliam: Encore mode - combine ring
+		beq.s	loc_1DA62					;
+		bset	#Status_CombineRing,status_secondary(a1)	;
+		moveq	#signextendB(sfx_CombineRing),d0		;
+		jmp	(Play_SFX).l					;
 ; ---------------------------------------------------------------------------
 
 loc_1DA62:
@@ -204560,7 +204506,7 @@ loc_89D3C:
 loc_89D44:
 		lea	ObjDat3_89E9C(pc),a1
 		jsr	SetUp_ObjAttributes(pc)
-		move.l	#Obj_Bouncing_Ring,(a0)
+		move.l	#Obj_BouncingRing_Create,(a0)
 		move.b	#-1,(Ring_spill_anim_counter).w
 		move.b	#8,y_radius(a0)
 		move.b	#8,x_radius(a0)
@@ -220141,7 +220087,7 @@ ArtUnc_Ray:							; Liliam: add extra characters
 ; ---------------------------------------------------------------------------
 ArtUnc_MetalSonic:						; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Art/Metal Sonic.bin"
-ArtUnc_CombineRing:								; Liliam: Encore mode - combine ring
+ArtUnc_CombineRing:							; Liliam: Encore mode - combine ring
 		binclude "General/Sprites/Ring/Combine Ring.bin"
 		include "strings.asm"				; Liliam: options menu
 		align $20000
