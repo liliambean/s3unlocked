@@ -19614,6 +19614,12 @@ Test_Ring_Collisions:
 		move.w	y_pos(a0),d3
 		subi.w	#$40,d2
 		subi.w	#$40,d3
+		bpl.s	loc_EA54				; Liliam: bugfix - vertical wrapping
+		clr.w	d3					;
+		cmpi.w	#-$100,(Camera_min_Y_pos).w		;
+		beq.s	Test_Ring_Collisions_NoAttraction	;
+
+loc_EA54:
 		move.w	#6,d1
 		move.w	#$C,d6
 		move.w	#$80,d4
@@ -19640,9 +19646,9 @@ Test_Ring_Collisions_NextRing:
 		move.w	(a1),d0
 		sub.w	d1,d0
 		sub.w	d2,d0
-		bcc.s	loc_EAA0
+		bhs.s	loc_EAA0
 		add.w	d6,d0
-		bcs.s	loc_EAA6
+		blo.s	loc_EAA6
 		bra.w	loc_EADA
 ; ---------------------------------------------------------------------------
 
@@ -19654,9 +19660,9 @@ loc_EAA6:
 		move.w	2(a1),d0
 		sub.w	d1,d0
 		sub.w	d3,d0
-		bcc.s	loc_EAB8
+		bhs.s	loc_EAB8
 		add.w	d6,d0
-		bcs.s	loc_EABE
+		blo.s	loc_EABE
 		bra.w	loc_EADA
 ; ---------------------------------------------------------------------------
 
@@ -27337,7 +27343,7 @@ loc_123DE:
 ; ---------------------------------------------------------------------------
 
 loc_123FA:
-		and.w	(Screen_Y_wrap_value).w,d0		; Liliam: bugfix - stop deleting prematurely
+		and.w	(Screen_Y_wrap_value).w,d0		; Liliam: bugfix - vertical wrapping
 		addi.w	#$100,d0
 		tst.w	(Competition_mode).w
 		beq.s	loc_12408
@@ -41317,6 +41323,12 @@ loc_1A780:
 loc_1A79C:
 ;		tst.b	(Ring_spill_anim_counter).w			; Liliam: bugfix - delete scattered rings consistently
 ;		beq.s	loc_1A7E4					;
+		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
+		bne.s	loc_1A7A2				;
+		move.w	(Screen_Y_wrap_value).w,d0		;
+		and.w	d0,y_pos(a0)				;
+
+loc_1A7A2:
 		move.w	(Camera_max_Y_pos).w,d0
 		addi.w	#$E0,d0
 		cmp.w	y_pos(a0),d0
@@ -41384,6 +41396,12 @@ loc_1A80C:
 loc_1A828:
 ;		tst.b	(Ring_spill_anim_counter).w			; Liliam: bugfix - delete scattered rings consistently
 ;		beq.s	loc_1A7E4					;
+		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
+		bne.s	loc_1A82E				;
+		move.w	(Screen_Y_wrap_value).w,d0		;
+		and.w	d0,y_pos(a0)				;
+
+loc_1A82E:
 		move.w	(Camera_max_Y_pos).w,d0
 		addi.w	#$E0,d0
 		cmp.w	y_pos(a0),d0
@@ -41414,6 +41432,12 @@ loc_1A88C:
 		tst.b	routine(a0)
 		bne.s	AttractedRing_GiveRing
 		bsr.w	AttractedRing_Move
+		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
+		bne.s	loc_1A896				;
+		move.w	(Screen_Y_wrap_value).w,d0		;
+		and.w	d0,y_pos(a0)				;
+
+loc_1A896:
 		btst	#Status_LtngShield,(Player_1+status_secondary).w
 		bne.s	Obj_Attracted_RingAnimate
 		move.l	#Obj_Bouncing_Ring,(a0)
@@ -41508,11 +41532,23 @@ AttractedRing_MoveRight:
 
 AttractedRing_ApplyMovementX:
 		add.w	d1,x_vel(a0)
+		move.w	y_pos(a0),d0				; Liliam: bugfix - vertical wrapping (credit: flamewing)
+		sub.w	(Player_1+y_pos).w,d0			;
+		cmpi.w	#-$100,(Camera_min_Y_pos).w		;
+		bne.s	loc_1A962				;
+		and.w	(Screen_Y_wrap_value).w,d0		;
+		move.w	(Screen_Y_wrap_mask).w,d2		;
+		add.w	d2,d0					;
+		eor.w	d2,d0					;
+
+loc_1A962:
 		; Move on Y axis
 		move.w	#$30,d1
-		move.w	(Player_1+y_pos).w,d0
-		cmp.w	y_pos(a0),d0
-		bhs.s	AttractedRing_MoveUp	; If ring is below the player, branch
+		tst.w	d0					;
+		bmi.s	AttractedRing_MoveUp			;
+;		move.w	(Player_1+y_pos).w,d0			;
+;		cmp.w	y_pos(a0),d0				;
+;		bhs.s	AttractedRing_MoveUp			;
 
 		neg.w	d1
 		tst.w	y_vel(a0)
@@ -101257,7 +101293,7 @@ loc_46F54:
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull).l
 		jsr	(CheckPlayerReleaseFromObj).l
-		btst	#p1_standing_bit,status(a0)		; Liliam: bugfix - stop deleting prematurely
+		btst	#p1_standing_bit,status(a0)		; Liliam: bugfix - release player from object
 		beq.s	loc_46F70				;
 		move.w	(Camera_Y_pos).w,d0			;
 		add.w	$3A(a0),d0				;
@@ -213394,6 +213430,7 @@ loc_8F322:
 		move.w	y_pos(a0),d1
 		subi.w	#$80,d1
 		add.w	d1,d0
+		and.w	(Screen_Y_wrap_value).w,d0		; Liliam: bugfix - vertical wrapping
 		move.w	d0,y_pos(a0)
 		move.w	#$100,y_vel(a0)
 		rts
@@ -213401,7 +213438,11 @@ loc_8F322:
 
 loc_8F36E:
 		jsr	(Animate_RawMultiDelay).l
-		jmp	(MoveSprite2).l
+;		jmp	(MoveSprite2).l				; Liliam: bugfix - vertical wrapping
+		jsr	(MoveSprite2).l				;
+		move.w	(Screen_Y_wrap_value).w,d0		;
+		and.w	d0,y_pos(a0)				;
+		rts						;
 ; ---------------------------------------------------------------------------
 
 loc_8F37A:
