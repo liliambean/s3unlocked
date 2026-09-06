@@ -23136,7 +23136,7 @@ Amy_Normal:
 		move.l	#Map_Amy,mappings(a0)
 		bsr.w	loc_10ADE
 		move.b	(Disable_A_button_flag).w,d1
-		bpl.s	.checkHammerRush
+		bpl.w	.checkHammerRush
 		addq.b	#1,d1
 		beq.s	.checkButton
 		addq.b	#1,d1
@@ -23162,8 +23162,14 @@ Amy_Normal:
 
 	.throwBuffered:
 		moveq	#-1,d1
-		jsr	(AllocateObject).l
-		bne.s	.updateTimer
+		lea	(Dynamic_object_RAM_end).w,a1
+
+	.allocateObj:
+		lea	-next_object(a1),a1
+		tst.l	(a1)
+		bne.s	.allocateObj
+		cmpa.w	#Dynamic_object_RAM,a1
+		blo.s	.updateTimer
 		moveq	#-$1F,d1
 		move.l	#Obj_HyperAmyHammer,(a1)
 		move.w	x_pos(a0),x_pos(a1)
@@ -33883,12 +33889,18 @@ Tails_RingBarrier_DrawTouch:
 		bsr.w	Tails_RingBarrier_Draw
 		move.w	sub2_x_pos(a0),d2
 		move.w	sub2_y_pos(a0),d3
+		cmpi.w	#-$100,(Camera_min_Y_pos).w
+		bne.s	Tails_RingBarrier_Touch
+		and.w	(Screen_Y_wrap_value).w,d3
+		move.w	d3,sub2_y_pos(a0)
 
 Tails_RingBarrier_Touch:
-		lea	(Dynamic_object_RAM).w,a1
-		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d6
+		lea	(Collision_response_list).w,a4
+		move.w	(a4)+,d6
+		beq.s	.return
 
 	.loop:
+		movea.w	(a4)+,a1
 		move.b	collision_flags(a1),d4
 		beq.s	.nextObject
 		cmpi.b	#$46,d4
@@ -33899,8 +33911,10 @@ Tails_RingBarrier_Touch:
 		beq.s	.checkWidth
 
 	.nextObject:
-		lea	next_object(a1),a1
-		dbf	d6,.loop
+		subq.w	#2,d6
+		bne.s	.loop
+
+	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -35072,7 +35086,8 @@ loc_16BFA:
 		move.w	y_pos(a0),d2
 		subq.w	#8,d2
 		move.w	x_pos(a0),d3
-		bsr.w	CheckCeilingDist_WithRadius
+		jsr	(CheckCeilingDist_WithRadius).l		; Liliam: fallout
+;		bsr.w	CheckCeilingDist_WithRadius		;
 
 		; Check if Knuckles has room above him.
 		tst.w	d1
@@ -35143,7 +35158,7 @@ loc_16BFA:
 		move.w	y_pos(a0),d2
 		subi.w	#9,d2
 		move.w	x_pos(a0),d3
-		jsr	(CheckCeilingDist_WithRadius).l		;
+		jsr	(CheckCeilingDist_WithRadius).l		; Liliam: fallout
 ;		bsr.w	CheckCeilingDist_WithRadius		;
 
 		; Check if Knuckles has room below him.
@@ -40210,9 +40225,21 @@ Obj_HyperAmyHammer:							; Liliam: Hyper Amy
 Obj_HyperAmyHammer_Main:						; Liliam: Hyper Amy
 		move.w	x_pos(a0),d2
 		move.w	y_pos(a0),d3
+		cmpi.w	#-$100,(Camera_min_Y_pos).w
+		bne.s	.checkCollision
+		and.w	(Screen_Y_wrap_value).w,d3
+		move.w	d3,y_pos(a0)
+
+	.checkCollision:
 		bsr.w	Tails_RingBarrier_Touch
 		tst.w	d6
+		beq.s	.noCollision
+		tst.b	d4
 		bpl.w	Delete_Current_Sprite
+		tst.l	d0
+		bpl.w	Delete_Current_Sprite
+
+	.noCollision:
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.w	Delete_Current_Sprite
 		bsr.w	Draw_Sprite
@@ -47032,20 +47059,16 @@ loc_1DA62:
 		cmpi.b	#6,(Player_1+character_id).w			; Liliam: Metal Sonic - no super forms allowed
 		beq.s	locret_1DB2C					;
 
-		lea	(Super_Sonic_Knux_flag).w,a1		; Liliam: bugfix - give Sonic correct super form after credits
-		moveq	#1,d1					;
-		cmp.b	(Player_1+character_id).w,d1		;
-		bne.s	.notTails				;
-		lea	(Super_Tails_flag).w,a1			;
-
-	.notTails:
-		tst.b	(a1)					;
+		moveq	#1,d1					; Liliam: bugfix - give Sonic correct super form after credits
+		tst.w	(Super_Sonic_Knux_flag).w		;
 		beq.s	loc_1DA68				;
 		moveq	#-1,d1					;
 
 loc_1DA68:
 		; Liliam: removed original implementation
+		move.w	d1,-(sp)				;
 		jsr	(Give_SuperSonic).l			;
+		move.w	(sp)+,d1				;
 		moveq	#signextendB(sfx_SuperTransform),d0
 		jsr	(Play_SFX).l
 		tst.b	(Boss_flag).w				; Liliam: bugfix - use correct music for bosses
@@ -178102,6 +178125,8 @@ LRZEncoreBoss_Init:							; Liliam: Encore mode - LRZ2 boss
 		lea	-next_object(a1),a1
 		tst.l	(a1)
 		bne.s	.allocateObj
+		cmpa.w	#Dynamic_object_RAM,a1
+		blo.s	LRZEncoreBoss_Return
 		jmp	(CreateChild1_Normal.loop+8).l
 ; ---------------------------------------------------------------------------
 
@@ -178113,6 +178138,8 @@ LRZEncoreBoss_Fall:							; Liliam: Encore mode - LRZ2 boss
 		move.w	d0,y_pos(a0)
 		move.w	#$2F,$2E(a0)
 		addq.b	#2,routine(a0)
+
+LRZEncoreBoss_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -178142,8 +178169,6 @@ LRZEncoreBoss_Surface:
 		clr.w	y_vel(a0)
 		move.w	d0,y_pos(a0)
 		addq.b	#2,routine(a0)
-
-LRZEncoreBoss_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
