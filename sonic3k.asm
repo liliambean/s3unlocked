@@ -93055,9 +93055,11 @@ sub_400F0:
 		cmpi.w	#$40,d0
 		bhs.w	locret_401A2
 		btst	#Status_InAir,status(a1)
-		beq.s	locret_401A2
+		beq.w	locret_401A2				; Liliam: bugfix - release player from object
+;		beq.s	locret_401A2				;
 		btst	#Status_OnObj,status(a1)
-		bne.s	locret_401A2
+		bne.w	locret_401A2				;
+;		bne.s	locret_401A2				;
 		cmpi.b	#State_NoControl,routine(a1)
 		bhs.s	locret_401A2
 		tst.b	object_control(a1)
@@ -93080,9 +93082,15 @@ sub_400F0:
 		asr	y_vel(a1)
 		cmpi.b	#State_Control,routine(a1)
 		beq.s	locret_401A2
+		cmpa.w	#Player_1,a1				; Liliam: bugfix - release player from object
+		bne.s	loc_40190				;
+		tst.w	(Debug_placement_mode).w		;
+		bne.s	locret_401A2				;
+
+loc_40190:
 		move.b	#State_Control,routine(a1)
 		move.b	#2*60,invulnerability_timer(a1)
-;		move.b	#0,spin_dash_flag(a1)			;
+;		move.b	#0,spin_dash_flag(a1)			; Liliam: bugfix - clear flags
 
 locret_401A2:
 		rts
