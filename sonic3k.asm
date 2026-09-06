@@ -29470,7 +29470,7 @@ loc_139A8:
 
 Tails_CPU_Control:
 		move.b	(Ctrl_2_held_logical).w,d0
-		andi.b	#button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_B_mask|button_C_mask|button_A_mask,d0
+		andi.b	#button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask,d0
 		beq.s	loc_139DC
 		move.w	#10*60,(Tails_CPU_idle_timer).w
 
@@ -218076,9 +218076,9 @@ loc_92A20:
 		move.w	art_tile(a0),(Debug_saved_art_tile).w
 
 loc_92A38:
-		move.w	(Screen_Y_wrap_value).w,d0
-		and.w	d0,(Player_1+y_pos).w
-		and.w	d0,(Camera_Y_pos).w
+;		move.w	(Screen_Y_wrap_value).w,d0		; Liliam: debug - properly apply camera boundaries
+;		and.w	d0,(Player_1+y_pos).w			;
+;		and.w	d0,(Camera_Y_pos).w			;
 		clr.b	(Scroll_lock).w
 		clr.b	(WindTunnel_flag).w				; Liliam: Encore mode - pick RAM variables by SST
 ;		clr.w	(WindTunnel_flag).w				;
@@ -218151,6 +218151,8 @@ sub_92AD4:
 		bne.s	loc_92AFE
 		move.b	#$C,(Debug_camera_delay).w
 		move.b	#$F,(Debug_camera_speed).w
+		move.l	y_pos(a0),d2				; Liliam: debug - properly apply camera boundaries
+		move.l	x_pos(a0),d3				;
 		bra.w	loc_92B7A
 ; ---------------------------------------------------------------------------
 
@@ -218176,66 +218178,43 @@ loc_92B1A:
 		btst	#button_up,d4
 		beq.s	loc_92B44
 		sub.l	d1,d2
-		moveq	#0,d0
-		move.w	(Camera_min_Y_pos).w,d0
-		cmpi.w	#-$100,d0				; Liliam: debug - properly apply camera boundaries
-		beq.s	loc_92B44				;
-		swap	d0
-		cmp.l	d0,d2
-		bge.s	loc_92B44
-		move.l	d0,d2
+;		moveq	#0,d0					; Liliam: debug - properly apply camera boundaries
+;		move.w	(Camera_min_Y_pos).w,d0			;
+;		swap	d0					;
+;		cmp.l	d0,d2					;
+;		bge.s	loc_92B44				;
+;		move.l	d0,d2					;
 
 loc_92B44:
-		move.l	(Screen_Y_wrap_value).w,d0		; Liliam: debug - properly apply camera boundaries
-		move.w	#-1,d0					;
-		and.l	d0,d2					;
 		btst	#button_down,d4
 		beq.s	loc_92B5E
 		add.l	d1,d2
-		and.l	d0,d2					;
-		moveq	#0,d0
-		move.w	(Camera_target_max_Y_pos).w,d0
-		addi.w	#$DF,d0
-		swap	d0
-		cmp.l	d0,d2
-		blt.s	loc_92B5E
-		move.l	d0,d2
+;		moveq	#0,d0
+;		move.w	(Camera_target_max_Y_pos).w,d0		;
+;		addi.w	#$DF,d0					;
+;		swap	d0					;
+;		cmp.l	d0,d2					;
+;		blt.s	loc_92B5E				;
+;		move.l	d0,d2					;
 
 loc_92B5E:
 		btst	#button_left,d4
 		beq.s	loc_92B6A
 		sub.l	d1,d3
-		moveq	#0,d0					; Liliam: debug - properly apply camera boundaries
-		move.w	(Camera_min_X_pos).w,d0			;
-		swap	d0					;
-		cmp.l	d0,d3					;
-		bge.s	loc_92B6A				;
-		move.l	d0,d3					;
-;		bcc.s	loc_92B6A				;
+;		bhs.s	loc_92B6A				;
 ;		moveq	#0,d3					;
 
 loc_92B6A:
 		btst	#button_right,d4
 		beq.s	loc_92B72
 		add.l	d1,d3
-		moveq	#0,d0					; Liliam: debug - properly apply camera boundaries
-		move.w	#$7360,d0				;
-		cmpi.b	#$C,(Current_zone).w			;
-		beq.s	.check					;
-		move.w	(Camera_max_X_pos).w,d0			;
-
-	.check:
-		addi.w	#$13F,d0				;
-		swap	d0					;
-		cmp.l	d0,d3					;
-		blt.s	loc_92B72				;
-		move.l	d0,d3					;
 
 loc_92B72:
 		move.l	d2,y_pos(a0)
 		move.l	d3,x_pos(a0)
 
 loc_92B7A:
+		bsr.w	Debug_LevelBound			; Liliam: debug - properly apply camera boundaries
 		btst	#button_A,(Ctrl_1_held).w
 		beq.s	loc_92BB2
 		btst	#button_B,(Ctrl_1_pressed).w		; Liliam: debug - allow selection of monitor contents
@@ -218367,6 +218346,54 @@ sub_92C54:
 		rts
 ; End of function sub_92C54
 
+; ---------------------------------------------------------------------------
+
+Debug_LevelBound:						; Liliam: debug - properly apply camera boundaries
+		move.l	(Screen_Y_wrap_value).w,d0
+		move.w	#-1,d0
+		and.l	d0,y_pos(a0)
+
+		moveq	#0,d0
+		move.w	(Camera_min_Y_pos).w,d0
+		cmpi.w	#-$100,d0
+		beq.s	.minYdone
+		swap	d0
+		cmp.l	d0,d2
+		bge.s	.minYdone
+		move.l	d0,y_pos(a0)
+
+	.minYdone:
+		moveq	#0,d0
+		move.w	(Camera_target_max_Y_pos).w,d0
+		addi.w	#$E0,d0
+		swap	d0
+		cmp.l	d0,d2
+		blt.s	.maxYdone
+		move.l	d0,y_pos(a0)
+
+	.maxYdone:
+		moveq	#0,d0
+		move.w	(Camera_min_X_pos).w,d0
+		swap	d0
+		cmp.l	d0,d3
+		bge.s	.minXdone
+		move.l	d0,x_pos(a0)
+
+	.minXdone:
+		move.l	#$74800000,d0
+		cmpi.b	#$C,(Current_zone).w
+		beq.s	.DDZ
+		move.w	(Camera_max_X_pos).w,d0
+		addi.w	#$140,d0
+		swap	d0
+
+	.DDZ:
+		cmp.l	d0,d3
+		blt.s	.maxYDone
+		move.l	d0,x_pos(a0)
+
+	.maxYDone:
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
