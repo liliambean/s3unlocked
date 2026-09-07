@@ -9114,8 +9114,8 @@ Osc_Data2_end
 ; ---------------------------------------------------------------------------
 
 ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
-		cmpi.b	#State_Dead,(Player_1+routine).w
-		bhs.w	locret_7810
+		cmpi.b	#State_NoControl,(Player_1+routine).w
+		bhs.w	ChangeRingFrame
 		moveq	#0,d1
 		move.b	d1,(Super_ready_flag).w
 		tst.b	(Encore_mode).w
@@ -9229,6 +9229,8 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 
 
 ChangeRingFrame:
+		cmpi.b	#State_Dead,(Player_1+routine).w	; Liliam: Encore mode - expand player routines
+		bhs.s	locret_7810				;
 		subq.b	#1,(Rings_frame_timer).w
 		bpl.s	loc_77E8
 		move.b	#3,(Rings_frame_timer).w				; Liliam: QOL - extend ring animation
@@ -9254,30 +9256,30 @@ loc_77D8:
 ;		andi.b	#3,(Rings_frame).w					;
 
 loc_77E8:
-		moveq	#0,d0						; Liliam: bugfix - delete scattered rings consistently
-		tst.b	(Ring_spill_anim_counter).w
-		beq.s	loc_7802					;
-;		beq.s	loc_780A					;
-;		moveq	#0,d0						;
+;		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
+		tst.w	(Ring_spill_anim_counter).w		;
+		beq.s	loc_780A
+		moveq	#0,d0
 		move.b	(Ring_spill_anim_counter).w,d0
+		beq.s	loc_77F8				;
 		add.w	(Ring_spill_anim_accum).w,d0
-		move.w	d0,(Ring_spill_anim_accum).w
-		subq.b	#1,(Ring_spill_anim_counter).w			;
-		andi.w	#$700,d0						; Liliam: QOL - extend ring animation
-;		rol.w	#7,d0							;
-;		andi.w	#3,d0							;
+		subq.b	#1,(Ring_spill_anim_counter).w		;
 
-loc_7802:
+loc_77F8:
+		move.w	d0,(Ring_spill_anim_accum).w
+		andi.w	#$700,d0						; Liliam: QOL - extend ring animation
 		move.w	d0,d1							;
 		lsr.w	#8,d0							;
 		cmp.b	(Ring_spill_anim_frame).w,d0				;
 		beq.s	loc_780A						;
+;		rol.w	#7,d0							;
+;		andi.w	#3,d0							;
 		move.b	d0,(Ring_spill_anim_frame).w
+;		subq.b	#1,(Ring_spill_anim_counter).w				;
 		addi.l	#ArtUnc_Ring+$80,d1					;
 		move.w	#tiles_to_bytes(ArtTile_Ring),d2			;
 		moveq	#$40,d3							;
 		bsr.w	Add_To_DMA_Queue					;
-;		subq.b	#1,(Ring_spill_anim_counter).w				;
 
 loc_780A:
 		addi.w	#$180,(AIZ_vine_angle).w
@@ -41323,9 +41325,9 @@ loc_1A738:
 		bne.w	loc_1A7E8
 
 loc_1A75C:
-		tst.b	(Ring_spill_anim_counter).w			; Liliam: bugfix - delete scattered rings consistently
-		beq.w	loc_1A7E4					;
-;		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)	;
+;		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)		; Liliam: QOL - extend ring animation
+		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
+		beq.w	loc_1A7E4				;
 		bsr.w	MoveSprite2
 		addi.w	#$18,y_vel(a0)
 		bmi.s	loc_1A7B0
@@ -41347,8 +41349,8 @@ loc_1A780:
 		neg.w	y_vel(a0)
 
 loc_1A79C:
-;		tst.b	(Ring_spill_anim_counter).w			; Liliam: bugfix - delete scattered rings consistently
-;		beq.s	loc_1A7E4					;
+;		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
+;		beq.s	loc_1A7E4				;
 		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
 		bne.s	loc_1A7A2				;
 		move.w	(Screen_Y_wrap_value).w,d0		;
@@ -41393,13 +41395,13 @@ loc_1A7E4:
 ; ---------------------------------------------------------------------------
 
 loc_1A7E8:
-		tst.b	(Ring_spill_anim_counter).w			; Liliam: bugfix - delete scattered rings consistently
-		beq.s	loc_1A7E4					;
-;		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)	;
+;		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)		; Liliam: QOL - extend ring animation
+		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
+		beq.s	loc_1A7E4				;
 
 loc_1A7EE:
-		bsr.w	MoveSprite_ReverseGravity2			;
-;		bsr.w	MoveSprite_TestGravity2				;
+		bsr.w	MoveSprite_ReverseGravity2		;
+;		bsr.w	MoveSprite_TestGravity2			;
 		addi.w	#$18,y_vel(a0)
 		bmi.s	loc_1A83C
 		move.b	(V_int_run_count+3).w,d0
@@ -41420,8 +41422,8 @@ loc_1A80C:
 		neg.w	y_vel(a0)
 
 loc_1A828:
-;		tst.b	(Ring_spill_anim_counter).w			; Liliam: bugfix - delete scattered rings consistently
-;		beq.s	loc_1A7E4					;
+;		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
+;		beq.s	loc_1A7E4				;
 		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
 		bne.s	loc_1A82E				;
 		move.w	(Screen_Y_wrap_value).w,d0		;
