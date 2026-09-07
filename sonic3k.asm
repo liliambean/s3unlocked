@@ -73176,10 +73176,16 @@ loc_30826:
 ; ---------------------------------------------------------------------------
 
 loc_30834:
-		move.w	(Water_level).w,d0
-		cmp.w	y_pos(a0),d0
-		bhs.s	loc_3084A
-		jsr	(MoveSprite2).l
+		subq.w	#8,y_pos(a0)				; Liliam: QOL - speed up HCZ fan bubbles
+		move.w	y_pos(a0),d0				;
+		cmp.w	(Camera_Y_pos).w,d0			;
+		blo.s	loc_3084A				;
+		cmp.w	(Water_level).w,d0			;
+		blo.s	loc_3084A				;
+;		move.w	(Water_level).w,d0			;
+;		cmp.w	y_pos(a0),d0				;
+;		bhs.s	loc_3084A				;
+;		jsr	(MoveSprite2).l				;
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
