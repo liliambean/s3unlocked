@@ -21227,8 +21227,8 @@ locret_F96C:
 RingCheckFloorDist:
 		move.w	x_pos(a0),d3
 		move.w	y_pos(a0),d2
-		move.b	y_radius(a0),d0
-		ext.w	d0
+;		move.b	y_radius(a0),d0				; Liliam: QOL - speed up ring loss
+;		ext.w	d0					;
 		add.w	d0,d2
 		lea	(Primary_Angle).w,a4
 		move.b	#0,(a4)
@@ -21548,8 +21548,8 @@ locret_FC9E:
 RingCheckFloorDist_ReverseGravity:
 		move.w	x_pos(a0),d3
 		move.w	y_pos(a0),d2
-		move.b	y_radius(a0),d0
-		ext.w	d0
+;		move.b	y_radius(a0),d0				; Liliam: QOL - speed up ring loss
+;		ext.w	d0					;
 		sub.w	d0,d2
 		eori.w	#$F,d2
 		lea	(Primary_Angle).w,a4
@@ -41152,8 +41152,9 @@ CombineRing_Done:
 
 loc_1A6A6:
 		subq.w	#1,d5
-		move.w	#$288,d4
-		move.l	#Obj_BouncingRing,d6			; Liliam: QOL - speed up ring loss
+;		move.w	#$288,d4				; Liliam: QOL - speed up ring loss
+		move.w	#$A88,d4				;
+		move.l	#Obj_BouncingRing,d6			;
 		move.b	#-1,(Ring_spill_anim_counter).w		;
 		movea.l	a0,a1					;
 		tst.b	(Reverse_gravity_flag).w		;
@@ -41187,20 +41188,33 @@ loc_1A6B6:
 		jsr	(GetSineCosine).l
 		move.w	d4,d2
 		lsr.w	#8,d2
-		asl.w	d2,d0
-		asl.w	d2,d1
-		move.w	d0,d2
-		move.w	d1,d3
+		ext.l	d0					;
+		ext.l	d1					;
+		asl.l	d2,d0					;
+		asl.l	d2,d1					;
+;		asl.w	d2,d0					;
+;		asl.w	d2,d1					;
+;		move.w	d0,d2					;
+;		move.w	d1,d3					;
+		move.l	d0,d2					;
+		tst.b	(Reverse_gravity_flag).w		;
+		beq.s	loc_1A718				;
+		neg.l	d1					;
+
+loc_1A718:
 		addi.b	#$10,d4
-		bcc.s	loc_1A728
+		bhs.s	loc_1A728
 		subi.w	#$80,d4
-		bcc.s	loc_1A728
-		move.w	#$288,d4
+;		bhs.s	loc_1A728				;
+;		move.w	#$288,d4				;
 
 loc_1A728:
-		move.w	d2,x_vel(a1)
-		move.w	d3,y_vel(a1)
-		neg.w	d2
+;		move.w	d2,x_vel(a1)				;
+;		move.w	d3,y_vel(a1)				;
+		move.l	d2,x_vel(a1)				;
+		move.l	d1,y_vel+$10(a1)			;
+		neg.l	d2					;
+;		neg.w	d2					;
 		neg.w	d4
 		dbf	d5,loc_1A6AE
 
@@ -41217,8 +41231,14 @@ Obj_BouncingRing:
 ;		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)		; Liliam: QOL - extend ring animation
 		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
 		beq.w	Delete_Current_Sprite			;
-		bsr.w	MoveSprite2
-		addi.w	#$18,y_vel(a0)
+
+		move.l	x_vel(a0),d0				; Liliam: QOL - speed up ring loss
+		add.l	d0,x_pos(a0)				;
+		move.l	y_vel+$10(a0),d0			;
+		add.l	d0,y_pos(a0)				;
+;		bsr.w	MoveSprite2				;
+;		addi.w	#$18,y_vel(a0)				;
+		addi.l	#$1800,y_vel+$10(a0)			;
 		bmi.s	loc_1A7B0
 ;		move.b	(V_int_run_count+3).w,d0		; Liliam: bugfix - delete bouncing rings consistently
 		move.b	(Level_frame_counter+1).w,d0		;
@@ -41227,16 +41247,21 @@ Obj_BouncingRing:
 		bne.s	loc_1A7B0
 		tst.b	render_flags(a0)
 		bpl.s	loc_1A79C
+		moveq	#8,d0					; Liliam: QOL - speed up ring loss
 
 loc_1A780:
 		jsr	(RingCheckFloorDist).l
 		tst.w	d1
 		bpl.s	loc_1A79C
 		add.w	d1,y_pos(a0)
-		move.w	y_vel(a0),d0
-		asr.w	#2,d0
-		sub.w	d0,y_vel(a0)
-		neg.w	y_vel(a0)
+		move.l	y_vel+$10(a0),d0			; Liliam: QOL - speed up ring loss
+		asr.l	#2,d0					;
+		sub.l	d0,y_vel+$10(a0)			;
+		neg.l	y_vel+$10(a0)				;
+;		move.w	y_vel(a0),d0				;
+;		asr.w	#2,d0					;
+;		sub.w	d0,y_vel(a0)				;
+;		neg.w	y_vel(a0)				;
 
 loc_1A79C:
 ;		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
@@ -41272,10 +41297,16 @@ Obj_BouncingRing_ReverseGravity:
 ;		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)		; Liliam: QOL - extend ring animation
 		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
 		beq.w	Delete_Current_Sprite			;
-;		bsr.w	MoveSprite_TestGravity2			; Liliam: QOL - speed up ring loss
-		bsr.w	MoveSprite_ReverseGravity2		;
-		addi.w	#$18,y_vel(a0)
-		bmi.s	loc_1A83C
+
+		move.l	x_vel(a0),d0				; Liliam: QOL - speed up ring loss
+		add.l	d0,x_pos(a0)				;
+		move.l	y_vel+$10(a0),d0			;
+		add.l	d0,y_pos(a0)				;
+;		bsr.w	MoveSprite_TestGravity2			;
+;		addi.w	#$18,y_vel(a0)				;
+		subi.l	#$1800,y_vel+$10(a0)			;
+		bpl.s	loc_1A83C				;
+;		bmi.s	loc_1A83C				;
 ;		move.b	(V_int_run_count+3).w,d0		; Liliam: bugfix - delete bouncing rings consistently
 		move.b	(Level_frame_counter+1).w,d0		;
 		add.b	d7,d0
@@ -41283,16 +41314,21 @@ Obj_BouncingRing_ReverseGravity:
 		bne.s	loc_1A83C
 		tst.b	render_flags(a0)
 		bpl.s	loc_1A828
+		moveq	#8,d0					; Liliam: QOL - speed up ring loss
 
 loc_1A80C:
 		jsr	(RingCheckFloorDist_ReverseGravity).l
 		tst.w	d1
 		bpl.s	loc_1A828
 		sub.w	d1,y_pos(a0)
-		move.w	y_vel(a0),d0
-		asr.w	#2,d0
-		sub.w	d0,y_vel(a0)
-		neg.w	y_vel(a0)
+		move.l	y_vel+$10(a0),d0			; Liliam: QOL - speed up ring loss
+		asr.l	#2,d0					;
+		sub.l	d0,y_vel+$10(a0)			;
+		neg.l	y_vel+$10(a0)				;
+;		move.w	y_vel(a0),d0				;
+;		asr.w	#2,d0					;
+;		sub.w	d0,y_vel(a0)				;
+;		neg.w	y_vel(a0)				;
 
 loc_1A828:
 ;		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
@@ -41473,15 +41509,23 @@ CombineRing_Create:							; Liliam: Encore mode - combine ring
 		move.w	d5,$46(a0)
 		move.w	#$88,d0
 		jsr	(GetSineCosine_Fine).l
-		asl.w	#2,d0
-		asl.w	#2,d1
+		moveq	#$A,d2
+		ext.l	d0
+		ext.l	d1
+		asl.l	d2,d0
+		asl.l	d2,d1
 		tst.w	x_vel(a2)
-		bpl.s	.applySpeeds
-		neg.w	d0
+		bpl.s	.checkGravity
+		neg.l	d0
+
+	.checkGravity:
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.applySpeeds
+		neg.l	d1
 
 	.applySpeeds:
-		move.w	d0,x_vel(a0)
-		move.w	d1,y_vel(a0)
+		move.l	d0,x_vel(a0)
+		move.l	d1,y_vel+$10(a0)
 		move.w	#signextendB(sfx_RingLoss),d0
 		jsr	(Play_SFX).l
 		clr.w	(Ring_count).w
@@ -41493,18 +41537,26 @@ CombineRing_Create:							; Liliam: Encore mode - combine ring
 
 Obj_CombineRing:
 		bsr.s	CombineRing_Common
-		bsr.w	MoveSprite2
-		addi.w	#$18,y_vel(a0)
-		bpl.w	loc_1A780
-		bra.w	loc_1A7B0
+		move.l	x_vel(a0),d0
+		add.l	d0,x_pos(a0)
+		move.l	y_vel+$10(a0),d0
+		add.l	d0,y_pos(a0)
+		addi.l	#$1800,y_vel+$10(a0)
+		bmi.w	loc_1A7B0
+		moveq	#$C,d0
+		bra.w	loc_1A780
 ; ---------------------------------------------------------------------------
 
 Obj_CombineRing_ReverseGravity:						; Liliam: Encore mode - combine ring
 		bsr.s	CombineRing_Common
-		bsr.w	MoveSprite_ReverseGravity2
-		addi.w	#$18,y_vel(a0)
-		bpl.w	loc_1A80C
-		bra.w	loc_1A83C
+		move.l	x_vel(a0),d0
+		add.l	d0,x_pos(a0)
+		move.l	y_vel+$10(a0),d0
+		add.l	d0,y_pos(a0)
+		subi.l	#$1800,y_vel+$10(a0)
+		bpl.w	loc_1A83C
+		moveq	#$C,d0
+		bra.w	loc_1A80C
 ; ---------------------------------------------------------------------------
 
 CombineRing_Common:							; Liliam: Encore mode - combine ring
