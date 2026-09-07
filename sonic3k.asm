@@ -21936,19 +21936,19 @@ Touch_ChkValue:
 		andi.b	#$3F,d0					; Get only collision size
 		cmpi.b	#6,d0					; Is touch response $46 ?
 		beq.s	Touch_Monitor				; If yes, branch
-		move.b	(Player_1+invulnerability_timer).w,d0	; Get the main character's invulnerability_timer
-		tst.w	(Competition_mode).w			; Is the competition mode?
-		beq.s	.notcompetition				; If not, branch
-		move.b	invulnerability_timer(a0),d0		; Get invulnerability_timer from whoever branched to TouchResponse
-
-	.notcompetition:
-		cmpi.b	#90,d0					; Is there more than 90 frames on the timer remaining?
-		bhs.w	.return					; If so, branch
 
 		move.l	#Obj_RingCollect,(a1)			; Liliam: QOL - speed up ring loss
+;		move.b	(Player_1+invulnerability_timer).w,d0	;
+;		tst.w	(Competition_mode).w			;
+;		beq.s	.notcompetition				;
+;		move.b	invulnerability_timer(a0),d0		;
+
+;	.notcompetition:
+;		cmpi.b	#90,d0					;
+;		bhs.w	.return					;
 ;		move.b	#4,routine(a1)				;
 
-	.return:
+;	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -41247,7 +41247,11 @@ loc_1A79C:
 ;		blo.s	loc_1A7E4				;
 
 loc_1A7B0:
+		cmpi.b	#90,(Player_1+invulnerability_timer).w	;
+		bhi.s	loc_1A7B6				;
 		jsr	(Add_SpriteToCollisionResponseList).l
+
+loc_1A7B6:
 		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
 		bne.s	.wrapHorizontal				;
 		move.w	(Screen_Y_wrap_value).w,d0		;
@@ -41303,7 +41307,11 @@ loc_1A828:
 ;		blo.s	loc_1A7E4				;
 
 loc_1A83C:
+		cmpi.b	#90,(Player_1+invulnerability_timer).w	;
+		bhi.s	loc_1A7B6				;
 		jsr	(Add_SpriteToCollisionResponseList).l
+
+loc_1A842:
 		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
 		bne.s	.wrapHorizontal				;
 		move.w	(Screen_Y_wrap_value).w,d0		;
@@ -41359,6 +41367,8 @@ loc_1A8C6:
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#$280,d0
 		bhi.w	loc_1A8E4
+		cmpi.b	#90,(Player_1+invulnerability_timer).w	; Liliam: QOL - speed up ring loss
+		bhi.w	Draw_Sprite				;
 		jsr	(Add_SpriteToCollisionResponseList).l
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
