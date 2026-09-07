@@ -41240,11 +41240,11 @@ Obj_BouncingRing:
 ;		addi.w	#$18,y_vel(a0)				;
 		addi.l	#$1800,y_vel+$10(a0)			;
 		bmi.s	loc_1A7B0
-;		move.b	(V_int_run_count+3).w,d0		; Liliam: bugfix - delete bouncing rings consistently
-		move.b	(Level_frame_counter+1).w,d0		;
-		add.b	d7,d0
-		andi.b	#7,d0
-		bne.s	loc_1A7B0
+
+;		move.b	(V_int_run_count+3).w,d0		; Liliam: QOL - run ring collision every frame
+;		add.b	d7,d0					;
+;		andi.b	#7,d0					;
+;		bne.s	loc_1A7B0				;
 		tst.b	render_flags(a0)
 		bpl.s	loc_1A79C
 		moveq	#8,d0					; Liliam: QOL - speed up ring loss
@@ -41311,11 +41311,11 @@ Obj_BouncingRing_ReverseGravity:
 		subi.l	#$1800,y_vel+$10(a0)			;
 		bpl.s	loc_1A83C				;
 ;		bmi.s	loc_1A83C				;
-;		move.b	(V_int_run_count+3).w,d0		; Liliam: bugfix - delete bouncing rings consistently
-		move.b	(Level_frame_counter+1).w,d0		;
-		add.b	d7,d0
-		andi.b	#7,d0
-		bne.s	loc_1A83C
+
+;		move.b	(V_int_run_count+3).w,d0		; Liliam: QOL - run ring collision every frame
+;		add.b	d7,d0					;
+;		andi.b	#7,d0					;
+;		bne.s	loc_1A83C				;
 		tst.b	render_flags(a0)
 		bpl.s	loc_1A828
 		moveq	#8,d0					; Liliam: QOL - speed up ring loss
