@@ -36574,8 +36574,7 @@ loc_17732:
 		move.w	#$600,d2
 		btst	#Status_Underwater,status(a0)
 		beq.s	loc_1775C
-		clr.w	y_pos+2(a0)				; Liliam: bugfix - set correct jump height for Knuckles
-		move.w	#$33C,d2				;
+		move.w	#$33C,d2				; Liliam: bugfix - set correct jump height for Knuckles
 ;		move.w	#$300,d2				;
 
 loc_1775C:
@@ -48118,6 +48117,7 @@ RideObject_SetRide:
 loc_1E4A0:
 		move.w	a0,interact(a1)
 		move.b	#0,angle(a1)
+		move.w	#0,y_pos+2(a1)				; Liliam: bugfix - jumping off objects underwater
 		move.w	#0,y_vel(a1)
 		move.w	x_vel(a1),ground_vel(a1)
 		bset	#Status_OnObj,status(a1)
@@ -55482,14 +55482,12 @@ SOZFloatingPillar_CheckHurt:
 		beq.s	.checkCeilingP2				;
 		lea	(Player_1).w,a1				;
 		bsr.w	CeilingSpikes_CheckHurt			;
-		bclr	#p1_pushing_bit,status(a0)		;
 
 	.checkCeilingP2:
 		btst	#$13,d6					;
 		beq.s	loc_240D8				;
 		lea	(Player_2).w,a1				;
 		bsr.w	CeilingSpikes_CheckHurt			;
-		bclr	#p2_pushing_bit,status(a0)		;
 		bra.s	loc_240D8				;
 ; ---------------------------------------------------------------------------
 
@@ -55504,7 +55502,6 @@ loc_240B0:
 		move.b	$44(a0),d1				; Liliam: spikes - bounce off Mighty if rolling
 		bsr.w	VerticalSpikes_CheckHurt		;
 ;		bsr.w	Spikes_CheckHurt			;
-		bclr	#p1_pushing_bit,status(a0)		;
 
 loc_240CA:
 		andi.b	#p2_standing,d6
@@ -55513,7 +55510,6 @@ loc_240CA:
 		move.b	$45(a0),d1				; Liliam: spikes - bounce off Mighty if rolling
 		bsr.w	VerticalSpikes_CheckHurt		;
 ;		bsr.w	Spikes_CheckHurt			;
-		bclr	#p2_pushing_bit,status(a0)		;
 
 loc_240D8:
 		move.w	$30(a0),d0
@@ -55611,7 +55607,7 @@ loc_241DC:
 		lea	(Player_1).w,a1
 		bsr.w	Spikes_CheckHurt_PlaySFX		; Liliam: spikes - play correct sound
 ;		bsr.w	Spikes_CheckHurt			;
-		bclr	#p1_pushing_bit,status(a0)
+;		bclr	#p1_pushing_bit,status(a0)		;
 
 loc_2421A:
 		andi.b	#2,d6
@@ -55619,7 +55615,7 @@ loc_2421A:
 		lea	(Player_2).w,a1
 		bsr.w	Spikes_CheckHurt_PlaySFX		; Liliam: spikes - play correct sound
 ;		bsr.w	Spikes_CheckHurt			;
-		bclr	#p2_pushing_bit,status(a0)
+;		bclr	#p2_pushing_bit,status(a0)		;
 
 loc_2422E:
 		jmp	(Draw_Sprite).l
