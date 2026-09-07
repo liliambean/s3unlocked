@@ -973,9 +973,9 @@ Ring_spill_anim_frame		ds.b 1
 Ring_spill_anim_accum		ds.w 1
 AIZ_vine_angle			ds.w 1			; controls the angle of AIZ giant vines
 Photo_piece_disable_flag	ds.b 1		; Liliam: museum - photo piece object
+Ring_spill_collision_timer	ds.b 1		; Liliam: QOL - speed up ring loss
 Slot_machine_wall_frame_timer	ds.b 1		; Liliam: ported from S1 - restore full item set
 Slot_machine_wall_frame		ds.b 1		;
-Extra_life_flags_P2		ds.b 1
 Max_speed_P2			ds.w 1
 Acceleration_P2			ds.w 1
 Deceleration_P2			ds.w 1

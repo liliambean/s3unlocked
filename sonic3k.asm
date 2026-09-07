@@ -9281,6 +9281,9 @@ loc_7802:
 
 loc_780A:
 		addi.w	#$180,(AIZ_vine_angle).w
+		tst.b	(Ring_spill_collision_timer).w		; Liliam: QOL - speed up ring loss
+		beq.s	locret_7810				;
+		subq.b	#1,(Ring_spill_collision_timer).w	;
 
 locret_7810:
 		rts
@@ -27252,59 +27255,16 @@ loc_122F2:
 		and.w	d0,y_pos(a0)
 
 loc_12302:
-		bsr.w	sub_12318
+		bsr.w	sub_17C10				; Liliam: Encore mode - restart level
+;		bsr.w	sub_12318				;
 		bsr.w	Player_LevelBound
 		bsr.w	Player_RecordPos
 		bsr.w	Sonic_UpdateSprite
 		jmp	(Draw_Sprite).l
-
-; =============== S U B R O U T I N E =======================================
-
-
-sub_12318:
-		tst.b	(Disable_death_plane).w
-		bne.s	loc_12344
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_12336
-		move.w	(Camera_max_Y_pos).w,d0
-		addi.w	#$E0,d0
-		cmp.w	y_pos(a0),d0
-		blt.w	loc_1238A
-		bra.s	loc_12344
 ; ---------------------------------------------------------------------------
 
-loc_12336:
-		move.w	(Camera_min_Y_pos).w,d0
-		cmp.w	y_pos(a0),d0
-		blt.s	loc_12344
-		bra.w	loc_1238A
-; ---------------------------------------------------------------------------
-
-loc_12344:
-		movem.l	a4-a6,-(sp)
-		bsr.w	SonicKnux_DoLevelCollision
-		movem.l	(sp)+,a4-a6
-		btst	#Status_InAir,status(a0)
-		bne.s	locret_12388
-		moveq	#0,d0
-		move.w	d0,y_vel(a0)
-		move.w	d0,x_vel(a0)
-		move.w	d0,ground_vel(a0)
-		move.b	d0,object_control(a0)
-		move.b	#0,anim(a0)
-		move.w	#$100,priority(a0)
-		move.b	#State_Control,routine(a0)
-		move.b	#2*60,invulnerability_timer(a0)
-		move.b	#0,spin_dash_flag(a0)
-
-locret_12388:
-		rts
-; ---------------------------------------------------------------------------
-
-loc_1238A:
-		jmp	(Kill_Character).l
-; End of function sub_12318
-
+;sub_12318:
+		; Liliam: Encore mode - restart level
 ; ---------------------------------------------------------------------------
 
 Sonic_Dead:
@@ -32709,11 +32669,16 @@ loc_15742:
 		move.w	d0,x_vel(a0)
 		move.w	d0,ground_vel(a0)
 		move.b	d0,object_control(a0)
-		move.b	#0,anim(a0)
+		move.b	d0,anim(a0)				; Liliam: QOL - speed up ring loss
+;		move.b	#0,anim(a0)				;
 		move.w	#$100,priority(a0)
 		move.b	#State_Control,routine(a0)
 		move.b	#2*60,invulnerability_timer(a0)
-		move.b	#0,spin_dash_flag(a0)
+;		move.b	#0,spin_dash_flag(a0)			;
+		move.b	d0,spin_dash_flag(a0)			;
+		cmpa.w	#Player_1,a0				;
+		bne.s	locret_15786				;
+		move.b	#30,(Ring_spill_collision_timer).w	;
 
 locret_15786:
 		rts
@@ -37186,11 +37151,16 @@ loc_17C3C:
 		move.w	d0,x_vel(a0)
 		move.w	d0,ground_vel(a0)
 		move.b	d0,object_control(a0)
-		move.b	#0,anim(a0)
+		move.b	d0,anim(a0)				; Liliam: QOL - speed up ring loss
+;		move.b	#0,anim(a0)				;
 		move.w	#$100,priority(a0)
 		move.b	#State_Control,routine(a0)
 		move.b	#2*60,invulnerability_timer(a0)
-		move.b	#0,spin_dash_flag(a0)
+;		move.b	#0,spin_dash_flag(a0)			;
+		move.b	d0,spin_dash_flag(a0)			;
+		cmpa.w	#Player_1,a0				;
+		bne.s	locret_17C80				;
+		move.b	#30,(Ring_spill_collision_timer).w	;
 
 locret_17C80:
 		rts
@@ -41131,6 +41101,7 @@ Obj_BouncingRing_Create:
 
 ;loc_1A68C:
 ;		movea.l	a0,a1					; Liliam: QOL - speed up ring loss
+		move.b	#-1,(Ring_spill_collision_timer).w	;
 		moveq	#0,d5
 		move.w	(Ring_count).w,d5
 		movea.w	$3E(a0),a2					; Liliam: Encore mode - combine ring
@@ -41247,8 +41218,8 @@ loc_1A79C:
 ;		blo.s	loc_1A7E4				;
 
 loc_1A7B0:
-		cmpi.b	#90,(Player_1+invulnerability_timer).w	;
-		bhi.s	loc_1A7B6				;
+		tst.b	(Ring_spill_collision_timer).w		;
+		bne.s	loc_1A7B6				;
 		jsr	(Add_SpriteToCollisionResponseList).l
 
 loc_1A7B6:
@@ -41307,8 +41278,8 @@ loc_1A828:
 ;		blo.s	loc_1A7E4				;
 
 loc_1A83C:
-		cmpi.b	#90,(Player_1+invulnerability_timer).w	;
-		bhi.s	loc_1A7B6				;
+		tst.b	(Ring_spill_collision_timer).w		;
+		bne.s	loc_1A7B6				;
 		jsr	(Add_SpriteToCollisionResponseList).l
 
 loc_1A842:
@@ -41367,8 +41338,8 @@ loc_1A8C6:
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#$280,d0
 		bhi.w	loc_1A8E4
-		cmpi.b	#90,(Player_1+invulnerability_timer).w	; Liliam: QOL - speed up ring loss
-		bhi.w	Draw_Sprite				;
+		tst.b	(Ring_spill_collision_timer).w		; Liliam: QOL - speed up ring loss
+		bne.w	Draw_Sprite				;
 		jsr	(Add_SpriteToCollisionResponseList).l
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
@@ -93017,7 +92988,8 @@ sub_400F0:
 		bne.w	locret_401A2				;
 ;		bne.s	locret_401A2				;
 		cmpi.b	#State_NoControl,routine(a1)
-		bhs.s	locret_401A2
+		bhs.w	locret_401A2				;
+;		bhs.s	locret_401A2				;
 		tst.b	object_control(a1)
 		bne.s	locret_401A2
 		tst.w	y_vel(a1)
@@ -93042,6 +93014,7 @@ sub_400F0:
 		bne.s	loc_40190				;
 		tst.w	(Debug_placement_mode).w		;
 		bne.s	locret_401A2				;
+		move.b	#30,(Ring_spill_collision_timer).w	; Liliam: QOL - speed up ring loss
 
 loc_40190:
 		move.b	#State_Control,routine(a1)
@@ -205857,10 +205830,16 @@ loc_8A87E:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Obj_ICZPlayerIceBlock_Wait:
-		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - release player from object
-		bne.s	loc_8A8BA				;
-		bra.s	loc_8A88A				;
+Obj_ICZPlayerIceBlock_Wait:					; Liliam: bugfix - release player from object
+		tst.w	(Debug_placement_mode).w
+		bne.s	loc_8A8BA
+		bsr.s	loc_8A88A
+		tst.l	(a0)
+		bne.s	.return
+		move.b	#30,(Ring_spill_collision_timer).w
+
+	.return:
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_ICZPlayerIceBlock_Wait2:
