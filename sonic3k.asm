@@ -30686,11 +30686,11 @@ locret_1459C:
 
 
 Tails_Carry_GrabPlayer:
-		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
 		clr.w	angle(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$1C,y_pos(a1)
@@ -63818,7 +63818,7 @@ loc_291A2:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
-		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+		bsr.w	Player_ClearRollHeight			; Liliam: bugfix - clear roll state
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$94,y_pos(a1)
@@ -74184,6 +74184,7 @@ loc_3132E:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		bsr.w	Player_ClearRollHeight			; Liliam: bugfix - clear roll state
 		andi.b	#$FC,render_flags(a1)
 		move.w	y_pos(a0),d0
 		addi.w	#$14,d0
@@ -74222,6 +74223,7 @@ loc_313D6:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		bsr.w	Player_ClearRollHeight			; Liliam: bugfix - clear roll state
 		andi.b	#$FC,render_flags(a1)
 		move.w	y_pos(a0),d0
 		subi.w	#$14,d0
@@ -79244,6 +79246,7 @@ loc_34AD6:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		bsr.w	Player_ClearRollHeight			; Liliam: bugfix - clear roll state
 		move.w	d2,x_pos(a1)
 		move.w	d3,y_pos(a1)
 		move.b	#$B,anim(a1)
@@ -87927,6 +87930,7 @@ loc_3C0DC:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		andi.b	#$FC,render_flags(a1)
 		move.b	y_radius(a1),d0
 		move.b	default_y_radius(a1),y_radius(a1)
@@ -91512,6 +91516,7 @@ loc_3EEDA:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		andi.b	#$FC,render_flags(a1)
 		move.w	y_pos(a0),d0
 		addi.w	#$14,d0
@@ -98009,6 +98014,7 @@ loc_444B6:
 		clr.w	x_vel(a1)
 		clr.w	y_vel(a1)
 		clr.w	ground_vel(a1)
+		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		andi.b	#$FC,render_flags(a1)
 		move.w	x_pos(a0),x_pos(a1)
 		move.b	(Level_frame_counter+1).w,d0
