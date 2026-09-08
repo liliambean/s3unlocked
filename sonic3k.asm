@@ -41016,12 +41016,14 @@ Obj_Ring:
 		move.w	#$100,priority(a0)
 		move.b	#$47,collision_flags(a0)
 		move.b	#8,width_pixels(a0)
+		move.b	#8,height_pixels(a0)					;
 		tst.w	(Competition_mode).w
-		beq.s	loc_1A568
-		move.w	#make_art_tile(ArtTile_2PArt_3+$C,3,0),art_tile(a0)
+		bne.w	Obj_Ring_2P				; Liliam: competition - custom ring object
+;		beq.s	loc_1A568				;
+;		move.w	#make_art_tile(ArtTile_2PArt_3+$C,3,0),art_tile(a0)	;
 
-loc_1A568:
-;		move.b	(Rings_frame).w,mapping_frame(a0)			; Liliam: QOL - extend ring animation
+;loc_1A568:
+;		move.b	(Rings_frame).w,mapping_frame(a0)			;
 		bra.w	Sprite_CheckDeleteTouch3
 ; ---------------------------------------------------------------------------
 
@@ -41131,16 +41133,19 @@ Obj_BouncingRing_Create:
 		; Liliam: QOL - speed up ring loss
 
 ;loc_1A68C:
-;		movea.l	a0,a1					; Liliam: QOL - speed up ring loss
-		moveq	#0,d5
-		move.w	(Ring_count).w,d5
-		movea.w	$3E(a0),a2					; Liliam: Encore mode - combine ring
-		cmpa.w	#Player_1,a2					;
-;		tst.b	$3F(a0)						;
+;		movea.l	a0,a1					; Liliam: competition - custom ring object
+;		moveq	#0,d5					;
+		movea.w	$3E(a0),a2				;
+		lea	(Ring_count).w,a3			;
+;		move.w	(Ring_count).w,d5			;
+;		tst.b	$3F(a0)					;
+		cmpa.w	#Player_1,a2				;
 		beq.s	loc_1A69E
-		move.w	(Ring_count_P2).w,d5
+		lea	(Ring_count_P2).w,a3			;
+;		move.w	(Ring_count_P2).w,d5			;
 
 loc_1A69E:
+		move.w	(a3),d5						; Liliam: Encore mode - combine ring
 		bclr	#Status_CombineRing,status_secondary(a2)	;
 		bne.w	CombineRing_Create				;
 
@@ -41152,11 +41157,14 @@ CombineRing_Done:
 
 loc_1A6A6:
 		subq.w	#1,d5
-;		move.w	#$288,d4				; Liliam: QOL - speed up ring loss
-		move.w	#$A88,d4				;
+		move.w	#$A88,d4				; Liliam: QOL - speed up ring loss
+;		move.w	#$288,d4				;
+		movea.l	a0,a1					;
+		move.l	#Obj_BouncingRing_2P,d6			;
+		tst.w	(Competition_mode).w			;
+		bne.s	loc_1A6B6				;
 		move.l	#Obj_BouncingRing,d6			;
 		move.b	#-1,(Ring_spill_anim_counter).w		;
-		movea.l	a0,a1					;
 		tst.b	(Reverse_gravity_flag).w		;
 		beq.s	loc_1A6B6				;
 		move.l	#Obj_BouncingRing_ReverseGravity,d6	;
@@ -41181,6 +41189,7 @@ loc_1A6B6:
 		move.b	#$47,collision_flags(a1)
 		move.b	#8,width_pixels(a1)
 		move.b	#8,height_pixels(a1)			;
+		move.w	a2,$3E(a1)				;
 ;		move.b	#-1,(Ring_spill_anim_counter).w		;
 		tst.w	d4
 		bmi.s	loc_1A728
@@ -41221,9 +41230,12 @@ loc_1A728:
 loc_1A738:
 		move.w	#signextendB(sfx_RingLoss),d0
 		jsr	(Play_SFX).l
-		move.w	#0,(Ring_count).w
+		clr.w	(a3)					; Liliam: competition - custom ring object
+;		move.w	#0,(Ring_count).w			;
 		move.b	#$80,(Update_HUD_ring_count).w
 		move.b	#0,(Extra_life_flags).w
+		tst.w	(Competition_mode).w			;
+		bne.w	Obj_BouncingRing_2P			;
 		tst.b	(Reverse_gravity_flag).w
 		bne.w	Obj_BouncingRing_ReverseGravity
 
@@ -41499,6 +41511,105 @@ AttractedRing_ApplyMovementY:
 		jmp	(MoveSprite2).l
 ; End of function AttractedRing_Move
 
+; ---------------------------------------------------------------------------
+
+Obj_Ring_2P:							; Liliam: competition - custom ring object
+		move.l	#Obj_Ring_2P_Main,(a0)
+		move.l	#Map_2PItem,mappings(a0)
+		move.w	#make_art_tile(ArtTile_2PArt_3,0,1),art_tile(a0)
+		move.b	#$C7,collision_flags(a0)
+		move.b	#8,y_radius(a0)
+		move.b	#8,x_radius(a0)
+		move.b	#3,anim(a0)
+
+Obj_Ring_2P_Main:
+		move.b	collision_property(a0),d0
+		bne.w	Obj_BouncingRing_2P_Main.checkPlayer
+		jsr	(Add_SpriteToCollisionResponseList).l
+		lea	(Ani_2PItem).l,a1
+		bsr.w	Animate_Sprite
+		bra.w	Draw_Sprite
+; ---------------------------------------------------------------------------
+
+Obj_BouncingRing_2P:						; Liliam: competition - custom ring object
+		move.l	#Obj_BouncingRing_2P_Main,(a0)
+		move.l	#Map_2PItem,mappings(a0)
+		move.w	#make_art_tile(ArtTile_2PArt_3,0,1),art_tile(a0)
+		move.b	#$C7,collision_flags(a0)
+		move.b	#-1,$43(a0)
+
+Obj_BouncingRing_2P_Main:
+		move.b	collision_property(a0),d0
+		bne.w	.checkPlayer
+		move.w	$42(a0),d0
+		beq.w	Delete_Current_Sprite
+		add.w	$44(a0),d0
+		move.w	d0,$44(a0)
+		rol.w	#7,d0
+		andi.w	#3,d0
+		lea	(byte_36A79+1).l,a1
+		move.b	(a1,d0.w),mapping_frame(a0)
+		subq.w	#1,$42(a0)
+
+		move.l	x_vel(a0),d0
+		add.l	d0,x_pos(a0)
+		move.l	y_vel+$10(a0),d0
+		add.l	d0,y_pos(a0)
+		addi.l	#$1800,y_vel+$10(a0)
+		bmi.w	.checkParent
+		moveq	#8,d0
+		jsr	(RingCheckFloorDist).l
+		tst.w	d1
+		bpl.s	.checkDelete
+		add.w	d1,y_pos(a0)
+		move.l	y_vel+$10(a0),d0
+		asr.l	#2,d0
+		sub.l	d0,y_vel+$10(a0)
+		neg.l	y_vel+$10(a0)
+
+	.checkDelete:
+		move.w	(Camera_max_Y_pos).w,d0
+		addi.w	#$E0,d0
+		cmp.w	y_pos(a0),d0
+		blo.w	Delete_Current_Sprite
+
+	.checkParent:
+		movea.w	$3E(a0),a1
+		cmpi.b	#90,invulnerability_timer(a1)
+		bhi.s	.wrapVertical
+		jsr	(Add_SpriteToCollisionResponseList).l
+
+	.wrapVertical:
+		cmpi.w	#-$100,(Camera_min_Y_pos).w
+		bne.s	.wrapHorizontal
+		move.w	(Screen_Y_wrap_value).w,d0
+		and.w	d0,y_pos(a0)
+
+	.wrapHorizontal:
+		move.w	(Screen_X_wrap_value).w,d0
+		and.w	d0,x_pos(a0)
+		addi.w	#$400,x_pos(a0)
+		bra.w	Draw_Sprite
+; ---------------------------------------------------------------------------
+
+	.checkPlayer:
+		move.l	#Obj_RingSparkle_2P,(a0)
+		move.b	#8,anim(a0)
+		subq.b	#1,d0
+		bne.s	.player2
+		bsr.w	GiveRing
+		bra.s	Obj_RingSparkle_2P
+; ---------------------------------------------------------------------------
+
+	.player2:
+		bsr.w	GiveRing_Tails
+
+Obj_RingSparkle_2P:
+		lea	(Ani_2PItem).l,a1
+		bsr.w	Animate_Sprite
+		tst.b	routine(a0)
+		bne.w	Delete_Current_Sprite
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 CombineRing_Create:							; Liliam: Encore mode - combine ring
@@ -41952,7 +42063,7 @@ Animate_Sprite:
 
 loc_1AC00:
 		subq.b	#1,anim_frame_timer(a0)
-		bcc.s	locret_1AC36
+		bhs.s	locret_1AC36
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1
 		move.b	(a1),anim_frame_timer(a0)
@@ -219038,6 +219149,7 @@ Pal_DDZ:
 		binclude "Levels/DDZ/Palettes/Main.bin"
 		even
 Pal_ALZ:
+		; Liliam: bugfix - 2P object palette assignment
 		binclude "Levels/ALZ/Palettes/Main.bin"
 		even
 Pal_BPZ:
@@ -220402,6 +220514,7 @@ ArtNem_2PArt_2:							; Liliam: reinsert S3 data
 		binclude "General/2P Zone/Nemesis Art/Misc Art 2.bin"
 		even
 ArtNem_2PArt_3:							; Liliam: reinsert S3 data
+		; Liliam: bugfix - 2P object palette assignment
 		binclude "General/2P Zone/Nemesis Art/Misc Art 3.bin"
 		even
 ArtNem_2PStartPost:						; Liliam: reinsert S3 data
