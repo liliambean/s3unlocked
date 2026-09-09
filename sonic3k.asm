@@ -62274,7 +62274,8 @@ AnimateTiles_DPZ:
 		lsr.w	#1,d0
 		lea	word_28446(pc,d0.w),a4
 		lea	(ArtUnc_AniDPZ__BG).l,a0
-		move.w	#tiles_to_bytes($153),d4
+		move.w	#tiles_to_bytes($45),d4			; Liliam: Encore mode - add extra levels
+;		move.w	#tiles_to_bytes($153),d4		;
 		add.l	a0,d1
 		move.w	d4,d2
 		move.w	(a4)+,d3
@@ -62330,7 +62331,8 @@ loc_28466:
 		lsr.w	#1,d0
 		lea	word_28446(pc,d0.w),a4
 		lea	(ArtUnc_AniDPZ__BG).l,a0
-		move.w	#tiles_to_bytes($173),d4
+		move.w	#tiles_to_bytes($172),d4		; Liliam: Encore mode - add extra levels
+;		move.w	#tiles_to_bytes($173),d4		;
 		add.l	a0,d1
 		move.w	d4,d2
 		move.w	(a4)+,d3
@@ -63347,7 +63349,8 @@ AniPLC_DEZ: zoneanimstart
 	zoneanimend
 
 AniPLC_ALZ: zoneanimstart
-	zoneanimdecl   9, ArtUnc_AniALZ, $238,  3,$10
+	zoneanimdecl   9, ArtUnc_AniALZ, $238+$46,  3,$10	; Liliam: Encore mode - add extra levels
+;	zoneanimdecl   9, ArtUnc_AniALZ, $238,  3,$10		;
 		dc.b    0
 		dc.b  $10
 		dc.b  $20
@@ -63355,7 +63358,8 @@ AniPLC_ALZ: zoneanimstart
 	zoneanimend
 
 AniPLC_BPZ: zoneanimstart
-	zoneanimdecl   7, ArtUnc_AniBPZ__0, $118,  6,  7
+	zoneanimdecl   7, ArtUnc_AniBPZ__0, $118+$C5,  6,  7	; Liliam: Encore mode - add extra levels
+;	zoneanimdecl   7, ArtUnc_AniBPZ__0, $118,  6,  7	;
 		dc.b    0
 		dc.b    7
 		dc.b   $E
@@ -63363,7 +63367,8 @@ AniPLC_BPZ: zoneanimstart
 		dc.b  $1C
 		dc.b  $23
 		even
-	zoneanimdecl   5, ArtUnc_AniBPZ__1, $11F, $A,  8
+	zoneanimdecl   5, ArtUnc_AniBPZ__1, $11F+$C5, $A,  8	; Liliam: Encore mode - add extra levels
+;	zoneanimdecl   5, ArtUnc_AniBPZ__1, $11F, $A,  8	;
 		dc.b    0
 		dc.b    8
 		dc.b  $10
@@ -63375,18 +63380,21 @@ AniPLC_BPZ: zoneanimstart
 		dc.b  $18
 		dc.b  $20
 		even
-	zoneanimdecl   2, ArtUnc_AniBPZ__2, $127,  2,  3
+	zoneanimdecl   2, ArtUnc_AniBPZ__2, $127-$62,  2,  3	; Liliam: Encore mode - add extra levels
+;	zoneanimdecl   2, ArtUnc_AniBPZ__2, $127,  2,  3	;
 		dc.b    0
 		dc.b    3
 		even
-	zoneanimdecl   4, ArtUnc_AniBPZ__3, $12A,  2,  1
+	zoneanimdecl   4, ArtUnc_AniBPZ__3, $12A-$62,  2,  1	; Liliam: Encore mode - add extra levels
+;	zoneanimdecl   4, ArtUnc_AniBPZ__3, $12A,  2,  1	;
 		dc.b    0
 		dc.b    1
 		even
 	zoneanimend
 
 AniPLC_DPZ: zoneanimstart
-	zoneanimdecl  $B, ArtUnc_AniDPZ, $147,  5, $C
+	zoneanimdecl  $B, ArtUnc_AniDPZ, $147+$1F,  5, $C	; Liliam: Encore mode - add extra levels
+;	zoneanimdecl  $B, ArtUnc_AniDPZ, $147,  5, $C		;
 		dc.b    0
 		dc.b   $C
 		dc.b  $18
@@ -111505,10 +111513,8 @@ LevelEventArray:dc.l	AIZ1_ScreenEvent,	AIZ1_BackgroundEvent
 		dc.l	Pachinko_ScreenEvent,	Pachinko_BackgroundEvent
 		dc.l	Slots_ScreenInit,	Slots_BackgroundInit
 		dc.l	EncoreBonus_ScrnInit,	EncoreBonus_BgndInit	; Liliam: Encore mode - bonus stage
-;		dc.l	Slots_ScreenInit,	Slots_BackgroundInit	;
 		dc.l	Slots_ScreenEvent,	Slots_BackgroundEvent
 		dc.l	EncoreBonus_ScrnEvent,	EncoreBonus_BgndEvent	;
-;		dc.l	Slots_ScreenEvent,	Slots_BackgroundEvent	;
 		dc.l	LRZ3_ScreenInit,	LRZ3_BackgroundInit
 		dc.l	HPZ_ScreenInit,		HPZ_BackgroundInit
 		dc.l	LRZ3_ScreenEvent,	LRZ3_BackgroundEvent
@@ -217552,7 +217558,6 @@ byte_91F06:
 LevelLoadBlock:
 	; Liliam: reinsert AIZ intro PLC
 	levartptrs PLCID_AIZIntro,  PLCID_AIZIntro,  PalID_AIZIntro, AIZ1_8x8_Primary_KosM, AIZ1_8x8_Secondary_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_Secondary_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos            ; ANGEL ISLAND ZONE ACT 1
-;	levartptrs PLCID_AIZ1,      PLCID_AIZ1,      PalID_AIZIntro, AIZ1_8x8_Primary_KosM, AIZ1_8x8_Secondary_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_Secondary_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos            ;
 	levartptrs PLCID_AIZ2,      PLCID_AIZ2,      PalID_AIZFire,  AIZ2_8x8_Primary_KosM, AIZ2_8x8_Secondary_KosM, AIZ2_16x16_Primary_Kos, AIZ2_16x16_Secondary_Kos, AIZ2_128x128_Kos,         AIZ2_128x128_Kos            ; ANGEL ISLAND ZONE ACT 2
 	levartptrs PLCID_HCZ1,      PLCID_HCZ1_2,    PalID_HCZ1,     HCZ_8x8_Primary_KosM,  HCZ1_8x8_Secondary_KosM, HCZ_16x16_Primary_Kos,  HCZ1_16x16_Secondary_Kos, HCZ_128x128_Primary_Kos,  HCZ1_128x128_Secondary_Kos  ; HYDROCITY ZONE ACT 1
 	levartptrs PLCID_HCZ2,      PLCID_HCZ2_2,    PalID_HCZ2,     HCZ_8x8_Primary_KosM,  HCZ2_8x8_Secondary_KosM, HCZ_16x16_Primary_Kos,  HCZ2_16x16_Secondary_Kos, HCZ_128x128_Primary_Kos,  HCZ2_128x128_Secondary_Kos  ; HYDROCITY ZONE ACT 2
@@ -217568,8 +217573,7 @@ LevelLoadBlock:
 	; Liliam: bugfix - improve LBZ act transition
 	levartptrs PLCID_LBZ1,      PLCID_LBZ1,      PalID_LBZ1,     LBZ_8x8_Primary_KosM,  LBZ1_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ1_16x16_Secondary_Kos, LBZ_128x128_Primary_Kos,  LBZ1_128x128_Secondary_Kos  ; LAUNCH BASE ZONE ACT 1
 	levartptrs PLCID_LBZ2,      PLCID_LBZ2_2,    PalID_LBZ2,     LBZ_8x8_Primary_KosM,  LBZ2_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ2_16x16_Secondary_Kos, LBZ_128x128_Primary_Kos,  LBZ2_128x128_Secondary_Kos  ; LAUNCH BASE ZONE ACT 2
-;	levartptrs PLCID_LBZ1,      PLCID_LBZ1,      PalID_LBZ1,     LBZ_8x8_Primary_KosM,  LBZ1_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ1_16x16_Secondary_Kos, LBZ1_128x128_Kos,         LBZ1_128x128_Kos            ;
-;	levartptrs PLCID_LBZ2,      PLCID_LBZ2_2,    PalID_LBZ2,     LBZ_8x8_Primary_KosM,  LBZ2_8x8_Secondary_KosM, LBZ_16x16_Primary_Kos,  LBZ2_16x16_Secondary_Kos, LBZ2_128x128_Kos,         LBZ2_128x128_Kos            ;
+
 	levartptrs PLCID_MHZ1,      PLCID_MHZ1,      PalID_MHZ1,     ArtKosM_MHZ_Primary,   ArtKosM_MHZ_Secondary,   MHZ_16x16_Primary_Kos,  MHZ_16x16_Secondary_Kos,  MHZ_128x128_Primary_Kos,  MHZ_128x128_Secondary_Kos   ; MUSHROOM HILL ZONE ACT 1
 	levartptrs PLCID_MHZ2,      PLCID_MHZ2,      PalID_MHZ2,     ArtKosM_MHZ_Primary,   ArtKosM_MHZ_Secondary,   MHZ_16x16_Primary_Kos,  MHZ_16x16_Secondary_Kos,  MHZ_128x128_Primary_Kos,  MHZ_128x128_Secondary_Kos   ; MUSHROOM HILL ZONE ACT 2
 	levartptrs PLCID_SOZ1,      PLCID_SOZ1,      PalID_SOZ1,     ArtKosM_SOZ_Primary,   ArtKosM_SOZ1_Secondary,  SOZ_16x16_Primary_Kos,  SOZ1_16x16_Secondary_Kos, SOZ_128x128_Kos,          SOZ_128x128_Kos             ; SANDOPOLIS ZONE ACT 1
@@ -217584,39 +217588,33 @@ LevelLoadBlock:
 	; Liliam: use level art for Doomsday objects
 	levartptrs PLCID_DDZ1,      PLCID_DDZ1,      PalID_DDZ1,     ArtKosM_DDZ,           ArtKosM_DDZMisc,         DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos             ; DOOMSDAY ZONE
 	levartptrs PLCID_DDZ2,      PLCID_DDZ2,      PalID_DDZ2,     ArtKosM_DDZ,           ArtKosM_DDZMisc,         DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos             ; DOOMSDAY ZONE (unused)
-;	levartptrs PLCID_DDZ1,      PLCID_DDZ1,      PalID_DDZ1,     ArtKosM_DDZ,           ArtKosM_DDZ,             DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos             ;
-;	levartptrs PLCID_DDZ2,      PLCID_DDZ2,      PalID_DDZ2,     ArtKosM_DDZ,           ArtKosM_DDZ,             DDZ_16x16_Kos,          DDZ_16x16_Kos,            DDZ_128x128_Kos,          DDZ_128x128_Kos             ;
 
 	levartptrs PLCID_AIZ1,      PLCID_AIZ1,      PalID_AIZ,      AIZ1_8x8_Primary_KosM, AIZ1_8x8_MainLevel_KosM, AIZ1_16x16_Primary_Kos, AIZ1_16x16_MainLevel_Kos, AIZ1_128x128_Kos,         AIZ1_128x128_Kos            ; SONIC/TAILS INTRO
 	levartptrs PLCID_Ending,    PLCID_Ending,    PalID_Ending2,  ArtKosM_SSZ2,          ArtKosM_SSZ2,            SSZ2_16x16_Kos,         SSZ2_16x16_Kos,           SSZ2_128x128_Kos,         SSZ2_128x128_Kos            ; SONIC/TAILS ENDING
 
 	; Liliam: Encore mode - add extra levels
-	levartptrs PLCID_ALZ,       PLCID_ALZ,       PalID_ALZ,      ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos             ; AZURE LAKE ZONE
-	levartptrs PLCID_ALZ_2,     PLCID_ALZ_2,     PalID_ALZ_2,    ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos             ; AZURE LAKE ZONE (ENCORE)
-;	levartptrs PLCID_ALZ,       PLCID_ALZ,       PalID_ALZ_2,    ALZ_8x8_KosM,          ALZ_8x8_KosM,            ALZ_16x16_Kos,          ALZ_16x16_Kos,            ALZ_128x128_Kos,          ALZ_128x128_Kos             ;
-	levartptrs PLCID_BPZ,       PLCID_BPZ,       PalID_BPZ,      BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos             ; BALLOON PARK ZONE
-	levartptrs PLCID_BPZ_2,     PLCID_BPZ_2,     PalID_BPZ_2,    BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos             ; BALLOON PARK ZONE (ENCORE)
-;	levartptrs PLCID_BPZ,       PLCID_BPZ,       PalID_BPZ_2,    BPZ_8x8_KosM,          BPZ_8x8_KosM,            BPZ_16x16_Kos,          BPZ_16x16_Kos,            BPZ_128x128_Kos,          BPZ_128x128_Kos             ;
-	levartptrs PLCID_DPZ,       PLCID_DPZ,       PalID_DPZ,      DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos             ; DESERT PALACE ZONE
-	levartptrs PLCID_DPZ_2,     PLCID_DPZ_2,     PalID_DPZ_2,    DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos             ; DESERT PALACE ZONE (ENCORE)
-;	levartptrs PLCID_DPZ,       PLCID_DPZ,       PalID_DPZ,      DPZ_8x8_KosM,          DPZ_8x8_KosM,            DPZ_16x16_Kos,          DPZ_16x16_Kos,            DPZ_128x128_Kos,          DPZ_128x128_Kos             ;
-	levartptrs PLCID_CGZ,       PLCID_CGZ,       PalID_CGZ,      CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos             ; CHROME GADGET ZONE
-	levartptrs PLCID_CGZ_2,     PLCID_CGZ_2,     PalID_CGZ_2,    CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos             ; CHROME GADGET ZONE (ENCORE)
-;	levartptrs PLCID_CGZ,       PLCID_CGZ,       PalID_CGZ,      CGZ_8x8_KosM,          CGZ_8x8_KosM,            CGZ_16x16_Kos,          CGZ_16x16_Kos,            CGZ_128x128_Kos,          CGZ_128x128_Kos             ;
-	levartptrs PLCID_EMZ,       PLCID_EMZ,       PalID_EMZ,      EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos             ; ENDLESS MINE ZONE
-	levartptrs PLCID_EMZ_2,     PLCID_EMZ_2,     PalID_EMZ_2,    EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos             ; ENDLESS MINE ZONE (ENCORE)
-;	levartptrs PLCID_EMZ,       PLCID_EMZ,       PalID_EMZ,      EMZ_8x8_KosM,          EMZ_8x8_KosM,            EMZ_16x16_Kos,          EMZ_16x16_Kos,            EMZ_128x128_Kos,          EMZ_128x128_Kos             ;
+	levartptrs PLCID_ALZ,       PLCID_ALZ,       PalID_ALZ,      ALZ_8x8_Primary_KosM,  ALZ_8x8_Secondary_KosM,  ALZ_16x16_Primary_Kos,  ALZ_16x16_Secondary_Kos, ALZ_128x128_Primary_Kos,   ALZ_128x128_Secondary_Kos   ; AZURE LAKE ZONE
+	levartptrs PLCID_ALZ_2,     PLCID_ALZ_2,     PalID_ALZ_2,    ALZ_8x8_Primary_KosM,  ALZ_8x8_Secondary_KosM,  ALZ_16x16_Primary_Kos,  ALZ_16x16_Secondary_Kos, ALZ_128x128_Primary_Kos,   ALZ_128x128_Secondary_Kos   ; AZURE LAKE ZONE (ENCORE)
+	levartptrs PLCID_BPZ,       PLCID_BPZ,       PalID_BPZ,      BPZ_8x8_Primary_KosM,  BPZ_8x8_Secondary_KosM,  BPZ_16x16_Primary_Kos,  BPZ_16x16_Secondary_Kos, BPZ_128x128_Primary_Kos,   BPZ_128x128_Secondary_Kos   ; BALLOON PARK ZONE
+	levartptrs PLCID_BPZ_2,     PLCID_BPZ_2,     PalID_BPZ_2,    BPZ_8x8_Primary_KosM,  BPZ_8x8_Secondary_KosM,  BPZ_16x16_Primary_Kos,  BPZ_16x16_Secondary_Kos, BPZ_128x128_Primary_Kos,   BPZ_128x128_Secondary_Kos   ; BALLOON PARK ZONE (ENCORE)
+	levartptrs PLCID_DPZ,       PLCID_DPZ,       PalID_DPZ,      DPZ_8x8_Primary_KosM,  DPZ_8x8_Secondary_KosM,  DPZ_16x16_Primary_Kos,  DPZ_16x16_Secondary_Kos, DPZ_128x128_Kos,           DPZ_128x128_Kos             ; DESERT PALACE ZONE
+	levartptrs PLCID_DPZ_2,     PLCID_DPZ_2,     PalID_DPZ_2,    DPZ_8x8_Primary_KosM,  DPZ_8x8_Secondary_KosM,  DPZ_16x16_Primary_Kos,  DPZ_16x16_Secondary_Kos, DPZ_128x128_Kos,           DPZ_128x128_Kos             ; DESERT PALACE ZONE (ENCORE)
+	levartptrs PLCID_CGZ,       PLCID_CGZ,       PalID_CGZ,      CGZ_8x8_Primary_KosM,  CGZ_8x8_Secondary_KosM,  CGZ_16x16_Primary_Kos,  CGZ_16x16_Secondary_Kos, CGZ_128x128_Primary_Kos,   CGZ_128x128_Secondary_Kos   ; CHROME GADGET ZONE
+	levartptrs PLCID_CGZ_2,     PLCID_CGZ_2,     PalID_CGZ_2,    CGZ_8x8_Primary_KosM,  CGZ_8x8_Secondary_KosM,  CGZ_16x16_Primary_Kos,  CGZ_16x16_Secondary_Kos, CGZ_128x128_Primary_Kos,   CGZ_128x128_Secondary_Kos   ; CHROME GADGET ZONE (ENCORE)
+	levartptrs PLCID_EMZ,       PLCID_EMZ,       PalID_EMZ,      EMZ_8x8_Primary_KosM,  EMZ_8x8_Secondary_KosM,  EMZ_16x16_Primary_Kos,  EMZ_16x16_Secondary_Kos, EMZ_128x128_Primary_Kos,   EMZ_128x128_Secondary_Kos   ; ENDLESS MINE ZONE
+	levartptrs PLCID_EMZ_2,     PLCID_EMZ_2,     PalID_EMZ_2,    EMZ_8x8_Primary_KosM,  EMZ_8x8_Secondary_KosM,  EMZ_16x16_Primary_Kos,  EMZ_16x16_Secondary_Kos, EMZ_128x128_Primary_Kos,   EMZ_128x128_Secondary_Kos   ; ENDLESS MINE ZONE (ENCORE)
 
 	; Liliam: Encore mode - bonus stage
 	levartptrs PLCID_Gumball,   PLCID_Gumball,   PalID_Gumball,  Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos         ; GUMBALL
 	levartptrs PLCID_Gumball_2, PLCID_Gumball_2, PalID_Gumball,  Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos         ; GUMBALL (ENCORE)
-;	levartptrs PLCID_Gumball,   PLCID_Gumball,   PalID_Gumball,  Gumball_8x8_KosM,      Gumball_8x8_KosM,        Gumball_16x16_Kos,      Gumball_16x16_Kos,        Gumball_128x128_Kos,      Gumball_128x128_Kos         ;
+
+	; Liliam: Encore mode - bonus stage
 	levartptrs PLCID_Pachinko,  PLCID_Pachinko,  PalID_Pachinko, ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos        ; PACHINKO
 	levartptrs PLCID_Pachinko_2, PLCID_Pachinko_2, PalID_Pachinko, ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos        ; PACHINKO (ENCORE)
-;	levartptrs PLCID_Pachinko,  PLCID_Pachinko,  PalID_Pachinko, ArtKosM_Pachinko,      ArtKosM_Pachinko,        Pachinko_16x16_Kos,     Pachinko_16x16_Kos,       Pachinko_128x128_Kos,     Pachinko_128x128_Kos        ;
+
+	; Liliam: Encore mode - bonus stage
 	levartptrs PLCID_Slots,     PLCID_Slots,     PalID_Slots,    ArtKosM_Slots,         ArtKosM_Slots,           Slots_16x16_Kos,        Slots_16x16_Kos,          Slots_128x128_Kos,        Slots_128x128_Kos           ; SLOTS
 	levartptrs PLCID_Slots_2,   PLCID_Slots_2,   PalID_Slots_2,  ArtKosM_EncoreBonus,   ArtKosM_EncoreBonus,     EncoreBonus_16x16_Kos,  EncoreBonus_16x16_Kos,    EncoreBonus_128x128_Kos,  EncoreBonus_128x128_Kos     ; SLOTS (ENCORE)
-;	levartptrs PLCID_Slots,     PLCID_Slots,     PalID_Slots,    ArtKosM_Slots,         ArtKosM_Slots,           Slots_16x16_Kos,        Slots_16x16_Kos,          Slots_128x128_Kos,        Slots_128x128_Kos           ;
 
 	levartptrs PLCID_HPZ,       PLCID_HPZ,       PalID_LRZBoss,   ArtKosM_HPZ_Primary,   ArtKosM_LRZ3_Secondary,  HPZ_16x16_Primary_Kos,  LRZ3_16x16_Secondary_Kos, HPZ_128x128_Primary_Kos,  LRZ3_128x128_Secondary_Kos  ; LAVA REEF ZONE BOSS
 	levartptrs PLCID_HPZ,       PLCID_HPZ,       PalID_HPZIntro,  ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos   ; HIDDEN PALACE ZONE
@@ -217624,7 +217622,6 @@ LevelLoadBlock:
 
 	; Liliam: bugfix - HPZ SS results palette screwery
 	levartptrs PLCID_HPZ,       PLCID_HPZ,       PalID_HPZ,       ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos   ; SPECIAL STAGE HUB
-;	levartptrs PLCID_HPZ,       PLCID_HPZ,       PalID_HPZIntro,  ArtKosM_HPZ_Primary,   ArtKosM_HPZ_Secondary,   HPZ_16x16_Primary_Kos,  HPZ_16x16_Secondary_Kos,  HPZ_128x128_Primary_Kos,  HPZ_128x128_Secondary_Kos   ;
 ; ---------------------------------------------------------------------------
 
 ; Macro to define PLC pointer entry
@@ -218830,15 +218827,25 @@ Solid_DEZ:
 Solid_DDZ:
 		binclude "Levels/DDZ/Collision/1.bin"
 		even
-Solid_ALZ:	binclude "Levels/ALZ/Collision/1.bin"		; Liliam: reinsert S3 data
+Solid_ALZ:							; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
+		binclude "Levels/ALZ/Collision/1.bin"
 		even
-Solid_BPZ:	binclude "Levels/BPZ/Collision/1.bin"		; Liliam: reinsert S3 data
+Solid_BPZ:							; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
+		binclude "Levels/BPZ/Collision/1.bin"
 		even
-Solid_DPZ:	binclude "Levels/DPZ/Collision/1.bin"		; Liliam: reinsert S3 data
+Solid_DPZ:							; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
+		binclude "Levels/DPZ/Collision/1.bin"
 		even
-Solid_CGZ:	binclude "Levels/CGZ/Collision/1.bin"		; Liliam: reinsert S3 data
+Solid_CGZ:							; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
+		binclude "Levels/CGZ/Collision/1.bin"
 		even
-Solid_EMZ:	binclude "Levels/EMZ/Collision/1.bin"		; Liliam: reinsert S3 data
+Solid_EMZ:							; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
+		binclude "Levels/EMZ/Collision/1.bin"
 		even
 Solid_Gumball_Special:						; Liliam: reinsert S3 data
 		binclude "Levels/Gumball/Collision/1.bin"
@@ -218986,15 +218993,22 @@ Layout_DEZ2:
 Layout_DDZ:
 		binclude "Levels/DDZ/Layout/1.bin"
 		even
-Layout_ALZ:	binclude "Levels/ALZ/Layout/1.bin"		; Liliam: reinsert S3 data
+Layout_ALZ:							; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
+		binclude "Levels/ALZ/Layout/1.bin"
 		even
-Layout_BPZ:	binclude "Levels/BPZ/Layout/1.bin"		; Liliam: reinsert S3 data
+Layout_BPZ:							; Liliam: reinsert S3 data
+		binclude "Levels/BPZ/Layout/1.bin"
 		even
-Layout_DPZ:	binclude "Levels/DPZ/Layout/1.bin"		; Liliam: reinsert S3 data
+Layout_DPZ:							; Liliam: reinsert S3 data
+		binclude "Levels/DPZ/Layout/1.bin"
 		even
-Layout_CGZ:	binclude "Levels/CGZ/Layout/1.bin"		; Liliam: reinsert S3 data
+Layout_CGZ:							; Liliam: reinsert S3 data
+		binclude "Levels/CGZ/Layout/1.bin"
 		even
-Layout_EMZ:	binclude "Levels/EMZ/Layout/1.bin"		; Liliam: reinsert S3 data
+Layout_EMZ:							; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
+		binclude "Levels/EMZ/Layout/1.bin"
 		even
 Layout_Gumball_Special:						; Liliam: reinsert S3 data
 		binclude "Levels/Gumball/Layout/1.bin"
@@ -222472,50 +222486,107 @@ ArtKosM_DDZ:
 DDZ_128x128_Kos:
 		binclude "Levels/DDZ/Chunks/Primary.bin"
 		even
-ALZ_16x16_Kos:							; Liliam: reinsert S3 data
+ALZ_16x16_Primary_Kos:						; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/ALZ/Blocks/Primary.bin"
 		even
-ALZ_8x8_KosM:							; Liliam: reinsert S3 data
+ALZ_16x16_Secondary_Kos:					; Liliam: Encore mode - add extra levels
+		binclude "Levels/ALZ/Blocks/Secondary.bin"
+		even
+ALZ_8x8_Primary_KosM:						; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/ALZ/Tiles/Primary.bin"
 		even
-ALZ_128x128_Kos:						; Liliam: reinsert S3 data
+ALZ_8x8_Secondary_KosM:						; Liliam: Encore mode - add extra levels
+		binclude "Levels/ALZ/Tiles/Secondary.bin"
+		even
+ALZ_128x128_Primary_Kos:					; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/ALZ/Chunks/Primary.bin"
 		even
-BPZ_16x16_Kos:							; Liliam: reinsert S3 data
+ALZ_128x128_Secondary_Kos:					; Liliam: Encore mode - add extra levels
+		binclude "Levels/ALZ/Chunks/Secondary.bin"
+		even
+BPZ_16x16_Primary_Kos:						; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/BPZ/Blocks/Primary.bin"
 		even
-BPZ_8x8_KosM:							; Liliam: reinsert S3 data
+BPZ_16x16_Secondary_Kos:					; Liliam: Encore mode - add extra levels
+		binclude "Levels/BPZ/Blocks/Secondary.bin"
+		even
+BPZ_8x8_Primary_KosM:						; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/BPZ/Tiles/Primary.bin"
 		even
-BPZ_128x128_Kos:						; Liliam: reinsert S3 data
+BPZ_8x8_Secondary_KosM:						; Liliam: Encore mode - add extra levels
+		binclude "Levels/BPZ/Tiles/Secondary.bin"
+		even
+BPZ_128x128_Primary_Kos:					; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/BPZ/Chunks/Primary.bin"
 		even
-DPZ_16x16_Kos:							; Liliam: reinsert S3 data
+BPZ_128x128_Secondary_Kos:					; Liliam: Encore mode - add extra levels
+		binclude "Levels/BPZ/Chunks/Secondary.bin"
+		even
+DPZ_16x16_Primary_Kos:						; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/DPZ/Blocks/Primary.bin"
 		even
-DPZ_8x8_KosM:							; Liliam: reinsert S3 data
+DPZ_16x16_Secondary_Kos:					; Liliam: Encore mode - add extra levels
+		binclude "Levels/DPZ/Blocks/Secondary.bin"
+		even
+DPZ_8x8_Primary_KosM:						; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/DPZ/Tiles/Primary.bin"
 		even
+DPZ_8x8_Secondary_KosM:						; Liliam: Encore mode - add extra levels
+		binclude "Levels/DPZ/Tiles/Secondary.bin"
+		even
 DPZ_128x128_Kos:						; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/DPZ/Chunks/Primary.bin"
 		even
-CGZ_16x16_Kos:							; Liliam: reinsert S3 data
+CGZ_16x16_Primary_Kos:						; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/CGZ/Blocks/Primary.bin"
 		even
-CGZ_8x8_KosM:							; Liliam: reinsert S3 data
+CGZ_16x16_Secondary_Kos:					; Liliam: Encore mode - add extra levels
+		binclude "Levels/CGZ/Blocks/Secondary.bin"
+		even
+CGZ_8x8_Primary_KosM:						; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/CGZ/Tiles/Primary.bin"
 		even
-CGZ_128x128_Kos:						; Liliam: reinsert S3 data
+CGZ_8x8_Secondary_KosM:						; Liliam: Encore mode - add extra levels
+		binclude "Levels/CGZ/Tiles/Secondary.bin"
+		even
+CGZ_128x128_Primary_Kos:					; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/CGZ/Chunks/Primary.bin"
 		even
-EMZ_16x16_Kos:							; Liliam: reinsert S3 data
+CGZ_128x128_Secondary_Kos:					; Liliam: Encore mode - add extra levels
+		binclude "Levels/CGZ/Chunks/Secondary.bin"
+		even
+EMZ_16x16_Primary_Kos:						; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/EMZ/Blocks/Primary.bin"
 		even
-EMZ_8x8_KosM:							; Liliam: reinsert S3 data
+EMZ_16x16_Secondary_Kos:					; Liliam: Encore mode - add extra levels
+		binclude "Levels/EMZ/Blocks/Secondary.bin"
+		even
+EMZ_8x8_Primary_KosM:						; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/EMZ/Tiles/Primary.bin"
 		even
-EMZ_128x128_Kos:						; Liliam: reinsert S3 data
+EMZ_8x8_Secondary_KosM:						; Liliam: Encore mode - add extra levels
+		binclude "Levels/EMZ/Tiles/Secondary.bin"
+		even
+EMZ_128x128_Primary_Kos:					; Liliam: reinsert S3 data
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/EMZ/Chunks/Primary.bin"
+		even
+EMZ_128x128_Secondary_Kos:					; Liliam: Encore mode - add extra levels
+		binclude "Levels/EMZ/Chunks/Secondary.bin"
 		even
 Gumball_16x16_Kos:						; Liliam: reinsert S3 data
 		; Liliam: gumball bonus - remove sprite mask
