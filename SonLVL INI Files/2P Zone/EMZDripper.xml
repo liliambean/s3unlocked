@@ -10,10 +10,17 @@
       <MapFile type="ASM" filename="../Levels/EMZ/Misc Object Data/Map - Dripper.asm" frame="3" startpal="2" />
     </ImageFromMappings>
   </Images>
+  <Subtypes>
+    <Subtype id="00" name="Dripper" image="img0" />
+    <Subtype id="80" name="Sludge" image="img1" />
+  </Subtypes>
   <Display>
     <DisplayOption>
-      <Condition property="XFlip" value="true" />
+      <Condition property="SubType" value="128" />
       <ImageRef image="img1" />
+    </DisplayOption>
+    <DisplayOption>
+      <ImageRef image="img0" />
     </DisplayOption>
   </Display>
 </ObjDef>

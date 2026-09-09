@@ -16,12 +16,12 @@ Map_Spring3_:
 		dc.w word_239C2-Map_Spring3_
 		dc.w word_239D6-Map_Spring3_
 word_23920:	dc.w 2
-		dc.b  $F6,   8,   0,   0, $FF, $F4
+		dc.b  $F6,   8,   0,   3, $FF, $F4
 		dc.b  $FB,   8,   0,   6, $FF, $F4
 word_2392E:	dc.w 1
-		dc.b  $FB,   8,   0,   0, $FF, $F4
+		dc.b  $FB,   8,   0,   3, $FF, $F4
 word_23936:	dc.w 3
-		dc.b  $F1,   8,   0,   0, $FF, $F4
+		dc.b  $F1,   8,   0,   3, $FF, $F4
 		dc.b  $F3,   0,   0,   9, $FF, $FC
 		dc.b  $FB,   8,   0,  $A, $FF, $F4
 word_2394A:	dc.w 2
@@ -34,26 +34,26 @@ word_23960:	dc.w 3
 		dc.b  $FC,   0,   8,   9,   0,   5
 		dc.b  $F4,   2,   8,  $A, $FF, $FD
 word_23974:	dc.w 2
-		dc.b    2,   8, $10,   0, $FF, $F4
+		dc.b    2,   8, $10,   3, $FF, $F4
 		dc.b  $FD,   8, $10,   6, $FF, $F4
 word_23982:	dc.w 2
-		dc.b  $F6,   8,   0,   3, $FF, $F4
+		dc.b  $F6,   8, $60,   0, $FF, $F4
 		dc.b  $FB,   8,   0,   6, $FF, $F4
 word_23990:	dc.w 1
-		dc.b  $FB,   8,   0,   3, $FF, $F4
+		dc.b  $FB,   8, $60,   0, $FF, $F4
 word_23998:	dc.w 3
-		dc.b  $F1,   8,   0,   3, $FF, $F4
+		dc.b  $F1,   8, $60,   0, $FF, $F4
 		dc.b  $F3,   0,   0,   9, $FF, $FC
 		dc.b  $FB,   8,   0,  $A, $FF, $F4
 word_239AC:	dc.w 2
-		dc.b  $F4,   2,   8,   3,   0,   2
+		dc.b  $F4,   2, $68,   3,   0,   2
 		dc.b  $F4,   2,   8,   6, $FF, $FD
 word_239BA:	dc.w 1
-		dc.b  $F4,   2,   8,   3, $FF, $FD
+		dc.b  $F4,   2, $68,   3, $FF, $FD
 word_239C2:	dc.w 3
-		dc.b  $F4,   2,   8,   3,   0,   7
+		dc.b  $F4,   2, $68,   3,   0,   7
 		dc.b  $FC,   0,   8,   9,   0,   5
 		dc.b  $F4,   2,   8,  $A, $FF, $FD
 word_239D6:	dc.w 2
-		dc.b    2,   8, $10,   3, $FF, $F4
+		dc.b    2,   8, $70,   0, $FF, $F4
 		dc.b  $FD,   8, $10,   6, $FF, $F4

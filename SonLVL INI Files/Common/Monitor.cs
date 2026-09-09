@@ -76,7 +76,7 @@ namespace S3KObjectDefinitions.Common
 
 			subtypeNames = new[]
 			{
-				"Combine Ring",
+				"Rotate Stocks",
 				"1-Up",
 				"Eggman",
 				"Rings",
@@ -85,7 +85,7 @@ namespace S3KObjectDefinitions.Common
 				"Thunder Barrier",
 				"Aqua Barrier",
 				"Invincibility",
-				"Rotate Stocks"
+				"Combine Ring",
 			};
 
 			var subtypes = new byte[subtypeNames.Length];

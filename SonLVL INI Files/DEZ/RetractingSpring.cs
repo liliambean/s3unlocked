@@ -80,13 +80,13 @@ namespace S3KObjectDefinitions.DEZ
 			subtypes = new ReadOnlyCollection<byte>(new byte[0]);
 			sprites = new Sprite[2][];
 			sprites[0] = BuildFlippedSprites(ObjectHelper.MapASMToBmp(indexer.ToArray(),
-				"../Levels/DEZ/Misc Object Data/Map - Retracting Spring.asm", 0, 1));
+				"../Levels/DEZ/Misc Object Data/Map - Retracting Spring.asm", "word_481BC", 1));
 
 			sprites[0][2].Offset(32, 0);
 			sprites[0][3].Offset(-32, 0);
 
 			sprites[1] = BuildFlippedSprites(ObjectHelper.MapASMToBmp(indexer.ToArray(),
-				"../Levels/DEZ/Misc Object Data/Map - Retracting Spring 2.asm", 0, 1));
+				"../Levels/DEZ/Misc Object Data/Map - Retracting Spring.asm", "Map_DEZRetractingSpring2_0", 1));
 
 			sprites[1][2].Offset(32, 0);
 			sprites[1][3].Offset(-32, 0);

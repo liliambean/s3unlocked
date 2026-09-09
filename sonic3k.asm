@@ -1143,6 +1143,7 @@ Clear_DisplayData:
 		tst.w	(Competition_mode).w
 		beq.s	Clear_DisplayData_No2P
 		dmaFillVRAM 0,VRAM_Plane_A_Name_Table_Competition,$4000
+		dmaFillVRAM 0,$D800,$800			; Liliam: bugfix - debug in competition mode
 		bra.s	Clear_DisplayData_Cont
 ; ---------------------------------------------------------------------------
 
@@ -7395,7 +7396,7 @@ loc_663A:
 		tst.b	(Debug_cheat_flag).w
 		beq.s	loc_665A
 		move.b	(_unkFF7C).w,d0
-		cmpi.b	#$A0,d0
+		cmpi.b	#button_C_mask|button_start_mask,d0
 		bne.s	loc_665A
 		move.w	(Sound_test_sound).w,d0
 		lsl.w	#8,d0
@@ -7440,6 +7441,7 @@ loc_66DA:
 ;		bsr.w	Demo_PlayRecord				; Liliam: removed dead code
 		jsr	(Process_Sprites).l
 		jsr	(DeformBgLayer).l
+		bsr.w	OscillateNumDo				; Liliam: bugfix - used by CGZ fan
 
 loc_66EA:
 		subq.w	#1,(sp)
@@ -14263,7 +14265,7 @@ loc_AF58:
 		move.b	(Competition_menu_zone).w,d0
 		move.b	Comp_ZoneList(pc,d0.w),d0		; Liliam: Encore mode - add extra levels
 		lsl.w	#5,d0
-		lea	(Pal_Save_ZoneCard_AIZ_Encore).l,a1	;
+		lea	(Pal_Save_ZoneCard_AIZ).l,a1		;
 ;		lea	(Pal_Competition4).l,a1			;
 		adda.w	d0,a1
 		bra.s	loc_AFA4
@@ -38930,6 +38932,7 @@ DashDust2P_Index:
 
 loc_18F9C:
 		addq.b	#2,routine(a0)
+		move.b	#1,$38(a0)				; Liliam: dash dust - pick vertical pos by character ID
 		move.l	#Map_DashDust2P,mappings(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
@@ -45769,9 +45772,9 @@ loc_1CD16:
 		move.l	#Obj_PathSwap_Horizontal,(a0)
 		tst.w	(Competition_mode).w
 		beq.w	Obj_PathSwap_Horizontal
-		move.l	#loc_1CF1A,(a0)
+		move.l	#Obj_PathSwap_Horizontal_2P,(a0)
 		move.w	#make_art_tile(ArtTile_2PArt_3+$C,3,0),art_tile(a0)
-		bra.w	loc_1CF1A
+		bra.w	Obj_PathSwap_Horizontal_2P
 ; ---------------------------------------------------------------------------
 word_1CD34:
 		dc.w    $20,   $40,   $80,  $100
@@ -45798,9 +45801,9 @@ loc_1CD70:
 		move.l	#Obj_PathSwap_Vertical,(a0)
 		tst.w	(Competition_mode).w
 		beq.s	Obj_PathSwap_Vertical
-		move.l	#loc_1CDB2,(a0)
+		move.l	#Obj_PathSwap_Vertical_2P,(a0)
 		move.w	#make_art_tile(ArtTile_2PArt_3+$C,3,0),art_tile(a0)
-		bra.s	loc_1CDB2
+		bra.s	Obj_PathSwap_Vertical_2P
 ; ---------------------------------------------------------------------------
 
 Obj_PathSwap_Vertical:
@@ -45820,7 +45823,7 @@ loc_1CDAC:
 		jmp	(Sprite_OnScreen_Test).l
 ; ---------------------------------------------------------------------------
 
-loc_1CDB2:
+Obj_PathSwap_Vertical_2P:
 		move.w	x_pos(a0),d1
 		lea	$34(a0),a2
 		lea	(Player_1).w,a1
@@ -45828,7 +45831,8 @@ loc_1CDB2:
 		lea	(Player_2).w,a1
 		bsr.s	sub_1CDDA
 		lea	(Breathing_bubbles).w,a1
-		tst.w	(Debug_mode_flag).w
+		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - debug in competition mode
+;		tst.w	(Debug_mode_flag).w			;
 		beq.w	sub_1CDDA
 		bsr.s	sub_1CDDA
 		jmp	(Draw_Sprite).l
@@ -45949,7 +45953,7 @@ loc_1CF14:
 		jmp	(Sprite_OnScreen_Test).l
 ; ---------------------------------------------------------------------------
 
-loc_1CF1A:
+Obj_PathSwap_Horizontal_2P:
 		move.w	y_pos(a0),d1
 		lea	$34(a0),a2
 		lea	(Player_1).w,a1
@@ -45957,7 +45961,8 @@ loc_1CF1A:
 		lea	(Player_2).w,a1
 		bsr.s	sub_1CF42
 		lea	(Breathing_bubbles).w,a1
-		tst.w	(Debug_mode_flag).w
+		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - debug in competition mode
+;		tst.w	(Debug_mode_flag).w			;
 		beq.w	sub_1CF42
 		bsr.s	sub_1CF42
 		jmp	(Draw_Sprite).l
@@ -54072,7 +54077,7 @@ Spring_Index:
 
 
 sub_22D54:
-		move.l	#Map_Spring,mappings(a0);
+		move.l	#Map_Spring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_SpikesSprings,0,0),art_tile(a0)		; Liliam: QOL - allow taking DEZ1 Tails route
 ;		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,0),art_tile(a0)	;
 		ori.b	#4,render_flags(a0)
@@ -54085,9 +54090,10 @@ sub_22D54:
 		lsr.w	#3,d0
 		andi.w	#$E,d0
 		move.w	off_22DA0(pc,d0.w),d0
-		jsr	off_22DA0(pc,d0.w)
-		move.w	#-$800,$30(a0)
-		rts
+		jmp	off_22DA0(pc,d0.w)			; Liliam: bugfix - stop clobbering spring strength
+;		jsr	off_22DA0(pc,d0.w)			;
+;		move.w	#-$800,$30(a0)				;
+;		rts						;
 ; End of function sub_22D54
 
 ; ---------------------------------------------------------------------------
@@ -54999,7 +55005,8 @@ Map_Spring:
 		; Liliam: convert to 1P Ray palette
 		include "General/Sprites/Level Misc/Map - Spring.asm"
 Map_2PSpring:
-		include "General/Sprites/Level Misc/Map - 2P Spring.asm"
+		; Liliam: bugfix - 2P object palette assignment
+		include "General/2P Zone/Map - 2P Spring.asm"
 ; ---------------------------------------------------------------------------
 
 Obj_RetractingSpring:
@@ -55134,14 +55141,14 @@ locret_23B16:
 
 ; ---------------------------------------------------------------------------
 byte_23B18:
-		dc.b   $C,   8,   0,   1
-		dc.b   $C,   8,   0,   0
-		dc.b   $C,   8,   0,   1
-		dc.b    8,  $C,   1,   0
-		dc.b   $C,   8,   2,   1
-		dc.b   $C,   8,   3,   1
-		dc.b   $C,   8,   2,   1
-		dc.b   $C,   8,   3,   1
+		dc.b   $C,   8,   0,   3;,   1			; Liliam: bugfix - stop clobbering spring strength
+		dc.b   $C,   8,   0,   2;,   0			;
+		dc.b   $C,   8,   0,   3;,   1			;
+		dc.b    8,  $C,   1,   2;,   0			;
+		dc.b   $C,   8,   2,   3;,   1			;
+		dc.b   $C,   8,   3,   3;,   1			;
+		dc.b   $C,   8,   2,   3;,   1			;
+		dc.b   $C,   8,   3,   3;,   1			;
 		even
 ; ---------------------------------------------------------------------------
 
@@ -55504,7 +55511,7 @@ locret_23F48:
 		rts
 ; ---------------------------------------------------------------------------
 Map_2PRetractingSpring:
-		include "General/Sprites/Level Misc/Map - 2P Retracting Spring.asm"
+		include "General/2P Zone/Map - 2P Retracting Spring.asm"
 ; ---------------------------------------------------------------------------
 byte_23F74:
 		dc.b  $10, $10
@@ -73492,11 +73499,17 @@ sub_30A38:
 		add.w	y_pos(a1),d1
 		add.w	$36(a0),d1
 		sub.w	y_pos(a0),d1
-		bcs.s	locret_30ACE
+		blo.s	locret_30ACE
 		cmp.w	$38(a0),d1
-		bhs.s	locret_30ACE
+;		bhs.s	locret_30ACE				; Liliam: bugfix - vertical wrapping 
+		blo.s	loc_30A76				;
+		sub.w	(Screen_Y_wrap_value).w,d1		;
+		subq.w	#1,d1					;
+		bmi.s	locret_30ACE				;
+
+loc_30A76:
 		sub.w	$36(a0),d1
-		bcs.s	loc_30A80
+		blo.s	loc_30A80
 		not.w	d1
 		add.w	d1,d1
 
@@ -76819,7 +76832,8 @@ loc_32E3C:
 		tst.w	(Competition_mode).w
 		beq.s	loc_32E5A
 		move.l	#Map_2PBumper,mappings(a0)
-		move.w	#make_art_tile(ArtTile_BPZMisc,1,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_BPZMisc,0,0),art_tile(a0)	; Liliam: bugfix - 2P object palette assignment
+;		move.w	#make_art_tile(ArtTile_BPZMisc,1,0),art_tile(a0)	;
 		move.l	#loc_32FF0,(a0)
 		bra.w	loc_32FF0
 ; ---------------------------------------------------------------------------
@@ -77016,7 +77030,8 @@ sub_3301C:
 		bclr	#Status_Push,status(a1)
 		clr.b	jumping(a1)
 		move.b	#1,anim(a0)
-		moveq	#signextendB(sfx_SmallBumpers),d0
+		moveq	#signextendB(sfx_Bumper),d0		; Liliam: bugfix - use correct sound
+;		moveq	#signextendB(sfx_SmallBumpers),d0	;
 		jsr	(Play_SFX).l
 		rts
 ; End of function sub_3301C
@@ -81360,9 +81375,9 @@ loc_363B4:
 		move.b	#3,anim(a0)
 		move.b	#7,anim(a0)
 		move.b	#$C7,collision_flags(a0)
-		move.l	#loc_363D0,(a0)
+		move.l	#Obj_2PItem_Main,(a0)
 
-loc_363D0:
+Obj_2PItem_Main:
 		bsr.s	sub_3643C
 		move.b	angle(a0),d0
 		jsr	(GetSineCosine).l
@@ -82329,7 +82344,7 @@ sub_36FAA:
 
 loc_36FBE:
 		lea	next_object(a1),a1
-		cmpi.l	#loc_363D0,(a1)
+		cmpi.l	#Obj_2PItem_Main,(a1)
 		bne.s	loc_36FD4
 		move.b	(a4)+,anim(a1)
 		move.b	#$C7,collision_flags(a1)
@@ -83087,14 +83102,17 @@ Map_2PPosition:
 Obj_EMZDripper:
 		move.l	#Map_EMZDripper,mappings(a0)
 		move.w	#make_art_tile(ArtTile_EMZMisc,3,0),art_tile(a0)
-		move.b	#4,render_flags(a0)
+		ori.b	#4,render_flags(a0)			; Liliam: bugfix - horrors beyond comprehension
+;		move.b	#4,render_flags(a0)			;
 		move.w	#$280,priority(a0)
 		move.b	#8,width_pixels(a0)
 		move.b	#8,height_pixels(a0)
 		move.b	#4,x_radius(a0)
 		move.b	#4,y_radius(a0)
-		btst	#0,status(a0)
-		beq.s	loc_3814A
+		tst.b	subtype(a0)				;
+		bpl.s	loc_3814A				;
+;		btst	#Status_Facing,status(a0)		;
+;		beq.s	loc_3814A				;
 		move.w	#make_art_tile(ArtTile_EMZMisc,2,1),art_tile(a0)
 		move.b	#3,mapping_frame(a0)
 		move.l	#Draw_Sprite,(a0)
@@ -83116,7 +83134,7 @@ loc_38150:
 loc_3816A:
 		move.w	(a0,d0.w),(a1,d0.w)
 		subq.w	#2,d0
-		bcc.s	loc_3816A
+		bhs.s	loc_3816A
 		move.l	#loc_3818E,(a1)
 		move.w	#make_art_tile(ArtTile_EMZMisc,2,0),art_tile(a1)
 		move.b	#1,mapping_frame(a1)
@@ -83141,14 +83159,19 @@ loc_3818E:
 		bsr.s	sub_381F2
 		bsr.s	sub_381F2
 		bsr.s	sub_381F2
+		move.l	#loc_381D8,(a0)				; Liliam: bugfix - delete when offscreen
 
 loc_381C8:
-		cmpi.w	#-$100,(Camera_min_Y_pos).w
-		bne.s	loc_381D8
-		move.w	(Screen_Y_wrap_value).w,d0
-		and.w	d0,y_pos(a0)
+;		cmpi.w	#-$100,(Camera_min_Y_pos).w		;
+;		bne.s	loc_381D8				;
+;		move.w	(Screen_Y_wrap_value).w,d0		;
+;		and.w	d0,y_pos(a0)				;
+		jmp	(Draw_Sprite).l				;
+; ---------------------------------------------------------------------------
 
 loc_381D8:
+		jsr	(MoveSprite2).l				; Liliam: bugfix - delete when offscreen
+		addi.w	#8,y_vel(a0)				;
 		move.w	(Camera_max_Y_pos).w,d0
 		addi.w	#$60,d0
 		cmp.w	y_pos(a0),d0
@@ -113521,8 +113544,9 @@ CGZ_BackgroundInit:						; Liliam: reinsert S3 screen events
 		move.w	(Camera_Y_pos_P2_copy).w,d0
 		move.w	d0,(Events_bg+$04).w
 		move.w	d0,(Events_bg+$06).w
-		moveq	#0,d0
-		move.b	(Competition_total_laps).w,d0
+		moveq	#5,d0					; Liliam: bugfix - CGZ background deformation
+;		moveq	#0,d0					;
+;		move.b	(Competition_total_laps).w,d0		;
 		addq.w	#1,d0
 		lsl.w	#8,d0
 		subi.w	#$70,d0
@@ -218413,11 +218437,19 @@ loc_92B6A:
 		add.l	d1,d3
 
 loc_92B72:
+		moveq	#0,d0					;
+		move.w	(Screen_X_wrap_value).w,d0		;
+		move.l	d0,d1					;
+		addq.w	#1,d1					;
+		swap	d0					;
+		swap	d1					;
+		and.l	d0,d3					;
+		add.l	d1,d3					;
 		move.l	d2,y_pos(a0)
 		move.l	d3,x_pos(a0)
 
 loc_92B7A:
-		bsr.w	Debug_LevelBound			; Liliam: debug - properly apply camera boundaries
+		bsr.w	Debug_LevelBound			;
 		btst	#button_A,(Ctrl_1_held).w
 		beq.s	loc_92BB2
 		btst	#button_B,(Ctrl_1_pressed).w		; Liliam: debug - allow selection of monitor contents
@@ -218508,7 +218540,7 @@ loc_92C34:
 		move.b	default_x_radius(a1),x_radius(a1)	; Liliam: bugfix - set correct player height
 		move.b	default_y_radius(a1),y_radius(a1)	;
 		bsr.s	sub_92C54
-		tst.w	(Competition_mode).w			; Liliam: bugfix - allow exiting debug in 2P mode
+		tst.w	(Competition_mode).w			; Liliam: bugfix - debug in competition mode
 		bne.s	locret_92C52				;
 		cmpi.b	#$15,(Current_zone).w			;
 		beq.s	Debug_Reset_HUD				;
@@ -218552,23 +218584,21 @@ sub_92C54:
 ; ---------------------------------------------------------------------------
 
 Debug_LevelBound:						; Liliam: debug - properly apply camera boundaries
-		move.l	(Screen_Y_wrap_value).w,d0
-		move.w	#-1,d0
-		and.l	d0,y_pos(a0)
-
 		moveq	#0,d0
 		move.w	(Camera_min_Y_pos).w,d0
-		cmpi.w	#-$100,d0
-		beq.s	.minYdone
 		swap	d0
 		cmp.l	d0,d2
 		bge.s	.minYdone
 		move.l	d0,y_pos(a0)
 
 	.minYdone:
-		moveq	#0,d0
-		move.w	(Camera_target_max_Y_pos).w,d0
-		addi.w	#$E0,d0
+		moveq	#$6C,d0
+		tst.w	(Competition_mode).w
+		bne.s	.maxY
+		move.b	#$E0,d0
+
+	.maxY:
+		add.w	(Camera_target_max_Y_pos).w,d0
 		swap	d0
 		cmp.l	d0,d2
 		blt.s	.maxYdone
@@ -218585,17 +218615,19 @@ Debug_LevelBound:						; Liliam: debug - properly apply camera boundaries
 	.minXdone:
 		move.l	#$74800000,d0
 		cmpi.b	#$C,(Current_zone).w
-		beq.s	.DDZ
+		beq.s	.maxX
 		move.w	(Camera_max_X_pos).w,d0
 		addi.w	#$140,d0
 		swap	d0
 
-	.DDZ:
+	.maxX:
 		cmp.l	d0,d3
-		blt.s	.maxYDone
+		blt.s	.maxXdone
 		move.l	d0,x_pos(a0)
 
-	.maxYDone:
+	.maxXdone:
+		move.w	(Screen_Y_wrap_value).w,d0
+		and.w	d0,y_pos(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -218649,11 +218681,11 @@ Debug_DEZ2:		dbglistinclude "Levels/DEZ/Debug/Act 2.asm"	; Liliam: bugfix - set 
 Debug_DDZ1:		dbglistinclude "Levels/DDZ/Debug/Main.asm"
 Debug_DDZ2:		dbglistinclude "Levels/DEZ/Debug/Boss.asm"
 Debug_Ending:		dbglistinclude "Levels/SSZ/Debug/Ending.asm"
-Debug_ALZ:		dbglistinclude "Levels/ALZ/Debug/Main.asm"
-Debug_BPZ:		dbglistinclude "Levels/BPZ/Debug/Main.asm"
-Debug_DPZ:		dbglistinclude "Levels/DPZ/Debug/Main.asm"
-Debug_CGZ:		dbglistinclude "Levels/CGZ/Debug/Main.asm"
-Debug_EMZ:		dbglistinclude "Levels/EMZ/Debug/Main.asm"
+Debug_ALZ:		dbglistinclude "Levels/ALZ/Debug/Main.asm"	; Liliam: bugfix - 2P object palette assignment
+Debug_BPZ:		dbglistinclude "Levels/BPZ/Debug/Main.asm"	; Liliam: bugfix - 2P object palette assignment
+Debug_DPZ:		dbglistinclude "Levels/DPZ/Debug/Main.asm"	; Liliam: bugfix - 2P object palette assignment
+Debug_CGZ:		dbglistinclude "Levels/CGZ/Debug/Main.asm"	; Liliam: bugfix - 2P object palette assignment
+Debug_EMZ:		dbglistinclude "Levels/EMZ/Debug/Main.asm"	; Liliam: bugfix - horrors beyond comprehension
 Debug_Pachinko_Special:	dbglistinclude "Levels/Pachinko/Debug/Main.asm"	; Liliam: rolling jump bonus - remove F ball
 Debug_HPZ:		dbglistinclude "Levels/HPZ/Debug/Main.asm"
 Debug_Gumball_Special:	dbglistinclude "Levels/Gumball/Debug/Main.asm"
@@ -220508,9 +220540,11 @@ ArtNem_DEZ2Extra:
 		binclude "Levels/DEZ/Nemesis Art/Act 2 Extra Art.bin"
 		even
 ArtNem_2PArt_1:							; Liliam: reinsert S3 data
+		; Liliam: bugfix - 2P object palette assignment
 		binclude "General/2P Zone/Nemesis Art/Misc Art 1.bin"
 		even
 ArtNem_2PArt_2:							; Liliam: reinsert S3 data
+		; Liliam: bugfix - 2P object palette assignment
 		binclude "General/2P Zone/Nemesis Art/Misc Art 2.bin"
 		even
 ArtNem_2PArt_3:							; Liliam: reinsert S3 data
@@ -224036,6 +224070,7 @@ BPZ_Rings:
 SpriteTerminatI:
 		dc.w $FFFF, 0, 0
 DPZ_Sprites:
+		; Liliam: bugfix - adjust path swap object positioning
 		binclude "Levels/DPZ/Object Pos/1.bin"
 		even
 DPZ_Sprites_Encore:						; Liliam: Encore mode - layouts
@@ -224058,6 +224093,7 @@ CGZ_Rings:
 SpriteTerminatK:
 		dc.w $FFFF, 0, 0
 EMZ_Sprites:
+		; Liliam: bugfix - horrors beyond comprehension
 		binclude "Levels/EMZ/Object Pos/1.bin"
 		even
 EMZ_Sprites_Encore:						; Liliam: Encore mode - layouts

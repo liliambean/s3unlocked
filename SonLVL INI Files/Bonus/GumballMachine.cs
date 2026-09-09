@@ -62,7 +62,7 @@ namespace S3KObjectDefinitions.Gumball
 
 			var indexer = new MultiFileIndexer<byte>();
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
-				"../General/Sprites/Level Misc/SpikesSprings.bin", CompressionType.Nemesis)), -512);
+				"../General/Sprites/Level Misc/SpikesSprings.bin", CompressionType.Nemesis)), 0);
 
 			var spring1 = ObjectHelper.MapASMToBmp(indexer.ToArray(),
 				"../General/Sprites/Level Misc/Map - Spring.asm", "word_23788", 0);
@@ -73,7 +73,7 @@ namespace S3KObjectDefinitions.Gumball
 			var spring4 = new Sprite(spring1, 96, 0);
 
 			var reflection = ObjectHelper.MapToBmp(art, map, 0, 0, false);
-			var reflection2 = new Sprite(reflection);
+			var reflection2 = ObjectHelper.MapToBmp(art, map, 16, 0, false);
 			reflection.Offset(-56, -300);
 			reflection2.Offset(56, -300);
 
@@ -87,15 +87,12 @@ namespace S3KObjectDefinitions.Gumball
 			handle.Offset(0, -256);
 
 			var block = ObjectHelper.MapToBmp(art, map, 19, 1, false);
-			image = ObjectHelper.MapToBmp(art, map, 22, 0, false);
+			image = ObjectHelper.MapToBmp(art, map, 17, 0, false);
+			image.Offset(0, -296);
 			childSprite = new Sprite(block, spring1, spring2, spring3, spring4);
 
-			var bitmapHigh = new BitmapBits(112, 39);
-			bitmapHigh.DrawSpriteHigh(image, 56, 15);
-			var gumballs = new Sprite(image.GetBitmapLow(), bitmapHigh, -56, -311);
-
 			subtypes = new ReadOnlyCollection<byte>(new byte[0]);
-			sprite = new Sprite(gumballs, reflection, reflection2, shine, lid, handle);
+			sprite = new Sprite(image, reflection, reflection2, shine, lid, handle);
 		}
 	}
 }

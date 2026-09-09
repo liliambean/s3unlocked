@@ -27,9 +27,9 @@ namespace S3KObjectDefinitions.Common
 		protected void BuildSpritesProperties2P(bool priority)
 		{
 			BuildSpritesProperties(
-				"../General/2P Zone/Nemesis Art/Misc Art 2.bin", "word_23982", "word_23920", 0,
+				"../General/2P Zone/Nemesis Art/Misc Art 2.bin", "word_23920", "word_23982", 0,
 				"../General/2P Zone/Nemesis Art/Misc Art 1.bin", "word_2394A", "word_239AC", 0,
-				"../General/Sprites/Level Misc/Map - 2P Spring.asm", priority);
+				"../General/2P Zone/Map - 2P Spring.asm", priority);
 		}
 	}
 
@@ -138,8 +138,8 @@ namespace S3KObjectDefinitions.Common
 		public override void Init(ObjectData data)
 		{
 			BuildSpritesProperties(
-				"../General/Sprites/Level Misc/SpikesSprings.bin", "word_23788", "word_237AC", -512,
-				"../General/Sprites/Level Misc/SpikesSprings.bin", "word_237D0", "word_237F4", -1024,
+				"../General/Sprites/Level Misc/SpikesSprings.bin", "word_23788", "word_237AC", -0,
+				"../General/Sprites/Level Misc/SpikesSprings.bin", "word_237D0", "word_237F4", -0,
 				"../General/Sprites/Level Misc/Map - Spring.asm", false);
 		}
 
