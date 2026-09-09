@@ -2967,8 +2967,8 @@ OffsAnPal:
 		dc.w AnPal_Pachinko-OffsAnPal
 		dc.w AnPal_Pachinko-OffsAnPal
 		dc.w AnPal_Slots-OffsAnPal
-		dc.w AnPal_None-OffsAnPal				; Liliam: Encore mode - bonus stage
-;		dc.w AnPal_Slots-OffsAnPal				;
+		dc.w AnPal_None-OffsAnPal			; Liliam: Encore mode - bonus stage
+;		dc.w AnPal_Slots-OffsAnPal			;
 		dc.w AnPal_LRZ3-OffsAnPal
 		dc.w AnPal_HPZ-OffsAnPal
 		dc.w AnPal_None-OffsAnPal
@@ -5442,7 +5442,7 @@ Pal_FadeFromWhite_SpecialStage:					; Liliam: ported from S1 - Naka fade for spe
 ; =============== S U B R O U T I N E =======================================
 
 
-Pal_FadeFromWhite_EncoreBonus:						; Liliam: Encore mode - bonus stage
+Pal_FadeFromWhite_EncoreBonus:					; Liliam: Encore mode - bonus stage
 		move.l	a0,-(sp)
 		lea	(Normal_palette).w,a0
 		lea	(Target_palette).w,a1
@@ -6820,7 +6820,7 @@ LevelMusic_Playlist:
 		dc.b mus_SSZ,		mus_SSZ		; SKY SANCTUARY ZONE
 		dc.b mus_DEZ1,		mus_DEZ2	; DEATH EGG ZONE
 		dc.b mus_DDZ,		mus_DDZ		; DOOMSDAY ZONE
-		dc.b mus_AIZ1,		mus_Credits3			; Liliam: ending - use S3 credits music
+		dc.b mus_AIZ1,		mus_Credits3		; Liliam: ending - use S3 credits music
 ;		dc.b mus_SpecialStage,	mus_SSZ		; AIZ INTRO & ENDING
 		dc.b mus_ALZ,		mus_ALZ		; AZURE LAKE ZONE
 		dc.b mus_BPZ,		mus_BPZ		; BALLOON PARK ZONE
@@ -6829,7 +6829,7 @@ LevelMusic_Playlist:
 		dc.b mus_EMZ,		mus_EMZ		; ENDLESS MINE ZONE
 		dc.b mus_Gumball,	mus_Gumball	; GUMBALL
 		dc.b mus_Pachinko,	mus_Pachinko	; PACHINKO
-		dc.b mus_Slots,		mus_EncoreBonus			; Liliam: Encore mode - bonus stage
+		dc.b mus_Slots,		mus_EncoreBonus		; Liliam: Encore mode - bonus stage
 ;		dc.b mus_Slots,		mus_Slots	; SLOTS
 		dc.b mus_EndBoss,	mus_LRZ2	; LAVA REEF ZONE BOSS & HIDDEN PALACE ZONE
 		dc.b mus_DEZ2,		mus_LRZ2	; FINAL BOSS & SPECIAL STAGE HUB
@@ -7760,11 +7760,11 @@ SpawnLevelMainSprites_SpawnPlayers:
 		cmpi.w	#$1600,(Current_zone_and_act).w
 		bhs.s	loc_6A8A
 		clr.b	(Update_HUD_timer).w
-		move.b	#1,(Bonus_stage_flag).w				; Liliam: Encore mode - bonus stage
+		move.b	#1,(Bonus_stage_flag).w			; Liliam: Encore mode - bonus stage
 
 loc_6A8A:
-;		cmpi.w	#$1400,(Current_zone_and_act).w			;
-		cmpi.b	#$14,(Current_zone).w				;
+;		cmpi.w	#$1400,(Current_zone_and_act).w		;
+		cmpi.b	#$14,(Current_zone).w			;
 		bne.s	loc_6AB8
 		move.l	#Obj_PachinkoEnergyTrap,(Level_intro_object).w
 		move.w	#$78,(Level_intro_object+x_pos).w
@@ -7864,9 +7864,9 @@ loc_6B76:
 		move.l	#Obj_Sonic_RotatingSlotBonus,(Player_1).w
 		jsr	(Slots_LoadLayout).l
 		st	(Deform_lock).w
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - bonus stage
-		beq.s	locret_6B40					;
-		st	(Bonus_stage_flag).w				;
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - bonus stage
+		beq.s	locret_6B40				;
+		st	(Bonus_stage_flag).w			;
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -9802,8 +9802,6 @@ LevelSelect_CheckKnuckles:
 LevelSelect_DenySelection:
 		tst.w	(Debug_cheat_flag).w			;
 		bne.w	LevelSelect_StartZone			;
-
-loc_7D92:
 		moveq	#signextendB(sfx_Error),d0
 		bsr.w	Play_SFX				;
 ;		jsr	(Play_SFX).l				;
@@ -9811,14 +9809,14 @@ loc_7D92:
 ; ---------------------------------------------------------------------------
 
 LevelSelect_EncoreStart:
-		cmpi.w	#$1501,d0					; Liliam: Encore mode - bonus stage
-		bne.s	LevelSelect_CheckCNZSOZ				;
-		move.b	(Encore_unlocked_chars).w,d1			;
-		move.b	d1,(Encore_available_chars).w			;
-		move.b	(P1_character).w,d1				;
-		bclr	d1,(Encore_available_chars).w			;
-		move.b	(P2_character).w,d1				;
-		bclr	d1,(Encore_available_chars).w			;
+		cmpi.w	#$1501,d0				; Liliam: Encore mode - bonus stage
+		bne.s	LevelSelect_CheckCNZSOZ			;
+		move.b	(Encore_unlocked_chars).w,d1		;
+		move.b	d1,(Encore_available_chars).w		;
+		move.b	(P1_character).w,d1			;
+		bclr	d1,(Encore_available_chars).w		;
+		move.b	(P2_character).w,d1			;
+		bclr	d1,(Encore_available_chars).w		;
 
 LevelSelect_CheckCNZSOZ:
 		cmpi.w	#$300,d0				; Liliam: Encore mode - player starts
@@ -9846,11 +9844,7 @@ loc_7DAC:
 		cmpi.w	#$E00,d0				; Liliam: Encore mode - add extra levels
 		blo.s	loc_7DB4				;
 		cmpi.w	#$1300,d0				;
-	if No2PZones
-		blo.s	loc_7D92				;
-	else
 		blo.s	LevelSelect_DenySelection		;
-	endif
 ;		cmpi.w	#2,(Player_mode).w			;
 ;		bne.s	loc_7DBA				;
 
@@ -18669,13 +18663,13 @@ Render_HUD_P1:
 
 
 Render_HUD:
-		tst.b	(Bonus_stage_flag).w				; Liliam: Encore mode - bonus stage
-		bmi.w	Render_HUD_EncoreBonus				;
-		beq.s	loc_DB68					;
-;		cmpi.b	#$16,(Current_zone).w				;
-;		bhs.s	loc_DB68					;
-;		cmpi.b	#$13,(Current_zone).w				;
-;		blo.s	loc_DB68					;
+		tst.b	(Bonus_stage_flag).w			; Liliam: Encore mode - bonus stage
+		bmi.w	Render_HUD_EncoreBonus			;
+		beq.s	loc_DB68				;
+;		cmpi.b	#$16,(Current_zone).w			;
+;		bhs.s	loc_DB68				;
+;		cmpi.b	#$13,(Current_zone).w			;
+;		blo.s	loc_DB68				;
 
 		lea	Map_HUD(pc),a1					; Liliam: HUD - Encore mode HUD
 		move.w	#$90,d0						;
@@ -18767,7 +18761,7 @@ Render_HUD_Lives:							; Liliam: HUD - Encore mode HUD
 		jmp	(sub_1AF6C).l
 ; ---------------------------------------------------------------------------
 
-Render_HUD_EncoreBonus:							; Liliam: Encore mode - bonus stage
+Render_HUD_EncoreBonus:						; Liliam: Encore mode - bonus stage
 		lea	Map_HUD(pc),a1
 		move.w	#$90,d0
 		move.w	#$108,d1
@@ -33039,8 +33033,8 @@ loc_15A3C:
 		jsr	(GetArcTan).l
 		cmpi.b	#$15,(Current_zone).w
 		bne.s	loc_15A5E
-		add.b	angle(a2),d0					; Liliam: Encore mode - bonus stage
-;		add.b	(Stat_table).w,d0				;
+		add.b	angle(a2),d0				; Liliam: Encore mode - bonus stage
+;		add.b	(Stat_table).w,d0			;
 
 loc_15A5E:
 		moveq	#0,d1
@@ -43962,15 +43956,15 @@ LevelSizes:	;     xstart    xend  ystart    yend	; Level
 		dc.w       0,  $6000,      0,  $1000	; AIZ Intro (?)
 		dc.w       0,  $6000,      0,  $1000	; Ending scene
 		dc.w       0,  $12C0,   $100,   $190	; ALZ
-		dc.w       0,  $12C0,   $100,   $190	; ALZ
+		dc.w       0,  $12C0,   $100,   $120	; ALZ2	; Liliam: Encore mode - add extra levels
 		dc.w       0,  $12C0,   $200,   $390	; BPZ
-		dc.w       0,  $12C0,   $200,   $390	; BPZ
+		dc.w       0,  $12C0,   $200,   $320	; BPZ2	; Liliam: Encore mode - add extra levels
 		dc.w       0,  $12C0,   $100,   $190	; DPZ
-		dc.w       0,  $12C0,   $100,   $190	; DPZ
+		dc.w       0,  $12C0,   $100,   $120	; DPZ2	; Liliam: Encore mode - add extra levels
 		dc.w       0,  $12C0,  -$100,  $1000	; CGZ
-		dc.w       0,  $12C0,      0,    $90	; CGZ
+		dc.w       0,  $12C0,  -$100,  	$100	; CGZ2	; Liliam: Encore mode - add extra levels
 		dc.w       0,  $12C0,   $100,   $190	; EMZ
-		dc.w       0,  $12C0,   $100,   $190	; EMZ
+		dc.w       0,  $12C0,   $100,   $120	; EMZ2	; Liliam: Encore mode - add extra levels
 		dc.w     $60,    $60,      0,   $240	; Gumball
 		dc.w     $60,    $60,      0,   $240	; Gumball
 		dc.w       0,   $140,      0,   $F00	; Pachinko
@@ -44187,7 +44181,7 @@ DeformBgLayer:
 ; ---------------------------------------------------------------------------
 
 loc_1BFB8:
-		clr.w	(Camera_RAM).w
+		clr.w	(H_scroll_amount).w
 		clr.w	(V_scroll_amount).w
 		clr.w	(H_scroll_amount_P2).w
 		clr.w	(V_scroll_amount_P2).w
@@ -44205,7 +44199,7 @@ loc_1BFB8:
 loc_1BFF0:
 		lea	(Camera_X_pos).w,a1
 		lea	(Camera_min_X_pos).w,a2
-		lea	(Camera_RAM).w,a4
+		lea	(H_scroll_amount).w,a4
 		lea	(H_scroll_frame_offset).w,a5
 		lea	(Pos_table).w,a6
 		bsr.w	MoveCameraX
@@ -44230,7 +44224,7 @@ loc_1C02C:
 		lea	(Player_1).w,a0
 		lea	(Camera_X_pos).w,a1
 		lea	(Camera_min_X_pos).w,a2
-		lea	(Camera_RAM).w,a4
+		lea	(H_scroll_amount).w,a4
 		lea	(H_scroll_frame_offset).w,a5
 		lea	(Pos_table).w,a6
 		bsr.w	MoveCameraX_2P
@@ -50183,8 +50177,12 @@ Obj_AIZLRZEMZRock:
 		move.w	#make_art_tile(ArtTile_AIZMisc2,2,0),art_tile(a0)
 
 loc_1FA42:
+		cmpi.w	#$1201,(Current_zone_and_act).w		; Liliam: Encore mode - add extra levels
+		beq.s	loc_1FA4A				;
 		cmpi.w	#$1200,(Current_zone_and_act).w
 		bne.s	loc_1FA5E
+
+loc_1FA4A:
 		move.l	#Map_EMZRock,mappings(a0)
 		move.w	#make_art_tile(ArtTile_EMZMisc,3,1),art_tile(a0)
 		move.b	#0,mapping_frame(a0)
@@ -50360,6 +50358,8 @@ loc_1FBE0:
 loc_1FBF8:
 		move.w	$38(a0),(Chain_bonus_counter).w
 		andi.b	#$E7,status(a0)
+		cmpi.w	#$1201,(Current_zone_and_act).w		; Liliam: Encore mode - add extra levels
+		beq.w	loc_1FC9C				;
 		tst.w	(Competition_mode).w
 		bne.w	loc_1FC9C
 		move.l	#loc_1FC16,(a0)
@@ -54181,10 +54181,13 @@ Spring_Up:
 ;loc_22E96:
 		move.l	#Obj_Spring_Up,(a0)
 		tst.w	(Competition_mode).w
-		beq.s	Spring_Common
+		beq.s	loc_22EB6				; Liliam: Encore mode - add extra levels
+;		beq.s	Spring_Common				;
 		move.l	#Obj_2PSpring_Up,(a0)
 		move.l	#Map_2PSpring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_2PArt_2,0,0),art_tile(a0)
+
+loc_22EB6:
 		cmpi.b	#$12,(Current_zone).w
 		bne.s	Spring_Common
 		ori.w	#high_priority,art_tile(a0)
@@ -69073,10 +69076,10 @@ Map_StarpostStars:
 sub_2D3C8:
 		moveq	#4-1,d1
 		moveq	#0,d2
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - bonus stage
-		beq.s	loc_2D3CC					;
-		cmpi.w	#35,(Ring_count).w				;
-		blo.w	locret_2D336					;
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - bonus stage
+		beq.s	loc_2D3CC				;
+		cmpi.w	#35,(Ring_count).w			;
+		blo.w	locret_2D336				;
 
 loc_2D3CC:
 		st	(Barrier_HUD_DMA_flag).w			; Liliam: HUD - barrier HUD
@@ -69105,19 +69108,19 @@ loc_2D3CC:
 
 loc_2D436:
 		; Liliam: removed original implementation
-		move.w	(Ring_count).w,d3				; Liliam: Encore mode - bonus stage
-		bsr.s	Starpost_PickBonusStage				;
-		lsl.w	#2,d3						;
-		move.l	Starpost_BonusStarsPtrs(pc,d3.w),d1		;
+		move.w	(Ring_count).w,d3			; Liliam: Encore mode - bonus stage
+		bsr.s	Starpost_PickBonusStage			;
+		lsl.w	#2,d3					;
+		move.l	Starpost_BonusStarsPtrs(pc,d3.w),d1	;
 		move.w	#tiles_to_bytes(ArtTile_StarPost),d2
-		move.w	#$60,d3						;
-		jmp	(Add_To_DMA_Queue).l				;
-;		jmp	(Queue_Kos_Module).l				;
+		move.w	#$60,d3					;
+		jmp	(Add_To_DMA_Queue).l			;
+;		jmp	(Queue_Kos_Module).l			;
 ; End of function sub_2D3C8
 
 ; ---------------------------------------------------------------------------
 
-Starpost_PickBonusStage:						; Liliam: Encore mode - bonus stage
+Starpost_PickBonusStage:					; Liliam: Encore mode - bonus stage
 		tst.b	(Encore_mode).w
 		bne.s	.encoreMode
 		ext.l	d3
@@ -69148,12 +69151,12 @@ Starpost_PickBonusStage:						; Liliam: Encore mode - bonus stage
 		moveq	#3,d3
 		rts
 ; ---------------------------------------------------------------------------
-Starpost_BonusStarsPtrs:						; Liliam: Encore mode - bonus stage
+Starpost_BonusStarsPtrs:					; Liliam: Encore mode - bonus stage
 		dc.l ArtUnc_StarPostStars3
 		dc.l ArtUnc_StarPostStars2
 		dc.l ArtUnc_StarPostStars1
 		dc.l ArtUnc_StarPostStars_Encore
-Starpost_BonusZoneNums:							; Liliam: Encore mode - bonus stage
+Starpost_BonusZoneNums:						; Liliam: Encore mode - bonus stage
 		dc.w $1500
 		dc.w $1400
 		dc.w $1300
@@ -69167,13 +69170,13 @@ loc_2D47E:
 		beq.s	loc_2D506
 		move.b	#2,(Special_bonus_entry_flag).w
 		; Liliam: removed original implementation
-		move.w	(Saved_ring_count).w,d3				; Liliam: Encore mode - bonus stage
-		bsr.s	Starpost_PickBonusStage				;
-		add.w	d3,d3						;
-		move.w	Starpost_BonusZoneNums(pc,d3.w),d1		;
-		tst.b	(Encore_mode).w					;
-		beq.s	loc_2D4CA					;
-		move.b	#1,d1						;
+		move.w	(Saved_ring_count).w,d3			; Liliam: Encore mode - bonus stage
+		bsr.s	Starpost_PickBonusStage			;
+		add.w	d3,d3					;
+		move.w	Starpost_BonusZoneNums(pc,d3.w),d1	;
+		tst.b	(Encore_mode).w				;
+		beq.s	loc_2D4CA				;
+		move.b	#1,d1					;
 
 loc_2D4CA:
 		move.w	d1,(Current_zone_and_act).w
@@ -73107,6 +73110,8 @@ Map_HCZWaterWallDebris:						; Liliam: reinsert S3 data
 ; ---------------------------------------------------------------------------
 
 Obj_HCZCGZFan:
+		cmpi.w	#$1101,(Current_zone_and_act).w		; Liliam: Encore mode - add extra levels
+		beq.w	loc_309CC				;
 		tst.w	(Competition_mode).w
 		bne.w	loc_309CC
 		movea.l	a0,a1
@@ -76500,6 +76505,10 @@ Obj_MGZSinkingMud:
 		move.b	#$30,$3A(a0)
 		bset	#7,status(a0)
 		move.l	#loc_32B8C,(a0)
+		cmpi.w	#$E01,(Current_zone_and_act).w		; Liliam: Encore mode - add extra levels
+		beq.w	loc_32B8C				;
+		cmpi.w	#$1001,(Current_zone_and_act).w		;
+		beq.w	loc_32B8C				;
 		tst.w	(Competition_mode).w
 		bne.w	loc_32B8C
 		move.l	#loc_32AAE,(a0)
@@ -76695,6 +76704,11 @@ loc_32C8C:
 
 loc_32C92:
 		move.w	#$10,d1
+		tst.w	(Competition_mode).w			; Liliam: Encore mode - add extra levels
+		bne.s	loc_32C96				;
+		addq.w	4,d1					;
+
+loc_32C96:
 		moveq	#0,d2
 		move.b	height_pixels(a0),d2
 		move.w	d2,d3
@@ -76837,8 +76851,12 @@ Obj_CNZBumper:
 ; ---------------------------------------------------------------------------
 
 loc_32E3C:
+		cmpi.w	#$F01,(Current_zone_and_act).w		; Liliam: Encore mode - add extra levels
+		beq.s	loc_32E42				;
 		tst.w	(Competition_mode).w
 		beq.s	loc_32E5A
+
+loc_32E42:
 		move.l	#Map_2PBumper,mappings(a0)
 		move.w	#make_art_tile(ArtTile_BPZMisc,0,0),art_tile(a0)	; Liliam: bugfix - 2P object palette assignment
 ;		move.w	#make_art_tile(ArtTile_BPZMisc,1,0),art_tile(a0)	;
@@ -81997,6 +82015,8 @@ loc_36A1A:
 		jsr	(Animate_Sprite).l
 		tst.b	routine(a0)
 		beq.s	loc_36A32
+
+loc_36A2C:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -82033,6 +82053,8 @@ Map_2PItem:
 ; ---------------------------------------------------------------------------
 
 Obj_2PGoalMarker:
+		tst.w	(Competition_mode).w			; Liliam: Encore mode - add extra levels
+		beq.w	loc_36A2C				;
 		move.l	#Map_2PGoalMarker,mappings(a0)
 		move.w	#make_art_tile(ArtTile_2PStartPost,0,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
@@ -83167,6 +83189,8 @@ loc_3818E:
 		bsr.s	sub_381F2
 		bsr.s	sub_381F2
 		bsr.s	sub_381F2
+		tst.w	(Competition_mode).w			; Liliam: Encore mode - add extra levels
+		beq.s	loc_381C8				;
 		move.l	#loc_381D8,(a0)				; Liliam: bugfix - delete when offscreen
 
 loc_381C8:
@@ -107514,7 +107538,7 @@ Slots_AniBreakableWallData:
 ;		dc.b  $1E, $40, $80,   3, $28,   2, $F8			;
 ; ---------------------------------------------------------------------------
 
-Slots_PickLayout:							; Liliam: Encore mode - bonus stage
+Slots_PickLayout:						; Liliam: Encore mode - bonus stage
 		moveq	#0,d1
 		tst.b	(Current_act).w
 		beq.s	locret_4B686
@@ -107544,31 +107568,31 @@ Slots_LoadLayout:
 loc_4B6B4:
 		clr.l	(a1)+
 		dbf	d0,loc_4B6B4
-		lea	(SlotBonusLayoutPtrs).l,a0			; Liliam: Encore mode - bonus stage
-		lea	(RAM_start+$7000).l,a1				;
-		bsr.s	Slots_PickLayout				;
-		lsl.w	#2,d1						;
-		movea.l	(a0,d1.w),a0					;
-;		lea	(RAM_start+$4020).l,a1				;
-;		lea	(SlotBonusLayout).l,a0				;
+		lea	(SlotBonusLayoutPtrs).l,a0		; Liliam: Encore mode - bonus stage
+		lea	(RAM_start+$7000).l,a1			;
+		bsr.s	Slots_PickLayout			;
+		lsl.w	#2,d1					;
+		movea.l	(a0,d1.w),a0				;
+;		lea	(RAM_start+$4020).l,a1			;
+;		lea	(SlotBonusLayout).l,a0			;
 		move.w	(a0)+,(Player_1+x_pos).w
 		move.w	(a0)+,(Player_1+y_pos).w
-		moveq	#0,d0						;
-		jsr	(Eni_Decomp).l					;
-		lea	(RAM_start+$7000).l,a0				;
-		lea	(RAM_start+$4020).l,a1				;
-		moveq	#$40-1,d1					;
-;		moveq	#$20-1,d1					;
+		moveq	#0,d0					;
+		jsr	(Eni_Decomp).l				;
+		lea	(RAM_start+$7000).l,a0			;
+		lea	(RAM_start+$4020).l,a1			;
+		moveq	#$40-1,d1				;
+;		moveq	#$20-1,d1				;
 
 loc_4B6D0:
-		moveq	#$40-1,d2					;
-;		moveq	#$20-1,d2					;
+		moveq	#$40-1,d2				;
+;		moveq	#$20-1,d2				;
 
 loc_4B6D2:
 		move.b	(a0)+,(a1)+
 		dbf	d2,loc_4B6D2
-		lea	$40(a1),a1					;
-;		lea	$60(a1),a1					;
+		lea	$40(a1),a1				;
+;		lea	$60(a1),a1				;
 		dbf	d1,loc_4B6D0
 
 loc_4B6E0:
@@ -107589,37 +107613,37 @@ loc_4B6EE:
 loc_4B70A:
 		clr.l	(a1)+
 		dbf	d1,loc_4B70A
-		moveq	#0,d1						; Liliam: Encore mode - bonus stage
-		tst.b	(Current_act).w					;
-		beq.s	loc_4B710					;
-		lea	(Chunk_table+$7008).l,a1			;
-		bclr	#6,($3C*8)+6(a1)				;
-		bclr	#6,($3F*8)+6(a1)				;
-		bset	#5,($40*8)+6(a1)				;
-		moveq	#0,d1						;
-		move.b	(Encore_available_chars).w,d0			;
-		beq.s	loc_4B710					;
-		lsl.b	#1,d0						;
+		moveq	#0,d1					; Liliam: Encore mode - bonus stage
+		tst.b	(Current_act).w				;
+		beq.s	loc_4B710				;
+		lea	(Chunk_table+$7008).l,a1		;
+		bclr	#6,($3C*8)+6(a1)			;
+		bclr	#6,($3F*8)+6(a1)			;
+		bset	#5,($40*8)+6(a1)			;
+		moveq	#0,d1					;
+		move.b	(Encore_available_chars).w,d0		;
+		beq.s	loc_4B710				;
+		lsl.b	#1,d0					;
 
 	.loop:
-		addq.w	#1,d1						;
-		btst	d1,d0						;
-		beq.s	.loop						;
-		move.l	#Map_SB_Tails,d0				;
-		cmpi.b	#1+1,d1						;
-		beq.s	.setTailsAmy					;
-		move.l	#Map_SB_Amy,d0					;
-		cmpi.b	#3+1,d1						;
-		bne.s	loc_4B710					;
+		addq.w	#1,d1					;
+		btst	d1,d0					;
+		beq.s	.loop					;
+		move.l	#Map_SB_Tails,d0			;
+		cmpi.b	#1+1,d1					;
+		beq.s	.setTailsAmy				;
+		move.l	#Map_SB_Amy,d0				;
+		cmpi.b	#3+1,d1					;
+		bne.s	loc_4B710				;
 
 	.setTailsAmy:
-		move.l	d0,($27*8)(a1)					;
+		move.l	d0,($27*8)(a1)				;
 
 loc_4B710:
 		jsr	(AllocateObject).l
 		bne.w	locret_4B720
 		move.l	#loc_4BF62,(a1)
-		move.b	d1,character_id(a1)				;
+		move.b	d1,character_id(a1)			;
 
 locret_4B720:
 		rts
@@ -107726,13 +107750,13 @@ loc_4BA32:
 		move.b	#1,(Update_HUD_ring_count).w
 
 RotatingSlotBonus_Control:
-		tst.b	$39(a0)						; Liliam: Encore mode - bonus stage
-		beq.s	loc_4BA4E					;
-		subq.b	#1,$39(a0)					;
-		bne.s	loc_4BA62					;
-		addq.b	#2,routine(a0)					;
-		moveq	#signextendB(sfx_Goal),d0			;
-		jmp	(Play_SFX).l					;
+		tst.b	$39(a0)					; Liliam: Encore mode - bonus stage
+		beq.s	loc_4BA4E				;
+		subq.b	#1,$39(a0)				;
+		bne.s	loc_4BA62				;
+		addq.b	#2,routine(a0)				;
+		moveq	#signextendB(sfx_Goal),d0		;
+		jmp	(Play_SFX).l				;
 ; ---------------------------------------------------------------------------
 
 loc_4BA4E:
@@ -107759,7 +107783,7 @@ loc_4BA80:
 		asl.w	#4,d0
 		add.w	(Stat_table).w,d0
 		move.w	d0,(Stat_table).w
-		move.w	d0,angle(a0)					; Liliam: Encore mode - bonus stage
+		move.w	d0,angle(a0)				; Liliam: Encore mode - bonus stage
 		rts
 ; ---------------------------------------------------------------------------
 off_4BA90:
@@ -107838,7 +107862,7 @@ RotatingSlotBonus_MdAir:
 		move.w	(Stat_table).w,d0
 		add.w	(SStage_scalar_index_1).w,d0
 		move.w	d0,(Stat_table).w
-		move.w	d0,angle(a0)					; Liliam: Encore mode - bonus stage
+		move.w	d0,angle(a0)				; Liliam: Encore mode - bonus stage
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -107995,8 +108019,8 @@ sub_4BBB2:
 		bset	#Status_InAir,status(a0)
 		bset	#Status_Roll,status(a0)			; Liliam: QOL - variable jump height in slot bonus
 		moveq	#signextendB(sfx_Jump),d0
-		bra.w	Check_Play_SFX					; Liliam: Encore mode - bonus stage
-;		jsr	(Play_SFX).l					;
+		bra.w	Check_Play_SFX				; Liliam: Encore mode - bonus stage
+;		jsr	(Play_SFX).l				;
 
 ;locret_4BBF2:
 ;		rts
@@ -108248,12 +108272,12 @@ loc_4BDFC:
 		move.l	a1,4(a2)
 
 loc_4BE10:
-		moveq	#1,d0						; Liliam: Encore mode - bonus stage
-		moveq	#-1,d1						;
-		tst.b	$39(a0)						;
-		bne.s	loc_4BE32					;
-		moveq	#0,d1						;
-;		jsr	(GiveRing).l					;
+		moveq	#1,d0					; Liliam: Encore mode - bonus stage
+		moveq	#-1,d1					;
+		tst.b	$39(a0)					;
+		bne.s	loc_4BE32				;
+		moveq	#0,d1					;
+;		jsr	(GiveRing).l				;
 
 ;		cmpi.w	#50,(Ring_count).w			; Liliam: continues - stop awarding in slot bonus
 ;		blo.s	loc_4BE32				;
@@ -108264,22 +108288,22 @@ loc_4BE10:
 ;		jsr	(Play_Music).l				;
 
 loc_4BE32:
-		jsr	(loc_860F2).l					; Liliam: Encore mode - bonus stage
+		jsr	(loc_860F2).l				; Liliam: Encore mode - bonus stage
 		moveq	#0,d4
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_4BE36:
-		tst.b	$39(a0)						; Liliam: Encore mode - bonus stage
-		bne.s	.notExtraLife					;
-		cmpi.b	#$28,d4						;
-		bne.s	.notExtraLife					;
-		move.b	#$20,$39(a0)					;
-		jsr	(Pal_FadeFromWhite_EncoreBonus).l		;
-		st	(Ending_running_flag).w				;
-		moveq	#0,d4						;
-		moveq	#signextendB(mus_HighFive),d0			;
-		jmp	(Play_Music).l					;
+		tst.b	$39(a0)					; Liliam: Encore mode - bonus stage
+		bne.s	.notExtraLife				;
+		cmpi.b	#$28,d4					;
+		bne.s	.notExtraLife				;
+		move.b	#$20,$39(a0)				;
+		jsr	(Pal_FadeFromWhite_EncoreBonus).l	;
+		st	(Ending_running_flag).w			;
+		moveq	#0,d4					;
+		moveq	#signextendB(mus_HighFive),d0		;
+		jmp	(Play_Music).l				;
 ; ---------------------------------------------------------------------------
 
 	.notExtraLife:
@@ -108379,8 +108403,8 @@ loc_4BEC8:
 
 
 Check_Play_SFX:
-		tst.b	$39(a0)						; Liliam: Encore mode - bonus stage
-		bne.s	locret_4BEE2					;
+		tst.b	$39(a0)					; Liliam: Encore mode - bonus stage
+		bne.s	locret_4BEE2				;
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
@@ -108391,7 +108415,7 @@ loc_4BED0:
 		addq.b	#2,routine(a0)
 		moveq	#signextendB(sfx_Goal),d0
 		jsr	(Play_SFX).l
-		st	(Ending_running_flag).w				; Liliam: Encore mode - bonus stage
+		st	(Ending_running_flag).w			; Liliam: Encore mode - bonus stage
 
 locret_4BEE2:
 		rts
@@ -108446,8 +108470,8 @@ loc_4BEE4:
 loc_4BF0C:
 		neg.w	(SStage_scalar_index_1).w
 		moveq	#signextendB(sfx_LaunchGo),d0
-		bra.w	Check_Play_SFX					; Liliam: Encore mode - bonus stage
-;		jmp	(Play_SFX).l					;
+		bra.w	Check_Play_SFX				; Liliam: Encore mode - bonus stage
+;		jmp	(Play_SFX).l				;
 ; ---------------------------------------------------------------------------
 
 loc_4BF18:
@@ -108485,8 +108509,8 @@ loc_4BF54:
 
 loc_4BF58:
 		moveq	#signextendB(sfx_Flipper),d0
-		bra.w	Check_Play_SFX					; Liliam: Encore mode - bonus stage
-;		jmp	(Play_SFX).l					;
+		bra.w	Check_Play_SFX				; Liliam: Encore mode - bonus stage
+;		jmp	(Play_SFX).l				;
 ; ---------------------------------------------------------------------------
 
 locret_4BF60:
@@ -108495,7 +108519,7 @@ locret_4BF60:
 
 ; ---------------------------------------------------------------------------
 
-Obj_EncoreBonusHelper:							; Liliam: Encore mode - bonus stage
+Obj_EncoreBonusHelper:						; Liliam: Encore mode - bonus stage
 		move.l	#Obj_EncoreBonusHelper_Main,(a0)
 		move.l	#Obj_EncoreBonusHelper_Common,$10(a0)
 		move.w	#ArtTile_Player_2,art_tile(a0)
@@ -108556,7 +108580,7 @@ Obj_EncoreBonusHelper_Main:
 		jmp	(a1)
 ; ---------------------------------------------------------------------------
 
-Obj_EncoreBonusHelper_Delay:						; Liliam: Encore mode - bonus stage
+Obj_EncoreBonusHelper_Delay:					; Liliam: Encore mode - bonus stage
 		subq.b	#1,$14(a0)
 		bpl.w	locret_4C012
 		move.b	#3,$14(a0)
@@ -108567,7 +108591,7 @@ Obj_EncoreBonusHelper_Delay:						; Liliam: Encore mode - bonus stage
 		jmp	(DPLC_Convert_Palette).l
 ; ---------------------------------------------------------------------------
 
-Obj_EncoreBonusHelper_Tails:						; Liliam: Encore mode - bonus stage
+Obj_EncoreBonusHelper_Tails:					; Liliam: Encore mode - bonus stage
 		adda.w	#$10,a0
 		movea.l	a0,a2
 		lea	(AniTails_Tail).l,a1
@@ -108580,13 +108604,13 @@ Obj_EncoreBonusHelper_Common:
 ; ---------------------------------------------------------------------------
 
 loc_4BF62:
-		move.b	character_id(a0),d0				; Liliam: Encore mode - bonus stage
-		bne.w	Obj_EncoreBonusHelper				;
+		move.b	character_id(a0),d0			; Liliam: Encore mode - bonus stage
+		bne.w	Obj_EncoreBonusHelper			;
 		move.w	#$460,x_pos(a0)
 		move.w	#$430,y_pos(a0)
-		move.l	#Obj_SlotBonusCage_Main,(a0)			;
-		tst.b	(Current_act).w					;
-		beq.s	Obj_SlotBonusCage_Main				;
+		move.l	#Obj_SlotBonusCage_Main,(a0)		;
+		tst.b	(Current_act).w				;
+		beq.s	Obj_SlotBonusCage_Main			;
 		move.l	#Map_SlotBonusCage,mappings(a0)
 		move.w	#make_art_tile(ArtTile_SlotsBlocks+$146,0,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
@@ -111484,25 +111508,25 @@ LevelEventArray:dc.l	AIZ1_ScreenEvent,	AIZ1_BackgroundEvent
 		dc.l	Ending_ScreenEvent,	Ending_BackgroundEvent
 		dc.l	Ending_ScreenEvent,	Ending_BackgroundEvent
 		dc.l	Comp_ScreenInit,	ALZ_BackgroundInit
-		dc.l	Comp_ScreenInit,	ALZ_BackgroundInit
+		dc.l	ALZ2_ScreenInit,	ALZ2_BackgroundInit		; Liliam: Encore mode - add extra levels
 		dc.l	Comp_ScreenEvent,	ALZ_BackgroundEvent
-		dc.l	Comp_ScreenEvent,	ALZ_BackgroundEvent
+		dc.l	ALZ2_ScreenEvent,	ALZ2_BackgroundEvent		;
 		dc.l	Comp_ScreenInit,	BPZ_BackgroundInit
-		dc.l	Comp_ScreenInit,	BPZ_BackgroundInit
+		dc.l	BPZ2_ScreenInit,	BPZ2_BackgroundInit		;
 		dc.l	Comp_ScreenEvent,	BPZ_BackgroundEvent
-		dc.l	Comp_ScreenEvent,	BPZ_BackgroundEvent
+		dc.l	BPZ2_ScreenEvent,	BPZ2_BackgroundEvent		;
 		dc.l	Comp_ScreenInit,	DPZ_BackgroundInit
-		dc.l	Comp_ScreenInit,	DPZ_BackgroundInit
+		dc.l	DPZ2_ScreenInit,	DPZ2_BackgroundInit		;
 		dc.l	Comp_ScreenEvent,	DPZ_BackgroundEvent
-		dc.l	Comp_ScreenEvent,	DPZ_BackgroundEvent
+		dc.l	DPZ2_ScreenEvent,	DPZ2_BackgroundEvent		;
 		dc.l	Comp_ScreenInit,	CGZ_BackgroundInit
-		dc.l	Comp_ScreenInit,	CGZ_BackgroundInit
+		dc.l	CGZ2_ScreenInit,	CGZ2_BackgroundInit		;
 		dc.l	CGZ_ScreenEvent,	CGZ_BackgroundEvent
-		dc.l	CGZ_ScreenEvent,	CGZ_BackgroundEvent
+		dc.l	CGZ2_ScreenEvent,	CGZ2_BackgroundEvent		;
 		dc.l	Comp_ScreenInit,	EMZ_BackgroundInit
-		dc.l	Comp_ScreenInit,	EMZ_BackgroundInit
+		dc.l	EMZ2_ScreenInit,	EMZ2_BackgroundInit		;
 		dc.l	Comp_ScreenEvent,	EMZ_BackgroundEvent
-		dc.l	Comp_ScreenEvent,	EMZ_BackgroundEvent
+		dc.l	EMZ2_ScreenEvent,	EMZ2_BackgroundEvent		;
 		dc.l	Gumball_ScreenInit,	Gumball_BackgroundInit
 		dc.l	Gumball_ScreenInit,	Gumball_BackgroundInit
 		dc.l	Gumball_ScreenEvent,	Gumball_BackgroundEvent
@@ -111512,9 +111536,9 @@ LevelEventArray:dc.l	AIZ1_ScreenEvent,	AIZ1_BackgroundEvent
 		dc.l	Pachinko_ScreenEvent,	Pachinko_BackgroundEvent
 		dc.l	Pachinko_ScreenEvent,	Pachinko_BackgroundEvent
 		dc.l	Slots_ScreenInit,	Slots_BackgroundInit
-		dc.l	EncoreBonus_ScrnInit,	EncoreBonus_BgndInit	; Liliam: Encore mode - bonus stage
+		dc.l	EncoreBonus_ScreenInit,	EncoreBonus_BackgroundInit	; Liliam: Encore mode - bonus stage
 		dc.l	Slots_ScreenEvent,	Slots_BackgroundEvent
-		dc.l	EncoreBonus_ScrnEvent,	EncoreBonus_BgndEvent	;
+		dc.l	EncoreBonus_ScreenEvent,EncoreBonus_BackgroundEvent	;
 		dc.l	LRZ3_ScreenInit,	LRZ3_BackgroundInit
 		dc.l	HPZ_ScreenInit,		HPZ_BackgroundInit
 		dc.l	LRZ3_ScreenEvent,	LRZ3_BackgroundEvent
@@ -113471,6 +113495,15 @@ loc_4F8FE:
 
 ; ---------------------------------------------------------------------------
 
+Update_VerticalWrapMask:					; Liliam: camera - prevent wrapping (credit: flamewing)
+		move.w	(Screen_Y_wrap_value).w,d1
+		addq.w	#1,d1
+		lsr.w	#1,d1
+		neg.w	d1
+		move.w	d1,(Screen_Y_wrap_mask).w
+		rts
+; ---------------------------------------------------------------------------
+
 Comp_ScreenInit:						; Liliam: reinsert S3 screen events
 		jsr	Update_CameraPositionP2(pc)
 		move.w	(Camera_X_pos_copy).w,d0
@@ -113480,16 +113513,11 @@ Comp_ScreenInit:						; Liliam: reinsert S3 screen events
 		move.w	d0,(Events_fg_2).w
 		move.w	d0,(_unkEEBA).w
 		moveq	#0,d0
-		move.b	(Current_zone_and_act).w,d0
+		move.b	(Current_zone).w,d0
 		lsl.w	#4,d0
 		lea	Comp_ScreenInitArray-$E0(pc),a1
 		adda.w	d0,a1
 		move.w	(a1)+,(Screen_X_wrap_value).w
-		move.w	(a1),d0					; Liliam: camera - prevent wrapping (credit: flamewing)
-		addq.w	#1,d0					;
-		lsr.w	#1,d0					;
-		neg.w	d0					;
-		move.w	d0,(Screen_Y_wrap_mask).w		;
 		move.w	(a1)+,(Screen_Y_wrap_value).w
 		move.w	(a1)+,(Camera_Y_pos_mask).w
 		move.w	(a1)+,(Layout_row_index_mask).w
@@ -113497,6 +113525,7 @@ Comp_ScreenInit:						; Liliam: reinsert S3 screen events
 		move.w	(a1)+,d0
 		move.w	(a1)+,d2
 		move.w	(a1)+,d6
+		bsr.s	Update_VerticalWrapMask			; Liliam: camera - prevent wrapping (credit: flamewing)
 		moveq	#0,d1
 		move.w	#VRAM_Plane_A_Name_Table_Competition,d7
 		jmp	Refresh_PlaneFull_Competition(pc)
@@ -113569,7 +113598,7 @@ EMZ_BackgroundInit:						; Liliam: reinsert S3 screen events
 Comp_BackgroundInit:						; Liliam: reinsert S3 screen events
 		move.l	(V_scroll_value_P2).w,(V_scroll_value_P2_copy).w
 		moveq	#0,d0
-		move.b	(Current_zone_and_act).w,d0
+		move.b	(Current_zone).w,d0
 		lsl.w	#4,d0
 		lea	Comp_ScreenInitArray-$D4(pc),a1
 		adda.w	d0,a1
@@ -114311,7 +114340,6 @@ loc_4FAFA:
 		jsr	AIZ1_IntroDeform(pc)			; Liliam: reinsert S3 screen events
 ;		jsr	(AIZ1_IntroDeform).l			;
 		jsr	Reset_TileOffsetPositionEff(pc)
-		moveq	#0,d1					; Liliam: AIZ intro - allow start from other levels
 		jsr	Refresh_PlaneFull(pc)
 		lea	AIZ1_IntroDeformArray(pc),a4		; Liliam: reinsert S3 data
 		lea	(HScroll_table+$028).w,a5
@@ -130563,6 +130591,86 @@ DDZ_BGDeformArray:
 		dc.w    $B0,   $10,     8,     8,   $18,   $38, $7FFF
 ; ---------------------------------------------------------------------------
 
+ALZ2_ScreenInit:						; Liliam: Encore mode - add extra levels
+BPZ2_ScreenInit:
+DPZ2_ScreenInit:
+CGZ2_ScreenInit:
+EMZ2_ScreenInit:
+		moveq	#0,d0
+		move.b	(Current_zone).w,d0
+		lea	(Comp_ScreenInitArray-$E0).l,a1
+		lsl.w	#4,d0
+		adda.w	d0,a1
+		move.w	(a1)+,(Screen_X_wrap_value).w
+		move.w	(a1)+,(Screen_Y_wrap_value).w
+		move.w	(a1)+,(Camera_Y_pos_mask).w
+		move.w	(a1)+,(Layout_row_index_mask).w
+		jsr	(Update_VerticalWrapMask).l
+		clr.b	(Screen_Y_wrap_mask+1).w
+		jsr	(Reset_TileOffsetPositionActual).l
+		jmp	(Refresh_PlaneFull).l
+; ---------------------------------------------------------------------------
+
+ALZ2_ScreenEvent:						; Liliam: Encore mode - add extra levels
+BPZ2_ScreenEvent:
+DPZ2_ScreenEvent:
+CGZ2_ScreenEvent:
+EMZ2_ScreenEvent:
+		move.w	(Level_repeat_offset).w,d0
+		beq.s	.checkWrap
+		sub.w	d0,(Player_1+x_pos).w
+		sub.w	d0,(Player_2+x_pos).w
+		moveq	#0,d1
+		jsr	(Offset_SomeObjectsDuringTransition).l
+		clr.b	(Deform_lock).w
+		movem.l	a0/a2,-(sp)
+		jsr	(loc_1BFB8).l
+		movem.l	(sp)+,a0/a2
+		move.w	(Camera_X_pos).w,(Camera_X_pos_copy).w
+		move.w	(Camera_Y_pos).w,(Camera_Y_pos_copy).w
+
+	.checkWrap:
+		move.w	(Player_1+x_pos).w,d0
+		move.w	(Screen_X_wrap_value).w,d1
+		and.w	d0,d1
+		addi.w	#$400,d1
+		sub.w	d1,d0
+		move.w	d0,(Level_repeat_offset).w
+		beq.s	.done
+		sub.w	d0,(Camera_X_pos).w
+		st	(Deform_lock).w
+
+	.done:
+		jmp	(DrawTilesAsYouMove).l
+; ---------------------------------------------------------------------------
+
+EMZ2_BackgroundInit:						; Liliam: Encore mode - add extra levels
+		tst.b	(Last_star_post_hit).w
+		bne.s	ALZ2_BackgroundInit
+		jsr	(AllocateObject).l
+		bne.s	ALZ2_BackgroundInit
+		move.l	#Obj_LevelIntroAIZ2,(a1)
+
+ALZ2_BackgroundInit:
+BPZ2_BackgroundInit:
+DPZ2_BackgroundInit:
+CGZ2_BackgroundInit:
+		clr.w	(Camera_X_pos_BG_copy).w
+		clr.w	(Camera_Y_pos_BG_copy).w
+		jsr	(Reset_TileOffsetPositionEff).l
+		jsr	(Refresh_PlaneFull).l
+		jmp	(PlainDeformation).l
+; ---------------------------------------------------------------------------
+
+ALZ2_BackgroundEvent:						; Liliam: Encore mode - add extra levels
+BPZ2_BackgroundEvent:
+DPZ2_BackgroundEvent:
+CGZ2_BackgroundEvent:
+EMZ2_BackgroundEvent:
+		jsr	(DrawBGAsYouMove).l
+		jmp	(PlainDeformation).l
+; ---------------------------------------------------------------------------
+
 Gumball_ScreenInit:						; Liliam: reinsert S3 screen events
 		move.w	#$FE00,(Screen_Y_wrap_mask).w		; Liliam: camera - prevent wrapping (credit: flamewing)
 		move.w	#$3FF,(Screen_Y_wrap_value).w
@@ -130955,7 +131063,7 @@ word_599DE:
 		dc.w    $40,     0, $E000,     5,     8,     0,     0,     0,     0,     0
 ; ---------------------------------------------------------------------------
 
-EncoreBonus_ScrnInit:							; Liliam: Encore mode - bonus stage
+EncoreBonus_ScreenInit:						; Liliam: Encore mode - bonus stage
 		lea	(Normal_palette).w,a1
 		lea	(Pal_Encore_Special).l,a5
 		moveq	#7,d0
@@ -130964,13 +131072,13 @@ EncoreBonus_ScrnInit:							; Liliam: Encore mode - bonus stage
 		move.l	(a5)+,(a1)+
 		dbf	d0,.loop
 
-EncoreBonus_BgndInit:
+EncoreBonus_BackgroundInit:
 		moveq	#0,d0
 		moveq	#0,d1
 		jmp	(Refresh_PlaneFull).l
 ; ---------------------------------------------------------------------------
 
-EncoreBonus_ScrnEvent:							; Liliam: Encore mode - bonus stage
+EncoreBonus_ScreenEvent:					; Liliam: Encore mode - bonus stage
 		moveq	#0,d0
 		moveq	#0,d1
 		moveq	#$7F,d6
@@ -130989,7 +131097,7 @@ EncoreBonus_ScrnEvent:							; Liliam: Encore mode - bonus stage
 		move.b	d6,(V_scroll_value+1).w
 		addq.w	#4,sp
 
-EncoreBonus_BgndEvent:
+EncoreBonus_BackgroundEvent:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -143158,9 +143266,9 @@ loc_61E02:
 		move.w	#-$600,y_vel(a0)
 		move.w	#$80,x_vel(a0)
 		move.w	#$1300,(Camera_min_X_pos).w		; Liliam: moved from AIZ1_Resize - set level size for cutscene
-		bra.w	CutsceneKnux_LoadPal_S3				; Liliam: Encore mode - use Robotnik for cutscenes
-;		lea	Pal_CutsceneKnux(pc),a1				;
-;		jmp	(PalLoad_Line1).l				;
+		bra.w	CutsceneKnux_LoadPal_S3			; Liliam: Encore mode - use Robotnik for cutscenes
+;		lea	Pal_CutsceneKnux(pc),a1			;
+;		jmp	(PalLoad_Line1).l			;
 ; ---------------------------------------------------------------------------
 
 loc_61E24:
@@ -143384,9 +143492,9 @@ loc_61FC2:
 		bsr.w	CutsceneKnux_PlayMusic
 		move.w	#(2*60)-1,$2E(a0)
 		move.l	#loc_6201A,$34(a0)
-		bsr.w	CutsceneKnux_LoadPal_S3				; Liliam: Encore mode - use Robotnik for cutscenes
-;		lea	Pal_CutsceneKnux(pc),a1				;
-;		jsr	(PalLoad_Line1).l				;
+		bsr.w	CutsceneKnux_LoadPal_S3			; Liliam: Encore mode - use Robotnik for cutscenes
+;		lea	Pal_CutsceneKnux(pc),a1			;
+;		jsr	(PalLoad_Line1).l			;
 		lea	ChildObjDat_6655A(pc),a2
 		jsr	(CreateChild6_Simple).l
 		bne.s	locret_62012
@@ -143586,9 +143694,9 @@ loc_621D6:
 		move.w	#$1F,$2E(a0)
 		move.l	#loc_62216,$34(a0)
 ;		move.w	#$5C0,(Camera_min_Y_pos).w		; Liliam: camera - fix HCZ2 Knuckles cutscene lock
-		bra.w	CutsceneKnux_LoadPal_S3				; Liliam: Encore mode - use Robotnik for cutscenes
-;		lea	Pal_CutsceneKnux(pc),a1				;
-;		jmp	(PalLoad_Line1).l				;
+		bra.w	CutsceneKnux_LoadPal_S3			; Liliam: Encore mode - use Robotnik for cutscenes
+;		lea	Pal_CutsceneKnux(pc),a1			;
+;		jmp	(PalLoad_Line1).l			;
 ; ---------------------------------------------------------------------------
 
 loc_62200:
@@ -143673,9 +143781,9 @@ loc_622E4:
 		move.l	#AniRaw_666BF,$30(a0)
 		move.l	#loc_6233E,$34(a0)
 		lea	word_62296(pc),a1
-		move.b	#mus_ProtoKnuckles,boss_saved_mus(a0)		; Liliam: Encore mode - use Robotnik for cutscenes
-		tst.b	(Encore_mode).w					;
-		bne.s	loc_62308					;
+		move.b	#mus_ProtoKnuckles,boss_saved_mus(a0)	; Liliam: Encore mode - use Robotnik for cutscenes
+		tst.b	(Encore_mode).w				;
+		bne.s	loc_62308				;
 		move.b	#mus_Knuckles,boss_saved_mus(a0)
 		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
 		beq.s	loc_62308				;
@@ -143691,9 +143799,9 @@ loc_62308:
 loc_62318:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_62318
-		bsr.w	CutsceneKnux_LoadPal_S3				; Liliam: Encore mode - use Robotnik for cutscenes
-;		lea	Pal_CutsceneKnux(pc),a1				;
-;		jsr	(PalLoad_Line1).l				;
+		bsr.w	CutsceneKnux_LoadPal_S3			; Liliam: Encore mode - use Robotnik for cutscenes
+;		lea	Pal_CutsceneKnux(pc),a1			;
+;		jsr	(PalLoad_Line1).l			;
 		lea	ChildObjDat_66560(pc),a2
 		jmp	(CreateChild1_Normal).l
 ; ---------------------------------------------------------------------------
@@ -143911,9 +144019,9 @@ loc_62528:
 
 loc_62540:
 		bsr.w	CutsceneKnux_PlayMusic
-		bra.w	CutsceneKnux_LoadPal_S3				; Liliam: Encore mode - use Robotnik for cutscenes
-;		lea	Pal_CutsceneKnux(pc),a1				;
-;		jmp	(PalLoad_Line1).l				;
+		bra.w	CutsceneKnux_LoadPal_S3			; Liliam: Encore mode - use Robotnik for cutscenes
+;		lea	Pal_CutsceneKnux(pc),a1			;
+;		jmp	(PalLoad_Line1).l			;
 ; ---------------------------------------------------------------------------
 
 loc_6254E:
@@ -144040,9 +144148,9 @@ loc_62678:
 		jsr	(SetUp_ObjAttributesSlotted).l
 		move.b	#$16,mapping_frame(a0)
 		move.w	#$A0,(Camera_min_Y_pos).w
-		bsr.w	CutsceneKnux_LoadPal_S3				; Liliam: Encore mode - use Robotnik for cutscenes
-;		lea	Pal_CutsceneKnux(pc),a1				;
-;		jsr	(PalLoad_Line1).l				;
+		bsr.w	CutsceneKnux_LoadPal_S3			; Liliam: Encore mode - use Robotnik for cutscenes
+;		lea	Pal_CutsceneKnux(pc),a1			;
+;		jsr	(PalLoad_Line1).l			;
 		lea	ChildObjDat_6657C(pc),a2
 		jmp	(CreateChild1_Normal).l
 ; ---------------------------------------------------------------------------
@@ -144256,9 +144364,9 @@ loc_628E0:
 		bset	#0,render_flags(a0)
 		move.b	#$20,mapping_frame(a0)
 		bsr.w	CutsceneKnux_PlayMusic
-		bsr.w	CutsceneKnux_LoadPal_S3				; Liliam: Encore mode - use Robotnik for cutscenes
-;		lea	Pal_CutsceneKnux(pc),a1				;
-;		jsr	(PalLoad_Line1).l				;
+		bsr.w	CutsceneKnux_LoadPal_S3			; Liliam: Encore mode - use Robotnik for cutscenes
+;		lea	Pal_CutsceneKnux(pc),a1			;
+;		jsr	(PalLoad_Line1).l			;
 		lea	ChildObjDat_66592(pc),a2
 		jmp	(CreateChild3_NormalRepeated).l
 ; ---------------------------------------------------------------------------
@@ -144481,9 +144589,9 @@ loc_62B68:
 loc_62BA2:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_62BA2
-		bra.w	CutsceneKnux_LoadPal_S3				; Liliam: Encore mode - use Robotnik for cutscenes
-;		lea	Pal_CutsceneKnux(pc),a1				;
-;		jmp	(PalLoad_Line1).l				;
+		bra.w	CutsceneKnux_LoadPal_S3			; Liliam: Encore mode - use Robotnik for cutscenes
+;		lea	Pal_CutsceneKnux(pc),a1			;
+;		jmp	(PalLoad_Line1).l			;
 ; ---------------------------------------------------------------------------
 
 loc_62BB2:
@@ -145778,9 +145886,9 @@ loc_63A96:
 ;		move.b	#$56,mapping_frame(a0)			;
 		move.w	#$3A38,x_pos(a0)
 		move.w	#$EC,y_pos(a0)
-		bra.w	CutsceneKnux_LoadPal_S3				; Liliam: Encore mode - use Robotnik for cutscenes
-;		lea	Pal_CutsceneKnux(pc),a1				;
-;		jmp	(PalLoad_Line1).l				;
+		bra.w	CutsceneKnux_LoadPal_S3			; Liliam: Encore mode - use Robotnik for cutscenes
+;		lea	Pal_CutsceneKnux(pc),a1			;
+;		jmp	(PalLoad_Line1).l			;
 ; ---------------------------------------------------------------------------
 
 loc_63ACA:
@@ -149025,9 +149133,9 @@ CutsceneKnux_PlayMusic:
 		jsr	(AllocateObject).l
 		bne.s	locret_65DEA
 		move.l	#Obj_Song_Fade_Transition,(a1)
-		move.b	#mus_ProtoKnuckles,subtype(a1)			; Liliam: Encore mode - use Robotnik for cutscenes
-		tst.b	(Encore_mode).w					;
-		bne.s	locret_65DEA					;
+		move.b	#mus_ProtoKnuckles,subtype(a1)		; Liliam: Encore mode - use Robotnik for cutscenes
+		tst.b	(Encore_mode).w				;
+		bne.s	locret_65DEA				;
 		move.b	#mus_Knuckles,subtype(a1)
 		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
 		beq.s	locret_65DEA				;
@@ -149436,7 +149544,7 @@ locret_66188:
 		; Liliam: Knuckles intro - use player 1 VRAM
 ; ---------------------------------------------------------------------------
 
-CutsceneKnux_LoadPal_S3:						; Liliam: Encore mode - use Robotnik for cutscenes
+CutsceneKnux_LoadPal_S3:					; Liliam: Encore mode - use Robotnik for cutscenes
 		tst.b	(Encore_mode).w
 		beq.s	.notEncore
 		andi.w	#high_priority|tile_mask,art_tile(a0)
@@ -150074,7 +150182,7 @@ ChildObjDat_66664:
 DPLCPtr_CutsceneKnux:
 		dc.l ArtUnc_CutsceneKnux
 		dc.l DPLC_CutsceneKnux
-DPLCPtr_CutsceneRobotnik:						; Liliam: Encore mode - use Robotnik for cutscenes
+DPLCPtr_CutsceneRobotnik:					; Liliam: Encore mode - use Robotnik for cutscenes
 		dc.l ArtUnc_CutsceneRobotnik
 		dc.l DPLC_CutsceneRobotnik
 DPLCPtr_MHZKnuxPress:
@@ -181749,7 +181857,7 @@ loc_7BCB0:
 loc_7BCC2:
 		move.l	#loc_7BCFC,(a0)
 		move.w	#(2*60)-1,$2E(a0)
-		move.w	#$D01,(Apparent_zone_and_act).w			; Liliam: ending - use S3 credits music
+		move.w	#$D01,(Apparent_zone_and_act).w		; Liliam: ending - use S3 credits music
 		st	(_unkFAA2).w
 		st	(Events_fg_4+1).w
 		lea	(Player_1).w,a1
@@ -218036,6 +218144,8 @@ PLC_ALZ: plrlistheader
 PLC_ALZ_End
 
 PLC_ALZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+		plreq ArtTile_GrayButton, ArtNem_GrayButton
+		plreq ArtTile_2PArt_1, ArtNem_2PArt_1
 PLC_ALZ_2_End
 
 PLC_BPZ: plrlistheader
@@ -218051,6 +218161,7 @@ PLC_BPZ: plrlistheader
 PLC_BPZ_End
 
 PLC_BPZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+		plreq ArtTile_BPZMisc, ArtNem_BPZMisc
 PLC_BPZ_2_End
 
 PLC_DPZ: plrlistheader
@@ -218066,6 +218177,8 @@ PLC_DPZ: plrlistheader
 PLC_DPZ_End
 
 PLC_DPZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+		plreq ArtTile_DPZMisc, ArtNem_DPZMisc
+		plreq ArtTile_2PArt_1, ArtNem_2PArt_1
 PLC_DPZ_2_End
 
 PLC_CGZ: plrlistheader
@@ -218081,6 +218194,9 @@ PLC_CGZ: plrlistheader
 PLC_CGZ_End
 
 PLC_CGZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+		plreq ArtTile_GrayButton, ArtNem_GrayButton
+		plreq ArtTile_CGZMisc, ArtNem_CGZMisc
+		plreq ArtTile_2PArt_2, ArtNem_2PArt_2
 PLC_CGZ_2_End
 
 PLC_EMZ: plrlistheader
@@ -218096,6 +218212,7 @@ PLC_EMZ: plrlistheader
 PLC_EMZ_End
 
 PLC_EMZ_2: plrlistheader							; Liliam: Encore mode - add extra levels
+		plreq ArtTile_EMZMisc, ArtNem_EMZMisc
 PLC_EMZ_2_End
 
 PLC_GumballBonus: plrlistheader
@@ -218434,7 +218551,10 @@ loc_92B6A:
 		add.l	d1,d3
 
 loc_92B72:
-		moveq	#0,d0					;
+		tst.w	(Competition_mode).w			; Liliam: Encore mode - add extra levels
+		beq.s	.done					;
+
+		moveq	#0,d0					; Liliam: debug - properly apply camera boundaries
 		move.w	(Screen_X_wrap_value).w,d0		;
 		move.l	d0,d1					;
 		addq.w	#1,d1					;
@@ -218442,6 +218562,8 @@ loc_92B72:
 		swap	d1					;
 		and.l	d0,d3					;
 		add.l	d1,d3					;
+
+	.done:
 		move.l	d2,y_pos(a0)
 		move.l	d3,x_pos(a0)
 
@@ -218654,7 +218776,55 @@ loc_92CA2:
 ; End of function sub_92C88
 
 ; ---------------------------------------------------------------------------
-DebugOffs:		include "Levels/Misc/Debug list pointers.asm"
+DebugOffs:
+		dc.w Debug_AIZ1-DebugOffs
+		dc.w Debug_AIZ2-DebugOffs
+		dc.w Debug_HCZ-DebugOffs
+		dc.w Debug_HCZ-DebugOffs
+		dc.w Debug_MGZ-DebugOffs
+		dc.w Debug_MGZ-DebugOffs
+		dc.w Debug_CNZ-DebugOffs
+		dc.w Debug_CNZ-DebugOffs
+		dc.w Debug_FBZ1-DebugOffs
+		dc.w Debug_FBZ2-DebugOffs
+		dc.w Debug_ICZ1-DebugOffs
+		dc.w Debug_ICZ2-DebugOffs
+		dc.w Debug_LBZ1-DebugOffs
+		dc.w Debug_LBZ2-DebugOffs
+		dc.w Debug_MHZ-DebugOffs
+		dc.w Debug_MHZ-DebugOffs
+		dc.w Debug_SOZ1-DebugOffs
+		dc.w Debug_SOZ2-DebugOffs
+		dc.w Debug_LRZ1-DebugOffs
+		dc.w Debug_LRZ2-DebugOffs
+		dc.w Debug_SSZ-DebugOffs
+		dc.w Debug_SSZ-DebugOffs
+		dc.w Debug_DEZ1-DebugOffs
+		dc.w Debug_DEZ2-DebugOffs
+		dc.w Debug_DDZ1-DebugOffs
+		dc.w Debug_Null-DebugOffs			; Liliam: cutscene skip object
+		dc.w Debug_Null-DebugOffs			;
+		dc.w Debug_Null-DebugOffs			;
+		dc.w Debug_ALZ-DebugOffs
+		dc.w Debug_Null-DebugOffs			; Liliam: Encore mode - add extra levels
+		dc.w Debug_BPZ-DebugOffs
+		dc.w Debug_Null-DebugOffs			;
+		dc.w Debug_DPZ-DebugOffs
+		dc.w Debug_Null-DebugOffs			;
+		dc.w Debug_CGZ-DebugOffs
+		dc.w Debug_Null-DebugOffs			;
+		dc.w Debug_EMZ-DebugOffs
+		dc.w Debug_Null-DebugOffs			;
+		dc.w Debug_Gumball_Special-DebugOffs
+		dc.w Debug_Gumball_Special-DebugOffs
+		dc.w Debug_Pachinko_Special-DebugOffs
+		dc.w Debug_Pachinko_Special-DebugOffs
+		dc.w Debug_Null-DebugOffs
+		dc.w Debug_Null-DebugOffs
+		dc.w Debug_HPZ-DebugOffs
+		dc.w Debug_HPZ-DebugOffs
+		dc.w Debug_Null-DebugOffs
+		dc.w Debug_Null-DebugOffs
 
 Debug_AIZ1:		dbglistinclude "Levels/AIZ/Debug/Act 1.asm"		; Liliam: QOL - use high precision sine tables for AIZ vines
 Debug_AIZ2:		dbglistinclude "Levels/AIZ/Debug/Act 2.asm"		; Liliam: QOL - use high precision sine tables for AIZ vines
@@ -218676,8 +218846,8 @@ Debug_SSZ:		dbglistinclude "Levels/SSZ/Debug/Main.asm"
 Debug_DEZ1:		dbglistinclude "Levels/DEZ/Debug/Act 1.asm"	; Liliam: bugfix - set correct palette
 Debug_DEZ2:		dbglistinclude "Levels/DEZ/Debug/Act 2.asm"	; Liliam: bugfix - set correct palette
 Debug_DDZ1:		dbglistinclude "Levels/DDZ/Debug/Main.asm"
-Debug_DDZ2:		dbglistinclude "Levels/DEZ/Debug/Boss.asm"
-Debug_Ending:		dbglistinclude "Levels/SSZ/Debug/Ending.asm"
+;Debug_DDZ2:		; Liliam: cutscene skip object
+;Debug_Ending:		; Liliam: cutscene skip object
 Debug_ALZ:		dbglistinclude "Levels/ALZ/Debug/Main.asm"	; Liliam: bugfix - 2P object palette assignment
 Debug_BPZ:		dbglistinclude "Levels/BPZ/Debug/Main.asm"	; Liliam: bugfix - 2P object palette assignment
 Debug_DPZ:		dbglistinclude "Levels/DPZ/Debug/Main.asm"	; Liliam: bugfix - 2P object palette assignment
@@ -218685,6 +218855,7 @@ Debug_CGZ:		dbglistinclude "Levels/CGZ/Debug/Main.asm"	; Liliam: bugfix - 2P obj
 Debug_EMZ:		dbglistinclude "Levels/EMZ/Debug/Main.asm"	; Liliam: bugfix - horrors beyond comprehension
 Debug_Pachinko_Special:	dbglistinclude "Levels/Pachinko/Debug/Main.asm"	; Liliam: rolling jump bonus - remove F ball
 Debug_HPZ:		dbglistinclude "Levels/HPZ/Debug/Main.asm"
+Debug_Null:
 Debug_Gumball_Special:	dbglistinclude "Levels/Gumball/Debug/Main.asm"
 
 Sprite_Listing3:	include "Levels/Misc/Object pointers - SK Set 1.asm"
@@ -218908,8 +219079,8 @@ LevelPtrs:
 		dc.l Layout_Pachinko_Special
 		dc.l Layout_Pachinko_Special
 		dc.l Layout_Slots_Special
-		dc.l Layout_Encore_Special				; Liliam: Encore mode - bonus stage
-;		dc.l Layout_Slots_Special				;
+		dc.l Layout_Encore_Special			; Liliam: Encore mode - bonus stage
+;		dc.l Layout_Slots_Special			;
 		dc.l Layout_LRZBoss
 		dc.l Layout_HPZ
 		dc.l Layout_DEZBoss
@@ -219019,7 +219190,7 @@ Layout_Pachinko_Special:
 Layout_Slots_Special:
 		binclude "Levels/Slots/Layout/1.bin"
 		even
-Layout_Encore_Special:							; Liliam: Encore mode - bonus stage
+Layout_Encore_Special:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/Layout/Encore.bin"
 		even
 Layout_LRZBoss:
@@ -219195,19 +219366,23 @@ Pal_DDZ:
 		binclude "Levels/DDZ/Palettes/Main.bin"
 		even
 Pal_ALZ:
-		; Liliam: bugfix - 2P object palette assignment
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/ALZ/Palettes/Main.bin"
 		even
 Pal_BPZ:
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/BPZ/Palettes/Main.bin"
 		even
 Pal_DPZ:
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/DPZ/Palettes/Main.bin"
 		even
 Pal_CGZ:
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/CGZ/Palettes/Main.bin"
 		even
 Pal_EMZ:
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/EMZ/Palettes/Main.bin"
 		even
 Pal_Gumball_Special:
@@ -219220,7 +219395,7 @@ Pal_Slot_Special:
 		; Liliam: bugfix - slot bonus palette assignment
 		binclude "Levels/Slots/Palettes/Main.bin"
 		even
-Pal_Encore_Special:							; Liliam: Encore mode - bonus stage
+Pal_Encore_Special:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/Palettes/Encore.bin"
 		even
 Pal_LRZBoss:
@@ -220222,7 +220397,7 @@ ArtUnc_StarPostStars2:							; Liliam: HUD - barrier HUD
 		binclude "General/Sprites/Starpost/Starpost Stars 2.bin"
 ArtUnc_StarPostStars3:							; Liliam: HUD - barrier HUD
 		binclude "General/Sprites/Starpost/Starpost Stars 3.bin"
-ArtUnc_StarPostStars_Encore:						; Liliam: Encore mode - bonus stage
+ArtUnc_StarPostStars_Encore:					; Liliam: Encore mode - bonus stage
 		binclude "General/Sprites/Starpost/Starpost Stars Encore.bin"
 		align $20000
 ; ---------------------------------------------------------------------------
@@ -220290,9 +220465,9 @@ ArtKosM_HPZEncoreRobotnik:					; Liliam: HPZ - add Encore mode cutscene
 ; ---------------------------------------------------------------------------
 ArtUnc_Mighty:							; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Art/Mighty.bin"
-ArtUnc_CutsceneRobotnik:						; Liliam: Encore mode - use Robotnik for cutscenes
+ArtUnc_CutsceneRobotnik:					; Liliam: Encore mode - use Robotnik for cutscenes
 		binclude "General/Sprites/Robotnik/Cutscene Main.bin"
-PalTable_EncoreGray:							; Liliam: Encore mode - bonus stage
+PalTable_EncoreGray:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Misc/Pal - Encore Gray.bin"
 PalTable_Ray:							; Liliam: convert to 1P Ray palette
 		binclude "Levels/Misc/Pal - Ray.bin"
@@ -220607,7 +220782,7 @@ ArtNem_SlotsBlocks:
 		; Liliam: bugfix - slot bonus palette assignment
 		binclude "Levels/Slots/Nemesis Art/Blocks.bin"
 		even
-ArtNem_SlotsEncore:							; Liliam: Encore mode - bonus stage
+ArtNem_SlotsEncore:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/Nemesis Art/Encore Peppermint.bin"
 		even
 ArtUnc_SlotOptions:
@@ -220620,7 +220795,7 @@ ArtKosM_CNZTeleport:
 ArtNem_ICZTeleport:
 		binclude "Levels/ICZ/Nemesis Art/Teleporter Beam.bin"
 		even
-ArtKosM_AIZ2Bombership:							; Liliam: reinsert S3 data
+ArtKosM_AIZ2Bombership:						; Liliam: reinsert S3 data
 		; Liliam: QOL - use high precision sine tables for AIZ vines
 		binclude "Levels/AIZ/KosinskiM Art/Act 2 Bombership.bin"
 		even
@@ -221174,9 +221349,9 @@ DPLC_CutsceneKnux:						; Liliam: reinsert S3 data
 		include "General/Sprites/Knuckles/Cutscene/DPLC - Cutscene Knuckles.asm"
 Map_CutsceneSkip:						; Liliam: cutscene skip object
 		include "General/Sprites/HUD Icon/Map - Cutscene Skip Hint.asm"
-Map_CutsceneRobotnik:							; Liliam: Encore mode - use Robotnik for cutscenes
+Map_CutsceneRobotnik:						; Liliam: Encore mode - use Robotnik for cutscenes
 		include "General/Sprites/Robotnik/Map - Cutscene Main.asm"
-DPLC_CutsceneRobotnik:							; Liliam: Encore mode - use Robotnik for cutscenes
+DPLC_CutsceneRobotnik:						; Liliam: Encore mode - use Robotnik for cutscenes
 		include "General/Sprites/Robotnik/DPLC - Cutscene Main.asm"
 ;Map_AIZIntroPlane:						; Liliam: reinsert S3 data
 		; Liliam: AIZ intro - use ending plane sprite
@@ -222091,7 +222266,7 @@ ArtNem_BonusStage:
 		; Liliam: gumball bonus - remove S ball
 		binclude "Levels/Gumball/Nemesis Art/Gumball Bonus.bin"
 		even
-ArtNem_EncoreBonusItem:							; Liliam: Encore mode - bonus stage
+ArtNem_EncoreBonusItem:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Gumball/Nemesis Art/Rotate Stocks Item.bin"
 		even
 
@@ -222617,13 +222792,13 @@ ArtKosM_Slots:
 Slots_128x128_Kos:
 		binclude "Levels/Slots/Chunks/Primary.bin"
 		even
-EncoreBonus_16x16_Kos:							; Liliam: Encore mode - bonus stage
+EncoreBonus_16x16_Kos:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/Blocks/Encore.bin"
 		even
-ArtKosM_EncoreBonus:							; Liliam: Encore mode - bonus stage
+ArtKosM_EncoreBonus:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/Tiles/Encore.bin"
 		even
-EncoreBonus_128x128_Kos:						; Liliam: Encore mode - bonus stage
+EncoreBonus_128x128_Kos:					; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/Chunks/Encore.bin"
 		even
 
@@ -222674,14 +222849,19 @@ SOZ2_Start:	binclude "Levels/SOZ/Start Location/Sonic/2.bin"
 		binclude "Levels/AIZ/Start Location/Sonic/Intro.bin"
 		binclude "Levels/SSZ/Start Location/Sonic/Ending.bin"
 		binclude "Levels/ALZ/Start Location/Sonic/1.bin"
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/ALZ/Start Location/Sonic/2.bin"
 		binclude "Levels/BPZ/Start Location/Sonic/1.bin"
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/BPZ/Start Location/Sonic/2.bin"
 		binclude "Levels/DPZ/Start Location/Sonic/1.bin"
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/DPZ/Start Location/Sonic/2.bin"
 		binclude "Levels/CGZ/Start Location/Sonic/1.bin"
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/CGZ/Start Location/Sonic/2.bin"
 		binclude "Levels/EMZ/Start Location/Sonic/1.bin"
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/EMZ/Start Location/Sonic/2.bin"
 		binclude "Levels/Gumball/Start Location/Sonic/1.bin"
 		; Liliam: Encore mode - bonus stage
@@ -222733,14 +222913,19 @@ Knux_Start_Locations:
 		binclude "Levels/AIZ/Start Location/Knuckles/Intro.bin"
 		binclude "Levels/SSZ/Start Location/Knuckles/Ending.bin"
 		binclude "Levels/ALZ/Start Location/Knuckles/1.bin"
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/ALZ/Start Location/Knuckles/2.bin"
 		binclude "Levels/BPZ/Start Location/Knuckles/1.bin"
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/BPZ/Start Location/Knuckles/2.bin"
 		binclude "Levels/DPZ/Start Location/Knuckles/1.bin"
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/DPZ/Start Location/Knuckles/2.bin"
 		binclude "Levels/CGZ/Start Location/Knuckles/1.bin"
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/CGZ/Start Location/Knuckles/2.bin"
 		binclude "Levels/EMZ/Start Location/Knuckles/1.bin"
+		; Liliam: Encore mode - add extra levels
 		binclude "Levels/EMZ/Start Location/Knuckles/2.bin"
 		binclude "Levels/Gumball/Start Location/Knuckles/1.bin"
 		; Liliam: Encore mode - bonus stage
@@ -222965,7 +223150,7 @@ DEZTunnelPaths:
 		dc.l word_1FB6CE
 ;SSCompressedLayoutPtrs:
 		; Liliam: special stage - compress S3 layouts
-SlotBonusLayoutPtrs:							; Liliam: Encore mode - bonus stage
+SlotBonusLayoutPtrs:						; Liliam: Encore mode - bonus stage
 		dc.l SlotBonusLayout
 		dc.l EncoreBonusLayout1
 		dc.l EncoreBonusLayout2
@@ -222978,27 +223163,27 @@ SlotBonusLayout:
 		binclude "Levels/Slots/SSLayout/Bonus Player Start.bin"
 		binclude "Levels/Slots/SSLayout/Bonus Layout.bin"
 		even
-EncoreBonusLayout1:							; Liliam: Encore mode - bonus stage
+EncoreBonusLayout1:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/SSLayout/Encore Player Start 1.bin"
 		binclude "Levels/Slots/SSLayout/Encore Layout 1.bin"
 		even
-EncoreBonusLayout2:							; Liliam: Encore mode - bonus stage
+EncoreBonusLayout2:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/SSLayout/Encore Player Start 2.bin"
 		binclude "Levels/Slots/SSLayout/Encore Layout 2.bin"
 		even
-EncoreBonusLayout3:							; Liliam: Encore mode - bonus stage
+EncoreBonusLayout3:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/SSLayout/Encore Player Start 3.bin"
 		binclude "Levels/Slots/SSLayout/Encore Layout 3.bin"
 		even
-EncoreBonusLayout4:							; Liliam: Encore mode - bonus stage
+EncoreBonusLayout4:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/SSLayout/Encore Player Start 4.bin"
 		binclude "Levels/Slots/SSLayout/Encore Layout 4.bin"
 		even
-EncoreBonusLayout5:							; Liliam: Encore mode - bonus stage
+EncoreBonusLayout5:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/SSLayout/Encore Player Start 5.bin"
 		binclude "Levels/Slots/SSLayout/Encore Layout 5.bin"
 		even
-EncoreBonusLayout6:							; Liliam: Encore mode - bonus stage
+EncoreBonusLayout6:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Slots/SSLayout/Encore Player Start 6.bin"
 		binclude "Levels/Slots/SSLayout/Encore Layout 6.bin"
 		even
