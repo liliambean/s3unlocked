@@ -45102,12 +45102,13 @@ AIZ2_SonicResize4:
 		lea	(ArtKosM_AIZ2EggRoboHead).l,a1			;
 
 loc_1C72E:
-		jsr	(Queue_Kos_Module).l				; Load all battleship art
+		jsr	(Queue_Kos_Module).l
 
 loc_1C734:
 		moveq	#PalID_AIZBoss,d0
-		jsr	(LoadPalette_Immediate).l			; Load palette
-		st	(Events_fg_5).w						; Send signal to background event
+		jsr	(LoadPalette_Immediate).l
+		move.w	#$3C00,(Camera_min_X_pos).w		; Liliam: camera - fix AIZ2 boss entry lock
+		st	(Events_fg_5).w
 		addq.b	#2,(Dynamic_resize_routine).w
 
 locret_1C744:
@@ -69045,8 +69046,8 @@ Load_Starpost_Settings:
 		move.w	(Saved_apparent_zone_and_act).w,(Apparent_zone_and_act).w
 		move.w	(Saved_X_pos).w,(Player_1+x_pos).w
 		bpl.s	loc_2D254				; Liliam: face left at left-facing star posts
-		move.b	#1<<Status_Facing,(Player_1+status).w	;
 		bclr	#7,(Player_1+x_pos).w			;
+		move.b	#1<<Status_Facing,(Player_1+status).w	;
 
 loc_2D254:
 		move.w	(Saved_Y_pos).w,(Player_1+y_pos).w
@@ -118195,6 +118196,7 @@ loc_51CD2:
 		jsr	Reset_TileOffsetPositionEff(pc)
 		lea	(Pal_CNZMiniboss).l,a1
 		jsr	(PalLoad_Line1).l
+		move.w	#$2F80,(Camera_min_X_pos).w		; Liliam: camera - fix CNZ1 boss entry lock
 		move.w	#$260,d0				; Liliam: CNZ1 boss - raise entry lock
 		move.w	d0,(Camera_max_Y_pos).w			;
 		move.w	d0,(Camera_target_max_Y_pos).w		;
@@ -123969,7 +123971,8 @@ loc_54DDC:
 		cmpi.w	#$280,(Camera_Y_pos).w
 		blo.w	loc_54E7E
 		move.w	#$280,(Camera_min_Y_pos).w
-		bra.s	loc_54E7E
+		bra.w	loc_54E7E				; Liliam: camera - allow misaligned MHZ2 start
+;		bra.s	loc_54E7E				;
 ; ---------------------------------------------------------------------------
 
 loc_54E00:
@@ -124011,6 +124014,9 @@ loc_54E48:
 
 loc_54E4C:
 		move.w	#$9A0,d0
+		cmpi.w	#$36A0,(Camera_min_X_pos).w		; Liliam: camera - fix MHZ2 boss entry lock
+		blo.s	loc_54E70				;
+		move.w	#$4A0,d0				;
 		cmpi.w	#$3A97,(Player_1+x_pos).w
 		blo.s	loc_54E70
 		move.w	#$280,d0
@@ -124450,6 +124456,7 @@ loc_5528A:
 		move.w	#tiles_to_bytes($222),d2
 		jsr	(Queue_Kos_Module).l
 		movem.l	(sp)+,d7-a0/a2-a3
+		move.w	#$36A0,(Camera_min_X_pos).w		; Liliam: camera - fix MHZ2 boss entry lock
 		addq.w	#8,(Events_routine_bg).w
 		bra.s	loc_55312
 ; ---------------------------------------------------------------------------
@@ -146247,6 +146254,21 @@ loc_63DD4:
 ; ---------------------------------------------------------------------------
 
 loc_63DE0:
+		move.w	(Camera_max_X_pos).w,d0			; Liliam: camera - fix HPZ boss entry lock
+		addi.w	#$A0,d0					;
+		cmp.w	(Player_1+x_pos).w,d0			;
+		bls.s	.done					;
+		jsr	(Animate_Raw2MultiDelay).l		;
+		lea	off_64056(pc),a3			;
+		bsr.w	loc_660BE				;
+		bsr.w	CutsceneKnux_LoadPLC_SSZHPZ		;
+		jmp	(Draw_Sprite).l				;
+; ---------------------------------------------------------------------------
+
+	.done:
+		move.l	#Obj_HPZEndBoss,(a0)			;
+
+Obj_HPZEndBoss:
 		moveq	#0,d0
 		move.b	routine(a0),d0
 		move.w	off_63E1E(pc,d0.w),d1
@@ -154534,6 +154556,8 @@ Obj_HCZMiniboss:
 		moveq	#PLCID_HCZMiniboss,d0
 		jsr	(Load_PLC).l
 		move.w	#$300,(Camera_min_Y_pos).w
+		move.w	#$638,(Camera_max_Y_pos).w		; Liliam: camera - fix HCZ1 boss entry lock
+		move.w	#$638,(Camera_target_max_Y_pos).w	;
 		lea	ChildObjDat_6AD6E(pc),a2
 		jmp	(CreateChild1_Normal).l
 ; ---------------------------------------------------------------------------
@@ -154549,11 +154573,15 @@ loc_69EDA:
 		bhi.s	loc_69EFE
 		bset	#0,$38(a0)
 		move.w	d0,(Camera_min_Y_pos).w
-		move.w	d0,(Camera_max_Y_pos).w
-		move.w	d0,(Camera_target_max_Y_pos).w
+;		move.w	d0,(Camera_max_Y_pos).w			; Liliam: camera - fix HCZ1 boss entry lock
+;		move.w	d0,(Camera_target_max_Y_pos).w		;
 
 loc_69EFE:
-;		btst	#1,$38(a0)			; Liliam: ???
+		btst	#1,$38(a0)
+		bne.s	loc_69F22				;
+		move.w	(Player_1+y_pos).w,d0			;
+		cmp.w	(Camera_Y_pos).w,d0			;
+		blo.s	loc_69F22				;
 		move.w	#$3680,d0
 		move.w	(Camera_X_pos).w,d1
 		move.w	d1,(Camera_min_X_pos).w
