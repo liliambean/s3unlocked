@@ -155930,11 +155930,13 @@ loc_6AC68:
 		moveq	#0,d0
 		btst	#0,$20(a0)
 		bne.s	loc_6AC7C
-		addi.w	#2*7,d0
+		addi.w	#2*(4+7),d0				; Liliam: QOL - perform underwater boss flash
+;		addi.w	#2*7,d0					;
 
 loc_6AC7C:
 		lea	word_6ACC6(pc),a1
 		lea	word_6ACD4(pc,d0.w),a2
+		jsr	(CopyWordData_4).l			;
 		jsr	(CopyWordData_7).l
 		subq.b	#1,$20(a0)
 		bne.s	locret_6ACA4
@@ -155957,10 +155959,16 @@ loc_6ACA6:
 
 ; ---------------------------------------------------------------------------
 word_6ACC6:
+		dc.w Water_palette_line_2+$08			; Liliam: QOL - perform underwater boss flash
+		dc.w Water_palette_line_2+$12			;
+		dc.w Water_palette_line_2+$14			;
+		dc.w Water_palette_line_2+$16			;
 		dc.w Normal_palette_line_2+$08, Normal_palette_line_2+$0E, Normal_palette_line_2+$12, Normal_palette_line_2+$14
 		dc.w Normal_palette_line_2+$16, Normal_palette_line_2+$1A, Normal_palette_line_2+$1C
 word_6ACD4:
+		dc.w    $44,   $66,  $246,   $20		;
 		dc.w      4,     0,    $C,     8,   $20,  $826,  $624
+		dc.w   $CCA,  $CA8,  $CCA,  $EEE		;
 		dc.w   $AAA,  $AAA,  $888,  $AAA,  $EEE,  $888,  $AAA
 ObjDat_HCZMiniboss_Loop:
 		dc.l Map_HCZMiniboss
@@ -156125,6 +156133,7 @@ Pal_HCZMiniboss:
 		binclude "Levels/HCZ/Palettes/Miniboss.bin"
 		even
 Pal_HCZMinibossWater:
+		; Liliam: QOL - perform underwater boss flash
 		binclude "Levels/HCZ/Palettes/Miniboss Water.bin"
 		even
 ; ---------------------------------------------------------------------------
@@ -179561,9 +179570,9 @@ loc_7A2C0:
 		move.w	#$67,$2E(a0)
 		move.l	#loc_7A2FC,$34(a0)
 		lea	(Child1_MakeMechaHead).l,a2
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - use Robotnik head for SSZ bosses
-		beq.s	loc_7A2EA					;
-		lea	(Child1_MakeRoboHead3).l,a2			;
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - use Robotnik head for SSZ bosses
+		beq.s	loc_7A2EA				;
+		lea	(Child1_MakeRoboHead3).l,a2		;
 
 loc_7A2EA:
 		jmp	(CreateChild1_Normal).l
@@ -179853,12 +179862,12 @@ loc_7A5C6:
 		moveq	#0,d0
 		btst	#0,$20(a0)
 		bne.s	loc_7A5D4
-		addi.w	#2*7,d0							; Liliam: perform Mecha Sonic boss flash
+		addi.w	#2*7,d0					; Liliam: QOL - perform Mecha Sonic boss flash
 	if FixBugs
-;		addi.w	#2*3,d0							;
+;		addi.w	#2*3,d0					;
 	else
 		; Bug: should be 2*3
-;		addi.w	#2*2,d0							;
+;		addi.w	#2*2,d0					;
 	endif
 
 loc_7A5D4:
@@ -179891,9 +179900,9 @@ loc_7A60E:
 sub_7A614:
 		lea	word_7A622(pc),a1
 		lea	word_7A628(pc,d0.w),a2
-		tst.b	(Encore_mode).w						; Liliam: perform Mecha Sonic boss flash
-		bne.s	loc_7A61C						;
-		jmp	(CopyWordData_7).l					;
+		tst.b	(Encore_mode).w				; Liliam: QOL - perform Mecha Sonic boss flash
+		bne.s	loc_7A61C				;
+		jmp	(CopyWordData_7).l			;
 ; ---------------------------------------------------------------------------
 
 loc_7A61C:
@@ -179908,15 +179917,15 @@ word_7A622:
 ;		dc.w Normal_palette+$0E							;
 ;		dc.w Normal_palette+$1C							;
 ;		dc.w Normal_palette+$1E							;
-		dc.w Normal_palette_line_2+$14					; Liliam: perform Mecha Sonic boss flash
-		dc.w Normal_palette_line_2+$16					;
-		dc.w Normal_palette_line_2+$18					;
-		dc.w Normal_palette_line_2+$1C					;
+		dc.w Normal_palette_line_2+$14			; Liliam: QOL - perform Mecha Sonic boss flash
+		dc.w Normal_palette_line_2+$16			;
+		dc.w Normal_palette_line_2+$18			;
+		dc.w Normal_palette_line_2+$1C			;
 word_7A628:
 		dc.w      8,  $866,  $222
-		dc.w   $A24,  $624,  $422,   $20				;
+		dc.w   $A24,  $624,  $422,   $20		;
 		dc.w   $888,  $CCC,  $EEE
-		dc.w   $666,  $888,  $AAA,  $EEE				;
+		dc.w   $666,  $888,  $AAA,  $EEE		;
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -180059,9 +180068,9 @@ loc_7A72C:
 		move.b	#$27,$38(a0)
 		move.b	#$27,$3A(a0)
 		lea	(Child1_MakeMechaHead).l,a2
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - use Robotnik head for SSZ bosses
-		beq.s	loc_7A7AC					;
-		lea	(Child1_MakeRoboHead3).l,a2			;
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - use Robotnik head for SSZ bosses
+		beq.s	loc_7A7AC				;
+		lea	(Child1_MakeRoboHead3).l,a2		;
 
 loc_7A7AC:
 		jsr	(CreateChild1_Normal).l
@@ -180577,19 +180586,19 @@ sub_7ACF2:
 ;		move.b	#$20,$1C(a0)				;
 		moveq	#signextendB(sfx_BossHit),d0
 		jsr	(Play_SFX).l
-		bset	#6,status(a0)					; Liliam: Encore mode - use Robotnik head for SSZ bosses
+		bset	#6,status(a0)				; Liliam: Encore mode - use Robotnik head for SSZ bosses
 
 loc_7AD1A:
 		moveq	#0,d0
-		btst	#0,$20(a0)				;
+		btst	#0,$20(a0)				; Liliam: bugfix - stop clobbering flash timer with player address
 ;		btst	#0,$1C(a0)				;
 		bne.s	loc_7AD28
-		addi.w	#2*7,d0							; Liliam: perform Mecha Sonic boss flash
+		addi.w	#2*7,d0					; Liliam: QOL - perform Mecha Sonic boss flash
 	if FixBugs
-;		addi.w	#2*3,d0							;
+;		addi.w	#2*3,d0					;
 	else
 		; Bug: this should be 2*3
-;		addi.w	#2*2,d0							;
+;		addi.w	#2*2,d0					;
 	endif
 
 loc_7AD28:
@@ -180599,7 +180608,7 @@ loc_7AD28:
 		subq.b	#1,$20(a0)				; Liliam: bugfix - stop clobbering flash timer with player address
 ;		subq.b	#1,$1C(a0)				;
 		bne.s	locret_7AD38
-		bclr	#6,status(a0)					; Liliam: Encore mode - use Robotnik head for SSZ bosses
+		bclr	#6,status(a0)				; Liliam: Encore mode - use Robotnik head for SSZ bosses
 		move.b	#$F,collision_flags(a0)
 
 locret_7AD38:
@@ -220234,6 +220243,7 @@ ArtKosM_AIZ_CaterkillerJr:					; Liliam: reinsert S3 data
 		binclude "General/Sprites/Caterkiller Jr/Caterkiller Jr.bin"
 		even
 ArtNem_HCZMiniboss:						; Liliam: reinsert S3 data
+		; Liliam: QOL - perform underwater boss flash
 		binclude "Levels/HCZ/Nemesis Art/Miniboss.bin"
 		even
 ArtNem_HCZEndBoss:						; Liliam: reinsert S3 data
