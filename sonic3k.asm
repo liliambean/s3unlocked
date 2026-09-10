@@ -7327,8 +7327,10 @@ loc_6468:
 ;		jsr	(Pal_FillBlack).l			;
 		move.w	#$16,(Palette_fade_timer).w
 ;		move.w	#$16,(Title_card_object+objoff_2E).w	;
-		move.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask)<<8,(Ctrl_1).w
-		move.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask)<<8,(Ctrl_2).w
+		move.w	#$FF00,(Ctrl_1).w					; Liliam: bugfix - held buttons read as pressed
+		move.w	#$FF00,(Ctrl_2).w					;
+;		move.w	#(button_direction_mask|button_ABC_mask)<<8,(Ctrl_1).w	;
+;		move.w	#(button_direction_mask|button_ABC_mask)<<8,(Ctrl_2).w	;
 		andi.b	#$7F,(Last_star_post_hit).w
 		bclr	#7,(Game_mode).w
 		move.b	#VInt_ID_8,(V_int_routine).w						; Liliam: title cards - fix sprite pop-in
@@ -7416,6 +7418,8 @@ loc_665A:
 		move.w	#$40-1,(Palette_fade_info).w
 		jsr	(Pal_FillBlack).l
 		move.w	#$16,(Palette_fade_timer).w
+		move.w	#$FF00,(Ctrl_1).w					; Liliam: bugfix - held buttons read as pressed
+		move.w	#$FF00,(Ctrl_2).w					;
 		move.w	#0,(_unkFF7C).w
 		bclr	#7,(Game_mode).w
 
@@ -11793,7 +11797,7 @@ sub_937C:
 		move.b	(Special_stage_jumping).w,2(a1)
 		addq.b	#4,(Pos_table_index+1).w
 		move.b	(Ctrl_2_held).w,d0
-		andi.b	#button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask,d0
+		andi.b	#button_direction_mask|button_ABC_mask,d0
 		beq.s	loc_93A6
 		move.w	#600,(Tails_CPU_idle_timer).w
 
@@ -22832,7 +22836,7 @@ loc_107F6:
 		blo.s	loc_10844
 		bsr.w	Player_SlopeResist
 		move.b	(Ctrl_1_held_logical).w,d0
-		andi.b	#button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask,d0
+		andi.b	#button_direction_mask|button_ABC_mask,d0
 		beq.s	loc_1085E
 		move.b	#$A,anim(a0)
 		cmpi.b	#$AC,anim_frame(a0)
@@ -23570,7 +23574,7 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 		andi.b	#button_ABC_mask,d0
 		beq.s	.return
 		move.b	(Ctrl_1_held_logical).w,d0
-		andi.w	#button_up_mask|button_down_mask|button_left_mask|button_right_mask,d0
+		andi.w	#button_direction_mask,d0
 		beq.s	.noInput
 		cmpi.b	#$B,d0
 		blo.s	.checkUp
@@ -26086,7 +26090,7 @@ Sonic_HyperDash:
 		moveq	#signextendB(sfx_Dash),d0
 		jsr	(Play_SFX).l
 		move.b	(Ctrl_1_held_logical).w,d0
-		andi.w	#button_up_mask|button_down_mask|button_left_mask|button_right_mask,d0	; Get D-pad input
+		andi.w	#button_direction_mask,d0	; Get D-pad input
 		beq.s	.noInput
 		; Any values totaling $B or above are produced by holding
 		; both opposing directions on the D-pad, which is invalid
@@ -29498,7 +29502,7 @@ loc_139A8:
 
 Tails_CPU_Control:
 		move.b	(Ctrl_2_held_logical).w,d0
-		andi.b	#button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask,d0
+		andi.b	#button_direction_mask|button_ABC_mask,d0
 		beq.s	loc_139DC
 		move.w	#10*60,(Tails_CPU_idle_timer).w
 
@@ -29991,7 +29995,7 @@ loc_13E50:
 loc_13E64:
 		tst.b	(Tails_CPU_auto_jump_flag).w
 		beq.s	loc_13E7C
-		ori.w	#((button_ABC_mask)<<8)|0,d1
+		ori.w	#(button_ABC_mask<<8)|0,d1
 		btst	#Status_InAir,status(a0)
 		bne.s	loc_13EB8
 		move.b	#0,(Tails_CPU_auto_jump_flag).w
@@ -30017,7 +30021,7 @@ loc_13E9C:
 		bne.s	loc_13EB8
 		cmpi.b	#8,anim(a0)
 		beq.s	loc_13EB8
-		ori.w	#((button_ABC_mask)<<8)|(button_ABC_mask),d1
+		ori.w	#(button_ABC_mask<<8)|button_ABC_mask,d1
 		move.b	#1,(Tails_CPU_auto_jump_flag).w
 
 loc_13EB8:
@@ -30175,7 +30179,7 @@ loc_13FA4:
 loc_13FB2:
 		andi.b	#$1F,d0
 		bne.s	locret_13FBE
-		ori.w	#((button_ABC_mask)<<8)|(button_ABC_mask),(Ctrl_2_logical).w
+		ori.w	#(button_ABC_mask<<8)|button_ABC_mask,(Ctrl_2_logical).w
 
 locret_13FBE:
 		rts
@@ -30291,7 +30295,7 @@ loc_14106:
 		move.b	(Level_frame_counter+1).w,d0
 		andi.b	#7,d0
 		bne.s	loc_14128
-		ori.w	#((button_ABC_mask)<<8)|(button_ABC_mask),(Ctrl_2_logical).w
+		ori.w	#(button_ABC_mask<<8)|button_ABC_mask,(Ctrl_2_logical).w
 
 loc_14128:
 		move.w	(Camera_Y_pos).w,d0
@@ -30328,7 +30332,7 @@ loc_14164:
 		cmpi.b	#$C0,(Tails_CPU_auto_fly_timer).w
 		blo.s	loc_141D2
 		move.b	#0,(Tails_CPU_auto_fly_timer).w
-		ori.w	#((button_ABC_mask)<<8)|(button_ABC_mask),(Ctrl_2_logical).w
+		ori.w	#(button_ABC_mask<<8)|button_ABC_mask,(Ctrl_2_logical).w
 		bra.s	loc_141D2
 ; ---------------------------------------------------------------------------
 
@@ -30339,7 +30343,7 @@ loc_14198:
 		cmpi.b	#$20,(Tails_CPU_auto_fly_timer).w
 		blo.s	loc_141D2
 		move.b	#0,(Tails_CPU_auto_fly_timer).w
-		ori.w	#((button_ABC_mask)<<8)|(button_ABC_mask),(Ctrl_2_logical).w
+		ori.w	#(button_ABC_mask<<8)|button_ABC_mask,(Ctrl_2_logical).w
 		bra.s	loc_141D2
 ; ---------------------------------------------------------------------------
 
@@ -30348,7 +30352,7 @@ loc_141BA:
 		cmpi.b	#$58,(Tails_CPU_auto_fly_timer).w
 		blo.s	loc_141D2
 		move.b	#0,(Tails_CPU_auto_fly_timer).w
-		ori.w	#((button_ABC_mask)<<8)|(button_ABC_mask),(Ctrl_2_logical).w
+		ori.w	#(button_ABC_mask<<8)|button_ABC_mask,(Ctrl_2_logical).w
 
 loc_141D2:
 		move.b	(Ctrl_1).w,d0
@@ -30380,7 +30384,7 @@ loc_1421C:
 		move.b	(Level_frame_counter+1).w,d0
 		andi.b	#7,d0
 		bne.s	loc_1423E
-		ori.w	#((button_ABC_mask)<<8)|(button_ABC_mask),(Ctrl_2_logical).w
+		ori.w	#(button_ABC_mask<<8)|button_ABC_mask,(Ctrl_2_logical).w
 
 loc_1423E:
 		move.w	(Camera_Y_pos).w,d0
@@ -30452,7 +30456,7 @@ loc_142E2:
 		move.b	#0,(Tails_CPU_auto_fly_timer).w
 
 loc_14328:
-		ori.w	#((button_ABC_mask)<<8)|(button_ABC_mask),(Ctrl_2_logical).w
+		ori.w	#(button_ABC_mask<<8)|button_ABC_mask,(Ctrl_2_logical).w
 
 loc_1432E:
 		rts						; Liliam: Encore mode - allow carrying player 2
@@ -30551,7 +30555,7 @@ loc_143BA:
 		clr.b	object_control(a1)
 		clr.b	(a2)
 		move.b	#$12,1(a2)
-		andi.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask)<<8,d0
+		andi.w	#button_direction_mask<<8,d0
 		beq.w	loc_14410
 		move.b	#$3C,1(a2)
 
@@ -57670,7 +57674,7 @@ sub_253FA:
 		clr.b	object_control(a1)
 		clr.b	(a2)
 		move.b	#$12,2(a2)
-		andi.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask)<<8,d0
+		andi.w	#button_direction_mask<<8,d0
 		beq.w	loc_25430
 		move.b	#$3C,2(a2)
 
@@ -59347,7 +59351,7 @@ sub_266B0:
 		clr.b	$2E(a1)
 		clr.b	(a2)
 		move.b	#$12,2(a2)
-		andi.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask)<<8,d0
+		andi.w	#button_direction_mask<<8,d0
 		beq.w	loc_266E6
 		move.b	#$3C,2(a2)
 
@@ -63930,7 +63934,7 @@ sub_290F2:
 		clr.b	object_control(a1)
 		clr.b	(a2)
 		move.b	#$12,2(a2)
-		andi.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask)<<8,d0
+		andi.w	#button_direction_mask<<8,d0
 		beq.w	loc_29128
 		move.b	#$3C,2(a2)
 
@@ -86630,7 +86634,7 @@ sub_3A8B8:
 		clr.b	object_control(a1)
 		clr.b	(a2)
 		move.b	#$12,2(a2)
-		andi.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask)<<8,d0
+		andi.w	#button_direction_mask<<8,d0
 		beq.w	loc_3A8F8
 		move.b	#$3C,2(a2)
 
@@ -86777,7 +86781,7 @@ sub_3AA7E:
 		clr.b	object_control(a1)
 		clr.b	(a2)
 		move.b	#$12,2(a2)
-		andi.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask)<<8,d0
+		andi.w	#button_direction_mask<<8,d0
 		beq.w	loc_3AAC0
 		move.b	#$3C,2(a2)
 
@@ -90919,7 +90923,7 @@ sub_3E508:
 		clr.b	$2E(a1)
 		clr.b	(a2)
 		move.b	#$12,2(a2)
-		andi.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask)<<8,d0
+		andi.w	#button_direction_mask<<8,d0
 		beq.w	loc_3E546
 		move.b	#$3C,2(a2)
 
@@ -92302,7 +92306,7 @@ sub_3F5C2:
 		clr.b	object_control(a1)
 		clr.b	(a2)
 		move.b	#$12,2(a2)
-		andi.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask)<<8,d0
+		andi.w	#button_direction_mask<<8,d0
 		beq.w	loc_3F61C
 		move.b	#$3C,2(a2)
 
@@ -94447,7 +94451,7 @@ sub_40F52:
 		clr.b	object_control(a1)
 		clr.b	(a2)
 		move.b	#18,2(a2)
-		andi.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask)<<8,d0
+		andi.w	#button_direction_mask<<8,d0
 		beq.w	loc_40F88
 		move.b	#60,2(a2)
 
@@ -101639,7 +101643,7 @@ sub_4703E:
 		clr.b	object_control(a1)
 		clr.b	(a2)
 		move.b	#18,2(a2)
-		andi.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask)<<8,d0
+		andi.w	#button_direction_mask<<8,d0
 		beq.w	loc_47074
 		move.b	#60,2(a2)
 
@@ -110300,7 +110304,7 @@ loc_4D456:
 
 loc_4D470:
 		move.b	(Ctrl_1_pressed).w,d1
-		andi.b	#button_up_mask|button_down_mask|button_left_mask|button_right_mask,d1
+		andi.b	#button_direction_mask,d1
 		beq.s	loc_4D482
 		moveq	#signextendB(sfx_WeatherMachine),d0
 		jsr	(Play_SFX).l
@@ -161453,7 +161457,7 @@ loc_6E7E4:
 		cmpi.b	#$12,angle(a1)
 		bne.w	locret_6E4C4
 		move.l	#loc_6E80C,(a0)
-		move.w	#((button_ABC_mask)<<8)|(button_ABC_mask),(Ctrl_1_logical).w
+		move.w	#(button_ABC_mask<<8)|button_ABC_mask,(Ctrl_1_logical).w
 		st	(Ctrl_1_locked).w
 		rts
 ; ---------------------------------------------------------------------------
@@ -191967,7 +191971,7 @@ loc_827E8:
 		bne.s	loc_82828
 		move.b	(a2)+,d0
 		move.b	(a2)+,d1
-		andi.w	#button_up_mask|button_down_mask|button_left_mask|button_right_mask,d0
+		andi.w	#button_direction_mask,d0
 		lsl.w	#2,d0
 		andi.w	#button_ABC_mask,d1
 		beq.s	loc_8281A
@@ -218530,10 +218534,10 @@ sub_92AD4:
 		moveq	#0,d4
 		move.w	#1,d1
 		move.b	(Ctrl_1_pressed).w,d4
-		andi.w	#button_up_mask|button_down_mask|button_left_mask|button_right_mask,d4
+		andi.w	#button_direction_mask,d4
 		bne.s	loc_92B16
 		move.b	(Ctrl_1_held).w,d0
-		andi.w	#button_up_mask|button_down_mask|button_left_mask|button_right_mask,d0
+		andi.w	#button_direction_mask,d0
 		bne.s	loc_92AFE
 		move.b	#$C,(Debug_camera_delay).w
 		move.b	#$F,(Debug_camera_speed).w

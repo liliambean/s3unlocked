@@ -166,6 +166,7 @@ button_B_mask:			EQU	1<<button_B	; $10
 button_C_mask:			EQU	1<<button_C	; $20
 button_A_mask:			EQU	1<<button_A	; $40
 button_start_mask:		EQU	1<<button_start	; $80
+button_direction_mask:		EQU	button_up_mask|button_down_mask|button_left_mask|button_right_mask
 button_ABC_mask:		EQU	button_A_mask|button_B_mask|button_C_mask
 button_confirm_mask:		EQU	button_C_mask|button_start_mask			; Liliam: options menu
 ;button_confirm_mask:		EQU	button_A_mask|button_C_mask|button_start_mask	;
