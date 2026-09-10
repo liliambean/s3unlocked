@@ -116454,7 +116454,9 @@ loc_50EC0:
 ; ---------------------------------------------------------------------------
 
 loc_50ED0:
-		move.w	#$10,(Events_routine_bg).w			; Normal deformation
+		move.w	#$10,(Events_routine_bg).w
+		lea	(Level_layout_main+$748).w,a5		; Liliam: bugfix - persist HCZ2 wall after events
+		bsr.w	Adjust_HCZ2Layout			;
 		jsr	HCZ2_Deform(pc)
 		jsr	Reset_TileOffsetPositionEff(pc)
 		moveq	#0,d1
@@ -116521,6 +116523,8 @@ loc_50F64:
 		clr.w	(Screen_shake_flag).w		; Disable screen shaking if still constant
 
 loc_50F72:
+		lea	(Level_layout_main+$754).w,a5		; Liliam: bugfix - persist HCZ2 wall after event
+		bsr.s	Adjust_HCZ2Layout			;
 		clr.b	(Background_collision_flag).w
 		move.w	#$F0,(Draw_delayed_position).w
 		move.w	#$F,(Draw_delayed_rowcount).w
@@ -116566,6 +116570,18 @@ loc_50FCE:
 		lea	(HScroll_table).w,a5
 		jsr	ApplyDeformation(pc)
 		jmp	ShakeScreen_Setup(pc)
+; ---------------------------------------------------------------------------
+
+Adjust_HCZ2Layout:						; Liliam: bugfix - persist HCZ2 wall after event
+		lea	(Level_layout_main+$E2C).w,a1
+		moveq	#4-1,d0
+
+	.loop:
+		move.l	(a1),(a5)
+		adda.w	#$14,a1
+		adda.w	#$90,a5
+		dbf	d0,.loop
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
