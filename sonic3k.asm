@@ -23190,9 +23190,9 @@ Amy_Normal:
 
 	.checkHammerRush:
 		tst.b	double_jump_property(a0)
-		beq.s	Amy_CheckMoves_Return
+		beq.s	.return
 		tst.b	double_jump_flag(a0)
-		bne.s	Amy_CheckMoves_Return
+		bne.s	.return
 		cmpi.b	#$1D,anim(a0)
 		bne.s	.cancel
 		subq.b	#1,double_jump_property(a0)
@@ -23217,7 +23217,7 @@ Amy_Normal:
 		move.w	#-$600,ground_vel(a0)
 		bclr	#Status_Push,status(a0)
 		btst	#Status_Facing,status(a0)
-		bne.s	Amy_CheckMoves_Return
+		bne.s	.return
 		move.w	#$600,ground_vel(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -23229,7 +23229,7 @@ Amy_Normal:
 		clr.b	double_jump_property(a0)
 		bclr	#Status_WaterSlide,status_secondary(a0)
 
-Amy_CheckMoves_Return:
+	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -23243,7 +23243,7 @@ Amy_CheckMoves:							; Liliam: extra skills - hammer attack
 		andi.b	#button_right_mask|button_left_mask,d0
 		bne.s	.activate
 		btst	#button_up,(Ctrl_1_held_logical).w
-		bne.s	Amy_CheckMoves_Return
+		bne.s	Amy_Normal.return
 
 	.activate:
 		move.w	#-$380,d0
@@ -23351,12 +23351,12 @@ Mighty_Normal:
 		tst.b	double_jump_property(a0)
 		bne.w	MightyRay_TriangleJump
 		cmpi.b	#Status_HammerDrop,double_jump_flag(a0)
-		bne.s	Mighty_CheckMoves_Return
+		bne.s	.return
 		cmpi.w	#$1000,y_vel(a0)
-		ble.s	Mighty_CheckMoves_Return
+		ble.s	.return
 		move.w	#$1000,y_vel(a0)
 
-Mighty_CheckMoves_Return:
+	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -23365,7 +23365,7 @@ Mighty_CheckMoves:						; Liliam: extra skills - hammer drop
 		andi.b	#button_right_mask|button_left_mask,d0
 		bne.s	.activate
 		btst	#button_up,(Ctrl_1_held_logical).w
-		bne.s	Mighty_CheckMoves_Return
+		bne.s	Mighty_Normal.return
 
 	.activate:
 		moveq	#Skill_MightyWallJump,d1
@@ -23505,6 +23505,33 @@ MightyRay_TriangleJump_CheckAttach:				; Liliam: extra skills - triangle jump
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
+Obj_Ray:							; Liliam: add extra characters
+		move.l	#.main,(a0)
+		move.b	#5,character_id(a0)
+
+	.main:
+		cmpa.w	#Player_1,a0
+		bne.s	.player2
+		lea	(Max_speed).w,a4
+		lea	(Distance_from_top).w,a5
+		lea	(Dust).w,a6
+		tst.w	(Debug_placement_mode).w
+		beq.s	Ray_Normal
+		bmi.w	Sonic_FrameCycle
+		jmp	(DebugMode).l
+; ---------------------------------------------------------------------------
+
+	.player2:
+		lea	(Max_speed_P2).w,a4
+		lea	(Distance_from_top_P2).w,a5
+		lea	(Dust_P2).w,a6
+
+Ray_Normal:
+		move.l	#Map_Ray,mappings(a0)
+		bsr.w	loc_10ADE
+		tst.b	double_jump_property(a0)
+		beq.w	MightyRay_TriangleJump.return
+
 MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 		move.w	x_pos(a0),d0
 		cmp.w	x_pos+2(a0),d0
@@ -23539,7 +23566,7 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 	.lookup:
 		lsl.w	#2,d0
 		lea	(MightyRay_TriangleJumpSpeeds-4).l,a1
-		lea	(a1,d0.w),a1
+		adda.l	d0,a1
 		move.w	(a1)+,x_vel(a0)
 		move.w	(a1)+,y_vel(a0)
 		move.b	#1,jumping(a0)
@@ -23576,37 +23603,6 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 		moveq	#9,d0
 		bra.s	.lookup
 ; ---------------------------------------------------------------------------
-
-Obj_Ray:							; Liliam: add extra characters
-		move.l	#.main,(a0)
-		move.b	#5,character_id(a0)
-
-	.main:
-		cmpa.w	#Player_1,a0
-		bne.s	.player2
-		lea	(Max_speed).w,a4
-		lea	(Distance_from_top).w,a5
-		lea	(Dust).w,a6
-		tst.w	(Debug_placement_mode).w
-		beq.s	Ray_Normal
-		bmi.w	Sonic_FrameCycle
-		jmp	(DebugMode).l
-; ---------------------------------------------------------------------------
-
-	.player2:
-		lea	(Max_speed_P2).w,a4
-		lea	(Distance_from_top_P2).w,a5
-		lea	(Dust_P2).w,a6
-
-Ray_Normal:
-		move.l	#Map_Ray,mappings(a0)
-		bsr.w	loc_10ADE
-		tst.b	double_jump_property(a0)
-		bne.w	MightyRay_TriangleJump
-
-Ray_CheckMoves_Return:
-		rts
-; ---------------------------------------------------------------------------
 ability_timer = $2D
 glide_speed_cap = $28
 glide_anim_timer = $30
@@ -23619,7 +23615,7 @@ Ray_CheckMoves:							; Liliam: extra skills - air glide (credit: Rubberduckycoo
 		andi.b	#button_right_mask|button_left_mask,d0
 		bne.s	.activate
 		btst	#button_up,(Ctrl_1_held_logical).w
-		bne.s	Ray_CheckMoves_Return
+		bne.s	MightyRay_TriangleJump.return
 
 	.activate:
 		moveq	#Skill_RayWallJump,d1
