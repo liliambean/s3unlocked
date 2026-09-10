@@ -5927,7 +5927,7 @@ loc_3FF0:
 		tst.w	-$E(a1)					; Wait for BG color to turn to black
 		bne.s	loc_3FF0
 		clr.w	(Ending_scroll_delay).w
-		clr.w	(_unkF662).w
+;		clr.w	(_unkF662).w				; Liliam: bugfix - set correct camera height
 		move.b	#-1,(Title_anim_buffer).w
 		move.b	#0,(Title_anim_delay).w
 		move.w	#1,(Title_anim_frame).w		; Set initial variables for Sonic animation page flipping
@@ -7054,7 +7054,8 @@ loc_613E:
 		jsr	(Init_SpriteTable).l
 		lea	(VDP_control_port).l,a6
 		move.w	#VDP_Option2|VDPReg2_LineScroll,(a6)
-		move.w	#VDP_Plane_A|(VRAM_Plane_A_Name_Table>>10),(a6)
+		move.w	#VDP_Plane_A|(VRAM_Plane_B_Name_Table>>10),(a6)				; Liliam: title cards - fix sprite pop-in
+;		move.w	#VDP_Plane_A|(VRAM_Plane_A_Name_Table>>10),(a6)				;
 		move.w	#VDP_Plane_B|(VRAM_Plane_B_Name_Table>>13),(a6)
 		move.w	#VDP_Sprites|(VRAM_Sprite_Table>>9),(a6)
 		move.w	#VDP_PlnSize|PlaneSize_512x256,(a6)
@@ -7105,7 +7106,7 @@ loc_61BE:
 		bsr.w	LoadPalette_LevelLoad						; Liliam: simplify player palette selection
 ;		bsr.w	LoadPalette_Immediate						;
 		bsr.w	CheckLevelForWater
-		clearRAM	Water_palette_line_2,(Water_palette_end-Water_palette_line_2)
+;		clearRAM	Water_palette_line_2,(Water_palette_end-Water_palette_line_2)	; Liliam: title cards - fix sprite pop-in
 		tst.b	(Water_flag).w
 		beq.s	loc_61FC
 		move.w	#VDP_Option0|VDPReg0_EnableHInt,(a6)
@@ -7198,7 +7199,7 @@ loc_6310:
 ;		moveq	#PalID_SonicTails,d0			; Liliam: competition - use 1P player palettes
 ;		bsr.w	LoadPalette				;
 		jsr	(Get_LevelSizeStart).l
-		jsr	(DeformBgLayer).l
+;		jsr	(DeformBgLayer).l							; Liliam: title cards - fix sprite pop-in
 		bsr.w	LoadLevelLoadBlock
 		jsr	(LoadLevelLoadBlock2).l
 		move	#$2700,sr
@@ -7295,14 +7296,16 @@ loc_6460:
 loc_6468:
 		bsr.w	SpawnLevelMainSprites
 		jsr	(Load_Sprites).l
-		jsr	(Load_Rings).l
-		jsr	(Draw_LRZ_Special_Rock_Sprites).l
+;		jsr	(Load_Rings).l								; Liliam: title cards - fix sprite pop-in
+;		jsr	(Draw_LRZ_Special_Rock_Sprites).l					;
 		jsr	(Process_Sprites).l
+		jsr	(DeformBgLayer).l							;
+		jsr	(Load_Rings).l								;
 		jsr	(Render_Sprites).l
 		jsr	(Animate_Tiles).l
 		move.w	#1800,(Demo_timer).w
-;		bsr.w	LoadWaterPalette							; Liliam: QOL - fade in player palette if title card suppressed
-;		clearRAM	Water_palette_line_2,(Water_palette_end-Water_palette_line_2)	;
+		bsr.w	LoadWaterPalette
+		clearRAM	Water_palette_line_2,(Water_palette_end-Water_palette_line_2)
 		move.b	#0,(Ctrl_1_locked).w
 		move.b	#0,(Ctrl_2_locked).w
 		jsr	GetDemoPtr(pc)
@@ -7328,12 +7331,19 @@ loc_6468:
 		move.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask)<<8,(Ctrl_2).w
 		andi.b	#$7F,(Last_star_post_hit).w
 		bclr	#7,(Game_mode).w
+		move.b	#VInt_ID_8,(V_int_routine).w						; Liliam: title cards - fix sprite pop-in
+		bsr.w	Wait_VSync								;
+		move.w	#VDP_Plane_A|(VRAM_Plane_A_Name_Table>>10),(VDP_control_port).l		;
+		bra.s	loc_6520								;
+; ---------------------------------------------------------------------------
 
 LevelLoop:
 		bsr.w	Pause_Game
 		move.b	#VInt_ID_8,(V_int_routine).w
 		jsr	(Process_Kos_Queue).l
 		bsr.w	Wait_VSync
+
+loc_6520:
 		addq.w	#1,(Level_frame_counter).w
 		bsr.w	Demo_PlayRecord
 		jsr	(Animate_Palette).l
@@ -9421,7 +9431,7 @@ loc_78F2:
 
 loc_7932:
 		move.l	#WaterTransition_AIZ1,(Water_palette_data_addr).w
-		moveq	#0,d0
+;		moveq	#0,d0									; Liliam: title cards - fix sprite pop-in
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#1,d0
 		lsr.w	#6,d0
@@ -9434,6 +9444,16 @@ loc_7932:
 		clr.b	(Water_entered_counter).w
 		clr.b	(Water_full_screen_flag).w
 		move.b	#1,(Water_speed).w
+		tst.b	(Game_mode).w								; Liliam: title cards - fix sprite pop-in
+		bpl.s	LoadWaterPalette							;
+		lea	(Normal_palette),a1							;
+		lea	(Water_palette),a2							;
+		moveq	#bytesToLcnt(Water_palette_line_2-Water_palette),d0			;
+
+	.loop:
+		move.l	(a1)+,(a2)+								;
+		dbf	d0,.loop								;
+		rts										;
 ; End of function CheckLevelForWater
 
 
@@ -24166,13 +24186,12 @@ Sonic_Init_Continued:
 		move.b	#4,flip_speed(a0)
 		move.b	#0,(Super_Sonic_Knux_flag).w
 		move.b	#30,air_left(a0)
-		bra.w	Reset_Player_Position_Array		; Liliam: reset array to actual player position
-;		subi.w	#$20,x_pos(a0)				;
+;		subi.w	#$20,x_pos(a0)				; Liliam: reset array to actual player position
 ;		addi.w	#4,y_pos(a0)				;
-;		bsr.w	Reset_Player_Position_Array		;
+		bsr.w	Reset_Player_Position_Array
 ;		addi.w	#$20,x_pos(a0)				;
 ;		subi.w	#4,y_pos(a0)				;
-;		rts						;
+;		rts										; Liliam: title cards - fix sprite pop-in
 
 ; ---------------------------------------------------------------------------
 ; Normal state for Sonic
@@ -29204,6 +29223,8 @@ Tails_Init_Continued:
 		move.b	#4,flip_speed(a0)
 		move.b	#0,(Super_Tails_flag).w
 		move.b	#30,air_left(a0)
+		bsr.w	Reset_Player_Position_Array		; Liliam: reset array to actual player position
+
 ;		cmpi.w	#$20,(Tails_CPU_routine).w				; Liliam: Tails CPU - always reset timers
 ;		beq.s	loc_137A4						;
 ;		cmpi.w	#$12,(Tails_CPU_routine).w				;
@@ -29214,12 +29235,10 @@ Tails_Init_Continued:
 ;		move.w	#0,(Tails_CPU_idle_timer).w				;
 ;		move.w	#0,(Tails_CPU_flight_timer).w				;
 		move.l	#Obj_Tails_Tail,(Tails_tails).w
+		move.w	#$100,(Tails_tails+priority).w						; Liliam: title cards - fix sprite pop-in
 		move.w	a0,(Tails_tails+$30).w
-		bra.w	Reset_Player_Position_Array		; Liliam: reset array to actual player position
-
-;		move.b	(Last_star_post_hit).w,(Tails_CPU_star_post_flag).w	; Liliam: Tails CPU - always reset timers
-;		rts								;
-; ---------------------------------------------------------------------------
+;		move.b	(Last_star_post_hit).w,(Tails_CPU_star_post_flag).w			;
+;		rts										;
 
 Tails_Control:
 		cmpa.w	#Player_1,a0				; Liliam: Encore mode - block debug mode for player 2
@@ -33580,6 +33599,14 @@ Obj_Tails_Tail_NoDraw:
 		ori.w	#high_priority,art_tile(a0)
 
 loc_16106:
+		move.b	mapping_frame(a2),d1							; Liliam: title cards - fix sprite pop-in
+		bne.s	.done									;
+		clr.b	(Player_prev_frame_P2_tail).w						;
+		clr.b	mapping_frame(a0)							;
+		bra.w	Tails_RingBarrier							;
+; ---------------------------------------------------------------------------
+
+	.done:
 		moveq	#0,d0
 		move.b	anim(a2),d0
 ;		btst	#Status_Push,status(a2)			; Liliam: simplify player anim selection
@@ -33588,22 +33615,21 @@ loc_16106:
 ;		bne.s	loc_1612C				;
 
 		; This is checking if parent (Tails) is in its pushing animation
-		cmpi.b	#$D0,mapping_frame(a2)			;
 ;		cmpi.b	#$A9,mapping_frame(a2)			;
+		cmpi.b	#$D0,d1					;
 		blo.s	loc_1612C
-		cmpi.b	#$D3,mapping_frame(a2)			;
 ;		cmpi.b	#$AC,mapping_frame(a2)			;
+		cmpi.b	#$D3,d1					;
 		bhi.s	loc_1612C
 		moveq	#4,d0
 
 loc_1612C:
-		cmp.b	objoff_34(a0),d0	; Has the input parent anim changed since last check?
-		beq.s	loc_1613C		; If not, branch and skip setting a matching Tails' Tails anim
-		move.b	d0,objoff_34(a0)	; Store d0 for the above comparison
+;		cmp.b	objoff_34(a0),d0			;
+;		beq.s	loc_1613C				;
+;		move.b	d0,objoff_34(a0)			;
 		move.b	Obj_Tails_Tail_AniSelection(pc,d0.w),anim(a0)	; Load anim relative to parent's
 
 loc_1613C:
-		bsr.w	Tails_RingBarrier			; Liliam: extra skills - ring barrier
 		lea	(AniTails_Tail).l,a1
 		bsr.w	Animate_Tails_Part2
 ;		tst.b	(Reverse_gravity_flag).w		; Liliam: add extra characters
@@ -33613,8 +33639,8 @@ loc_1613C:
 ;		eori.b	#2,render_flags(a0)			;
 
 ;loc_1615A:
-		bra.w	Tails_Tail_Load_PLC			; Liliam: Encore mode - draw Tails' tails along with him
-;		bsr.w	Tails_Tail_Load_PLC			;
+		bsr.w	Tails_Tail_Load_PLC
+		bra.s	Tails_RingBarrier			; Liliam: Encore mode - draw Tails' tails along with him
 ;		jmp	(Draw_Sprite).l				;
 ; ---------------------------------------------------------------------------
 ; animation master script table for the tails
@@ -34266,14 +34292,13 @@ Knuckles_Init_Continued:
 		move.b	#4,flip_speed(a0)
 		move.b	#0,(Super_Sonic_Knux_flag).w
 		move.b	#30,air_left(a0)
-		bra.w	Reset_Player_Position_Array		; Liliam: reset array to actual player position
+		bsr.w	Reset_Player_Position_Array		; Liliam: reset array to actual player position
 ;		subi.w	#$20,x_pos(a0)				;
 ;		addi.w	#4,y_pos(a0)				;
 ;		jsr	(Reset_Player_Position_Array).l		;
 ;		addi.w	#$20,x_pos(a0)				;
 ;		subi.w	#4,y_pos(a0)				;
-;		rts						;
-; ---------------------------------------------------------------------------
+;		rts										; Liliam: title cards - fix sprite pop-in
 
 Knuckles_Control:
 		cmpa.w	#Player_1,a0				; Liliam: Encore mode - block debug mode for player 2
@@ -43903,7 +43928,7 @@ Get_LevelSizeStart:
 		moveq	#0,d0
 		move.b	d0,(Dynamic_resize_routine).w
 		move.w	d0,(Ending_scroll_delay).w
-		move.w	d0,(_unkF662).w
+;		move.w	d0,(_unkF662).w				; Liliam: bugfix - set correct camera height
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#1,d0
 		lsr.w	#4,d0
@@ -43977,6 +44002,7 @@ loc_1BE46:
 		tst.b	(Last_star_post_hit).w
 		beq.s	loc_1BE5E
 		jsr	(Load_Starpost_Settings).l
+		addq.w	#4,(Player_1+y_pos).w			; Liliam: bugfix - set correct camera height
 		move.w	(Player_1+x_pos).w,d1
 		move.w	(Player_1+y_pos).w,d0
 		bra.w	loc_1BF74
@@ -44103,7 +44129,8 @@ loc_1BF48:
 		move.w	#$3E4,d0				;
 		move.w	d1,(Player_1+x_pos).w			;
 		move.w	d0,(Player_1+y_pos).w			;
-		bset	#Status_OnObj,(Player_1+status).w	;
+		move.b	#5,(Player_1+anim).w			;
+		move.b	#1,(Player_1+object_control).w		;
 		bra.s	loc_1BF74				;
 ; ---------------------------------------------------------------------------
 
@@ -44142,6 +44169,24 @@ loc_1BF7C:
 		addi.w	#$30,d0					; Liliam: bugfix - set correct camera height
 		tst.w	(Competition_mode).w
 		bne.s	loc_1BF8C
+		moveq	#0,d2					;
+		cmpi.w	#2,(Player_mode).w			;
+		beq.s	.setTailsHeight				;
+		cmpi.w	#4,(Player_mode).w			;
+		beq.s	.setTailsHeight				;
+		tst.b	(Encore_mode).w				;
+		beq.s	.adjustPosition				;
+		cmpi.b	#1,(P1_character).w			;
+		beq.s	.setTailsHeight				;
+		cmpi.b	#3,(P1_character).w			;
+		bne.s	.adjustPosition				;
+
+	.setTailsHeight:
+		moveq	#4,d2					;
+
+	.adjustPosition:
+		add.w	d2,(Player_1+y_pos).w			;
+		add.w	d2,d0					;
 		subi.w	#$30,d0					;
 		move.w	(Camera_max_X_pos).w,d2
 		cmp.w	d2,d1
@@ -85366,6 +85411,7 @@ Obj_LevelIntro_PlayerLaunchFromGround:
 
 
 sub_39A78:
+		clr.b	mapping_frame(a1)							; Liliam: title cards - fix sprite pop-in
 		move.b	#3,object_control(a1)
 
 locret_39A7E:
@@ -98365,9 +98411,6 @@ Obj_LevelIntro_PlayerRun:
 		addi.w	#$B0,d0
 		move.w	d0,$30(a0)
 		move.w	(Player_1+y_pos).w,d0
-		moveq	#$13,d1					; Liliam: bugfix - set correct camera height
-		sub.b	(Player_1+default_y_radius).w,d1	;
-		add.w	d1,d0					;
 		move.w	d0,$32(a0)
 		move.l	#loc_44A26,(a0)
 
@@ -118871,8 +118914,9 @@ loc_5238E:
 ; ---------------------------------------------------------------------------
 
 loc_523B6:
-		move.b	#1,object_control(a1)		; Player under object control
-		bset	#Status_Roll,status(a1)		; Set to jumping state
+		move.b	#1,object_control(a1)
+		bclr	#Status_InAir,status(a1)						; Liliam: title cards - fix sprite pop-in
+		bset	#Status_Roll,status(a1)
 		move.b	#2,anim(a1)		; Rolling animation
 
 locret_523C8:
@@ -121412,6 +121456,8 @@ loc_53B7E:
 		move.b	#$81,object_control(a1)				; Liliam: place ICZ1 teleporter in layout
 ;		move.b	#1,object_control(a1)				;
 		move.b	#2,anim(a1)
+		clr.b	mapping_frame(a1)							; Liliam: title cards - fix sprite pop-in
+		bclr	#Status_InAir,status(a1)						;
 		bset	#Status_Roll,status(a1)
 		move.w	#-1,y_vel(a1)				; Liliam: allow player 2 to interact with teleporters
 
@@ -128334,6 +128380,7 @@ loc_57CD2:
 		bne.w	loc_57D50
 		move.b	#1,object_control(a1)
 		move.b	#2,anim(a1)
+		bclr	#Status_InAir,status(a1)						; Liliam: title cards - fix sprite pop-in
 		bset	#Status_Roll,status(a1)
 		move.w	#-1,y_vel(a1)
 		move.w	y_pos(a1),d1
@@ -128430,6 +128477,7 @@ Obj_57DCC:
 		move.w	x_pos(a0),x_pos(a1)
 		move.b	#1,object_control(a1)
 		move.b	#2,anim(a1)
+		bclr	#Status_InAir,status(a1)						; Liliam: title cards - fix sprite pop-in
 		bset	#Status_Roll,status(a1)
 		move.w	#-1,y_vel(a1)
 		tst.w	(Player_1+art_tile).w			; Liliam: allow player 2 to interact with teleporters
@@ -146160,6 +146208,7 @@ Obj_HPZEggCapsuleEmpty:						; Liliam: HPZ - add Knuckles LRZ2 results
 		bne.s	.return
 		lea	next_object(a0),a1
 		bset	#p1_standing_bit,status(a1)
+		bset	#Status_OnObj,(Player_1+status).w
 		move.w	a1,(Player_1+interact).w
 		move.w	(Camera_Y_pos).w,d0
 		move.w	d0,(Camera_min_Y_pos).w
@@ -222819,11 +222868,13 @@ Sonic_Start_Locations:
 		; Liliam: start from actual act 2 start
 		binclude "Levels/MGZ/Start Location/Sonic/2.bin"
 		binclude "Levels/CNZ/Start Location/Sonic/1.bin"
+		; Liliam: bugfix - set correct camera height
 		binclude "Levels/CNZ/Start Location/Sonic/2.bin"
 		binclude "Levels/FBZ/Start Location/Sonic/1.bin"
 		; Liliam: start from actual act 2 start
 		binclude "Levels/FBZ/Start Location/Sonic/2.bin"
 		binclude "Levels/ICZ/Start Location/Sonic/1.bin"
+		; Liliam: bugfix - set correct camera height
 		binclude "Levels/ICZ/Start Location/Sonic/2.bin"
 		binclude "Levels/LBZ/Start Location/Sonic/1.bin"
 		; Liliam: start from actual act 2 start
@@ -222882,6 +222933,7 @@ Knux_Start_Locations:
 		binclude "Levels/MGZ/Start Location/Knuckles/2.bin"
 		; Liliam: Encore mode - player starts
 		binclude "Levels/CNZ/Start Location/Knuckles/1.bin"
+		; Liliam: bugfix - set correct camera height
 		binclude "Levels/CNZ/Start Location/Knuckles/2.bin"
 		binclude "Levels/FBZ/Start Location/Knuckles/1.bin"
 		; Liliam: start from actual act 2 start

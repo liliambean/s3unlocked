@@ -680,25 +680,21 @@ Palette_frame			ds.w 1
 Palette_timer			ds.b 1
 Super_palette_status		ds.b 1			; appears to be a flag for the palette's current status: '0' for 'off', '1' for 'fading', -1 for 'fading done'
 Ending_scroll_delay		ds.w 1
-_unkF662			ds.w 1			; unused
+Scroll_forced_X_pos		ds.w 1
 Background_collision_flag	ds.b 1			; if set, background collision is enabled
 Disable_death_plane		ds.b 1			; if set, going below the screen won't kill the player
-Super_Sonic_Knux_flag		ds.b 1
-Super_Tails_flag		ds.b 1
+Scroll_forced_Y_pos		ds.w 1			; note: must be exactly 4 bytes after Scroll_forced_X_pos
 Palette_frame_Tails		ds.w 1			; Tails would use Palette_frame, but it's reserved for his Super Flickies
 Ctrl_2_logical =		*			; both held and pressed
 Ctrl_2_held_logical		ds.b 1
 Ctrl_2_pressed_logical		ds.b 1
 Tails_birds_first_target	ds.b 1
-			ds.b 3				; unused
+Scroll_force_positions		ds.b 1			; if this is set scrolling will be based on the Scroll_forced variables rather than the player's actual position
+Scroll_forced_ground_vel	ds.w 1		; Liliam: extra skills - air glide
 Super_frame_count		ds.w 1
-			ds.l 1				; unused
-Scroll_force_positions		ds.b 1			; if this is set scrolling will be based on the two variables below rather than the player's actual position
-			ds.b 1				; unused
-Scroll_forced_X_pos		ds.w 1
-			ds.w 1				; unused
-Scroll_forced_Y_pos		ds.w 1			; note: must be exactly 4 bytes after Scroll_forced_X_pos
-			ds.w 1				; unused
+			ds.b $A				; unused
+Scroll_forced_status		ds.b 1		; Liliam: extra skills - air glide
+			ds.b 3				; unused
 
 Nem_decomp_queue		ds.b 6*$10		; 6 bytes per entry, first longword is source location and next word is VRAM destination
 Nem_decomp_queue_End
@@ -905,9 +901,9 @@ Current_act			ds.b 1
 Life_count			ds.b 1
 			ds.b 3				; unused
 Current_special_stage		ds.b 1
-			ds.b 1				; unused
 Continue_count			ds.b 1
-			ds.b 1				; unused
+Super_Sonic_Knux_flag		ds.b 1
+Super_Tails_flag		ds.b 1
 Time_over_flag			ds.b 1
 Extra_life_flags		ds.b 1
 Update_HUD_life_count		ds.b 1
