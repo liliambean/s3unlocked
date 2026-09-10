@@ -1925,7 +1925,7 @@ Process_Nem_Queue_Init:
 		moveq	#$10,d6
 		moveq	#0,d0
 		move.l	a0,(Nem_decomp_queue).w
-		move.l	a3,(Nem_decomp_vars).w
+		move.l	a3,(Nem_write_routine).w
 		move.l	d0,(Nem_repeat_count).w
 		move.l	d0,(Nem_palette_index).w
 		move.l	d0,(Nem_previous_row).w
@@ -1988,7 +1988,7 @@ Process_Nem_Queue_Main:
 		move.l	d0,(a4)
 		subq.w	#VDP_control_port-VDP_data_port,a4	; a4 = VDP_data_port
 		movea.l	(Nem_decomp_queue).w,a0
-		movea.l	(Nem_decomp_vars).w,a3
+		movea.l	(Nem_write_routine).w,a3
 		move.l	(Nem_repeat_count).w,d0
 		move.l	(Nem_palette_index).w,d1
 		move.l	(Nem_previous_row).w,d2
@@ -2004,7 +2004,7 @@ Process_Nem_Queue_Loop:
 		subq.w	#1,(Nem_frame_patterns_left).w	; has the current frame's worth of patterns been decompressed?
 		bne.s	Process_Nem_Queue_Loop	; if not, loop
 		move.l	a0,(Nem_decomp_queue).w
-		move.l	a3,(Nem_decomp_vars).w
+		move.l	a3,(Nem_write_routine).w
 		move.l	d0,(Nem_repeat_count).w
 		move.l	d1,(Nem_palette_index).w
 		move.l	d2,(Nem_previous_row).w
@@ -5048,11 +5048,11 @@ loc_3B7C:
 
 ; ---------------------------------------------------------------------------
 
-Pal_PrepFade_LevelLoad:										; Liliam: fade in player palette if title card suppressed
-		cmpi.l	#Obj_TitleCard,(Dynamic_object_RAM+(object_size*5)).w
+Pal_PrepFade_LevelLoad:						; Liliam: QOL - fade in player palette if title card suppressed
+		cmpi.l	#Obj_TitleCard,(Title_card_object).w
 		bne.s	.fadePlayerPal
 		move.w	#$2030-1,(Palette_fade_info).w
-		move.w	#$16,(Dynamic_object_RAM+(object_size*5)+objoff_2E).w
+		move.w	#$16,(Title_card_object+objoff_2E).w
 		bra.s	Pal_FillBlack
 ; ---------------------------------------------------------------------------
 
@@ -5651,7 +5651,7 @@ Encore_LoadFlags:						; Liliam: Encore mode - palette
 		rts
 ; ---------------------------------------------------------------------------
 
-LoadPalette_LevelLoad:										; Liliam: fade in player palette if title card suppressed
+LoadPalette_LevelLoad:						; Liliam: Encore mode - palette
 		bsr.s	Encore_LoadFlags
 		tst.w	(Competition_mode).w
 		bne.s	LoadPalette_NoEncore
@@ -5727,7 +5727,7 @@ loc_3DEA:
 ; =============== S U B R O U T I N E =======================================
 
 
-LoadPalette2:
+LoadPalette2_Immediate:
 		lea	(PalPoint_Encore-$48).l,a1		; Liliam: Encore mode - palette
 		tst.b	(Encore_flags).w			;
 		bmi.s	loc_3DF8				;
@@ -5745,13 +5745,13 @@ loc_3E06:
 		move.l	(a2)+,(a3)+
 		dbf	d7,loc_3E06
 		rts
-; End of function LoadPalette2
+; End of function LoadPalette2_Immediate
 
 
 ; =============== S U B R O U T I N E =======================================
 
 
-LoadPalette2_Immediate:
+LoadPalette2:
 		lea	(PalPoint_Encore-$48).l,a1		; Liliam: Encore mode - palette
 		tst.b	(Encore_flags).w			;
 		bmi.s	loc_3E14				;
@@ -5769,7 +5769,7 @@ loc_3E22:
 		move.l	(a2)+,(a3)+
 		dbf	d7,loc_3E22
 		rts
-; End of function LoadPalette2_Immediate
+; End of function LoadPalette2
 
 ; ---------------------------------------------------------------------------
 
@@ -7102,8 +7102,8 @@ loc_61BE:
 		; Liliam: removed original implementation
 
 ;loc_61DA:
-		bsr.w	LoadPalette_LevelLoad							; Liliam: fade in player palette if title card suppressed
-;		bsr.w	LoadPalette_Immediate							;
+		bsr.w	LoadPalette_LevelLoad						; Liliam: simplify player palette selection
+;		bsr.w	LoadPalette_Immediate						;
 		bsr.w	CheckLevelForWater
 		clearRAM	Water_palette_line_2,(Water_palette_end-Water_palette_line_2)
 		tst.b	(Water_flag).w
@@ -7153,15 +7153,15 @@ loc_6268:
 		; Liliam: moved to loc_6040 - queue animals to avoid VDP bugs
 
 ;loc_62B6:
-		tst.w	(Competition_mode).w							; Liliam: fade in player palette if title card suppressed
-		bne.s	loc_62CC								;
-		cmpi.w	#$D01,(Apparent_zone_and_act).w						;
-		beq.s	loc_62CC								;
+		tst.w	(Competition_mode).w			; Liliam: QOL - fade in player palette if title card suppressed
+		bne.s	loc_62CC				;
+		cmpi.w	#$D01,(Apparent_zone_and_act).w		;
+		beq.s	loc_62CC				;
 		cmpi.w	#$1701,(Current_zone_and_act).w
 		beq.s	loc_62FE
 		tst.b	(Act3_flag).w
 		bne.s	loc_62FE
-		move.l	#Obj_TitleCard,(Dynamic_object_RAM+(object_size*5)).w
+		move.l	#Obj_TitleCard,(Title_card_object).w
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - LRZ2 boss
 		beq.s	loc_62CC					;
 		cmpi.w	#$1601,(Current_zone_and_act).w			;
@@ -7177,7 +7177,7 @@ loc_62CC:
 		jsr	(Render_Sprites).l
 		bsr.w	Process_Nem_Queue_Init
 		jsr	(Process_Kos_Module_Queue).l
-		tst.w	(Dynamic_object_RAM+(object_size*5)+objoff_48).w
+		tst.w	(Title_card_object+objoff_48).w
 		bne.s	loc_62CC
 		tst.l	(Nem_decomp_queue).w
 		bne.s	loc_62CC
@@ -7301,7 +7301,7 @@ loc_6468:
 		jsr	(Render_Sprites).l
 		jsr	(Animate_Tiles).l
 		move.w	#1800,(Demo_timer).w
-;		bsr.w	LoadWaterPalette							; Liliam: fade in player palette if title card suppressed
+;		bsr.w	LoadWaterPalette							; Liliam: QOL - fade in player palette if title card suppressed
 ;		clearRAM	Water_palette_line_2,(Water_palette_end-Water_palette_line_2)	;
 		move.b	#0,(Ctrl_1_locked).w
 		move.b	#0,(Ctrl_2_locked).w
@@ -7319,11 +7319,11 @@ loc_6468:
 ;		jsr	(PLCLoad_AnimalsAndExplosion).l		;
 
 ;loc_64DC:
-		bsr.w	Pal_PrepFade_LevelLoad							; Liliam: fade in player palette if title card suppressed
-;		move.w	#$2030-1,(Palette_fade_info).w						;
-;		jsr	(Pal_FillBlack).l							;
+		bsr.w	Pal_PrepFade_LevelLoad			; Liliam: QOL - fade in player palette if title card suppressed
+;		move.w	#$2030-1,(Palette_fade_info).w		;
+;		jsr	(Pal_FillBlack).l			;
 		move.w	#$16,(Palette_fade_timer).w
-;		move.w	#$16,(Dynamic_object_RAM+(object_size*5)+objoff_2E).w			;
+;		move.w	#$16,(Title_card_object+objoff_2E).w	;
 		move.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask)<<8,(Ctrl_1).w
 		move.w	#(button_up_mask|button_down_mask|button_left_mask|button_right_mask|button_ABC_mask)<<8,(Ctrl_2).w
 		andi.b	#$7F,(Last_star_post_hit).w
@@ -9478,9 +9478,9 @@ LoadWaterPalette:
 
 loc_7A00:
 		move.w	d0,d1
-		bsr.w	LoadPalette2
-		move.w	d1,d0
 		bsr.w	LoadPalette2_Immediate
+		move.w	d1,d0
+		bsr.w	LoadPalette2
 		tst.b	(Last_star_post_hit).w
 		beq.s	loc_7A18
 		move.b	(Saved_water_full_screen_flag).w,(Water_full_screen_flag).w
@@ -15765,7 +15765,7 @@ loc_C08A:
 sub_C0AE:
 		lea	(Dynamic_object_RAM).w,a0
 		bsr.s	sub_C0B8
-		lea	(Dynamic_object_RAM+(object_size*5)).w,a0
+		lea	(Title_card_object).w,a0
 ; End of function sub_C0AE
 
 
@@ -29391,7 +29391,7 @@ Tails_Display:
 		beq.s	loc_1390C
 		subq.b	#1,invulnerability_timer(a0)
 		lsr.b	#3,d0
-		bcc.s	loc_13912
+		bhs.s	loc_13912
 
 loc_1390C:
 		jsr	(Draw_Sprite).l
@@ -40121,13 +40121,13 @@ Obj_SuperTailsBirds_FindTarget:
 		move.w	(a4)+,d6
 		beq.s	.return
 		moveq	#0,d0
-		addq.b	#2,(_unkF66C).w
-		cmp.b	(_unkF66C).w,d6
+		addq.b	#2,(Tails_birds_first_target).w
+		cmp.b	(Tails_birds_first_target).w,d6
 		bhi.s	.noreset
-		move.b	#0,(_unkF66C).w
+		move.b	#0,(Tails_birds_first_target).w
 
 	.noreset:
-		move.b	(_unkF66C).w,d0
+		move.b	(Tails_birds_first_target).w,d0
 		sub.w	d0,d6
 		lea	(a4,d0.w),a4
 
@@ -44135,7 +44135,7 @@ loc_1BF70:
 
 loc_1BF74:
 		subi.w	#$A0,d1
-		bcc.s	loc_1BF7C
+		bhs.s	loc_1BF7C
 		moveq	#0,d1
 
 loc_1BF7C:
@@ -44152,7 +44152,7 @@ loc_1BF8C:
 		move.w	d1,(Camera_X_pos).w
 		move.w	d1,(Camera_X_pos_P2).w
 		subi.w	#$60,d0
-		bcc.s	loc_1BF9C
+		bhs.s	loc_1BF9C
 		moveq	#0,d0
 
 loc_1BF9C:
@@ -69413,8 +69413,8 @@ Obj_TitleCardInit:
 ;		; Liliam: moved to loc_62B6 - suppress for 2P mode rather than levels
 
 		lea	(ArtKosM_TitleCardRedAct).l,a1
-		move.w	#tiles_to_bytes($510),d2	; Liliam: title cards - move 'ZONE' letters for sprite limit
-;		move.w	#tiles_to_bytes($500),d2	;
+		move.w	#tiles_to_bytes($510),d2		; Liliam: title cards - move 'ZONE' letters for sprite limit
+;		move.w	#tiles_to_bytes($500),d2		;
 		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l
 		; Liliam: removed S&K alone mode
@@ -118858,8 +118858,8 @@ loc_52388:
 ; ---------------------------------------------------------------------------
 
 loc_5238E:
-		move.l	#loc_523CA,(a0)	; When beam has expanded all the way
-		move.b	#3,object_control(a1)		; Stop player animation
+		move.l	#loc_523CA,(a0)		; When beam has expanded all the way
+		move.b	#3,object_control(a1)	; Stop player animation
 		moveq	#0,d0
 		move.w	d0,y_pos(a1)		; Make player disappear!
 		move.b	d0,anim(a1)
@@ -121413,7 +121413,7 @@ loc_53B7E:
 ;		move.b	#1,object_control(a1)				;
 		move.b	#2,anim(a1)
 		bset	#Status_Roll,status(a1)
-		move.w	#-1,y_vel(a1)					;
+		move.w	#-1,y_vel(a1)				; Liliam: allow player 2 to interact with teleporters
 
 Obj_ICZTeleporterMain:
 		lea	(Player_1).w,a1
@@ -128428,7 +128428,7 @@ Obj_57DCC:
 		subq.w	#1,subtype(a0)
 		bne.s	locret_57E32
 		move.w	x_pos(a0),x_pos(a1)
-		move.b	#1,$2E(a1)
+		move.b	#1,object_control(a1)
 		move.b	#2,anim(a1)
 		bset	#Status_Roll,status(a1)
 		move.w	#-1,y_vel(a1)
@@ -137935,15 +137935,15 @@ loc_5D944:
 
 loc_5D95C:
 		move.l	#$EEE0EEE,d0
-		move.l	d0,(Target_palette+$4).w						; Liliam: fade in player palette if title card suppressed
-		move.w	d0,(Target_palette+$8).w						;
-;		move.l	d0,(Normal_palette+$4).w						;
-;		move.w	d0,(Normal_palette+$8).w						;
+		move.l	d0,(Target_palette+$4).w		; Liliam: QOL - fade in player palette if title card suppressed
+		move.w	d0,(Target_palette+$8).w		;
+;		move.l	d0,(Normal_palette+$4).w		;
+;		move.w	d0,(Normal_palette+$8).w		;
 
 loc_5D96A:
 		move.w	#$100,x_pos(a0)
 		move.w	#$E0,y_pos(a0)
-		lea	(Dynamic_object_RAM+(object_size*5)).w,a1
+		lea	(Title_card_object).w,a1
 		move.w	a1,$44(a0)
 		move.l	#Obj_5EA52,(a1)
 		st	$2C(a1)

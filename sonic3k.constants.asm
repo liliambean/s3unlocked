@@ -392,6 +392,7 @@ Player_2			ds.b object_size	; Tails in a Sonic and Tails game, player 2 in Compe
 Reserved_object_3		ds.b object_size	; during a level, an object whose sole purpose is to clear the collision response list is stored here
 Wave_Splash =			*		; Liliam: expand dynamic object RAM
 Level_intro_object =		* + (object_size*2)
+Title_card_object =		* + (object_size*5)
 Dynamic_object_RAM		ds.b object_size*96	; $1BC0 bytes ; 96 objects
 Dynamic_object_RAM_end =	*
 
@@ -688,7 +689,7 @@ Palette_frame_Tails		ds.w 1			; Tails would use Palette_frame, but it's reserved
 Ctrl_2_logical =		*			; both held and pressed
 Ctrl_2_held_logical		ds.b 1
 Ctrl_2_pressed_logical		ds.b 1
-_unkF66C			ds.b 1
+Tails_birds_first_target	ds.b 1
 			ds.b 3				; unused
 Super_frame_count		ds.w 1
 			ds.l 1				; unused
