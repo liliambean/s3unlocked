@@ -19989,7 +19989,7 @@ loc_ED32:
 loc_ED38:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+;		move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
 		rts
 ; End of function Player_AnglePos
 
@@ -20114,7 +20114,7 @@ loc_EE40:
 loc_EE46:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+;		move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -20186,7 +20186,7 @@ loc_EEEE:
 loc_EEF4:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+;		move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -20258,7 +20258,7 @@ loc_EF9C:
 loc_EFA2:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+;		move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
 		rts
 ; ---------------------------------------------------------------------------
 ;GetFloorPosition_BG
@@ -25139,7 +25139,7 @@ loc_113FE:
 		bset	#Status_Facing,status(a0)
 		bne.s	loc_11412
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+		move.b	#1,prev_anim(a0)
 
 loc_11412:
 		sub.w	d5,d0
@@ -25207,7 +25207,7 @@ sub_11482:
 		bclr	#Status_Facing,status(a0)
 		beq.s	loc_1149C
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+		move.b	#1,prev_anim(a0)
 
 loc_1149C:
 		add.w	d5,d0
@@ -26208,7 +26208,7 @@ SonicKnux_SuperHyper:
 		move.b	#-1,(Player_prev_frame).w		;
 
 	.notSonic:
-;	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting			;
+;		move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting			;
 		move.b	#1,invincibility_timer(a0)
 		bclr	#Status_Invincible,status_secondary(a0)	; Liliam: bugfix - clear super form on death
 		move.w	#$600,Max_speed-Max_speed(a4)
@@ -27269,59 +27269,16 @@ loc_122F2:
 		and.w	d0,y_pos(a0)
 
 loc_12302:
-		bsr.w	sub_12318
+		bsr.w	sub_17C10				; Liliam: Encore mode - restart level
+;		bsr.w	sub_12318				;
 		bsr.w	Player_LevelBound
 		bsr.w	Player_RecordPos
 		bsr.w	Sonic_UpdateSprite
 		jmp	(Draw_Sprite).l
-
-; =============== S U B R O U T I N E =======================================
-
-
-sub_12318:
-		tst.b	(Disable_death_plane).w
-		bne.s	loc_12344
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_12336
-		move.w	(Camera_max_Y_pos).w,d0
-		addi.w	#$E0,d0
-		cmp.w	y_pos(a0),d0
-		blt.w	loc_1238A
-		bra.s	loc_12344
 ; ---------------------------------------------------------------------------
 
-loc_12336:
-		move.w	(Camera_min_Y_pos).w,d0
-		cmp.w	y_pos(a0),d0
-		blt.s	loc_12344
-		bra.w	loc_1238A
-; ---------------------------------------------------------------------------
-
-loc_12344:
-		movem.l	a4-a6,-(sp)
-		bsr.w	SonicKnux_DoLevelCollision
-		movem.l	(sp)+,a4-a6
-		btst	#Status_InAir,status(a0)
-		bne.s	locret_12388
-		moveq	#0,d0
-		move.w	d0,y_vel(a0)
-		move.w	d0,x_vel(a0)
-		move.w	d0,ground_vel(a0)
-		move.b	d0,object_control(a0)
-		move.b	#0,anim(a0)
-		move.w	#$100,priority(a0)
-		move.b	#State_Control,routine(a0)
-		move.b	#2*60,invulnerability_timer(a0)
-		move.b	#0,spin_dash_flag(a0)
-
-locret_12388:
-		rts
-; ---------------------------------------------------------------------------
-
-loc_1238A:
-		jmp	(Kill_Character).l
-; End of function sub_12318
-
+;sub_12318:
+		; Liliam: Encore mode - restart level
 ; ---------------------------------------------------------------------------
 
 Sonic_Dead:
@@ -31472,7 +31429,7 @@ loc_14C28:
 		bset	#Status_Facing,status(a0)
 		bne.s	loc_14C3C
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+		move.b	#1,prev_anim(a0)
 
 loc_14C3C:
 		sub.w	d5,d0
@@ -31540,7 +31497,7 @@ sub_14CAC:
 		bclr	#Status_Facing,status(a0)
 		beq.s	loc_14CC6
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+		move.b	#1,prev_anim(a0)
 
 loc_14CC6:
 		add.w	d5,d0
@@ -36225,7 +36182,7 @@ loc_17430:
 		bset	#Status_Facing,status(a0)
 		bne.s	loc_17444
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+		move.b	#1,prev_anim(a0)
 
 loc_17444:
 		sub.w	d5,d0
@@ -36293,7 +36250,7 @@ sub_174B4:
 		bclr	#Status_Facing,status(a0)
 		beq.s	loc_174CE
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+		move.b	#1,prev_anim(a0)
 
 loc_174CE:
 		add.w	d5,d0
@@ -80519,7 +80476,7 @@ loc_35564:
 		bset	#Status_Facing,status(a0)
 		bne.s	loc_35578
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+		move.b	#1,prev_anim(a0)
 
 loc_35578:
 		sub.w	d5,d0
@@ -80586,7 +80543,7 @@ sub_355E4:
 		bclr	#Status_Facing,status(a0)
 		beq.s	loc_355FE
 		bclr	#Status_Push,status(a0)
-	;	move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+		move.b	#1,prev_anim(a0)
 
 loc_355FE:
 		add.w	d5,d0
