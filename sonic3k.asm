@@ -1850,38 +1850,9 @@ Load_PLC_Raw:
 ; End of function Load_PLC_Raw
 
 ; ---------------------------------------------------------------------------
-; Adds pattern load requests to the Nemesis decompression queue
-; Differs from Load_PLC in that it clears the queue before loading
-; Input: d0 = ID of the PLC to load
-; ---------------------------------------------------------------------------
 
-; =============== S U B R O U T I N E =======================================
-
-
-Load_PLC_2:
-		movem.l	a1-a2,-(sp)		; This differs from Load_PLC in that it overrides any PLCs already in the queue
-		lea	(Offs_PLC).l,a1
-		add.w	d0,d0
-		move.w	(a1,d0.w),d0
-		lea	(a1,d0.w),a1
-		bsr.s	Clear_Nem_Queue
-		lea	(Nem_decomp_queue).w,a2
-		move.w	(a1)+,d0
-		bmi.s	.done
-
-.queuePieces:
-		move.l	(a1)+,(a2)+
-		move.w	(a1)+,(a2)+
-		dbf	d0,.queuePieces
-
-.done:
-		movem.l	(sp)+,a1-a2
-		rts
-; End of function Load_PLC_2
-
-; ---------------------------------------------------------------------------
-; Clears the Nemesis decompression queue and its associated variables
-; ---------------------------------------------------------------------------
+;Load_PLC_2:
+		; Liliam: Encore mode - expand player routines
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -23916,34 +23887,39 @@ Ray_AirGlide:							; Liliam: extra skills - air glide (credit: Rubberduckycooly
 		beq.s	.hitWall
 		move.b	(Ctrl_1_held_logical).w,d0
 		andi.b	#button_ABC_mask,d0
-		beq.s	.cancelGlide
+		beq.s	.release
 		move.w	(Camera_min_Y_pos).w,d0
 		cmp.w	y_pos(a0),d0
 		ble.s	.return
 
-	.cancelGlide:
+	.release:
 		clr.b	prev_anim(a0)
 		tst.b	double_jump_flag(a0)
-		beq.s	.return
+		beq.s	.stopSFX
 		move.b	#2,double_jump_flag(a0)
 		cmpi.b	#2,anim(a0)
-		bne.s	.return
+		bne.s	.stopSFX
 		bset	#Status_Roll,status(a0)
 		tst.b	(Super_Sonic_Knux_flag).w
-		bpl.s	.return
+		bpl.s	.stopSFX
+
+	.cancel:
 		clr.b	double_jump_flag(a0)
+
+	.stopSFX:
+		moveq	#signextendB(cmd_StopSFX),d0
+		jmp	(Play_Music).l
+; ---------------------------------------------------------------------------
+
+	.hitWall:
+		bsr.s	.release
+		bsr.s	.checkWallJump
 
 	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
-	.hitWall:
-		bsr.s	.cancelGlide
-		bsr.s	.setUpTriangleJump
-		rts
-; ---------------------------------------------------------------------------
-
-	.setUpTriangleJump:
+	.checkWallJump:
 		moveq	#Skill_RayWallJump,d1
 		moveq	#button_left_mask,d0
 		btst	#Status_Facing,status(a0)
@@ -23956,9 +23932,8 @@ Ray_AirGlide:							; Liliam: extra skills - air glide (credit: Rubberduckycooly
 ; ---------------------------------------------------------------------------
 
 Ray_AirGlide_TouchFloor:					; Liliam: extra skills - air glide
-		clr.b	double_jump_flag(a0)
 		clr.b	anim(a0)
-		rts
+		bra.s	Ray_AirGlide.cancel
 ; ---------------------------------------------------------------------------
 
 Ray_AirGlide_CheckControls:					; Liliam: extra skills - air glide
@@ -27374,7 +27349,8 @@ loc_12478:
 		move.w	#mus_GameOver,d0
 		jsr	(Play_Music).l
 		moveq	#PLCID_GameOver,d0
-		jmp	(Load_PLC_2).l
+		jmp	(Load_PLC).l				;
+;		jmp	(Load_PLC_2).l				;
 ; ---------------------------------------------------------------------------
 
 loc_12498:
@@ -75082,10 +75058,13 @@ Obj_CNZTrapDoor:
 		move.l	#loc_31CCA,(a0)
 
 loc_31CCA:
+		moveq	#0,d1					; Liliam: bugfix - fix stuck animation
 		lea	(Player_1).w,a1
 		bsr.s	sub_31CFA
 		lea	(Player_2).w,a1
 		bsr.s	sub_31CFA
+		bsr.s	sub_31D1E				;
+		move.b	d1,$30(a0)				;
 		move.w	#$20,d1
 		move.w	#9,d3
 		move.w	x_pos(a0),d4
@@ -75108,6 +75087,15 @@ sub_31CFA:
 		addi.w	#$20,d0
 		cmpi.w	#$20,d0
 		bhs.s	locret_31D2C
+		moveq	#1,d1					; Liliam: bugfix - fix stuck animation
+		rts						;
+; ---------------------------------------------------------------------------
+
+sub_31D1E:
+		tst.b	d1					; Liliam: bugfix - fix stuck animation
+		beq.s	locret_31D2C				;
+		tst.b	$30(a0)					;
+		bne.s	locret_31D2C				;
 		move.b	#1,anim(a0)
 		moveq	#signextendB(sfx_TrapDoor),d0
 		jsr	(Play_SFX).l
@@ -76427,8 +76415,12 @@ Obj_CNZTriangleBumpers:
 		move.l	#loc_329A6,(a0)
 
 loc_329A6:
+		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - release player from object
+		bne.s	loc_329AC				;
 		lea	(Player_1).w,a1
 		bsr.s	sub_329B8
+
+loc_329AC:
 		lea	(Player_2).w,a1
 		bsr.s	sub_329B8
 		jmp	(Delete_Sprite_If_Not_In_Range).l
@@ -76455,7 +76447,6 @@ locret_329E4:
 ; ---------------------------------------------------------------------------
 
 loc_329E6:
-		jsr	(Mighty_HammerDrop_Cancel).l		; Liliam: extra skills - hammer drop
 		move.w	#-$800,x_vel(a1)
 		move.w	#-$800,y_vel(a1)
 		bset	#Status_Facing,status(a1)
@@ -76489,6 +76480,7 @@ loc_32A30:
 
 loc_32A5A:
 ;		clr.b	jumping(a1)				; Liliam: bugfix - clear roll state
+		clr.b	double_jump_flag(a1)			;
 		bset	#Status_InAir,status(a1)
 		bsr.w	Player_ClearRollHeight			;
 ;		bclr	#Status_RollJump,status(a1)		;
