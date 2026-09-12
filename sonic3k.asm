@@ -39725,6 +39725,9 @@ Sonic_ClearShieldJump:						; Liliam: simplify double jump selection
 
 	.clear:
 		clr.b	double_jump_flag(a2)
+		tst.b	double_jump_property(a2)
+		bmi.s	.return
+		clr.b	double_jump_property(a2)
 
 	.return:
 		rts
