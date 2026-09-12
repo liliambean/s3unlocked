@@ -219091,6 +219091,7 @@ Layout_MGZ2:							; Liliam: reinsert S3 data
 		binclude "Levels/MGZ/Layout/2.bin"
 		even
 Layout_CNZ1:							; Liliam: reinsert S3 data
+		; Liliam: bugfix - fix backwards tube
 		binclude "Levels/CNZ/Layout/1.bin"
 		even
 Layout_CNZ2:							; Liliam: reinsert S3 data
