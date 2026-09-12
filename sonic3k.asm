@@ -65221,16 +65221,20 @@ loc_2A0DA:
 		rts
 ; ---------------------------------------------------------------------------
 
-LBZTubeElevator_CheckPlayer2:
-		cmpi.w	#2,(Tails_CPU_routine).w		; Liliam: bugfix - release respawning player
-		bne.s	LBZTubeElevator_CheckPlayer		;
-		clr.b	(a2)					;
-		rts						;
+LBZTubeElevator_CheckPlayer2:					; Liliam: bugfix - release respawning player
+		moveq	#p2_standing_bit,d6
+		cmpi.w	#2,(Tails_CPU_routine).w
+		bne.s	loc_2A106
+		clr.b	(a2)
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 
 LBZTubeElevator_CheckPlayer:
+		moveq	#p1_standing_bit,d6			; Liliam: bugfix - LBZ1 tube elevators
+
+loc_2A106:
 		move.b	(a2),d0
 		bne.w	loc_2A1B6
 		tst.w	(Debug_placement_mode).w
@@ -65246,13 +65250,14 @@ loc_2A128:
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		addq.w	#3,d0
-		btst	#0,status(a0)
+		btst	#Status_Facing,status(a0)
 		beq.s	loc_2A13E
 		addi.w	#$A,d0
 
 loc_2A13E:
 		cmpi.w	#$10,d0
-		bhs.s	locret_2A1B4
+		bhs.w	locret_2A1B4				; Liliam: bugfix - LBZ1 tube elevators
+;		bhs.s	locret_2A1B4				;
 		move.w	y_pos(a1),d1
 		sub.w	y_pos(a0),d1
 		addi.w	#$20,d1
@@ -65280,6 +65285,10 @@ loc_2A164:
 		bclr	#p1_pushing_bit,status(a0)
 		bclr	#Status_Push,status(a1)		; Not pushing
 		bclr	#Status_InAir,status(a1)	; Not in air
+		bclr	#Status_Roll,status(a1)			; Liliam: bugfix - LBZ1 tube elevators
+		bset	#Status_OnObj,status(a1)		;
+		bset	d6,status(a0)				;
+		move.w	a0,interact(a1)				;
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),d0		; Match player position to object position
 		addi.w	#$18,d0
