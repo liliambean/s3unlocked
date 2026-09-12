@@ -60607,7 +60607,8 @@ loc_274E4:
 loc_27508:
 		move.w	x_vel(a1),ground_vel(a1)
 		move.b	subtype(a0),d1
-		beq.s	loc_2758A
+		beq.w	loc_2758A				; Liliam: bugfix - prevent deadlock
+;		beq.s	loc_2758A				;
 		cmpi.b	#$1F,d1
 		bne.s	loc_27534
 		move.b	#1,(_unkF7C2).w
@@ -60620,6 +60621,10 @@ loc_27508:
 ; ---------------------------------------------------------------------------
 
 loc_27534:
+		move.w	respawn_addr(a0),d0			; Liliam: bugfix - prevent deadlock
+		beq.s	loc_2755E				;
+		movea.w	d0,a2					;
+		bclr	#7,(a2)					;
 		jsr	(AllocateObjectAfterCurrent).l
 		bne.w	loc_2758A
 		move.l	#Obj_AutomaticTunnelDelayed,(a1)
