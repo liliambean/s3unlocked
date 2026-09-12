@@ -41347,6 +41347,21 @@ loc_1A842:
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
+BouncingRing_Convert:						; Liliam: QOL - speed up ring loss
+		move.l	#Obj_BouncingRing,(a0)
+		clr.b	routine(a0)
+		clr.w	$46(a0)
+		move.w	x_vel(a0),d0
+		move.w	y_vel(a0),d1
+		ext.l	d0
+		ext.l	d1
+		asl.l	#8,d0
+		asl.l	#8,d1
+		move.l	d0,x_vel(a0)
+		move.l	d1,y_vel+$10(a0)
+		rts
+; ---------------------------------------------------------------------------
+
 Obj_Attracted_Ring:
 		move.l	#Map_Ring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_PhotoPiece+4,1,1),art_tile(a0)	; Liliam: QOL - extend ring animation
@@ -41366,7 +41381,7 @@ loc_1A88C:
 		bsr.w	AttractedRing_Move
 		btst	#Status_LtngShield,(Player_1+status_secondary).w
 		bne.s	Obj_Attracted_RingAnimate
-		move.l	#Obj_BouncingRing,(a0)			; Liliam: QOL - speed up ring loss
+		bsr.s	BouncingRing_Convert			; Liliam: QOL - speed up ring loss
 ;		move.l	#Obj_BouncingRing_Create,(a0)		;
 ;		move.b	#2,routine(a0)				;
 		move.b	#-1,(Ring_spill_anim_counter).w
@@ -204860,13 +204875,14 @@ loc_89D3C:
 loc_89D44:
 		lea	ObjDat3_89E9C(pc),a1
 		jsr	SetUp_ObjAttributes(pc)
-		move.l	#Obj_BouncingRing_Create,(a0)
+;		move.l	#Obj_BouncingRing_Create,(a0)		; Liliam: QOL - speed up ring loss
 		move.b	#-1,(Ring_spill_anim_counter).w
 		move.b	#8,y_radius(a0)
 		move.b	#8,x_radius(a0)
 		move.b	#$84,render_flags(a0)
 		moveq	#4,d0
 		jsr	(Set_IndexedVelocity).l
+		jsr	(BouncingRing_Convert).l		;
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
