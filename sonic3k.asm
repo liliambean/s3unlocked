@@ -23212,10 +23212,12 @@ Amy_Normal:
 		move.w	#-$600,ground_vel(a0)
 		bclr	#Status_Push,status(a0)
 		btst	#Status_Facing,status(a0)
-		bne.s	.return
+		bne.s	.checkDone
 		move.w	#$600,ground_vel(a0)
-		rts
-; ---------------------------------------------------------------------------
+
+	.checkDone:
+		tst.b	flip_type(a0)
+		bpl.s	.return
 
 	.done:
 		clr.b	anim(a0)
@@ -25314,6 +25316,11 @@ loc_11578:
 		move.b	default_y_radius(a0),y_radius(a0)
 		move.b	default_x_radius(a0),x_radius(a0)
 		move.b	#5,anim(a0)
+		tst.b	flip_type(a0)				; Liliam: bugfix - fix stuck animation
+		bpl.s	loc_115A0				;
+		clr.b	anim(a0)				;
+
+loc_115A0:
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
 		tst.b	(Reverse_gravity_flag).w
@@ -31605,6 +31612,11 @@ loc_14DA2:
 		move.b	default_y_radius(a0),y_radius(a0)
 		move.b	default_x_radius(a0),x_radius(a0)
 		move.b	#5,anim(a0)
+		tst.b	flip_type(a0)				; Liliam: bugfix - fix stuck animation
+		bpl.s	loc_14DCA				;
+		clr.b	anim(a0)				;
+
+loc_14DCA:
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
 		tst.b	(Reverse_gravity_flag).w
@@ -36358,6 +36370,11 @@ loc_175AA:
 		move.b	default_y_radius(a0),y_radius(a0)
 		move.b	default_x_radius(a0),x_radius(a0)
 		move.b	#5,anim(a0)
+		tst.b	flip_type(a0)				; Liliam: bugfix - fix stuck animation
+		bpl.s	loc_175D2				;
+		clr.b	anim(a0)				;
+
+loc_175D2:
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
 		tst.b	(Reverse_gravity_flag).w
@@ -67826,8 +67843,13 @@ loc_2C444:
 loc_2C44E:
 		jsr	(RideObject_SetRide).l
 		move.b	#$80,flip_type(a1)
-		move.w	#1,anim(a1)	; and prev_anim
-		clr.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
+		tst.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
+		beq.s	loc_2C460				;
+		clr.b	double_jump_flag(a1)			;
+		clr.b	anim(a1)				;
+;		move.w	#1,anim(a1)				;
+
+loc_2C460:
 		tst.w	ground_vel(a1)
 		bne.s	locret_2C46C
 		move.w	#1,ground_vel(a1)
@@ -85845,10 +85867,17 @@ loc_39FBA:
 		addq.w	#4,d2				; Liliam: bugfix???
 ;		addq.w	#3,d2				;
 		move.w	d2,y_pos(a1)
+		move.b	default_x_radius(a1),x_radius(a1)	; Liliam: allow glide-landing on objects
+		move.b	default_y_radius(a1),y_radius(a1)	;
 		jsr	(RideObject_SetRide).l
 		move.b	#$80,flip_type(a1)
-		move.w	#1,anim(a1)
-		clr.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
+		tst.b	double_jump_flag(a1)			;
+		beq.s	loc_3A002				;
+		clr.b	double_jump_flag(a1)			;
+		clr.b	anim(a1)				;
+;		move.w	#1,anim(a1)				;
+
+loc_3A002:
 		move.b	#0,(a2)
 		move.b	#0,2(a2)
 		tst.w	ground_vel(a1)
@@ -218691,7 +218720,7 @@ sub_92C54:
 		move.b	d0,anim(a1)
 		move.w	d0,x_pos+2(a1)
 		move.w	d0,y_pos+2(a1)
-		move.b	d0,angle(a1)				; Liliam: bugfix - clear flags
+		move.w	d0,angle(a1)				; Liliam: bugfix - clear flags
 		move.b	d0,object_control(a1)
 		move.b	d0,double_jump_flag(a1)			;
 ;		move.b	d0,spin_dash_flag(a1)			;
