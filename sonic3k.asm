@@ -126732,7 +126732,8 @@ loc_56B6C:
 		cmpi.w	#3,(Player_mode).w
 		bne.s	loc_56B88
 		movea.w	4(a3),a1
-		move.b	#-$A,4(a1)
+		move.b	#$F6,4(a1)
+		move.b	#$F6,8(a1)				; Liliam: bugfix - remove both Death Eggs
 
 loc_56B88:
 		jsr	LRZ1_Deform(pc)
@@ -126947,85 +126948,23 @@ sub_56DAC:
 
 
 sub_56DCA:
-		lea	word_56F88(pc),a1
-		move.w	(Player_1+x_pos).w,d0
-		move.w	(Player_1+y_pos).w,d1
-		moveq	#0,d2
-		move.w	#3-1,d3
+		moveq	#0,d0					; Liliam: bugfix - LRZ1 moving lava
+		cmpi.w	#$1A80,(Camera_X_pos).w			;
+		blo.s	.checkEnable				;
+		cmpi.w	#$20C0,(Camera_X_pos).w			;
+		bhs.s	.checkEnable				;
+		cmpi.w	#$7A0,(Camera_Y_pos).w			;
+		blo.s	.checkEnable				;
+		cmpi.w	#$9C0,(Camera_Y_pos).w			;
+		bhs.s	.checkEnable				;
+		moveq	#-1,d0					;
 
-loc_56DDC:
-		lea	(a1),a5
-		cmp.w	(a5)+,d0
-		blo.s	loc_56DEE
-		cmp.w	(a5)+,d0
-		bhi.s	loc_56DEE
-		cmp.w	(a5)+,d1
-		blo.s	loc_56DEE
-		cmp.w	(a5)+,d1
-		blo.s	loc_56DFA
-
-loc_56DEE:
-		adda.w	#$A,a1
-		addq.w	#4,d2
-		dbf	d3,loc_56DDC
-		rts
-; ---------------------------------------------------------------------------
-
-loc_56DFA:
-		jmp	loc_56DFE(pc,d2.w)
-; End of function sub_56DCA
-
-; ---------------------------------------------------------------------------
-
-loc_56DFE:
-		bra.w	loc_56E0A
-; ---------------------------------------------------------------------------
-		bra.w	loc_56E1C
-; ---------------------------------------------------------------------------
-		bra.w	loc_56E2E
-; ---------------------------------------------------------------------------
-
-loc_56E0A:
-		tst.w	(Events_bg+$00).w
-		bne.s	loc_56E16
-		cmp.w	(a5),d0
-		bhs.s	loc_56E40
-		rts
-; ---------------------------------------------------------------------------
-
-loc_56E16:
-		cmp.w	(a5),d0
-		blo.s	loc_56E66
-		rts
-; ---------------------------------------------------------------------------
-
-loc_56E1C:
-		tst.w	(Events_bg+$00).w
-		bne.s	loc_56E28
-		cmp.w	(a5),d0
-		blo.s	loc_56E40
-		rts
-; ---------------------------------------------------------------------------
-
-loc_56E28:
-		cmp.w	(a5),d0
-		bhs.s	loc_56E66
-		rts
-; ---------------------------------------------------------------------------
-
-loc_56E2E:
-		tst.w	(Events_bg+$00).w
-		bne.s	loc_56E3A
-		cmp.w	(a5),d1
-		bhs.s	loc_56E40
-		rts
-; ---------------------------------------------------------------------------
-
-loc_56E3A:
-		cmp.w	(a5),d1
-		blo.s	loc_56E66
-		rts
-; ---------------------------------------------------------------------------
+	.checkEnable:
+		cmp.b	(Events_bg+$00).w,d0			;
+		beq.w	locret_56F66				;
+		tst.b	d0					;
+		beq.s	loc_56E66				;
+		; Liliam: removed original implementation
 
 loc_56E40:
 		st	(Events_bg+$00).w
@@ -127134,11 +127073,8 @@ LRZ1_BGDrawArray:
 		dc.w    $B0,  $100, $7FFF
 LRZ1_BGDeformArray:
 		dc.w    $40,   $20,   $10,   $10,   $10,   $10,   $10,  $100,   $10,   $10,   $10,   $20, $7FFF
-word_56F88:
-		dc.w  $1AC0, $1B40,  $840,  $8C0
-		dc.w  $1B00, $2240, $2340,  $840
-		dc.w   $880, $22C0, $20C0, $2180
-		dc.w   $740,  $800,  $7A0
+;word_56F88:
+		; Liliam: bugfix - LRZ1 moving lava
 ; ---------------------------------------------------------------------------
 
 LRZ2_ScreenInit:
@@ -219194,6 +219130,7 @@ Layout_SOZ2:
 		binclude "Levels/SOZ/Layout/2.bin"
 		even
 Layout_LRZ1:
+		; Liliam: bugfix - LRZ1 moving lava
 		binclude "Levels/LRZ/Layout/1.bin"
 		even
 Layout_LRZ2:
