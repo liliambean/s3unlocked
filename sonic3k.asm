@@ -222609,6 +222609,7 @@ SSZ2_128x128_Kos:
 		binclude "Levels/SSZ/Chunks/Act 2.bin"
 		even
 DEZ_16x16_Primary_Kos:
+		; Liliam: bugfix - fix flip flags on shock blocks
 		binclude "Levels/DEZ/Blocks/Primary.bin"
 		even
 ArtKosM_DEZ_Primary:
@@ -222616,6 +222617,7 @@ ArtKosM_DEZ_Primary:
 		binclude "Levels/DEZ/Tiles/Primary.bin"
 		even
 DEZ_128x128_Kos:
+		; Liliam: bugfix - fix flip flags on shock blocks
 		binclude "Levels/DEZ/Chunks/Primary.bin"
 		even
 DEZ1_16x16_Secondary_Kos:
