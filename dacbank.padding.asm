@@ -16,8 +16,8 @@ Sonic_PeelOut:
 		bmi.s	.checkRelease
 		andi.b	#button_ABC_mask,d0
 		beq.s	.return
-		tst.b	spin_dash_flag(a0)
-		bne.s	.return
+		btst	#button_up+8,d0
+		beq.s	.return
 		cmpi.b	#7,anim(a0)
 		bne.s	.return
 		move.b	#1,anim(a0)
