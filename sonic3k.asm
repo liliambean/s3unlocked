@@ -222540,12 +222540,14 @@ LBZ2_128x128_DeathEgg_Kos:					; Liliam: reinsert S3 data
 		binclude "Levels/LBZ/Chunks/Act 2 Death Egg.bin"
 		even
 MHZ_16x16_Primary_Kos:
+		; Liliam: bugfix - fix inconsistent grass in boss areas
 		binclude "Levels/MHZ/Blocks/Primary.bin"
 		even
 ArtKosM_MHZ_Primary:
 		binclude "Levels/MHZ/Tiles/Primary.bin"
 		even
 MHZ_128x128_Primary_Kos:
+		; Liliam: bugfix - fix inconsistent grass in boss areas
 		binclude "Levels/MHZ/Chunks/Primary.bin"
 		even
 MHZ_16x16_Secondary_Kos:
