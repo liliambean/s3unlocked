@@ -223279,6 +223279,7 @@ Pachinko_RingCounts:
 SpriteTerminat1:
 		dc.w $FFFF, 0, 0
 AIZ1_Sprites:
+		; Liliam: bugfix - adjust star post positioning
 		binclude "Levels/AIZ/Object Pos/1.bin"
 		even
 AIZ2_Sprites:
@@ -223322,7 +223323,7 @@ HCZ2_Rings:
 SpriteTerminat3:
 		dc.w $FFFF, 0, 0
 MGZ1_Sprites:
-		; Liliam: bugfix - adjust kill block positioning
+		; Liliam: bugfix - adjust star post positioning
 		binclude "Levels/MGZ/Object Pos/1.bin"
 		even
 MGZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
@@ -223334,6 +223335,7 @@ MGZ1_Rings:
 SpriteTerminat4:
 		dc.w $FFFF, 0, 0
 MGZ2_Sprites:
+		; Liliam: bugfix - adjust star post positioning
 		binclude "Levels/MGZ/Object Pos/2.bin"
 		even
 MGZ2_Sprites_Encore:						; Liliam: Encore mode - layouts
@@ -223517,7 +223519,7 @@ word_1EE398:
 SpriteTerminat7:
 		dc.w $FFFF, 0, 0
 ICZ1_Sprites:
-		; Liliam: place ICZ1 teleporter in layout
+		; Liliam: Knuckles route fixup
 		binclude "Levels/ICZ/Object Pos/1.bin"
 		even
 ICZ2_Sprites:
@@ -223955,10 +223957,11 @@ AutoTunnel_14:
 SpriteTerminat9:
 		dc.w $FFFF, 0, 0
 MHZ1_Sprites:
-		; Liliam: Knuckles intro - no longer placed in layout
+		; Liliam: bugfix - adjust star post positioning
 		binclude "Levels/MHZ/Object Pos/1.bin"
 		even
 MHZ2_Sprites:
+		; Liliam: bugfix - adjust star post positioning
 		binclude "Levels/MHZ/Object Pos/2.bin"
 		even
 MHZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
@@ -224150,6 +224153,7 @@ AutoTunnel_19:
 SpriteTerminatB:
 		dc.w $FFFF, 0, 0
 LRZ1_Sprites:
+		; Liliam: bugfix - adjust star post positioning
 		binclude "Levels/LRZ/Object Pos/1.bin"
 		even
 LRZ2_Sprites:
@@ -224386,6 +224390,7 @@ Ending_Rings:
 SpriteTerminatG:
 		dc.w $FFFF, 0, 0
 ALZ_Sprites:
+		; Liliam: bugfix - adjust star post positioning
 		binclude "Levels/ALZ/Object Pos/1.bin"
 		even
 ALZ_Sprites_Encore:						; Liliam: Encore mode - layouts
@@ -224397,6 +224402,7 @@ ALZ_Rings:
 SpriteTerminatH:
 		dc.w $FFFF, 0, 0
 BPZ_Sprites:
+		; Liliam: bugfix - adjust star post positioning
 		binclude "Levels/BPZ/Object Pos/1.bin"
 		even
 BPZ_Sprites_Encore:						; Liliam: Encore mode - layouts
@@ -224420,6 +224426,7 @@ DPZ_Rings:
 SpriteTerminatJ:
 		dc.w $FFFF, 0, 0
 CGZ_Sprites:
+		; Liliam: bugfix - adjust star post positioning
 		binclude "Levels/CGZ/Object Pos/1.bin"
 		even
 CGZ_Sprites_Encore:						; Liliam: Encore mode - layouts
@@ -224431,7 +224438,7 @@ CGZ_Rings:
 SpriteTerminatK:
 		dc.w $FFFF, 0, 0
 EMZ_Sprites:
-		; Liliam: bugfix - horrors beyond comprehension
+		; Liliam: bugfix - adjust star post positioning
 		binclude "Levels/EMZ/Object Pos/1.bin"
 		even
 EMZ_Sprites_Encore:						; Liliam: Encore mode - layouts
