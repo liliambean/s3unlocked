@@ -43974,7 +43974,6 @@ loc_1BE46:
 		tst.b	(Last_star_post_hit).w
 		beq.s	loc_1BE5E
 		jsr	(Load_Starpost_Settings).l
-		addq.w	#4,(Player_1+y_pos).w			; Liliam: bugfix - set correct camera height
 		move.w	(Player_1+x_pos).w,d1
 		move.w	(Player_1+y_pos).w,d0
 		bra.w	loc_1BF74
@@ -68971,6 +68970,7 @@ sub_2D164:
 		move.b	subtype(a0),(Last_star_post_hit).w
 		move.w	x_pos(a0),(Saved_X_pos).w
 		move.w	y_pos(a0),(Saved_Y_pos).w
+		addq.w	#4,(Saved_Y_pos).w			; Liliam: bugfix - set correct camera height
 		btst	#Status_Facing,status(a0)		; Liliam: face left at left-facing star posts
 		beq.s	Save_Level_Data				;
 		bset	#7,(Saved_X_pos).w			;
@@ -98943,7 +98943,6 @@ SSZ1_Save_StarPost:
 		move.b	#1,(Last_star_post_hit).w
 		jsr	(Save_Level_Data).l
 ;		clr.l	(Saved_timer).w				;
-		move.w	#$C0C,(Saved_camera_Y_pos).w		;
 		move.w	#$C0C,(Saved_camera_max_Y_pos).w	;
 		rts						;
 ; ---------------------------------------------------------------------------
