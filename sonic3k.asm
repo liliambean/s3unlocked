@@ -43150,11 +43150,11 @@ Sprite_OnScreen_Test2:
 		andi.w	#$FF80,d0
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#$280,d0
-		bhi.w	Delete_And_Respawn_Sprite
+		bhi.w	Respawn_Sprite
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
-Delete_And_Respawn_Sprite:
+Respawn_Sprite:
 		move.w	respawn_addr(a0),d0
 		beq.s	loc_1B5AC
 		movea.w	d0,a2
@@ -58422,11 +58422,11 @@ loc_25D18:
 
 loc_25D26:
 		tst.b	render_flags(a0)			; Liliam: bugfix - prevent offscreen collision
-		bpl.w	loc_25EA0				;
+		bpl.w	loc_261EC				;
 		move.w	(Player_1+y_pos).w,d0			;
 		addi.w	#$40,d0					;
 		cmp.w	y_pos(a0),d0				;
-		blo.w	loc_25EA0				;
+		blo.w	loc_261EC				;
 		jmp	(Sprite_CheckDeleteTouch3).l
 
 ; =============== S U B R O U T I N E =======================================
@@ -58523,7 +58523,8 @@ loc_25DF0:
 
 loc_25E22:
 		tst.w	$30(a0)
-		beq.s	loc_25EA0
+		beq.s	loc_25E48				; Liliam: bugfix - wait for quake before deleting
+;		beq.s	loc_25EA0				;
 		move.b	subtype(a0),d0
 		andi.w	#$F,d0
 		lea	(Level_trigger_array).w,a3
@@ -58532,7 +58533,10 @@ loc_25E22:
 		bne.s	loc_25E4A
 		move.b	#0,(a3)
 		move.b	#0,mapping_frame(a0)
-		bra.s	loc_25EA0
+
+loc_25E48:
+		jmp	(Sprite_OnScreen_Test).l		;
+;		bra.s	loc_25EA0				;
 ; ---------------------------------------------------------------------------
 
 loc_25E4A:
@@ -58571,7 +58575,8 @@ loc_25E9A:
 		move.b	#4,mapping_frame(a0)
 
 loc_25EA0:
-		jmp	(Sprite_OnScreen_Test).l
+		jmp	(Draw_Sprite).l				; Liliam: bugfix - wait for quake before deleting
+;		jmp	(Sprite_OnScreen_Test).l		;
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -58597,8 +58602,10 @@ loc_25EBA:
 		asr.l	#8,d0
 		move.w	d0,y_vel(a1)
 		bset	#Status_InAir,status(a1)
+		bset	#Status_Roll,status(a1)			; Liliam: bugfix - fix stuck animation
 		bclr	#Status_RollJump,status(a1)
 		bclr	#Status_Push,status(a1)
+		bsr.w	Player_SetRollHeight			;
 		clr.b	jumping(a1)
 		clr.b	spin_dash_flag(a1)
 		moveq	#signextendB(sfx_SmallBumpers),d0
@@ -72617,7 +72624,7 @@ loc_2FE9E:
 ;loc_2FEAC:
 		clr.b	(WindTunnel_disable_flags).w		;
 		clr.b	(Palette_cycle_counters+$00).w		;
-		jmp	(Delete_And_Respawn_Sprite).l		;
+		jmp	(Respawn_Sprite).l			;
 ;		jmp	(Sprite_OnScreen_Test).l		;
 ; ---------------------------------------------------------------------------
 
@@ -72668,7 +72675,7 @@ loc_2FF04:
 		bhs.s	loc_2FF14
 
 loc_2FF0E:
-		jmp	(Delete_And_Respawn_Sprite).l		;
+		jmp	(Respawn_Sprite).l			;
 ;		jmp	(Delete_Current_Sprite).l		;
 ; ---------------------------------------------------------------------------
 
@@ -72825,7 +72832,7 @@ loc_30106:
 
 loc_3010E:
 		jsr	(LoadEnemyArt).l
-		jmp	(Delete_And_Respawn_Sprite).l		; Liliam: HCZ intro - polish up water rush sequence
+		jmp	(Respawn_Sprite).l			; Liliam: HCZ intro - polish up water rush sequence
 ;		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -79078,7 +79085,8 @@ loc_34646:
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull).l
 		move.w	$36(a0),d0
-		jmp	(Sprite_OnScreen_Test2).l
+		bra.s	MGZTriggerPlatform_CheckDelete		; Liliam: bugfix - wait for quake before deleting
+;		jmp	(Sprite_OnScreen_Test2).l		;
 ; ---------------------------------------------------------------------------
 
 loc_3466E:
@@ -79118,7 +79126,37 @@ loc_346BE:
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull).l
-		jmp	(Sprite_OnScreen_Test).l
+		move.w	x_pos(a0),d0				; Liliam: bugfix - wait for quake before deleting
+;		jmp	(Sprite_OnScreen_Test).l		;
+
+MGZTriggerPlatform_CheckDelete:
+		bsr.s	Quake_CheckDelete			;
+		jmp	(Respawn_Sprite).l			;
+; ---------------------------------------------------------------------------
+
+Tunnelbot_CheckDelete:						; Liliam: bugfix - wait for quake before deleting
+		jsr	(Add_SpriteToCollisionResponseList).l
+		move.w	x_pos(a0),d0
+		bsr.s	Quake_CheckDelete
+		jmp	(Respawn_SpriteAndChildren).l
+; ---------------------------------------------------------------------------
+
+Quake_CheckDelete:						; Liliam: bugfix - wait for quake before deleting
+		andi.w	#$FF80,d0
+		sub.w	(Camera_X_pos_coarse_back).w,d0
+		cmpi.w	#$280,d0
+		bhi.s	.checkQuake
+		addq.w	#4,sp
+		jmp	(Draw_Sprite).l
+; ---------------------------------------------------------------------------
+
+	.checkQuake:
+		tst.b	(Screen_shake_flag).w
+		bpl.s	.return
+		addq.w	#4,sp
+
+	.return:
+		rts
 ; ---------------------------------------------------------------------------
 Map_MGZTriggerPlatform:						; Liliam: reinsert S3 data
 		include "Levels/MGZ/Misc Object Data/Map - Trigger Platform.asm"
@@ -96813,7 +96851,7 @@ sub_42EC0:
 loc_42ED0:
 		bsr.s	ExplodingTrigger_LoadArray		; Liliam: hyper touch - stop bouncing players on defeat
 		bset	d3,(a3)
-		jsr	(loc_85088).l				; Liliam: bugfix - prevent deadlock
+		jsr	(Respawn_Sprite).l			; Liliam: bugfix - prevent deadlock
 		move.l	#Obj_LRZShootingTrigger_Delete,(a0)	;
 ;		move.l	#Obj_Explosion,(a0)			;
 		move.b	#2,routine(a0)
@@ -120157,7 +120195,8 @@ Pal_FBZBGOutdoors_Night:					; Liliam: Encore mode - palette
 ; ---------------------------------------------------------------------------
 
 FBZ2_ScreenInit:
-		move.w	#$2C40,d0
+		move.w	#$2C80,d0				; Liliam: camera - fix FBZ2 boss entry lock
+;		move.w	#$2C40,d0				;
 		cmp.w	(Camera_X_pos).w,d0
 		bhi.s	loc_52E2C
 		move.w	#4,(Events_routine_fg).w	; If screen X is past subboss battle, change screen event
@@ -144353,7 +144392,7 @@ CutsceneKnux_LBZ2:
 		movea.w	(Events_bg+$00).w,a1			;
 		cmpi.l	#loc_8D36A,(a1)				;
 		beq.s	loc_628B4				;
-		jmp	(loc_85088).l				;
+		jmp	(Respawn_Sprite).l			;
 ; ---------------------------------------------------------------------------
 
 loc_628B4:
@@ -162360,7 +162399,7 @@ loc_6F04A:
 Obj_FBZEmptyCapsule:									; Liliam: start from actual act 2 start
 		tst.b	(_unkFAA8).w
 		beq.s	Init_EmptyCapsule_FBZ
-		jmp	(Delete_And_Respawn_Sprite).l
+		jmp	(Respawn_Sprite).l
 ; ---------------------------------------------------------------------------
 
 Init_EmptyCapsule_FBZ:									; Liliam: start from actual act 2 start
@@ -163742,7 +163781,12 @@ loc_6FF34:
 
 loc_6FF50:
 		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
-		jmp	(Sprite_CheckDeleteXY).l
+		move.w	#$2C80,d0				; Liliam: camera - fix FBZ2 boss entry lock
+		cmp.w	(Camera_min_X_pos).w,d0			;
+		bhi.s	locret_6FF32				;
+		move.w	d0,(Camera_min_X_pos).w			;
+		jmp	(Go_Delete_Sprite).l			;
+;		jmp	(Sprite_CheckDeleteXY).l		;
 ; ---------------------------------------------------------------------------
 
 loc_6FF5C:
@@ -192423,7 +192467,7 @@ loc_82B78:
 loc_82B84:
 		move.l	#Wait_Draw,(a0)
 		move.w	#3,$2E(a0)
-		move.l	#loc_85088,$34(a0)
+		move.l	#Respawn_SpriteAndChildren,$34(a0)
 		lea	(Child6_CreateBossExplosion).l,a2
 		jsr	(CreateChild6_Simple).l
 		bne.s	loc_82BAC
@@ -196192,11 +196236,11 @@ Sprite_CheckDelete:
 		andi.w	#$FF80,d0
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#$280,d0
-		bhi.s	loc_85088
+		bhi.s	Respawn_SpriteAndChildren
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_85088:
+Respawn_SpriteAndChildren:
 		move.w	respawn_addr(a0),d0
 		beq.s	loc_85094
 		movea.w	d0,a2
@@ -196266,7 +196310,7 @@ Sprite_CheckDeleteTouch:
 		andi.w	#$FF80,d0
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#$280,d0
-		bhi.w	loc_85088
+		bhi.w	Respawn_SpriteAndChildren
 		jsr	(Add_SpriteToCollisionResponseList).l
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -202410,12 +202454,14 @@ byte_8844D:
 
 Obj_Tunnelbot:
 		jsr	(Obj_WaitOffscreen).l
+		jsr	(Tunnelbot_CheckDelete).l		; Liliam: bugfix - wait for quake before deleting
 		moveq	#0,d0
 		move.b	routine(a0),d0
 		move.w	Tunnelbot_Index(pc,d0.w),d1
 		jsr	Tunnelbot_Index(pc,d1.w)
-		bsr.w	sub_88A62
-		jmp	Sprite_CheckDeleteTouch(pc)
+		bra.w	sub_88A62				;
+;		bsr.w	sub_88A62				;
+;		jmp	Sprite_CheckDeleteTouch(pc)		;
 ; ---------------------------------------------------------------------------
 Tunnelbot_Index:
 		dc.w loc_88480-Tunnelbot_Index
@@ -205278,7 +205324,7 @@ loc_8A0AA:
 
 loc_8A0EC:
 		jsr	Displace_PlayerOffObject(pc)
-		jmp	loc_85088(pc)
+		jmp	Respawn_SpriteAndChildren(pc)
 ; ---------------------------------------------------------------------------
 
 loc_8A0F4:
@@ -210353,8 +210399,8 @@ loc_8CE1C:
 ; ---------------------------------------------------------------------------
 
 loc_8CE30:
-		jmp	(loc_85088).l				; Liliam: fallout
-;		jmp	loc_85088(pc)				;
+		jmp	(Respawn_SpriteAndChildren).l		; Liliam: fallout
+;		jmp	Respawn_SpriteAndChildren(pc)		;
 ; ---------------------------------------------------------------------------
 
 loc_8CE34:
@@ -210461,7 +210507,7 @@ loc_8CF0A:
 Obj_LBZ2MinibossBox:									; Liliam: start from actual act 2 start
 		tst.b	(_unkFAA8).w
 		beq.s	LBZ2MinibossBox_Init
-		jmp	(Delete_And_Respawn_Sprite).l
+		jmp	(Respawn_Sprite).l
 ; ---------------------------------------------------------------------------
 
 loc_8CF10:
@@ -214516,7 +214562,7 @@ Obj_Iwamodoki:
 
 loc_8FB2A:
 		jsr	(Displace_PlayerOffObject).l
-		jmp	(loc_85088).l
+		jmp	(Respawn_SpriteAndChildren).l
 ; ---------------------------------------------------------------------------
 
 loc_8FB36:
@@ -217100,7 +217146,7 @@ sub_91914:
 		btst	d0,d1
 		bne.w	locret_918C2
 		addq.w	#8,sp
-		jmp	(loc_85088).l
+		jmp	(Respawn_SpriteAndChildren).l
 ; End of function sub_91914
 
 

@@ -493,7 +493,7 @@ Obj_MetalSonicHologram_Main:
 		bls.w	MetalSonicHologram_DrawSprite
 		bsr.w	MetalSonicHologram_RestoreArt
 		clr.b	mapping_frame(a0)
-		jmp	(Delete_And_Respawn_Sprite).l
+		jmp	(Respawn_Sprite).l
 ; ---------------------------------------------------------------------------
 
 	.okaytodestroy:
