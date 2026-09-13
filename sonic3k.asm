@@ -162443,19 +162443,29 @@ loc_6F0CE:
 		lea	word_6FA5E(pc),a1
 		jsr	(SetUp_ObjAttributes3).l
 		move.l	#loc_6F102,(a0)
-		move.w	#$EEE,(Normal_palette_line_2+$1E).w
-		lea	(word_6FAE0).l,a1
-		lea	(Palette_rotation_data).w,a2
-		move.l	(a1)+,(a2)+
-		move.l	(a1)+,(a2)+
-		clr.w	(a2)
-		move.l	#Go_Delete_Sprite,(Palette_rotation_custom).w
+		move.l	#AniRaw_FBZMinibossEyes,$30(a0)			; Liliam: bugfix - FBZ1 boss flash
+		move.l	#FBZMinibossEyes_CheckDelete,$34(a0)		;
+		move.w	#6,$2E(a0)					;
+;		move.w	#$EEE,(Normal_palette_line_2+$1E).w		;
+;		lea	(word_6FAE0).l,a1				;
+;		lea	(Palette_rotation_data).w,a2			;
+;		move.l	(a1)+,(a2)+					;
+;		move.l	(a1)+,(a2)+					;
+;		clr.w	(a2)						;
+;		move.l	#Go_Delete_Sprite,(Palette_rotation_custom).w	;
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
 loc_6F102:
-		jsr	(Run_PalRotationScript).l
+		jsr	(Animate_Raw).l					; Liliam: bugfix - FBZ1 boss flash
+;		jsr	(Run_PalRotationScript).l			;
 		jmp	(Draw_Sprite).l
+; ---------------------------------------------------------------------------
+
+FBZMinibossEyes_CheckDelete:						; Liliam: bugfix - FBZ1 boss flash
+		subq.w	#1,$2E(a0)
+		bne.s	locret_6F176
+		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
 
 loc_6F10E:
@@ -163070,6 +163080,10 @@ sub_6F796:
 loc_6F7A6:
 		moveq	#0,d0
 		move.b	subtype(a0),d0
+		bne.s	loc_6F7AC				; Liliam: bugfix - set correct position for boss pieces
+		addi.b	#$C0,x_pos+2(a0)			;
+
+loc_6F7AC:
 		move.w	word_6F7C0(pc,d0.w),$2E(a0)
 		add.w	d0,d0
 		lea	word_6F7C6(pc,d0.w),a1
@@ -163078,8 +163092,7 @@ loc_6F7A6:
 		rts
 ; ---------------------------------------------------------------------------
 word_6F7C0:
-		dc.w    $1E					; Liliam: bugfix - set correct position for boss pieces (credit: Tiddles)
-;		dc.w    $20					;
+		dc.w    $20
 		dc.w    $20
 		dc.w    $40
 word_6F7C6:
@@ -163363,12 +163376,14 @@ loc_6F9B6:
 		moveq	#0,d0
 		btst	#0,$20(a0)
 		bne.s	loc_6F9C2
-		addq.w	#2*4,d0
+		addq.w	#2*2,d0						; Liliam: bugfix - FBZ1 boss flash
+;		addq.w	#2*4,d0						;
 
 loc_6F9C2:
 		lea	word_6F9FC(pc),a1
 		lea	word_6FA04(pc,d0.w),a2
-		jsr	(CopyWordData_4).l
+		jsr	(CopyWordData_2).l				;
+;		jsr	(CopyWordData_4).l				;
 		subq.b	#1,$20(a0)
 		bne.s	locret_6F9DC
 		bclr	#6,$3A(a0)
@@ -163387,10 +163402,17 @@ loc_6F9DE:
 
 ; ---------------------------------------------------------------------------
 word_6F9FC:
-		dc.w Normal_palette_line_2+$04, Normal_palette_line_2+$08, Normal_palette_line_2+$16, Normal_palette_line_2+$1E
+;		dc.w Normal_palette_line_2+$04				; Liliam: bugfix - FBZ1 boss flash
+		dc.w Normal_palette_line_2+$08
+		dc.w Normal_palette_line_2+$16
+;		dc.w Normal_palette_line_2+$1E				;
 word_6FA04:
-		dc.w   $222,  $644,  $222,   $44
-		dc.w   $AAA,  $AAA,  $EEE,  $EEE
+;		dc.w   $222						;
+		dc.w   $644,  $222
+;		dc.w   $44						;
+;		dc.w   $AAA						;
+		dc.w   $AAA,  $EEE
+;		dc.w   $EEE						;
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -163470,15 +163492,14 @@ ChildObjDat_FBZEmptyCapsule:								; Liliam: start from actual act 2 start
 		dc.w $E4
 ;		; Liliam: removed unused data
 Pal_FBZMiniboss:
+		; Liliam: bugfix - FBZ1 boss flash
 		binclude "Levels/FBZ/Palettes/FBZ Miniboss.bin"
 		even
-word_6FAE0:	palscriptptr .header, .data
-		dc.w 0
-.header	palscripthdr	Normal_palette_line_2+$1E, 1, 7-1
-.data	palscriptdata	1, $EEE
-	palscriptdata	4, $644
-	palscriptrun
-
+;word_6FAE0:
+		; Liliam: bugfix - FBZ1 boss flash
+AniRaw_FBZMinibossEyes:							; Liliam: bugfix - FBZ1 boss flash
+		dc.b    0, $11, $11,   4,   4,   4, $F4
+		even
 Map_FBZMiniboss:
 		include "Levels/FBZ/Misc Object Data/Map - Miniboss.asm"
 ; ---------------------------------------------------------------------------
@@ -221050,6 +221071,7 @@ ArtKosM_FBZExitHall:
 		binclude "Levels/FBZ/KosinskiM Art/Exit Hall.bin"
 		even
 ArtKosM_FBZMiniboss:
+		; Liliam: bugfix - FBZ1 boss flash
 		binclude "Levels/FBZ/KosinskiM Art/Miniboss.bin"
 		even
 ArtKosM_FBZCloud:
