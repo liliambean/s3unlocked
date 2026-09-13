@@ -68025,8 +68025,10 @@ loc_2C626:
 loc_2C62C:
 		tst.b	render_flags(a0)
 		bpl.s	loc_2C690
-		move.w	#$10,d1
-		move.w	#6,d3
+		moveq	#$10,d1					; Liliam: bugfix - set correct collision height
+		moveq	#5,d3					;
+;		move.w	#$10,d1					;
+;		move.w	#6,d3					;
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectTop).l
 		move.b	#0,mapping_frame(a0)
