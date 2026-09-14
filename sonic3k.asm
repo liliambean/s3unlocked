@@ -69015,6 +69015,11 @@ Save_Level_Data:
 		move.w	(Camera_Y_pos).w,(Saved_camera_Y_pos).w
 		move.w	(Mean_water_level).w,(Saved_mean_water_level).w
 		move.b	(Water_full_screen_flag).w,(Saved_water_full_screen_flag).w
+		tst.w	(Debug_placement_mode).w			; Liliam: debug - set correct priority
+		beq.s	locret_2D1CA					;
+		move.w	(Debug_saved_art_tile).w,(Saved_art_tile).w	;
+
+locret_2D1CA:
 		rts
 ; End of function Save_Level_Data
 
@@ -69040,6 +69045,11 @@ Save_Level_Data2:
 		move.w	(Mean_water_level).w,(Saved2_mean_water_level).w
 		move.b	(Water_full_screen_flag).w,(Saved2_water_full_screen_flag).w
 		move.b	(Player_1+status_secondary).w,(Saved2_status_secondary).w
+		tst.w	(Debug_placement_mode).w			; Liliam: debug - set correct priority
+		beq.s	locret_2D232					;
+		move.w	(Debug_saved_art_tile).w,(Saved2_art_tile).w	;
+
+locret_2D232:
 		rts
 ; End of function Save_Level_Data2
 
