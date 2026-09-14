@@ -30654,7 +30654,7 @@ Tails_Carry_GrabPlayer:
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$1C,y_pos(a1)
-		move.w	#$14<<8,anim(a1)			; Liliam: simplify player anim selection
+		move.w	#$14<<8|$FF,anim(a1)			; Liliam: simplify player anim selection
 ;		move.w	#$22<<8,anim(a1)			;
 		move.b	#0,anim_frame_timer(a1)
 		move.b	#0,anim_frame(a1)
@@ -105345,9 +105345,9 @@ sub_49CFE:
 		btst	d6,status(a0)
 		beq.s	locret_49D3A
 		addq.b	#1,(a3)
-		move.w	#2<<8,anim(a1)	; and prev_anim
+;		move.w	#2<<8,anim(a1)	; and prev_anim		; Liliam: bugfix - set correct player height
 		move.b	#1,object_control(a1)
-		jsr	(Player_SetRollHeight).l		; Liliam: bugfix - set correct player height
+		jsr	(Player_SetRollHeight).l		;
 ;		move.b	#$E,y_radius(a1)			;
 ;		move.b	#7,x_radius(a1)				;
 		move.b	#2,anim(a1)
