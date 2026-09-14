@@ -40984,10 +40984,11 @@ Obj_Ring:
 ;Obj_RingInit:
 ;		addq.b	#2,routine(a0)				; Liliam: QOL - speed up ring loss
 		move.l	#Sprite_CheckDeleteTouch3,(a0)		;
-		move.l	#Map_Ring,mappings(a0)
-		move.w	#make_art_tile(ArtTile_PhotoPiece+4,1,1),art_tile(a0)	; Liliam: QOL - extend ring animation
-;		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)		;
-		move.b	#4,render_flags(a0)
+		move.l	#Map_BouncingRing,mappings(a0)				; Liliam: QOL - extend ring animation
+;		move.l	#Map_Ring,mappings(a0)					;
+		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)
+		move.b	#$24,render_flags(a0)					;
+;		move.b	#4,render_flags(a0)					;
 		move.w	#$100,priority(a0)
 		move.b	#$47,collision_flags(a0)
 		move.b	#8,width_pixels(a0)
@@ -41016,6 +41017,8 @@ Obj_RingCollect:
 ; ---------------------------------------------------------------------------
 
 loc_1A582:
+		move.l	#Map_Ring,mappings(a0)					; Liliam: QOL - extend ring animation
+		bclr	#5,render_flags(a0)					;
 		bsr.s	GiveRing
 
 Obj_RingSparkle:
@@ -41157,9 +41160,12 @@ loc_1A6B6:
 		move.b	#8,x_radius(a1)
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
-		move.l	#Map_Ring,mappings(a1)
-		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a1)
-		move.b	#$84,render_flags(a1)
+		move.l	#Map_BouncingRing,mappings(a1)				; Liliam: QOL - extend ring animation
+		move.w	#make_art_tile(ArtTile_Ring+4,1,1),art_tile(a1)		;
+		move.b	#$A4,render_flags(a1)					;
+;		move.l	#Map_Ring,mappings(a1)					;
+;		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a1)		;
+;		move.b	#$84,render_flags(a1)					;
 		move.w	#$180,priority(a1)
 		move.b	#$47,collision_flags(a1)
 		move.b	#8,width_pixels(a1)
@@ -41363,10 +41369,11 @@ BouncingRing_Convert:						; Liliam: QOL - speed up ring loss
 ; ---------------------------------------------------------------------------
 
 Obj_Attracted_Ring:
-		move.l	#Map_Ring,mappings(a0)
-		move.w	#make_art_tile(ArtTile_PhotoPiece+4,1,1),art_tile(a0)	; Liliam: QOL - extend ring animation
-;		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)		;
-		move.b	#4,render_flags(a0)
+		move.l	#Map_BouncingRing,mappings(a0)				; Liliam: QOL - extend ring animation
+;		move.l	#Map_Ring,mappings(a0)					;
+		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)
+		move.b	#$24,render_flags(a0)					;
+;		move.b	#4,render_flags(a0)					;
 		move.w	#$100,priority(a0)
 		move.b	#$47,collision_flags(a0)
 		move.b	#8,width_pixels(a0)
@@ -41386,7 +41393,7 @@ loc_1A88C:
 ;		move.b	#2,routine(a0)				;
 		move.b	#-1,(Ring_spill_anim_counter).w
 		move.b	(Rings_frame).w,(Ring_spill_anim_frame).w		; Liliam: QOL - extend ring animation
-		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)		;
+		move.w	#make_art_tile(ArtTile_Ring+4,1,1),art_tile(a0)		;
 
 Obj_Attracted_RingAnimate:
 ;		subq.b	#1,anim_frame_timer(a0)					;
@@ -41507,7 +41514,9 @@ Obj_Ring_2P:							; Liliam: competition - custom ring object
 		move.l	#Obj_Ring_2P_Main,(a0)
 		move.l	#Map_2PItem,mappings(a0)
 		move.w	#make_art_tile(ArtTile_2PArt_3,0,1),art_tile(a0)
+		move.w	#$80,priority(a0)
 		move.b	#$C7,collision_flags(a0)
+		bclr	#5,render_flags(a0)
 		move.b	#8,y_radius(a0)
 		move.b	#8,x_radius(a0)
 		move.b	#3,anim(a0)
@@ -41525,7 +41534,9 @@ Obj_BouncingRing_2P:						; Liliam: competition - custom ring object
 		move.l	#Obj_BouncingRing_2P_Main,(a0)
 		move.l	#Map_2PItem,mappings(a0)
 		move.w	#make_art_tile(ArtTile_2PArt_3,0,1),art_tile(a0)
+		move.w	#$80,priority(a0)
 		move.b	#$C7,collision_flags(a0)
+		bclr	#5,render_flags(a0)
 		move.b	#-1,$43(a0)
 
 Obj_BouncingRing_2P_Main:
@@ -41711,8 +41722,10 @@ Ani_RingSparkle:
 		; Liliam: Encore mode - combine ring
 		include "General/Sprites/Ring/Anim - Ring Sparkle.asm"
 Map_Ring:
-		; Liliam: QOL - extend ring animation
+		; Liliam: Encore mode - combine ring
 		include "General/Sprites/Ring/Map - Ring.asm"
+Map_BouncingRing:								; Liliam: QOL - extend ring animation
+		dc.b  $F8,   5, $FF, $FC, $FF, $F8
 Map_CombineRing:							; Liliam: Encore mode - combine ring
 		include "General/Sprites/Ring/Map - Combine Ring.asm"
 DPLC_CombineRing:							; Liliam: Encore mode - combine ring
@@ -193774,7 +193787,9 @@ AniRaw_EndSigns1:
 ;AniRaw_EndSigns2:
 		; Liliam: simplify end sign selection
 AniRaw_SignpostSparkle:
-		dc.b    1,   4,   5,   6,   7, $FC
+		; Liliam: QOL - extend ring animation
+		dc.b    1,   1,   2,   3,   4, $FC
+;		dc.b    1,   4,   5,   6,   7, $FC
 		even
 DPLC_EndSigns:
 		; Liliam: add extra characters
@@ -204947,7 +204962,8 @@ loc_89D44:
 		move.b	#-1,(Ring_spill_anim_counter).w
 		move.b	#8,y_radius(a0)
 		move.b	#8,x_radius(a0)
-		move.b	#$84,render_flags(a0)
+		move.b	#$A4,render_flags(a0)					; Liliam: QOL - extend ring animation
+;		move.b	#$84,render_flags(a0)					;
 		moveq	#4,d0
 		jsr	(Set_IndexedVelocity).l
 		jsr	(BouncingRing_Convert).l		;
@@ -205080,8 +205096,10 @@ word_89E96:
 		dc.w   $280
 		dc.b  $20, $28,   0,   0
 ObjDat3_89E9C:
-		dc.l Map_Ring
-		dc.w make_art_tile(ArtTile_Ring,1,1)
+		dc.l Map_BouncingRing						; Liliam: QOL - extend ring animation
+		dc.w make_art_tile(ArtTile_Ring+4,1,1)				;
+;		dc.l Map_Ring							;
+;		dc.w make_art_tile(ArtTile_Ring,1,1)				;
 		dc.w   $180
 		dc.b    8,   8,   0, $47
 ChildObjDat_89EA8:
