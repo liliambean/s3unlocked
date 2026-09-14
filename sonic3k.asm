@@ -33573,9 +33573,9 @@ loc_16106:
 		moveq	#4,d0
 
 loc_1612C:
-;		cmp.b	objoff_34(a0),d0			;
-;		beq.s	loc_1613C				;
-;		move.b	d0,objoff_34(a0)			;
+		cmp.b	objoff_34(a0),d0	; Has the input parent anim changed since last check?
+		beq.s	loc_1613C		; If not, branch and skip setting a matching Tails' Tails anim
+		move.b	d0,objoff_34(a0)	; Store d0 for the above comparison
 		move.b	Obj_Tails_Tail_AniSelection(pc,d0.w),anim(a0)	; Load anim relative to parent's
 
 loc_1613C:
