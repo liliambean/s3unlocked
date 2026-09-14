@@ -7792,13 +7792,19 @@ loc_6AD0:
 		bclr	d1,(Encore_available_chars).w		;
 
 loc_6AEE:
+		moveq	#0,d2					;
+		bsr.s	SpawnLevelMainSprites_AdjustPosition	;
 		lsl.w	#2,d1					;
 		move.l	(a1,d1.w),(Player_2).w			;
 ;		move.l	#Obj_Tails,(Player_2).w			;
 		move.w	(Player_1+x_pos).w,(Player_2+x_pos).w
 		move.w	(Player_1+y_pos).w,(Player_2+y_pos).w
 		subi.w	#$20,(Player_2+x_pos).w
-		addi.w	#4,(Player_2+y_pos).w
+		move.w	d0,d1					;
+		neg.w	d2					;
+		bsr.s	SpawnLevelMainSprites_AdjustPosition	;
+		add.w	d2,(Player_2+y_pos).w			;
+;		addi.w	#4,(Player_2+y_pos).w			;
 		move.l	#Obj_DashDust,(Dust_P2).w
 		move.w	#0,(Tails_CPU_routine).w
 		btst	#Status_Facing,(Player_1+status).w	; Liliam: face left at left-facing star posts
@@ -7806,6 +7812,17 @@ loc_6AEE:
 		addi.w	#$40,(Player_2+x_pos).w			;
 
 locret_6B1C:
+		rts
+; ---------------------------------------------------------------------------
+
+SpawnLevelMainSprites_AdjustPosition:				; Liliam: bugfix - set correct camera height
+		cmpi.b	#1,d1
+		beq.s	.setTailsHeight
+		cmpi.b	#3,d1
+		beq.s	.setTailsHeight
+		addq.w	#4,d2
+
+	.setTailsHeight:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -23118,6 +23135,11 @@ Obj_Amy:							; Liliam: add extra characters
 		bsr.s	.main
 		move.b	#$F,y_radius(a0)
 		move.b	#$F,default_y_radius(a0)
+		btst	#Status_InAir,status(a0)
+		bne.s	.initDust
+		addq.w	#4,y_pos(a0)
+
+	.initDust:
 		move.b	#5-TailsRollHeightDiff,$38(a6)
 		btst	#Skill_AmyDoubleJump,(Skill_options).w
 		beq.s	.return
@@ -44027,9 +44049,10 @@ loc_1BE7A:
 		moveq	#0,d0
 		move.w	(a1),d0
 		move.w	d0,(Player_1+y_pos).w
-		tst.b	(Last_star_post_hit).w
-		bne.w	loc_1BF74
-		cmpi.w	#0,(Current_zone_and_act).w
+;		tst.b	(Last_star_post_hit).w			;
+;		bne.w	loc_1BF74				;
+;		cmpi.w	#0,(Current_zone_and_act).w		;
+		tst.w	(Current_zone_and_act).w		;
 		bne.s	loc_1BEC6
 	if No2PZones
 		nop
@@ -143538,8 +143561,9 @@ Obj_AIZEncoreIntro:							; Liliam: AIZ intro - Encore mode intro
 Obj_AIZEncoreIntro_InitPlayer:						; Liliam: AIZ intro - Encore mode intro
 		bset	#1,status(a1)
 		move.b	#3,object_control(a1)
-		move.w	#$280,ground_vel(a1)
+		clr.b	mapping_frame(a1)
 		move.w	#-$600,y_vel(a1)
+		move.w	#$280,ground_vel(a1)
 
 Obj_AIZEncoreIntro_InitCorkFloor:
 		move.w	#$1400,x_pos(a1)
