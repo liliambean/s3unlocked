@@ -1423,7 +1423,6 @@ EncoreCapsule_SpawnPlayer:
 		move.l	a0,-(sp)
 		movea.l	a1,a0
 		jsr	(a3)
-		jsr	(a3)
 		movea.l	a0,a1
 		movea.l	(sp)+,a0
 		rts
