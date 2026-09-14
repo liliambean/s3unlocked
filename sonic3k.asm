@@ -20038,7 +20038,7 @@ Player_WalkVertR:
 		bpl.s	loc_EE22
 		cmpi.w	#-$E,d1
 		blt.s	loc_EE0E
-		tst.b	AIZ_loop_timer(a0)
+		tst.b	AIZ1_loop_timer(a0)
 		bne.s	loc_EE02
 		add.w	d1,x_pos(a0)
 
@@ -20047,7 +20047,7 @@ locret_EE00:
 ; ---------------------------------------------------------------------------
 
 loc_EE02:
-		subq.b	#1,AIZ_loop_timer(a0)
+		subq.b	#1,AIZ1_loop_timer(a0)
 		move.b	#$C0,angle(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -20056,7 +20056,7 @@ loc_EE0E:
 		tst.w	(Current_zone_and_act).w
 		bne.s	locret_EE00
 		move.b	#$C0,angle(a0)
-		move.b	#3,AIZ_loop_timer(a0)
+		move.b	#3,AIZ1_loop_timer(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -100054,7 +100054,7 @@ loc_45A84:
 		tst.b	(Encore_mode).w					;
 		bne.s	loc_45AA6					;
 		move.l	#Obj_SSZEndBoss,(a1)
-		move.w	a1,(_unkFAA4).w
+		move.w	a1,(Boss_object_addr).w
 
 loc_45AA6:
 		move.w	a1,$30(a0)
@@ -100099,7 +100099,7 @@ loc_45B16:
 
 loc_45B1C:
 		jsr	sub_45866(pc)
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Cutscene_Knux_addr).w,a1
 		movea.w	$3C(a0),a2
 		cmpi.b	#8,$46(a2)
 		blt.w	loc_45B84
@@ -127711,7 +127711,7 @@ loc_5754C:
 		addq.w	#4,a5
 		addq.w	#2,a6
 		dbf	d2,loc_5751C
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Boss_object_addr).w,a1
 		move.w	$10(a1),d0
 		subi.w	#$19A0,d0
 		lsr.w	#3,d0
@@ -130775,7 +130775,7 @@ Gumball_ScreenEvent:						; Liliam: reinsert S3 screen events
 
 Gumball_SetUpVScroll:						; Liliam: reinsert S3 screen events
 		move.w	(Camera_Y_pos_copy).w,d0
-		movea.w (_unkFAA4).w,a5
+		movea.w (Gumball_machine_addr).w,a5
 		move.w	$14(a5),d1
 		subi.w	#$C8,d1
 		sub.w	d0,d1
@@ -134634,8 +134634,8 @@ loc_5C3EE:
 loc_5C3FE:
 		move.l	#Obj_Continue_Knuckles,(Reserved_object_3).w
 		lea	(Dynamic_object_RAM).w,a1
-		move.l	#loc_5C4D6,(a1)
-		move.w	a1,(_unkFAA4).w
+		move.l	#Obj_ContinueScreen,(a1)
+		move.w	a1,(Continue_object_addr).w
 		move.l	#loc_5C9DC,(Dynamic_object_RAM+object_size).w
 		bsr.w	sub_5CB1C
 		jsr	(Process_Sprites).l
@@ -134706,7 +134706,7 @@ locret_5C4D4:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_5C4D6:
+Obj_ContinueScreen:
 		move.l	#loc_5C4E6,(a0)
 ;		clr.w	(_unkFA82).w				; Liliam: continues - start countdown from 10
 		move.w	#13,(_unkFA82).w			;
@@ -134758,7 +134758,7 @@ Obj_Continue_SonicWTails:
 		move.l	#loc_5C55C,(a0)
 
 loc_5C55C:
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Continue_object_addr).w,a1
 		btst	#3,$38(a1)
 		bne.s	loc_5C582
 		move.b	#0,mapping_frame(a0)
@@ -134913,7 +134913,7 @@ loc_5C684:
 		addq.w	#4,y_pos(a0)				;
 
 loc_5C6B6:
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Continue_object_addr).w,a1
 		btst	#2,$38(a1)
 		bne.s	loc_5C6CC
 		jmp	(Animate_RawCheckResult).l		;
@@ -134972,7 +134972,7 @@ Obj_Continue_TailsWSonic:
 		move.l	#loc_5C74A,(a0)
 
 loc_5C74A:
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Continue_object_addr).w,a1
 		btst	#3,$38(a1)
 		bne.s	loc_5C770
 		move.b	#5,mapping_frame(a0)
@@ -135094,7 +135094,7 @@ loc_5C854:
 loc_5C88C:
 		move.w	#$37,$2E(a0)				; Liliam: continues - add delay to match other characters
 ;		move.w	#$2F,$2E(a0)				;
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Continue_object_addr).w,a1
 		btst	#3,$38(a1)
 		beq.s	loc_5C8AC
 		move.l	#loc_5C8AC,(a0)
@@ -135141,7 +135141,7 @@ loc_5C8EA:
 ; ---------------------------------------------------------------------------
 
 loc_5C91E:
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Continue_object_addr).w,a1
 		btst	#3,$38(a1)
 		bne.s	loc_5C92C
 		rts
@@ -135154,7 +135154,7 @@ loc_5C932:
 		move.w	x_pos(a0),d0
 		addq.w	#6,d0
 		move.w	d0,x_pos(a0)
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Continue_object_addr).w,a1
 		cmpi.w	#$120,d0
 		blo.s	loc_5C94C
 		bset	#2,$38(a1)
@@ -135240,7 +135240,7 @@ Continue_Robotnik_Init2:
 ; ---------------------------------------------------------------------------
 
 Continue_Robotnik_Check:					; Liliam: continues - use Robotnik once Knuckles switches sides
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Continue_object_addr).w,a1
 		btst	#3,$38(a1)
 		bne.s	Continue_Robotnik_Start
 
@@ -135249,7 +135249,7 @@ Continue_MechaSonic_Wait:
 ; ---------------------------------------------------------------------------
 
 Continue_MechaSonic_Check:						; Liliam: Metal Sonic - use Mecha Sonic for continue screen
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Continue_object_addr).w,a1
 		btst	#3,$38(a1)
 		beq.s	Continue_MechaSonic_Wait
 
@@ -135267,7 +135267,7 @@ Continue_Robotnik_Start:
 Continue_Robotnik_Check2:
 		cmpi.w	#$11A,x_pos(a0)
 		blo.s	Continue_Robotnik_Move
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Continue_object_addr).w,a1
 		bset	#2,$38(a1)
 		addq.b	#2,routine(a0)
 
@@ -135354,7 +135354,7 @@ loc_5CA5C:
 
 loc_5CA68:
 ;		movea.l	$30(a0),a1				; Liliam: continues - update count on button press
-		movea.w	(_unkFAA4).w,a1				;
+		movea.w	(Continue_object_addr).w,a1		;
 		btst	#3,$38(a1)				;
 		beq.s	loc_5CA72				;
 		move.l	#Draw_Sprite,(a0)			;
@@ -135390,7 +135390,7 @@ Obj_ContinueIcon_TailsTail:
 loc_5CA9E:
 		lea	AniRaw_ContinueIconTailsTail(pc),a1
 		jsr	(Animate_RawNoSST).l
-		movea.w	(_unkFAA4).w,a1				; Liliam: continues - update count on button press
+		movea.w	(Continue_object_addr).w,a1		; Liliam: continues - update count on button press
 		btst	#3,$38(a1)				;
 		beq.s	loc_5CA72				;
 		move.l	#Draw_Sprite,(a0)			;
@@ -138182,7 +138182,7 @@ loc_5DB5C:
 ; ---------------------------------------------------------------------------
 
 loc_5DB60:
-		tst.w	(_unkFAA4).w
+		tst.w	(Continue_object_addr).w
 		bne.s	loc_5DB6A
 		bra.w	sub_60000
 ; ---------------------------------------------------------------------------
@@ -138529,7 +138529,7 @@ loc_5DEDE:
 		move.w	#$100,y_vel(a0)
 
 loc_5DEF0:
-		move.w	(_unkFAA4).w,d0
+		move.w	(Continue_object_addr).w,d0
 		bne.s	loc_5DEFC
 		jmp	(MoveSprite2).l
 ; ---------------------------------------------------------------------------
@@ -138617,7 +138617,7 @@ loc_5DFB2:
 		cmpi.b	#-$74,d0
 		bgt.s	loc_5DFCC
 		move.l	#loc_5DFD8,(a0)
-		move.w	a0,(_unkFAA4).w
+		move.w	a0,(Continue_object_addr).w
 
 loc_5DFCC:
 		jsr	(Refresh_ChildPosition).l
@@ -142103,7 +142103,7 @@ Obj_GumballMachine:
 		lea	ObjDat_GumballMachine(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		move.l	#loc_60CB8,(a0)
-		move.w	a0,(_unkFAA4).w
+		move.w	a0,(Gumball_machine_addr).w
 		subi.w	#$100,y_pos(a0)
 		move.w	y_pos(a0),$3A(a0)
 		st	(Disable_death_plane).w
@@ -142397,7 +142397,7 @@ loc_60FB4:
 		lea	($FF2000).l,a1
 		clr.b	(a1,d0.w)
 		move.w	#$F,($FF2020).l
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Gumball_machine_addr).w,a1
 		bset	#0,$38(a1)
 		moveq	#signextendB(sfx_Spring),d0
 		jsr	(Play_SFX).l
@@ -143267,7 +143267,7 @@ PalSPtr_SSEntry2:
 ; ---------------------------------------------------------------------------
 
 Obj_CutsceneKnuckles:
-		move.w	a0,(_unkFAA4).w
+		move.w	a0,(Cutscene_Knux_addr).w
 		moveq	#0,d0
 		move.b	subtype(a0),d0
 		movea.l	CutsceneKnuckles_Index(pc,d0.w),a1
@@ -143436,6 +143436,7 @@ loc_61F22:
 
 loc_61F2A:
 		jsr	(AfterBoss_Cleanup).l
+		clr.w	(Cutscene_Knux_addr).w			; Liliam: bugfix - prevent cutscene button from pressing itself
 		jsr	(Remove_From_TrackingSlot).l
 		jsr	(AllocateObject).l
 		bne.s	loc_61F44
@@ -143969,6 +143970,7 @@ loc_6242C:
 		move.l	#Obj_Song_Fade_ToLevelMusic,(a1)
 
 loc_6244C:
+		clr.w	(Cutscene_Knux_addr).w			; Liliam: bugfix - prevent cutscene button from pressing itself
 		jsr	(Remove_From_TrackingSlot).l
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -144934,7 +144936,7 @@ loc_62E6A:
 		move.b	#$1C,subtype(a1)
 
 loc_62E92:
-		move.w	(_unkFAA4).w,d0
+		move.w	(Cutscene_Knux_addr).w,d0
 		beq.s	loc_62ECA
 		movea.w	d0,a1
 		lea	word_65C48(pc),a2
@@ -146160,7 +146162,7 @@ CutsceneKnux_HPZ:
 		movea.l	a0,a1
 		move.l	#loc_63D1A,(a1)
 		lea	(Dynamic_object_RAM+(object_size*45)).w,a2
-		move.w	a2,(_unkFAA4).w
+		move.w	a2,(Cutscene_Knux_addr).w
 		moveq	#bytesToWcnt(object_size),d0
 
 loc_63D0E:
@@ -147818,7 +147820,7 @@ locret_64E6A:
 ; ---------------------------------------------------------------------------
 
 loc_64E6C:
-		movea.w	(_unkFAA4).w,a1				; Liliam: cutscene skip - HPZ part 4
+		movea.w	(Cutscene_Knux_addr).w,a1		; Liliam: cutscene skip - HPZ part 4
 		cmpi.b	#$56,routine(a1)			;
 		bne.s	.done					;
 		move.l	#.done,(a0)				;
@@ -149060,7 +149062,7 @@ PLC_CutsceneButton_End
 ; ---------------------------------------------------------------------------
 
 loc_65C04:
-		move.w	(_unkFAA4).w,d0
+		move.w	(Cutscene_Knux_addr).w,d0
 		beq.s	loc_65C3A
 		movea.w	d0,a1
 		lea	word_65C48(pc),a2
@@ -151020,7 +151022,7 @@ loc_67956:
 ; ---------------------------------------------------------------------------
 
 loc_6795C:
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Cutscene_Knux_addr).w,a1
 		move.w	x_pos(a0),d0
 		move.w	x_pos(a1),d1
 		subq.w	#8,d0
@@ -167842,7 +167844,7 @@ loc_72BBC:
 ;		bpl.w	locret_72B02				;
 		move.l	#loc_72C0A,(a0)
 		bset	#5,$38(a0)
-		move.w	a0,(_unkFAA4).w
+		move.w	a0,(Boss_object_addr).w
 ;		jsr	(Restore_PlayerControl).l		;
 ;		lea	(Player_2).w,a1				;
 ;		jsr	(Restore_PlayerControl2).l		;
@@ -171858,7 +171860,7 @@ loc_75220:
 		subi.w	#$78,d0
 		move.w	d0,y_pos(a0)
 		move.b	#6,collision_property(a0)
-		move.w	a0,(_unkFAA4).w
+		move.w	a0,(Boss_object_addr).w
 		move.b	#5,$42(a0)
 		move.l	(V_int_run_count).w,(RNG_seed).w
 		move.b	#1,(Boss_flag).w
@@ -172657,7 +172659,7 @@ Obj_MHZMinibossTree:
 		move.l	#loc_75A94,(a0)
 
 loc_75A94:
-		move.w	(_unkFAA4).w,d0
+		move.w	(Boss_object_addr).w,d0
 		beq.s	loc_75ACE
 		movea.w	d0,a1
 		cmpi.l	#Obj_MHZMiniboss,(a1)
@@ -172685,7 +172687,7 @@ loc_75AD4:
 		jsr	(SetUp_ObjAttributes).l
 		move.l	#loc_75B34,(a0)
 		move.b	#$18,y_radius(a0)
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Boss_object_addr).w,a1
 		moveq	#0,d2
 		move.b	$42(a1),d2
 		move.b	byte_75B2E(pc,d2.w),d3
@@ -178046,7 +178048,7 @@ Pal_LRZBossFire:
 ; ---------------------------------------------------------------------------
 
 Obj_LRZEndBoss:
-		move.w	a0,(_unkFAA4).w
+		move.w	a0,(Boss_object_addr).w
 		move.l	#loc_797C6,(a0)
 		lea	(ArtKosM_LRZEndBoss).l,a1
 		move.w	#tiles_to_bytes(ArtTile_LRZEndBoss),d2
@@ -178961,7 +178963,7 @@ loc_79C72:
 		move.w	#$37F,$2E(a1)
 
 loc_79C9E:
-		tst.w	(_unkFAA4).w
+		tst.w	(Boss_object_addr).w
 		bne.w	loc_79DB6
 		subq.w	#1,$2E(a0)
 		bpl.w	locret_797F8
@@ -179046,7 +179048,7 @@ loc_79D6E:
 		bmi.s	loc_79DB6
 
 loc_79D82:
-		tst.w	(_unkFAA4).w
+		tst.w	(Boss_object_addr).w
 		beq.s	loc_79DAA
 		tst.b	render_flags(a0)
 		bpl.s	loc_79DB6
@@ -179276,7 +179278,7 @@ word_79FEE:
 
 
 sub_79FFE:
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Boss_object_addr).w,a1
 		tst.w	(a1)
 		beq.w	locret_797F8
 		lea	word_7A038(pc),a2
@@ -183291,7 +183293,7 @@ loc_7CB82:
 		move.l	#Obj_SSZEndBoss,(a1)
 
 loc_7CB90:
-		move.w	a1,(_unkFAA4).w
+		move.w	a1,(Boss_object_addr).w
 
 loc_7CB94:
 		jsr	Swing_UpAndDown(pc)
@@ -183301,7 +183303,7 @@ loc_7CB94:
 
 loc_7CBA4:
 		move.w	#1,(Tails_CPU_idle_timer).w		; Liliam: allow other characters to play SSZ2
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Boss_object_addr).w,a1
 		lea	word_7CC16(pc),a2
 		jsr	(Check_InMyRange).l
 		beq.s	loc_7CBCE
@@ -183316,7 +183318,7 @@ loc_7CBC8:
 loc_7CBCE:
 		jsr	(Swing_UpAndDown).l
 		jsr	(MoveSprite2).l
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Boss_object_addr).w,a1
 		lea	word_7CC1E(pc),a2
 		jsr	(Check_InMyRange).l
 		beq.s	loc_7CC10
@@ -188016,7 +188018,7 @@ loc_7FD9E:
 		move.b	#2,routine(a0)
 		bset	#2,render_flags(a0)
 		move.b	#1,(Boss_flag).w			; Liliam: bugfix - use correct music for bosses
-		move.w	a0,(_unkFAA4).w
+		move.w	a0,(Boss_object_addr).w
 		clr.l	(_unkFA84).w
 		lea	(ArtKosM_DEZFinalBossMisc).l,a1
 		move.w	#tiles_to_bytes(ArtTile_DEZFinalBossMisc),d2
@@ -190671,7 +190673,7 @@ loc_818B4:
 		move.w	#$160,d2
 		move.w	#$130,d3
 		bsr.w	sub_830C0
-		move.w	(_unkFAA4).w,d0
+		move.w	(Boss_object_addr).w,d0
 		beq.s	locret_81912
 		movea.w	d0,a1
 		btst	#7,status(a1)
@@ -191154,7 +191156,7 @@ off_81E50:
 loc_81E54:
 		lea	ObjDat3_831CC(pc),a1
 		jsr	SetUp_ObjAttributes(pc)
-		move.w	a0,(_unkFAA4).w
+		move.w	a0,(Boss_object_addr).w
 		move.w	#$C0,$42(a0)
 		move.w	#$4B,$44(a0)
 		move.b	#7,collision_property(a0)
@@ -192429,7 +192431,7 @@ sub_82B06:
 		bpl.s	loc_82B30
 		tst.b	subtype(a0)
 		beq.s	loc_82B30
-		move.w	(_unkFAA4).w,d0
+		move.w	(Boss_object_addr).w,d0
 		beq.s	loc_82B30
 		movea.w	d0,a1
 		tst.b	collision_flags(a1)
@@ -205196,7 +205198,7 @@ ICZPathFollowPlatform_Index:
 loc_89F7E:
 		lea	ObjDat_ICZPathFollowPlatform(pc),a1
 		jsr	SetUp_ObjAttributes(pc)
-		move.w	a0,(_unkFAA4).w
+		move.w	a0,(ICZ1_platform_addr).w
 		move.b	#$20,x_radius(a0)
 		move.b	#$12,y_radius(a0)
 		moveq	#0,d0
@@ -205581,7 +205583,7 @@ loc_8A280:
 		bclr	#Status_Push,status(a1)			;
 
 loc_8A2A0:
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(ICZ1_platform_addr).w,a1
 		cmpi.l	#Obj_ICZPathFollowPlatform_2,(a1)
 		bne.s	loc_8A2DC
 		move.w	x_pos(a1),d0
@@ -210960,7 +210962,7 @@ loc_8D3AC:
 		jsr	(Swing_UpAndDown).l
 		jsr	(MoveSprite2).l
 		bsr.w	sub_8D506
-		movea.w	(_unkFAA4).w,a1
+		movea.w	(Cutscene_Knux_addr).w,a1
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		cmpi.w	#$50,d0

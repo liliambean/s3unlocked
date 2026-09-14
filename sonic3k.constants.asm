@@ -71,7 +71,7 @@ stick_to_convex =	$3C ; byte ; used to make character stick to convex surfaces s
 spin_dash_flag =	$3D ; byte ; bit 1 indicates spin dash, bit 7 indicates forced roll
 spin_dash_counter =	$3E ; word
 jumping =		$40 ; byte
-AIZ_loop_timer =	$41 ; byte
+AIZ1_loop_timer =	$41 ; byte
 interact =		$42 ; word ; RAM address of the last object the character stood on
 default_y_radius =	$44 ; byte ; default value of y_radius
 default_x_radius =	$45 ; byte ; default value of x_radius
@@ -825,7 +825,11 @@ Slotted_object_bits		ds.b 8			; bits to determine which slots are used for slott
 
 _unkFAA2			ds.b 1
 _unkFAA3			ds.b 1
-_unkFAA4			ds.w 1
+ICZ1_platform_addr =		*
+Gumball_machine_addr =		*
+Cutscene_Knux_addr =		*
+Continue_object_addr =		*
+Boss_object_addr		ds.w 1
 Signpost_addr			ds.w 1			; address of the currently active signpost object. Hidden monitors use this for bouncing
 _unkFAA8			ds.b 1
 _unkFAA9			ds.b 1
