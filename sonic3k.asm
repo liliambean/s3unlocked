@@ -131274,6 +131274,7 @@ loc_59B1C:
 		move.w	(Act3_ring_count).w,d0
 		beq.s	loc_59B30
 		clr.w	(Act3_ring_count).w
+		move.b	(Saved2_extra_life_flags).w,(Extra_life_flags).w	; Liliam: bugfix - save extra life flags
 		move.w	d0,(Ring_count).w
 		move.b	#1,(Update_HUD_ring_count).w
 
@@ -132041,6 +132042,7 @@ HPZSE_FromLRZ2:							; Liliam: HPZ - add Knuckles LRZ2 results
 		move.w	(Act3_ring_count).w,d0
 		beq.s	.noRings
 		clr.w	(Act3_ring_count).w
+		move.b	(Saved2_extra_life_flags).w,(Extra_life_flags).w	; Liliam: bugfix - save extra life flags
 		move.w	d0,(Ring_count).w
 		move.b	#1,(Update_HUD_ring_count).w
 
@@ -132396,6 +132398,7 @@ loc_5A49A:
 		move.w	(Act3_ring_count).w,d0
 		beq.s	loc_5A4AE
 		clr.w	(Act3_ring_count).w
+		move.b	(Saved2_extra_life_flags).w,(Extra_life_flags).w	; Liliam: bugfix - save extra life flags
 		move.w	d0,(Ring_count).w
 		move.b	#1,(Update_HUD_ring_count).w
 
@@ -146143,6 +146146,7 @@ LRZ3_StartNewLevel:
 		move.w	(Ring_count).w,(Act3_ring_count).w
 		move.l	(Timer).w,(Act3_timer).w
 		move.b	(Player_1+status_secondary).w,(Saved2_status_secondary).w
+		move.b	(Extra_life_flags).w,(Saved2_extra_life_flags).w	; Liliam: bugfix - save extra life flags
 		move.w	#$1600,d0
 		jmp	(StartNewLevel).l
 ; ---------------------------------------------------------------------------
@@ -186936,6 +186940,8 @@ loc_7F314:
 		move.w	(Ring_count).w,(Act3_ring_count).w
 		move.l	(Timer).w,(Act3_timer).w
 		move.b	(Player_1+status_secondary).w,(Saved2_status_secondary).w
+		move.b	(Extra_life_flags).w,(Saved2_extra_life_flags).w	; Liliam: bugfix - save extra life flags
+		clr.w	(H_scroll_frame_offset).w				;
 		move.w	#$1700,d0
 		jsr	(StartNewLevel).l
 		jmp	(Delete_Current_Sprite).l
@@ -198991,25 +198997,27 @@ loc_86418:
 		move.w	subtype(a0),d0
 		lsr.w	#1,d0
 		rol.b	#1,d0
-		beq.s	loc_86422				;
-		move.w	d0,(Current_zone_and_act).w		;
-		move.w	(Ring_count).w,(Act3_ring_count).w	;
-		move.l	(Timer).w,(Act3_timer).w		;
-		move.b	$2B(a1),(Saved2_status_secondary).w	;
-		move.b	#1,(Alternate_start_flag).w		;
-		move.w	#1,(Restart_level_flag).w		;
-		clr.b	(Last_star_post_hit).w			;
-		clr.b	(Special_bonus_entry_flag).w		;
-		st	(Act3_flag).w				;
-		btst	#Status_Invincible,status_secondary(a1)	;
-		beq.s	loc_863F0				;
-		move.b	#1,(Act3_flag).w			;
-		rts						;
-; ---------------------------------------------------------------------------
-
-loc_86422:
+		bne.s	StartNewLevel_HPZ			;
 		jmp	StartNewLevel_Alternate(pc)					; Liliam: improve transition to CNZ
 ;		jmp	StartNewLevel(pc)						;
+; ---------------------------------------------------------------------------
+
+StartNewLevel_HPZ:						; Liliam: HPZ - improve transition from LRZ2
+		move.w	d0,(Current_zone_and_act).w
+		move.w	(Ring_count).w,(Act3_ring_count).w
+		move.l	(Timer).w,(Act3_timer).w
+		move.b	status_secondary(a1),(Saved2_status_secondary).w
+		move.b	(Extra_life_flags).w,(Saved2_extra_life_flags).w
+		move.b	#1,(Alternate_start_flag).w
+		move.w	#1,(Restart_level_flag).w
+		clr.b	(Last_star_post_hit).w
+		clr.b	(Special_bonus_entry_flag).w
+		st	(Act3_flag).w
+		btst	#Status_Invincible,status_secondary(a1)
+		beq.s	loc_863F0
+		move.b	#1,(Act3_flag).w
+		rts
+; ---------------------------------------------------------------------------
 ; ---------------------------------------------------------------------------
 ;word_86426:
 		; Liliam: HPZ - improve transition from LRZ2
