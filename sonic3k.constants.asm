@@ -782,10 +782,11 @@ Primary_collision_addr		ds.l 1
 Secondary_collision_addr	ds.l 1
 			ds.l 1				; unused
 MHZ_pollen_counter		ds.b 1			; number of currently active pollen or leaves in MHZ
-_unkF7C1			ds.b 1
-_unkF7C2			ds.b 1
+MHZ_pollen_type =		*
+FBZ_magnetic_pull_flag		ds.b 1
+LBZ2_rising_water_flag		ds.b 1
 SOZ_darkness_level		ds.b 1
-_unkF7C4			ds.w 1
+SOZ_pushable_block_addr		ds.w 1
 Reverse_gravity_flag		ds.b 1
 WindTunnel_flag			ds.b 1
 WindTunnel_disable_flags	ds.b 1		; Liliam: Encore mode - pick RAM variables by SST

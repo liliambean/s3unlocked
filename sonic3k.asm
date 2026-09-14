@@ -2952,7 +2952,7 @@ AnPal_None:
 
 AnPal_AIZ1:
 		move.b	(AIZ1_palette_cycle_flag).w,d0
-		bmi.s	locret_221C							; Liliam: Knuckles intro - apply bomb flash to waterfall
+		bmi.s	locret_221C					; Liliam: Knuckles intro - apply bomb flash to waterfall
 		bne.s	loc_221E
 		subq.w	#1,(Palette_cycle_counter1).w
 		bpl.s	locret_221C
@@ -3156,7 +3156,7 @@ locret_243E:
 AnPal_FBZ:
 		tst.b	(Level_frame_counter+1).w
 		bne.s	locret_244C
-		bchg	#0,(_unkF7C1).w
+		bchg	#0,(FBZ_magnetic_pull_flag).w
 
 locret_244C:
 		rts
@@ -8192,7 +8192,7 @@ DynamicWaterHeight_LBZ2:
 ;		rts						;
 
 ;loc_6EF2:
-		tst.b	(_unkF7C2).w
+		tst.b	(LBZ2_rising_water_flag).w
 		beq.s	locret_6F10					; Liliam: bugfix - set correct water level
 		bpl.s	loc_6F00					;
 ;		bne.s	loc_6F00					;
@@ -8204,7 +8204,7 @@ loc_6F00:
 		move.w	(Camera_Y_pos).w,d0
 		cmp.w	(Mean_water_level).w,d0
 		blo.s	locret_6F10
-		clr.b	(_unkF7C2).w					; Liliam: bugfix - set correct water level
+		clr.b	(LBZ2_rising_water_flag).w			; Liliam: bugfix - set correct water level
 		move.w	#$65E,(Mean_water_level).w			;
 ;		move.w	#$660,(Mean_water_level).w			;
 
@@ -9277,8 +9277,24 @@ locret_7810:
 
 ; ---------------------------------------------------------------------------
 
+Load_PLC_MonitorsSpikesSprings:					; Liliam: Encore mode - change character item
+		lea	(PLC_MonitorsSpikesSprings_Encore).l,a1
+		tst.b	(Encore_mode).w
+		bne.w	Load_PLC_Raw
+		lea	(PLC_MonitorsSpikesSprings_Ray).l,a1
+		cmpi.w	#6,(Player_mode).w
+		beq.w	Load_PLC_Raw
+		lea	(PLC_MonitorsSpikesSprings_Amy).l,a1
+		cmpi.w	#4,(Player_mode).w
+		beq.w	Load_PLC_Raw
+		lea	(PLC_MonitorsSpikesSprings_Extra).l,a1
+		bhi.w	Load_PLC_Raw
+		lea	(PLC_MonitorsSpikesSprings).l,a1
+		bra.w	Load_PLC_Raw
+; ---------------------------------------------------------------------------
+
 LoadLevel_ReloadTitleCardPLCs:					; Liliam: Encore mode - restart level
-		jsr	(Load_PLC_MonitorsSpikesSprings).l
+		bsr.s	Load_PLC_MonitorsSpikesSprings
 		jsr	(LoadEnemyArt).l
 		jsr	(PLCLoad_AnimalsAndExplosion).l
 		clr.b	(Respawn_table_keep).w
@@ -16679,7 +16695,7 @@ sub_C828:
 
 loc_C83C:
 		move.w	d1,(Emerald_flicker_flag).w
-		move.w	#$CAA,d2						; Liliam: QOL - reduce flicker to avoid eye strain
+		move.w	#$CAA,d2							; Liliam: QOL - reduce flicker to avoid eye strain
 
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - save data
 		beq.s	.notEncore					;
@@ -44863,7 +44879,7 @@ loc_1C4D0:
 ;		move.w	#$41A,(Saved_Y_pos).w			;
 ;		jsr	(Save_Level_Data).l			;
 ;		move.l	#0,(Saved_timer).w			;
-;		moveq	#PLCID_MetalLifeIcon,d0			;
+;		moveq	#PLCID_08,d0				;
 ;		jsr	(Load_PLC).l				;
 ;		addq.b	#2,(Dynamic_resize_routine).w		;
 
@@ -60665,7 +60681,7 @@ loc_27508:
 ;		beq.s	loc_2758A				;
 		cmpi.b	#$1F,d1
 		bne.s	loc_27534
-		move.b	#1,(_unkF7C2).w
+		move.b	#1,(LBZ2_rising_water_flag).w
 		move.w	#$65E,(Target_water_level).w			; Liliam: bugfix - set correct water level
 ;		move.w	#$660,(Target_water_level).w			;
 		tst.b	(Super_Sonic_Knux_flag).w
@@ -70057,13 +70073,27 @@ loc_2DBDE:
 		tst.b	(Apparent_act).w
 		bne.s	locret_2DC34		; If this is act 2, branch
 		move.b	(Apparent_zone).w,d0
-		beq.s	locret_2DC34		; If this is Angel Island, branch
+		beq.s	LevelResults_AIZ1			; Liliam: remove AfterBoss_Cleanup
+;		beq.s	locret_2DC34				;
 		cmpi.b	#5,d0
-		beq.s	locret_2DC34		; If this is Ice Cap Zone, branch
+		beq.s	LevelResults_ICZ1			;
+;		beq.s	locret_2DC34				;
 		st	(Events_fg_5).w		; Set the background event flag for the given level (presumably for transitions)
 
 locret_2DC34:
 		rts
+; ---------------------------------------------------------------------------
+
+LevelResults_AIZ1:						; Liliam: remove AfterBoss_Cleanup
+		lea	(PLC_AfterMiniboss_AIZ).l,a1
+		jsr	(Load_PLC_Raw).l
+		moveq	#PalID_AIZFire,d0
+		jmp	(LoadPaletteLine1_Immediate).l
+; ---------------------------------------------------------------------------
+
+LevelResults_ICZ1:						; Liliam: remove AfterBoss_Cleanup
+		moveq	#PalID_ICZ2,d0
+		jmp	(LoadPaletteLine1_Immediate).l
 ; ---------------------------------------------------------------------------
 
 Obj_LevelResultsWait:
@@ -70168,7 +70198,7 @@ loc_2DCE2:
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - LRZ2 boss
 		bne.s	loc_2DCF2					;
 		cmpi.b	#$16,d0
-		beq.s	LevelResults_LRZ3			; Liliam: HPZ - add transition from LRZ3
+		beq.s	LevelResults2_LRZ3			; Liliam: HPZ - add transition from LRZ3
 ;		beq.s	loc_2DCF8				;
 
 loc_2DCF2:
@@ -70186,21 +70216,21 @@ Obj_LevelResultsWait3:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
-LevelResults_LRZ3:
-		move.b	d0,(Apparent_zone).w			; Liliam: HPZ - add Knuckles LRZ2 results
+LevelResults2_LRZ3:
+		move.b	d0,(Apparent_zone).w			; Liliam: HPZ - add transition from LRZ3
 
 loc_2DD06:
 		move.b	#1,(Apparent_act).w	; Change to act 2 if in act 1
 		clr.b	(Last_star_post_hit).w
 		clr.b	(Special_bonus_entry_flag).w
-		clr.b	(Alternate_start_flag).w		; Liliam: Encore mode - player starts
 		clr.b	(_unkFAA8).w
+		clr.b	(Alternate_start_flag).w		; Liliam: Encore mode - player starts
 		move.b	(Current_zone).w,d0			;
-		beq.s	LevelResults_AIZ1			;
+		beq.s	LevelResults2_AIZ1			;
 		cmpi.b	#5,d0					;
-		beq.s	LevelResults_ICZ1			;
+		beq.s	LevelResults2_ICZ1			;
 		cmpi.b	#6,d0					;
-		beq.s	LevelResults_LBZ1			;
+		beq.s	LevelResults2_LBZ2			;
 		cmpi.b	#8,d0					;
 		beq.s	loc_2DD18				;
 		cmpi.b	#$B,d0					;
@@ -70214,26 +70244,26 @@ loc_2DD18:
 		jmp	(Delete_Current_Sprite).l		;
 ; ---------------------------------------------------------------------------
 
-LevelResults_AIZ1:						; Liliam: Encore mode - AIZ1 boss
+LevelResults2_AIZ1:						; Liliam: Encore mode - AIZ1 boss
 		cmpi.b	#$12,(Dynamic_resize_routine).w
 		bne.s	loc_2DD28
 		bra.s	LevelResults_AlternateStart
 ; ---------------------------------------------------------------------------
 
-LevelResults_ICZ1:						; Liliam: Encore mode - ICZ1 boss
+LevelResults2_ICZ1:						; Liliam: Encore mode - ICZ1 boss
 		cmpi.w	#$8C8,(Camera_target_max_Y_pos).w
 		bne.s	loc_2DD28
 		bra.s	LevelResults_AlternateStart
 ; ---------------------------------------------------------------------------
 
-LevelResults_LBZ1:
+LevelResults2_LBZ2:
 		move.w	#$65E,d0					; Liliam: bugfix - set correct water level
 		move.w	d0,(Mean_water_level).w				;
 		move.w	d0,(Target_water_level).w			;
 
 		cmpi.w	#$148,(Camera_target_max_Y_pos).w	; Liliam: Encore mode - LBZ1 boss
 		beq.s	loc_2DD28				;
-		st	(_unkF7C2).w				;
+		st	(LBZ2_rising_water_flag).w		;
 
 LevelResults_AlternateStart:
 		move.b	#1,(Alternate_start_flag).w		; Liliam: Encore mode - player starts
@@ -70247,6 +70277,7 @@ loc_2DD28:
 
 ;loc_2DD38:
 ;		jmp	(Delete_Current_Sprite).l		; Liliam: Encore mode - player starts
+; ---------------------------------------------------------------------------
 
 Obj_LevResultsCharName:
 		; Liliam: removed original implementation
@@ -87189,7 +87220,7 @@ loc_3B18C:
 		move.l	#loc_3B1B2,(a0)
 
 loc_3B1B2:
-		tst.b	(_unkF7C1).w
+		tst.b	(FBZ_magnetic_pull_flag).w
 		beq.s	loc_3B1BE
 		move.l	#loc_3B1C4,(a0)
 
@@ -87208,7 +87239,7 @@ loc_3B1C4:
 		move.l	#loc_3B1EA,(a0)
 
 loc_3B1EA:
-		tst.b	(_unkF7C1).w
+		tst.b	(FBZ_magnetic_pull_flag).w
 		bne.s	loc_3B1F6
 		move.l	#loc_3B18C,(a0)
 
@@ -87217,7 +87248,7 @@ loc_3B1F6:
 ; ---------------------------------------------------------------------------
 
 loc_3B1FC:
-		tst.b	(_unkF7C1).w
+		tst.b	(FBZ_magnetic_pull_flag).w
 		beq.s	loc_3B232
 		addq.b	#1,mapping_frame(a0)
 		cmpi.b	#5,mapping_frame(a0)
@@ -87242,7 +87273,7 @@ loc_3B232:
 ; ---------------------------------------------------------------------------
 
 loc_3B238:
-		tst.b	(_unkF7C1).w
+		tst.b	(FBZ_magnetic_pull_flag).w
 		beq.s	loc_3B256
 		addq.b	#1,mapping_frame(a0)
 		cmpi.b	#7,mapping_frame(a0)
@@ -87319,7 +87350,7 @@ loc_3B3C0:
 		move.l	#loc_3B3EC,(a0)
 
 loc_3B3EC:
-		tst.b	(_unkF7C1).w
+		tst.b	(FBZ_magnetic_pull_flag).w
 		beq.s	loc_3B3F8
 		move.l	#loc_3B3FA,(a0)
 
@@ -87353,7 +87384,7 @@ loc_3B436:
 		move.l	#loc_3B450,(a0)
 
 loc_3B450:
-		tst.b	(_unkF7C1).w
+		tst.b	(FBZ_magnetic_pull_flag).w
 		bne.s	loc_3B462
 		move.b	#$F,y_radius(a0)
 		move.l	#loc_3B3C0,(a0)
@@ -90149,7 +90180,7 @@ word_3DB50:
 
 
 sub_3DB68:
-		tst.b	(_unkF7C1).w
+		tst.b	(MHZ_pollen_type).w
 		bne.s	loc_3DB7E
 		move.l	#Map_MHZPollen,mappings(a1)
 		move.w	#make_art_tile(ArtTile_MHZMisc+$21,3,1),art_tile(a1)
@@ -92260,7 +92291,7 @@ Obj_SOZMushroomParachute_CheckDelete:							; Liliam: Encore mode - FBZ level or
 		tst.l	(a0)
 		bne.s	Obj_SOZMushroomParachute_Return
 		moveq	#PalID_SOZ1,d0
-		jmp	(LoadPalette_Immediate_Line1).l
+		jmp	(LoadPaletteLine1_Immediate).l
 ; ---------------------------------------------------------------------------
 
 Obj_MHZMushroomParachute:
@@ -93721,7 +93752,7 @@ Obj_SOZPushableRock:
 		move.l	a1,$36(a0)
 		tst.b	subtype(a0)
 		bpl.s	loc_405A4
-		move.w	a0,(_unkF7C4).w
+		move.w	a0,(SOZ_pushable_block_addr).w
 		move.l	#loc_405D6,(a0)
 		bra.s	loc_405D6
 ; ---------------------------------------------------------------------------
@@ -95348,12 +95379,12 @@ locret_41AA6:
 
 
 sub_41AA8:
-		move.w	(_unkF7C4).w,d0
+		move.w	(SOZ_pushable_block_addr).w,d0
 		beq.w	locret_41B54
 		movea.w	d0,a2
 		cmpi.l	#loc_405D6,(a2)
 		beq.s	loc_41AC2
-		move.w	#0,(_unkF7C4).w
+		move.w	#0,(SOZ_pushable_block_addr).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -118450,7 +118481,8 @@ CNZ1BGE_DoTransition:
 
 loc_51EC0:
 		moveq	#PalID_CNZ2,d0
-		jsr	(LoadPalette_Immediate).l		; Load CNZ palette
+		jsr	(LoadPaletteLine1_Immediate).l		; Liliam: bugfix - improve CNZ act transition
+;		jsr	(LoadPalette_Immediate).l		;
 		movem.l	(sp)+,d7-a0/a2-a3
 		bclr	#7,(Disable_wall_grab).w		; Wall gliding is possible again
 		move.w	#$3000,d0
@@ -121779,7 +121811,7 @@ ICZ2_ScreenEvent:
 
 ICZ2_BackgroundInit:
 		move.w	#4,(Events_routine_bg).w
-		cmpi.w	#$3600,(Camera_X_pos).w	; Check ranges for either indoor/outdoor BGs
+		cmpi.w	#$3600,(Camera_X_pos).w		; Check ranges for either indoor/outdoor BGs
 		bhs.s	loc_53CF6
 		cmpi.w	#$720,(Camera_Y_pos).w
 		bhs.s	loc_53D2C
@@ -121789,8 +121821,9 @@ ICZ2_BackgroundInit:
 		bhs.s	loc_53D2C
 
 loc_53CF6:
-		clr.w	(Events_bg+$16).w			; Outdoors
-		cmpi.w	#$720,(Camera_X_pos).w
+		clr.w	(Events_bg+$16).w
+		cmpi.w	#$6F0,(Camera_X_pos).w			; Liliam: camera - fix ICZ2 level size, ICZ1 boss entry lock
+;		cmpi.w	#$720,(Camera_X_pos).w			;
 		bhs.s	loc_53D0A
 		lea	(Target_palette_line_4+2).w,a5		; Liliam: Encore mode - palette
 		jsr	ICZ2_SetICZ1Pal(pc)			; Liliam: reinsert S3 screen events
@@ -122903,7 +122936,7 @@ LBZ2_KnuxLevelSizeAdjust:
 
 loc_543A2:
 		cmp.w	(Target_water_level).w,d0			;
-		sne	(_unkF7C2).w					;
+		sne	(LBZ2_rising_water_flag).w			;
 		cmpi.w	#$60A,(Player_1+x_pos).w					; Liliam: start from actual act 2 start
 		blo.s	locret_543C0							;
 
@@ -122967,7 +123000,7 @@ LBZ2SE_Normal:
 loc_543C8:
 		jmp	DrawTilesAsYouMove(pc)		; Remarkably straightforward
 ; ---------------------------------------------------------------------------
-LBZ2SE_DeathEgg_Chunks:						; Liliam: bugfix - improve LBZ act transition
+LBZ2SE_DeathEgg_Chunks:						; Liliam: QOL - flicker jets during LBZ2 Death Egg launch
 		dc.b    0,   0, $B8, $B9, $BA, $BB, $B8, $B9
 ; ---------------------------------------------------------------------------
 
@@ -123773,7 +123806,7 @@ LBZ2_BGUWDeformRange:						; Liliam: reinsert S3 data
 
 MHZ1_ScreenInit:
 		clr.w	(Events_bg+$16).w
-		clr.b	(_unkF7C1).w
+		clr.b	(MHZ_pollen_type).w
 		jsr	sub_54B80(pc)
 		; Liliam: removed S&K alone mode
 		jsr	Reset_TileOffsetPositionActual(pc)
@@ -123861,6 +123894,8 @@ MHZ1_BackgroundEvent:
 		jsr	Clear_Switches(pc)
 		jsr	(Load_Level).l
 		jsr	(LoadSolids).l
+		moveq	#PalID_MHZ2,d0				; Liliam: remove AfterBoss_Cleanup
+		jsr	(LoadPaletteLine1_Immediate).l		;
 		movem.l	(sp)+,d7-a0/a2-a3
 		move.w	#$4200,d0
 		moveq	#0,d1
@@ -123986,7 +124021,7 @@ loc_54D26:
 MHZ2_ScreenInit:
 		move.w	#4,(Events_routine_fg).w
 		clr.w	(Events_bg+$16).w
-		st	(_unkF7C1).w
+		st	(MHZ_pollen_type).w
 		move.w	(Player_1+x_pos).w,d0
 		lea	Pal_MHZ2Gold(pc),a1
 		cmpi.w	#$2940,d0
@@ -123998,7 +124033,7 @@ MHZ2_ScreenInit:
 		cmpi.w	#$600,(Player_1+y_pos).w
 		blo.s	loc_54D72
 		clr.b	(Events_bg+$04).w
-		clr.b	(_unkF7C1).w
+		clr.b	(MHZ_pollen_type).w
 		lea	(Pal_MHZ1+$20).l,a1
 
 loc_54D72:
@@ -124365,21 +124400,21 @@ loc_55092:
 
 loc_55098:
 		st	(Events_bg+$04).w
-		st	(_unkF7C1).w
+		st	(MHZ_pollen_type).w
 		lea	(Pal_MHZ2+$20).l,a1
 		bra.s	loc_550C4
 ; ---------------------------------------------------------------------------
 
 loc_550A8:
 		clr.w	(Events_bg+$04).w
-		clr.b	(_unkF7C1).w
+		clr.b	(MHZ_pollen_type).w
 		lea	(Pal_MHZ1+$20).l,a1
 		bra.s	loc_550C4
 ; ---------------------------------------------------------------------------
 
 loc_550B8:
 		clr.w	(Events_bg+$04).w
-		st	(_unkF7C1).w
+		st	(MHZ_pollen_type).w
 		lea	Pal_MHZ2Gold(pc),a1
 
 loc_550C4:
@@ -132223,14 +132258,14 @@ sub_5A32C:
 
 
 sub_5A334:
-		move.w	(Emerald_flicker_flag).w,d1				; Liliam: QOL - reduce flicker to avoid eye strain
-		addq.w	#1,d1							;
-		cmpi.w	#3,d1							;
-		blo.s	.increment						;
-		moveq	#0,d1							;
+		move.w	(Emerald_flicker_flag).w,d1					; Liliam: QOL - reduce flicker to avoid eye strain
+		addq.w	#1,d1								;
+		cmpi.w	#3,d1								;
+		blo.s	.increment							;
+		moveq	#0,d1								;
 
 	.increment:
-		move.w	d1,(Emerald_flicker_flag).w				;
+		move.w	d1,(Emerald_flicker_flag).w					;
 		move.w	#$E00,d2
 		move.w	#$700,d3
 
@@ -143443,10 +143478,13 @@ loc_61F10:
 loc_61F22:
 		clr.b	(Palette_cycle_counters+$00).w
 		clr.b	(Ctrl_1_locked).w
+		clr.w	(Cutscene_Knux_addr).w			; Liliam: bugfix - prevent cutscene button from pressing itself
+		bsr.w	Load_PLC_Monitors			; Liliam: AIZ intro - load main level art during cutscene
 
 loc_61F2A:
-		jsr	(AfterBoss_Cleanup).l
-		clr.w	(Cutscene_Knux_addr).w			; Liliam: bugfix - prevent cutscene button from pressing itself
+		moveq	#PalID_AIZ,d0				; Liliam: remove AfterBoss_Cleanup
+		jsr	(LoadPaletteLine1_Immediate).l		;
+;		jsr	(AfterBoss_Cleanup).l			;
 		jsr	(Remove_From_TrackingSlot).l
 		jsr	(AllocateObject).l
 		bne.s	loc_61F44
@@ -143971,7 +144009,7 @@ loc_62422:
 loc_6242C:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_6242C
-		jsr	(Load_PLC_Monitors).l			; Liliam: Encore mode - change character item
+		bsr.w	Load_PLC_Monitors			; Liliam: Encore mode - change character item
 ;		lea	(PLC_Monitors).l,a1			;
 ;		jsr	(Load_PLC_Raw).l			;
 		clr.b	(Boss_flag).w				; Liliam: bugfix - use correct music for cutscene
@@ -145424,6 +145462,14 @@ MHZ2_Save_StarPost:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
+AIZKnucklesIntro_AnimatePalette:					; Liliam: Knuckles intro - apply bomb flash to waterfall
+		move.l	6(a1),d0
+		move.w	(a1),d0
+		move.l	2(a1),(a1)
+		move.l	d0,4(a1)
+		rts
+; ---------------------------------------------------------------------------
+
 ;CutsceneKnux_SKIntro:
 ;		cmpi.b	#2,(Player_1+character_id).w			; Liliam: Knuckles intro - no longer placed in layout
 ;		bne.w	CutsceneKnux_Delete				;
@@ -145434,15 +145480,15 @@ MHZ2_Save_StarPost:
 ;		move.l	#Obj_AIZKnuxIntro,(a0)				;
 
 Obj_AIZKnucklesIntro:
-		subq.w	#1,(Palette_cycle_counter1).w					; Liliam: Knuckles intro - apply bomb flash to waterfall
-		bpl.s	loc_63466							;
-		move.w	#7,(Palette_cycle_counter1).w					;
-		move.w	(Palette_cycle_counter0).w,d0					;
-		addq.w	#8,(Palette_cycle_counter0).w					;
-		lea	(Normal_palette_line_3+$16).w,a1				;
-		bsr.s	AIZKnuxIntro_AnimatePal						;
-		lea	(Target_palette_line_3+$16).w,a1				;
-		bsr.s	AIZKnuxIntro_AnimatePal						;
+		subq.w	#1,(Palette_cycle_counter1).w			; Liliam: Knuckles intro - apply bomb flash to waterfall
+		bpl.s	loc_63466					;
+		move.w	#7,(Palette_cycle_counter1).w			;
+		move.w	(Palette_cycle_counter0).w,d0			;
+		addq.w	#8,(Palette_cycle_counter0).w			;
+		lea	(Normal_palette_line_3+$16).w,a1		;
+		bsr.s	AIZKnucklesIntro_AnimatePalette			;
+		lea	(Target_palette_line_3+$16).w,a1		;
+		bsr.s	AIZKnucklesIntro_AnimatePalette			;
 
 loc_63466:
 		moveq	#0,d0
@@ -145468,14 +145514,6 @@ off_63494:
 		dc.w loc_634B8-off_63494
 ; ---------------------------------------------------------------------------
 
-AIZKnuxIntro_AnimatePal:								; Liliam: Knuckles intro - apply bomb flash to waterfall
-		move.l	6(a1),d0
-		move.w	(a1),d0
-		move.l	2(a1),(a1)
-		move.l	d0,4(a1)
-		rts
-; ---------------------------------------------------------------------------
-
 loc_6349A:
 		move.l	#Map_KnuxIntroLay,mappings(a0)
 		lea	DPLCPtr_KnuxIntroLay(pc),a2
@@ -145499,9 +145537,10 @@ loc_634CA:
 		jsr	(SetUp_ObjAttributesSlotted).l
 		move.w	#$EF,$2E(a0)
 		move.b	#$83,(Player_1+object_control).w
-		move.w	#$1363,x_pos(a0)				; Liliam: Knuckles intro - no longer placed in layout
+		clr.b	(Player_1+mapping_frame).w						; Liliam: title cards - fix sprite pop-in
+		st	(AIZ1_palette_cycle_flag).w			; Liliam: Knuckles intro - no longer placed in layout
+		move.w	#$1363,x_pos(a0)				;
 		move.w	#$424,y_pos(a0)					;
-		st	(AIZ1_palette_cycle_flag).w			;
 ;		move.w	#$560,(Camera_X_pos).w				;
 ;		move.w	#$948,(Camera_Y_pos).w				;
 ;		st	(Scroll_lock).w					;
@@ -145597,9 +145636,11 @@ loc_635FC:
 		; Liliam: removed original implementation
 		move.w	#$1322,(Player_1+x_pos).w		; Liliam: Knuckles intro - transition directly to level
 		clr.b	(Player_1+object_control).w		;
+		clr.b	(Player_1+prev_anim).w			;
+		clr.b	(Player_prev_frame).w			;
 		clr.b	(AIZ1_palette_cycle_flag).w		;
 		jsr	(AllocateObject).l			;
-		bne.w	loc_61F44				;
+		bne.w	loc_61F2A				;
 		move.l	#Obj_Song_Fade_ToLevelMusic,(a1)	;
 		bra.w	loc_61F2A				;
 ; ---------------------------------------------------------------------------
@@ -148869,11 +148910,29 @@ loc_65976:
 loc_65998:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_65998
-		jsr	(Load_PLC_Monitors).l			; Liliam: Encore mode - change character item
+		bsr.s	Load_PLC_Monitors			; Liliam: Encore mode - change character item
 ;		lea	(PLC_Monitors).l,a1			;
 ;		jsr	(Load_PLC_Raw).l			;
 		jsr	(Remove_From_TrackingSlot).l
 		jmp	(Go_Delete_Sprite).l
+; ---------------------------------------------------------------------------
+
+Load_PLC_Monitors:						; Liliam: Encore mode - change character item
+		lea	(PLC_Monitors_Encore).l,a1
+		tst.b	(Encore_mode).w
+		bne.s	.loadPLC
+		lea	(PLC_Monitors_Ray).l,a1
+		cmpi.w	#6,(Player_mode).w
+		beq.s	.loadPLC
+		lea	(PLC_Monitors_Amy).l,a1
+		cmpi.w	#4,(Player_mode).w
+		beq.s	.loadPLC
+		lea	(PLC_Monitors_Extra).l,a1
+		bhi.s	.loadPLC
+		lea	(PLC_Monitors).l,a1
+
+	.loadPLC:
+		jmp	(Load_PLC_Raw).l
 ; ---------------------------------------------------------------------------
 
 Obj_SSZCutsceneButton:
@@ -150836,11 +150895,11 @@ loc_67764:
 		dbf	d0,loc_67764
 		lea	ChildObjDat_67A7E(pc),a2
 		jsr	(CreateChild6_Simple).l
-		move.l	#Obj_AIZIntroEmeralds_Flicker,(a0)			; Liliam: QOL - reduce flicker to avoid eye strain
-		bset	#7,status(a0)						;
-;		jmp	(Go_Delete_Sprite).l					;
+		move.l	#Obj_AIZIntroEmeralds_Flicker,(a0)				; Liliam: QOL - reduce flicker to avoid eye strain
+		bset	#7,status(a0)							;
+;		jmp	(Go_Delete_Sprite).l						;
 
-Obj_AIZIntroEmeralds_Flicker:							; Liliam: QOL - reduce flicker to avoid eye strain
+Obj_AIZIntroEmeralds_Flicker:								; Liliam: QOL - reduce flicker to avoid eye strain
 		lea	(Pal_SaveScreen+$60+$4).l,a1
 		lea	(Normal_palette_line_4+$4).w,a2
 		moveq	#7-1,d0
@@ -151055,10 +151114,20 @@ loc_6797C:
 loc_6798A:
 		tst.w	d0
 		bmi.w	locret_67512
-		tst.b	subtype(a0)						; Liliam: QOL - reduce flicker to avoid eye strain
-		bne.s	loc_67990						;
-		movea.w	parent3(a0),a1						;
-		jsr	(Delete_Referenced_Sprite).l				;
+		tst.b	subtype(a0)							; Liliam: QOL - reduce flicker to avoid eye strain
+		bne.s	loc_67990							;
+		lea	(Pal_AIZ_Encore+$40).l,a1					;
+		lea	(Normal_palette_line_4).w,a2					;
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d0	;
+		tst.b	(Encore_flags).w						;
+		bmi.s	.loop								;
+		lea	(Pal_AIZ+$40).l,a1						;
+
+	.loop:
+		move.l	(a1)+,(a2)+
+		dbf	d0,.loop
+		movea.w	parent3(a0),a1							;
+		jsr	(Delete_Referenced_Sprite).l					;
 
 loc_67990:
 		jmp	(Delete_Current_Sprite).l
@@ -152218,7 +152287,9 @@ loc_68690:
 loc_686A2:
 		clr.b	(Boss_flag).w
 		jsr	(Restore_LevelMusic).l
-		jsr	(sub_83C9C).l				; Liliam: bugfix - stop double-loading AIZ2 PLCs
+		lea	(PLC_AfterMiniboss_AIZ).l,a1		; Liliam: bugfix - stop double-loading AIZ2 PLCs
+		jsr	(Load_PLC_Raw).l			;
+		bsr.w	Load_PLC_Monitors			;
 ;		lea	(PLC_Monitors).l,a1			;
 ;		jsr	(Load_PLC_Raw).l			;
 		jmp	(Go_Delete_Sprite_2).l
@@ -173763,7 +173834,7 @@ loc_765DE:
 loc_765F2:
 		lea	(Child6_CreateBossExplosion).l,a2
 		jsr	(CreateChild6_Simple).l
-		clr.b	(_unkF7C1).w
+		clr.b	(MHZ_pollen_type).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -185385,7 +185456,7 @@ loc_7E4A2:
 		subq.w	#1,$2E(a0)
 		bpl.w	locret_7DE44
 		moveq	#PalID_DEZ2,d0							; Liliam: Encore mode - palette
-		bsr.w	LoadPalette_Immediate_Line1					;
+		bsr.w	LoadPaletteLine1_Immediate					;
 ;		lea	(Pal_DEZMiniboss2).l,a1						;
 ;		lea	(Normal_palette_line_2).w,a2					;
 ;		moveq	#bytesToLcnt(Normal_palette_line_3-Normal_palette_line_2),d6	;
@@ -193811,168 +193882,10 @@ Map_EndSigns:
 		include "General/Sprites/Signpost/Map - End Signs.asm"
 Map_SignpostStub:
 		include "General/Sprites/Signpost/Map - Signpost Stub.asm"
-
-; =============== S U B R O U T I N E =======================================
-
-
-AfterBoss_Cleanup:
-		moveq	#0,d0
-		lea	(Current_zone_and_act).w,a1
-		move.b	(a1)+,d0
-		add.b	d0,d0
-		add.b	(a1)+,d0
-		add.b	d0,d0
-		move.w	AfterBoss_Index(pc,d0.w),d0
-		jmp	AfterBoss_Index(pc,d0.w)
-; End of function AfterBoss_Cleanup
-
-; ---------------------------------------------------------------------------
-AfterBoss_Index:
-		dc.w AfterBoss_AIZ1-AfterBoss_Index
-		dc.w AfterBoss_AIZ2-AfterBoss_Index
-		dc.w AfterBoss_HCZ-AfterBoss_Index
-		dc.w AfterBoss_HCZ-AfterBoss_Index
-		dc.w AfterBoss_MGZ-AfterBoss_Index
-		dc.w AfterBoss_MGZ-AfterBoss_Index
-		dc.w AfterBoss_CNZ-AfterBoss_Index
-		dc.w AfterBoss_CNZ-AfterBoss_Index
-		dc.w AfterBoss_FBZ-AfterBoss_Index
-		dc.w AfterBoss_FBZ-AfterBoss_Index
-		dc.w AfterBoss_ICZ1-AfterBoss_Index
-		dc.w AfterBoss_ICZ2-AfterBoss_Index
-		dc.w AfterBoss_LBZ-AfterBoss_Index
-		dc.w AfterBoss_LBZ-AfterBoss_Index
-		dc.w AfterBoss_MHZ-AfterBoss_Index
-		dc.w AfterBoss_MHZ-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
-		dc.w AfterBoss_None-AfterBoss_Index
 ; ---------------------------------------------------------------------------
 
-AfterBoss_AIZ1:
-		lea	(Pal_AIZ).l,a1
-		bsr.w	PalLoad_Line1							; Liliam: Knuckles intro - apply bomb flash to waterfall
-		cmpi.w	#3,(Player_mode).w						;
-		beq.s	locret_83CA6							;
-		lea	(Pal_AIZ+$40).l,a1						;
-		lea	(Normal_palette_line_4).w,a2					;
-;		lea	(Normal_palette_line_2).w,a2					;
-;		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_2),d0	;
-		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d0	;
-
-loc_83C88:
-		move.l	(a1)+,(a2)+
-		dbf	d0,loc_83C88
-
-Load_PLC_Monitors:
-		lea	PLC_Monitors_Encore(pc),a1		; Liliam: Encore mode - special Robotnik icon for palette
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_83C8E				;
-		lea	PLC_Monitors_Ray(pc),a1			;
-		cmpi.w	#6,(Player_mode).w			;
-		beq.s	loc_83C8E				;
-		lea	PLC_Monitors_Amy(pc),a1			;
-		cmpi.w	#4,(Player_mode).w			;
-		beq.s	loc_83C8E				;
-		lea	PLC_Monitors_Extra(pc),a1		;
-		bhi.s	loc_83C8E				;
-		lea	PLC_Monitors(pc),a1			;
-
-loc_83C8E:
-		jmp	(Load_PLC_Raw).l			;
-;		rts						;
-; ---------------------------------------------------------------------------
-
-AfterBoss_AIZ2:
-		lea	(Pal_AIZFire).l,a1
-		jsr	(PalLoad_Line1).l
-
-sub_83C9C:
-		bsr.s	Load_PLC_Monitors			; Liliam: bugfix - stop double-loading AIZ2 PLCs
-		lea	PLC_AfterMiniboss_AIZ(pc),a1
-		jmp	(Load_PLC_Raw).l
-; ---------------------------------------------------------------------------
-
-AfterBoss_HCZ:
-locret_83CA6:
-		rts
-; ---------------------------------------------------------------------------
-
-AfterBoss_MGZ:
-Load_PLC_MonitorsSpikesSprings:
-		lea	PLC_MonitorsSpikesSprings_Encore(pc),a1	; Liliam: Encore mode - special Robotnik icon for palette
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_83CAC				;
-		lea	PLC_MonitorsSpikesSprings_Ray(pc),a1	;
-		cmpi.w	#6,(Player_mode).w			;
-		beq.s	loc_83CAC				;
-		lea	PLC_MonitorsSpikesSprings_Amy(pc),a1	;
-		cmpi.w	#4,(Player_mode).w			;
-		beq.s	loc_83CAC				;
-		lea	PLC_MonitorsSpikesSprings_Extra(pc),a1	;
-		bhi.s	loc_83CAC				;
-		lea	PLC_MonitorsSpikesSprings(pc),a1
-
-loc_83CAC:
-		jmp	(Load_PLC_Raw).l
-; ---------------------------------------------------------------------------
-
-AfterBoss_CNZ:
-AfterBoss_FBZ:
-AfterBoss_ICZ1:
-		rts
-; ---------------------------------------------------------------------------
-
-AfterBoss_ICZ2:
-		lea	(Pal_ICZ2).l,a1
-		jmp	(PalLoad_Line1).l
-; ---------------------------------------------------------------------------
-
-AfterBoss_LBZ:
-	if FixBugs
-		rts
-; ---------------------------------------------------------------------------
-	else
-		; Bug: LBZ uses a post-boss routine meant for MHZ
-		; This makes the MHZ object palette load during LBZ1's results
-	endif
-
-AfterBoss_MHZ:
-		lea	(Pal_MHZ2).l,a1
-		jmp	(PalLoad_Line1).l
-; ---------------------------------------------------------------------------
-
-AfterBoss_None:
-		rts
+;AfterBoss_Cleanup:
+		; Liliam: remove AfterBoss_Cleanup
 ; ---------------------------------------------------------------------------
 PLC_AfterMiniboss_AIZ: plrlistheader
 ;		plreq ArtTile_Monitors, ArtNem_Monitors		; Liliam: bugfix - stop double-loading AIZ2 PLCs
@@ -197293,7 +197206,7 @@ locret_8593E:
 
 ; ---------------------------------------------------------------------------
 
-LoadPalette_Immediate_Line1:					; Liliam: Encore mode - palette
+LoadPaletteLine1_Immediate:					; Liliam: Encore mode - palette
 		lea	(PalPoint_Encore-$48).l,a1
 		tst.b	(Encore_flags).w
 		bmi.s	.notEncore
@@ -197727,8 +197640,9 @@ loc_85BEC:
 		lea	PLC_EndSignStuff(pc),a1
 
 loc_85BF0:
-		jsr	(Load_PLC_Raw).l
-		jmp	AfterBoss_Cleanup(pc)
+		jmp	(Load_PLC_Raw).l			; Liliam: remove AfterBoss_Cleanup
+;		jsr	(Load_PLC_Raw).l			;
+;		jmp	AfterBoss_Cleanup(pc)			;
 ; ---------------------------------------------------------------------------
 Child6_EndSign:
 		dc.w 1-1
@@ -204335,7 +204249,7 @@ locret_895EA:
 ; ---------------------------------------------------------------------------
 
 loc_895EC:
-		tst.b	(_unkF7C1).w
+		tst.b	(FBZ_magnetic_pull_flag).w
 		bne.s	locret_895F8
 		move.b	#$E,routine(a0)
 
@@ -204424,7 +204338,7 @@ loc_896CC:
 sub_896D6:
 		tst.b	$3C(a0)
 		beq.s	locret_896FA
-		tst.b	(_unkF7C1).w
+		tst.b	(FBZ_magnetic_pull_flag).w
 		beq.s	locret_896FA
 		move.b	routine(a0),$3D(a0)
 		move.b	#$A,routine(a0)
@@ -215816,13 +215730,13 @@ loc_9089E:
 
 loc_908BE:
 		move.b	subtype(a0),mapping_frame(a0)
-		tst.w	(Emerald_flicker_flag).w				; Liliam: QOL - reduce flicker to avoid eye strain
-		bne.s	loc_908DE						;
-;		move.w	$3A(a0),art_tile(a0)					;
-;		btst	#0,(V_int_run_count+3).w				;
-;		beq.s	loc_908DE						;
+		tst.w	(Emerald_flicker_flag).w					; Liliam: QOL - reduce flicker to avoid eye strain
+		bne.s	loc_908DE							;
+;		move.w	$3A(a0),art_tile(a0)						;
+;		btst	#0,(V_int_run_count+3).w					;
+;		beq.s	loc_908DE							;
 		move.b	#7,mapping_frame(a0)
-;		move.w	#make_art_tile(ArtTile_HPZEmeraldMisc,0,1),art_tile(a0)	;
+;		move.w	#make_art_tile(ArtTile_HPZEmeraldMisc,0,1),art_tile(a0)		;
 
 loc_908DE:
 		move.w	#$1B,d1
@@ -216507,12 +216421,12 @@ loc_90E34:
 		jsr	(MoveSprite_Circular).l
 
 loc_90E3E:
-		move.b	#7,mapping_frame(a0)					; Liliam: QOL - reduce flicker to avoid eye strain
-		tst.w	(Emerald_flicker_flag).w				;
-		beq.s	loc_90E48						;
-		move.b	subtype(a0),mapping_frame(a0)				;
-;		btst	#0,(V_int_run_count+3).w				;
-;		bne.w	locret_90C32						;
+		move.b	#7,mapping_frame(a0)						; Liliam: QOL - reduce flicker to avoid eye strain
+		tst.w	(Emerald_flicker_flag).w					;
+		beq.s	loc_90E48							;
+		move.b	subtype(a0),mapping_frame(a0)					;
+;		btst	#0,(V_int_run_count+3).w					;
+;		bne.w	locret_90C32							;
 
 loc_90E48:
 		jmp	(Child_Draw_Sprite).l			; Liliam: cutscene skip - HPZ SS entry
@@ -222984,7 +222898,7 @@ Sonic_Start_Locations:
 		; Liliam: start from actual act 2 start
 		binclude "Levels/FBZ/Start Location/Sonic/2.bin"
 		binclude "Levels/ICZ/Start Location/Sonic/1.bin"
-		; Liliam: bugfix - set correct camera height
+		; Liliam: start from actual act 2 start
 		binclude "Levels/ICZ/Start Location/Sonic/2.bin"
 		binclude "Levels/LBZ/Start Location/Sonic/1.bin"
 		; Liliam: start from actual act 2 start
@@ -223050,6 +222964,7 @@ Knux_Start_Locations:
 		binclude "Levels/FBZ/Start Location/Knuckles/2.bin"
 		; Liliam: Encore mode - player starts
 		binclude "Levels/ICZ/Start Location/Knuckles/1.bin"
+		; Liliam: start from actual act 2 start
 		binclude "Levels/ICZ/Start Location/Knuckles/2.bin"
 		binclude "Levels/LBZ/Start Location/Knuckles/1.bin"
 		; Liliam: Encore mode - player starts
