@@ -237,9 +237,9 @@ AniTails_Tail:
 		dc.w AniTails_Tail_Skid-AniTailsTail	; 08
 		dc.w AniTails_Tail_Push-AniTailsTail	; 09
 		dc.w AniTails_Tail_Hang-AniTailsTail	; 0A
-		dc.w AniTails_Tail_FlyFall-AniTailsTail	; 0B
+		dc.w AniTails_Tail_FlyTired-AniTailsTail; 0B
 		dc.w AniTails_Tail_Fly-AniTailsTail	; 0C
-		dc.w AniTails_Tail_FlyTired-AniTailsTail; 0D
+		dc.w AniTails_Tail_FlyFall-AniTailsTail	; 0D
 Ani_PlayerWalk:		dc.b  $FF,   1,   2,   3,   4,   5,   6,   7,   8, $FF
 Ani_PlayerRun:		dc.b  $FF, $21, $22, $23, $24, $FF, $FF, $FF, $FF, $FF
 Ani_PlayerSpin:		dc.b  $FE, $E0, $E1, $E0, $E2, $E0, $E3, $E0, $E4, $FF
@@ -379,7 +379,7 @@ AniTails_Tail_SpinDash:	dc.b    2,   1,   2,   3,   4, $FF
 AniTails_Tail_Skid:	dc.b    2, $1A, $1B, $1C, $1D, $FF
 AniTails_Tail_Push:	dc.b    9, $1E, $1F, $20, $21, $FF
 AniTails_Tail_Hang:	dc.b    9, $29, $2A, $2B, $2C, $FF
-AniTails_Tail_FlyFall:	dc.b    1, $27, $28, $FF
-AniTails_Tail_Fly:	dc.b    0, $27, $28, $FF
 AniTails_Tail_FlyTired:	dc.b    2, $15, $16, $17, $18, $19, $FF
+AniTails_Tail_Fly:	dc.b    0, $27, $28, $FF
+AniTails_Tail_FlyFall:	dc.b    1, $27, $28, $FF
 	even

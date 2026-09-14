@@ -22211,6 +22211,27 @@ Enemy_Points:
 		dc.w 10, 20, 50, 100
 ; ---------------------------------------------------------------------------
 
+Touch_ChkHurt_Tails:						; Liliam: bugfix - bounce projectiles consistently
+		move.b	shield_reaction(a1),d0
+		andi.b	#1<<3,d0
+		beq.s	Touch_ChkHurt2
+		cmpi.b	#$C,(Tails_tails+anim).w
+		blo.s	Touch_ChkHurt2
+		move.w	x_pos(a0),d1
+		move.w	y_pos(a0),d2
+		sub.w	x_pos(a1),d1
+		sub.w	y_pos(a1),d2
+		jsr	(GetArcTan).l
+		move.w	d0,d1
+		subi.b	#$20,d1
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.checkAbove
+		subi.b	#$80,d1
+
+	.checkAbove:
+		cmpi.b	#$40,d1
+		bls.s	loc_1026A
+		bra.s	Touch_ChkHurt2
 ; ---------------------------------------------------------------------------
 ; Subroutine for checking if Sonic/Tails/Knuckles should be hurt and hurting them if so
 ; note: character must be at a0
@@ -22238,6 +22259,8 @@ Touch_ChkHurt_Return:
 ; ---------------------------------------------------------------------------
 
 Touch_ChkHurt_NoPowerUp:
+		cmpi.b	#1,character_id(a0)			; Liliam: bugfix - bounce projectiles consistently
+		beq.s	Touch_ChkHurt_Tails			;
 		cmpi.b	#Status_HammerDrop,double_jump_flag(a0)	; Liliam: extra skills - hammer drop
 		beq.s	Touch_ChkHurt_HaveShield		;
 		cmpi.b	#1,double_jump_flag(a0)			; Is player Insta-Shield-attacking (Sonic), flying (Tails) or gliding (Knuckles)?
@@ -22245,7 +22268,7 @@ Touch_ChkHurt_NoPowerUp:
 
 Touch_ChkHurt_HaveShield:
 		move.b	shield_reaction(a1),d0
-		andi.b	#1<<3,d0					; Should the object be bounced away by a shield?
+		andi.b	#1<<3,d0				; Should the object be bounced away by a shield?
 		beq.s	Touch_ChkHurt2				; If not, branch
 
 Touch_ChkHurt_Bounce_Projectile:
@@ -22254,6 +22277,8 @@ Touch_ChkHurt_Bounce_Projectile:
 		sub.w	x_pos(a1),d1
 		sub.w	y_pos(a1),d2
 		jsr	(GetArcTan).l
+
+loc_1026A:
 		jsr	(GetSineCosine).l
 		muls.w	#-$800,d1
 		asr.l	#8,d1
@@ -23322,7 +23347,11 @@ Amy_HammerAttack_Touch:						; Liliam: extra skills - hammer attack
 		move.w	x_pos(a0),d2
 		move.w	y_pos(a0),d3
 		cmpi.b	#$80,d1
+		bne.s	.increasedRadius
+		btst	#3,shield_reaction(a1)
 		beq.s	.normalRadius
+
+	.increasedRadius:
 		subi.w	#$18,d2
 		subi.w	#$18,d3
 		moveq	#$30,d4
@@ -33586,15 +33615,15 @@ Obj_Tails_Tail_NoDraw:
 		ori.w	#high_priority,art_tile(a0)
 
 loc_16106:
+		moveq	#0,d0
 		move.b	mapping_frame(a2),d1							; Liliam: title cards - fix sprite pop-in
-		bne.s	.done									;
-		clr.b	(Player_prev_frame_P2_tail).w						;
-		clr.b	mapping_frame(a0)							;
+		bne.s	loc_16108								;
+		move.b	d0,mapping_frame(a0)							;
+		move.b	d0,(Player_prev_frame_P2_tail).w					;
 		bra.w	Tails_RingBarrier							;
 ; ---------------------------------------------------------------------------
 
-	.done:
-		moveq	#0,d0
+loc_16108:
 		move.b	anim(a2),d0
 ;		btst	#Status_Push,status(a2)			; Liliam: simplify player anim selection
 ;		beq.s	loc_1612C				;
@@ -33617,6 +33646,7 @@ loc_1612C:
 		move.b	Obj_Tails_Tail_AniSelection(pc,d0.w),anim(a0)	; Load anim relative to parent's
 
 loc_1613C:
+		bsr.s	Tails_RingBarrier			; Liliam: extra skills - ring barrier
 		lea	(AniTails_Tail).l,a1
 		bsr.w	Animate_Tails_Part2
 ;		tst.b	(Reverse_gravity_flag).w		; Liliam: add extra characters
@@ -33626,8 +33656,8 @@ loc_1613C:
 ;		eori.b	#2,render_flags(a0)			;
 
 ;loc_1615A:
-		bsr.w	Tails_Tail_Load_PLC
-		bra.s	Tails_RingBarrier			; Liliam: Encore mode - draw Tails' tails along with him
+		bra.w	Tails_Tail_Load_PLC			; Liliam: Encore mode - draw Tails' tails along with him
+;		bsr.w	Tails_Tail_Load_PLC			;
 ;		jmp	(Draw_Sprite).l				;
 ; ---------------------------------------------------------------------------
 ; animation master script table for the tails
@@ -33666,16 +33696,17 @@ Obj_Tails_Tail_AniSelection:
 		dc.b 0		; Ani_PlayerFall	->
 		dc.b 0		; Ani_PlayerBlank	->
 		dc.b 0		; Ani_TailsSwimTired	->
-		dc.b $D		; Ani_TailsFlyTired		; Liliam: add custom animation
+		dc.b $B		; Ani_TailsFlyTired		; Liliam: add custom animation
 ;		dc.b 0						;
 		dc.b $C		; Ani_TailsFlyRingBarrier	; Liliam: extra skills - ring barrier
 ;		dc.b 0						;
-		dc.b $B		; Ani_TailsFlyFall	-> AniTails_Tail_FlyFall
-		dc.b $C		; Ani_TailsFly		-> AniTails_Tail_Fly
-		dc.b $B		; Ani_TailsFlyCarryFall	-> AniTails_Tail_FlyFall
-		dc.b $C		; Ani_TailsFlyCarry	-> AniTails_Tail_Fly
-		dc.b $D		; Ani_TailsFlyTiredCarry	; Liliam: add custom animation
+		dc.b $D		; Ani_TailsFlyFall		; Liliam: add custom animation
 ;		dc.b $B						;
+		dc.b $C		; Ani_TailsFly		-> AniTails_Tail_Fly
+		dc.b $D		; Ani_TailsFlyCarryFall		 Liliam: add custom animation
+;		dc.b $B						;
+		dc.b $C		; Ani_TailsFlyCarry	-> AniTails_Tail_Fly
+		dc.b $B		; Ani_TailsFlyTiredCarry-> AniTails_Tail_FlyTired
 		dc.b 0		; Ani_TailsSwimFall	->
 		dc.b 0		; Ani_TailsSwim		->
 		dc.b 0		; Ani_TailsSwimCarry	->
@@ -33803,7 +33834,7 @@ Tails_RingBarrier_Spin:						; Liliam: extra skills - ring barrier
 		add.w	y_pos(a0),d1
 		move.w	d0,sub2_x_pos(a0)
 		move.w	d1,sub2_y_pos(a0)
-		addq.b	#8,angle+1(a0)
+		addi.b	#$C,angle+1(a0)
 
 	.checkButtons:
 		move.b	d2,d0
