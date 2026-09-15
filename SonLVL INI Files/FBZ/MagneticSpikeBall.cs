@@ -78,9 +78,9 @@ namespace S3KObjectDefinitions.FBZ
 				"../Levels/FBZ/Nemesis Art/Misc Art 1.bin", CompressionType.Nemesis));
 
 			var indexer = new MultiFileIndexer<byte>();
-			indexer.AddFile(tiles, -6464);
+			indexer.AddFile(tiles, -6208);
 			var art = indexer.ToArray();
-			indexer.AddFile(tiles, -6432);
+			indexer.AddFile(tiles, -6048);
 			var art2 = indexer.ToArray();
 
 			var bitmap = new BitmapBits(22, 22);

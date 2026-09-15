@@ -34,8 +34,8 @@
       <MapFile type="ASM" filename="../Levels/FBZ/Misc Object Data/Map - Miniboss.asm" frame="8" startpal="5" />
     </ImageFromMappings>
     <ImageFromMappings id="button">
-      <ArtFile filename="../Levels/FBZ/Nemesis Art/Egg Capsule.bin" offset="27552" />
-      <MapFile type="ASM" filename="../Levels/FBZ/Misc Object Data/Map - Egg Capsule.asm" frame="5" />
+      <ArtFile filename="../General/Sprites/Egg Capsule/Egg Capsule.bin" />
+      <MapFile type="ASM" filename="../General/Sprites/Egg Capsule/Map - Egg Capsule.asm" frame="5" />
     </ImageFromMappings>
   </Images>
   <Display>

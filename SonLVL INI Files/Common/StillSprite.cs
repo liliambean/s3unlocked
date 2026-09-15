@@ -130,7 +130,7 @@ namespace S3KObjectDefinitions.FBZ
 				"../Levels/FBZ/Nemesis Art/Misc Art 1.bin", CompressionType.Nemesis);
 
 			var indexer = new MultiFileIndexer<byte>();
-			indexer.AddFile(new List<byte>(art1), -6464);
+			indexer.AddFile(new List<byte>(art1), -6208);
 			var art2 = indexer.ToArray();
 
 			BuildSpritesSubtypes(
@@ -150,7 +150,7 @@ namespace S3KObjectDefinitions.FBZ
 				"../Levels/FBZ/Nemesis Art/Misc Art 1.bin", CompressionType.Nemesis);
 
 			var indexer = new MultiFileIndexer<byte>();
-			indexer.AddFile(new List<byte>(art1), -6464);
+			indexer.AddFile(new List<byte>(art1), -6208);
 			var art2 = indexer.ToArray();
 
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(

@@ -65638,7 +65638,8 @@ loc_2A444:
 		cmpi.b	#4,(Current_zone).w
 		bne.s	loc_2A46E
 		move.l	#Map_FBZCorkFloor,mappings(a0)
-		move.w	#make_art_tile(ArtTile_FBZMisc+$C1,1,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_FBZMisc+$89,1,0),art_tile(a0)		; Liliam: use main capsule art in FBZ
+;		move.w	#make_art_tile(ArtTile_FBZMisc+$C1,1,0),art_tile(a0)		;
 		move.b	#$10,width_pixels(a0)
 		move.b	#$10,height_pixels(a0)
 		move.l	#word_2A884,$3C(a0)
@@ -67652,7 +67653,8 @@ word_2B968:
 		dc.w make_art_tile(ArtTile_FBZMisc,2,0)				; 2A FBZ Four Metal Hangers
 		dc.w    $80
 		dc.b  $38, $14
-		dc.w make_art_tile(ArtTile_FBZMisc+$CA,1,0)			; 2B Unknown?
+		dc.w make_art_tile(ArtTile_FBZMisc+$C2,1,0)			; Liliam: use main capsule art in FBZ
+;		dc.w make_art_tile(ArtTile_FBZMisc+$CA,1,0)			; 2B Unknown?
 		dc.w   $300
 		dc.b    4, $10
 		dc.w make_art_tile(ArtTile_FBZMisc2+$67,1,0)			; 2C FBZ2 Spider Rail
@@ -87239,12 +87241,14 @@ locret_3AD88:
 		rts
 ; ---------------------------------------------------------------------------
 Map_FBZChainLink:
+		; Liliam: use main capsule art in FBZ
 		include "Levels/FBZ/Misc Object Data/Map - Chain Link.asm"
 ; ---------------------------------------------------------------------------
 
 Obj_FBZMagneticSpikeBall:
 		move.l	#Map_FBZMagneticSpikeBall,mappings(a0)
-		move.w	#make_art_tile(ArtTile_FBZMisc+$CA,1,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_FBZMisc+$C2,1,0),art_tile(a0)		; Liliam: use main capsule art in FBZ
+;		move.w	#make_art_tile(ArtTile_FBZMisc+$CA,1,0),art_tile(a0)		;
 		ori.b	#4,render_flags(a0)
 		move.w	#$280,priority(a0)
 		tst.b	subtype(a0)
@@ -87268,7 +87272,8 @@ loc_3B122:
 ; ---------------------------------------------------------------------------
 
 loc_3B146:
-		move.w	#make_art_tile(ArtTile_FBZMisc+$C9,1,1),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_FBZMisc+$C1,1,1),art_tile(a0)		; Liliam: use main capsule art in FBZ
+;		move.w	#make_art_tile(ArtTile_FBZMisc+$C9,1,1),art_tile(a0)		;
 		move.b	#$24,width_pixels(a0)
 		move.b	#4,height_pixels(a0)
 		move.b	#4,mapping_frame(a0)
@@ -87368,7 +87373,8 @@ Map_FBZMagneticSpikeBall:
 
 Obj_FBZMagneticPlatform:
 		move.l	#Map_FBZMagneticPlatform,mappings(a0)
-		move.w	#make_art_tile(ArtTile_FBZMisc+$CA,1,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_FBZMisc+$C2,1,0),art_tile(a0)		; Liliam: use main capsule art in FBZ
+;		move.w	#make_art_tile(ArtTile_FBZMisc+$CA,1,0),art_tile(a0)		;
 		ori.b	#4,render_flags(a0)
 		move.b	#$18,width_pixels(a0)
 		move.b	#$10,height_pixels(a0)
@@ -87540,7 +87546,8 @@ loc_3B556:
 
 Obj_FBZSnakePlatformMain:
 		move.l	#Map_FBZSnakePlatform,mappings(a0)
-		move.w	#make_art_tile(ArtTile_FBZMisc+$F2,1,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_FBZMisc+$EA,1,0),art_tile(a0)		; Liliam: use main capsule art in FBZ
+;		move.w	#make_art_tile(ArtTile_FBZMisc+$F2,1,0),art_tile(a0)		;
 		ori.b	#4,render_flags(a0)
 		move.b	#$C,width_pixels(a0)
 		move.b	#$C,height_pixels(a0)
@@ -87689,7 +87696,8 @@ byte_3B6D8:
 
 Obj_FBZBentPipe:
 		move.l	#Map_FBZBentPipe,mappings(a0)
-		move.w	#make_art_tile(ArtTile_FBZMisc+$F2,1,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_FBZOutdoors+$6F,1,0),art_tile(a0)	; Liliam: use main capsule art in FBZ
+;		move.w	#make_art_tile(ArtTile_FBZMisc+$F2,1,0),art_tile(a0)		;
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
 		move.b	subtype(a0),d0
@@ -87753,7 +87761,8 @@ loc_3B7F8:
 loc_3B802:
 		move.l	#loc_3B86A,(a1)
 		move.l	#Map_FBZRotatingPlatform,mappings(a1)
-		move.w	#make_art_tile(ArtTile_FBZMisc+$F2,1,0),art_tile(a1)
+		move.w	#make_art_tile(ArtTile_FBZMisc+$EA,1,0),art_tile(a1)		; Liliam: use main capsule art in FBZ
+;		move.w	#make_art_tile(ArtTile_FBZMisc+$F2,1,0),art_tile(a1)
 		ori.b	#4,render_flags(a1)
 		move.b	#$C,width_pixels(a1)
 		move.b	#$C,height_pixels(a1)
@@ -87766,7 +87775,8 @@ loc_3B802:
 		lsr.b	#1,d2
 		bcc.s	loc_3B866
 		move.l	#loc_3B8C2,(a1)
-		move.w	#make_art_tile(ArtTile_FBZMisc+$CA,1,0),art_tile(a1)
+		move.w	#make_art_tile(ArtTile_FBZMisc+$C2,1,0),art_tile(a1)		; Liliam: use main capsule art in FBZ
+;		move.w	#make_art_tile(ArtTile_FBZMisc+$CA,1,0),art_tile(a1)		;
 		move.b	#1,mapping_frame(a1)
 		move.b	#$86,collision_flags(a1)
 
@@ -205095,13 +205105,17 @@ word_89E74:
 		dc.w make_art_tile(ArtTile_Animals1,0,1)
 		dc.w make_art_tile(ArtTile_Animals2,0,1)
 ObjDat_FBZEggPrison:
-		dc.l Map_FBZEggCapsule
-		dc.w make_art_tile($000,0,0)
+		dc.l Map_EggCapsule							; Liliam: use main capsule art in FBZ
+		dc.w make_art_tile(ArtTile_FBZEggCapsule,0,0)				;
+;		dc.l Map_FBZEggCapsule							;
+;		dc.w make_art_tile($000,0,0)						;
 		dc.w   $200
 		dc.b  $20, $28,   0,   0
 ObjDat_FBZSpringPlunger:
-		dc.l Map_FBZEggCapsule
-		dc.w make_art_tile($000,0,0)
+		dc.l Map_EggCapsule							;
+		dc.w make_art_tile(ArtTile_FBZEggCapsule,0,0)				;
+;		dc.l Map_FBZEggCapsule							;
+;		dc.w make_art_tile($000,0,0)						;
 		dc.w   $180
 		dc.b  $10,   8,   5,   0
 word_89E90:
@@ -218186,15 +218200,17 @@ PLC_CNZ: plrlistheader
 PLC_CNZ_End
 
 PLC_FBZ1: plrlistheader
+		plreq ArtTile_FBZEggCapsule, ArtNem_EggCapsule				; Liliam: use main capsule art in FBZ
 		plreq ArtTile_FBZMisc, ArtNem_FBZMisc
 		plreq ArtTile_FBZOutdoors, ArtNem_FBZOutdoors
-		plreq ArtTile_FBZEggCapsule, ArtNem_FBZEggCapsule
+;		plreq ArtTile_FBZEggCapsule, ArtNem_FBZEggCapsule			;
 PLC_FBZ1_End
 
 PLC_FBZ2: plrlistheader
+		plreq ArtTile_FBZEggCapsule, ArtNem_EggCapsule				; Liliam: use main capsule art in FBZ
 		plreq ArtTile_FBZMisc, ArtNem_FBZMisc
 		plreq ArtTile_FBZMisc2, ArtNem_FBZMisc2
-		plreq ArtTile_FBZEggCapsule, ArtNem_FBZEggCapsule
+;		plreq ArtTile_FBZEggCapsule, ArtNem_FBZEggCapsule			;
 PLC_FBZ2_End
 
 PLC_ICZ1: plrlistheader
@@ -218976,18 +218992,18 @@ DebugOffs:
 		dc.w Debug_Null-DebugOffs
 		dc.w Debug_Null-DebugOffs
 
-Debug_AIZ1:		dbglistinclude "Levels/AIZ/Debug/Act 1.asm"		; Liliam: QOL - use high precision sine tables for AIZ vines
-Debug_AIZ2:		dbglistinclude "Levels/AIZ/Debug/Act 2.asm"		; Liliam: QOL - use high precision sine tables for AIZ vines
+Debug_AIZ1:		dbglistinclude "Levels/AIZ/Debug/Act 1.asm"	; Liliam: QOL - use high precision sine tables for AIZ vines
+Debug_AIZ2:		dbglistinclude "Levels/AIZ/Debug/Act 2.asm"	; Liliam: QOL - use high precision sine tables for AIZ vines
 Debug_HCZ:		dbglistinclude "Levels/HCZ/Debug/Main.asm"
 Debug_MGZ:		dbglistinclude "Levels/MGZ/Debug/Main.asm"
 Debug_CNZ:		dbglistinclude "Levels/CNZ/Debug/Main.asm"
-Debug_FBZ1:		dbglistinclude "Levels/FBZ/Debug/Act 1.asm"
-Debug_FBZ2:		dbglistinclude "Levels/FBZ/Debug/Act 2.asm"
+Debug_FBZ1:		dbglistinclude "Levels/FBZ/Debug/Act 1.asm"	; Liliam: use main capsule art in FBZ
+Debug_FBZ2:		dbglistinclude "Levels/FBZ/Debug/Act 2.asm"	; Liliam: use main capsule art in FBZ
 Debug_ICZ1:		dbglistinclude "Levels/ICZ/Debug/Act 1.asm"	; Liliam: place ICZ1 teleporter in layout
 Debug_ICZ2:		dbglistinclude "Levels/ICZ/Debug/Act 2.asm"	; Liliam: place ICZ1 teleporter in layout
 Debug_LBZ1:		dbglistinclude "Levels/LBZ/Debug/Act 1.asm"
 Debug_LBZ2:		dbglistinclude "Levels/LBZ/Debug/Act 2.asm"
-Debug_MHZ:		dbglistinclude "Levels/MHZ/Debug/Main.asm"		; Liliam: QOL - use high precision sine tables for AIZ vines
+Debug_MHZ:		dbglistinclude "Levels/MHZ/Debug/Main.asm"	; Liliam: QOL - use high precision sine tables for AIZ vines
 Debug_SOZ1:		dbglistinclude "Levels/SOZ/Debug/Act 1.asm"
 Debug_SOZ2:		dbglistinclude "Levels/SOZ/Debug/Act 2.asm"
 Debug_LRZ1:		dbglistinclude "Levels/LRZ/Debug/Act 1.asm"
@@ -220814,9 +220830,11 @@ ArtNem_CNZPlatform:						; Liliam: reinsert S3 data
 		binclude "Levels/CNZ/Nemesis Art/Platform.bin"
 		even
 ArtNem_FBZMisc:
+		; Liliam: use main capsule art in FBZ
 		binclude "Levels/FBZ/Nemesis Art/Misc Art 1.bin"
 		even
 ArtNem_FBZOutdoors:
+		; Liliam: use main capsule art in FBZ
 		binclude "Levels/FBZ/Nemesis Art/Outdoors.bin"
 		even
 ArtNem_FBZMisc2:
@@ -221158,9 +221176,8 @@ ArtKosM_FBZBossPillar:
 ArtKosM_FBZExitDoor:
 		binclude "Levels/FBZ/KosinskiM Art/Exit Door.bin"
 		even
-ArtNem_FBZEggCapsule:
-		binclude "Levels/FBZ/Nemesis Art/Egg Capsule.bin"
-		even
+;ArtNem_FBZEggCapsule:
+		; Liliam: use main capsule art in FBZ
 ArtKosM_FBZButton:
 		binclude "Levels/FBZ/KosinskiM Art/Button.bin"
 		even
@@ -221563,8 +221580,8 @@ Map_SSZGHZMisc:
 		include "Levels/SSZ/Misc Object Data/Map - GHZ Misc.asm"
 Map_LRZMiniboss:
 		include "Levels/LRZ/Misc Object Data/Map - Miniboss.asm"
-Map_FBZEggCapsule:
-		include "Levels/FBZ/Misc Object Data/Map - Egg Capsule.asm"
+;Map_FBZEggCapsule:
+		; Liliam: use main capsule art in FBZ
 Map_SOZGhosts:
 		include "General/Sprites/SOZ Ghosts/Map - SOZ Ghosts.asm"
 Map_LRZEndBoss:
