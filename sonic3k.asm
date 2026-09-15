@@ -1883,7 +1883,7 @@ Process_Nem_Queue_Init:
 		cmpi.w	#6,(Player_mode).w			; Liliam: convert to 1P Ray palette
 		bne.s	loc_1790				;
 		lea	(Ray_AltNemPatterns).l,a1		;
-		moveq	#3-1,d0					;
+		moveq	#6-1,d0					;
 
 	.loop:
 		cmpa.l	(a1),a0					;
@@ -147122,6 +147122,7 @@ loc_644FC:
 		lea	(ArtKosM_KnuxFinalBossCrane).l,a1
 		move.w	#tiles_to_bytes(ArtTile_HPZBossCrane),d2		; Liliam: HPZ - add Knuckles cutscene
 ;		move.w	#tiles_to_bytes(ArtTile_HPZSSZBossCrane),d2		;
+		bset	#0,d2					; Liliam: convert to 1P Ray palette
 		jsr	(Queue_Kos_Module).l
 		lea	(PLC_DEZHPZRobotnikShip).l,a1					; Liliam: move Egg Mobile boss flash out of palette line 1
 ;		lea	PLC_KnuxHPZCutsceneShip(pc),a1					;
@@ -194075,6 +194076,9 @@ Ray_AltNemPatterns:						; Liliam: convert to 1P Ray palette
 		dc.l ArtNem_BossExplosion, ArtNem_BossExplosion_Ray
 		dc.l ArtNem_EggCapsule,    ArtNem_EggCapsule_Ray
 		dc.l ArtNem_RobotnikShip,  ArtNem_RobotnikShip_Ray
+		dc.l ArtNem_FBZRobotnikHead,  ArtNem_FBZRobotnikHead_Ray
+		dc.l ArtNem_FBZRobotnikStand,  ArtNem_FBZRobotnikStand_Ray
+		dc.l ArtNem_FBZRobotnikRun,  ArtNem_FBZRobotnikRun_Ray
 ; ---------------------------------------------------------------------------
 
 Obj_CreateBossExplosion:
@@ -221100,11 +221104,14 @@ ArtNem_EggRoboRun:
 ArtNem_EggRoboStand:
 		binclude "General/Sprites/Egg Robo/Egg Robo Stand.bin"
 		even
-ArtNem_S3EndingGraphics:					; Liliam: reinsert S3 data
-		binclude "General/Ending/Nemesis Art/S3 Ending Graphics.bin"
+ArtNem_DEZHPZRobotnikShip:								; Liliam: move Egg Mobile boss flash out of palette line 1
+		binclude "General/Sprites/Robotnik/HPZ Ship.bin"
 		even
 ArtNem_EndingMasterEmerald:							; Liliam: bugfix - queue Master Emerald for ending
 		binclude "General/Sprites/SSZ Master Emerald/Master Emerald.bin"
+		even
+ArtNem_S3EndingGraphics:					; Liliam: reinsert S3 data
+		binclude "General/Ending/Nemesis Art/S3 Ending Graphics.bin"
 		even
 ArtNem_SSZ2Extra:						; Liliam: Metal Sonic - final boss
 		binclude "Levels/SSZ/Nemesis Art/SSZ2 Extra.bin"
@@ -222405,8 +222412,14 @@ ArtNem_EggCapsule_Ray:						; Liliam: convert to 1P Ray palette
 ArtNem_RobotnikShip_Ray:					; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Robotnik/Ray Ship.bin"
 		even
-ArtNem_DEZHPZRobotnikShip:								; Liliam: move Egg Mobile boss flash out of palette line 1
-		binclude "General/Sprites/Robotnik/HPZ Ship.bin"
+ArtNem_FBZRobotnikHead_Ray:					; Liliam: convert to 1P Ray palette
+		binclude "General/Sprites/Robotnik/Ray Robotnik FBZ.bin"
+		even
+ArtNem_FBZRobotnikStand_Ray:					; Liliam: convert to 1P Ray palette
+		binclude "General/Sprites/Robotnik/Ray Robotnik Stand.bin"
+		even
+ArtNem_FBZRobotnikRun_Ray:					; Liliam: convert to 1P Ray palette
+		binclude "General/Sprites/Robotnik/Ray Robotnik Run.bin"
 		even
 ;ArtNem_S2Signpost:
 		; Liliam: removed unused data
