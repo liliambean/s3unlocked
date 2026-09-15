@@ -37,9 +37,10 @@ VariableRollHeight = 1
 DevMode = 1
 ; If 1, enables some cheats to help with development
 
-NoMuseum = 0
-NoHolograms = 0
+NoEncorePalettes = 1
+NoMuseum = 1
 NoJPOptions = 1
+NoHolograms = 1
 No2PZones = 1
 ; If 1, disables features that are under construction
 
@@ -5648,6 +5649,12 @@ Encore_LoadFlags:						; Liliam: Encore mode - palette
 		ror.b	#2,d2
 
 	.updateFlags:
+	if NoEncorePalettes
+		bclr	#EncoreFlags_Palette,d2
+	else
+		nop
+		nop
+	endif
 		move.b	d2,(Encore_flags).w
 		rts
 ; ---------------------------------------------------------------------------
@@ -136180,12 +136187,20 @@ OptionsScreen_GetUnlockState:					; Liliam: options menu
 		moveq	#0,d1
 		cmp.b	#GameMode_EraseData,(Game_mode).w
 		beq.s	OptionsScreen_Return
+		cmpi.b	#1,d5
+	if NoEncorePalettes
+		beq.s	.locked
+	else
+		nop
+	endif
+		cmpi.b	#2,d5
+		bls.s	OptionsScreen_Return
 		move.w	d5,d2
-		cmpi.b	#3,d2
-		blo.s	OptionsScreen_Return
 		subq.w	#2,d2
 		btst	d2,(Unlock_flags).w
 		bne.s	OptionsScreen_Return
+
+	.locked:
 		moveq	#$10,d1
 		rts
 ; ---------------------------------------------------------------------------
@@ -136194,14 +136209,20 @@ OptionsScreen_GetOnOffState:					; Liliam: options menu
 		lea	(Encore_mode).w,a1
 		move.w	d5,d2
 		beq.s	OptionsScreen_Return
-		cmpi.b	#3,d2
-		blo.s	.encoreFlags
+		cmpi.b	#2,d2
+		bls.s	.encoreFlags
 		lea	(Skill_options).w,a1
 		subq.w	#2,d2
 		rts
 ; ---------------------------------------------------------------------------
 
 	.encoreFlags:
+		cmpi.b	#1,d2
+	if NoEncorePalettes
+		beq.s	OptionsScreen_Return
+	else
+		nop
+	endif
 		lea	(Encore_options).w,a1
 		tst.b	(Encore_mode).w
 		beq.s	OptionsScreen_Return
