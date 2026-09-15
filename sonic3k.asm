@@ -1693,6 +1693,7 @@ Nem_PCD_InlineData:
 ; ---------------------------------------------------------------------------
 
 Nem_PCD_WriteRowToVDP:
+		bsr.s	Nem_PCD_CheckConvert			; Liliam: convert to 1P Ray palette
 		move.l	d4,(a4)	; write 8-pixel row
 		subq.w	#1,a5
 		move.w	a5,d4	; have all the 8-pixel rows been written?
@@ -1702,7 +1703,10 @@ Nem_PCD_WriteRowToVDP:
 
 Nem_PCD_WriteRowToVDP_XOR:
 		eor.l	d4,d2	; XOR the previous row by the current row
-		move.l	d2,(a4)	; and write the result
+		move.l	d2,d4					; Liliam: convert to 1P Ray palette
+		bsr.s	Nem_PCD_CheckConvert			;
+		move.l	d4,(a4)					;
+;		move.l	d2,(a4)					;
 		subq.w	#1,a5
 		move.w	a5,d4
 		bne.s	Nem_PCD_NewRow
@@ -1710,6 +1714,7 @@ Nem_PCD_WriteRowToVDP_XOR:
 ; ---------------------------------------------------------------------------
 
 Nem_PCD_WriteRowToRAM:
+		bsr.s	Nem_PCD_CheckConvert			; Liliam: convert to 1P Ray palette
 		move.l	d4,(a4)+
 		subq.w	#1,a5
 		move.w	a5,d4
@@ -1717,6 +1722,21 @@ Nem_PCD_WriteRowToRAM:
 		rts
 ; End of function Nem_Process_Compressed_Data
 
+; ---------------------------------------------------------------------------
+
+Nem_PCD_CheckConvert:						; Liliam: convert to 1P Ray palette
+		tst.b	(Nem_pal_convert).w
+		beq.s	.return
+		lea	(PalTable_Ray).l,a2
+		moveq	#0,d3
+	rept 4
+		move.b	d4,d3
+		move.b	(a2,d3.w),d4
+		ror.l	#8,d4
+	endm
+
+	.return:
+		rts
 ; ---------------------------------------------------------------------------
 		; Liliam: removed dead code
 
@@ -1879,24 +1899,14 @@ Process_Nem_Queue_Init:
 		beq.s	++	; return if the queue is empty
 		tst.w	(Nem_patterns_left).w
 		bne.s	++	; return if processing of a previous piece is still going on
+
+		clr.b	(Nem_pal_convert).w			; Liliam: convert to 1P Ray palette
+		bclr	#0,(Nem_decomp_queue+3).w		;
+		beq.s	.done					;
+		move.b	(Ray_palette_flag).w,(Nem_pal_convert).w;
+
+	.done:
 		movea.l	(Nem_decomp_queue).w,a0
-		cmpi.w	#6,(Player_mode).w			; Liliam: convert to 1P Ray palette
-		bne.s	loc_1790				;
-		lea	(Ray_AltNemPatterns).l,a1		;
-		moveq	#6-1,d0					;
-
-	.loop:
-		cmpa.l	(a1),a0					;
-		beq.s	.match					;
-		addq.l	#8,a1					;
-		dbf	d0,.loop				;
-		bra.s	loc_1790				;
-; ---------------------------------------------------------------------------
-
-	.match:
-		movea.l	4(a1),a0				; Liliam: convert to 1P Ray palette
-
-loc_1790:
 		lea	(Nem_PCD_WriteRowToVDP).l,a3
 ;		nop
 		lea	(Nem_code_table).w,a1
@@ -2437,6 +2447,9 @@ Kos_Decomp_Done:
 ; =============== S U B R O U T I N E =======================================
 
 
+Queue_Kos_Module_Ray:
+		ori.b	#1,d2					; Liliam: convert to 1P Ray palette
+
 Queue_Kos_Module:
 		lea	(Kos_module_queue).w,a2
 		tst.l	(a2)	; is the first slot free?
@@ -2534,8 +2547,8 @@ Process_Kos_Module_Queue:
 
 		bclr	#0,d2					; Liliam: convert to 1P Ray palette
 		beq.s	+					;
-		cmpi.w	#6,(Player_mode).w			;
-		bne.s	+					;
+		tst.b	(Ray_palette_flag).w			;
+		beq.s	+					;
 		lea	(PalTable_Ray).l,a0			;
 		lea	(Kos_decomp_buffer).w,a1		;
 		move.w	d3,d0					;
@@ -6952,6 +6965,8 @@ loc_6040:
 		moveq	#9,d1					;
 
 	.loadPLC:
+		cmpi.b	#6,d1					; Liliam: convert to 1P Ray palette
+		seq	(Ray_palette_flag).w			;
 		move.b	Player_PLCs(pc,d1.w),d0			; Liliam: simplify player PLC selection
 		bsr.w	Load_PLC				;
 
@@ -7844,11 +7859,6 @@ SpawnLevelMainSprites_AdjustPosition:				; Liliam: bugfix - set correct camera h
 ; ---------------------------------------------------------------------------
 
 loc_6B1E:
-		cmpi.w	#6,d0					; Liliam: convert to 1P Ray palette
-		bne.s	.done					;
-		st	(Tails_CPU_palette_flag).w		;
-
-	.done:
 		subq.w	#1,d0
 		bpl.s	loc_6B22				; Liliam: simplify player object selection
 		moveq	#0,d0					;
@@ -33171,7 +33181,7 @@ CutsceneTails_LoadPLC:						; Liliam: convert to 1P Ray palette
 ; ---------------------------------------------------------------------------
 
 Tails_Tail_Load_PLC:
-		tst.b	(Tails_CPU_palette_flag).w		; Liliam: convert to 1P Ray palette
+		tst.b	(Ray_palette_flag).w			; Liliam: convert to 1P Ray palette
 		bne.s	CutsceneTails_LoadPLC			;
 
 sub_15C3E:
@@ -33197,7 +33207,7 @@ sub_15C3E:
 
 
 Tails_Load_PLC:
-		tst.b	(Tails_CPU_palette_flag).w		; Liliam: convert to 1P Ray palette
+		tst.b	(Ray_palette_flag).w			; Liliam: convert to 1P Ray palette
 		bne.s	locret_15CCE				;
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0
@@ -69587,8 +69597,8 @@ Obj_TitleCardInit:
 		lea	(ArtKosM_TitleCardRedAct).l,a1
 		move.w	#tiles_to_bytes($510),d2		; Liliam: title cards - move 'ZONE' letters for sprite limit
 ;		move.w	#tiles_to_bytes($500),d2		;
-		bset	#0,d2					; Liliam: convert to 1P Ray palette
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		; Liliam: removed S&K alone mode
 		tst.b	(Encore_mode).w				; Liliam: title cards - add 'Unlocked' branding
 		beq.s	loc_2D6F4				;
@@ -69614,8 +69624,8 @@ loc_2D6F4:
 ;loc_2D716:
 		move.w	#tiles_to_bytes($500),d2	; Liliam: title cards - move 'ZONE' letters for sprite limit
 ;		move.w	#tiles_to_bytes($53D),d2	;
-		bset	#0,d2					; Liliam: convert to 1P Ray palette
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		lea	TitleCard_LevelGfx(pc),a1
 		moveq	#9,d0
 		cmpi.w	#$1600,(Apparent_zone_and_act).w	; Liliam: bugfix - use apparent zone for title card selection
@@ -70083,8 +70093,8 @@ Obj_LevelResultsInit:
 loc_2DB1C:
 		move.w	d0,subtype(a0)
 		move.w	#tiles_to_bytes($568),d2
-		bset	#0,d2					; Liliam: convert to 1P Ray palette
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		; Liliam: removed original implementation
 		moveq	#0,d0					; Liliam: simplify results art selection
 		move.b	(Player_1+character_id).w,d0		;
@@ -70095,8 +70105,8 @@ loc_2DB1C:
 		move.w	#tiles_to_bytes($5A0),d2
 
 loc_2DB66:
-		bset	#0,d2					; Liliam: convert to 1P Ray palette
-		jsr	(Queue_Kos_Module).l		; Load character name graphics
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		clr.b	(Update_HUD_timer).w		; Ensure timer isn't being updated currently
 		moveq	#0,d0
 		move.b	(Timer_minute).w,d0
@@ -70726,13 +70736,13 @@ loc_2E04E:
 
 loc_2E06A:
 		move.w	#tiles_to_bytes($50F),d2
-		bset	#0,d2					; Liliam: convert to 1P Ray palette
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		; Liliam: removed original implementation
 		bsr.w	SSResults_CharNamePickArt		; Liliam: simplify results art selection
 		move.w	#tiles_to_bytes($4F1),d2
-		bset	#0,d2					; Liliam: convert to 1P Ray palette
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		lea	(ArtKosM_SSResults).l,a1
 		move.w	#tiles_to_bytes($523),d2
 		jsr	(Queue_Kos_Module).l
@@ -138191,8 +138201,8 @@ loc_5D9B8:
 ;		jsr	(Queue_Kos_Module).l					;
 		lea	(ArtKosM_SonicPlane).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_Plane),d2
-		bset	#0,d2					; Liliam: convert to 1P Ray palette
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		lea	(ArtKosM_SonicPlaneEnding).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_PlaneExtra),d2
 		jmp	(Queue_Kos_Module).l
@@ -138982,8 +138992,8 @@ loc_5E23E:
 loc_5E258:
 		lea	(ArtKosM_SonicPlane).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_Plane),d2
-		bset	#0,d2					; Liliam: convert to 1P Ray palette
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		lea	(ArtKosM_SonicPlaneEnding).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_PlaneExtra),d2
 		jsr	(Queue_Kos_Module).l
@@ -139515,8 +139525,8 @@ loc_5E7CC:
 		jsr	(Queue_Kos_Module).l
 		lea	(ArtKosM_SonicPlane).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_Plane),d2
-		bset	#0,d2					; Liliam: convert to 1P Ray palette
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		lea	(ArtKosM_SonicPlaneEnding).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_PlaneExtra),d2
 		jmp	(Queue_Kos_Module).l
@@ -147122,8 +147132,8 @@ loc_644FC:
 		lea	(ArtKosM_KnuxFinalBossCrane).l,a1
 		move.w	#tiles_to_bytes(ArtTile_HPZBossCrane),d2		; Liliam: HPZ - add Knuckles cutscene
 ;		move.w	#tiles_to_bytes(ArtTile_HPZSSZBossCrane),d2		;
-		bset	#0,d2					; Liliam: convert to 1P Ray palette
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		lea	(PLC_DEZHPZRobotnikShip).l,a1					; Liliam: move Egg Mobile boss flash out of palette line 1
 ;		lea	PLC_KnuxHPZCutsceneShip(pc),a1					;
 		jmp	(Load_PLC_Raw).l
@@ -151054,8 +151064,8 @@ loc_677A4:
 		lea	(ArtKosM_SonicPlane).l,a1		; Liliam: AIZ intro - use ending plane sprite
 ;		lea	(ArtKosM_AIZIntroPlane).l,a1		;
 		move.w	#tiles_to_bytes(ArtTile_AIZIntroPlane),d2
-		bset	#0,d2					; Liliam: convert to 1P Ray palette
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		lea	(ArtKosM_AIZIntroEmeralds).l,a1
 		move.w	#tiles_to_bytes(ArtTile_AIZIntroEmeralds),d2
 		jsr	(Queue_Kos_Module).l
@@ -156347,7 +156357,7 @@ word_6AEA6:
 Obj_HCZEndBoss:
 		lea	word_6AE96(pc),a1
 		cmpi.w	#$3A0,(Camera_Y_pos).w			; Liliam: Encore mode - HCZ2 boss
-		bHI.s	loc_6AEC6				;
+		bhi.s	loc_6AEC6				;
 ;		cmpi.b	#2,(Player_1+character_id).w		;
 ;		bne.s	loc_6AEC6				;
 		lea	word_6AEA6(pc),a1
@@ -156360,12 +156370,12 @@ loc_6AEC6:
 		move.l	#loc_6AF04,$34(a0)
 		moveq	#PLCID_HCZEndBoss,d0
 		jsr	(Load_PLC).l
-		lea	(Pal_SonicTails).l,a1						; Liliam: add Egg Mobile boss flash
+		jsr	(SSZBoss_PickPlayerPalette).l					; Liliam: add Egg Mobile boss flash
 		lea	(Normal_palette_line_3).w,a2					;
 		moveq	#bytesToLcnt(Normal_palette_line_4-Normal_palette_line_3),d6	;
 
 	.loop:
-		move.l	(a1)+,(a2)+							;
+		move.l	(a3)+,(a2)+							;
 		dbf	d6,.loop							;
 ;		move.w	#0,(Normal_palette+$1E).w					;
 		lea	Pal_HCZEndBoss(pc),a1
@@ -179753,7 +179763,7 @@ loc_7A244:
 loc_7A282:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_7A282
-		lea	(Pal_SonicTails+$20).l,a2					;
+		bsr.w	SSZBoss_PickPlayerPalette					;
 		moveq	#9-1,d6								;
 
 	.loop:
@@ -180213,6 +180223,20 @@ ChildObjDat_7A69E:
 		dc.b  $1E,   0
 ; ---------------------------------------------------------------------------
 
+SSZBoss_PickPlayerPalette:								; Liliam: move Egg Mobile boss flash out of palette line 1
+		lea	(Pal_EncoreMode).l,a3
+		tst.b	(Encore_mode).w
+		bne.s	.done
+		lea	(PalPoint).l,a3
+		move.w	(Player_mode).w,d0
+		lsl.w	#3,d0
+		movea.l	(a3,d0.w),a3
+
+	.done:
+		lea	$20(a3),a2
+		rts
+; ---------------------------------------------------------------------------
+
 Obj_SSZMTZBoss:
 		move.l	#Obj_Wait,(a0)
 		move.b	#1,(Boss_flag).w
@@ -180241,7 +180265,7 @@ loc_7A6DC:
 loc_7A702:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_7A702
-		lea	(Pal_SonicTails+$20).l,a2					;
+		bsr.s	SSZBoss_PickPlayerPalette					;
 		moveq	#9-1,d6								;
 
 	.loop:
@@ -194071,14 +194095,6 @@ PLC_EggCapsule_End
 PLC_RobotnikShip: plrlistheader
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
 PLC_RobotnikShip_End
-
-Ray_AltNemPatterns:						; Liliam: convert to 1P Ray palette
-		dc.l ArtNem_BossExplosion, ArtNem_BossExplosion_Ray
-		dc.l ArtNem_EggCapsule,    ArtNem_EggCapsule_Ray
-		dc.l ArtNem_RobotnikShip,  ArtNem_RobotnikShip_Ray
-		dc.l ArtNem_FBZRobotnikHead,  ArtNem_FBZRobotnikHead_Ray
-		dc.l ArtNem_FBZRobotnikStand,  ArtNem_FBZRobotnikStand_Ray
-		dc.l ArtNem_FBZRobotnikRun,  ArtNem_FBZRobotnikRun_Ray
 ; ---------------------------------------------------------------------------
 
 Obj_CreateBossExplosion:
@@ -218093,7 +218109,6 @@ PLC_RayLifeIcon: plrlistheader							; Liliam: Ray life icon/universal level gra
 		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
 		plreq ArtTile_Ring, ArtNem_RingHUDText
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
-		plreq ArtTile_StarPost+$C, ArtNem_StarPost_Ray
 PLC_RayLifeIcon_End
 
 PLC_MetalLifeIcon: plrlistheader						; Liliam: Metal Sonic life icon/universal level graphics
@@ -220288,20 +220303,20 @@ ArtKos_SaveScreenMisc:						; Liliam: reinsert S3 data
 		; Liliam: data select - add extra characters
 		binclude "General/Save Menu/Kosinski Art/Misc.bin"
 		even
-ArtNem_BossExplosion:
+ArtNem_BossExplosion = *+1					; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Boss Explosion/Boss Explosion.bin"
 		even
-ArtNem_RobotnikShip:
+ArtNem_RobotnikShip = *+1					; Liliam: convert to 1P Ray palette
 		; Liliam: move Egg Mobile boss flash out of palette line 1
 		binclude "General/Sprites/Robotnik/Ship.bin"
 		even
-ArtNem_FBZRobotnikHead:
+ArtNem_FBZRobotnikHead = *+1					; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Robotnik/FBZ Robotnik Head.bin"
 		even
-ArtNem_FBZRobotnikStand:
+ArtNem_FBZRobotnikStand = *+1					; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Robotnik/FBZ Robotnik Stand.bin"
 		even
-ArtNem_FBZRobotnikRun:
+ArtNem_FBZRobotnikRun = *+1					; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Robotnik/FBZ Robotnik Run.bin"
 		even
 ArtUnc_SSEntryRing:
@@ -220499,7 +220514,7 @@ ArtUnc_EndSigns:
 ArtNem_SignpostStub:
 		binclude "General/Sprites/Signpost/Stub.bin"
 		even
-ArtNem_EggCapsule:
+ArtNem_EggCapsule = *+1					; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Egg Capsule/Egg Capsule.bin"
 		even
 ArtNem_CreditsText:
@@ -222397,29 +222412,8 @@ ArtNem_Monitors_Encore:						; Liliam: Encore mode - change character item
 ArtNem_Monitors_Ray:						; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Monitors/Ray Monitors.bin"
 		even
-ArtNem_StarPost_Ray:						; Liliam: convert to 1P Ray palette
-		binclude "General/Sprites/Starpost/Ray Starpost.bin"
-		even
 ArtNem_RedSpring_Ray:						; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Level Misc/Ray Red Spring.bin"
-		even
-ArtNem_BossExplosion_Ray:					; Liliam: convert to 1P Ray palette
-		binclude "General/Sprites/Boss Explosion/Ray Boss Explosion.bin"
-		even
-ArtNem_EggCapsule_Ray:						; Liliam: convert to 1P Ray palette
-		binclude "General/Sprites/Egg Capsule/Ray Egg Capsule.bin"
-		even
-ArtNem_RobotnikShip_Ray:					; Liliam: convert to 1P Ray palette
-		binclude "General/Sprites/Robotnik/Ray Ship.bin"
-		even
-ArtNem_FBZRobotnikHead_Ray:					; Liliam: convert to 1P Ray palette
-		binclude "General/Sprites/Robotnik/Ray Robotnik FBZ.bin"
-		even
-ArtNem_FBZRobotnikStand_Ray:					; Liliam: convert to 1P Ray palette
-		binclude "General/Sprites/Robotnik/Ray Robotnik Stand.bin"
-		even
-ArtNem_FBZRobotnikRun_Ray:					; Liliam: convert to 1P Ray palette
-		binclude "General/Sprites/Robotnik/Ray Robotnik Run.bin"
 		even
 ;ArtNem_S2Signpost:
 		; Liliam: removed unused data
@@ -222441,7 +222435,7 @@ ArtNem_RingHUDText:
 		; Liliam: QOL - extend ring animation
 		binclude "General/Sprites/Ring/RingHUDText.bin"
 		even
-ArtNem_EnemyPtsStarPost:
+ArtNem_EnemyPtsStarPost = *+1					; Liliam: convert to 1P Ray palette
 		; Liliam: museum - photo piece object
 		binclude "General/Sprites/Enemy Misc/EnemyPtsStarpost.bin"
 		even

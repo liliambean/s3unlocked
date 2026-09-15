@@ -710,7 +710,9 @@ Nem_data_word			ds.l 1			; contains the current compressed word being processed
 Nem_shift_value			ds.l 1			; the number of bits the data word needs to be shifted by
 Nem_patterns_left		ds.w 1			; the number of patterns remaining to be decompressed
 Nem_frame_patterns_left		ds.w 1			; the number of patterns remaining to be decompressed in the current frame
-			ds.l 1				; unused?
+Nem_pal_convert			ds.b 1		; Liliam: convert to 1P Ray palette
+Ray_palette_flag		ds.b 1		; Liliam: convert to 1P Ray palette
+			ds.w 1				; unused?
 Nem_decomp_vars_end =		*
 
 ; The following all the way through Sprite_table is cleared on level load.
@@ -728,12 +730,11 @@ Rings_manager_routine		ds.b 1
 Level_started_flag		ds.b 1
 _unkF712			ds.b $1C		; Gumball Machine and HPZ Emerald throne room object respawn table
 AIZ1_palette_cycle_flag		ds.b 1			; selects which palette cycles are used in AIZ1
-Tails_CPU_palette_flag		ds.b 1		; Liliam: convert to 1P Ray palette
-Water_flag			ds.b 1
 Bonus_stage_flag		ds.b 1		; Liliam: Encore mode - bonus stage
+Water_flag			ds.b 1
 Disable_A_button_flag		ds.b 1		; Liliam: Encore mode - disable A button
 Encore_flags			ds.b 1		; Liliam: Encore mode - palette
-			ds.b $A				; unused
+			ds.b $B				; unused
 Flying_carrying_Sonic_flag	ds.b 1			; set when Tails carries Sonic in a Sonic and Tails game
 Flying_picking_Sonic_timer	ds.b 1			; until this is 0 Tails can't pick Sonic up
 _unkF740			ds.w 1
