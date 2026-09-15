@@ -1880,6 +1880,23 @@ Process_Nem_Queue_Init:
 		tst.w	(Nem_patterns_left).w
 		bne.s	++	; return if processing of a previous piece is still going on
 		movea.l	(Nem_decomp_queue).w,a0
+		cmpi.w	#6,(Player_mode).w			; Liliam: convert to 1P Ray palette
+		bne.s	loc_1790				;
+		lea	(Ray_AltNemPatterns).l,a1		;
+		moveq	#3-1,d0					;
+
+	.loop:
+		cmpa.l	(a1),a0					;
+		beq.s	.match					;
+		addq.l	#8,a1					;
+		dbf	d0,.loop				;
+		bra.s	loc_1790				;
+; ---------------------------------------------------------------------------
+
+	.match:
+		movea.l	4(a1),a0				; Liliam: convert to 1P Ray palette
+
+loc_1790:
 		lea	(Nem_PCD_WriteRowToVDP).l,a3
 ;		nop
 		lea	(Nem_code_table).w,a1
@@ -194033,6 +194050,11 @@ PLC_EggCapsule_End
 PLC_RobotnikShip: plrlistheader
 		plreq ArtTile_RobotnikShip, ArtNem_RobotnikShip
 PLC_RobotnikShip_End
+
+Ray_AltNemPatterns:						; Liliam: convert to 1P Ray palette
+		dc.l ArtNem_BossExplosion, ArtNem_BossExplosion_Ray
+		dc.l ArtNem_EggCapsule,    ArtNem_EggCapsule_Ray
+		dc.l ArtNem_RobotnikShip,  ArtNem_RobotnikShip_Ray
 ; ---------------------------------------------------------------------------
 
 Obj_CreateBossExplosion:
@@ -218040,7 +218062,7 @@ PLC_RayLifeIcon: plrlistheader							; Liliam: Ray life icon/universal level gra
 		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
 		plreq ArtTile_Ring, ArtNem_RingHUDText
 		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
-		plreq ArtTile_StarPost+$C, ArtNem_RayStarPost
+		plreq ArtTile_StarPost+$C, ArtNem_StarPost_Ray
 PLC_RayLifeIcon_End
 
 PLC_MetalLifeIcon: plrlistheader						; Liliam: Metal Sonic life icon/universal level graphics
@@ -220239,9 +220261,6 @@ ArtNem_RobotnikShip:
 		; Liliam: move Egg Mobile boss flash out of palette line 1
 		binclude "General/Sprites/Robotnik/Ship.bin"
 		even
-ArtNem_DEZHPZRobotnikShip:								; Liliam: move Egg Mobile boss flash out of palette line 1
-		binclude "General/Sprites/Robotnik/HPZ Ship.bin"
-		even
 ArtNem_FBZRobotnikHead:
 		binclude "General/Sprites/Robotnik/FBZ Robotnik Head.bin"
 		even
@@ -222338,13 +222357,25 @@ ArtNem_Monitors_Encore:						; Liliam: Encore mode - change character item
 		binclude "General/Sprites/Monitors/Monitors Encore.bin"
 		even
 ArtNem_Monitors_Ray:						; Liliam: convert to 1P Ray palette
-		binclude "General/Sprites/Monitors/Monitors Ray.bin"
+		binclude "General/Sprites/Monitors/Ray Monitors.bin"
 		even
-ArtNem_RayStarPost:						; Liliam: convert to 1P Ray palette
+ArtNem_StarPost_Ray:						; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Starpost/Ray Starpost.bin"
 		even
-ArtNem_EncoreCursor:						; Liliam: Encore mode - player swap
-		binclude "General/Sprites/Enemy Misc/Encore Cursor.bin"
+ArtNem_RedSpring_Ray:						; Liliam: convert to 1P Ray palette
+		binclude "General/Sprites/Level Misc/Ray Red Spring.bin"
+		even
+ArtNem_BossExplosion_Ray:					; Liliam: convert to 1P Ray palette
+		binclude "General/Sprites/Boss Explosion/Ray Boss Explosion.bin"
+		even
+ArtNem_EggCapsule_Ray:						; Liliam: convert to 1P Ray palette
+		binclude "General/Sprites/Egg Capsule/Ray Egg Capsule.bin"
+		even
+ArtNem_RobotnikShip_Ray:					; Liliam: convert to 1P Ray palette
+		binclude "General/Sprites/Robotnik/Ray Ship.bin"
+		even
+ArtNem_DEZHPZRobotnikShip:								; Liliam: move Egg Mobile boss flash out of palette line 1
+		binclude "General/Sprites/Robotnik/HPZ Ship.bin"
 		even
 ;ArtNem_S2Signpost:
 		; Liliam: removed unused data
@@ -222362,9 +222393,6 @@ ArtNem_SpikesSprings:
 		; Liliam: QOL - allow taking DEZ1 Tails route
 		binclude "General/Sprites/Level Misc/SpikesSprings.bin"
 		even
-ArtNem_RedSpring_Ray:						; Liliam: convert to 1P Ray palette
-		binclude "General/Sprites/Level Misc/Red Spring Ray.bin"
-		even
 ArtNem_RingHUDText:
 		; Liliam: QOL - extend ring animation
 		binclude "General/Sprites/Ring/RingHUDText.bin"
@@ -222372,6 +222400,9 @@ ArtNem_RingHUDText:
 ArtNem_EnemyPtsStarPost:
 		; Liliam: museum - photo piece object
 		binclude "General/Sprites/Enemy Misc/EnemyPtsStarpost.bin"
+		even
+ArtNem_EncoreCursor:						; Liliam: Encore mode - player swap
+		binclude "General/Sprites/Enemy Misc/Encore Cursor.bin"
 		even
 ArtNem_Seal:
 		binclude "General/Sprites/Animals/Seal.bin"
