@@ -9369,6 +9369,11 @@ loc_7826:
 		move.w	#$D00,d0
 
 loc_782A:
+		cmpi.b	#4,(Current_zone).w						; Liliam: Encore mode - FBZ level order
+		bne.s	.done								;
+		move.b	(Encore_mode).w,d0						;
+
+	.done:
 		ror.b	#1,d0
 		lsr.w	#4,d0
 		andi.w	#$1F8,d0
@@ -44722,6 +44727,11 @@ loc_1C2C4:
 		move.w	#$D00,d0
 
 loc_1C2C8:
+		cmpi.b	#4,(Current_zone).w						; Liliam: Encore mode - FBZ level order
+		bne.s	.done								;
+		move.b	(Encore_mode).w,d0						;
+
+	.done:
 		ror.b	#1,d0
 		lsr.w	#4,d0
 		andi.w	#$1F8,d0
@@ -119682,11 +119692,11 @@ loc_5286A:
 		bhs.s	loc_528A4
 		st	(Events_bg+$04).w		; if player is at start, then he's outside. Set outdoors flag
 		lea	Pal_FBZBGOutdoors(pc),a1
-		move.b	(Encore_mode).w,d1			; Liliam: Encore mode - palette
-		beq.s	loc_5287A				;
-		tst.b	d1					;
-		bmi.s	loc_5287A				;
-		lea	Pal_FBZBGOutdoors_Night(pc),a1		;
+		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
+		beq.s	loc_5287A							;
+		tst.b	(Encore_flags).w						;
+		bmi.s	loc_5287A							;
+		lea	Pal_FBZBGOutdoors_Night(pc),a1					;
 
 loc_5287A:
 		lea	(Target_palette_line_4+$4).w,a5
@@ -120135,11 +120145,11 @@ loc_52C2E:
 		moveq	#$10,d0
 		move.w	#$3F0,d6
 		lea	Pal_FBZBGOutdoors(pc),a1
-		move.b	(Encore_mode).w,d1			; Liliam: Encore mode - palette
-		beq.s	loc_52C42				;
-		tst.b	d1					;
-		bmi.s	loc_52C42				;
-		lea	Pal_FBZBGOutdoors_Night(pc),a1		;
+		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
+		beq.s	loc_52C42							;
+		tst.b	(Encore_flags).w						;
+		bmi.s	loc_52C42							;
+		lea	Pal_FBZBGOutdoors_Night(pc),a1					;
 		bra.s	loc_52C42
 ; ---------------------------------------------------------------------------
 
@@ -120215,11 +120225,11 @@ loc_52CC4:
 
 FBZ_BGChangeGoOut:
 		lea	Pal_FBZBGOutdoors(pc),a1
-		move.b	(Encore_mode).w,d1			; Liliam: Encore mode - palette
-		beq.s	loc_52CD8				;
-		tst.b	d1					;
-		bmi.s	loc_52CD8				;
-		lea	Pal_FBZBGOutdoors_Night(pc),a1		;
+		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
+		beq.s	loc_52CD8							;
+		tst.b	(Encore_flags).w						;
+		bmi.s	loc_52CD8							;
+		lea	Pal_FBZBGOutdoors_Night(pc),a1					;
 		bra.s	loc_52CD8
 ; ---------------------------------------------------------------------------
 
@@ -120528,17 +120538,17 @@ loc_52F7A:
 		lea	Pal_FBZBGOutdoors(pc),a1
 		lea	(Normal_palette_line_4+$2).w,a5
 		lea	(Target_palette_line_4+$2).w,a6
-		move.b	(Encore_mode).w,d1			; Liliam: Encore mode - palette
-		beq.s	loc_52F86				;
-		tst.b	d1					;
-		bmi.s	loc_52F86				;
-		lea	Pal_FBZBGOutdoors_Night(pc),a1		;
-		move.w	(a1),(a5)+				;
-		move.w	(a1),(a6)+				;
-		bsr.s	sub_52F8E				;
-		move.w	#$C62,-$10(a5)				;
-		move.w	#$C62,-$10(a6)				;
-		rts						;
+		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
+		beq.s	loc_52F86							;
+		tst.b	(Encore_flags).w						;
+		bmi.s	loc_52F86							;
+		lea	Pal_FBZBGOutdoors_Night(pc),a1					;
+		move.w	(a1),(a5)+							;
+		move.w	(a1),(a6)+							;
+		bsr.s	sub_52F8E							;
+		move.w	#$C62,-$10(a5)							;
+		move.w	#$C62,-$10(a6)							;
+		rts									;
 ; ---------------------------------------------------------------------------
 
 loc_52F86:
@@ -120877,11 +120887,11 @@ loc_5326A:
 		moveq	#$C,d0
 		move.w	#$F0,d6
 		lea	Pal_FBZBGOutdoors(pc),a1
-		move.b	(Encore_mode).w,d1			; Liliam: Encore mode - palette
-		beq.s	loc_5327E				;
-		tst.b	d1					;
-		bmi.s	loc_5327E				;
-		lea	Pal_FBZBGOutdoors_Night(pc),a1		;
+		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
+		beq.s	loc_5327E							;
+		tst.b	(Encore_flags).w						;
+		bmi.s	loc_5327E							;
+		lea	Pal_FBZBGOutdoors_Night(pc),a1					;
 		bra.s	loc_5327E
 ; ---------------------------------------------------------------------------
 
@@ -217837,8 +217847,11 @@ LevelLoadBlock:
 	levartptrs PLCID_MGZ2,      PLCID_MGZ2,      PalID_MGZ2,     MGZ_8x8_Primary_KosM,  MGZ2_8x8_Secondary_KosM, MGZ_16x16_Primary_Kos,  MGZ2_16x16_Secondary_Kos, MGZ_128x128_Primary_Kos,  MGZ2_128x128_Secondary_Kos  ; MARBLE GARDEN ZONE ACT 2
 	levartptrs PLCID_CNZ1,      PLCID_CNZ1_2,    PalID_CNZ1,     CNZ_8x8_KosM,          CNZ_8x8_KosM,            CNZ_16x16_Kos,          CNZ_16x16_Kos,            CNZ_128x128_Kos,          CNZ_128x128_Kos             ; CARNIVAL NIGHT ZONE ACT 1
 	levartptrs PLCID_CNZ2,      PLCID_CNZ2_2,    PalID_CNZ2,     CNZ_8x8_KosM,          CNZ_8x8_KosM,            CNZ_16x16_Kos,          CNZ_16x16_Kos,            CNZ_128x128_Kos,          CNZ_128x128_Kos             ; CARNIVAL NIGHT ZONE ACT 2
-	levartptrs PLCID_FBZ1,      PLCID_FBZ1,      PalID_FBZ1,     ArtKosM_FBZ,           ArtKosM_FBZ,             FBZ_16x16_Kos,          FBZ_16x16_Kos,            FBZ_128x128_Kos,          FBZ_128x128_Kos             ; FLYING BATTERY ZONE ACT 1
-	levartptrs PLCID_FBZ2,      PLCID_FBZ2,      PalID_FBZ2,     ArtKosM_FBZ,           ArtKosM_FBZ,             FBZ_16x16_Kos,          FBZ_16x16_Kos,            FBZ_128x128_Kos,          FBZ_128x128_Kos             ; FLYING BATTERY ZONE ACT 2
+
+	; Liliam: Encore mode - FBZ level order
+	levartptrs PLCID_FBZ1,      PLCID_FBZ1,      PalID_FBZ1,     FBZ_8x8_Primary_Kos,   FBZ1_8x8_Secondary_Kos,  FBZ_16x16_Primary_Kos,  FBZ1_16x16_Secondary_Kos, FBZ_128x128_Kos,          FBZ_128x128_Kos             ; FLYING BATTERY ZONE ACT 1
+	levartptrs PLCID_FBZ2,      PLCID_FBZ2,      PalID_FBZ2,     FBZ_8x8_Primary_Kos,   FBZ2_8x8_Secondary_Kos,  FBZ_16x16_Primary_Kos,  FBZ2_16x16_Secondary_Kos, FBZ_128x128_Kos,          FBZ_128x128_Kos             ; FLYING BATTERY ZONE ACT 2
+
 	levartptrs PLCID_ICZ1,      PLCID_ICZ1,      PalID_ICZ1,     ICZ_8x8_Primary_KosM,  ICZ1_8x8_Secondary_KosM, ICZ_16x16_Primary_Kos,  ICZ1_16x16_Secondary_Kos, ICZ_128x128_Primary_Kos,  ICZ1_128x128_Secondary_Kos  ; ICECAP ZONE ACT 1
 	levartptrs PLCID_ICZ2,      PLCID_ICZ2,      PalID_ICZ2,     ICZ_8x8_Primary_KosM,  ICZ2_8x8_Secondary_KosM, ICZ_16x16_Primary_Kos,  ICZ2_16x16_Secondary_Kos, ICZ_128x128_Primary_Kos,  ICZ2_128x128_Secondary_Kos  ; ICECAP ZONE ACT 2
 
@@ -218255,8 +218268,8 @@ PLC_MHZ_End
 
 PLC_SOZ1: plrlistheader
 		plreq ArtTile_SOZMisc, ArtNem_SOZMisc
-		plreq ArtTile_SOZMushroomParachute, ArtNem_SOZTile		; Liliam: Encore mode - FBZ level order
-;		plreq ArtTile_SOZTile, ArtNem_SOZTile				;
+		plreq ArtTile_SOZMushroomParachute, ArtNem_SOZTile			; Liliam: Encore mode - FBZ level order
+;		plreq ArtTile_SOZTile, ArtNem_SOZTile					;
 PLC_SOZ1_End
 
 PLC_SOZ2: plrlistheader
@@ -219280,6 +219293,7 @@ Layout_FBZ1:
 		binclude "Levels/FBZ/Layout/1.bin"
 		even
 Layout_FBZ2:
+		; Liliam: bugfix - prevent background running out
 		binclude "Levels/FBZ/Layout/2.bin"
 		even
 Layout_ICZ1:							; Liliam: reinsert S3 data
@@ -222571,14 +222585,29 @@ CNZ_8x8_KosM:							; Liliam: reinsert S3 data
 CNZ_128x128_Kos:						; Liliam: reinsert S3 data
 		binclude "Levels/CNZ/Chunks/Primary.bin"
 		even
-FBZ_16x16_Kos:
+FBZ_16x16_Primary_Kos:
+		; Liliam: Encore mode - FBZ level order
 		binclude "Levels/FBZ/Blocks/Primary.bin"
 		even
-ArtKosM_FBZ:
+FBZ_8x8_Primary_Kos:
+		; Liliam: Encore mode - FBZ level order
 		binclude "Levels/FBZ/Tiles/Primary.bin"
 		even
 FBZ_128x128_Kos:
+		; Liliam: Encore mode - FBZ level order
 		binclude "Levels/FBZ/Chunks/Primary.bin"
+		even
+FBZ1_16x16_Secondary_Kos:								; Liliam: Encore mode - FBZ level order
+		binclude "Levels/FBZ/Blocks/Secondary.bin"
+		even
+FBZ1_8x8_Secondary_Kos:									; Liliam: Encore mode - FBZ level order
+		binclude "Levels/FBZ/Tiles/Secondary.bin"
+		even
+FBZ2_16x16_Secondary_Kos:								; Liliam: Encore mode - FBZ level order
+		binclude "Levels/FBZ/Blocks/Encore Secondary.bin"
+		even
+FBZ2_8x8_Secondary_Kos:									; Liliam: Encore mode - FBZ level order
+		binclude "Levels/FBZ/Tiles/Encore Secondary.bin"
 		even
 ICZ_16x16_Primary_Kos:						; Liliam: reinsert S3 data
 		binclude "Levels/ICZ/Blocks/Primary.bin"
