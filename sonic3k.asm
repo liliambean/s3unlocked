@@ -23558,7 +23558,6 @@ MightyRay_TriangleJump_CheckAttach:				; Liliam: extra skills - triangle jump
 		bclr	#Status_Roll,status(a0)
 		clr.b	(Ctrl_1_pressed_logical).w
 		clr.b	prev_anim(a0)
-		clr.b	jumping(a0)
 		clr.w	x_vel(a0)
 		move.w	#$40,y_vel(a0)
 		move.w	x_pos(a0),x_pos+2(a0)
@@ -23597,6 +23596,7 @@ Ray_Normal:
 		beq.w	MightyRay_TriangleJump.return
 
 MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
+		move.b	#2,double_jump_flag(a0)
 		move.w	x_pos(a0),d0
 		cmp.w	x_pos+2(a0),d0
 		bne.s	.detach
@@ -23630,10 +23630,8 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 	.lookup:
 		lsl.w	#2,d0
 		lea	(MightyRay_TriangleJumpSpeeds-4).l,a1
-		adda.l	d0,a1
-		move.w	(a1)+,x_vel(a0)
-		move.w	(a1)+,y_vel(a0)
-		move.b	#1,jumping(a0)
+		move.l	(a1,d0.w),x_vel(a0)
+		clr.b	double_jump_flag(a0)
 		btst	#Status_Underwater,status(a0)
 		beq.s	.detach
 		asr.w	#1,x_vel(a0)
@@ -23645,6 +23643,9 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 		clr.b	object_control(a0)
 		clr.w	x_pos+2(a0)
 		clr.w	ground_vel(a0)
+		tst.b	(Super_Sonic_Knux_flag).w
+		bpl.s	.return
+		clr.b	double_jump_flag(a0)
 
 	.return:
 		rts
@@ -23667,10 +23668,11 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 		moveq	#9,d0
 		bra.s	.lookup
 ; ---------------------------------------------------------------------------
-ability_timer = $2D
-glide_speed_cap = $28
+ability_timer = $39
+glide_angle = $40
 glide_anim_timer = $30
-glide_sfx_timer = $31
+glide_sfx_timer = $2D
+glide_speed_cap = $28
 AirGlide_Dive = 1
 AirGlide_AnimUp = 0
 
@@ -23686,7 +23688,8 @@ Ray_CheckMoves:							; Liliam: extra skills - air glide (credit: Rubberduckycoo
 		bsr.w	MightyRay_TriangleJump_CheckAttach
 		bclr	#Status_Roll,status(a0)
 		st	double_jump_flag(a0)
-		move.w	#$300,glide_anim_timer(a0)
+		clr.b	glide_sfx_timer(a0)
+		move.b	#3,glide_anim_timer(a0)
 		move.b	#$F8,mapping_frame(a0)
 		addq.w	#4,sp
 
@@ -23746,7 +23749,7 @@ Ray_CheckMoves:							; Liliam: extra skills - air glide (credit: Rubberduckycoo
 
 	.done:
 		asr.w	#1,y_vel(a0)
-		move.b	#$40,angle(a0)
+		move.b	#$40,glide_angle(a0)
 		move.b	#$40,ability_timer(a0)
 		move.w	x_vel(a0),glide_speed_cap(a0)
 		bpl.s	.return
@@ -23759,16 +23762,16 @@ Ray_CheckMoves:							; Liliam: extra skills - air glide (credit: Rubberduckycoo
 Ray_AirGlide:							; Liliam: extra skills - air glide (credit: Rubberduckycooly)
 		btst	#AirGlide_Dive,double_jump_flag(a0)
 		bne.s	.isDiving
-		cmpi.b	#$70,angle(a0)
+		cmpi.b	#$70,glide_angle(a0)
 		bge.s	.checkAbilitySpeed
-		addq.b	#8,angle(a0)
+		addq.b	#8,glide_angle(a0)
 		bra.s	.checkAbilitySpeed
 ; ---------------------------------------------------------------------------
 
 	.isDiving:
-		cmpi.b	#$10,angle(a0)
+		cmpi.b	#$10,glide_angle(a0)
 		ble.s	.checkAbilitySpeed
-		subq.b	#8,angle(a0)
+		subq.b	#8,glide_angle(a0)
 
 	.checkAbilitySpeed:
 		move.w	ground_vel(a0),d0
@@ -23790,10 +23793,10 @@ Ray_AirGlide:							; Liliam: extra skills - air glide (credit: Rubberduckycooly
 
 	.noAbilitySpeed:
 		moveq	#0,d0
-		move.b	angle(a0),d0
+		move.b	glide_angle(a0),d0
 		lsl.w	#1,d0
-		move.b	angle(a0),d0		; Technically this could be lsr.b #2,d0
-		asr.b	#1,d0			; because angle is never negative
+		move.b	glide_angle(a0),d0	; Technically this could be lsr.b #2,d0
+		asr.b	#1,d0			; because glide_angle is never negative
 		jsr	(GetSineCosine_Fine).l
 		lsl.w	#1,d1
 		moveq	#$18,d0
@@ -23823,7 +23826,7 @@ Ray_AirGlide:							; Liliam: extra skills - air glide (credit: Rubberduckycooly
 
 	.calcAcceleration:
 		moveq	#$50,d0
-		sub.b	angle(a0),d0
+		sub.b	glide_angle(a0),d0
 		jsr	(GetSineCosine).l
 		muls.w	#22,d0
 		asr.l	#8,d0
@@ -23885,7 +23888,7 @@ Ray_AirGlide:							; Liliam: extra skills - air glide (credit: Rubberduckycooly
 		bsr.w	Ray_AirGlide_CheckControls
 		btst	#AirGlide_AnimUp,double_jump_flag(a0)
 		bne.s	.checkStartSwoop
-		cmpi.b	#$70,angle(a0)
+		cmpi.b	#$70,glide_angle(a0)
 		bne.w	.done
 		btst	#AirGlide_Dive,double_jump_flag(a0)
 		bne.w	.done
@@ -23895,7 +23898,7 @@ Ray_AirGlide:							; Liliam: extra skills - air glide (credit: Rubberduckycooly
 ; ---------------------------------------------------------------------------
 
 	.checkStartSwoop:
-		cmpi.b	#$10,angle(a0)
+		cmpi.b	#$10,glide_angle(a0)
 		bne.s	.done
 		btst	#AirGlide_Dive,double_jump_flag(a0)
 		beq.s	.done
@@ -24022,7 +24025,8 @@ Ray_AirGlide_CheckControls:					; Liliam: extra skills - air glide
 		cmp.b	double_jump_flag(a0),d0
 		beq.s	.setAnimation
 		move.b	d0,double_jump_flag(a0)
-		clr.w	glide_anim_timer(a0)
+		clr.b	glide_sfx_timer(a0)
+		clr.b	glide_anim_timer(a0)
 		cmpi.b	#$F8-5,mapping_frame(a0)
 		bne.s	.checkLimit
 		addq.b	#1,mapping_frame(a0)
@@ -54565,7 +54569,7 @@ Spring_LaunchHorizontal:
 		neg.w	x_vel(a1)
 
 loc_231BE:
-		move.w	#$F,$32(a1)
+		move.w	#$F,move_lock(a1)
 		move.w	x_vel(a1),ground_vel(a1)
 		bclr	#Status_Push,status(a1)			; Liliam: bugfix - fix stuck animation
 		beq.s	loc_231CA				;
