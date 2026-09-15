@@ -943,45 +943,45 @@ Map_Ray_HangSwing8:
 		dc.b  $EC,   8, $18, $15, $FF, $F1
 		dc.b  $E4,   4, $18, $18, $FF, $F9
 Map_Ray_HangWalk1:
-		dc.w 6
-		dc.b  $E5,  $C,   0,   0, $FF, $DD
-		dc.b  $ED,   9,   0,   4, $FF, $DD
-		dc.b  $ED,   2,   0,  $A, $FF, $FD
-		dc.b  $F5,   2,   0,  $D, $FF, $F5
-		dc.b  $FD,   5,   0, $10, $FF, $E5
-		dc.b    5,   0,   0, $14, $FF, $DD
-Map_Ray_HangWalk2:
 		dc.w 3
-		dc.b  $E2,  $F,   0,   0, $FF, $DD
-		dc.b  $E2,   3,   0, $10, $FF, $FD
-		dc.b  $EA,   2,   0, $14, $FF, $D5
+		dc.b  $E2,  $F,   0,   0, $FF, $E6
+		dc.b  $E2,   3,   0, $10,   0,   6
+		dc.b  $EA,   2,   0, $14, $FF, $DE
+Map_Ray_HangWalk2:
+		dc.w 4
+		dc.b  $E3,  $A,   0,   0, $FF, $F0
+		dc.b  $EB,   7,   0,   9, $FF, $E0
+		dc.b  $FB,   4,   0, $11, $FF, $F0
+		dc.b    3,   0,   0, $13, $FF, $F0
 Map_Ray_HangWalk3:
-		dc.w 4
-		dc.b  $E3,  $A,   0,   0, $FF, $E8
-		dc.b  $EB,   7,   0,   9, $FF, $D8
-		dc.b  $FB,   4,   0, $11, $FF, $E8
-		dc.b    3,   0,   0, $13, $FF, $E8
-Map_Ray_HangWalk4:
 		dc.w 6
-		dc.b  $E1,   5,   0,   0, $FF, $E8
-		dc.b  $E9,   3,   0,   4, $FF, $E0
-		dc.b  $F1,   3,   0,   8, $FF, $E8
-		dc.b  $F9,   1,   0,  $C, $FF, $D8
-		dc.b  $F9,   6,   0,  $E, $FF, $F0
-		dc.b    9,   0,   0, $14, $FF, $E0
-Map_Ray_HangWalk5:
+		dc.b  $E1,   5,   0,   0, $FF, $F3
+		dc.b  $E9,   3,   0,   4, $FF, $EB
+		dc.b  $F1,   3,   0,   8, $FF, $F3
+		dc.b  $F9,   1,   0,  $C, $FF, $E3
+		dc.b  $F9,   6,   0,  $E, $FF, $FB
+		dc.b    9,   0,   0, $14, $FF, $EB
+Map_Ray_HangWalk4:
 		dc.w 5
-		dc.b  $E4,   7,   0,   0, $FF, $E2
-		dc.b  $EC,   3,   0,   8, $FF, $DA
-		dc.b  $EC,   7,   0,  $C, $FF, $F2
-		dc.b  $FC,   1,   0, $14, $FF, $D2
-		dc.b    4,   4,   0, $16, $FF, $E2
-Map_Ray_HangWalk6:
+		dc.b  $E4,   7,   0,   0, $FF, $EA
+		dc.b  $EC,   3,   0,   8, $FF, $E2
+		dc.b  $EC,   7,   0,  $C, $FF, $FA
+		dc.b  $FC,   1,   0, $14, $FF, $DA
+		dc.b    4,   4,   0, $16, $FF, $EA
+Map_Ray_HangWalk5:
 		dc.w 4
-		dc.b  $E5,  $B,   0,   0, $FF, $EA
-		dc.b  $ED,   2,   0,  $C, $FF, $DA
-		dc.b  $F5,   2,   0,  $F, $FF, $E2
-		dc.b    5,   8,   0, $12, $FF, $EA
+		dc.b  $E5,  $B,   0,   0, $FF, $F4
+		dc.b  $ED,   2,   0,  $C, $FF, $E4
+		dc.b  $F5,   2,   0,  $F, $FF, $EC
+		dc.b    5,   8,   0, $12, $FF, $F4
+Map_Ray_HangWalk6:
+		dc.w 6
+		dc.b  $E5,  $C,   0,   0, $FF, $E7
+		dc.b  $ED,   9,   0,   4, $FF, $E7
+		dc.b  $ED,   2,   0,  $A,   0,   7
+		dc.b  $F5,   2,   0,  $D, $FF, $FF
+		dc.b  $FD,   5,   0, $10, $FF, $EF
+		dc.b    5,   0,   0, $14, $FF, $E7
 Map_Ray_360Hang2:
 Map_Ray_Hang1:
 		dc.w 4
@@ -1127,9 +1127,9 @@ Map_Ray_BarCurrent2:
 		dc.b    5,   6,   0,  $C, $FF, $F6
 Map_Ray_HangWalk7:
 		dc.w 3
-		dc.b  $E3,   7,   0,   0, $FF, $F3
-		dc.b  $F3,   3,   0,   8, $FF, $EB
-		dc.b    3,  $A,   0,  $C, $FF, $F3
+		dc.b  $E3,   7,   0,   0, $FF, $F5
+		dc.b  $F3,   3,   0,   8, $FF, $ED
+		dc.b    3,  $A,   0,  $C, $FF, $F5
 Map_Ray_Stand2:
 Map_Ray_Stand3:
 		dc.w 4

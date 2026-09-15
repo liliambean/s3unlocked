@@ -921,25 +921,17 @@ DPLC_Ray_HangSwing8:
 		dc.w $2852
 		dc.w $1855
 DPLC_Ray_HangWalk1:
-		dc.w 6
-		dc.w $3857
-		dc.w $585B
-		dc.w $2861
-		dc.w $2864
-		dc.w $3867
-		dc.w $086B
-DPLC_Ray_HangWalk2:
 		dc.w 3
 		dc.w $F86C
 		dc.w $387C
 		dc.w $2880
-DPLC_Ray_HangWalk3:
+DPLC_Ray_HangWalk2:
 		dc.w 4
 		dc.w $8883
 		dc.w $788C
 		dc.w $1894
 		dc.w $0896
-DPLC_Ray_HangWalk4:
+DPLC_Ray_HangWalk3:
 		dc.w 6
 		dc.w $3897
 		dc.w $389B
@@ -947,19 +939,27 @@ DPLC_Ray_HangWalk4:
 		dc.w $18A3
 		dc.w $58A5
 		dc.w $08AB
-DPLC_Ray_HangWalk5:
+DPLC_Ray_HangWalk4:
 		dc.w 5
 		dc.w $78AC
 		dc.w $38B4
 		dc.w $78B8
 		dc.w $18C0
 		dc.w $18C2
-DPLC_Ray_HangWalk6:
+DPLC_Ray_HangWalk5:
 		dc.w 4
 		dc.w $B8C4
 		dc.w $28D0
 		dc.w $28D3
 		dc.w $28D6
+DPLC_Ray_HangWalk6:
+		dc.w 6
+		dc.w $3857
+		dc.w $585B
+		dc.w $2861
+		dc.w $2864
+		dc.w $3867
+		dc.w $086B
 DPLC_Ray_360Hang2:
 DPLC_Ray_Hang1:
 		dc.w 4
