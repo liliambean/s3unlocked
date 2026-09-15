@@ -7615,6 +7615,7 @@ loc_68C2:
 loc_68FC:
 ;		cmpi.w	#2,(Player_mode).w			; Liliam: add extra characters
 ;		bne.s	loc_690A				;
+		clr.b	(Ctrl_1_locked).w							; Liliam: title cards - fix sprite pop-in
 		move.w	#$20,(Tails_CPU_routine).w
 
 loc_690A:
@@ -29617,7 +29618,8 @@ loc_13A32:
 ;		move.w	#0,(Tails_CPU_flight_timer).w				;
 		move.b	#1<<Status_InAir,status(a0)
 		move.w	#$C,(Tails_CPU_routine).w
-		rts
+		bra.w	loc_13FC2								; Liliam: title cards - fix sprite pop-in
+;		rts										;
 ; ---------------------------------------------------------------------------
 
 loc_13A74:
