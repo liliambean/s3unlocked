@@ -9898,13 +9898,14 @@ LevelSelect_CheckCNZSOZ:
 
 LevelSelect_AlternateStart:
 		move.b	#1,(Alternate_start_flag).w		;
-		bra.s	LevelSelect_StartZone			;
+		bra.w	LevelSelect_StartZone			;
 ; ---------------------------------------------------------------------------
 
 LevelSelect_CheckSonicTails:
 ;		cmpi.w	#3,(Player_mode).w			; Liliam: Metal Sonic - final boss
 		cmpi.w	#7,(Player_mode).w			;
 		bhs.s	loc_7DAC
+		move.b	#1,(Alternate_start_flag).w		;
 		cmpi.w	#$A01,d0			; Is SSZ act 2 selected?
 		beq.s	LevelSelect_DenySelection	; If so, branch and deny entry
 
@@ -9929,7 +9930,6 @@ loc_7DBA:
 		cmpi.w	#$D01,d0				;
 		bne.s	LevelSelect_CheckSpecialStage		;
 		move.b	(Game_mode).w,(Demo_mode_flag).w	;
-
 
 LevelSelect_CheckSpecialStage:
 		cmpi.w	#$4000,d0				; Liliam: level select - access all special stages from act 1
@@ -181461,14 +181461,14 @@ MechaSonic_WaitFly:						; Liliam: Metal Sonic - final boss
 		beq.s	locret_7B3B2
 		addq.b	#2,routine(a0)
 
-MechaSonic_FlyDown:						; Liliam: Metal Sonic - final boss
+MechaSonic_FlyDown:
 		moveq	#signextendB(sfx_FlamethrowerLoud),d0
 		jsr	(Play_SFX_Continuous).l
 		jsr	(MoveSprite2).l
 		cmpi.w	#$4A0,y_pos(a0)
 		bne.s	locret_7B3B2
 		bset	#4,$38(a0)
-		moveq	#signextendB(sfx_MechaLand),d0
+		moveq	#signextendB(sfx_MissileShoot),d0
 		jsr	(Play_SFX).l
 
 loc_7B3B6:
@@ -184448,8 +184448,10 @@ sub_7D35A:
 		beq.s	loc_7D376				;
 		tst.b	(Alternate_start_flag).w		;
 		bne.s	loc_7D376				;
-		move.w	#$A88,(Normal_palette+$A).w		;
 		move.b	#1,(Update_HUD_timer).w			;
+		cmpi.w	#7,(Player_mode).w			;
+		bne.s	loc_7D376				;
+		move.w	#$A88,(Normal_palette+$0A).w		;
 
 loc_7D376:
 		move.w	#$7F,$2E(a0)
