@@ -44242,8 +44242,7 @@ loc_1BF50:
 		bne.s	loc_1BF74
 		tst.b	(Alternate_start_flag).w					;
 		beq.s	loc_1BF74							;
-		move.w	#$C0,d1								;
-		move.w	#$658,d0							;
+		move.w	#$660,d0							;
 		bra.s	loc_1BF74							;
 ; ---------------------------------------------------------------------------
 
@@ -92352,6 +92351,7 @@ Map_MHZMushroomPlatform:
 
 Obj_SOZMushroomParachute:								; Liliam: Encore mode - FBZ level order
 		lea	(Player_1).w,a1
+		move.w	#$10,x_pos(a0)
 		move.w	#$63F,y_pos(a0)
 		move.b	#1,$30(a0)
 		move.b	y_radius(a1),d0
@@ -92382,6 +92382,7 @@ Obj_SOZMushroomParachute:								; Liliam: Encore mode - FBZ level order
 ; ---------------------------------------------------------------------------
 
 Obj_SOZMushroomParachute_AttachPlayer:							; Liliam: Encore mode - FBZ level order
+		clr.b	anim(a1)
 		ori.b	#$80,render_flags(a1)
 		move.b	#3,object_control(a1)
 		move.w	a0,interact(a1)
@@ -92389,7 +92390,9 @@ Obj_SOZMushroomParachute_AttachPlayer:							; Liliam: Encore mode - FBZ level o
 ; ---------------------------------------------------------------------------
 
 Obj_SOZMushroomParachute_Main:								; Liliam: Encore mode - FBZ level order
-		bsr.w	loc_3F51C
+		move.b	angle(a0),d0
+		bsr.w	loc_3F818
+		bsr.w	loc_3F520
 		cmpi.l	#loc_3F572,(a0)
 		bne.s	Obj_SOZMushroomParachute_Return
 		move.l	#Obj_SOZMushroomParachute_CheckDelete,(a0)
@@ -92437,6 +92440,8 @@ loc_3F516:
 
 loc_3F51C:
 		bsr.w	sub_3F7E2
+
+loc_3F520:
 		jsr	(MoveSprite2).l
 		bsr.w	sub_3F7AE
 		bsr.s	sub_3F5AA
