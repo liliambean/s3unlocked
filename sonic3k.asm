@@ -190782,6 +190782,7 @@ loc_81624:
 		move.b	#$81,(Player_1+object_control).w
 		move.b	#$16,(Player_1+anim).w			; Liliam: simplify player anim selection
 ;		move.b	#$1F,(Player_1+anim).w			;
+		move.w	#$1000,(Player_1+ground_vel).w		; Liliam: bugfix - fix stuck animation
 		move.w	#$A00,(Max_speed).w
 		move.w	#$30,(Acceleration).w
 		move.w	#$100,(Deceleration).w
