@@ -9841,7 +9841,7 @@ LevelSelect_GetActNumber:					; Liliam: level select - expand options
 ; ---------------------------------------------------------------------------
 
 LevelSelect_CheckKnuckles:
-		clr.b	(Alternate_start_flag).w		; Liliam: Encore mode - player starts
+		move.b	#1,(Alternate_start_flag).w		; Liliam: Encore mode - player starts
 		tst.b	(Encore_mode).w				;
 		bne.s	LevelSelect_EncoreStart			;
 		move.w	(Player_option).w,(Player_mode).w	;
@@ -9850,9 +9850,6 @@ LevelSelect_CheckKnuckles:
 
 		cmpi.w	#3,(Player_mode).w		; Are we Knuckles?
 		bne.s	LevelSelect_CheckSonicTails	; If not, branch
-		cmpi.w	#$800,d0							; Liliam: Encore mode - FBZ level order
-		beq.w	LevelSelect_StartZone						;
-		move.b	#1,(Alternate_start_flag).w					;
 
 		cmpi.w	#$A00,d0			; Is SSZ act 1 selected?
 		beq.s	LevelSelect_DenySelection	; If so, branch and deny entry
@@ -9864,11 +9861,11 @@ LevelSelect_CheckKnuckles:
 		cmpi.w	#$1600,d0			; Is LRZ act 3 selected?
 		beq.s	LevelSelect_DenySelection	; If so, branch and deny entry
 		cmpi.w	#$1700,d0			; Is DDZ act 2 selected?
-		bne.s	loc_7DAC				; Liliam: Encore mode - player starts
+		bne.s	LevelSelect_Check2PZones		; Liliam: Metal Sonic - final boss
 ;		bne.s	LevelSelect_CheckSonicTails		;
 
 LevelSelect_DenySelection:
-		tst.w	(Debug_cheat_flag).w			;
+		tst.w	(Debug_cheat_flag).w			; Liliam: Encore mode - player starts
 		bne.w	LevelSelect_StartZone			;
 		moveq	#signextendB(sfx_Error),d0
 		bsr.w	Play_SFX				;
@@ -9876,60 +9873,62 @@ LevelSelect_DenySelection:
 		bra.w	LevelSelect_Main
 ; ---------------------------------------------------------------------------
 
-LevelSelect_EncoreStart:
-		cmpi.w	#$1501,d0				; Liliam: Encore mode - bonus stage
-		bne.s	LevelSelect_CheckCNZSOZ			;
-		move.b	(Encore_unlocked_chars).w,d1		;
-		move.b	d1,(Encore_available_chars).w		;
-		move.b	(P1_character).w,d1			;
-		bclr	d1,(Encore_available_chars).w		;
-		move.b	(P2_character).w,d1			;
-		bclr	d1,(Encore_available_chars).w		;
+LevelSelect_EncoreStart:					; Liliam: Encore mode - player starts
+		cmpi.w	#$A01,d0
+		beq.s	LevelSelect_DenySelection
+		cmpi.w	#$1501,d0
+		bne.s	LevelSelect_CheckCNZ
+		move.b	(Encore_unlocked_chars).w,d1
+		move.b	d1,(Encore_available_chars).w
+		move.b	(P1_character).w,d1
+		bclr	d1,(Encore_available_chars).w
+		move.b	(P2_character).w,d1
+		bclr	d1,(Encore_available_chars).w
 
-LevelSelect_CheckCNZSOZ:
-		cmpi.w	#$300,d0				; Liliam: Encore mode - player starts
-		beq.s	LevelSelect_AlternateStart		;
-		cmpi.w	#$800,d0				;
+LevelSelect_CheckCNZ:
+		cmpi.w	#$300,d0
+		beq.w	LevelSelect_StartZone
+		clr.b	(Alternate_start_flag).w
 	if No2PZones
-		bne.s	loc_7DAC				;
+		bra.s	LevelSelect_Check2PZones
 	else
-		bne.s	loc_7DB4				;
+		bra.s	LevelSelect_CheckEnding
 	endif
-
-LevelSelect_AlternateStart:
-		move.b	#1,(Alternate_start_flag).w		;
-		bra.s	LevelSelect_StartZone			;
 ; ---------------------------------------------------------------------------
 
 LevelSelect_CheckSonicTails:
-;		cmpi.w	#3,(Player_mode).w			; Liliam: Metal Sonic - final boss
-		cmpi.w	#7,(Player_mode).w			;
-		bhs.s	loc_7DAC
+		cmpi.w	#7,(Player_mode).w			; Liliam: Metal Sonic - final boss
+		beq.s	LevelSelect_CheckCNZ			;
+;		cmpi.w	#3,(Player_mode).w			;
+;		bhs.s	loc_7DAC				;
 		cmpi.w	#$A01,d0			; Is SSZ act 2 selected?
 		beq.s	LevelSelect_DenySelection	; If so, branch and deny entry
+		clr.b	(Alternate_start_flag).w		;
 
-loc_7DAC:
+LevelSelect_Check2PZones:
 		cmpi.w	#$E00,d0				; Liliam: Encore mode - add extra levels
-		blo.s	loc_7DB4				;
+		blo.s	LevelSelect_CheckEnding			;
 		cmpi.w	#$1300,d0				;
 		blo.s	LevelSelect_DenySelection		;
-;		cmpi.w	#2,(Player_mode).w			;
-;		bne.s	loc_7DBA				;
 
-loc_7DB4:
+LevelSelect_CheckEnding:
+		cmpi.w	#$D01,d0				; Liliam: ending - allow start from save screen
+		bne.s	loc_7DAC				;
+		move.b	(Game_mode).w,(Demo_mode_flag).w	;
+
+loc_7DAC:
+;		cmpi.w	#2,(Player_mode).w				; Liliam: prevent other characters from playing DDZ
+;		bne.s	loc_7DBA					;
 		cmpi.w	#$C00,d0
-;		beq.s	LevelSelect_DenySelection			; Liliam: prevent other characters from playing DDZ
 		bne.s	loc_7DBA					;
-		clr.b	(Alternate_start_flag).w			;
+;		beq.s	LevelSelect_DenySelection			;
 		clr.w	(Player_mode).w					;
 
 loc_7DBA:
 		; Liliam: removed S&K alone mode
-		clr.b	(Demo_mode_flag).w			; Liliam: ending - allow start from save screen
-		cmpi.w	#$D01,d0				;
-		bne.s	LevelSelect_CheckSpecialStage		;
-		move.b	(Game_mode).w,(Demo_mode_flag).w	;
-
+		cmpi.w	#$800,d0							; Liliam: Encore mode - FBZ level order
+		bne.s	LevelSelect_CheckSpecialStage					;
+		move.b	(Encore_mode).w,(Alternate_start_flag).w			;
 
 LevelSelect_CheckSpecialStage:
 		cmpi.w	#$4000,d0				; Liliam: level select - access all special stages from act 1
@@ -17900,12 +17899,11 @@ loc_D540:
 		beq.w	loc_D44A
 		move.w	SRAM_collected_special_rings(a1),(Collected_special_ring_array+2).w
 		move.b	SRAM_current_zone(a1),d0
-		clr.b	(Demo_mode_flag).w			; Liliam: ending - allow start from save screen
 		tst.b	saveslot_clear_type(a0)
 		beq.s	loc_D57A
 		move.w	saveslot_selected_zone(a0),d0
 		cmp.b	saveslot_saved_zone(a0),d0
-;		bhs.w	loc_D44A				;
+;		bhs.w	loc_D44A				; Liliam: ending - allow start from save screen
 		bne.s	loc_D576				;
 		move.w	#$D01,d0				;
 		move.b	(Game_mode).w,(Demo_mode_flag).w	;
@@ -135767,6 +135765,7 @@ plane_height =	28
 
 UnlockScreen:							; Liliam: extra skills
 		move.b	(Demo_mode_flag).w,(Game_mode).w
+		clr.w	(Demo_mode_flag).w
 		tst.b	(Encore_mode).w
 		bne.s	.encoreMode
 		move.w	(Player_mode).w,d0
@@ -181461,14 +181460,14 @@ MechaSonic_WaitFly:						; Liliam: Metal Sonic - final boss
 		beq.s	locret_7B3B2
 		addq.b	#2,routine(a0)
 
-MechaSonic_FlyDown:						; Liliam: Metal Sonic - final boss
+MechaSonic_FlyDown:
 		moveq	#signextendB(sfx_FlamethrowerLoud),d0
 		jsr	(Play_SFX_Continuous).l
 		jsr	(MoveSprite2).l
 		cmpi.w	#$4A0,y_pos(a0)
 		bne.s	locret_7B3B2
 		bset	#4,$38(a0)
-		moveq	#signextendB(sfx_MechaLand),d0
+		moveq	#signextendB(sfx_MissileShoot),d0
 		jsr	(Play_SFX).l
 
 loc_7B3B6:
@@ -184448,8 +184447,10 @@ sub_7D35A:
 		beq.s	loc_7D376				;
 		tst.b	(Alternate_start_flag).w		;
 		bne.s	loc_7D376				;
-		move.w	#$A88,(Normal_palette+$A).w		;
 		move.b	#1,(Update_HUD_timer).w			;
+		cmpi.w	#7,(Player_mode).w			;
+		bne.s	loc_7D376				;
+		move.w	#$A88,(Normal_palette+$0A).w		;
 
 loc_7D376:
 		move.w	#$7F,$2E(a0)
@@ -223215,6 +223216,7 @@ Knux_Start_Locations:
 		binclude "Levels/SSZ/Start Location/Knuckles/2.bin"
 		binclude "Levels/DEZ/Start Location/Knuckles/1.bin"
 		binclude "Levels/DEZ/Start Location/Knuckles/2.bin"
+		; Liliam: Encore mode - player starts
 		binclude "Levels/DDZ/Start Location/Knuckles/1.bin"
 		binclude "Levels/DDZ/Start Location/Knuckles/2.bin"
 		binclude "Levels/AIZ/Start Location/Knuckles/Intro.bin"
@@ -223242,6 +223244,7 @@ Knux_Start_Locations:
 		binclude "Levels/Pachinko/Start Location/Knuckles/2.bin"
 		binclude "Levels/Slots/Start Location/Knuckles/1.bin"
 		binclude "Levels/Slots/Start Location/Knuckles/2.bin"
+		; Liliam: Encore mode - player starts
 		binclude "Levels/LRZ/Start Location/Knuckles/Boss.bin"
 		; Liliam: Encore mode - player starts
 		binclude "Levels/HPZ/Start Location/Knuckles/1.bin"
