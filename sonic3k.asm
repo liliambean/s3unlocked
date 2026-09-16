@@ -135983,13 +135983,7 @@ OptionsScreen:							; Liliam: options menu
 		jsr	(Wait_VSync).l
 
 		clearRAM	Options_buffer,plane_width*plane_height*2
-		bsr.w	OptionsScreen_BuildPlaneMap
-		bsr.w	OptionsScreen_MarkFields
-		lea	(Options_buffer).l,a1
-		move.l	#vdpComm(VRAM_Plane_A_Name_Table,VRAM,WRITE),d0
-		moveq	#plane_width>>1-1,d1
-		moveq	#plane_height-1,d2
-		jsr	(Plane_Map_To_VRAM_2).l
+		bsr.w	OptionsScreen_WritePlaneToVRAM
 
 		lea	(Object_RAM).w,a0
 		move.l	#Draw_Sprite,(a0)
@@ -136073,6 +136067,7 @@ OptionsScreen_MainLoop:
 		tst.w	mainspr_childsprites(a0)
 		beq.w	OptionsScreen_Help
 		move	#$2700,sr
+		bsr.w	OptionsScreen_CheckCheats
 		bsr.w	OptionsScreen_Controls
 		move	#$2300,sr
 		btst	#button_B,(Ctrl_1_pressed).w
@@ -136251,11 +136246,12 @@ OptionsScreen_CheckLR:						; Liliam: options menu
 		bne.s	.notEraseMenu
 		andi.w	#button_confirm_mask,d1
 		beq.s	OptionsScreen_Return
+		moveq	#0,d0
 		move.w	#$20,$2E(a0)
 		move.l	$24(a0),d5
 		add.w	d5,d5
-		move.w	EraseDataScreen_Index(pc,d5.w),d0
-		jsr	EraseDataScreen_Index(pc,d0.w)
+		move.w	EraseDataScreen_Index(pc,d5.w),d5
+		jsr	EraseDataScreen_Index(pc,d5.w)
 		moveq	#signextendB(sfx_AllSpheres),d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
@@ -136328,36 +136324,87 @@ EraseDataScreen_EraseCompetition:				; Liliam: options menu
 		jmp	(Write_SaveCompetition).l
 ; ---------------------------------------------------------------------------
 
+EraseDataScreen_EraseBlueSphere:				; Liliam: options menu
+		move.l	d0,(Blue_spheres_saved_level).w
+		move.b	d0,(Blue_spheres_menu_flag).w
+		bra.s	OptionsScreen_SaveData
+; ---------------------------------------------------------------------------
+
+EraseDataScreen_EraseUnlockFlags:				; Liliam: options menu
+		move.w	d0,(Skill_options).w
+		move.w	d0,(Dataselect_nosave_player).w
+		move.w	d0,(Player_option).w
+		move.w	d0,(P1_character).w
+		bra.s	OptionsScreen_SaveData
+; ---------------------------------------------------------------------------
+
 EraseDataScreen_ErasePhotoPieces:				; Liliam: options menu
 		lea	(Collected_photo_piece_array).w,a0
-	if DevMode
-		moveq	#-1,d0
-	else
-		moveq	#0,d0
-	endif
 		move.l	d0,(a0)+
 		move.l	d0,(a0)+
 		move.l	d0,(a0)+
 		move.w	d0,(a0)+
 		move.b	d0,(a0)+
-		bra.s	OptionsScreen_SaveData
-; ---------------------------------------------------------------------------
-
-EraseDataScreen_EraseBlueSphere:				; Liliam: options menu
-		clr.l	(Blue_spheres_saved_level).w
-		clr.b	(Blue_spheres_menu_flag).w
-		bra.s	OptionsScreen_SaveData
-; ---------------------------------------------------------------------------
-
-EraseDataScreen_EraseUnlockFlags:				; Liliam: options menu
-		clr.w	(Skill_options).w
-		clr.w	(Dataselect_nosave_player).w
-		clr.w	(Player_option).w
-		clr.w	(P1_character).w
 
 OptionsScreen_SaveData:
 		st	(SRAM_mask_interrupts_flag).w
 		jmp	(Write_SaveExtra).l
+; ---------------------------------------------------------------------------
+
+OptionsScreen_CheckCheats:					; Liliam: options menu
+		btst	#Skill_Cheated,(Skill_options).w
+		bne.w	OptionsScreen_Return
+		move.w	(Cheat_input_counter).w,d0
+		lea	OptionsScreenCodeDat(pc,d0.w),a1
+		move.b	(Ctrl_1_pressed).w,d1
+		beq.w	OptionsScreen_Return
+		btst	#button_A,d1
+		bne.s	.reset
+		move.b	(Ctrl_1_held).w,d1
+		cmp.b	(a1)+,d1
+		beq.s	.increment
+		cmpi.b	#button_up_mask,d1
+		bne.s	.reset
+		cmpi.b	#3,d0
+		beq.w	OptionsScreen_Return
+		blo.s	.increment
+		clr.w	(Cheat_input_counter).w
+
+	.increment:
+		addq.w	#1,(Cheat_input_counter).w
+		tst.b	(a1)
+		bne.w	OptionsScreen_Return
+		moveq	#-1,d0
+		move.w	d0,(Skill_options).w
+	if NoHolograms
+		bclr	#Unlock_MetalSonic,(Unlock_flags).w
+	else
+		nop
+		nop
+		nop
+	endif
+		bsr.s	EraseDataScreen_ErasePhotoPieces
+		bsr.s	OptionsScreen_WritePlaneToVRAM
+		clr.w	(Ctrl_1).w
+		moveq	#signextendB(sfx_Perfect),d0
+		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
+	.reset:
+		clr.w	(Cheat_input_counter).w
+		rts
+; ---------------------------------------------------------------------------
+OptionsScreenCodeDat:						; Liliam: options menu
+		dc.b button_up_mask
+		dc.b button_up_mask
+		dc.b button_up_mask
+		dc.b button_down_mask
+		dc.b button_down_mask
+		dc.b button_down_mask
+		dc.b button_left_mask
+		dc.b button_right_mask
+		dc.b button_left_mask
+		dc.b button_right_mask, 0, 0
 ; ---------------------------------------------------------------------------
 
 OptionsScreen_MarkFields:					; Liliam: options menu
@@ -136388,6 +136435,17 @@ OptionsScreen_UnmarkFields:
 		addq.w	#2,a0
 		dbf	d2,.loop
 		rts
+; ---------------------------------------------------------------------------
+
+OptionsScreen_WritePlaneToVRAM:					; Liliam: options menu
+		bsr.s	OptionsScreen_BuildPlaneMap
+		bsr.s	OptionsScreen_MarkFields
+		clr.w	(Cheat_input_counter).w
+		lea	(Options_buffer).l,a1
+		move.l	#vdpComm(VRAM_Plane_A_Name_Table,VRAM,WRITE),d0
+		moveq	#plane_width>>1-1,d1
+		moveq	#plane_height-1,d2
+		jmp	(Plane_Map_To_VRAM_2).l
 ; ---------------------------------------------------------------------------
 OptionsScreen_TextPtrs:						; Liliam: options menu
 		dc.l OptionText_EncoreMode

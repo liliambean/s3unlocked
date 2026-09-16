@@ -226,6 +226,7 @@ EncoreFlags_Initial     = (1<<EncoreFlags_Palette)|(1<<EncoreFlags_Music)
 ; ---------------------------------------------------------------------------
 ; Liliam: extra skills
 Unlock_MetalSonic       = 0
+Skill_Cheated           = 0
 Skill_SonicDropDash     = 1
 Skill_TailsRingBarrier  = 2
 Skill_KnuxClimbDash     = 3
