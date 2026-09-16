@@ -183474,9 +183474,11 @@ PLC_KnuxFinalBossCrane_End
 ; ---------------------------------------------------------------------------
 
 loc_7CA3A:
-		lea	(Player_1).w,a1
-		btst	#Status_InAir,status(a1)
-		beq.w	locret_7B448
+		tst.b	(Player_1+object_control).w						; Liliam: title cards - fix sprite pop-in
+		bne.w	locret_7B448								;
+;		lea	(Player_1).w,a1								;
+;		btst	#Status_InAir,status(a1)						;
+;		beq.w	locret_7B448								;
 		move.l	#loc_7CAAA,(a0)
 		lea	(ObjDat3_664EE).l,a1
 		jsr	SetUp_ObjAttributes(pc)
