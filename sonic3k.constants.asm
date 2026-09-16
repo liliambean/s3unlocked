@@ -834,32 +834,41 @@ Cutscene_Knux_addr =		*
 Continue_object_addr =		*
 Boss_object_addr		ds.w 1
 Signpost_addr			ds.w 1			; address of the currently active signpost object. Hidden monitors use this for bouncing
-_unkFAA8			ds.b 1
+Level_results_started		ds.b 1
+AIZ2_Knux_bridge_collapse =	*
+MHZ1_Knux_door_closed =		*
+MHZ2_boss_event_flag =		*
+LBZ_cup_elevator_lock =		*
+Continue_screen_exit =		*
 _unkFAA9			ds.b 1
-End_of_level_flag		ds.b 1			; set if end of level is current active, for example after beating a boss
-_unkFAAB			ds.b 1
-_unkFAAC			ds.b 1
-SOZ_ghost_count			ds.b 1
-_unkFAAE			ds.w 1
+Level_results_done		ds.b 1			; set if end of level is current active, for example after beating a boss
+LBZ1_Robotnik_carrying_flag	ds.b 1
+MGZ2_Tails_rescue_flag =	*
+HPZ_floor_collapse_flag		ds.b 1
+SOZ2_ghost_count		ds.b 1
+DDZ_scroll_speed =		*
+Boss_object_addr2 =		*
+Credits_text_page		ds.w 1
 _unkFAB0			ds.w 1
 _unkFAB2			ds.w 1
 _unkFAB4			ds.w 1
 _unkFAB6			ds.w 1
-_unkFAB8			ds.b 1
-_unkFAB9			ds.b 1
-_unkFABA			ds.w 1
-_unkFABC			ds.b 1
-_unkFABD			ds.b 1
+MHZ1_Knux_routine =		*
+Cutscene_flags			ds.b 1
+Ending_clouds_timer		ds.b 1
+HPZ_emerald_addr		ds.w 1
+DDZ_saved_debug			ds.b 1
+HPZ_emerald_child_dy		ds.b 1
 _unkFABE			ds.b 1			; unused?
 Palette_rotation_disable	ds.b 1			; if set, palette rotation scripts are disabled
-_unkFAC0			ds.b 1
-_unkFAC1			ds.b 1
-_unkFAC2			ds.w 1
-_unkFAC4			ds.w 1
+Emerald_collected_subtype	ds.b 1
+Emerald_animation_flag		ds.b 1
+Ending_clouds_x_vel		ds.w 1
+Ending_clouds_y_vel		ds.w 1
 			ds.w 1				; unused
 Ending_scroll_speed		ds.w 1
 			ds.w 1				; unused
-_unkFACC			ds.b 1
+Ending_scroll_done		ds.b 1
 			ds.b 1				; unused
 Pal_fade_delay2			ds.w 1			; timer for palette fade from white routine
 			ds.b $A				; unused

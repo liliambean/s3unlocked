@@ -1880,7 +1880,7 @@ Map_HPZKnucklesCutsceneDebris:
 ; ---------------------------------------------------------------------------
 
 Obj_HPZEncoreCutscene:
-		tst.b	(End_of_level_flag).w
+		tst.b	(Level_results_done).w
 		beq.w	HPZEncoreCutscene_Return
 		move.l	#Obj_HPZEncoreCutscene_WaitForPlayer,(a0)
 		jsr	(Restore_PlayerControl).l
@@ -1977,7 +1977,7 @@ Obj_HPZEncoreCutscene_SetEmeraldPriority:
 
 	.done:
 		dbf	d0,.loop
-		movea.w	(_unkFABA).w,a1
+		movea.w	(HPZ_emerald_addr).w,a1
 		move.w	d1,priority(a1)
 		rts
 ; ---------------------------------------------------------------------------
@@ -2022,7 +2022,7 @@ Obj_HPZEncoreCutscene_ResetEmeraldPriority:
 
 	.done:
 		dbf	d0,.loop
-		movea.w	(_unkFABA).w,a1
+		movea.w	(HPZ_emerald_addr).w,a1
 		move.w	#$180,priority(a1)
 		rts
 ; ---------------------------------------------------------------------------
@@ -2192,7 +2192,7 @@ Obj_HPZEncoreRobotnik_WaitToGrab:
 		moveq	#signextendB(sfx_BigRumble),d0
 		jsr	(Play_SFX).l
 		move.l	a0,-(sp)
-		movea.w	(_unkFABA).w,a0
+		movea.w	(HPZ_emerald_addr).w,a0
 		subi.w	#$18,y_pos(a0)
 		lea	(ChildObjDat_6661E).l,a2
 		jsr	(CreateChild6_Simple).l
@@ -2213,7 +2213,7 @@ Obj_HPZEncoreRobotnik_WaitToFly:
 Obj_HPZEncoreRobotnik_FlyAway:
 		moveq	#-$20,d1
 		jsr	(MoveSprite_CustomGravity).l
-		movea.w	(_unkFABA).w,a1
+		movea.w	(HPZ_emerald_addr).w,a1
 		add.l	d0,y_pos(a1)
 		move.w	(Camera_Y_pos).w,d0
 		subi.w	#$50,d0

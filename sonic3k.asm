@@ -30375,7 +30375,7 @@ loc_14164:
 		move.w	#(0<<8)|0,(Ctrl_2_logical).w
 		tst.b	(Flying_carrying_Sonic_flag).w
 		beq.w	loc_142E2
-		clr.b	(_unkFAAC).w
+		clr.b	(MGZ2_Tails_rescue_flag).w
 		btst	#button_down,(Ctrl_1_held).w
 		beq.s	loc_14198
 		addq.b	#1,(Tails_CPU_auto_fly_timer).w
@@ -30487,7 +30487,7 @@ locret_142E0:
 ; ---------------------------------------------------------------------------
 
 loc_142E2:
-		tst.b	(_unkFAAC).w
+		tst.b	(MGZ2_Tails_rescue_flag).w
 		bne.s	loc_14362
 		lea	(Player_1).w,a1
 		tst.b	render_flags(a1)
@@ -30514,7 +30514,7 @@ loc_1432E:
 ; ---------------------------------------------------------------------------
 
 loc_14330:
-		st	(_unkFAAC).w
+		st	(MGZ2_Tails_rescue_flag).w
 		move.w	y_pos(a1),d1
 		sub.w	y_pos(a0),d1
 		bpl.s	loc_14340
@@ -45568,7 +45568,7 @@ CNZ2_Resize1:
 CNZ2_Resize2:
 		cmpi.w	#$440,(Player_1+x_pos).w					;
 		blo.s	CNZ1_Resize							;
-		clr.b	(End_of_level_flag).w						;
+		clr.b	(Level_results_done).w						;
 		addq.b	#2,(Dynamic_resize_routine).w					;
 
 CNZ2_Resize3:
@@ -60250,7 +60250,7 @@ loc_26F46:
 ;		bhs.s	loc_26FD4				;
 		andi.b	#button_ABC_mask,d0
 		beq.w	loc_26FF4		; If jump hasn't been pressed, branch
-		tst.b	(_unkFAA9).w
+		tst.b	(LBZ_cup_elevator_lock).w
 		bne.w	loc_26FF4		; If controller is disabled, branch
 		move.w	#$100,priority(a1)	; Reset character priority
 		clr.b	object_control(a1)	; Sonic is under player control once more
@@ -61201,7 +61201,7 @@ locret_2787E:
 AnimateTiles_HCZ1:
 		tst.b	(Events_bg+$16).w
 		beq.s	loc_27888
-		tst.b	(_unkFAA8).w				; Liliam: QOL - animate HCZ1 background candles
+		tst.b	(Level_results_started).w		; Liliam: QOL - animate HCZ1 background candles
 		bne.s	locret_2787E				;
 		lea	(Anim_Counters).w,a3			;
 		move.w	(a2)+,d6				;
@@ -61607,7 +61607,7 @@ locret_27C34:
 ; ---------------------------------------------------------------------------
 
 AnimateTiles_CNZ:
-		tst.b	(End_of_level_flag).w						; Liliam: Encore mode - FBZ level order
+		tst.b	(Level_results_done).w						; Liliam: Encore mode - FBZ level order
 		bne.s	locret_27C34							;
 		lea	(Anim_Counters).w,a3
 		moveq	#0,d1
@@ -62274,7 +62274,7 @@ locret_282B2:
 ; ---------------------------------------------------------------------------
 
 AnimateTiles_LRZ3:
-		tst.b	(End_of_level_flag).w			; Liliam: HPZ - add transition from LRZ3
+		tst.b	(Level_results_done).w			; Liliam: HPZ - add transition from LRZ3
 		bne.s	locret_282B2				;
 		move.w	#tiles_to_bytes($170),d4
 		move.w	#tiles_to_bytes($194),d6
@@ -66897,7 +66897,7 @@ loc_2B2E2:
 ; ---------------------------------------------------------------------------
 
 loc_2B2E8:
-		tst.b	(_unkFAA9).w
+		tst.b	(AIZ2_Knux_bridge_collapse).w
 		beq.s	loc_2B304
 		move.l	#loc_2B452,(a0)
 		move.b	#$E,$34(a0)
@@ -68922,7 +68922,7 @@ Obj_HPZStarPost:						; Liliam: HPZ - add Knuckles LRZ2 results
 		cmpi.w	#3,(Player_mode).w
 		bne.s	Obj_StarPost
 		move.l	#Delete_Current_Sprite,(a0)
-		tst.w	(_unkFABA).w
+		tst.w	(HPZ_emerald_addr).w
 		beq.s	.lrz2cutscene
 		lea	(ArtKosM_HPZTeleporter).l,a1
 		move.w	#$A5C0,d2
@@ -69775,7 +69775,7 @@ loc_2D88A:
 ;loc_2D8A2:
 		tst.w	$3E(a0)
 		beq.s	loc_2D8AE
-		st	(End_of_level_flag).w	; If in-level, set end of title card flag. No need to reload PLCs
+		st	(Level_results_done).w	; If in-level, set end of title card flag. No need to reload PLCs
 		bra.s	loc_2D8CA
 ; ---------------------------------------------------------------------------
 
@@ -70288,7 +70288,7 @@ Obj_LevelResultsWait2:
 ; ---------------------------------------------------------------------------
 
 loc_2DCD6:
-		tst.w	$30(a0)			; Wait for title screen objects to disappear
+		tst.w	$30(a0)				; Wait for title screen objects to disappear
 		beq.s	loc_2DCE2
 		addq.w	#1,$32(a0)
 		rts
@@ -70309,8 +70309,8 @@ loc_2DCF2:
 		beq.s	loc_2DD06
 
 loc_2DCF8:
-		clr.b	(_unkFAA8).w		; Act 2 (or Sky Sanctuary or LRZ boss)
-		st	(End_of_level_flag).w
+		clr.b	(Level_results_started).w	; Act 2 (or Sky Sanctuary or LRZ boss)
+		st	(Level_results_done).w
 		addq.b	#2,routine(a0)				; Liliam: cutscene skip - results
 
 Obj_LevelResultsWait3:
@@ -70323,10 +70323,10 @@ LevelResults2_LRZ3:
 		move.b	d0,(Apparent_zone).w			; Liliam: HPZ - add transition from LRZ3
 
 loc_2DD06:
-		move.b	#1,(Apparent_act).w	; Change to act 2 if in act 1
+		move.b	#1,(Apparent_act).w		; Change to act 2 if in act 1
 		clr.b	(Last_star_post_hit).w
 		clr.b	(Special_bonus_entry_flag).w
-		clr.b	(_unkFAA8).w
+		clr.b	(Level_results_started).w
 		clr.b	(Alternate_start_flag).w		; Liliam: Encore mode - player starts
 		move.b	(Current_zone).w,d0			;
 		beq.s	LevelResults2_AIZ1			;
@@ -70372,7 +70372,7 @@ LevelResults_AlternateStart:
 		move.b	#1,(Alternate_start_flag).w		; Liliam: Encore mode - player starts
 
 loc_2DD28:
-		move.l	#Obj_TitleCard,(a0)	; Change current object to title card
+		move.l	#Obj_TitleCard,(a0)		; Change current object to title card
 		clr.b	routine(a0)
 		st	$3E(a0)
 		rts
@@ -70394,7 +70394,7 @@ Obj_LevResultsCharName:
 		move.w	#$28,d0
 
 loc_2DD8E:
-		move.w	d0,art_tile(a0)		; Offset VRAM depending on act number
+		move.w	d0,art_tile(a0)			; Offset VRAM depending on act number
 		move.l	#Obj_LevResultsGeneral,(a0)
 
 Obj_LevResultsGeneral:
@@ -70865,8 +70865,8 @@ loc_2E1CE:
 		bne.s	loc_2E226
 		move.b	(Current_special_stage_2).w,d0
 		ori.b	#$80,d0
-		move.b	d0,(_unkFAC0).w
-		st	(_unkFAC1).w
+		move.b	d0,(Emerald_collected_subtype).w
+		st	(Emerald_animation_flag).w
 
 loc_2E226:
 		jsr	(Init_SpriteTable).l
@@ -71450,7 +71450,7 @@ Obj_SSResultsEncore:							; Liliam: Encore mode - special stage
 		move.w	-$3A(a0),d0
 		cmp.w	-4(a0),d0
 		bne.s	locret_2E7D8
-		clr.b	(_unkFAC1).w
+		clr.b	(Emerald_animation_flag).w
 		moveq	#signextendB(sfx_SuperEmerald),d0
 		jsr	(Play_SFX).l
 		jmp	(Delete_Current_Sprite).l
@@ -71651,7 +71651,7 @@ loc_2E9D8:
 		move.w	-$3A(a0),d0
 		cmp.w	-4(a0),d0
 		bne.s	locret_2E9F4
-		clr.b	(_unkFAC1).w
+		clr.b	(Emerald_animation_flag).w
 		moveq	#signextendB(sfx_Perfect),d0
 		jsr	(Play_SFX).l
 
@@ -72155,7 +72155,7 @@ loc_2ED6A:
 loc_2EDAE:
 		movea.w	$34(a0),a1
 		st	$31(a1)
-		clr.b	(_unkFAC0).w
+		clr.b	(Emerald_collected_subtype).w
 		bra.s	loc_2EDCA
 ; ---------------------------------------------------------------------------
 
@@ -99683,7 +99683,7 @@ loc_45596:
 		move.w	#make_art_tile(ArtTile_HPZTeleporter,0,0),art_tile(a0)	; If in HPZ, use this VRAM offset
 		cmpi.w	#3,(Player_mode).w
 		bne.s	loc_455B2
-		tst.w	(_unkFABA).w						; Liliam: HPZ - add Knuckles cutscene
+		tst.w	(HPZ_emerald_addr).w					; Liliam: HPZ - add Knuckles cutscene
 		beq.s	loc_455B2						;
 		move.b	#$4A,subtype(a0)
 		bra.s	loc_455B2
@@ -100290,7 +100290,7 @@ loc_45B6C:
 ; ---------------------------------------------------------------------------
 
 loc_45B7E:
-		bset	#7,(_unkFAB8).w
+		bset	#7,(Cutscene_flags).w
 
 loc_45B84:
 		jmp	(Draw_Sprite).l
@@ -100304,7 +100304,7 @@ loc_45B8A:
 loc_45B94:
 		cmpi.w	#3,(Player_mode).w
 		bne.s	loc_45BC8
-		tst.w	(_unkFABA).w						; Liliam: HPZ - add Knuckles cutscene
+		tst.w	(HPZ_emerald_addr).w					; Liliam: HPZ - add Knuckles cutscene
 		beq.s	loc_45BD4						;
 		cmpi.w	#$240,(Camera_Y_pos).w
 		bhs.s	locret_45BF2
@@ -100377,7 +100377,7 @@ loc_45C42:
 		bne.s	loc_45C60
 		subq.b	#1,$2D(a0)
 		bne.s	loc_45C72
-		bset	#6,(_unkFAB8).w
+		bset	#6,(Cutscene_flags).w
 		move.w	#(2<<8)|60,subtype(a0)
 		bra.s	loc_45C72
 ; ---------------------------------------------------------------------------
@@ -103993,7 +103993,7 @@ loc_48C62:
 		bne.w	locret_48D2A
 		btst	#Status_InAir,status(a1)
 		bne.w	locret_48D2A
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		bne.w	locret_48D2A
 		movea.w	interact(a1),a3
 		cmpi.l	#Obj_DEZTeleporter,(a3)
@@ -111653,7 +111653,7 @@ LevelSetup:
 		clr.l	(Plane_buffer_2_addr).w
 		clr.l	(Glide_screen_shake).w
 		clr.w	(HPZ_special_stage_completed).w
-		clr.w	(_unkFAC0).w
+		clr.w	(Emerald_collected_subtype).w
 ;		clr.w	(HPZ_current_special_stage).w		; Liliam: bugfix - select next special stage
 		clr.w	(Palette_fade_timer).w
 		clr.l	(Events_bg+$00).w
@@ -118937,11 +118937,11 @@ loc_521AA:
 loc_521BE:
 ;		move.w	#$4750,(Camera_min_X_pos).w		; Liliam: camera - fix CNZ2 Knuckles end lock
 ;		move.w	#$48E0,(Camera_max_X_pos).w		;
-		clr.b	(End_of_level_flag).w
+		clr.b	(Level_results_done).w
 		addq.w	#4,(Events_routine_fg).w
 
 loc_521D2:
-		tst.b	(End_of_level_flag).w
+		tst.b	(Level_results_done).w
 		beq.s	CNZ2SE_Normal
 		jsr	(AllocateObject).l
 		bne.s	CNZ2SE_Normal
@@ -124186,7 +124186,7 @@ MHZ2_ScreenEvent_Index:
 ; ---------------------------------------------------------------------------
 
 loc_54DB0:
-		tst.b	(End_of_level_flag).w
+		tst.b	(Level_results_done).w
 		beq.s	loc_54DBA
 		addq.w	#4,(Events_routine_fg).w
 
@@ -125061,10 +125061,10 @@ loc_5564A:
 
 loc_55686:
 		move.b	(a1,d1.w),(Events_bg+$07).w
-		tst.b	(_unkFAA9).w
+		tst.b	(MHZ2_boss_event_flag).w
 		beq.s	loc_5569A
 		st	(Events_bg+$0A).w
-		clr.b	(_unkFAA9).w
+		clr.b	(MHZ2_boss_event_flag).w
 
 loc_5569A:
 		move.w	d0,(Camera_max_X_pos).w
@@ -125242,11 +125242,11 @@ loc_55888:
 		add.w	(_unkEEA2).w,d0
 		addq.w	#5,d0
 		move.w	d0,(_unkEE9C).w
-		tst.b	(_unkFAA9).w
+		tst.b	(MHZ2_boss_event_flag).w
 		bne.s	loc_558AC
 		cmpi.w	#-$3E6,(_unkEE98).w
 		bgt.s	loc_558AC
-		st	(_unkFAA9).w
+		st	(MHZ2_boss_event_flag).w
 		st	(Events_fg_4).w
 		st	(Scroll_lock).w
 
@@ -127658,7 +127658,7 @@ SSZ1_ScreenEvent_Index:
 ; ---------------------------------------------------------------------------
 
 loc_572BA:
-		tst.b	(End_of_level_flag).w
+		tst.b	(Level_results_done).w
 		bne.s	loc_572CE
 		jsr	sub_575EA(pc)
 		jsr	sub_5758A(pc)
@@ -128727,7 +128727,7 @@ loc_57E64:
 		move.w	d0,y_pos(a1)
 		tst.l	$2E(a0)
 		bmi.s	locret_57E94
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -129658,7 +129658,7 @@ loc_58B9E:
 
 loc_58BBC:
 		jsr	sub_592EE(pc)
-		tst.w	(_unkFAAE).w
+		tst.w	(Boss_object_addr2).w
 		beq.w	locret_58C7E
 		; Liliam: removed S&K alone mode
 		cmpi.w	#$1660,(Camera_Y_pos).w		; Liliam: removed S&K alone mode
@@ -129667,7 +129667,7 @@ loc_58BBC:
 		bne.w	locret_58C7E
 		tst.w	(Events_routine_bg).w
 		bne.w	locret_58C7E
-		clr.b	(_unkFAB9).w
+		clr.b	(Ending_clouds_timer).w
 		move.w	(Camera_Y_pos_BG_copy).w,d0
 		addi.w	#$100,d0
 		move.w	d0,(Camera_Y_pos_BG_copy).w
@@ -131767,7 +131767,7 @@ sub_59DDE:
 		beq.s	loc_59DF2				;
 		tst.b	(Update_HUD_timer).w			;
 		beq.s	loc_59DF2				;
-;		tst.b	(End_of_level_flag).w			;
+;		tst.b	(Level_results_done).w			;
 ;		bne.s	loc_59DF2				;
 ;		tst.b	(_unkFACD).w				;
 ;		bne.s	loc_59DF2				;
@@ -132075,7 +132075,7 @@ loc_5A0AC:
 		beq.s	loc_5A0D6				;
 		tst.b	(Update_HUD_timer).w			;
 		beq.s	loc_5A0D6				;
-;		tst.b	(End_of_level_flag).w			;
+;		tst.b	(Level_results_done).w			;
 ;		bne.s	loc_5A0D6				;
 		btst	#Status_FireShield,status_secondary(a1)
 		bne.s	loc_5A0D6
@@ -132095,7 +132095,7 @@ loc_5A0DE:
 		beq.s	loc_5A0FC				;
 		tst.b	(Update_HUD_timer).w			;
 		beq.s	loc_5A0FC				;
-;		tst.b	(End_of_level_flag).w			;
+;		tst.b	(Level_results_done).w			;
 ;		bne.s	loc_5A0FC				;
 ;		tst.b	(_unkFACD).w				;
 ;		bne.s	loc_5A0FC				;
@@ -133725,10 +133725,10 @@ off_5B19A:
 
 loc_5B1A2:
 		addq.w	#2,(_unkFA86).w
-		clr.b	(_unkFACC).w
+		clr.b	(Ending_scroll_done).w
 		clr.l	(Camera_Y_pos).w
 		clr.l	(V_scroll_value).w
-		clr.w	(_unkFAAE).w
+		clr.w	(Credits_text_page).w
 		cmpi.w	#3,(Player_mode).w
 		bne.s	loc_5B1D2
 		tst.w	(Ending_running_flag).w			; Liliam: cutscene skip - ending part Knuckles
@@ -133782,9 +133782,9 @@ loc_5B204:
 		andi.w	#$F00,d1
 		bsr.w	sub_5B2D6
 		; Liliam: removed S&K alone mode
-		move.w	(_unkFAAE).w,d2			; Liliam: removed S&K alone mode
+		move.w	(Credits_text_page).w,d2	; Liliam: removed S&K alone mode
 ;		moveq	#0,d2				;
-;		add.w	(_unkFAAE).w,d2			;
+;		add.w	(Credits_text_page).w,d2	;
 		movea.l	off_5B284(pc,d2.w),a1
 		move.w	(_unkFA84).w,d2
 		move.w	(a1,d2.w),d2
@@ -133820,7 +133820,7 @@ off_5B284:
 ; ---------------------------------------------------------------------------
 
 loc_5B294:
-		addq.w	#4,(_unkFAAE).w
+		addq.w	#4,(Credits_text_page).w
 		clr.w	(_unkFA84).w
 		rts
 ; ---------------------------------------------------------------------------
@@ -133837,7 +133837,7 @@ loc_5B2A2:
 		addq.w	#2,(_unkFA86).w				;
 		clr.l	(Timer).w
 		st	(Events_fg_4).w
-		st	(_unkFACC).w
+		st	(Ending_scroll_done).w
 		cmpi.w	#3,(Player_mode).w
 		beq.s	loc_5B2B8
 		rts
@@ -133855,7 +133855,7 @@ locret_5B2CC:
 ; ---------------------------------------------------------------------------
 
 loc_5B2CE:
-		clr.b	(_unkFAB9).w
+		clr.b	(Ending_clouds_timer).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -134730,7 +134730,7 @@ ContinueScreen:
 		lea	(ArtNem_ContinueIcons).l,a0
 		jsr	(Nem_Decomp).l
 		clr.b	(Level_started_flag).w
-		clr.b	(_unkFAA9).w
+		clr.b	(Continue_screen_exit).w
 		clr.b	(Ending_completion_level).w
 	if FixBugs
 		; The game leaves this flag set after a Game Over, which causes
@@ -134820,7 +134820,7 @@ loc_5C454:
 		jsr	(Process_Sprites).l
 		jsr	(Render_Sprites).l
 		jsr	(Process_Kos_Module_Queue).l
-		move.b	(_unkFAA9).w,d0
+		move.b	(Continue_screen_exit).w,d0
 		beq.s	loc_5C454
 		subq.b	#1,d0
 		beq.s	loc_5C48A
@@ -134900,7 +134900,7 @@ locret_5C512:
 ; ---------------------------------------------------------------------------
 
 loc_5C514:
-		move.b	#2,(_unkFAA9).w
+		move.b	#2,(Continue_screen_exit).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -135120,7 +135120,7 @@ loc_5C6F4:
 
 loc_5C70A:
 		move.b	#8,routine(a0)
-		move.b	#1,(_unkFAA9).w
+		move.b	#1,(Continue_screen_exit).w
 
 locret_5C716:
 		rts
@@ -135206,7 +135206,7 @@ loc_5C814:
 		addq.w	#6,x_pos(a0)
 		cmpi.w	#$1E0,x_pos(a0)
 		blo.s	loc_5C826
-		move.b	#1,(_unkFAA9).w
+		move.b	#1,(Continue_screen_exit).w
 
 loc_5C826:
 		jmp	(Animate_Tails).l
@@ -135335,7 +135335,7 @@ loc_5C95C:
 		move.b	#6,routine(a0)
 		cmpi.w	#3,(Player_mode).w
 		bne.s	locret_5C970
-		move.b	#1,(_unkFAA9).w
+		move.b	#1,(Continue_screen_exit).w
 
 locret_5C970:
 		rts
@@ -138201,7 +138201,7 @@ loc_5D8BC:
 		bsr.w	Ending_SetCompletionLevel
 		jsr	(Make_CutsceneSkipObj).l		; Liliam: cutscene skip - ending part 1
 		st	(Scroll_lock).w
-		clr.b	(_unkFAB8).w
+		clr.b	(Cutscene_flags).w
 		lea	(Player_1).w,a1
 		bclr	#2,render_flags(a1)
 		bset	#7,art_tile(a1)
@@ -138298,7 +138298,7 @@ loc_5D9EE:
 		bne.s	loc_5DA12
 		bset	#7,$38(a0)
 		bne.s	loc_5DA12
-		move.b	#1,(_unkFAC1).w
+		move.b	#1,(Emerald_animation_flag).w
 		jsr	(AllocateObject).l
 		bne.s	loc_5DA12
 		move.l	#loc_5DF58,(a1)
@@ -138315,9 +138315,9 @@ loc_5DA12:
 		move.l	#loc_5F94C,(a1)
 
 loc_5DA3C:
-		move.b	#$1F,(_unkFAB9).w
-		move.w	#-$100,(_unkFAC2).w
-		move.w	#-$100,(_unkFAC4).w
+		move.b	#$1F,(Ending_clouds_timer).w
+		move.w	#-$100,(Ending_clouds_x_vel).w
+		move.w	#-$100,(Ending_clouds_y_vel).w
 
 locret_5DA4E:
 		rts
@@ -138350,7 +138350,7 @@ loc_5DA74:
 
 loc_5DA96:
 		move.b	#8,routine(a0)
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		move.w	#$20,$2E(a0)
 		moveq	#-$20,d0
 		move.b	d0,$42(a1)
@@ -138403,7 +138403,7 @@ loc_5DB1C:
 loc_5DB2C:
 		subq.w	#1,$2E(a0)
 		bne.s	loc_5DB38
-		bset	#1,(_unkFAB8).w
+		bset	#1,(Cutscene_flags).w
 
 loc_5DB38:
 		addq.w	#2,x_pos(a0)
@@ -138433,8 +138433,8 @@ loc_5DB76:
 		subq.w	#1,$2E(a0)
 		bpl.s	loc_5DBB2
 		move.b	#$E,routine(a0)
-		move.w	#-$100,(_unkFAC4).w
-		clr.b	(_unkFAB9).w
+		move.w	#-$100,(Ending_clouds_y_vel).w
+		clr.b	(Ending_clouds_timer).w
 		move.w	#$BF,$2E(a0)
 		st	(Events_fg_5).w
 		lea	word_5DBB6(pc),a2
@@ -138675,8 +138675,8 @@ loc_5DE36:
 loc_5DE46:
 		moveq	#signextendB(cmd_FadeOut),d0
 		jsr	(Play_Music).l
-		clr.b	(_unkFAC1).w
-		clr.b	(_unkFAB8).w
+		clr.b	(Emerald_animation_flag).w
+		clr.b	(Cutscene_flags).w
 		st	(Events_fg_4).w
 
 loc_5DE5A:
@@ -138756,7 +138756,7 @@ loc_5DEC6:
 ; ---------------------------------------------------------------------------
 
 loc_5DED4:
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		bne.s	loc_5DEDE
 		rts
 ; ---------------------------------------------------------------------------
@@ -138815,7 +138815,7 @@ loc_5DF58:
 		tst.b	(Ending_completion_level).w
 		beq.s	locret_5DF7E
 		bmi.s	locret_5DF7E
-		move.b	(_unkFAC1).w,d0
+		move.b	(Emerald_animation_flag).w,d0
 		beq.s	locret_5DF7E
 		lea	(off_7DD5A).l,a1
 		lea	(Normal_palette_line_3+$1C).w,a2
@@ -138839,7 +138839,7 @@ loc_5DF80:
 ; ---------------------------------------------------------------------------
 
 loc_5DF98:
-		btst	#1,(_unkFAB8).w
+		btst	#1,(Cutscene_flags).w
 		beq.s	loc_5DFA6
 		move.l	#loc_5DFB2,(a0)
 
@@ -138893,7 +138893,7 @@ loc_5E038:
 		jsr	(CreateChild6_Simple).l
 		lea	ChildObjDat_601D0(pc),a2
 		jsr	(CreateChild1_Normal).l
-		bclr	#0,(_unkFAB8).w
+		bclr	#0,(Cutscene_flags).w
 		jsr	(AllocateObject).l
 		bne.s	loc_5E07A
 		move.l	#Obj_EndingMasterEmerald,(a1)
@@ -138913,7 +138913,7 @@ loc_5E08A:
 		bne.s	loc_5E0AC
 		bset	#7,$38(a0)
 		bne.s	loc_5E0AC
-		st	(_unkFAC1).w
+		st	(Emerald_animation_flag).w
 		jsr	(AllocateObject).l
 		bne.s	loc_5E0AC
 		move.l	#loc_5DF58,(a1)
@@ -138986,7 +138986,7 @@ loc_5E170:
 		bpl.w	locret_5FF1A
 		move.b	#6,routine(a0)
 		st	(Events_fg_4).w
-		clr.b	(_unkFAC1).w
+		clr.b	(Emerald_animation_flag).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -139091,7 +139091,7 @@ loc_5E288:
 		bclr	#2,(Tails_tails+render_flags).w
 		jsr	(Swing_UpAndDown).l
 		jsr	(MoveSprite2).l
-		tst.b	(_unkFACC).w
+		tst.b	(Ending_scroll_done).w
 		beq.w	locret_5FF1A
 		move.b	#4,routine(a0)
 		move.w	#$1F,$2E(a0)
@@ -139376,14 +139376,14 @@ loc_5E4E2:
 		move.b	#$7F,(Palette_timer).w
 
 Ending_WaitForLogo:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		bne.s	loc_5E4FE
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
 Ending_MetalSonic_WaitForLogo:						; Liliam: Metal Sonic - no super forms allowed
 		bsr.s	Ending_MetalSonic_Animate
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		beq.s	loc_5E4DC
 
 loc_5E4FE:
@@ -139428,7 +139428,7 @@ word_5E554:
 ; ---------------------------------------------------------------------------
 
 loc_5E568:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		bne.w	loc_5EC36
 		lea	AniRaw_602A1(pc),a1
 		jsr	(Animate_RawNoSST).l
@@ -139442,7 +139442,7 @@ loc_5E58E:
 ; ---------------------------------------------------------------------------
 
 loc_5E594:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		bne.w	loc_5EC36
 		jsr	(Swing_UpAndDown).l
 		jsr	(MoveSprite2).l
@@ -139461,7 +139461,7 @@ loc_5E5D4:
 ; ---------------------------------------------------------------------------
 
 loc_5E5DA:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		bne.w	loc_5EC36
 		jsr	(Swing_UpAndDown).l
 		jsr	(MoveSprite2).l
@@ -139492,7 +139492,7 @@ loc_5E612:
 ; ---------------------------------------------------------------------------
 
 loc_5E64A:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		bne.w	loc_5EC36
 		subq.w	#1,$2E(a0)
 		bpl.s	locret_5E684
@@ -139510,7 +139510,7 @@ locret_5E684:
 ; ---------------------------------------------------------------------------
 
 loc_5E686:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		bne.w	loc_5EC36
 		jsr	(MoveSprite).l
 		clr.b	mapping_frame(a0)
@@ -139564,7 +139564,7 @@ loc_5E70E:
 		move.b	#$83,$2E(a1)
 		clr.b	mapping_frame(a1)
 		st	(Scroll_lock).w
-		clr.b	(_unkFAB8).w
+		clr.b	(Cutscene_flags).w
 		clr.b	(Level_started_flag).w
 		clr.w	(Screen_shake_flag).w
 		clr.l	(Timer).w
@@ -139783,12 +139783,12 @@ loc_5EA1A:
 		move.l	#loc_5F94C,(a1)
 
 loc_5EA30:
-		move.b	#$3F,(_unkFAB9).w
-		clr.w	(_unkFAC2).w
-		move.w	#-$80,(_unkFAC4).w
+		move.b	#$3F,(Ending_clouds_timer).w
+		clr.w	(Ending_clouds_x_vel).w
+		move.w	#-$80,(Ending_clouds_y_vel).w
 		tst.b	(Ending_completion_level).w
 		bmi.s	loc_5EA4C
-		move.w	#$80,(_unkFAC4).w
+		move.w	#$80,(Ending_clouds_y_vel).w
 
 loc_5EA4C:
 		jmp	(Delete_Current_Sprite).l
@@ -139875,7 +139875,7 @@ locret_5EB14:
 ; ---------------------------------------------------------------------------
 
 loc_5EB16:
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		bne.s	loc_5EB26
 		addq.w	#2,x_pos(a0)
 		bra.w	sub_60000
@@ -140262,7 +140262,7 @@ loc_5EF28:
 		bsr.w	sub_5FE48
 
 loc_5EF3E:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		bne.s	loc_5EF56
 		btst	#6,$38(a0)
 		bne.w	locret_5FF1A
@@ -140282,7 +140282,7 @@ Obj_Ending_CutsceneSkip:					; Liliam: cutscene skip - ending part 5
 		movea.w	$44(a0),a1
 		btst	#7,status(a1)
 		beq.s	.checkScroll
-		bset	#3,(_unkFAB8).w
+		bset	#3,(Cutscene_flags).w
 		move.w	#8,(_unkFA86).w
 		stopZ80
 		dmaFillVRAM 0,VRAM_Plane_A_Name_Table,$1000
@@ -140500,7 +140500,7 @@ loc_5F144:
 		bmi.s	loc_5F15A
 		cmpi.w	#$40,$2E(a0)
 		bne.s	locret_5F158
-		bset	#2,(_unkFAB8).w
+		bset	#2,(Cutscene_flags).w
 
 locret_5F158:
 		rts
@@ -140526,7 +140526,7 @@ loc_5F18A:
 		btst	#7,status(a1)
 		beq.w	locret_5FF1A
 		move.l	#locret_5F1AA,(a0)
-		bset	#3,(_unkFAB8).w
+		bset	#3,(Cutscene_flags).w
 		movea.l	$34(a0),a1
 		jmp	(a1)
 ; ---------------------------------------------------------------------------
@@ -140538,7 +140538,7 @@ locret_5F1AA:
 ; ---------------------------------------------------------------------------
 
 loc_5F1F6:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		bne.s	loc_5F204
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -140591,7 +140591,7 @@ loc_5F26C:
 ;		beq.s	loc_5F294				;
 		move.l	#loc_5F2EA,(a0)
 		move.w	#$4AF,$2E(a0)
-		bclr	#2,(_unkFAB8).w
+		bclr	#2,(Cutscene_flags).w
 
 ;loc_5F294:
 		lea	word_5F2E2(pc),a1
@@ -140629,7 +140629,7 @@ word_5F2E2:
 loc_5F2EA:
 		cmpi.w	#$40,$2E(a0)
 		bne.s	loc_5F2F8
-		bset	#2,(_unkFAB8).w
+		bset	#2,(Cutscene_flags).w
 
 loc_5F2F8:
 		btst	#button_start,(Ctrl_1_held).w
@@ -140684,7 +140684,7 @@ byte_5F36E:
 loc_5F376:
 		lea	AniRaw_6025C(pc),a1
 		jsr	(Animate_RawNoSST).l
-		btst	#2,(_unkFAB8).w
+		btst	#2,(Cutscene_flags).w
 		beq.s	loc_5F398
 		move.l	#loc_5F39E,(a0)
 		lea	AniRaw_60260(pc),a1
@@ -140807,7 +140807,7 @@ locret_5F4E2:
 ; ---------------------------------------------------------------------------
 
 loc_5F4E4:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		bne.w	loc_5F204
 		jsr	(Animate_Raw).l
 		jmp	(Draw_Sprite).l
@@ -141217,10 +141217,10 @@ loc_5F970:
 ; ---------------------------------------------------------------------------
 
 loc_5F986:
-		tst.b	(_unkFAB9).w
+		tst.b	(Ending_clouds_timer).w
 		beq.w	loc_5EC36
 		move.b	(V_int_run_count+3).w,d0
-		and.b	(_unkFAB9).w,d0
+		and.b	(Ending_clouds_timer).w,d0
 		bne.w	locret_5FA56
 		addq.b	#1,$39(a0)
 		jsr	(AllocateObject).l
@@ -141228,7 +141228,7 @@ loc_5F986:
 		jsr	(Random_Number).l
 		move.l	#loc_5FA58,(a1)
 		move.b	d0,subtype(a1)
-		move.w	(_unkFAC2).w,d2
+		move.w	(Ending_clouds_x_vel).w,d2
 		beq.s	loc_5F9D0
 		move.w	d0,d1
 		andi.w	#$3F,d1
@@ -141241,7 +141241,7 @@ loc_5F9CA:
 		move.w	d1,x_vel(a1)
 
 loc_5F9D0:
-		move.w	(_unkFAC4).w,d3
+		move.w	(Ending_clouds_y_vel).w,d3
 		beq.s	loc_5F9EA
 		move.l	d0,d1
 		swap	d1
@@ -141325,7 +141325,7 @@ loc_5FA7A:
 		move.b	#$10,height_pixels(a0)
 
 loc_5FA8C:
-		move.w	(_unkFAC2).w,d0
+		move.w	(Ending_clouds_x_vel).w,d0
 		beq.s	loc_5FAA0
 		move.w	x_vel(a0),d1
 		add.w	d0,d1
@@ -141334,7 +141334,7 @@ loc_5FA8C:
 		add.l	d1,x_pos(a0)
 
 loc_5FAA0:
-		move.w	(_unkFAC4).w,d2
+		move.w	(Ending_clouds_y_vel).w,d2
 		beq.s	loc_5FAB4
 		move.w	y_vel(a0),d3
 		add.w	d2,d3
@@ -141544,7 +141544,7 @@ Obj_PalCycle_SuperTailsEndPose:
 		jsr	(sub_7C67C).l				;
 
 loc_5FCEC:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		bne.w	loc_5EC36
 		jmp	(Run_PalRotationScript).l
 ; ---------------------------------------------------------------------------
@@ -144545,7 +144545,7 @@ loc_62778:
 ; ---------------------------------------------------------------------------
 
 loc_6278A:
-		clr.b	(_unkFAA9).w
+		clr.b	(LBZ_cup_elevator_lock).w
 		clr.b	(Player_1+object_control).w
 		clr.b	(Player_2+object_control).w
 		ori.b	#$80,(Update_HUD_timer).w		; Liliam: cutscene skip - LBZ1 pre-boss
@@ -144586,7 +144586,7 @@ locret_627FE:
 
 
 sub_62800:
-		st	(_unkFAA9).w
+		st	(LBZ_cup_elevator_lock).w
 		movea.w	d0,a1
 		cmpi.b	#State_NoControl,routine(a1)
 		bhs.s	locret_627FE
@@ -145000,7 +145000,7 @@ Obj_MHZ1CutsceneKnuckles:
 		; Liliam: removed S&K alone mode
 		lea	(Player_1).w,a1
 		moveq	#0,d0
-		move.b	(_unkFAB8).w,d0
+		move.b	(MHZ1_Knux_routine).w,d0
 		move.w	MHZ1CutsceneKnuckles_Index(pc,d0.w),d0
 		jmp	MHZ1CutsceneKnuckles_Index(pc,d0.w)
 ; ---------------------------------------------------------------------------
@@ -145015,7 +145015,7 @@ MHZ1CutsceneKnuckles_Index:
 ; ---------------------------------------------------------------------------
 
 loc_62CDE:
-		move.b	#2,(_unkFAB8).w
+		move.b	#2,(MHZ1_Knux_routine).w
 		tst.l	(Player_2).w
 		beq.s	loc_62CF8
 		jsr	(AllocateObject).l
@@ -145031,7 +145031,7 @@ loc_62CF8:
 
 loc_62D04:
 		move.w	d0,x_pos(a1)
-		move.b	#4,(_unkFAB8).w
+		move.b	#4,(MHZ1_Knux_routine).w
 		bclr	#0,render_flags(a1)
 		bclr	#0,status(a1)
 		st	(Ctrl_1_locked).w
@@ -145048,7 +145048,7 @@ loc_62D2C:
 ; ---------------------------------------------------------------------------
 
 loc_62D36:
-		move.b	#6,(_unkFAB8).w
+		move.b	#6,(MHZ1_Knux_routine).w
 		move.w	#$20,$2E(a0)
 
 loc_62D42:
@@ -145058,7 +145058,7 @@ loc_62D42:
 ; ---------------------------------------------------------------------------
 
 loc_62D4A:
-		move.b	#8,(_unkFAB8).w
+		move.b	#8,(MHZ1_Knux_routine).w
 		st	(Scroll_lock).w
 		move.w	#(button_down_mask<<8)|button_down_mask,(Ctrl_1_logical).w
 
@@ -145070,14 +145070,14 @@ loc_62D5A:
 ; ---------------------------------------------------------------------------
 
 loc_62D68:
-		move.b	#$A,(_unkFAB8).w
+		move.b	#$A,(MHZ1_Knux_routine).w
 
 locret_62D6E:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_62D70:
-		clr.b	(_unkFAB8).w
+		clr.b	(MHZ1_Knux_routine).w
 		clr.b	(Ctrl_1_locked).w
 		clr.b	(Ctrl_2_locked).w
 		clr.b	(Scroll_lock).w
@@ -145099,7 +145099,7 @@ MHZ1_Save_StarPost:
 
 loc_62DAC:
 		lea	(Player_2).w,a1
-		cmpi.b	#4,(_unkFAB8).w
+		cmpi.b	#4,(MHZ1_Knux_routine).w
 		bhs.s	loc_62DC4
 		move.w	#$371,d0
 		cmp.w	x_pos(a1),d0
@@ -145116,9 +145116,9 @@ loc_62DC4:
 
 loc_62DDC:
 		lea	(Player_2).w,a1
-		move.b	(_unkFAB8).w,d0
+		move.b	(MHZ1_Knux_routine).w,d0
 		beq.s	loc_62E1A
-		cmpi.b	#4,(_unkFAB8).w
+		cmpi.b	#4,(MHZ1_Knux_routine).w
 		blo.s	loc_62E04
 		move.w	#$371,d0
 		cmp.w	x_pos(a1),d0
@@ -145162,7 +145162,7 @@ loc_62E56:
 ; ---------------------------------------------------------------------------
 
 loc_62E5C:
-		cmpi.b	#$A,(_unkFAB8).w
+		cmpi.b	#$A,(MHZ1_Knux_routine).w
 		bhs.s	loc_62E6A
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -145188,7 +145188,7 @@ loc_62E92:
 		move.w	#1,$2E(a0)
 		move.b	#1,mapping_frame(a0)
 		bset	#1,$38(a0)
-		st	(_unkFAA9).w
+		st	(MHZ1_Knux_door_closed).w
 		moveq	#signextendB(sfx_Switch),d0
 		jsr	(Play_SFX).l
 
@@ -145210,7 +145210,7 @@ loc_62EF6:
 ; ---------------------------------------------------------------------------
 
 loc_62EFC:
-		move.b	#$C,(_unkFAB8).w
+		move.b	#$C,(MHZ1_Knux_routine).w
 		move.l	#loc_62F0A,(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -145227,7 +145227,7 @@ loc_62F0A:
 		btst	#2,$38(a0)
 		bne.s	loc_62F46
 		bset	#1,$38(a0)
-		not.b	(_unkFAA9).w
+		not.b	(MHZ1_Knux_door_closed).w
 		moveq	#signextendB(sfx_Switch),d0
 		jsr	(Play_SFX).l
 
@@ -145300,7 +145300,7 @@ loc_6300C:
 		move.l	#loc_6303C,(a0)
 		move.w	#$390,x_pos(a0)
 		move.w	#$620,y_pos(a0)
-		tst.b	(_unkFAA9).w
+		tst.b	(MHZ1_Knux_door_closed).w
 		beq.s	loc_6303C
 		addi.w	#$40,y_pos(a0)
 
@@ -145311,7 +145311,7 @@ loc_6303C:
 		jsr	(sub_65E4C).l
 		lea	(Player_1).w,a1
 		jsr	(Find_OtherObject).l
-		tst.b	(_unkFAA9).w
+		tst.b	(MHZ1_Knux_door_closed).w
 		beq.s	loc_6306E
 		tst.w	d0
 		bne.s	loc_6306E
@@ -145325,14 +145325,14 @@ loc_6306E:
 ; ---------------------------------------------------------------------------
 
 loc_63074:
-		clr.b	(_unkFAA9).w
+		clr.b	(MHZ1_Knux_door_closed).w
 
 loc_63078:
 		move.l	#loc_630A6,(a0)
 		movea.w	parent3(a0),a1
 		bset	#2,$38(a1)
 		move.w	#$100,d0
-		tst.b	(_unkFAA9).w
+		tst.b	(MHZ1_Knux_door_closed).w
 		bne.s	loc_63094
 		neg.w	d0
 
@@ -145424,7 +145424,7 @@ loc_63182:
 		st	(Ctrl_2_locked).w
 		clr.w	(Ctrl_1_logical).w
 		clr.w	(Ctrl_2_logical).w
-		clr.b	(End_of_level_flag).w			; Liliam: cutscene skip - MHZ2 intro
+		clr.b	(Level_results_done).w			; Liliam: cutscene skip - MHZ2 intro
 		jmp	(Make_CutsceneSkipObj).l		;
 ;		rts						;
 ; ---------------------------------------------------------------------------
@@ -145759,7 +145759,7 @@ loc_6351E:
 ; ---------------------------------------------------------------------------
 
 loc_63526:
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		bne.s	loc_6354C
 		subq.w	#1,$2E(a0)
 		bne.s	loc_63542
@@ -145780,7 +145780,7 @@ loc_6354C:
 ; ---------------------------------------------------------------------------
 
 loc_63562:
-		btst	#1,(_unkFAB8).w
+		btst	#1,(Cutscene_flags).w
 		bne.s	loc_63570
 		jmp	(Animate_RawMultiDelay).l
 ; ---------------------------------------------------------------------------
@@ -145794,7 +145794,7 @@ loc_63570:
 		move.w	#-$100,y_vel(a0)
 
 loc_6358E:
-		btst	#2,(_unkFAB8).w
+		btst	#2,(Cutscene_flags).w
 		bne.s	loc_635A2
 		addi.w	#8,y_vel(a0)
 		jmp	(MoveSprite2).l
@@ -145973,7 +145973,7 @@ loc_637EC:
 		tst.w	d1
 		bpl.s	loc_63840
 		add.w	d1,y_pos(a0)
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		moveq	#signextendB(sfx_FloorThump),d0
 		jsr	(Play_SFX).l
 		move.w	y_vel(a0),d0
@@ -145996,7 +145996,7 @@ loc_63846:
 		bpl.s	loc_6389C
 		move.l	#loc_638A2,(a0)
 		bset	#7,status(a0)
-		bset	#1,(_unkFAB8).w
+		bset	#1,(Cutscene_flags).w
 		moveq	#signextendB(sfx_MissileExplode),d0
 		jsr	(Play_SFX).l
 		lea	(Normal_palette).w,a1
@@ -146023,7 +146023,7 @@ loc_638A2:
 		movea.w	$44(a0),a1
 		btst	#5,$38(a1)
 		beq.w	locret_6206C
-		bset	#2,(_unkFAB8).w
+		bset	#2,(Cutscene_flags).w
 		jsr	(AllocateObject).l
 		bne.s	loc_638C4
 		move.l	#loc_639C8,(a1)
@@ -146209,7 +146209,7 @@ loc_63A96:
 ; ---------------------------------------------------------------------------
 
 loc_63ACA:
-		btst	#1,(_unkFAB8).w
+		btst	#1,(Cutscene_flags).w
 		beq.w	locret_6206C
 		move.b	#4,routine(a0)
 		move.l	#loc_62932,$34(a0)			; Liliam: ported from 0408 - use S3 Knuckles anim
@@ -146228,7 +146228,7 @@ loc_63AE8:
 
 ;loc_63AF2:
 ;		move.b	#6,routine(a0)				;
-		bset	#2,(_unkFAB8).w
+		bset	#2,(Cutscene_flags).w
 ;		move.l	#loc_63B1A,$34(a0)			;
 ;		lea	AniRaw_668A7(pc),a1			;
 ;		jmp	(Set_Raw_Animation).l			;
@@ -146308,7 +146308,7 @@ loc_63BBE:
 		btst	#Status_InAir,status(a1)
 		bne.w	locret_6206C
 		move.l	#loc_63BF4,(a0)
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		move.w	#0,(Camera_min_X_pos).w
 		st	(Scroll_lock).w
 ;		clr.b	(Ctrl_1_locked).w			; Liliam: bugfix - lock player 2 controls consistently
@@ -146324,7 +146324,7 @@ loc_63BF4:
 		cmpi.w	#$90,d0
 		bhi.w	locret_6206C
 		move.l	#loc_63C14,(a0)
-		bset	#1,(_unkFAB8).w
+		bset	#1,(Cutscene_flags).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -146354,7 +146354,7 @@ loc_63C3E:
 ; ---------------------------------------------------------------------------
 
 loc_63C66:
-		btst	#2,(_unkFAB8).w
+		btst	#2,(Cutscene_flags).w
 		beq.s	loc_63C7A
 		move.l	#loc_63C80,(a0)
 		move.w	#-$200,x_vel(a0)
@@ -146498,7 +146498,7 @@ Obj_HPZEggCapsuleEmpty:						; Liliam: HPZ - add Knuckles LRZ2 results
 	.lrz2results:
 		move.l	#Obj_EggCapsule,(a0)
 		jsr	(Obj_EggCapsule).l
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		jsr	(AllocateObject).l
 		bne.s	.return
 		move.l	#Obj_HPZKnucklesIntro_FromLRZ2,(a1)
@@ -146512,7 +146512,7 @@ Obj_HPZEggCapsuleEmpty:						; Liliam: HPZ - add Knuckles LRZ2 results
 ; ---------------------------------------------------------------------------
 
 loc_63DD4:
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -146617,7 +146617,7 @@ loc_63E7C:
 		jsr	(Animate_Raw2MultiDelay).l
 		tst.w	d2
 		bpl.s	loc_63EA0
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		beq.s	loc_63EA0
 		move.b	$39(a0),d0
 		addq.b	#1,d0
@@ -147069,7 +147069,7 @@ Obj_HPZKnucklesIntro:								; Liliam: HPZ - add Knuckles cutscene
 ; ---------------------------------------------------------------------------
 
 Obj_HPZKnucklesIntro_FromLRZ2:							; Liliam: HPZ - add Knuckles cutscene
-		tst.b	(End_of_level_flag).w
+		tst.b	(Level_results_done).w
 		bne.s	HPZKnucklesIntro_ReleasePlayer
 		rts
 ; ---------------------------------------------------------------------------
@@ -147149,7 +147149,7 @@ loc_64450:
 
 loc_64460:
 		jsr	(Animate_RawCheckResult).l
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		bne.w	loc_6453C
 
 locret_64470:
@@ -147185,7 +147185,7 @@ loc_64472:
 		move.w	#$3AC,y_pos(a0)
 
 sub_644A8:
-		clr.b	(_unkFAB8).w
+		clr.b	(Cutscene_flags).w
 		clr.w	(Screen_shake_flag).w
 		jsr	(AllocateObject).l
 		bne.s	loc_644BE
@@ -147352,7 +147352,7 @@ loc_64670:
 loc_64692:
 		jsr	(Animate_RawCheckResult).l
 		jsr	(MoveSprite).l
-		movea.w	(_unkFAAE).w,a1
+		movea.w	(Boss_object_addr2).w,a1
 		lea	word_646B0(pc),a2
 		jsr	(Check_InTheirRange).l
 		bne.s	loc_6471A
@@ -147364,7 +147364,7 @@ word_646B0:
 
 loc_646B8:
 		move.b	#$32,routine(a0)
-		bset	#1,(_unkFAB8).w
+		bset	#1,(Cutscene_flags).w
 		move.w	#0,$44(a0)
 		move.l	#Map_Knuckles,mappings(a0)
 		move.b	#$B2,mapping_frame(a0)			; Liliam: simplify player anim selection
@@ -147417,7 +147417,7 @@ loc_64758:
 loc_64770:
 		move.w	d0,x_vel(a0)
 		jsr	(MoveSprite2).l
-		movea.w	(_unkFABA).w,a1
+		movea.w	(HPZ_emerald_addr).w,a1
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		cmpi.w	#$30,d0
@@ -147441,7 +147441,7 @@ loc_6478E:
 loc_647C6:
 		jsr	(Animate_RawCheckResult).l
 		jsr	(MoveSprite).l
-		movea.w	(_unkFABA).w,a1
+		movea.w	(HPZ_emerald_addr).w,a1
 		lea	word_647E4(pc),a2
 		jsr	(Check_InTheirRange).l
 		bne.s	loc_6482A
@@ -147461,11 +147461,11 @@ loc_647EC:
 ; ---------------------------------------------------------------------------
 
 loc_6480A:
-		btst	#4,(_unkFAB8).w
+		btst	#4,(Cutscene_flags).w
 		bne.s	loc_6486E
 
 loc_64812:
-		movea.w	(_unkFABA).w,a1
+		movea.w	(HPZ_emerald_addr).w,a1
 		move.w	x_pos(a1),d0
 		subi.w	#$C,d0
 		move.w	d0,x_pos(a0)
@@ -147536,7 +147536,7 @@ loc_648B2:
 loc_648B8:
 		add.w	d1,y_pos(a0)
 		move.b	#$40,routine(a0)
-		bset	#5,(_unkFAB8).w
+		bset	#5,(Cutscene_flags).w
 		clr.w	x_vel(a0)
 		clr.w	y_vel(a0)
 		move.l	#loc_648EA,$34(a0)
@@ -147545,7 +147545,7 @@ loc_648B8:
 ; ---------------------------------------------------------------------------
 
 loc_648E2:
-		tst.b	(_unkFAAC).w
+		tst.b	(HPZ_floor_collapse_flag).w
 		bne.s	loc_648FA
 		rts
 ; ---------------------------------------------------------------------------
@@ -147729,7 +147729,7 @@ loc_64AE2:
 
 loc_64B10:
 		jsr	(Animate_RawMultiDelay).l
-		btst	#6,(_unkFAB8).w
+		btst	#6,(Cutscene_flags).w
 		bne.w	loc_64B80
 		rts
 ; ---------------------------------------------------------------------------
@@ -147775,7 +147775,7 @@ loc_64B80:
 ; ---------------------------------------------------------------------------
 
 loc_64BB8:
-		btst	#7,(_unkFAB8).w
+		btst	#7,(Cutscene_flags).w
 		bne.s	loc_64C00
 		jmp	(Animate_RawMultiDelay).l
 ; ---------------------------------------------------------------------------
@@ -147889,7 +147889,7 @@ loc_64D1A:
 		cmpi.w	#$1580,d0
 		blo.s	locret_64D36
 		move.l	#loc_64D38,(a0)
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		cmpi.w	#3,(Player_mode).w					; Liliam: HPZ - add Knuckles cutscene
 		beq.s	Obj_HPZKnucklesCutscene					;
 
@@ -147950,7 +147950,7 @@ HPZKnucklesCutscene_Delete:
 ; ---------------------------------------------------------------------------
 
 loc_64D38:
-		btst	#1,(_unkFAB8).w
+		btst	#1,(Cutscene_flags).w
 		beq.s	locret_64D5A
 		move.l	#loc_64D5C,(a0)
 		lea	(Player_1).w,a1
@@ -147992,7 +147992,7 @@ locret_64DA8:
 ; ---------------------------------------------------------------------------
 
 loc_64DAA:
-		btst	#5,(_unkFAB8).w
+		btst	#5,(Cutscene_flags).w
 		beq.s	locret_64DCA
 		move.l	#loc_64DCC,(a0)
 		st	(Ctrl_1_locked).w
@@ -148034,7 +148034,7 @@ loc_64E00:
 		bhi.w	locret_6206C
 		move.l	#loc_64E28,(a0)
 		move.w	#$3F,$2E(a0)
-		st	(_unkFAAC).w
+		st	(HPZ_floor_collapse_flag).w
 		clr.w	(Ctrl_1_logical).w
 		jsr	(Stop_Object).l
 		jmp	(Player_Load_PLC).l
@@ -148090,7 +148090,7 @@ loc_64E88:
 		lea	ObjDat3_664EE(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		move.b	#$E,mapping_frame(a0)						; Liliam: move Egg Mobile boss flash out of palette line 1
-		move.w	a0,(_unkFAAE).w
+		move.w	a0,(Boss_object_addr2).w
 		move.l	#loc_64EC4,(a0)
 		bset	#0,render_flags(a0)
 		move.w	#$1640,x_pos(a0)
@@ -148158,12 +148158,12 @@ loc_64F66:
 ; ---------------------------------------------------------------------------
 
 loc_64F70:
-		move.b	(_unkFAB8).w,d0
+		move.b	(Cutscene_flags).w,d0
 		andi.b	#$C,d0
 		cmpi.b	#$C,d0
 		bne.s	loc_64F8A
 		move.l	#loc_64FA0,(a0)
-		bset	#4,(_unkFAB8).w
+		bset	#4,(Cutscene_flags).w
 
 loc_64F8A:
 		jsr	(Swing_UpAndDown).l
@@ -148175,7 +148175,7 @@ loc_64F8A:
 loc_64FA0:
 		jsr	(Swing_UpAndDown).l
 		jsr	(MoveSprite2).l
-		btst	#5,(_unkFAB8).w
+		btst	#5,(Cutscene_flags).w
 		beq.s	loc_64FD2
 		move.l	#loc_64FDC,(a0)
 		move.w	#$190,x_vel(a0)
@@ -148201,9 +148201,9 @@ loc_64FDC:
 
 loc_65000:
 		ori.b	#$30,$38(a0)
-		movea.w	(_unkFABA).w,a1
+		movea.w	(HPZ_emerald_addr).w,a1
 		jsr	(Delete_Referenced_Sprite).l
-		clr.w	(_unkFABA).w
+		clr.w	(HPZ_emerald_addr).w
 		clr.b	(Palette_cycle_counters+$00).w		; Liliam: bugfix - stop using timer for emerald palette
 ;		clr.w	(Palette_cycle_counter1).w		;
 		lea	(ArtKosM_HPZTeleporter).l,a1
@@ -148222,7 +148222,7 @@ loc_6502E:
 ; ---------------------------------------------------------------------------
 
 loc_65048:
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		bne.s	loc_6505C
 		jsr	(Refresh_ChildPositionAdjusted).l
 		jmp	(Child_Draw_Sprite).l
@@ -148233,7 +148233,7 @@ loc_6505C:
 		move.b	child_dy(a0),$3A(a0)
 
 loc_65068:
-		move.w	(_unkFABA).w,d0
+		move.w	(HPZ_emerald_addr).w,d0
 		beq.s	loc_6509A
 		movea.w	d0,a1
 		move.w	y_pos(a1),d0
@@ -148275,7 +148275,7 @@ loc_650D4:
 		moveq	#0,d2
 		movea.w	parent3(a0),a1
 		bset	#2,$38(a1)
-		movea.w	(_unkFABA).w,a2
+		movea.w	(HPZ_emerald_addr).w,a2
 		bset	#7,art_tile(a2)
 
 loc_650FA:
@@ -148287,12 +148287,12 @@ loc_650FA:
 
 loc_6510C:
 		jsr	(Refresh_ChildPositionAdjusted).l
-		move.w	(_unkFABA).w,d0
+		move.w	(HPZ_emerald_addr).w,d0
 		beq.s	loc_65132
 		movea.w	d0,a1
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),d0
-		move.b	(_unkFABD).w,d1
+		move.b	(HPZ_emerald_child_dy).w,d1
 		ext.w	d1
 		neg.w	d1
 		add.w	d1,d0
@@ -148664,14 +148664,14 @@ loc_654C2:
 		moveq	#3,d0
 
 loc_654DC:
-		bset	d0,(_unkFAB8).w
+		bset	d0,(Cutscene_flags).w
 
 loc_654E0:
 		bra.s	loc_6546E
 ; ---------------------------------------------------------------------------
 
 loc_654E2:
-		btst	#4,(_unkFAB8).w
+		btst	#4,(Cutscene_flags).w
 		beq.s	loc_654F6
 		move.l	#loc_654FA,(a0)
 		move.w	#60-1,$2E(a0)
@@ -148926,7 +148926,7 @@ CutsceneKnux_SSZ_Index:
 loc_65730:
 		lea	ObjSlot_CutsceneKnux(pc),a1
 		jsr	(SetUp_ObjAttributesSlotted).l
-		clr.b	(_unkFAB8).w
+		clr.b	(Cutscene_flags).w
 		move.w	#$80,priority(a0)
 		lea	(Normal_palette_line_2).w,a1
 		lea	(Target_palette_line_2).w,a2
@@ -148942,7 +148942,7 @@ loc_6574E:
 loc_6575E:
 		lea	AniRaw_667C1(pc),a1
 		jsr	(Animate_RawNoSSTCheckResult).l
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		beq.w	locret_6206C
 		move.b	#$16,routine(a0)			; Liliam: cutscene knux - delay decompressing Death Egg art
 ;		move.b	#4,routine(a0)				;
@@ -148992,7 +148992,7 @@ loc_657CE:
 loc_657FE:
 		moveq	#signextendB(sfx_DeathEggRiseQuiet),d0
 		jsr	(Play_SFX_Continuous).l
-		btst	#1,(_unkFAB8).w
+		btst	#1,(Cutscene_flags).w
 		bne.s	loc_65814
 		jmp	(Animate_RawMultiDelay).l
 ; ---------------------------------------------------------------------------
@@ -149193,7 +149193,7 @@ loc_65A4A:
 		cmp.w	y_pos(a0),d0
 		bls.w	locret_6206C
 		bset	#5,$38(a0)
-		bset	#1,(_unkFAB8).w
+		bset	#1,(Cutscene_flags).w
 		lea	(Target_palette_line_4).w,a1
 		lea	(Normal_palette_line_4).w,a2
 		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d6
@@ -149256,7 +149256,7 @@ loc_65B0E:
 
 loc_65B24:
 		st	(Spritemask_flag).w
-		btst	#2,(_unkFAB8).w
+		btst	#2,(Cutscene_flags).w
 		bne.s	loc_65B3C
 		jsr	(MoveSprite_SSZBGAdjust).l
 		jmp	(Draw_Sprite).l
@@ -149335,7 +149335,7 @@ loc_65C04:
 		beq.s	loc_65C3A
 		move.l	#loc_65C50,(a0)
 		move.b	#1,mapping_frame(a0)
-		st	(_unkFAA9).w
+		st	(AIZ2_Knux_bridge_collapse).w
 		clr.w	respawn_addr(a0)
 		moveq	#0,d0
 		move.b	subtype(a0),d0
@@ -149522,7 +149522,7 @@ sub_65E02:
 		move.w	d0,y_vel(a0)
 		swap	d0
 		move.w	#$100,d1
-		btst	#2,(_unkFAB8).w
+		btst	#2,(Cutscene_flags).w
 		bne.s	loc_65E3E
 		bclr	#0,render_flags(a0)
 		move.w	x_pos(a0),d2
@@ -153860,7 +153860,7 @@ loc_694A4:
 		move.l	#loc_694D4,(a0)
 
 loc_694AA:
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		clr.b	(Boss_flag).w
 		lea	(PLC_EggCapsule).l,a1
 		jsr	(Load_PLC_Raw).l
@@ -153871,7 +153871,7 @@ loc_694AA:
 ; ---------------------------------------------------------------------------
 
 loc_694D4:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_69366
 		move.l	#loc_69526,(a0)
 		jsr	(Restore_PlayerControl).l
@@ -155161,7 +155161,7 @@ loc_6A242:
 ; ---------------------------------------------------------------------------
 
 loc_6A24C:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_69F78
 		move.l	#loc_6A270,(a0)
 
@@ -155173,7 +155173,7 @@ loc_6A25A:
 		move.b	#$80,(Player_1+object_control).w
 
 loc_6A270:
-		tst.b	(End_of_level_flag).w
+		tst.b	(Level_results_done).w
 		bne.s	loc_6A278							; Liliam: start from actual act 2 start
 ;		beq.w	locret_69F78							;
 		rts									;
@@ -156628,7 +156628,7 @@ loc_6B0CC:
 loc_6B0E8:
 		move.l	#loc_6B154,(a0)
 		bclr	#7,render_flags(a0)
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		clr.b	(Boss_flag).w
 		move.w	(_unkFAB4).w,d0
 		addi.w	#$180,d0
@@ -156662,7 +156662,7 @@ locret_6B152:
 
 loc_6B154:
 		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_6AF0A
 		clr.w	(Ctrl_1_logical).w
 		clr.w	(Ctrl_2_logical).w
@@ -158344,7 +158344,7 @@ loc_6C2E2:
 ; ---------------------------------------------------------------------------
 
 loc_6C2EE:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_6BF96
 		move.l	#locret_6C318,(a0)
 		bset	#4,$38(a0)
@@ -158816,7 +158816,7 @@ loc_6C890:
 
 loc_6C8B4:
 		move.l	#loc_6C8F4,(a0)
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		clr.b	(Boss_flag).w
 		jsr	(AllocateObject).l
 		bne.s	loc_6C8DC
@@ -158835,10 +158835,10 @@ loc_6C8DC:
 
 loc_6C8F4:
 		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_6BF96
 		move.l	#loc_6C932,(a0)
-		clr.b	(_unkFAA8).w
+		clr.b	(Level_results_started).w
 		jsr	(Restore_PlayerControl).l
 ;		jsr	(Restore_LevelMusic).l			; Liliam: stop resuming music after act 2 results
 ;		clr.w	(Ctrl_1_logical).w			; Liliam: de-automate transition cutscene
@@ -160527,10 +160527,10 @@ loc_6D9A8:
 		move.w	#2*60,$2E(a0)			; Wait for 2 seconds
 		move.l	#Obj_CNZMinibossGo,$34(a0)
 		moveq	#signextendB(cmd_FadeOut),d0
-		jsr	(Play_Music).l				; Fade out music
+		jsr	(Play_Music).l			; Fade out music
 		move.b	#1,(Boss_flag).w		; Lock screen
 		moveq	#PLCID_CNZMiniboss,d0
-		jsr	(Load_PLC).l					; Load CNZ Miniboss PLC
+		jsr	(Load_PLC).l			; Load CNZ Miniboss PLC
 		lea	Pal_CNZMiniboss(pc),a1		; Load CNZ Miniboss palette
 		jmp	(PalLoad_Line1).l
 ; ---------------------------------------------------------------------------
@@ -160583,10 +160583,10 @@ Obj_CNZMinibossInit:
 		move.b	#6,$45(a0)				; Liliam: bugfix - set correct hit count for CNZ1 boss
 ;		move.b	#4,$45(a0)				;
 		bset	#3,$38(a0)
-		move.w	#$80,y_vel(a0)	; Initial vertical speed
-		move.w	#$11F,$2E(a0)	; Wait amount
+		move.w	#$80,y_vel(a0)			; Initial vertical speed
+		move.w	#$11F,$2E(a0)			; Wait amount
 		move.l	#Obj_CNZMinibossGo2,$34(a0)
-		lea	Child1_CNZMinibossMakeTop(pc),a2		; Make the little top
+		lea	Child1_CNZMinibossMakeTop(pc),a2	; Make the little top
 		jmp	(CreateChild1_Normal).l
 ; ---------------------------------------------------------------------------
 
@@ -160640,9 +160640,9 @@ Obj_CNZMinibossOpening:
 Obj_CNZMinibossOpenGo:
 		move.b	#$A,routine(a0)
 		move.l	#Obj_CNZMinibossChangeDir,$34(a0)
-		bset	#6,$38(a0)		; Set Open state
+		bset	#6,$38(a0)			; Set Open state
 		move.b	#$7F,$3B(a0)
-		lea	Child1_CNZCoilOpenSparks(pc),a2		; Create spark objects for coil
+		lea	Child1_CNZCoilOpenSparks(pc),a2	; Create spark objects for coil
 		jmp	(CreateChild1_Normal).l
 ; ---------------------------------------------------------------------------
 
@@ -160678,7 +160678,7 @@ loc_6DB7E:
 
 Obj_CNZMinibossEnd:
 		move.l	#Obj_Wait,(a0)
-		st	(_unkFAA8).w		; Set end of level flag
+		st	(Level_results_started).w	; Set end of level flag
 		bset	#4,$38(a0)
 		move.l	#Obj_CNZMinibossEndGo,$34(a0)
 		lea	Child6_CNZMinibossMakeDebris(pc),a2
@@ -160721,7 +160721,7 @@ Obj_CNZMinibossTopInit:
 Obj_CNZMinibossTopWait:
 		movea.w	parent3(a0),a1
 		btst	#1,$38(a1)
-		bne.s	loc_6DC10		; Wait for signal from main boss
+		bne.s	loc_6DC10			; Wait for signal from main boss
 		jmp	(Refresh_ChildPosition).l
 ; ---------------------------------------------------------------------------
 
@@ -160741,7 +160741,7 @@ Obj_CNZMinibossTopGo:
 		move.b	#6,routine(a0)
 		move.l	#AniRaw_CNZMinibossTop2,$30(a0)
 		move.w	#$200,x_vel(a0)
-		move.w	#$200,y_vel(a0)		; Set initial speed of top
+		move.w	#$200,y_vel(a0)			; Set initial speed of top
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -160759,68 +160759,68 @@ Obj_CNZMinibossTopMain:
 		jsr	(Animate_Raw).l
 		tst.w	x_vel(a0)
 		bmi.s	loc_6DCB0
-		moveq	#$10,d3		; If moving to the right
+		moveq	#$10,d3				; If moving to the right
 		jsr	(ObjCheckRightWallDist).l
 		tst.w	d1
-		bmi.w	loc_6DD4C	; Reverse direction if block is hit from side
+		bmi.w	loc_6DD4C			; Reverse direction if block is hit from side
 		move.w	x_pos(a0),d0
 		addi.w	#$10,d0
 		cmpi.w	#$3380,d0
-		bhs.w	loc_6DD8E	; Reverse direction if edge of screen is hit
+		bhs.w	loc_6DD8E			; Reverse direction if edge of screen is hit
 		move.w	y_pos(a0),d1
 		bsr.w	CNZMinibossTop_CheckHitBase
-		bne.w	loc_6DD8E	; Reverse direction if miniboss base was hit
+		bne.w	loc_6DD8E			; Reverse direction if miniboss base was hit
 		bra.w	loc_6DCDA
 ; ---------------------------------------------------------------------------
 
 loc_6DCB0:
-		moveq	#-$10,d3	; If moving to the left
+		moveq	#-$10,d3			; If moving to the left
 		jsr	(ObjCheckLeftWallDist).l
 		tst.w	d1
-		bmi.w	loc_6DD4C	; Reverse direction if wall was hit
+		bmi.w	loc_6DD4C			; Reverse direction if wall was hit
 		move.w	x_pos(a0),d0
 		subi.w	#$10,d0
 		cmpi.w	#$3200,d0
-		blo.w	loc_6DD8E	; Reverse direction if edge of screen is hit
+		blo.w	loc_6DD8E			; Reverse direction if edge of screen is hit
 		move.w	y_pos(a0),d1
 		bsr.w	CNZMinibossTop_CheckHitBase
-		bne.w	loc_6DD8E	; Reverse direction if miniboss base was hit
+		bne.w	loc_6DD8E			; Reverse direction if miniboss base was hit
 
 loc_6DCDA:
 		bsr.w	CNZMinibossTop_CheckPlayerBounce
-		bne.w	loc_6DDCC	; If bounce was detected, reverse direction
+		bne.w	loc_6DDCC			; If bounce was detected, reverse direction
 		tst.w	y_vel(a0)
 		bmi.s	loc_6DD1E
 		jsr	(ObjCheckFloorDist).l		; If moving downward, check for hitting the blocks
 		tst.w	d1
-		bmi.w	loc_6DD94	; If hit, reverse direction
+		bmi.w	loc_6DD94			; If hit, reverse direction
 		move.w	x_pos(a0),d0
 		move.w	y_pos(a0),d1
 		addq.w	#8,d1
 		move.w	(Camera_Y_pos).w,d2
 		addi.w	#$E0,d2
 		cmp.w	d2,d1
-		bhs.w	loc_6DDCC	; If bottom of screen was hit, bounce
+		bhs.w	loc_6DDCC			; If bottom of screen was hit, bounce
 		cmpi.w	#$380,d1
-		bhi.w	loc_6DDCC	; Maximum lower bound is $380
+		bhi.w	loc_6DDCC			; Maximum lower bound is $380
 		bsr.w	CNZMinibossTop_CheckHitBase
-		bne.w	loc_6DDCC	; If base was hit, bounce
+		bne.w	loc_6DDCC			; If base was hit, bounce
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_6DD1E:
-		jsr	(ObjCheckCeilingDist).l	; If moving upward, check for hitting the blocks from below
+		jsr	(ObjCheckCeilingDist).l		; If moving upward, check for hitting the blocks from below
 		tst.w	d1
-		bmi.s	loc_6DD94	; If hit, reverse direction
+		bmi.s	loc_6DD94			; If hit, reverse direction
 		move.w	x_pos(a0),d0
 		move.w	y_pos(a0),d1
 		subq.w	#8,d1
 		cmp.w	(Camera_Y_pos).w,d1
-		bls.w	loc_6DDCC	; If top of screen was hit, bounce
+		bls.w	loc_6DDCC			; If top of screen was hit, bounce
 		cmpi.w	#$240,d1
-		bls.w	loc_6DDCC	; Maximum upper bound is $240
+		bls.w	loc_6DDCC			; Maximum upper bound is $240
 		bsr.w	CNZMinibossTop_CheckHitBase
-		bne.w	loc_6DDCC	; If base was hit, bounce
+		bne.w	loc_6DDCC			; If base was hit, bounce
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -160834,7 +160834,7 @@ loc_6DD4C:
 
 loc_6DD64:
 		moveq	#$10,d0
-		neg.w	x_vel(a0)	; Change direction
+		neg.w	x_vel(a0)			; Change direction
 		bmi.s	loc_6DD6E
 		neg.w	d0
 
@@ -160843,7 +160843,7 @@ loc_6DD6E:
 		cmpi.w	#$3200,d0
 		bls.s	locret_6DD8C
 		cmpi.w	#$3380,d0
-		bhs.s	locret_6DD8C	; If the walls were hit somehow, don't do anything
+		bhs.s	locret_6DD8C			; If the walls were hit somehow, don't do anything
 		move.w	d0,(Events_bg+$00).w
 		move.w	y_pos(a0),(Events_bg+$02).w	; Move X/Y positions into special variables for removing the blocks from the level layout
 		bsr.w	CNZMiniboss_BlockExplosion
@@ -160853,7 +160853,7 @@ locret_6DD8C:
 ; ---------------------------------------------------------------------------
 
 loc_6DD8E:
-		neg.w	x_vel(a0)		; Simple direction switch
+		neg.w	x_vel(a0)			; Simple direction switch
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -160881,7 +160881,7 @@ loc_6DDA2:
 ; ---------------------------------------------------------------------------
 
 loc_6DDCC:
-		neg.w	y_vel(a0)		; Simple direction switch
+		neg.w	y_vel(a0)			; Simple direction switch
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -160930,15 +160930,15 @@ Obj_CNZMinibossCoilClose:
 		bne.s	loc_6DEB6
 		btst	#6,$38(a1)
 		bne.s	loc_6DEA8
-		jsr	(Refresh_ChildPosition).l		; If base is not open
+		jsr	(Refresh_ChildPosition).l	; If base is not open
 		movea.w	parent3(a0),a1
 		tst.b	collision_flags(a0)
-		bne.s	loc_6DE9C		; Skip if collision is set
+		bne.s	loc_6DE9C			; Skip if collision is set
 		bset	#2,$38(a0)
-		bne.s	loc_6DE88		; If $38 already set, branch
+		bne.s	loc_6DE88			; If $38 already set, branch
 		move.b	#$10,$3A(a0)
 		btst	#2,$38(a1)
-		bne.s	loc_6DE88		; If base has been stunned already, branch
+		bne.s	loc_6DE88			; If base has been stunned already, branch
 		move.b	collision_flags(a1),$25(a1)	; Backup parent collision
 		clr.b	collision_flags(a1)		; Unset parent collision
 		subq.b	#1,collision_property(a1)	; Remove a hit
@@ -160986,7 +160986,7 @@ loc_6DEEC:
 ; ---------------------------------------------------------------------------
 
 Obj_CNZMinibossTimedSparks:
-		lea	ObjDat3_CNZMinibossSpark(pc),a1		;Temporary sparks when boss is closed
+		lea	ObjDat3_CNZMinibossSpark(pc),a1	;Temporary sparks when boss is closed
 		jsr	(SetUp_ObjAttributes3).l
 		bset	#5,shield_reaction(a0)
 		move.l	#Obj_Wait,(a0)
@@ -161712,7 +161712,7 @@ loc_6E6C6:
 
 loc_6E6E4:
 		move.l	#loc_6E724,(a0)
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		clr.b	(Boss_flag).w
 		move.w	(_unkFAB4).w,d0
 		addi.w	#$190,d0
@@ -161730,7 +161730,7 @@ loc_6E718:
 
 loc_6E724:
 		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_6E4C4
 		move.l	#loc_6E778,(a0)
 		jsr	(Restore_PlayerControl).l
@@ -162689,7 +162689,7 @@ loc_6F04A:
 ; ---------------------------------------------------------------------------
 
 Obj_FBZEmptyCapsule:									; Liliam: start from actual act 2 start
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		beq.s	Init_EmptyCapsule_FBZ
 		jmp	(Respawn_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -164829,7 +164829,7 @@ loc_70854:
 
 loc_70870:
 		move.l	#loc_708AA,(a0)
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		clr.b	(Boss_flag).w
 		jsr	(AllocateObject).l
 		bne.s	loc_70898
@@ -164845,7 +164845,7 @@ loc_70898:
 
 loc_708AA:
 		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_70638
 		move.l	#loc_7092A,(a0)
 		jsr	(Restore_PlayerControl).l
@@ -165800,7 +165800,7 @@ loc_713D2:
 
 loc_713E8:
 		jsr	(Obj_EndSignControl).l
-		movea.w	(_unkFAAE).w,a1
+		movea.w	(Boss_object_addr2).w,a1
 		cmpi.l	#loc_8B660,(a1)
 		bne.s	loc_71400
 		bset	#5,$38(a1)
@@ -166682,7 +166682,7 @@ loc_71D80:
 
 loc_71D9E:
 		move.l	#loc_71DE2,(a0)
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		clr.b	(Boss_flag).w
 		jsr	(AllocateObject).l
 		bne.s	loc_71DC6
@@ -166704,9 +166704,9 @@ locret_71DE0:
 
 loc_71DE2:
 		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_71C14
-		clr.b	(_unkFAA8).w
+		clr.b	(Level_results_started).w
 		jsr	(Restore_PlayerControl).l
 		lea	(Player_2).w,a1
 		jsr	(Restore_PlayerControl2).l
@@ -167197,7 +167197,7 @@ locret_722C4:
 loc_722C6:
 		move.l	#Wait_FadeToLevelMusic,(a0)
 		move.l	#loc_71D80,$34(a0)
-		movea.w	(_unkFAAE).w,a1
+		movea.w	(Boss_object_addr2).w,a1
 		cmpi.l	#loc_8B660,(a1)
 		bne.s	loc_722E6
 		bset	#5,$38(a1)
@@ -168090,7 +168090,7 @@ loc_72B46:
 		bhs.s	locret_72B94
 		move.l	#loc_72B96,(a0)
 		jsr	(Set_PlayerEndingPose).l
-;		clr.b	(End_of_level_flag).w			;
+;		clr.b	(Level_results_done).w			;
 		jsr	(AllocateObject).l
 		bne.s	loc_72B86
 		move.l	#Obj_LevelResults,(a1)
@@ -168105,7 +168105,7 @@ locret_72B94:
 ; ---------------------------------------------------------------------------
 
 loc_72B96:
-		tst.b	(End_of_level_flag).w
+		tst.b	(Level_results_done).w
 		bne.w	loc_72C70				; Liliam: ported from S3 - restore Big Arm for all characters
 		rts						;
 ;		beq.w	locret_72B02				;
@@ -168422,7 +168422,7 @@ loc_72E36:
 		move.l	#loc_72E44,(a0)				; Liliam: ported from S3 - restore Big Arm for all characters
 
 loc_72E44:
-		tst.b	(End_of_level_flag).w			;
+		tst.b	(Level_results_done).w			;
 		beq.s	locret_72E20				;
 		lea	ChildObjDat_7380C(pc),a2
 		jsr	(CreateChild1_Normal).l
@@ -171050,7 +171050,7 @@ loc_74710:
 ; ---------------------------------------------------------------------------
 
 loc_7473A:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_74374
 		tst.b	(_unkFAA2).w
 		beq.w	locret_74374
@@ -173488,7 +173488,7 @@ Obj_MHZEndBoss:
 		lea	ObjDat_MHZEndBoss(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		clr.b	routine(a0)
-		clr.b	(_unkFAA9).w
+		clr.b	(MHZ2_boss_event_flag).w
 		lea	(ArtKosM_MHZEndBoss).l,a1
 		move.w	#tiles_to_bytes(ArtTile_MHZEndBoss),d2
 		jsr	(Queue_Kos_Module).l
@@ -173686,7 +173686,7 @@ loc_761E8:
 		bhs.s	loc_76236
 		move.l	#loc_7623C,(a0)
 		bset	#0,(Ending_completion_level).w
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		clr.b	(Boss_flag).w
 		bset	#5,$38(a0)
 		jsr	(PLCLoad_AnimalsAndExplosion).l
@@ -173723,7 +173723,7 @@ locret_7626E:
 ; ---------------------------------------------------------------------------
 
 loc_76270:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_76060
 		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
 		beq.s	loc_76278							;
@@ -173764,7 +173764,7 @@ loc_76270:
 
 loc_76278:
 		move.l	#loc_76310,(a0)
-		clr.b	(_unkFAA9).w
+		clr.b	(MHZ2_boss_event_flag).w
 		move.w	(Camera_X_pos).w,d0
 		subi.w	#$40,d0
 		move.w	d0,x_pos(a0)
@@ -173862,7 +173862,7 @@ loc_763C4:
 loc_763D8:
 		move.w	#(button_up_mask<<8)|button_up_mask,(Ctrl_1_logical).w
 		move.w	#(button_up_mask<<8)|button_up_mask,(Ctrl_2).w
-		tst.b	(_unkFAA9).w
+		tst.b	(MHZ2_boss_event_flag).w
 		beq.w	locret_76060
 		move.l	#loc_76404,(a0)
 		move.w	#(button_C_mask<<8)|button_C_mask,(Ctrl_1_logical).w
@@ -174268,7 +174268,7 @@ loc_76822:
 
 loc_7683E:
 		move.w	d0,x_vel(a0)
-		st	(_unkFAA9).w
+		st	(MHZ2_boss_event_flag).w
 		jsr	(AllocateObject).l
 		bne.s	loc_76854
 		move.l	#loc_768B6,(a1)
@@ -174311,7 +174311,7 @@ loc_76896:
 ; ---------------------------------------------------------------------------
 
 loc_768B6:
-		tst.b	(_unkFAA9).w
+		tst.b	(MHZ2_boss_event_flag).w
 		bne.w	locret_76060
 		move.l	#loc_768D2,(a0)
 		jsr	(AllocateObject).l
@@ -174833,12 +174833,12 @@ loc_76E48:
 ; ---------------------------------------------------------------------------
 
 loc_76E4E:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		beq.w	locret_76BF2
 		move.l	#loc_76E5C,(a0)
 
 loc_76E5C:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_76BF2
 		move.l	#loc_76E94,(a0)
 		lea	ChildObjDat_773F4(pc),a2
@@ -175658,7 +175658,7 @@ loc_778BC:
 
 loc_778DA:
 		move.l	#loc_778F2,(a0)
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		ori.b	#$30,$38(a0)
 		bclr	#7,render_flags(a0)
 		rts
@@ -175666,7 +175666,7 @@ loc_778DA:
 
 loc_778F2:
 		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_77AF6
 		move.l	#loc_77966,(a0)
 		jsr	(Restore_PlayerControl).l
@@ -175741,7 +175741,7 @@ loc_779C0:
 		cmp.w	d1,d0
 		blo.s	loc_779FC
 		move.l	#loc_77A02,(a0)
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		clr.w	x_vel(a0)
 		clr.w	y_vel(a0)
 		move.w	d1,d0
@@ -175811,7 +175811,7 @@ loc_77A5E:
 ; ---------------------------------------------------------------------------
 
 loc_77A6E:
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		beq.w	locret_77AF6
 		move.l	#loc_77A98,(a0)
 		lea	(Player_2).w,a1
@@ -177217,7 +177217,7 @@ RawAni_78A9C:
 ; ---------------------------------------------------------------------------
 
 loc_78AA8:
-		tst.b	(End_of_level_flag).w
+		tst.b	(Level_results_done).w
 		beq.w	locret_78536
 		move.l	#loc_78AE0,(a0)
 		lea	word_78EAA(pc),a1
@@ -177682,7 +177682,7 @@ locret_78FAC:
 ; ---------------------------------------------------------------------------
 
 loc_78FAE:
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		beq.s	locret_78FAC
 		move.l	#loc_79002,(a0)
 		clr.b	(Ctrl_1_locked).w
@@ -177724,7 +177724,7 @@ loc_79022:
 
 loc_79034:
 		move.b	#2,routine(a0)
-		bset	#1,(_unkFAB8).w
+		bset	#1,(Cutscene_flags).w
 		clr.w	x_vel(a0)
 		move.w	#$BF,$2E(a0)
 		move.l	#loc_79054,$34(a0)
@@ -177949,7 +177949,7 @@ word_792E0:
 ; ---------------------------------------------------------------------------
 
 loc_792F0:
-		btst	#1,(_unkFAB8).w
+		btst	#1,(Cutscene_flags).w
 		bne.s	loc_79304
 		jsr	(Refresh_ChildPosition).l
 		jmp	(Draw_And_Touch_Sprite).l
@@ -178079,7 +178079,7 @@ loc_79486:
 		btst	#7,status(a1)
 		beq.w	locret_78FAC
 		move.b	#1,(Palette_cycle_counters+$00).w
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		st	(Events_fg_4).w
 		moveq	#signextendB(sfx_SuperEmerald),d0
 		jsr	(Play_SFX).l
@@ -178521,7 +178521,7 @@ loc_79998:
 ; ---------------------------------------------------------------------------
 
 loc_799AA:
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		clr.b	(Update_HUD_timer).w			; Liliam: stop LRZ3 boss lava on defeat
 ;		clr.b	(Boss_flag).w				;
 		jsr	(AllocateObject).l
@@ -178544,7 +178544,7 @@ loc_799D4:
 ; ---------------------------------------------------------------------------
 
 loc_799E0:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_797F8
 		move.l	#loc_79A1C,(a0)				; Liliam: HPZ - add transition from LRZ3
 ;		move.l	#locret_79A52,(a0)			;
@@ -178562,7 +178562,7 @@ loc_799E0:
 		clr.w	(Ctrl_1_logical).w
 
 loc_79A1C:
-		tst.b	(End_of_level_flag).w			; Liliam: HPZ - add transition from LRZ3
+		tst.b	(Level_results_done).w			; Liliam: HPZ - add transition from LRZ3
 		beq.s	locret_79A50				;
 ;		move.w	#$EC0,(Camera_stored_max_X_pos).w	;
 
@@ -178948,7 +178948,7 @@ LRZEncoreBoss_BossDefeated:						; Liliam: Encore mode - LRZ2 boss
 		move.b	#4,subtype(a1)
 
 	.done:
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		clr.b	(Boss_flag).w
 		jmp	(BossDefeated_StopTimer).l
 ; ---------------------------------------------------------------------------
@@ -181452,7 +181452,7 @@ loc_7B39C:
 ; ---------------------------------------------------------------------------
 
 loc_7B3AC:
-		btst	#4,(_unkFAB8).w
+		btst	#4,(Cutscene_flags).w
 		bne.s	loc_7B3B6				; Liliam: Metal Sonic - final boss
 ;		beq.w	locret_7B448				;
 
@@ -181461,7 +181461,7 @@ locret_7B3B2:
 ; ---------------------------------------------------------------------------
 
 MechaSonic_WaitFly:						; Liliam: Metal Sonic - final boss
-		btst	#4,(_unkFAB8).w
+		btst	#4,(Cutscene_flags).w
 		beq.s	locret_7B3B2
 		addq.b	#2,routine(a0)
 
@@ -181554,7 +181554,7 @@ loc_7B484:
 		jsr	(Random_Number).l
 		tst.w	d0
 		bmi.s	loc_7B4CA
-		bclr	#4,(_unkFAB8).w
+		bclr	#4,(Cutscene_flags).w
 		bne.s	loc_7B4CA
 		move.l	#byte_7D4DE,$30(a0)
 		bclr	#3,$38(a0)
@@ -181910,7 +181910,7 @@ loc_7B888:
 		tst.b	(Current_act).w
 		bne.s	loc_7B8E6
 		move.b	#4,routine(a0)
-		st	(_unkFAA8).w
+		st	(Level_results_started).w
 		bset	#5,$38(a0)
 		bclr	#3,$38(a0)
 		move.w	#(2*60)-1,$2E(a0)
@@ -182171,7 +182171,7 @@ loc_7BBAC:
 		moveq	#signextendB(sfx_MechaTransform),d0
 		jsr	(Play_SFX_Continuous).l
 		jsr	(Run_PalRotationScript).l
-		bchg	#6,(_unkFAB8).w
+		bchg	#6,(Cutscene_flags).w
 		jmp	(Animate_RawMultiDelay).l
 ; ---------------------------------------------------------------------------
 
@@ -182187,7 +182187,7 @@ loc_7BBC6:
 
 loc_7BBE0:
 		jsr	(Run_PalRotationScript).l
-		bchg	#6,(_unkFAB8).w
+		bchg	#6,(Cutscene_flags).w
 		move.w	#(button_right_mask<<8)|button_right_mask,(Ctrl_1_logical).w
 		lea	(Player_1).w,a1
 		move.w	x_pos(a1),d0
@@ -182393,7 +182393,7 @@ loc_7BDBE:
 		moveq	#signextendB(sfx_MechaTransform),d0
 		jsr	(Play_SFX_Continuous).l
 		jsr	(Run_PalRotationScript).l
-		bchg	#6,(_unkFAB8).w
+		bchg	#6,(Cutscene_flags).w
 		jmp	(Animate_RawMultiDelay).l
 ; ---------------------------------------------------------------------------
 
@@ -182409,7 +182409,7 @@ loc_7BDF6:
 		move.b	#4,routine(a0)
 		clr.w	x_vel(a0)
 		move.w	#-$480,y_vel(a0)
-		bclr	#6,(_unkFAB8).w
+		bclr	#6,(Cutscene_flags).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -183307,7 +183307,7 @@ loc_7C856:
 
 loc_7C864:
 		move.b	#0,mapping_frame(a0)
-		btst	#6,(_unkFAB8).w
+		btst	#6,(Cutscene_flags).w
 		beq.s	loc_7C878
 		move.b	#1,mapping_frame(a0)
 
@@ -183515,26 +183515,26 @@ loc_7CAAA:
 		bhs.s	loc_7CACC
 		move.l	#loc_7CAD2,(a0)
 		clr.w	x_vel(a0)
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 
 loc_7CACC:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
 loc_7CAD2:
-		btst	#1,(_unkFAB8).w
+		btst	#1,(Cutscene_flags).w
 		beq.s	loc_7CAE6
 		move.l	#loc_7CAE6,(a0)
 		move.w	#-$80,x_vel(a0)
 
 loc_7CAE6:
-		btst	#2,(_unkFAB8).w
+		btst	#2,(Cutscene_flags).w
 		beq.s	loc_7CAF8
 		move.l	#loc_7CAF8,(a0)
 		clr.w	x_vel(a0)
 
 loc_7CAF8:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		beq.s	loc_7CB18
 		move.l	#loc_7CB28,(a0)
 		move.w	#$80,x_vel(a0)
@@ -183606,7 +183606,7 @@ loc_7CBA4:
 		move.l	#loc_7CC3A,(a1)
 
 loc_7CBC8:
-		bset	#5,(_unkFAB8).w
+		bset	#5,(Cutscene_flags).w
 
 loc_7CBCE:
 		jsr	(Swing_UpAndDown).l
@@ -183722,7 +183722,7 @@ loc_7CCFE:
 ; ---------------------------------------------------------------------------
 
 loc_7CD22:
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		bne.s	loc_7CD36
 		jsr	(Refresh_ChildPositionAdjusted).l
 		jmp	(Child_Draw_Sprite).l
@@ -183750,7 +183750,7 @@ loc_7CD42:
 
 loc_7CD76:
 		move.l	#loc_7CD82,(a0)
-		bset	#1,(_unkFAB8).w
+		bset	#1,(Cutscene_flags).w
 
 loc_7CD82:
 		move.b	$3A(a0),d0
@@ -183786,7 +183786,7 @@ loc_7CDB0:
 
 loc_7CDD2:
 		move.l	#loc_7CE1E,(a0)
-		bset	#2,(_unkFAB8).w
+		bset	#2,(Cutscene_flags).w
 		move.b	#2,mapping_frame(a0)
 		move.b	#$83,object_control(a1)
 ;		move.b	#$CB,mapping_frame(a1)			; Liliam: allow other characters to play SSZ2
@@ -183824,7 +183824,7 @@ loc_7CE1E:
 		subq.b	#1,d0
 		bpl.s	loc_7CE34
 		move.l	#loc_7CE42,(a0)
-		bset	#3,(_unkFAB8).w
+		bset	#3,(Cutscene_flags).w
 		moveq	#0,d0
 
 loc_7CE34:
@@ -183835,7 +183835,7 @@ loc_7CE34:
 
 loc_7CE42:
 		jsr	(Refresh_ChildPositionAdjusted).l
-		btst	#5,(_unkFAB8).w
+		btst	#5,(Cutscene_flags).w
 		bne.s	loc_7CE66
 		lea	(Player_1).w,a1
 		move.w	x_pos(a0),x_pos(a1)
@@ -184055,7 +184055,7 @@ locret_7D076:
 
 loc_7D078:
 		jsr	(Check_TailsEndPose).l
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_7B448
 		jsr	(Restore_PlayerControl).l
 		lea	(Player_2).w,a1
@@ -184129,7 +184129,7 @@ loc_7D134:
 		move.w	d0,(Camera_min_X_pos).w
 		move.w	d0,(Camera_max_X_pos).w
 		clr.b	(Scroll_lock).w
-		bset	#4,(_unkFAB8).w
+		bset	#4,(Cutscene_flags).w
 		jmp	(Delete_Current_Sprite).l
 
 ; =============== S U B R O U T I N E =======================================
@@ -185476,12 +185476,12 @@ loc_7E24A:
 ; ---------------------------------------------------------------------------
 
 loc_7E25C:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		beq.w	locret_7DE44
 		move.l	#loc_7E26A,(a0)
 
 loc_7E26A:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_7DE44
 		move.l	#loc_7E298,(a0)
 		st	(Ctrl_1_locked).w
@@ -186910,7 +186910,7 @@ Obj_DEZEndBoss:
 		lea	word_7F0C6(pc),a1
 		move.b	#mus_EndBoss,boss_saved_mus(a0)
 		jsr	Boss_FadeMusic_SetUpCamera(pc)
-		clr.b	(_unkFAB8).w
+		clr.b	(Cutscene_flags).w
 		moveq	#PLCID_DEZEndBoss,d0
 		cmpi.w	#3,(Player_mode).w			; Liliam: bugfix - use Egg Robo for DEZ2 boss
 		bne.s	loc_7F098				;
@@ -187080,7 +187080,7 @@ loc_7F234:
 ; ---------------------------------------------------------------------------
 
 loc_7F266:
-		btst	#1,(_unkFAB8).w
+		btst	#1,(Cutscene_flags).w
 		beq.s	locret_7F298
 		move.l	#loc_7F29A,(a0)
 		bset	#4,$38(a0)
@@ -187670,7 +187670,7 @@ loc_7F854:
 		move.w	#-2,y_vel(a0)
 		tst.b	subtype(a0)
 		bne.s	locret_7F870
-		bset	#1,(_unkFAB8).w
+		bset	#1,(Cutscene_flags).w
 
 locret_7F870:
 		rts
@@ -188086,7 +188086,7 @@ locret_7FBD4:
 loc_7FBD6:
 		move.l	#Wait_NewDelay,(a0)
 		bset	#7,status(a0)
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		move.l	#loc_7F210,$34(a0)
 		lea	(Child6_CreateBossExplosion).l,a2
 		jsr	(CreateChild6_Simple).l
@@ -188421,7 +188421,7 @@ locret_7FE94:
 ; ---------------------------------------------------------------------------
 
 loc_7FE96:
-		btst	#1,(_unkFAB8).w
+		btst	#1,(Cutscene_flags).w
 		beq.s	locret_7FEE0
 		move.b	#8,routine(a0)
 		move.w	#$BF,$2E(a0)
@@ -188454,7 +188454,7 @@ locret_7FEF4:
 ; ---------------------------------------------------------------------------
 
 loc_7FEF6:
-		btst	#2,(_unkFAB8).w
+		btst	#2,(Cutscene_flags).w
 		beq.s	locret_7FF3C
 		move.b	#$C,routine(a0)
 		move.w	y_pos(a0),$3A(a0)
@@ -188806,7 +188806,7 @@ locret_8029A:
 ; ---------------------------------------------------------------------------
 
 loc_8029C:
-		bset	#3,(_unkFAB8).w
+		bset	#3,(Cutscene_flags).w
 		move.w	#$F,$2E(a0)
 		move.l	#loc_802B2,$34(a0)
 		rts
@@ -188814,7 +188814,7 @@ loc_8029C:
 
 loc_802B2:
 		move.l	#loc_802C0,(a0)
-		bset	#4,(_unkFAB8).w
+		bset	#4,(Cutscene_flags).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -188830,7 +188830,7 @@ loc_802C0:
 
 loc_802DE:
 		move.l	#loc_8030E,(a0)
-		bset	#5,(_unkFAB8).w
+		bset	#5,(Cutscene_flags).w
 		ori.b	#$30,$38(a0)
 		jsr	(AllocateObject).l
 		bne.s	loc_802FE
@@ -189015,14 +189015,14 @@ loc_804C8:
 ; ---------------------------------------------------------------------------
 
 FinalBossCrane_Take:						; Liliam: ending - Robotnik takes the emerald to Doomsday
-		btst	#5,(_unkFAB8).w
+		btst	#5,(Cutscene_flags).w
 		beq.s	loc_804DA
 		move.l	#Delete_Current_Sprite,(a0)
 		bra.s	loc_804DA
 ; ---------------------------------------------------------------------------
 
 loc_804D2:
-		btst	#3,(_unkFAB8).w
+		btst	#3,(Cutscene_flags).w
 		bne.s	loc_804E0
 
 loc_804DA:
@@ -189265,7 +189265,7 @@ loc_80758:
 
 Obj_DEZMasterEmerald_Take:					; Liliam: ending - Robotnik takes the emerald to Doomsday
 		bsr.w	Refresh_ChildPosition
-		btst	#5,(_unkFAB8).w
+		btst	#5,(Cutscene_flags).w
 		beq.s	loc_807AC
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -189277,7 +189277,7 @@ loc_80760:
 
 loc_8076A:
 		jsr	Refresh_ChildPosition(pc)
-		btst	#4,(_unkFAB8).w
+		btst	#4,(Cutscene_flags).w
 		beq.s	loc_8077C
 		move.l	#loc_80782,(a0)
 
@@ -189878,7 +189878,7 @@ loc_80D72:
 		move.w	d0,y_pos(a0)
 
 loc_80D9E:
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		beq.s	loc_80DB8
 		move.l	#loc_80DBE,(a0)
 		move.w	#$1F,$2E(a0)
@@ -189896,7 +189896,7 @@ loc_80DBE:
 ; ---------------------------------------------------------------------------
 
 loc_80DD0:
-		bset	#1,(_unkFAB8).w
+		bset	#1,(Cutscene_flags).w
 		st	(Events_fg_5).w
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -189926,7 +189926,7 @@ loc_80E02:
 ; ---------------------------------------------------------------------------
 
 loc_80E20:
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		jmp	(Delete_Current_Sprite).l
 
 ; =============== S U B R O U T I N E =======================================
@@ -190229,7 +190229,7 @@ loc_810A0:
 		move.w	#$520,d1
 		cmp.w	d1,d0
 		blo.w	locret_80C88
-		bset	#2,(_unkFAB8).w
+		bset	#2,(Cutscene_flags).w
 		move.w	d1,(Camera_min_X_pos).w
 		addi.w	#$A0,d1
 		move.w	d1,(Camera_max_X_pos).w
@@ -190639,9 +190639,9 @@ loc_81492:
 		move.b	routine(a0),d0
 		move.w	off_81514(pc,d0.w),d1
 		jsr	off_81514(pc,d1.w)
-		move.w	(_unkFABC).w,d0
+		move.w	(DDZ_saved_debug).w,d0
 		move.w	(Debug_placement_mode).w,d1
-		move.w	d1,(_unkFABC).w
+		move.w	d1,(DDZ_saved_debug).w
 		eor.w	d1,d0
 		beq.s	loc_814B8
 		bsr.w	sub_8151C
@@ -190651,7 +190651,7 @@ loc_814B8:
 		bne.s	locret_81512
 		bsr.w	sub_82920
 		bsr.w	sub_829D2
-		btst	#1,(_unkFAB8).w
+		btst	#1,(Cutscene_flags).w
 		beq.s	locret_81512
 		move.l	#loc_816FC,(a0)
 		bset	#3,$38(a0)
@@ -190828,7 +190828,7 @@ loc_816FC:
 		bsr.w	sub_828B2
 		bsr.w	sub_829A0
 		bsr.w	sub_829D2
-		btst	#0,(_unkFAB8).w
+		btst	#0,(Cutscene_flags).w
 		beq.s	locret_81724
 		move.l	#loc_81726,(a0)
 		move.w	#$140,$3C(a0)
@@ -190838,7 +190838,7 @@ locret_81724:
 ; ---------------------------------------------------------------------------
 
 loc_81726:
-		clr.w	(_unkFAAE).w
+		clr.w	(DDZ_scroll_speed).w
 		move.w	(Camera_X_pos).w,d0
 		cmpi.w	#$7400,d0
 		blo.s	loc_81770
@@ -190858,16 +190858,16 @@ loc_8174E:
 		andi.w	#$FF80,d0
 		move.w	d0,(Camera_X_pos_coarse_back).w
 		move.w	#$2000,d1
-		move.w	d1,(_unkFAAE).w
+		move.w	d1,(DDZ_scroll_speed).w
 		sub.w	d1,x_pos(a0)
 
 loc_81770:
 		bsr.w	sub_82742
 		bsr.w	sub_82772
 		bsr.w	sub_828B2
-		move.w	(_unkFABC).w,d0
+		move.w	(DDZ_saved_debug).w,d0
 		move.w	(Debug_placement_mode).w,d1
-		move.w	d1,(_unkFABC).w
+		move.w	d1,(DDZ_saved_debug).w
 		eor.w	d1,d0
 		beq.s	loc_81790
 		bsr.w	sub_8151C
@@ -190897,7 +190897,7 @@ loc_8179E:
 ; ---------------------------------------------------------------------------
 
 Obj_DDZEndBoss:
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		moveq	#0,d0
 		move.b	routine(a0),d0
@@ -190920,7 +190920,7 @@ DDZEndBoss_Index:
 
 loc_8180E:
 		move.b	#2,routine(a0)
-		bset	#1,(_unkFAB8).w
+		bset	#1,(Cutscene_flags).w
 		move.w	#$200,(Events_bg+$00).w
 		move.w	(Camera_X_pos).w,d0
 		addi.w	#$140,d0
@@ -191119,7 +191119,7 @@ loc_81A9C:
 		move.b	#$E,routine(a0)
 		bclr	#4,$38(a0)
 		move.l	#$800,(_unkFA8A).w
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		move.b	#7,collision_property(a0)
 		clr.w	$2E(a0)
 		clr.w	x_vel(a0)
@@ -191215,7 +191215,7 @@ loc_81BB2:
 ; ---------------------------------------------------------------------------
 
 loc_81BBE:
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		moveq	#0,d0
 		move.b	routine(a0),d0
@@ -191352,7 +191352,7 @@ loc_81D44:
 		move.l	#loc_81D4A,(a0)
 
 loc_81D4A:
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		lea	(Player_1).w,a1
 		move.w	x_pos(a1),d0
@@ -191431,7 +191431,7 @@ word_81E1C:
 ; ---------------------------------------------------------------------------
 
 loc_81E28:
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		move.w	(_unkFA90).w,d0
 		add.w	d0,x_pos(a0)
@@ -191643,7 +191643,7 @@ loc_82038:
 		jsr	(Play_SFX).l
 
 loc_8204C:
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		subq.w	#2,x_pos(a0)
 		bsr.w	sub_82B06
@@ -191779,7 +191779,7 @@ loc_8218E:
 		move.w	d1,y_vel(a0)
 
 loc_821C2:
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		lea	byte_832B4(pc),a1
 		jsr	Animate_RawNoSSTMultiDelay(pc)
@@ -191800,7 +191800,7 @@ loc_821FC:
 		jsr	(MoveSprite2).l
 
 loc_82208:
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		tst.b	(Super_Sonic_Knux_flag).w
 		beq.s	loc_82224
@@ -191980,7 +191980,7 @@ loc_823EE:
 		move.l	#byte_832AE,$30(a0)
 
 loc_82412:
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		jsr	Animate_Raw(pc)
 		jsr	(MoveSprite2).l
@@ -192001,7 +192001,7 @@ loc_8242A:
 loc_82452:
 		tst.b	(Super_Sonic_Knux_flag).w
 		beq.w	locret_82ABA
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		subq.w	#8,x_pos(a0)
 		subq.b	#1,anim_frame_timer(a0)
@@ -192036,7 +192036,7 @@ loc_8249A:
 		move.w	word_824D4(pc,d0.w),y_vel(a0)
 		lsl.w	#3,d1
 		move.w	d1,$2E(a0)
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -192060,7 +192060,7 @@ word_824D4:
 ; ---------------------------------------------------------------------------
 
 loc_824F4:
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		subq.w	#1,$2E(a0)
 		bpl.w	locret_82ABA
@@ -192100,7 +192100,7 @@ loc_82568:
 		jsr	Animate_RawNoSST(pc)
 		move.w	(_unkFA90).w,d0
 		add.w	d0,x_pos(a0)
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		bsr.w	sub_82C28
 		jmp	Sprite_CheckDelete(pc)
@@ -192148,7 +192148,7 @@ loc_825CA:
 		move.w	#4,$2E(a0)
 
 loc_82606:
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		subq.w	#1,$2E(a0)
 		bpl.s	loc_82632
@@ -192171,7 +192171,7 @@ loc_82632:
 ; ---------------------------------------------------------------------------
 
 loc_82652:
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		subq.w	#1,$2E(a0)
 		bpl.s	loc_82678
@@ -192205,7 +192205,7 @@ loc_826A0:
 		move.l	#Go_Delete_Sprite,$34(a0)
 		move.w	#-$200,x_vel(a0)
 		move.w	#-$200,y_vel(a0)
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -192220,7 +192220,7 @@ loc_826E2:
 		movea.w	parent3(a0),a1
 		tst.b	subtype(a1)
 		beq.s	loc_826FC
-		move.w	(_unkFAAE).w,d0
+		move.w	(DDZ_scroll_speed).w,d0
 		sub.w	d0,x_pos(a0)
 		move.w	(_unkFA90).w,d0
 		add.w	d0,x_pos(a0)
@@ -197795,7 +197795,7 @@ Restore_PlayerControl2:
 
 Obj_EndSignControl:
 		move.l	#Obj_EndSignControlWait,(a0)
-		st	(_unkFAA8).w		; End of level is in effect
+		st	(Level_results_started).w	; End of level is in effect
 		bset	#4,$38(a0)
 		move.w	#(2*60)-1,$2E(a0)
 		move.l	#Obj_EndSignControlDoSign,$34(a0)
@@ -197866,7 +197866,7 @@ Child6_EndSign:
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlAwaitStart:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.w	locret_8405E
 		move.l	#Obj_EndSignControlDoStart,(a0)
 		jsr	Restore_PlayerControl(pc)
@@ -197875,7 +197875,7 @@ Obj_EndSignControlAwaitStart:
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlDoStart:
-		tst.b	(End_of_level_flag).w		; Wait for title card to finish
+		tst.b	(Level_results_done).w		; Wait for title card to finish
 		beq.w	locret_8405E
 		jsr	Change_Act2Sizes(pc)
 
@@ -198291,8 +198291,8 @@ CutsceneSkip_FBZ2:						; Liliam: cutscene skip - FBZ level end
 ; ---------------------------------------------------------------------------
 
 CutsceneSkip_LBZ1:						; Liliam: cutscene skip - LBZ1 pre-boss
-		clr.b	(_unkFAA9).w
-		clr.b	(_unkFAAB).w
+		clr.b	(LBZ_cup_elevator_lock).w
+		clr.b	(LBZ1_Robotnik_carrying_flag).w
 		ori.b	#$80,(Last_star_post_hit).w
 		move.w	#$3C50,x_pos(a0)
 		move.w	#$1EC,y_pos(a0)
@@ -198300,7 +198300,7 @@ CutsceneSkip_LBZ1:						; Liliam: cutscene skip - LBZ1 pre-boss
 ; ---------------------------------------------------------------------------
 
 CutsceneSkip_LBZ2:						; Liliam: cutscene skip - LBZ level end
-		tst.b	(End_of_level_flag).w
+		tst.b	(Level_results_done).w
 		beq.w	LBZ2RobotnikShip_CutsceneSkip
 		move.w	#$700,d0
 		tst.b	(Dynamic_resize_routine).w
@@ -198309,7 +198309,7 @@ CutsceneSkip_LBZ2:						; Liliam: cutscene skip - LBZ level end
 ; ---------------------------------------------------------------------------
 
 CutsceneSkip_MHZ1:						; Liliam: cutscene skip - MHZ1 intro
-		st	(_unkFAA9).w
+		st	(MHZ1_Knux_door_closed).w
 		jsr	(MHZ1_Save_StarPost).l
 		move.w	#$388,x_pos(a0)
 		move.w	#$5AC,y_pos(a0)
@@ -198317,7 +198317,7 @@ CutsceneSkip_MHZ1:						; Liliam: cutscene skip - MHZ1 intro
 ; ---------------------------------------------------------------------------
 
 CutsceneSkip_MHZ2:						; Liliam: cutscene skip - MHZ2 intro
-		tst.b	(End_of_level_flag).w
+		tst.b	(Level_results_done).w
 		bne.s	CutsceneSkip_CNZ2
 		jsr	(MHZ2_Save_StarPost).l
 		move.w	(Saved_X_pos).w,x_pos(a0)
@@ -198378,7 +198378,7 @@ CutsceneSkip_Ending:						; Liliam: cutscene skip - ending
 		move.b	#1,(Ending_running_flag).w
 		move.l	#Obj_Ending_CutsceneSkip,(a0)
 		clr.b	(Super_palette_status).w
-		clr.b	(_unkFAC1).w
+		clr.b	(Emerald_animation_flag).w
 		jsr	(Ending_SlowFade).l
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -199718,7 +199718,7 @@ loc_86854:
 		move.w	$3E(a0),y_vel(a0)
 		jsr	Find_SonicTails(pc)
 		move.w	#-$200,d1
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		beq.s	loc_86880
 		tst.w	d0
 		beq.s	loc_86880
@@ -199761,7 +199761,7 @@ loc_868B6:
 		bsr.w	sub_869F6
 		jsr	(MoveSprite2).l
 		bsr.w	sub_86B1E
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		bne.s	loc_868F0
 		move.l	#loc_868F2,(a0)
 		bset	#0,render_flags(a0)
@@ -199802,7 +199802,7 @@ locret_86930:
 
 
 Check_TailsEndPose:
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		beq.w	locret_8661C
 ;		cmpi.b	#3,(Current_zone).w			; Liliam: bugfix - release player from object
 ;		bne.s	loc_8694A				;
@@ -208045,7 +208045,7 @@ word_8B658:
 ; ---------------------------------------------------------------------------
 
 loc_8B660:
-		move.w	a0,(_unkFAAE).w
+		move.w	a0,(Boss_object_addr2).w
 		btst	#5,$38(a0)
 		bne.s	loc_8B6A8
 		move.w	(Camera_X_pos_copy).w,x_pos(a0)
@@ -208054,11 +208054,11 @@ loc_8B660:
 		subq.w	#1,$2E(a0)
 		bpl.s	locret_8B6A6
 		move.w	#8,$2E(a0)
-		move.b	(SOZ_ghost_count).w,d0
+		move.b	(SOZ2_ghost_count).w,d0
 		addq.b	#1,d0
 		cmpi.b	#$3C,d0
 		bhi.s	locret_8B6A6
-		move.b	d0,(SOZ_ghost_count).w
+		move.b	d0,(SOZ2_ghost_count).w
 		jsr	(AllocateObject).l
 		bne.s	locret_8B6A6
 		move.l	#loc_8B6AE,(a1)
@@ -208134,10 +208134,10 @@ loc_8B73A:
 ; ---------------------------------------------------------------------------
 
 loc_8B756:
-		move.b	(SOZ_ghost_count).w,d0
+		move.b	(SOZ2_ghost_count).w,d0
 		subq.b	#1,d0
 		bmi.s	loc_8B762
-		move.b	d0,(SOZ_ghost_count).w
+		move.b	d0,(SOZ2_ghost_count).w
 
 loc_8B762:
 		jmp	(Delete_Current_Sprite).l
@@ -210340,7 +210340,7 @@ loc_8CB9E:
 		lea	ObjDat_LBZ1Robotnik(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		move.b	#-1,collision_property(a0)
-		st	(_unkFAAB).w
+		st	(LBZ1_Robotnik_carrying_flag).w
 		jsr	(Swing_Setup1).l
 		move.w	#$3820,(Camera_min_X_pos).w
 		move.w	#$3AE8,(Camera_max_X_pos).w
@@ -210528,7 +210528,7 @@ Obj_LBZMinibossBox:
 		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
 ;		cmpi.b	#2,(Player_1+character_id).w		;
 		beq.s	loc_8CDEA
-		tst.b	(_unkFAAB).w
+		tst.b	(LBZ1_Robotnik_carrying_flag).w
 		bne.s	loc_8CDEA
 		move.l	#loc_8CDF2,(a0)
 ;		move.w	#$3EA0,(Camera_max_X_pos).w		; Liliam: camera - fix LBZ1 boss entry lock
@@ -210671,7 +210671,7 @@ loc_8CF0A:
 ; ---------------------------------------------------------------------------
 
 Obj_LBZ2MinibossBox:									; Liliam: start from actual act 2 start
-		tst.b	(_unkFAA8).w
+		tst.b	(Level_results_started).w
 		beq.s	LBZ2MinibossBox_Init
 		jmp	(Respawn_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -211056,7 +211056,7 @@ loc_8D2B6:
 		moveq	#signextendB(sfx_Rising),d0
 		jsr	(Play_SFX).l
 		jsr	(Make_CutsceneSkipObj).l		; Liliam: cutscene skip - LBZ2 pre-boss
-		clr.b	(End_of_level_flag).w			;
+		clr.b	(Level_results_done).w			;
 		st	(Anim_Counters+$F).w
 		move.w	#$4390,(Camera_stored_max_X_pos).w	; Liliam: camera - fix LBZ2 boss entry lock
 ;		move.w	#$6000,(Camera_stored_max_X_pos).w	;
@@ -213789,13 +213789,13 @@ loc_8F0DA:
 		move.b	(SOZ_darkness_level).w,d0
 		beq.s	loc_8F112
 		move.b	byte_8F118(pc,d0.w),d0
-		move.b	(SOZ_ghost_count).w,d1
+		move.b	(SOZ2_ghost_count).w,d1
 		cmp.b	d0,d1
 		bhs.w	locret_8F436
 		subq.w	#1,$3A(a0)
 		bpl.w	locret_8F436
 		addq.b	#1,d1
-		move.b	d1,(SOZ_ghost_count).w
+		move.b	d1,(SOZ2_ghost_count).w
 		cmp.b	d0,d1
 		bhs.s	loc_8F108
 		move.w	#$3F,$3A(a0)
@@ -213806,7 +213806,7 @@ loc_8F108:
 ; ---------------------------------------------------------------------------
 
 loc_8F112:
-		clr.b	(SOZ_ghost_count).w
+		clr.b	(SOZ2_ghost_count).w
 		rts
 ; ---------------------------------------------------------------------------
 byte_8F118:
@@ -213839,7 +213839,7 @@ loc_8F15E:
 ; ---------------------------------------------------------------------------
 
 loc_8F16A:
-		subq.b	#1,(SOZ_ghost_count).w
+		subq.b	#1,(SOZ2_ghost_count).w
 		jmp	(Go_Delete_SpriteSlotted2).l
 ; ---------------------------------------------------------------------------
 
@@ -213870,7 +213870,7 @@ loc_8F1AC:
 		bclr	#2,render_flags(a0)
 		bset	#7,render_flags(a0)
 		move.b	(SOZ_darkness_level).w,child_dx(a0)
-		move.b	(SOZ_ghost_count).w,child_dy(a0)
+		move.b	(SOZ2_ghost_count).w,child_dy(a0)
 		bsr.w	sub_8F538
 		moveq	#signextendB(sfx_GhostAppear),d0
 		jsr	(Play_SFX).l
@@ -215713,9 +215713,9 @@ Obj_HPZMasterEmerald:
 		jsr	(SetUp_ObjAttributes).l
 		move.l	#Obj_HPZMasterEmerald_Main,(a0)			; Liliam: Encore mode - special stage
 ;		move.l	#loc_90700,(a0)					;
-		move.w	a0,(_unkFABA).w
-		move.b	#-$10,(_unkFABC).w
-		move.b	#-$18,(_unkFABD).w
+		move.w	a0,(HPZ_emerald_addr).w
+		move.b	#-$10,(DDZ_saved_debug).w
+		move.b	#-$18,(HPZ_emerald_child_dy).w
 ;		lea	(off_914CE).l,a1			; Liliam: bugfix - stop loading wrong kind of palette data
 ;		lea	(Palette_rotation_data).w,a2		;
 ;		move.l	(a1)+,(a2)+				;
@@ -215772,7 +215772,7 @@ MasterEmerald_Return:
 ; ---------------------------------------------------------------------------
 
 loc_9071A:
-		tst.b	(_unkFAC1).w
+		tst.b	(Emerald_animation_flag).w
 		bne.s	loc_9072E
 		lea	off_914CE(pc),a1
 		lea	(Normal_palette_line_4+$2).w,a2
@@ -215940,7 +215940,7 @@ loc_90880:
 ; ---------------------------------------------------------------------------
 
 loc_9089E:
-		move.b	(_unkFAC0).w,d0
+		move.b	(Emerald_collected_subtype).w,d0
 		bpl.s	loc_908BE
 		bclr	#7,d0
 		cmp.b	subtype(a0),d0
@@ -216019,7 +216019,7 @@ Obj_HPZSuperEmerald_EncoreShattered:					; Liliam: Encore mode - special stage
 		tst.w	respawn_addr(a0)
 		bne.w	loc_908DE
 		move.b	#$1D,mapping_frame(a0)
-		move.b	(_unkFAC0).w,d0
+		move.b	(Emerald_collected_subtype).w,d0
 		bpl.w	loc_908DE
 		bclr	#7,d0
 		cmp.b	subtype(a0),d0
@@ -216187,7 +216187,7 @@ locret_90A92:
 ; ---------------------------------------------------------------------------
 
 loc_90A94:
-		bclr	#0,(_unkFAB8).w
+		bclr	#0,(Cutscene_flags).w
 		beq.w	locret_90C32
 		cmpi.b	#7,(Super_emerald_count).w			; Liliam: Encore mode - special stage
 		slo	d2						;
@@ -216557,7 +216557,7 @@ loc_90D52:
 ; ---------------------------------------------------------------------------
 
 loc_90D5E:
-		bset	#0,(_unkFAB8).w
+		bset	#0,(Cutscene_flags).w
 		move.w	$44(a0),d0
 		beq.s	loc_90D72
 		movea.w	d0,a1
