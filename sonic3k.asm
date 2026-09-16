@@ -190648,9 +190648,12 @@ loc_81492:
 
 loc_814B8:
 		tst.w	d1
-		bne.s	locret_81512
+		bne.s	loc_814C4				; Liliam: debug - properly apply camera boundaries
+;		bne.s	locret_81512				;
 		bsr.w	sub_82920
 		bsr.w	sub_829D2
+
+loc_814C4:
 		btst	#1,(Cutscene_flags).w
 		beq.s	locret_81512
 		move.l	#loc_816FC,(a0)
@@ -190698,6 +190701,8 @@ sub_8151C:
 ; ---------------------------------------------------------------------------
 
 loc_81548:
+		tst.b	(Cutscene_flags).w			; Liliam: debug - properly apply camera boundaries
+		bne.s	locret_81512				;
 		clr.w	(Camera_min_X_pos).w
 		move.w	#$7FFF,(Camera_max_X_pos).w
 		rts
@@ -190734,7 +190739,7 @@ loc_81554:
 		move.w	#$120,(Camera_target_max_Y_pos).w
 		lea	(Player_2).w,a1
 		moveq	#0,d0
-		moveq	#$12-1,d1
+		moveq	#bytesToLcnt(object_size),d1
 
 loc_815DC:
 		move.l	d0,(a1)+
@@ -190826,8 +190831,20 @@ loc_816FC:
 		bsr.w	sub_82742
 		bsr.w	sub_82772
 		bsr.w	sub_828B2
+		move.w	(DDZ_saved_debug).w,d0			; Liliam: debug - properly apply camera boundaries
+		move.w	(Debug_placement_mode).w,d1		;
+		move.w	d1,(DDZ_saved_debug).w			;
+		eor.w	d1,d0					;
+		beq.s	loc_81708				;
+		bsr.w	sub_8151C				;
+		tst.w	d1					;
+		bne.s	loc_81710				;
+
+loc_81708:
 		bsr.w	sub_829A0
 		bsr.w	sub_829D2
+
+loc_81710:
 		btst	#0,(Cutscene_flags).w
 		beq.s	locret_81724
 		move.l	#loc_81726,(a0)
@@ -192767,6 +192784,8 @@ loc_82B62:
 ; ---------------------------------------------------------------------------
 
 loc_82B6E:
+		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - release player from object
+		bne.s	loc_82B78				;
 		lea	(Player_1).w,a1
 		move.b	#90-1,invulnerability_timer(a1)
 
@@ -192830,6 +192849,8 @@ sub_82BE4:
 		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
 		bne.s	loc_82C18
+		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - release player from object
+		bne.s	locret_82C1E				;
 		lea	(Player_1).w,a1
 		tst.b	invulnerability_timer(a1)
 		bne.s	locret_82C1E
@@ -192871,6 +192892,8 @@ locret_82C4E:
 ; ---------------------------------------------------------------------------
 
 loc_82C50:
+		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - release player from object
+		bne.w	loc_82B84				;
 		lea	(Player_1).w,a1
 		move.b	#90-1,invulnerability_timer(a1)
 		bsr.w	sub_82C6A
@@ -219019,14 +219042,11 @@ Debug_LevelBound:						; Liliam: debug - properly apply camera boundaries
 		move.l	d0,x_pos(a0)
 
 	.minXdone:
-		move.l	#$74800000,d0
 		cmpi.b	#$C,(Current_zone).w
-		beq.s	.maxX
+		beq.s	.maxXdone
 		move.w	(Camera_max_X_pos).w,d0
 		addi.w	#$140,d0
 		swap	d0
-
-	.maxX:
 		cmp.l	d0,d3
 		blt.s	.maxXdone
 		move.l	d0,x_pos(a0)
