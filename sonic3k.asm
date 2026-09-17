@@ -7658,10 +7658,16 @@ loc_693E:
 ;		move.b	#$1B,anim(a1)				;
 ;		bset	#Status_InAir,status(a1)		;
 
-;loc_695A:
+		cmpi.w	#$400,(Current_zone_and_act).w					; Liliam: Encore mode - FBZ level order
+		bne.s	loc_695A							;
+		tst.b	(Alternate_start_flag).w					;
+		beq.s	loc_695A							;
+		move.l	#Obj_LevelIntroFBZ1,(Level_intro_object).w			;
+
+loc_695A:
 		cmpi.w	#$800,(Current_zone_and_act).w
 		bne.s	loc_6986
-		move.l	#Obj_SOZMushroomParachute,(Level_intro_object).w		; Liliam: Encore mode - FBZ level order
+		move.l	#Obj_SOZMushroomParachute,(Level_intro_object).w		;
 		tst.b	(Alternate_start_flag).w					;
 		bne.s	loc_6986							;
 		move.l	#Obj_LevelIntro_PlayerFallIntoGround,(Level_intro_object).w
@@ -9897,7 +9903,7 @@ LevelSelect_CheckCNZ:
 ; ---------------------------------------------------------------------------
 
 LevelSelect_CheckSonicTails:
-		cmpi.w	#7,(Player_mode).w			; Liliam: Metal Sonic - final boss
+		cmpi.w	#7,(Player_mode).w			; Liliam: Metal Sonic - player starts
 		beq.s	LevelSelect_CheckCNZ			;
 ;		cmpi.w	#3,(Player_mode).w			;
 ;		bhs.s	loc_7DAC				;
@@ -9926,8 +9932,12 @@ loc_7DAC:
 
 loc_7DBA:
 		; Liliam: removed S&K alone mode
-		cmpi.w	#$800,d0							; Liliam: Encore mode - FBZ level order
+		cmpi.w	#$400,d0							; Liliam: Encore mode - FBZ level order
+		beq.s	LevelSelect_AlternateStart					;
+		cmpi.w	#$800,d0							;
 		bne.s	LevelSelect_CheckSpecialStage					;
+
+LevelSelect_AlternateStart:
 		move.b	(Encore_mode).w,(Alternate_start_flag).w			;
 
 LevelSelect_CheckSpecialStage:
@@ -15905,8 +15915,12 @@ SaveScreen_PickPlayerStart:
 		move.b	d0,(Alternate_start_flag).w		; Liliam: Encore mode - player starts
 		tst.b	(Encore_mode).w				;
 		bne.s	SaveScreen_EncoreStart			;
+		cmpi.w	#7,(Player_mode).w			;
+		beq.s	SaveScreen_CheckCNZ			;
 		cmpi.w	#3,(Player_mode).w			;
 		bne.s	locret_C152				;
+		cmpi.w	#$400,(Current_zone_and_act).w		;
+		beq.s	locret_C152				;
 		cmpi.w	#$800,(Current_zone_and_act).w		;
 		beq.s	locret_C152				;
 		bra.s	SaveScreen_AlternateStart		;
@@ -15917,9 +15931,13 @@ SaveScreen_EncoreStart:
 		move.b	#1,(Encore_unlocked_chars).w			;
 		move.l	(P1_character).w,(Saved_encore_stocks).w	;
 
-		cmpi.w	#$300,(Current_zone_and_act).w		; Liliam: Encore mode - player starts
+		cmpi.w	#$400,(Current_zone_and_act).w		; Liliam: Encore mode - player starts
 		beq.s	SaveScreen_AlternateStart		;
 		cmpi.w	#$800,(Current_zone_and_act).w		;
+		beq.s	SaveScreen_AlternateStart		;
+
+SaveScreen_CheckCNZ:
+		cmpi.w	#$300,(Current_zone_and_act).w		; Liliam: Metal Sonic - player starts
 		bne.s	locret_C152				;
 
 SaveScreen_AlternateStart:
@@ -40790,7 +40808,7 @@ Obj_EncoreHelper_Main:
 		move.b	(P1_character).w,d0
 		move.b	(P2_character).w,(P1_character).w
 		move.b	d0,(P2_character).w
-		move.b	#$47,(Tails_CPU_pos_table_offset).w
+		move.b	#$43,(Tails_CPU_pos_table_offset).w
 		moveq	#signextendB(sfx_EncoreSwap),d0
 
 	.playSFX:
@@ -85132,10 +85150,55 @@ loc_393BE:
 		ext.l	d0
 		asl.l	#8,d0
 		add.l	d0,2(a4)
+
+locret_393EC:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_393EE:
+Obj_LevelIntroFBZ1:									; Liliam: Encore mode - FBZ level order
+		move.l	#Obj_LevelIntroFBZ1_Wait,(a0)
+		move.b	#10,anim_frame_timer(a0)
+		lea	(Player_1).w,a1
+		bsr.s	LevelIntroFBZ1_InitPlayer
+		lea	(Player_2).w,a1
+		tst.l	(a1)
+		beq.s	locret_393EC
+
+LevelIntroFBZ1_InitPlayer:
+		move.w	#8,x_pos(a1)
+		move.w	#$740,y_pos(a1)
+		move.w	#$800,x_vel(a1)
+		move.w	#$280,y_vel(a1)
+		move.w	#$800,ground_vel(a1)
+		move.b	#3,object_control(a1)
+		move.b	#2,anim(a1)
+		bset	#Status_InAir,status(a1)
+		bset	#Status_Roll,status(a1)
+		bset	#Status_RollJump,status(a1)
+		clr.b	mapping_frame(a1)
+		jmp	(Player_SetRollHeight).l
+; ---------------------------------------------------------------------------
+
+Obj_LevelIntroFBZ1_Wait:								; Liliam: Encore mode - FBZ level order
+		subq.b	#1,anim_frame_timer(a0)
+		bne.s	locret_393EC
+		clr.b	(Player_1+object_control).w
+		tst.l	(Player_2).w
+		beq.s	LevelIntroFBZ1_Delete
+		clr.b	(Player_2+object_control).w
+		move.l	#Obj_LevelIntroFBZ1_Wait2,(a0)
+		move.b	#-1,(Tails_CPU_pos_table_offset).w
+
+Obj_LevelIntroFBZ1_Wait2:
+		tst.w	(Player_2+x_vel).w
+		bne.w	locret_393EC
+		move.b	#$43,(Tails_CPU_pos_table_offset).w
+
+LevelIntroFBZ1_Delete:
+		jmp	(Delete_Current_Sprite).l
+; ---------------------------------------------------------------------------
+
+Obj_SonicSnowboard:
 		move.w	#make_art_tile(ArtTile_Player_1,0,0),art_tile(a0)
 		move.l	#Map_SonicSnowboard,mappings(a0)
 		move.w	#$100,priority(a0)
@@ -85182,6 +85245,7 @@ loc_394A0:
 		move.b	byte_394F2(pc,d0.w),anim(a0)
 		btst	#Status_InAir,status(a2)
 		beq.s	loc_39502
+		move.b	#2,double_jump_flag(a2)			; Liliam: bugfix - no double jumps on the snowboard
 		move.b	#0,anim(a0)
 		tst.w	x_vel(a2)
 		beq.s	loc_394E2
@@ -85378,10 +85442,10 @@ Obj_LevelIntroICZ1:
 		move.w	#$280,y_vel(a1)
 		move.w	#$800,ground_vel(a1)
 		bset	#Status_InAir,status(a1)
-		move.b	#0,jumping(a1)
 		jsr	(Player_SetRollHeight).l		; Liliam: bugfix - set correct player height
 ;		move.b	#$E,y_radius(a1)			;
 ;		move.b	#7,x_radius(a1)				;
+;		move.b	#0,jumping(a1)				;
 		move.b	#2,anim(a1)
 		bset	#Status_Roll,status(a1)
 		move.b	#1,(Ctrl_1_locked).w
@@ -85442,7 +85506,7 @@ loc_397FA:
 		move.b	#2,object_control(a2)
 		jsr	(AllocateObjectAfterCurrent).l
 		bne.w	loc_39836
-		move.l	#loc_393EE,(a1)
+		move.l	#Obj_SonicSnowboard,(a1)
 		move.w	x_pos(a2),x_pos(a1)
 		move.w	y_pos(a2),y_pos(a1)
 		move.w	x_vel(a2),x_vel(a1)
@@ -121588,7 +121652,7 @@ loc_53A5A:
 ;		bne.s	locret_53AD2				;
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.w	#button_ABC_mask,d0
-		beq.s	locret_53AD2				; Liliam: Encore mode - disable A button
+		beq.s	locret_53A32				; Liliam: Encore mode - disable A button
 		tst.b	(Disable_A_button_flag).w		;
 		beq.s	loc_53A9C				;
 		andi.b	#button_B_mask|button_C_mask,d0		;
@@ -121597,42 +121661,46 @@ loc_53A5A:
 loc_53A9C:
 		clr.b	(Ctrl_1_locked).w
 		clr.b	(Ctrl_2_locked).w			; Liliam: Encore mode - player starts
+		move.w	#-$600,y_vel(a1)
+		move.b	#1,jumping(a1)				;
 		moveq	#signextendB(sfx_SandSplash),d0		;
 		jsr	(Play_SFX).l				;
 		lea	(Dust).w,a6				;
-		bsr.s	loc_53AA0				;
+		bsr.s	sub_53AA6				;
 		lea	(Player_2).w,a1				;
 		lea	(Dust_P2).w,a6				;
 		tst.l	(a1)					;
 		beq.s	locret_53AD2				;
 		tst.b	(Encore_mode).w				;
-		bne.s	loc_53AA0				;
-		move.w	#2,(Tails_CPU_routine).w		;
-		rts						;
-; ---------------------------------------------------------------------------
+		beq.s	ICZ1BigSnowPile_ReleaseTails		;
+		move.w	#-$5C0,y_vel(a1)			;
 
-loc_53AA0:
-		move.w	#-$600,y_vel(a1)
+sub_53AA6:
 		bset	#Status_InAir,status(a1)
-;		move.b	#1,jumping(a1)				; Liliam: Encore mode - player starts
 		jsr	(Player_SetRollHeight).l		; Liliam: bugfix - set correct player height
+;		move.b	#1,jumping(a1)				;
 ;		move.b	#$E,y_radius(a1)			;
 ;		move.b	#7,x_radius(a1)				;
 		move.b	#2,anim(a1)
 		bset	#Status_Roll,status(a1)
-		move.w	x_pos(a0),d0				; Liliam: Encore mode - player starts
+		move.w	x_pos(a0),d0				; Liliam: QOL - add snow splash effect
 		sub.w	x_pos(a1),d0				;
 		addi.w	#$94,d0					;
 		lsr.w	#1,d0					;
-		moveq	#-1,d1					;
 		move.b	(a2,d0.w),d1				;
-		addi.w	#$7AC,d1				;
+		ext.w	d1					;
+		addi.w	#$6AC,d1				;
 		move.w	d1,y_pos(a6)				;
 		move.w	#4<<8,anim(a6)				;
 ;		moveq	#signextendB(sfx_Jump),d0		;
 ;		jsr	(Play_SFX).l				;
 
 locret_53AD2:
+		rts
+; ---------------------------------------------------------------------------
+
+ICZ1BigSnowPile_ReleaseTails:					; Liliam: bugfix - lock player 2 controls consistently
+		move.w	#2,(Tails_CPU_routine).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -161798,12 +161866,14 @@ loc_6E80C:
 		addi.w	#$20,d0
 		cmp.w	(Player_1+y_pos).w,d0
 		blo.w	locret_6E4C4
-		move.w	#$500,d0
 		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
-		beq.s	loc_6E820							;
+		beq.s	loc_6E81C							;
 		move.w	#$400,d0							;
+		jmp	(StartNewLevel_Alternate).l					;
+; ---------------------------------------------------------------------------
 
-loc_6E820:
+loc_6E81C:
+		move.w	#$500,d0
 		jsr	(StartNewLevel).l
 		jmp	(Go_Delete_Sprite_2).l
 ; ---------------------------------------------------------------------------
