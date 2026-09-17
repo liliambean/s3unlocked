@@ -45517,7 +45517,8 @@ loc_1C930:
 		blo.s	locret_1C96C
 		cmpi.w	#$700,d0
 		bhs.s	locret_1C96C
-		cmpi.w	#$3A00,(Camera_X_pos).w
+;		cmpi.w	#$3A00,(Camera_X_pos).w			; Liliam: camera - fix MGZ2 boss entry lock
+		cmpi.w	#$3A80,(Player_1+x_pos).w		;
 		blo.s	locret_1C96C
 		clr.w	(Events_fg_2).w				; Liliam: camera - repurpose MGZ2 ceiling raiser
 		move.w	#$6A0,d0
@@ -45539,23 +45540,18 @@ locret_1C96C:
 ; ---------------------------------------------------------------------------
 
 loc_1C96E:
-		cmpi.w	#$3A00,(Camera_X_pos).w
+;		cmpi.w	#$3A00,(Camera_X_pos).w			; Liliam: camera - fix MGZ2 boss entry lock
+		cmpi.w	#$3A80,(Player_1+x_pos).w		;
 		blo.s	loc_1C9A8
-		move.w	(Camera_Y_pos).w,d1			; Liliam: camera - fix MGZ2 boss entry lock
+		move.w	(Camera_Y_pos).w,d1			;
 		cmp.w	#$6A0,d1				;
-		beq.s	loc_1C976				;
-		bhi.s	locret_1C96C				;
-
-	.apply:
-		move.w	d1,(Camera_min_Y_pos).w			;
-		rts						;
-; ---------------------------------------------------------------------------
-
-loc_1C976:
+		bhi.s	locret_1C9C8				;
+		blo.s	MGZ2_VerticalCameraLock			;
+		tst.b	(Encore_mode).w				;
+		bne.s	MGZ2_VerticalCameraLock			;
 		move.w	#$3C80,d0
 		cmp.w	(Camera_X_pos).w,d0
-		bhi.s	loc_1C96E.apply				; Liliam: camera - fix MGZ2 boss entry lock
-;		bhi.s	locret_1C9C6				;
+		bhi.s	MGZ2_VerticalCameraLock
 		move.w	d0,(Camera_min_X_pos).w
 		move.w	d0,(Camera_target_min_X_pos).w
 		jsr	(AllocateObject).l
@@ -45585,8 +45581,9 @@ loc_1C9C6:
 		bra.w	loc_1C9F8				;
 ; ---------------------------------------------------------------------------
 
-;locret_1C9C6:
-;		rts						; Liliam: camera - fix MGZ2 boss entry lock
+MGZ2_VerticalCameraLock:
+		move.w	d1,(Camera_min_Y_pos).w			; Liliam: camera - fix MGZ2 boss entry lock
+;		rts						;
 
 locret_1C9C8:
 		rts
