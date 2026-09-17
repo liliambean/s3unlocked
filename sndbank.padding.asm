@@ -316,13 +316,11 @@ LevelSelectZoneIcon_ExtraIcons:
 ; ---------------------------------------------------------------------------
 
 Obj_PhotoPiece:
-		tst.b	(Encore_mode).w
 	if NoMuseum
 		bra.s	PhotoPiece_Delete
 	else
-		bne.s	PhotoPiece_Delete
-	endif
 		moveq	#0,d0
+	endif
 		move.b	subtype(a0),d0
 		cmpi.b	#120,d0
 		bhs.s	PhotoPiece_Delete
@@ -408,13 +406,11 @@ Map_PhotoPiece:
 ; ---------------------------------------------------------------------------
 
 Obj_MetalSonicHologram:
-		tst.b	(Encore_mode).w
 	if NoHolograms
 		bra.w	MetalSonicHologram_Delete
 	else
-		beq.w	MetalSonicHologram_Delete
-	endif
 		bsr.w	MetalSonicHologram_LoadArray
+	endif
 		btst	d2,d0
 		bne.w	MetalSonicHologram_Delete
 		cmpi.b	#18,d2					; Skip over the next bit if in LRZ1
