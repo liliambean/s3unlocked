@@ -83455,7 +83455,9 @@ loc_3818E:
 		tst.w	d1
 		bpl.s	loc_381C8
 		move.l	#loc_38234,(a0)
-		move.w	#$100,x_vel(a0)
+		movea.l	a0,a1					; Liliam: bugfix - delete object consistently
+		bsr.s	sub_38208				;
+;		move.w	#$100,x_vel(a0)				;
 		neg.w	y_vel(a0)
 		asr	y_vel(a0)
 		asr	y_vel(a0)
@@ -83463,29 +83465,21 @@ loc_3818E:
 		bsr.s	sub_381F2
 		bsr.s	sub_381F2
 		bsr.s	sub_381F2
-		tst.w	(Competition_mode).w			; Liliam: Encore mode - add extra levels
-		beq.s	loc_381C8				;
-		move.l	#loc_381D8,(a0)				; Liliam: bugfix - delete when offscreen
 
 loc_381C8:
 ;		cmpi.w	#-$100,(Camera_min_Y_pos).w		;
 ;		bne.s	loc_381D8				;
 ;		move.w	(Screen_Y_wrap_value).w,d0		;
 ;		and.w	d0,y_pos(a0)				;
-		jmp	(Draw_Sprite).l				;
-; ---------------------------------------------------------------------------
 
-loc_381D8:
-		jsr	(MoveSprite2).l				; Liliam: bugfix - delete when offscreen
-		addi.w	#8,y_vel(a0)				;
-		move.w	(Camera_max_Y_pos).w,d0
-		addi.w	#$60,d0
-		cmp.w	y_pos(a0),d0
-		bge.s	loc_381EC
-		jmp	(Delete_Current_Sprite).l
-; ---------------------------------------------------------------------------
+;loc_381D8:
+;		move.w	(Camera_max_Y_pos).w,d0			;
+;		addi.w	#$60,d0					;
+;		cmp.w	y_pos(a0),d0				;
+;		bge.s	loc_381EC				;
+;		jmp	(Delete_Current_Sprite).l		;
 
-loc_381EC:
+;loc_381EC:
 		jmp	(Draw_Sprite).l
 
 ; =============== S U B R O U T I N E =======================================
@@ -83499,7 +83493,10 @@ sub_381F2:
 loc_381FE:
 		move.w	(a0,d0.w),(a1,d0.w)
 		subq.w	#2,d0
-		bcc.s	loc_381FE
+		bhs.s	loc_381FE
+		subi.w	#$10,y_vel(a0)				; Liliam: bugfix - delete object consistently
+
+sub_38208:
 		jsr	(Random_Number).l
 		move.w	d0,d1
 		andi.w	#$1FF,d0
@@ -83509,8 +83506,8 @@ loc_381FE:
 		andi.w	#$F,d1
 		addi.w	#$1A,d1
 		move.b	d1,$3C(a1)
-		subi.w	#$10,y_vel(a0)
-		moveq	#0,d0
+;		subi.w	#$10,y_vel(a0)				;
+;		moveq	#0,d0					;
 
 locret_38232:
 		rts
