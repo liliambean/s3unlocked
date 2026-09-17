@@ -139,7 +139,7 @@ namespace S3KObjectDefinitions.Common
 					case 0x03: return new Sprite(sprite, obj.XFlip ? 0x60 : -0x60, 0);
 					case 0x04: return new Sprite(sprite, 0, obj.XFlip ? 0x20 : -0x20);
 					case 0x05: return new Sprite(sprite, 0, obj.XFlip ? 0x40 : -0x40);
-					case 0x06: return new Sprite(sprite, 0, obj.XFlip ? 0x60 : -0x60);
+					case 0x06: return new Sprite(sprite, 0, obj.XFlip ? 0 : -0x60);
 					case 0x07: return new Sprite(sprite, obj.XFlip ? 0x80 : -0x80, 0);
 					case 0x08: return new Sprite(sprite, 0, obj.XFlip ? 0x80 : -0x80);
 				}
@@ -160,7 +160,7 @@ namespace S3KObjectDefinitions.Common
 					case 0x03: return Line(0xC0, 0);
 					case 0x04: return Line(0, 0x40);
 					case 0x05: return Line(0, 0x80);
-					case 0x06: return Line(0, 0xC0);
+					case 0x06: return Line(0, 0xC0, bugged: obj.XFlip);
 					case 0x07: return Line(0x100, 0);
 					case 0x08: return Line(0, 0x100);
 				}
@@ -209,11 +209,11 @@ namespace S3KObjectDefinitions.Common
 			return new[] { sprite, flipX, flipY, flipXY };
 		}
 
-		private Sprite Line(int width, int height)
+		private Sprite Line(int width, int height, bool bugged = false)
 		{
 			var overlay = new BitmapBits(width + 1, height + 1);
 			overlay.DrawLine(LevelData.ColorWhite, 0, height, width, 0);
-			return new Sprite(overlay, -width / 2, -height / 2);
+			return new Sprite(overlay, -width / 2, -height / (bugged ? 1 : 2));
 		}
 
 		public abstract int GetSpriteIndex(byte subtype);
