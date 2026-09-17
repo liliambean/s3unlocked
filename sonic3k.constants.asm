@@ -1009,8 +1009,15 @@ Competition_total_laps		ds.b 1			; total number of laps in competition mode (typ
 			ds.b 1				; unused
 Competition_current_lap		ds.b 1			; current lap number for player 1 in competition mode
 Competition_current_lap_2P	ds.b 1			; current lap number for player 2 in competition mode
-			ds.b $2A			; unused
+			ds.b $20			; unused
 
+Encore_characters =		*
+Encore_P1_character		ds.b 1		; Liliam: Encore mode
+Encore_P2_character		ds.b 1		; Liliam: Encore mode
+Encore_stocks_packed		ds.w 1		; Liliam: Encore mode
+Encore_unlocked_chars		ds.b 1		; Liliam: Encore mode - save data
+Encore_available_chars		ds.b 1		; Liliam: Encore mode - bonus stage
+Saved_encore_chars		ds.l 1		; Liliam: Encore mode
 Player_mode			ds.w 1			; 0 = Sonic and Tails, 1 = Sonic alone, 2 = Tails alone, 3 = Knuckles alone
 Player_option			ds.w 1			; option selected on level select, data select screen or Sonic & Knuckles title screen
 Encore_mode			ds.b 1		; Liliam: Encore mode
@@ -1052,7 +1059,7 @@ Respawn_table_keep		ds.b 1			; if set, respawn table is not reset during level l
 			ds.w 1				; unused
 Saved_apparent_zone_and_act	ds.w 1
 Saved2_apparent_zone_and_act	ds.w 1
-Saved_encore_stocks		ds.l 1		; Liliam: Encore mode - save data
+			ds.l 1				; unused
 Blue_spheres_current_stage	ds.b 4			; the layout parts that make up the current stage
 Blue_spheres_current_level	ds.l 1			; number shown at the top of the full game menu
 Blue_spheres_option		ds.b 1			; 0 = level, 1 = start, 2 = code
@@ -1094,9 +1101,7 @@ Cheat_input_counter2		ds.w 1			; progress entering cheat codes
 Competition_mode		ds.w 1
 P1_character			ds.b 1			; 0 = Sonic, 1 = Tails, 2 = Knuckles
 P2_character			ds.b 1
-Encore_stocks_packed		ds.w 1		; Liliam: Encore mode - save data
-Encore_available_chars		ds.b 1		; Liliam: Encore mode - character stock monitor
-Encore_unlocked_chars		ds.b 1		; Liliam: Encore mode - save data
+			ds.l 1				; unused
 
 CrossResetRAM_End =		*
 

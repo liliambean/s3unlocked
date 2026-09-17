@@ -5640,6 +5640,17 @@ loc_3DBA:
 
 ; ---------------------------------------------------------------------------
 
+Encore_UnlockCharacters:					; Liliam: Encore mode - character stock monitor
+		moveq	#%0111111,d0
+		btst	#Unlock_MetalSonic,(Unlock_flags).w
+		beq.s	.updateFlags
+		moveq	#%1111111,d0
+
+	.updateFlags:
+		move.b	d0,(Encore_unlocked_chars).w
+		rts
+; ---------------------------------------------------------------------------
+
 Encore_LoadFlags:						; Liliam: Encore mode - palette
 		moveq	#8,d0
 		move.b	(Encore_options).w,d2
@@ -5831,12 +5842,13 @@ loc_3E32:
 		move.w	d0,(Debug_mode_flag).w			;
 ;		move.w	d0,(Competition_mode).w				; Liliam: prevent other characters from playing DDZ
 		move.w	d0,(Player_mode).w				;
-		move.l	d0,(Encore_stocks_packed).w		; Liliam: Encore mode - clear variables
-		move.l	d0,(Saved_encore_stocks).w		;
 		move.w	d0,(Cheat_input_counter).w
 ;		move.w	d0,(Cheat_input_counter2).w		; Liliam: cutscene skip - AIZ intro
 		move.b	d0,(AIZ_skip_intro_flag).w		;
 		move.b	d0,(Blue_spheres_stage_flag).w
+		move.w	d0,(Encore_stocks_packed).w		; Liliam: Encore mode - clear variables
+		bsr.w	Encore_UnlockCharacters			;
+
 		move.w	#(15*60)-39,(Demo_timer).w		; Liliam: title screen - quick return by pressing B
 		btst	#6,(Graphics_flags).w			;
 		beq.s	loc_3F1C				;
@@ -5846,6 +5858,12 @@ loc_3E32:
 loc_3F1C:
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w	; Clear DMA queue
+
+		tst.b	(Game_mode).w				; Liliam: title screen - quick return by pressing B
+		bne.w	loc_4090				;
+		move.w	#(6*60)-1,(Demo_timer).w		;
+		clr.b	(Title_screen_option).w				; Liliam: title screen - preserve cursor position
+
 	if DevMode
 		; Sonic 2 Beta 4 reveals that these were the original instructions.
 		; The original source code may have been able to produce debug builds with this enabled.
@@ -5860,10 +5878,6 @@ loc_3F1C:
 		nop
 	endif
 		; Liliam: removed S&K alone mode
-		tst.b	(Game_mode).w				; Liliam: title screen - quick return by pressing B
-		bne.w	loc_4090				;
-		move.w	#6*60-1,(Demo_timer).w			;
-		move.b	d0,(Title_screen_option).w			; Liliam: title screen - preserve cursor position
 		lea	(ArtKos_S3TitleSonic1).l,a0	;S3DATA
 		lea	(RAM_start).l,a1
 		bsr.w	Kos_Decomp
@@ -6043,13 +6057,12 @@ loc_4140:
 		move.w	#VDP_Plane_B|(VRAM_Plane_B_Name_Table>>13),(VDP_control_port).l	; Liliam: title screen - add fade from white
 		move.w	#VDP_Plane_A|(VRAM_Plane_A_Name_Table>>10),(VDP_control_port).l	;
 		tst.b	(Game_mode).w							;
-		beq.s	loc_41D4							;
+		beq.s	TitleScreen_Main						;
 		jsr	(Process_Sprites).l						;
 		jsr	(Render_Sprites).l						;
 		bsr.w	Pal_FadeFromWhite						;
 
-loc_41D4:
-
+TitleScreen_Main:
 		move.b	#VInt_ID_1A,(V_int_routine).w					;
 ;		move.b	#VInt_ID_4,(V_int_routine).w					;
 		bsr.w	Wait_VSync
@@ -6057,15 +6070,15 @@ loc_41D4:
 		jsr	(Render_Sprites).l
 		bsr.w	Process_Nem_Queue_Init
 		tst.w	(Palette_fade_timer).w						;
-		bne.s	loc_41D4							;
+		bne.s	TitleScreen_Main						;
 ;		tst.l	(Reserved_object_3).w						;
-;		beq.s	loc_41D4							;
+;		beq.s	TitleScreen_Main						;
 		tst.w	(Demo_timer).w
 		beq.w	loc_4278			; If the timer has run out, go do the level demos
 		move.b	(Ctrl_1_pressed).w,d0
 		or.b	(Ctrl_2_pressed).w,d0
 		andi.b	#button_start_mask,d0
-		beq.w	loc_41D4			; Repeat until start has been pressed on either controller
+		beq.w	TitleScreen_Main		; Repeat until start has been pressed on either controller
 
 		; Liliam: removed original implementation
 		moveq	#$7F,d0					; Liliam: title screen - expand options
@@ -6075,8 +6088,7 @@ loc_41D4:
 		move.b	d0,(Game_mode).w			;
 		cmpi.b	#GameMode_LevelSelect,d0		;
 		beq.s	TitleScreen_LevelSelect			;
-
-		clr.b	(Encore_mode).w				; Liliam: Encore mode - clear variables
+		clr.b	(Encore_mode).w				;
 
 TitleScreen_LevelSelect:
 		moveq	#signextendB(cmd_FadeOut),d0		; Liliam: upgraded S3&K sound driver (credit: flamewing)
@@ -6086,7 +6098,7 @@ TitleScreen_LevelSelect:
 TitleScreen_DenySelection:					; Liliam: title screen - expand options
 		moveq	#signextendB(sfx_Error),d0
 		bsr.w	Play_SFX
-		bra.s	loc_41D4
+		bra.s	TitleScreen_Main
 ; ---------------------------------------------------------------------------
 TitleScreen_GameModes:						; Liliam: title screen - expand options
 		dc.b GameMode_SaveScreen
@@ -6104,7 +6116,7 @@ TitleScreen_GameModes:						; Liliam: title screen - expand options
 ; ---------------------------------------------------------------------------
 
 loc_4278:
-		clr.b	(Encore_mode).w				; Liliam: Encore mode - clear variables
+		clr.b	(Encore_mode).w				; Liliam: title screen - expand options
 ;		moveq	#signextendB(cmd_FadeOut),d0		;
 ;		bsr.w	Play_SFX				;
 		move.w	(Next_demo_number).w,d0
@@ -7823,7 +7835,7 @@ loc_6AB8:
 loc_6AD0:
 		move.b	(Encore_unlocked_chars).w,d0		; Liliam: simplify player object selection
 		move.b	d0,(Encore_available_chars).w		;
-		move.b	(P1_character).w,d0			;
+		move.b	(Encore_P1_character).w,d0		;
 		bclr	d0,(Encore_available_chars).w		;
 		move.w	d0,d1					;
 		lsl.w	#2,d1					;
@@ -7832,7 +7844,7 @@ loc_6AD0:
 		move.l	#Obj_DashDust,(Dust).w
 		move.l	#Obj_InstaShield,(Shield).w
 		move.w	#Player_1,(Shield+parent).w
-		move.b	(P2_character).w,d1			;
+		move.b	(Encore_P2_character).w,d1		;
 		cmp.b	d0,d1					;
 		beq.s	locret_6B1C				;
 		bclr	d1,(Encore_available_chars).w		;
@@ -9886,9 +9898,9 @@ LevelSelect_EncoreStart:					; Liliam: Encore mode - player starts
 		bne.s	LevelSelect_CheckCNZ
 		move.b	(Encore_unlocked_chars).w,d1
 		move.b	d1,(Encore_available_chars).w
-		move.b	(P1_character).w,d1
+		move.b	(Encore_P1_character).w,d1
 		bclr	d1,(Encore_available_chars).w
-		move.b	(P2_character).w,d1
+		move.b	(Encore_P2_character).w,d1
 		bclr	d1,(Encore_available_chars).w
 
 LevelSelect_CheckCNZ:
@@ -9978,7 +9990,7 @@ LevelSelect_StartZoneContinued:
 		st	(AIZ_skip_intro_flag).w			; Liliam: cutscene skip - AIZ intro
 		move.b	#3,(Life_count).w
 		move.b	#3,(Life_count_P2).w
-		move.l	(P1_character).w,(Saved_encore_stocks).w	; Liliam: Encore mode - save data
+		move.l	(Encore_characters).w,(Saved_encore_chars).w	; Liliam: Encore mode - save data
 		moveq	#0,d0
 		move.w	d0,(Ring_count).w
 		move.l	d0,(Timer).w
@@ -10200,10 +10212,10 @@ locret_7F20:
 LevSelControls_PickCharacters:					; Liliam: ported from S3 - pick both characters
 		tst.b	(Encore_mode).w
 		beq.s	LevelSelect_PickPlayerMode
-		lea	(P1_character).w,a1
+		lea	(Encore_P1_character).w,a1
 		move.w	(Ctrl_1).w,d0
 		bsr.s	sub_206C3C
-		lea	(P2_character).w,a1
+		lea	(Encore_P2_character).w,a1
 		move.w	(Ctrl_2).w,d0
 
 sub_206C3C:
@@ -10705,8 +10717,8 @@ loc_842C:
 		tst.b	(Encore_mode).w							; Liliam: special stage - add extra characters
 		beq.s	loc_8446							;
 		move.b	#1,(SK_special_stage_flag).w					;
-		move.b	(P1_character).w,d0						;
-		move.b	(P2_character).w,d1						;
+		move.b	(Encore_P1_character).w,d0					;
+		move.b	(Encore_P2_character).w,d1					;
 		cmp.b	d0,d1								;
 		beq.s	loc_8454							;
 		move.b	d1,(Player_2+character_id).w					;
@@ -11589,7 +11601,7 @@ loc_90CC:
 		beq.s	loc_90EE
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - player swap
 		beq.s	loc_90E2				;
-		btst	#button_A,(Ctrl_1_pressed).w		;
+		btst	#button_A,d0				;
 		beq.s	loc_90E2				;
 		lea	(Player_2).w,a1				;
 		tst.l	(a1)					;
@@ -11692,6 +11704,33 @@ loc_91BE:
 		dbf	d5,loc_91BE
 
 locret_91E6:
+		rts
+; ---------------------------------------------------------------------------
+
+SpecialStage_SwapPlayers:					; Liliam: Encore mode - player swap
+		move.b	(Encore_P1_character).w,d0
+		move.b	(Encore_P2_character).w,(Encore_P1_character).w
+		move.b	d0,(Encore_P2_character).w
+		move.w	art_tile(a0),d0
+		move.w	art_tile(a1),art_tile(a0)
+		move.w	d0,art_tile(a1)
+		move.l	mappings(a0),d0
+		move.l	mappings(a1),mappings(a0)
+		move.l	d0,mappings(a1)
+		move.l	mapping_frame(a0),d0
+		move.l	mapping_frame(a1),mapping_frame(a0)
+		move.l	d0,mapping_frame(a1)
+		move.l	$2C(a0),d0
+		move.l	$2C(a1),$2C(a0)
+		move.l	d0,$2C(a1)
+		move.w	$3A(a0),d0
+		move.w	$3A(a1),$3A(a0)
+		move.w	d0,$3A(a1)
+		lea	(Reserved_object_3).w,a1
+		tst.l	(a1)
+		beq.s	locret_91E6
+		eori.w	#$80,priority(a1)
+		eori.w	#Player_2-Player_1,$3E(a1)
 		rts
 ; ---------------------------------------------------------------------------
 ;byte_91E8:
@@ -12344,48 +12383,19 @@ loc_97BE:
 
 loc_97C8:
 		cmpi.b	#3,d2
-		bne.w	loc_97EE				; Liliam: Encore mode - player swap
-;		bne.s	loc_97EE				;
+		bne.s	loc_97EE
 		tst.b	(Special_stage_bumper_lock).w
-		bne.w	loc_97EE				;
-;		bne.s	loc_97EE				;
+		bne.s	loc_97EE
 		move.w	d1,(Special_stage_interact).w
 		move.b	#1,(Special_stage_bumper_lock).w
 		move.b	#0,(Special_stage_advancing).w
 		moveq	#signextendB(sfx_Bumper),d0
 		jsr	(Play_SFX).l
-		tst.b	(Encore_mode).w				;
-		beq.s	locret_97EC				;
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - player swap
+		beq.s	locret_97A8				;
 		lea	(Player_2).w,a1				;
 		tst.l	(a1)					;
-		beq.s	locret_97EC				;
-
-SpecialStage_SwapPlayers:
-		move.b	(P1_character).w,d0			;
-		move.b	(P2_character).w,(P1_character).w	;
-		move.b	d0,(P2_character).w			;
-		move.w	art_tile(a0),d0				;
-		move.w	art_tile(a1),art_tile(a0)		;
-		move.w	d0,art_tile(a1)				;
-		move.l	mappings(a0),d0				;
-		move.l	mappings(a1),mappings(a0)		;
-		move.l	d0,mappings(a1)				;
-		move.l	mapping_frame(a0),d0			;
-		move.l	mapping_frame(a1),mapping_frame(a0)	;
-		move.l	d0,mapping_frame(a1)			;
-		move.l	$2C(a0),d0				;
-		move.l	$2C(a1),$2C(a0)				;
-		move.l	d0,$2C(a1)				;
-		move.w	$3A(a0),d0				;
-		move.w	$3A(a1),$3A(a0)				;
-		move.w	d0,$3A(a1)				;
-		lea	(Reserved_object_3).w,a1		;
-		tst.l	(a1)					;
-		beq.s	locret_97EC				;
-		eori.w	#$80,priority(a1)			;
-		eori.w	#Player_2-Player_1,$3E(a1)		;
-
-locret_97EC:
+		bne.w	SpecialStage_SwapPlayers		;
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -15927,9 +15937,9 @@ SaveScreen_PickPlayerStart:
 ; ---------------------------------------------------------------------------
 
 SaveScreen_EncoreStart:
-		clr.l	(P1_character).w				; Liliam: Encore mode - save data
+		clr.l	(Encore_characters).w				; Liliam: Encore mode - save data
 		move.b	#1,(Encore_unlocked_chars).w			;
-		move.l	(P1_character).w,(Saved_encore_stocks).w	;
+		move.l	(Encore_characters).w,(Saved_encore_chars).w	;
 
 		cmpi.w	#$400,(Current_zone_and_act).w		; Liliam: Encore mode - player starts
 		beq.s	SaveScreen_AlternateStart		;
@@ -16384,9 +16394,9 @@ loc_C4B4:
 		move.w	(Encore_stocks_packed).w,SRAM_life_count(a1)	;
 		move.b	(Encore_unlocked_chars).w,d0			;
 		lsl.w	#3,d0						;
-		or.b	(P2_character).w,d0				;
+		or.b	(Encore_P2_character).w,d0			;
 		lsl.w	#3,d0						;
-		or.b	(P1_character).w,d0				;
+		or.b	(Encore_P1_character).w,d0			;
 		lsl.w	#3,d0						;
 		or.b	(Current_special_stage).w,d0			;
 		move.w	d0,SRAM_player_mode(a1)				;
@@ -16406,7 +16416,7 @@ loc_C4C0:
 		jsr	Write_SaveGame(pc)
 
 loc_C4CC:
-		move.l	(P1_character).w,(Saved_encore_stocks).w	; Liliam: Encore mode - save data
+		move.l	(Encore_characters).w,(Saved_encore_chars).w	; Liliam: Encore mode - save data
 		clr.l	(Collected_special_ring_array).w	; Clear special stage ring collection RAM
 		rts
 ; End of function SaveGame
@@ -17961,18 +17971,18 @@ loc_D57E:
 		lsr.w	#3,d1						;
 		moveq	#7,d0						;
 		and.b	d1,d0						;
-		move.b	d0,(P1_character).w				;
+		move.b	d0,(Encore_P1_character).w			;
 		lsr.w	#3,d1						;
 		moveq	#7,d0						;
 		and.b	d1,d0						;
-		move.b	d0,(P2_character).w				;
+		move.b	d0,(Encore_P2_character).w			;
 		move.w	SRAM_life_count(a1),(Encore_stocks_packed).w	;
 		clr.l	(Player_mode).w					;
 		lsr.w	#3,d1						;
 		move.b	d1,(Encore_unlocked_chars).w			;
 		bsr.w	SaveScreen_LoadHologramSRAM			;
 		move.l	(a1),(Collected_holograms_array).w		;
-		move.l	(P1_character).w,(Saved_encore_stocks).w	;
+		move.l	(Encore_characters).w,(Saved_encore_chars).w	;
 		move.b	#GameMode_Level,(Game_mode).w			;
 		jmp	(Draw_Sprite).l					;
 ; ---------------------------------------------------------------------------
@@ -19379,10 +19389,10 @@ HUD_Lives_Encore:							; Liliam: HUD - Encore mode HUD
 		lea	(Encore_stocks).w,a1
 		move.b	(a1)+,d2
 		moveq	#0,d1
-		move.b	(P1_character).w,d1
+		move.b	(Encore_P1_character).w,d1
 		bsr.s	HUD_Lives_Encore_DrawPlayerIcon
 		moveq	#0,d1
-		move.b	(P2_character).w,d1
+		move.b	(Encore_P2_character).w,d1
 		bsr.s	HUD_Lives_Encore_DrawPlayerIcon
 		bsr.s	HUD_Lives_Encore_DrawStockIcon
 		bsr.s	HUD_Lives_Encore_DrawStockIcon_2
@@ -37343,7 +37353,7 @@ locret_17CCC:
 Encore_CheckRestart:						; Liliam: Encore mode - restart level
 		move.b	character_id(a0),d3
 		bset	d3,(Encore_available_chars).w
-		move.b	(P2_character).w,d3
+		move.b	(Encore_P2_character).w,d3
 		lea	(Encore_stocks).w,a1
 		subq.b	#1,(a1)
 		move.b	(a1)+,d2
@@ -37364,7 +37374,7 @@ Encore_CheckRestart:						; Liliam: Encore mode - restart level
 		jsr	(Encore_RepackStocks_NoHUD).l
 
 	.done:
-		move.b	d3,(P1_character).w
+		move.b	d3,(Encore_P1_character).w
 		lea	(Player_2).w,a1
 		tst.b	render_flags(a1)
 		bpl.s	Encore_RestartLevel
@@ -37391,7 +37401,7 @@ Encore_CheckRestart:						; Liliam: Encore mode - restart level
 
 	.checkSpawn:
 		st	(Reserved_object_3+routine).w
-		cmp.b	(P2_character).w,d3
+		cmp.b	(Encore_P2_character).w,d3
 		beq.s	.swapPlayers
 		lsl.w	#2,d3
 		lea	(Player_ObjectPtrs).l,a1
@@ -37408,8 +37418,8 @@ Encore_CheckRestart:						; Liliam: Encore mode - restart level
 ; ---------------------------------------------------------------------------
 
 Encore_RestartLevel:						; Liliam: Encore mode - restart level
-		move.b	(P2_character).w,(P1_character).w
-		move.b	d3,(P2_character).w
+		move.b	(Encore_P2_character).w,(Encore_P1_character).w
+		move.b	d3,(Encore_P2_character).w
 		move.w	#1,(Restart_level_flag).w
 		move.b	#1,(Act3_flag).w
 		st	(Encore_restart_flag).w
@@ -40805,9 +40815,9 @@ Obj_EncoreHelper_Main:
 		move.b	(Player_prev_frame).w,d0
 		move.b	(Player_prev_frame_P2).w,(Player_prev_frame).w
 		move.b	d0,(Player_prev_frame_P2).w
-		move.b	(P1_character).w,d0
-		move.b	(P2_character).w,(P1_character).w
-		move.b	d0,(P2_character).w
+		move.b	(Encore_P1_character).w,d0
+		move.b	(Encore_P2_character).w,(Encore_P1_character).w
+		move.b	d0,(Encore_P2_character).w
 		move.b	#$43,(Tails_CPU_pos_table_offset).w
 		moveq	#signextendB(sfx_EncoreSwap),d0
 
@@ -44290,9 +44300,9 @@ loc_1BF7C:
 		beq.s	.setTailsHeight				;
 		tst.b	(Encore_mode).w				;
 		beq.s	.adjustPosition				;
-		cmpi.b	#1,(P1_character).w			;
+		cmpi.b	#1,(Encore_P1_character).w		;
 		beq.s	.setTailsHeight				;
-		cmpi.b	#3,(P1_character).w			;
+		cmpi.b	#3,(Encore_P1_character).w		;
 		bne.s	.adjustPosition				;
 
 	.setTailsHeight:
@@ -47134,7 +47144,7 @@ Monitor_Give_Stock:						; Liliam: Encore mode - character stock monitor
 ; ---------------------------------------------------------------------------
 
 	.spawnPlayer:
-		move.b	d1,(P2_character).w
+		move.b	d1,(Encore_P2_character).w
 		move.b	d1,d0
 		lsl.w	#2,d0
 		lea	(Player_ObjectPtrs).l,a1
@@ -47396,13 +47406,13 @@ Encore_RotateStocks:						; Liliam: Encore mode - change character item
 		subq.b	#1,d2
 		bpl.s	.loop
 		lea	(Player_prev_frame).w,a2
-		lea	(P1_character).w,a3
+		lea	(Encore_P1_character).w,a3
 		lea	(Max_speed).w,a5
 		lea	(Dust).w,a6
 		cmpa.w	#Player_1,a1
 		beq.s	.swapPlayers
 		lea	(Player_prev_frame_P2).w,a2
-		lea	(P2_character).w,a3
+		lea	(Encore_P2_character).w,a3
 		lea	(Max_speed_P2).w,a5
 		lea	(Dust_P2).w,a6
 
@@ -71964,7 +71974,7 @@ sub_2EC80:
 ; ---------------------------------------------------------------------------
 
 	.encoreMode:
-		move.b	(P1_character).w,d0			; Liliam: results - center character name
+		move.b	(Encore_P1_character).w,d0		; Liliam: results - center character name
 
 LevelResults_CharNamePickWidth:					; Liliam: results - center character name
 		bsr.s	LevelResults_CheckMiles
@@ -71985,7 +71995,7 @@ SSResults_CheckEncore:						; Liliam: simplify results art selection
 ; ---------------------------------------------------------------------------
 
 	.encoreMode:
-		move.b	(P1_character).w,d0
+		move.b	(Encore_P1_character).w,d0
 
 LevelResults_CheckKnuckles:
 		cmpi.b	#2,d0
@@ -108045,7 +108055,7 @@ RotatingSlotBonus_Init:
 		move.b	#$E,y_radius(a0)
 		move.b	#7,x_radius(a0)
 		moveq	#0,d0					; Liliam: simplify player object selection
-		move.b	(P1_character).w,d0			;
+		move.b	(Encore_P1_character).w,d0		;
 		tst.b	(Encore_mode).w				;
 		bne.s	loc_4B9E8				;
 		move.w	(Player_mode).w,d0
@@ -108868,12 +108878,12 @@ Obj_EncoreBonusHelper_Main:
 		cmpi.l	#loc_4BC54,(Player_1).w
 		beq.s	Obj_EncoreBonusHelper_Delay
 		move.b	character_id(a0),d0
-		move.b	(P2_character).w,d1
+		move.b	(Encore_P2_character).w,d1
 		cmp.b	d0,d1
 		beq.s	.done
-		move.b	d0,(P2_character).w
+		move.b	d0,(Encore_P2_character).w
 		bclr	d0,(Encore_available_chars).w
-		cmp.b	(P1_character).w,d1
+		cmp.b	(Encore_P1_character).w,d1
 		beq.s	.done
 		addq.b	#1,d0
 		addq.b	#1,d1
@@ -134842,7 +134852,7 @@ loc_5C3C2:
 ;		move.w	#make_art_tile(ArtTile_Continue_Text,0,1),d6		;
 ;		jsr	(sub_5B318).l						;
 
-		move.b	(P1_character).w,d4			; Liliam: continues - add extra characters
+		move.b	(Encore_P1_character).w,d4		; Liliam: continues - add extra characters
 		tst.b	(Encore_mode).w				;
 		bne.s	loc_5C3E2				;
 		move.w	(Player_mode).w,d4			;
@@ -134900,7 +134910,7 @@ loc_5C48A:
 		move.b	#GameMode_Level,(Game_mode).w
 		move.b	#3,(Life_count).w
 		move.b	#3,(Life_count_P2).w
-		move.l	(Saved_encore_stocks).w,(P1_character).w	; Liliam: Encore mode - save data
+		move.l	(Saved_encore_chars).w,(Encore_characters).w	; Liliam: Encore mode - save data
 		moveq	#0,d0
 		move.w	d0,(Ring_count).w
 		move.l	d0,(Timer).w
@@ -136404,9 +136414,10 @@ EraseDataScreen_EraseBlueSphere:				; Liliam: options menu
 
 EraseDataScreen_EraseUnlockFlags:				; Liliam: options menu
 		move.w	d0,(Skill_options).w
-		move.w	d0,(Dataselect_nosave_player).w
 		move.w	d0,(Player_option).w
-		move.w	d0,(P1_character).w
+		move.w	d0,(Dataselect_nosave_player).w
+		move.l	d0,(Encore_characters).w
+		bclr	#6,(Encore_unlocked_chars).w
 		bra.s	OptionsScreen_SaveData
 ; ---------------------------------------------------------------------------
 

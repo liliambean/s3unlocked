@@ -112,8 +112,8 @@ Obj_LevelSelectCharIcons_Main:
 
 Obj_LevelSelectCharIcons_Encore:
 		move.w	#1,mainspr_childsprites(a0)
-		move.b	(P1_character).w,d0
-		move.b	(P2_character).w,d1
+		move.b	(Encore_P1_character).w,d0
+		move.b	(Encore_P2_character).w,d1
 		cmp.b	d0,d1
 		beq.s	Obj_LevelSelectCharIcons_Draw
 		addq.w	#2,mainspr_childsprites(a0)
@@ -1283,9 +1283,9 @@ Obj_EncoreCapsule:
 		move.b	#$20,height_pixels(a0)
 		move.b	#4,render_flags(a0)
 		move.b	subtype(a0),d0
-		cmp.b	(P1_character).w,d0
+		cmp.b	(Encore_P1_character).w,d0
 		beq.s	.failsafe
-		cmp.b	(P2_character).w,d0
+		cmp.b	(Encore_P2_character).w,d0
 		bne.s	.done
 
 	.failsafe:
@@ -1358,7 +1358,7 @@ EncoreCapsule_GiveStock:
 		bset	d0,(Encore_unlocked_chars).w
 	endif
 		bclr	d0,(Encore_available_chars).w
-		move.b	d0,(P2_character).w
+		move.b	d0,(Encore_P2_character).w
 		move.b	#1,(Update_HUD_life_count).w
 		move.w	#1,(Encore_HUD_stocks_timer).w
 		st	(Ctrl_2_locked).w
@@ -1429,17 +1429,11 @@ EncoreCapsule_SpawnPlayer:
 ; ---------------------------------------------------------------------------
 
 EncoreCapsule_UnlockCharacters:
-		moveq	#%0111111,d0
-		btst	#Unlock_MetalSonic,(Unlock_flags).w
-		beq.s	.updateFlags
-		moveq	#%1111111,d0
-
-	.updateFlags:
-		move.b	d0,(Encore_unlocked_chars).w
+		jsr	(Encore_UnlockCharacters).l
 		move.b	d0,(Encore_available_chars).w
-		move.b	(P1_character).w,d0
+		move.b	(Encore_P1_character).w,d0
 		bclr	d0,(Encore_available_chars).w
-		move.b	(P2_character).w,d0
+		move.b	(Encore_P2_character).w,d0
 		bclr	d0,(Encore_available_chars).w
 		move.w	(Encore_stocks_packed).w,d0
 		jsr	(Encore_UnpackStocks).l
