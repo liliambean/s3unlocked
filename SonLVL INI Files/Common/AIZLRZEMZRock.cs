@@ -66,6 +66,7 @@ namespace S3KObjectDefinitions.LRZ
 				new Dictionary<string, int>
 				{
 					{ "Vertical", 7 },
+					{ "Vertical (high priority)", 4 },
 					{ "Horizontal", 6 }
 				});
 		}

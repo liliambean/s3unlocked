@@ -39181,20 +39181,11 @@ Obj_SuperSonic_Stars:
 		move.b	#$18,width_pixels(a0)
 		move.b	#$18,height_pixels(a0)
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
-		lea	(Debug_saved_art_tile).w,a1		; Liliam: debug - set correct priority
-		tst.w	(Debug_placement_mode).w		;
-		bgt.s	loc_19190				;
-		lea	(Player_1+art_tile).w,a1		;
-
-loc_19190:
-		tst.w	(a1)					;
-		bpl.s	loc_1919E				;
-;		btst	#7,(Player_1+art_tile).w		;
+;		btst	#7,(Player_1+art_tile).w		; Liliam: debug - set correct priority
 ;		beq.s	loc_1919E				;
-		ori.w	#high_priority,art_tile(a0)		;
 ;		bset	#7,art_tile(a0)				;
 
-loc_1919E:
+;loc_1919E:
 		move.l	#loc_191AC,(a0)				; Liliam: AIZ intro - add spark trail
 		tst.b	(Level_started_flag).w			;
 		beq.s	loc_191AC				;
@@ -39206,13 +39197,9 @@ loc_191A4:
 		beq.w	loc_19230
 
 loc_191AC:
+		; Liliam: removed dead code
 		cmpi.b	#$1C,(Player_1+anim).w			; Liliam: Encore mode - use shield VRAM for SS entry ring
 		beq.s	locret_191E6				;
-		tst.b	anim(a0)
-		beq.s	loc_191B6
-		bsr.w	sub_19236
-
-loc_191B6:
 		tst.b	$34(a0)
 		beq.s	loc_19200
 		subq.b	#1,anim_frame_timer(a0)
@@ -39236,6 +39223,16 @@ loc_191E8:
 loc_191EE:
 		move.w	(Player_1+x_pos).w,x_pos(a0)
 		move.w	(Player_1+y_pos).w,y_pos(a0)
+		andi.w	#drawing_mask,art_tile(a0)		; Liliam: debug - set correct priority
+		lea	(Debug_saved_art_tile).w,a1		;
+		tst.w	(Debug_placement_mode).w		;
+		bgt.s	.checkPriority				;
+		lea	(Player_1+art_tile).w,a1		;
+
+	.checkPriority:
+		tst.w	(a1)					;
+		bpl.s	loc_191FA				;
+		ori.w	#high_priority,art_tile(a0)		;
 
 loc_191FA:
 		jmp	(Draw_Sprite).l
@@ -39268,68 +39265,8 @@ loc_19222:
 
 loc_19230:
 		jmp	(Delete_Current_Sprite).l
-
-; =============== S U B R O U T I N E =======================================
-
-
-sub_19236:
-		move.b	#0,anim(a0)
-		lea	(Player_1).w,a2
-		moveq	#$10-1,d5
-		move.w	#$488,d4
-
-loc_19246:
-		bsr.w	AllocateObject
-		bne.w	locret_192BE
-		move.l	#Obj_SuperSonic_Stars_Timer,(a1)
-		move.w	x_pos(a2),x_pos(a1)
-		move.w	y_pos(a2),y_pos(a1)
-		move.l	#Map_SuperSonic_Stars2,mappings(a1)
-		move.w	#make_art_tile(ArtTile_Shield,0,1),art_tile(a1)
-		move.b	#$84,render_flags(a1)
-		move.w	#$380,priority(a1)
-		move.b	#8,width_pixels(a1)
-		move.b	#8,height_pixels(a1)
-		tst.w	d4
-		bmi.s	loc_192AE
-		move.w	d4,d0
-		jsr	(GetSineCosine).l
-		move.w	d4,d2
-		lsr.w	#8,d2
-		asl.w	d2,d0
-		asl.w	d2,d1
-		move.w	d0,d2
-		move.w	d1,d3
-		addi.b	#$10,d4
-		bcc.s	loc_192AE
-		subi.w	#$80,d4
-		bcc.s	loc_192AE
-		move.w	#$488,d4
-
-loc_192AE:
-		move.w	d2,x_vel(a1)
-		move.w	d3,y_vel(a1)
-		neg.w	d2
-		neg.w	d4
-		dbf	d5,loc_19246
-
-locret_192BE:
-		rts
-; End of function sub_19236
-
 ; ---------------------------------------------------------------------------
-
-Obj_SuperSonic_Stars_Timer:
-		tst.b	render_flags(a0)
-		bmi.s	loc_192CC
-		jmp	(Delete_Current_Sprite).l
-; ---------------------------------------------------------------------------
-
-loc_192CC:
-		addq.b	#1,mapping_frame(a0)
-		andi.b	#3,mapping_frame(a0)
-		bsr.w	MoveSprite2
-		bra.w	Draw_Sprite
+		; Liliam: removed dead code
 ; ---------------------------------------------------------------------------
 Map_SuperSonic_Stars:
 		include "General/Sprites/Shields/Map - Super Sonic Stars.asm"
@@ -50809,6 +50746,13 @@ loc_1FE9E:
 		move.b	mapping_frame(a0),d0
 		cmpi.b	#9,(Current_zone).w
 		bne.s	loc_1FEBE
+		subi.b	#$A,d0					; Liliam: HPZ - improve transition from LRZ2
+		bpl.s	loc_1FEAC				;
+		not.b	d0					;
+
+loc_1FEAC:
+		addi.b	#$A,d0					;
+		move.b	d0,mapping_frame(a0)			;
 		subq.b	#4,d0
 		move.l	#loc_1FC66,(a0)
 		add.w	d0,d0
@@ -51390,6 +51334,7 @@ Map_EMZRock:							; Liliam: reinsert S3 data
 Map_LRZBreakableRock:
 		include "Levels/LRZ/Misc Object Data/Map - Breakable Rock.asm"
 Map_LRZBreakableRock2:
+		; Liliam: HPZ - improve transition from LRZ2
 		include "Levels/LRZ/Misc Object Data/Map - Breakable Rock 2.asm"
 ; ---------------------------------------------------------------------------
 
@@ -98019,6 +97964,9 @@ loc_43DC4:
 		move.w	#2*60,$30(a0)
 		move.b	#6,mapping_frame(a0)
 		move.l	#loc_43DDC,(a0)
+		btst	#1,status(a0)				; Liliam: HPZ - improve transition from LRZ2
+		beq.s	loc_43DDC				;
+		bclr	#1,render_flags(a0)			;
 
 loc_43DDC:
 		tst.b	$2F(a0)
@@ -98094,6 +98042,9 @@ loc_43EE4:
 		move.b	$25(a0),mapping_frame(a1)
 		move.b	$24(a0),$25(a1)
 		move.b	#8,$24(a1)
+		btst	#1,status(a0)				; Liliam: HPZ - improve transition from LRZ2
+		beq.s	loc_43EF6				;
+		ori.w	#high_priority,art_tile(a1)		;
 
 loc_43EF6:
 		move.w	#$23,d1
