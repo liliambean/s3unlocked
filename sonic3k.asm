@@ -123960,6 +123960,17 @@ MHZ1_ScreenInit:
 		clr.b	(MHZ_pollen_type).w
 		jsr	sub_54B80(pc)
 		; Liliam: removed S&K alone mode
+		tst.b	(Last_star_post_hit).w			; Liliam: Encore mode - MHZ1 intro
+		bne.s	loc_54B18				;
+		tst.b	(Encore_mode).w				;
+		bne.s	.closeDoor				;
+		cmpi.w	#3,(Player_mode).w			;
+		bne.s	loc_54B18				;
+
+	.closeDoor:
+		st	(MHZ1_Knux_door_closed).w		;
+
+loc_54B18:
 		jsr	Reset_TileOffsetPositionActual(pc)
 		jmp	Refresh_PlaneFull(pc)
 ; ---------------------------------------------------------------------------
@@ -145191,6 +145202,8 @@ Obj_MHZ1CutsceneButton:
 		move.l	#loc_62F0A,(a0)
 		tst.b	(Last_star_post_hit).w
 		bne.s	loc_62E56
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - MHZ1 intro
+		bne.s	loc_62E56				;
 		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
 ;		cmpi.b	#2,(Player_1+character_id).w		;
 		beq.s	loc_62E56
@@ -145402,6 +145415,8 @@ word_630DC:
 ; ---------------------------------------------------------------------------
 
 CutsceneKnux_MHZ2:
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - MHZ2 intro
+		bne.s	loc_6311A				;
 		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
 ;		cmpi.b	#2,(Player_1+character_id).w		;
 		beq.s	loc_6311A
