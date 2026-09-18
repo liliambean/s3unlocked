@@ -44080,7 +44080,7 @@ LevelSizes:	;     xstart    xend  ystart    yend	; Level
 		dc.w       0,  $2EC0,  -$100,  $1000	; MGZ1	;
 		dc.w       0,  $3EC0,      0,   $B20	; MGZ2	;
 		dc.w       0,  $3260,      0,   $B20	; CNZ1	;
-		dc.w       0,  $48E0,   $580,   $B20	; CNZ2	;
+		dc.w       0,  $4820,      0,   $B20	; CNZ2	;
 		dc.w       0,  $2EA0,      0,   $B00	; FBZ1	;
 		dc.w     $20,  $32B8,      0,   $B00	; FBZ2	;
 		dc.w       0,  $7000,  -$100,   $800	; ICZ1
@@ -45585,21 +45585,18 @@ CNZ2_Resize:
 CNZ2_Resize_Index:
 		dc.w CNZ2_Resize1-CNZ2_Resize_Index					; Liliam: Encore mode - FBZ level order
 		dc.w CNZ2_Resize2-CNZ2_Resize_Index					;
-		dc.w CNZ2_Resize3-CNZ2_Resize_Index					;
 		dc.w CNZ1_Resize-CNZ2_Resize_Index					;
 ; ---------------------------------------------------------------------------
 
 CNZ2_Resize1:
-		move.w	#$580,(Camera_min_Y_pos).w					; Liliam: Encore mode - FBZ level order
+		cmpi.w	#$B20,(Camera_target_max_Y_pos).w				; Liliam: Encore mode - FBZ level order
+		bne.s	CNZ1_Resize							;
+		clr.b	(Level_results_done).w						;
+		move.w	#$580,(Camera_min_Y_pos).w					;
+		move.w	#$580,(Camera_stored_min_Y_pos).w				;
 		addq.b	#2,(Dynamic_resize_routine).w					;
 
 CNZ2_Resize2:
-		cmpi.w	#$440,(Player_1+x_pos).w					;
-		blo.s	CNZ1_Resize							;
-		clr.b	(Level_results_done).w						;
-		addq.b	#2,(Dynamic_resize_routine).w					;
-
-CNZ2_Resize3:
 		cmpi.w	#$940,(Player_1+x_pos).w					;
 		blo.s	CNZ1_Resize							;
 		clr.w	(Camera_min_Y_pos).w						;
@@ -118882,6 +118879,7 @@ loc_520C0:
 		adda.w	d0,a1
 		dbf	d2,loc_520C0
 		addq.b	#4,routine(a0)
+		rts						; Liliam: camera - fix CNZ1 end lock
 
 Obj_CNZMinibossScrollWait3:
 		cmpi.w	#$1C0,(Events_bg+$08).w		; Wait till scroll offset is $1C0
@@ -118979,6 +118977,7 @@ loc_5216C:
 		blo.w	CNZ2SE_Normal				;
 		cmpi.w	#$880,(Camera_Y_pos).w			;
 		blo.w	CNZ2SE_Normal				;
+		move.w	#$48E0,(Camera_max_X_pos).w		;
 		cmpi.w	#$A80,(Camera_Y_pos).w			;
 		bhs.w	CNZ2SE_Normal				;
 		move.w	#$980,(Camera_target_max_Y_pos).w	;
