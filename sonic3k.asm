@@ -37883,7 +37883,7 @@ AirCountdown_Init:
 		addq.b	#8,routine(a0)
 		andi.w	#$7F,d0
 		move.b	d0,$37(a0)
-		move.w	Dust-Breathing_bubbles+$40(a0),$40(a0)		; Liliam: Encore mode - pick DPLC slot by SST
+		move.w	Dust-Breathing_bubbles+vram_art(a0),vram_art(a0); Liliam: Encore mode - pick DPLC slot by SST
 		bra.w	AirCountdown_Countdown
 ; ---------------------------------------------------------------------------
 
@@ -37891,7 +37891,7 @@ loc_181CC:
 		move.b	d0,anim(a0)
 		move.w	x_pos(a0),$34(a0)
 		move.w	#-$100,y_vel(a0)
-		cmpi.w	#tiles_to_bytes(ArtTile_DashDust),$40(a0)	; Liliam: Encore mode - pick DPLC slot by SST
+		cmpi.w	#tiles_to_bytes(ArtTile_DashDust),vram_art(a0)	; Liliam: Encore mode - pick DPLC slot by SST
 		beq.s	loc_181DC					;
 		move.l	#Map_Bubbler2,mappings(a0)			;
 
@@ -38060,7 +38060,7 @@ AirCountdown_Load_Art:
 		add.w	d0,d1
 		lsl.w	#6,d1
 		addi.l	#ArtUnc_AirCountdown,d1
-		move.w	$40(a0),d2					; Liliam: Encore mode - pick DPLC slot by SST
+		move.w	vram_art(a0),d2					; Liliam: Encore mode - pick DPLC slot by SST
 ;		move.w	#tiles_to_bytes(ArtTile_DashDust),d2		;
 ;		tst.b	parent+1(a0)					;
 ;		beq.s	loc_1845A					;
@@ -113701,7 +113701,7 @@ loc_4F3A8:
 
 Offset_ObjectsDuringTransition:
 		lea	(Dynamic_object_RAM+object_size).w,a1
-		moveq	#((Breathing_bubbles)-(Dynamic_object_RAM+object_size))/object_size-1,d2
+		moveq	#((Dynamic_object_RAM_end)-(Dynamic_object_RAM+object_size))/object_size-1,d2
 
 loc_4F3B6:
 		tst.l	(a1)
@@ -124183,7 +124183,7 @@ loc_54CEE:
 
 sub_54CF4:
 		lea	(Dynamic_object_RAM+object_size).w,a1
-		moveq	#((Breathing_bubbles)-(Dynamic_object_RAM+object_size))/object_size-1,d2
+		moveq	#((Dynamic_object_RAM_end)-(Dynamic_object_RAM+object_size))/object_size-1,d2
 
 loc_54CFA:
 		move.l	(a1),d3
@@ -155247,6 +155247,9 @@ loc_6A25A:
 		st	(Ctrl_1_locked).w
 		st	(Ctrl_2_locked).w
 		move.b	#$80,(Player_1+object_control).w
+		tst.l	(Player_2).w				; Liliam: bugfix - lock player 2 controls consistently
+		bne.s	loc_6A270				;
+		clr.b	(Ctrl_2_locked).w			;
 
 loc_6A270:
 		tst.b	(Level_results_done).w
@@ -201796,7 +201799,7 @@ loc_87B4C:
 
 sub_87B56:
 		lea	(Dynamic_object_RAM+object_size).w,a2
-		move.w	#((Breathing_bubbles)-(Dynamic_object_RAM+object_size))/object_size-1,d0
+		move.w	#((Dynamic_object_RAM_end)-(Dynamic_object_RAM+object_size))/object_size-1,d0
 
 loc_87B5E:
 		cmpi.l	#Obj_Buggernaut_2,(a2)
@@ -218814,7 +218817,6 @@ loc_92A38:
 ;		clr.w	(WindTunnel_flag).w				;
 		clr.b	jumping(a0)					; Liliam: HUD - barrier HUD
 		clr.b	routine(a0)				; Liliam: debug - resume processing sprites
-		bset	#Status_InAir,status(a0)		; Liliam: debug - set airborne flag for camera
 		move.b	status(a0),d0				; Liliam: debug - properly orient debug sprite
 		andi.b	#1,d0					;
 		andi.b	#$FC,render_flags(a0)			;
@@ -218856,6 +218858,7 @@ loc_92AA0:
 
 loc_92AB0:
 		jsr	(Debug_ResetScroll).l			; Liliam: bugfix - recenter camera during object control
+		bset	#Status_InAir,status(a0)		; Liliam: debug - set airborne flag for camera
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#1,d0
