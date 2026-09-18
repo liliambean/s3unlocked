@@ -399,13 +399,13 @@ Dynamic_object_RAM		ds.b object_size*96	; $1BC0 bytes ; 96 objects
 Dynamic_object_RAM_end =	*
 
 Level_object_RAM =		Dynamic_object_RAM_end	; $378 bytes ; various fixed in-level objects
-Breathing_bubbles		ds.b object_size	; for the main character
-Breathing_bubbles_P2		ds.b object_size	; for Tails in a Sonic and Tails game
 Super_stars =			*			; for Super Sonic and Super Knuckles
 Tails_tails_2P			ds.b object_size	; Tails' tails in Competition mode
 Tails_tails			ds.b object_size	; Tails' tails
 Dust				ds.b object_size
 Dust_P2				ds.b object_size
+Breathing_bubbles		ds.b object_size	; for the main character
+Breathing_bubbles_P2		ds.b object_size	; for Tails in a Sonic and Tails game
 Shield				ds.b object_size
 Invincibility_stars		ds.b object_size*4
 Object_RAM_end =		*
