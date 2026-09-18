@@ -45103,7 +45103,7 @@ word_1C60A:
 		dc.w  $83B0, $1B00
 		dc.w  $8430, $2000
 		dc.w  $84C0, $2B00
-		dc.w  $83B0, $2CD5				; Liliam: camera - fix AIZ1 boss cutscene entry lock
+		dc.w  $83B0, $2CD5				; Liliam: camera - fix AIZ1 cutscene entry lock
 ;		dc.w  $83B0, $2D80				;
 		dc.w  $82E0, $FFFF
 ; ---------------------------------------------------------------------------
@@ -144199,6 +144199,10 @@ loc_62308:
 		lea	(Normal_palette_line_2).w,a1
 		lea	(Target_palette_line_2).w,a2
 		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
+		move.w	#$1D00,d0				; Liliam: camera - fix CNZ2 cutscene entry lock
+		cmp.w	(Camera_X_pos).w,d0			;
+		blo.s	loc_62318				;
+		move.w	d0,(Camera_max_X_pos).w			;
 
 loc_62318:
 		move.l	(a1)+,(a2)+
