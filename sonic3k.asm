@@ -24657,7 +24657,7 @@ Sonic_InWater:
 		bne.s	locret_10E2C	; if already underwater, branch
 		tst.w	y_vel(a0)				; Liliam: bugfix - player speeds fix
 		bmi.s	locret_10E2C				;
-
+		bsr.w	Player_WaterResistFix			;
 		addq.b	#1,(Water_entered_counter).w
 		movea.l	a0,a1
 		bsr.w	Player_ResetAirTimer
@@ -30850,6 +30850,7 @@ loc_1463A:
 		bne.s	locret_14638
 		tst.w	y_vel(a0)				; Liliam: bugfix - player speeds fix
 		bmi.s	locret_14638				;
+		bsr.w	Player_WaterResistFix			;
 		addq.b	#1,(Water_entered_counter).w
 		movea.l	a0,a1
 		bsr.w	Player_ResetAirTimer
@@ -34620,6 +34621,7 @@ loc_166F6:
 		bne.s	locret_166F4
 		tst.w	y_vel(a0)				; Liliam: bugfix - player speeds fix
 		bmi.s	locret_166F4				;
+		bsr.w	Player_WaterResistFix			;
 		addq.b	#1,(Water_entered_counter).w
 		movea.l	a0,a1
 		bsr.w	Player_ResetAirTimer
@@ -38340,6 +38342,20 @@ loc_186BC:
 		rts
 ; End of function Player_ResetAirTimer
 
+; ---------------------------------------------------------------------------
+
+Player_WaterResistFix:						; Liliam: bugfix - player speeds fix
+		cmp.w	(Target_water_level).w,d0
+		bhs.s	.return
+		move.b	(Water_speed),d0
+		cmp.b	y_vel(a0),d0
+		blt.s	.return
+		ext.w	d0
+		ror.w	#6,d0
+		move.w	d0,y_vel(a0)
+
+	.return:
+		rts
 ; ---------------------------------------------------------------------------
 Ani_AirCountdown:
 		; Liliam: ported from S1 - restore original anim
