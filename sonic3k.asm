@@ -24287,8 +24287,8 @@ Sonic_Init:
 	.player2:
 		move.w	(Player_1+art_tile).w,d0			;
 		andi.w	#drawing_mask,d0				;
-		cmpi.w	#ArtTile_Player_1,d0				;
-		bne.s	.checkPriority2					;
+		cmpi.w	#ArtTile_Player_2,d0				;
+		beq.s	.checkPriority2					;
 		move.w	#ArtTile_Player_2,art_tile(a0)			;
 
 	.checkPriority2:
@@ -29287,8 +29287,8 @@ loc_1373C:
 loc_1375E:
 		move.w	(Player_1+art_tile).w,d0			;
 		andi.w	#drawing_mask,d0				;
-		cmpi.w	#ArtTile_Player_1,d0				;
-		bne.s	loc_13764					;
+		cmpi.w	#ArtTile_Player_2,d0				;
+		beq.s	loc_13764					;
 		move.w	#ArtTile_Player_2,art_tile(a0)
 
 loc_13764:
@@ -34365,8 +34365,8 @@ Knuckles_Init:
 	.player2:
 		move.w	(Player_1+art_tile).w,d0			;
 		andi.w	#drawing_mask,d0				;
-		cmpi.w	#ArtTile_Player_1,d0				;
-		bne.s	.checkPriority2					;
+		cmpi.w	#ArtTile_Player_2,d0				;
+		beq.s	.checkPriority2					;
 		move.w	#ArtTile_Player_2,art_tile(a0)			;
 
 	.checkPriority2:
