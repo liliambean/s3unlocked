@@ -188437,8 +188437,10 @@ loc_7FDE2:
 ;		move.w	#$CD,y_pos(a1)				;
 		bsr.w	sub_7FE06
 		lea	(Player_2).w,a1
+		tst.l	(a1)					; Liliam: bugfix - lock player 2 controls consistently
+		beq.s	locret_7FE2A				;
 		move.w	#$10,x_pos(a1)
-		move.w	#$CC,y_pos(a1)				;
+		move.w	#$CC,y_pos(a1)				; Liliam: bugfix - set correct collision height
 ;		move.w	#$CD,y_pos(a1)				;
 
 ; =============== S U B R O U T I N E =======================================
@@ -188482,7 +188484,11 @@ locret_7FE5A:
 
 sub_7FE5C:
 		lea	(Player_2).w,a1
+		tst.l	(a1)					; Liliam: bugfix - lock player 2 controls consistently
+		beq.s	loc_7FE64				;
 		bsr.w	sub_7FE68
+
+loc_7FE64:
 		lea	(Player_1).w,a1
 ; End of function sub_7FE5C
 
@@ -188506,6 +188512,8 @@ loc_7FE74:
 		move.b	#6,routine(a0)
 		bsr.w	sub_7FE8A
 		lea	(Player_2).w,a1
+		tst.l	(a1)					; Liliam: bugfix - lock player 2 controls consistently
+		beq.s	locret_7FE94				;
 
 ; =============== S U B R O U T I N E =======================================
 
