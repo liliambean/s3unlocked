@@ -74,6 +74,9 @@ namespace S3KObjectDefinitions.LRZ
 				ObjectHelper.MapToBmp(art, map, 0, 1),
 				ObjectHelper.MapToBmp(art, map, 2, 1),
 				ObjectHelper.MapToBmp(art, map, 4, 1),
+				ObjectHelper.MapToBmp(art, map, 0, 1, true),
+				ObjectHelper.MapToBmp(art, map, 2, 1, true),
+				ObjectHelper.MapToBmp(art, map, 4, 1, true),
 			};
 
 			var indexer = new MultiFileIndexer<byte>();
@@ -92,10 +95,10 @@ namespace S3KObjectDefinitions.LRZ
 					new Sprite(sprites[1], 64, 6), new Sprite(sprites[1], 80, 4),
 					new Sprite(sprites[2], 96, 0), new Sprite(sprites[2], 112, -8)),
 
-				new Sprite(new Sprite(image, false, true),
-					new Sprite(sprites[0], 32, 4, false, true), new Sprite(sprites[0], 48, 6, false, true),
-					new Sprite(sprites[1], 64, 6, false, true), new Sprite(sprites[1], 80, 4, false, true),
-					new Sprite(sprites[2], 96, 0, false, true), new Sprite(sprites[2], 112, -8, false, true)),
+				new Sprite(image,
+					new Sprite(sprites[3], 32, 4), new Sprite(sprites[3], 48, 6),
+					new Sprite(sprites[4], 64, 6), new Sprite(sprites[4], 80, 4),
+					new Sprite(sprites[5], 96, 0), new Sprite(sprites[5], 112, -8)),
 
 				new Sprite(vertical,
 					new Sprite(sprites[0], -4, 32), new Sprite(sprites[0], -6, 48),

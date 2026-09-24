@@ -7,7 +7,7 @@ Map_LRZBreakableRock2_:
 		dc.w word_204A0-Map_LRZBreakableRock2_
 		dc.w word_204AE-Map_LRZBreakableRock2_
 		dc.w word_204BC-Map_LRZBreakableRock2_
-		dc.w word_204CA-Map_LRZBreakableRock2_
+		dc.w Map_LRZBreakableRock2_08-Map_LRZBreakableRock2_
 		dc.w word_204E4-Map_LRZBreakableRock2_
 		dc.w word_204E4-Map_LRZBreakableRock2_
 		dc.w word_204CA-Map_LRZBreakableRock2_
@@ -33,3 +33,9 @@ word_204E4:	dc.w 4
 		dc.b  $F0,  $D, $10,   8,   0,   0
 		dc.b    0,  $D,   0,   8, $FF, $E0
 		dc.b    0,  $D, $10,   0,   0,   0
+Map_LRZBreakableRock2_08:
+		dc.w 4
+		dc.b  $E0,  $D, $80,   0, $FF, $F0
+		dc.b  $F0,  $D, $80,   8, $FF, $F0
+		dc.b    0,  $D, $88,   0, $FF, $F0
+		dc.b  $10,  $D, $88,   8, $FF, $F0
