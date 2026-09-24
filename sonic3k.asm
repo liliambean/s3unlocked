@@ -140891,8 +140891,8 @@ Obj_EndingEyecatch_S3Logo:
 		move.l	#loc_5F2EA,(a0)
 		move.w	#$4AF,$2E(a0)
 		bclr	#2,(Cutscene_flags).w
-		move.w	#$11E,x_pos(a0)								;
-		move.w	#$F0,y_pos(a0)								;
+		move.w	#$120,x_pos(a0)								;
+		move.w	#$E8,y_pos(a0)								;
 		bclr	#2,render_flags(a0)							;
 		jsr	(AllocateObject).l							;
 		bne.s	loc_5F294								;
@@ -140990,11 +140990,9 @@ Obj_EndingEyecatch_Sonic:
 ; ---------------------------------------------------------------------------
 byte_5F36E:
 		dc.b    0, $40
-		dc.b    0, $40
-		dc.b -$20, $2C					; Liliam: ending - add 'Unlocked' branding
-		dc.b -$20, $2C					;
-;		dc.b -$1C, $2C					;
-;		dc.b -$1C, $2C					;
+;		dc.b    0, $40									; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		dc.b -$1C, $2C									;
+;		dc.b -$1C, $2C									;
 ; ---------------------------------------------------------------------------
 
 loc_5F376:
@@ -141026,12 +141024,11 @@ Obj_EndingEyecatch_Tails:
 		jmp	(CreateChild1_Normal).l
 ; ---------------------------------------------------------------------------
 byte_5F3D2:
-		dc.b  $24, $2C
-		dc.b  $24, $2C
-		dc.b    4, $40					; Liliam: ending - add 'Unlocked' branding
-;		dc.b    8, $40					;
-		dc.b  $24, $2C
-		even
+		dc.b  $1C, $2C									; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		dc.b  $24, $2C									;
+;		dc.b  $24, $2C									;
+;		dc.b    8, $40									;
+;		dc.b  $24, $2C									;
 ; ---------------------------------------------------------------------------
 
 loc_5F3DA:
@@ -141078,13 +141075,10 @@ Obj_EndingEyecatch_Knuckles:
 ;		rts										;
 ; ---------------------------------------------------------------------------
 byte_5F462:
-		dc.b -$20, $2C					; Liliam: ending - add 'Unlocked' branding
-		dc.b -$20, $2C					;
-;		dc.b -$1C, $2C					;
-;		dc.b -$1C, $2C					;
-		dc.b  $1C, $2C
-		dc.b    0, $40
-		even
+		dc.b -$1C, $2C
+;		dc.b -$1C, $2C									; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		dc.b  $1C, $2C									;
+;		dc.b    0, $40									;
 ; ---------------------------------------------------------------------------
 
 loc_5F46A:
@@ -141172,8 +141166,7 @@ Obj_EndingEyecatch_S3LogoANDKnuckles:
 		bra.w	Ending_SetLogoChildPosition
 ; ---------------------------------------------------------------------------
 byte_5F564:
-		dc.b    2, $48					; Liliam: ending - add 'Unlocked' branding
-;		dc.b    0, $48					;
+		dc.b    0, $48
 ; ---------------------------------------------------------------------------
 
 Obj_EndingEyecatch_Eggman:
@@ -142109,17 +142102,13 @@ locret_5FEFC:
 
 
 Ending_SetEyecatchPosition:
-		move.w	(Player_mode).w,d0
-		cmpi.b	#4,d0					; Liliam: ending - add extra characters
-		blo.s	loc_5FF06				;
-		moveq	#0,d0					;
-;		andi.w	#3,d0					;
-
-loc_5FF06:
-		add.w	d0,d0
-		adda.w	d0,a1
+;		move.w	(Player_mode).w,d0							; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		andi.w	#3,d0									;
+;		add.w	d0,d0									;
+;		adda.w	d0,a1									;
 		move.b	(a1)+,d0
 		ext.w	d0
+		subq.w	#2,d0									;
 		add.w	d0,x_pos(a0)
 		move.b	(a1)+,d0
 		ext.w	d0
@@ -142466,7 +142455,8 @@ ChildObjDat_601F0:
 ChildObjDat_60204:
 		dc.w 1-1
 		dc.l Obj_EndingEyecatch_TailsTail
-		dc.b -$10,   8
+		dc.b    0,   0									; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		dc.b -$10,   8									;
 ChildObjDat_6020C:
 		dc.w 1-1
 		dc.l loc_5ED36
