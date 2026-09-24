@@ -2826,15 +2826,15 @@ GetSineCosine:
 		andi.w	#$FF,d0
 
 GetSineCosine_Fine:
-		move.w	d0,d1				; Liliam: QOL - use high precision sine tables in slot bonus
+		move.w	d0,d1					; Liliam: QOL - use high precision sine tables in slot bonus
 		add.w	d0,d0
-;		addi.w	#$40*2,d0			;
-;		move.w	SineTable(pc,d0.w),d1		;
-;		subi.w	#$40*2,d0			;
+;		addi.w	#$40*2,d0				;
+;		move.w	SineTable(pc,d0.w),d1			;
+;		subi.w	#$40*2,d0				;
 		move.w	SineTable(pc,d0.w),d0
-		addi.b	#$40,d1				;
-		add.w	d1,d1				;
-		move.w	SineTable(pc,d1.w),d1		;
+		addi.b	#$40,d1					;
+		add.w	d1,d1					;
+		move.w	SineTable(pc,d1.w),d1			;
 		rts
 ; End of function GetSineCosine
 
@@ -108453,7 +108453,7 @@ loc_4BB70:
 
 loc_4BB76:
 		subi.w	#$40,d0
-;		bcc.s	loc_4BB7E			; Liliam: ???
+;		bhs.s	loc_4BB7E			; Liliam: ???
 ;		nop					;
 
 ;loc_4BB7E:
@@ -108481,7 +108481,7 @@ loc_4BB9E:
 
 loc_4BBA4:
 		addi.w	#$40,d0
-;		bcc.s	loc_4BBAC			; Liliam: ???
+;		bhs.s	loc_4BBAC			; Liliam: ???
 ;		nop					;
 
 ;loc_4BBAC:
@@ -108834,38 +108834,8 @@ locret_4BE58:
 
 loc_4BE5A:
 		cmpi.b	#$25,d0						; Liliam: ported from S1 - restore full item set
-		beq.w	loc_4BEB8					;
-		cmpi.b	#$2D,d0						;
-		blo.w	loc_4BED0					;
-		cmpi.b	#$30,d0						;
-		bhi.w	loc_4BED0					;
 ;		cmpi.b	#5,d0						;
-;		bne.s	loc_4BED0					;
-		bsr.s	sub_4BE60					;
-		bne.s	.done						;
-		move.b	#5,(a2)						;
-		movea.l	$32(a0),a1					;
-		subq.l	#1,a1						;
-		move.l	a1,4(a2)					;
-		move.b	(a1),d0						;
-		addq.b	#1,d0						;
-		move.b	d0,4(a2)					;
-		cmpi.b	#$30,d0						;
-		bls.s	.done						;
-		clr.b	4(a2)						;
-
-	.done:
-		move.w	x_vel(a0),d0					;
-		move.w	y_vel(a0),d1					;
-		asr.w	#3,d0						;
-		asr.w	#3,d1						;
-		move.w	d0,x_vel(a0)					;
-		move.w	d1,y_vel(a0)					;
-		moveq	#signextendB(sfx_Diamonds),d0			;
-		bra.s	Check_Play_SFX					;
-; ---------------------------------------------------------------------------
-
-sub_4BE60:
+		bne.s	loc_4BED0
 		move.l	$32(a0),d1
 		subi.l	#-$CFFF,d1
 		move.w	d1,d2
@@ -108887,12 +108857,7 @@ sub_4BE60:
 		asr.l	#8,d0
 		move.w	d0,y_vel(a0)
 		bset	#Status_InAir,status(a0)
-		bra.w	Slots_FindCollisionResponseSlot			; Liliam: ported from S1 - restore full item set
-;		bsr.w	Slots_FindCollisionResponseSlot			;
-; ---------------------------------------------------------------------------
-
-loc_4BEB8:
-		bsr.s	sub_4BE60					; Liliam: ported from S1 - restore full item set
+		bsr.w	Slots_FindCollisionResponseSlot
 		bne.s	loc_4BEC8
 		move.b	#2,(a2)
 		move.l	$32(a0),d0
@@ -108901,12 +108866,8 @@ loc_4BEB8:
 
 loc_4BEC8:
 		moveq	#signextendB(sfx_Bumper),d0
-
-
-Check_Play_SFX:
-		tst.b	$39(a0)					; Liliam: Encore mode - bonus stage
-		bne.s	locret_4BEE2				;
-		jmp	(Play_SFX).l
+		bra.w	Check_Play_SFX				; Liliam: Encore mode - bonus stage
+;		jmp	(Play_SFX).l				;
 ; ---------------------------------------------------------------------------
 
 loc_4BED0:
@@ -108971,11 +108932,37 @@ loc_4BEE4:
 loc_4BF0C:
 		neg.w	(SStage_scalar_index_1).w
 		moveq	#signextendB(sfx_LaunchGo),d0
-		bra.w	Check_Play_SFX				; Liliam: Encore mode - bonus stage
-;		jmp	(Play_SFX).l				;
+
+Check_Play_SFX:
+		tst.b	$39(a0)					; Liliam: Encore mode - bonus stage
+		bne.s	locret_4BF60				;
+		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
 loc_4BF18:
+		cmpi.b	#$2D,d0						; Liliam: ported from S1 - restore full item set
+		blo.s	.notColorBlock					;
+		cmpi.b	#$30,d0						;
+		bhi.s	.notColorBlock					;
+		bsr.w	Slots_FindCollisionResponseSlot			;
+		bne.s	.done						;
+		move.b	#5,(a2)						;
+		movea.l	$32(a0),a1					;
+		subq.l	#1,a1						;
+		move.l	a1,4(a2)					;
+		move.b	(a1),d0						;
+		addq.b	#1,d0						;
+		move.b	d0,4(a2)					;
+		cmpi.b	#$30,d0						;
+		bls.s	.done						;
+		clr.b	4(a2)						;
+
+	.done:
+		moveq	#signextendB(sfx_Diamonds),d0			;
+		bra.s	Check_Play_SFX					;
+; ---------------------------------------------------------------------------
+
+	.notColorBlock:
 		cmpi.b	#$3B,d0						; Liliam: ported from S1 - restore full item set
 		blo.s	locret_4BF60					;
 		cmpi.b	#$3D,d0						;
@@ -109010,7 +108997,7 @@ loc_4BF54:
 
 loc_4BF58:
 		moveq	#signextendB(sfx_Flipper),d0
-		bra.w	Check_Play_SFX				; Liliam: Encore mode - bonus stage
+		bra.s	Check_Play_SFX				; Liliam: Encore mode - bonus stage
 ;		jmp	(Play_SFX).l				;
 ; ---------------------------------------------------------------------------
 
