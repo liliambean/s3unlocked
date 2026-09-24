@@ -72174,7 +72174,7 @@ SSResults_ContinueIconLoadArt:					; Liliam: simplify results art selection
 		jmp	(Queue_Kos_Module).l
 ; ---------------------------------------------------------------------------
 LevelResults_CharNameCoords:					; Liliam: results - center character name
-		dc.w    0,   0,-$18,   4,  -8,   8,-$20,   0
+		dc.w    0,   0,-$18,   4,  -8,   8,-$1E,   0
 LevelResults_CharNameFrames:					; Liliam: results - center character name
 		dc.b    0,   2,   3, $23, $24, $25, $26,   1
 		even

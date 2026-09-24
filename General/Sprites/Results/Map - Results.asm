@@ -279,8 +279,8 @@ word_2F70C:	dc.w 2
 		dc.b    0,   5, $85, $33,   0,  $F
 Map_ResultsAMY:
 		dc.w 2
-		dc.b    0,  $D, $85, $78,   0,  $F
-		dc.b    0,   9, $85, $80,   0, $2F
+		dc.b    0,  $D, $85, $78,   0,  $E
+		dc.b    0,   9, $85, $80,   0, $2E
 Map_ResultsMIGHTY:
 		dc.w 3
 		dc.b    0,  $D, $85, $78, $FF, $F1
@@ -292,7 +292,7 @@ Map_ResultsRAY:
 		dc.b    0,   5, $85, $80,   0, $37
 Map_ResultsMETALSONIC:
 		dc.w 4
-		dc.b    0,  $D, $85, $78, $FF, $C0
-		dc.b    0,  $D, $85, $80, $FF, $E0
-		dc.b    0,  $D, $85, $88,   0,   8
-		dc.b    0,  $D, $85, $90,   0, $28
+		dc.b    0,  $D, $85, $78, $FF, $C2
+		dc.b    0,  $D, $85, $80, $FF, $E2
+		dc.b    0,  $D, $85, $88,   0,   9
+		dc.b    0,  $D, $85, $90,   0, $29
