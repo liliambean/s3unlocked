@@ -179092,7 +179092,7 @@ Obj_LRZEncoreBoss_Init:
 		jsr	(Queue_Kos_Module).l
 		lea	(PLC_BossExplosion).l,a1
 		jsr	(Load_PLC_Raw).l
-		lea	Pal_LRZEndBoss(pc),a1
+		lea	Pal_LRZEncoreBoss(pc),a1
 		jsr	(PalLoad_Line1).l
 		st	(Screen_shake_flag).w
 		move.l	#Obj_LRZEncoreBoss_Wait,(a0)
@@ -179104,7 +179104,7 @@ Obj_LRZEncoreBoss_Init:
 
 Obj_LRZEncoreBoss_Wait:							; Liliam: Encore mode - LRZ2 boss
 		subq.w	#1,$2E(a0)
-		bmi.s	.done
+		beq.s	.done
 		move.w	$2E(a0),d0
 		andi.b	#$F,d0
 		bne.w	LRZEncoreBoss_Return
@@ -179118,12 +179118,12 @@ Obj_LRZEncoreBoss_Wait:							; Liliam: Encore mode - LRZ2 boss
 		moveq	#signextendB(sfx_Collapse),d0
 		jsr	(Play_SFX).l
 		jsr	(AllocateObject).l
-		bne.s	Obj_LRZEncoreBoss_Main
+		bne.s	.return
 		lea	LRZEncoreBoss_DebrisSpeeds(pc),a2
 		moveq	#6-1,d2
 
 	.loop:
-		move.l	#Obj_LRZEncoreBoss_Debris,(a1)
+		move.l	#Obj_LRZEncoreBossDebris,(a1)
 		move.l	#Map_HPZKnucklesCutsceneDebris,mappings(a1)
 		move.b	#$84,render_flags(a1)
 		move.b	#8,width_pixels(a1)
@@ -179143,10 +179143,14 @@ Obj_LRZEncoreBoss_Wait:							; Liliam: Encore mode - LRZ2 boss
 		move.b	d0,mapping_frame(a1)
 		move.w	(sp)+,d0
 		jsr	(CreateNewSprite4).l
-		bne.s	Obj_LRZEncoreBoss_Main
+		bne.s	.return
 		dbf	d2,.loop
 
-Obj_LRZEncoreBoss_Main:
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
+Obj_LRZEncoreBoss_Main:							; Liliam: Encore mode - LRZ2 boss
 		moveq	#0,d0
 		move.b	routine(a0),d0
 		move.w	LRZEncoreBoss_Index(pc,d0.w),d1
@@ -179157,8 +179161,9 @@ Obj_LRZEncoreBoss_Main:
 LRZEncoreBoss_Index:							; Liliam: Encore mode - LRZ2 boss
 		dc.w LRZEncoreBoss_Init-LRZEncoreBoss_Index
 		dc.w LRZEncoreBoss_Fall-LRZEncoreBoss_Index
-		dc.w LRZEncoreBoss_WaitOffScreen-LRZEncoreBoss_Index
-		dc.w LRZEncoreBoss_Surface-LRZEncoreBoss_Index
+		dc.w LRZEncoreBoss_Wait-LRZEncoreBoss_Index
+		dc.w LRZEncoreBoss_Wait2-LRZEncoreBoss_Index
+		dc.w LRZEncoreBoss_Jump-LRZEncoreBoss_Index
 		dc.w LRZEncoreBoss_Chase-LRZEncoreBoss_Index
 ; ---------------------------------------------------------------------------
 
@@ -179188,75 +179193,82 @@ LRZEncoreBoss_Init:							; Liliam: Encore mode - LRZ2 boss
 
 LRZEncoreBoss_Fall:							; Liliam: Encore mode - LRZ2 boss
 		jsr	(MoveSprite_LightGravity).l
-		move.w	#$48E,d0
+		move.w	#$48B,d0
 		cmp.w	y_pos(a0),d0
-		bhi.s	LRZEncoreBoss_Return
+		bhs.s	LRZEncoreBoss_Return
 		move.w	d0,y_pos(a0)
-		move.w	#$2F,$2E(a0)
+		move.w	#-$620,y_vel(a0)
+		move.w	#$80,priority(a0)
+		ori.w	#high_priority,art_tile(a0)
+		move.b	#$F8,collision_flags(a0)
+		move.b	#8,objoff_27(a0)
 		addq.b	#2,routine(a0)
+		move.w	#30,$2E(a0)
 
 LRZEncoreBoss_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
-LRZEncoreBoss_WaitOffScreen:						; Liliam: Encore mode - LRZ2 boss
+LRZEncoreBoss_Wait:							; Liliam: Encore mode - LRZ2 boss
 		subq.w	#1,$2E(a0)
-		bpl.s	LRZEncoreBoss_Return
+		bne.s	LRZEncoreBoss_Return
 		moveq	#signextendB(sfx_BossMagma),d0
 		jsr	(Play_SFX).l
-		ori.w	#high_priority,art_tile(a0)
-		move.w	#$80,priority(a0)
-		move.b	#$B8,collision_flags(a0)
-		move.b	#8,collision_property(a0)
 		addq.b	#2,routine(a0)
-		move.w	#-$580,y_vel(a0)
+		move.w	#20,$2E(a0)
 		move.w	(Player_1+x_pos).w,d0
 		cmp.w	x_pos(a0),d0
-		blo.s	LRZEncoreBoss_Surface
+		blo.s	LRZEncoreBoss_Wait2
 		bset	#Status_Facing,render_flags(a0)
 
-LRZEncoreBoss_Surface:
+LRZEncoreBoss_Wait2:
+		subq.w	#1,$2E(a0)
+		bne.s	LRZEncoreBoss_Jump
+		addq.b	#2,routine(a0)
+
+LRZEncoreBoss_Jump:
 		jsr	(MoveSprite).l
 		tst.w	y_vel(a0)
-		bmi.s	LRZEncoreBoss_Return
-		move.w	#$44E,d0
-		cmp.w	y_pos(a0),d0
-		bhi.s	LRZEncoreBoss_Return
-		clr.w	y_vel(a0)
-		move.w	d0,y_pos(a0)
-		addq.b	#2,routine(a0)
-		rts
-; ---------------------------------------------------------------------------
-
-LRZEncoreBoss_Chase:							; Liliam: Encore mode - LRZ2 boss
-		btst	#6,status(a0)
 		bne.s	LRZEncoreBoss_Return
-		subq.w	#1,$2E(a0)
-		bpl.s	.findPlayer
-		move.w	#$7F,$2E(a0)
+		addq.b	#2,routine(a0)
+
+LRZEncoreBoss_Chase:
+		btst	#6,status(a0)
+		bne.w	.done
+		move.b	angle(a0),d0
+		bne.s	.findPlayer
 		moveq	#signextendB(sfx_BossProjectile),d0
 		jsr	(Play_SFX).l
 		lea	ChildObjDat_7A19A(pc),a2
 		jsr	(CreateChild1_Normal).l
+		move.b	angle(a0),d0
 
 	.findPlayer:
+		jsr	(GetSineCosine).l
+		ext.l	d1
+		swap	d1
+		ror.l	#7,d1
+		addi.l	#$4308000,d1
+		move.l	d1,y_pos(a0)
+		addq.b	#2,angle(a0)
 		move.w	(Player_1+x_pos).w,d0
 		sub.w	x_pos(a0),d0
 		move.w	x_vel(a0),d1
 		asr.w	#4,d1
 		bmi.s	.movingLeft
-		beq.s	.movingRight
-		bset	#Status_Facing,render_flags(a0)
 
 	.movingRight:
 		cmp.w	d1,d0
-		bgt.s	.moveRight
+		bgt.s	.flipRight
 		tst.w	d1
 		bne.s	.moveLeft
 		tst.w	d0
 		bne.s	.moveLeft
 		rts
 ; ---------------------------------------------------------------------------
+
+	.flipRight:
+		bset	#Status_Facing,render_flags(a0)
 
 	.moveRight:
 		cmpi.w	#$180,x_vel(a0)
@@ -179266,15 +179278,17 @@ LRZEncoreBoss_Chase:							; Liliam: Encore mode - LRZ2 boss
 ; ---------------------------------------------------------------------------
 
 	.movingLeft:
-		bclr	#Status_Facing,render_flags(a0)
 		cmp.w	d1,d0
-		blt.s	.moveLeft
+		blt.s	.flipLeft
 		tst.w	d1
 		bne.s	.moveRight
 		tst.w	d0
 		bne.s	.moveRight
 		rts
 ; ---------------------------------------------------------------------------
+
+	.flipLeft:
+		bclr	#Status_Facing,render_flags(a0)
 
 	.moveLeft:
 		cmpi.w	#-$180,x_vel(a0)
@@ -179286,12 +179300,43 @@ LRZEncoreBoss_Chase:							; Liliam: Encore mode - LRZ2 boss
 ; ---------------------------------------------------------------------------
 
 LRZEncoreBoss_CheckHit:							; Liliam: Encore mode - LRZ2 boss
+		move.w	objoff_44(a0),d2
+		clr.w	objoff_44(a0)
+		jsr	(Check_PlayerCollision).l
+		beq.s	.checkBombHit
+		tst.w	$2E(a0)
+		bne.s	.checkHurtCharacter
+		btst	#Status_InAir,status(a1)
+		bne.s	.checkHurtCharacter
+		btst	#Status_Roll,status(a1)
+		beq.s	.checkHurtCharacter
+		cmp.w	objoff_44(a0),d2
+		beq.s	.checkBombHit
+		moveq	#signextendB(sfx_Bumper),d0
+		jsr	(Play_SFX).l
+		move.w	#$700,ground_vel(a1)
+		move.w	x_vel(a1),d0
+		asr.w	#2,d0
+		move.w	d0,x_vel(a0)
+		bmi.s	.checkBombHit
+		neg.w	ground_vel(a1)
+		bra.s	.checkBombHit
+; ---------------------------------------------------------------------------
+
+	.checkHurtCharacter:
+		tst.b	invulnerability_timer(a1)
+		bne.s	.checkBombHit
+		btst	#Status_Invincible,status_secondary(a1)
+		bne.s	.checkBombHit
+		jsr	(HurtCharacter_Directly).l
+
+	.checkBombHit:
 		btst	#6,status(a0)
 		beq.s	.return
 		tst.b	$20(a0)
 		bne.s	.invulnerable
 		clr.w	x_vel(a0)
-		subq.b	#1,collision_property(a0)
+		subq.b	#1,objoff_27(a0)
 		beq.s	LRZEncoreBoss_BossDefeated
 		move.b	#$20,$20(a0)
 		moveq	#signextendB(sfx_BossHit),d0
@@ -179301,10 +179346,10 @@ LRZEncoreBoss_CheckHit:							; Liliam: Encore mode - LRZ2 boss
 		moveq	#0,d0
 		btst	#0,$20(a0)
 		bne.s	.flash
-		addi.w	#2*4,d0
+		addi.w	#2*5,d0
 
 	.flash:
-		bsr.w	LRZEndBoss_BossFlash
+		bsr.s	LRZEncoreBoss_BossFlash
 		subq.b	#1,$20(a0)
 		bne.s	.return
 		bclr	#6,status(a0)
@@ -179326,6 +179371,18 @@ LRZEncoreBoss_BossDefeated:						; Liliam: Encore mode - LRZ2 boss
 		st	(Level_results_started).w
 		clr.b	(Boss_flag).w
 		jmp	(BossDefeated_StopTimer).l
+; ---------------------------------------------------------------------------
+
+LRZEncoreBoss_BossFlash:						; Liliam: Encore mode - LRZ2 boss
+		lea	(word_79FE6).l,a1
+		lea	LRZEncoreBoss_BossFlashColors(pc,d0.w),a2
+		jmp	(CopyWordData_5).l
+; End of function LRZEndBoss_BossFlash
+
+; ---------------------------------------------------------------------------
+LRZEncoreBoss_BossFlashColors:						; Liliam: Encore mode - LRZ2 boss
+		dc.w   $426,  $646,  $424,  $222,  $224
+		dc.w   $AAA,  $AAA,  $CCC,  $EEE,  $CCC
 ; ---------------------------------------------------------------------------
 
 LRZEncoreBoss_ReleaseCamera:						; Liliam: Encore mode - LRZ2 boss
@@ -179364,26 +179421,26 @@ Obj_LRZEncoreBoss_CheckDelete:						; Liliam: Encore mode - LRZ2 boss
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_LRZEncoreBoss_Debris:						; Liliam: Encore mode - LRZ2 boss
+Obj_LRZEncoreBossDebris:						; Liliam: Encore mode - LRZ2 boss
 		tst.b	render_flags(a0)
 		bmi.s	LRZEncoreBoss_MoveDraw
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Obj_LRZEndBoss_Bomb:
+Obj_LRZEndBossBomb:
 		lea	word_7A14C(pc),a1
 		jsr	(SetUp_ObjAttributes3).l
 		move.l	#loc_79AC4,(a0)
 		move.w	#-$800,y_vel(a0)
 
 loc_79AC4:
-		bsr.w	LRZEndBoss_Bomb_CheckDelete
+		bsr.w	LRZEndBossBomb_CheckDelete
 		tst.w	y_vel(a0)
 		bmi.s	loc_79B02
-		move.l	#Obj_LRZEncoreBoss_Bomb_Fall,(a0)		; Liliam: Encore mode - LRZ2 boss
+		move.l	#Obj_LRZEncoreBossBomb_Fall,(a0)		; Liliam: Encore mode - LRZ2 boss
 		tst.b	(Current_act).w					;
 		bne.s	loc_79B02					;
-		move.l	#Obj_LRZEndBoss_Bomb_Fall,(a0)
+		move.l	#Obj_LRZEndBossBomb_Fall,(a0)
 		move.w	#$100,priority(a0)
 		moveq	#$40,d0
 		movea.w	parent3(a0),a1
@@ -179413,8 +179470,8 @@ loc_79B16:
 ;		jmp	(Sprite_CheckDeleteTouch).l		;
 ; ---------------------------------------------------------------------------
 
-Obj_LRZEndBoss_Bomb_Fall:
-		bsr.w	LRZEndBoss_Bomb_CheckDelete
+Obj_LRZEndBossBomb_Fall:
+		bsr.w	LRZEndBossBomb_CheckDelete
 		jsr	(MoveSprite_LightGravity).l
 		movea.w	$44(a0),a1
 		moveq	#0,d0
@@ -179432,7 +179489,7 @@ Obj_LRZEndBoss_Bomb_Fall:
 		clr.w	y_vel(a0)
 
 loc_79B54:
-		bsr.w	LRZEndBoss_Bomb_CheckDelete
+		bsr.w	LRZEndBossBomb_CheckDelete
 		tst.b	(_unkFAA3).w
 		bne.s	loc_79B66
 		tst.b	render_flags(a0)
@@ -179442,7 +179499,7 @@ loc_79B66:
 		bsr.w	sub_79F14
 		jsr	(MoveSprite2).l
 		bsr.w	sub_79F30
-		bsr.w	LRZEndBoss_Bomb_CheckHit
+		bsr.w	LRZEndBossBomb_CheckPlayerHit
 
 	.checkCollision:
 		jsr	(Check_PlayerCollision).l		; Liliam: allow destroying LRZ3 boss bombs
@@ -179451,14 +179508,14 @@ loc_79B66:
 		bne.s	loc_79B78				;
 		btst	#Status_Invincible,status_secondary(a1)	;
 		bne.s	loc_79B78				;
-		move.l	#Obj_LRZEndBoss_Bomb_Explode,(a0)	;
+		move.l	#Obj_LRZEndBossBomb_Explode,(a0)	;
 		jsr	(HurtCharacter_Directly).l		;
 
 loc_79B78:
 		jmp	(Sprite_CheckDeleteTouch).l
 ; ---------------------------------------------------------------------------
 
-Obj_LRZEndBoss_Bomb_Explode:					; Liliam: allow destroying LRZ3 boss bombs
+Obj_LRZEndBossBomb_Explode:					; Liliam: allow destroying LRZ3 boss bombs
 		lea	(Child6_CreateBossExplosion).l,a2
 		jsr	(CreateChild6_Simple).l
 		bne.s	.done
@@ -179468,16 +179525,16 @@ Obj_LRZEndBoss_Bomb_Explode:					; Liliam: allow destroying LRZ3 boss bombs
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Obj_LRZEncoreBoss_Bomb_Fall:						; Liliam: Encore mode - LRZ2 boss
-		bsr.w	LRZEndBoss_Bomb_CheckDelete
+Obj_LRZEncoreBossBomb_Fall:						; Liliam: Encore mode - LRZ2 boss
+		bsr.w	LRZEndBossBomb_CheckDelete
 		jsr	(MoveSprite_LightGravity).l
-		bsr.w	LRZEndBoss_Bomb_CheckHit
+		bsr.w	LRZEndBossBomb_CheckPlayerHit
 		cmpi.w	#$470,y_pos(a0)
 		blo.s	loc_79B66.checkCollision
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Obj_LRZEndBoss_Exhaust:
+Obj_LRZEndBossExhaust:
 		lea	word_7A152(pc),a1
 		jsr	(SetUp_ObjAttributes3).l
 		move.l	#loc_79B96,(a0)
@@ -179490,7 +179547,7 @@ loc_79B96:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Obj_LRZEncoreBoss_BombSmoke:
+Obj_LRZEndBossSmoke:
 		lea	word_7A158(pc),a1
 		jsr	(SetUp_ObjAttributes3).l
 		move.l	#loc_79BCA,(a0)
@@ -179505,7 +179562,7 @@ loc_79BCA:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Obj_LRZEndBoss_SpikeRing:
+Obj_LRZEndBossSpikeRing:
 		lea	word_7A15E(pc),a1
 		jsr	(SetUp_ObjAttributes3).l
 		move.l	#loc_79BF6,(a0)
@@ -179517,11 +179574,11 @@ loc_79BF6:
 		jmp	(Child_Draw_Sprite2).l
 ; ---------------------------------------------------------------------------
 
-Obj_LRZEncoreBoss_SpikeRing:						; Liliam: Encore mode - LRZ2 boss
-		bsr.s	Obj_LRZEndBoss_SpikeRing
-		move.l	#Obj_LRZEncoreBoss_SpikeRing_CheckParent,(a0)
+Obj_LRZEncoreBossSpikeRing:						; Liliam: Encore mode - LRZ2 boss
+		bsr.s	Obj_LRZEndBossSpikeRing
+		move.l	#Obj_LRZEncoreBossSpikeRing_CheckParent,(a0)
 
-Obj_LRZEncoreBoss_SpikeRing_CheckParent:
+Obj_LRZEncoreBossSpikeRing_CheckParent:
 		movea.w	parent3(a0),a1
 		tst.w	art_tile(a1)
 		bpl.s	loc_79BF6
@@ -179531,18 +179588,18 @@ Obj_LRZEncoreBoss_SpikeRing_CheckParent:
 		bra.s	loc_79BF6
 ; ---------------------------------------------------------------------------
 
-Obj_LRZEndBoss_RobotnikHead:
+Obj_LRZEndBossRobotnikHead:
 		lea	word_7A164(pc),a1
 		jsr	(SetUp_ObjAttributes2).l
 		move.l	#loc_79C1C,(a0)
 		cmpi.w	#7,(Player_mode).w				; Liliam: Metal Sonic - use Mecha Sonic head for bosses
 		bne.s	loc_79C1C					;
-		move.l	#Obj_LRZEndBoss_MechaSonicHead,(a0)		;
+		move.l	#Obj_LRZEndBossMechaSonicHead,(a0)		;
 		lea	(ArtKosM_LRZ3MechaSonicHead).l,a1		;
 		move.w	#tiles_to_bytes(ArtTile_LRZEndBoss+$AF),d2	;
 		jsr	(Queue_Kos_Module).l				;
 
-Obj_LRZEndBoss_MechaSonicHead:
+Obj_LRZEndBossMechaSonicHead:
 		jsr	(Refresh_ChildPositionAdjusted).l		;
 		movea.w	parent3(a0),a1					;
 		move.b	#$10,mapping_frame(a0)				;
@@ -179554,11 +179611,11 @@ Obj_LRZEndBoss_MechaSonicHead:
 		bra.s	loc_79C4C					;
 ; ---------------------------------------------------------------------------
 
-Obj_LRZEncoreBoss_RobotnikHead:
+Obj_LRZEncoreBossRobotnikHead:
 		lea	word_7A164(pc),a1				; Liliam: Encore mode - LRZ2 boss
 		jsr	(SetUp_ObjAttributes2).l			;
 
-Obj_LRZEncoreBoss_RobotnikHead_CheckParent:
+Obj_LRZEncoreBossRobotnikHead_CheckParent:
 		movea.w	parent3(a0),a1					;
 		tst.w	art_tile(a1)					;
 		bpl.s	loc_79C1C					;
@@ -179785,14 +179842,14 @@ loc_79E9C:
 ; =============== S U B R O U T I N E =======================================
 
 
-LRZEndBoss_Bomb_CheckDelete:
+LRZEndBossBomb_CheckDelete:
 		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
 		bne.s	loc_79EE6
 		rts
 ; ---------------------------------------------------------------------------
 
-LRZEndBoss_Bomb_CheckHit:
+LRZEndBossBomb_CheckPlayerHit:
 		cmpi.b	#State_NoControl,(Player_1+routine).w	; Liliam: Encore mode - restart level
 		bhs.s	locret_79F0A				;
 		movea.w	parent3(a0),a1
@@ -179817,7 +179874,7 @@ loc_79EFA:
 
 locret_79F0A:
 		rts
-; End of function LRZEndBoss_Bomb_CheckDelete
+; End of function LRZEndBossBomb_CheckDelete
 
 ; ---------------------------------------------------------------------------
 word_79F0C:
@@ -179878,7 +179935,8 @@ loc_79F7A:
 		moveq	#0,d0
 		btst	#0,$20(a0)
 		bne.s	loc_79F88
-		addi.w	#2*4,d0
+		addi.w	#2*5,d0					; Liliam: bugfix - LRZ2 boss flash
+;		addi.w	#2*4,d0					;
 
 loc_79F88:
 		bsr.w	LRZEndBoss_BossFlash
@@ -179916,15 +179974,19 @@ loc_79FC6:
 LRZEndBoss_BossFlash:
 		lea	word_79FE6(pc),a1
 		lea	word_79FEE(pc,d0.w),a2
-		jmp	(CopyWordData_4).l
+		jmp	(CopyWordData_5).l			; Liliam: bugfix - LRZ2 boss flash
+;		jmp	(CopyWordData_4).l			;
 ; End of function LRZEndBoss_BossFlash
 
 ; ---------------------------------------------------------------------------
 word_79FE6:
 		dc.w Normal_palette_line_2+$08, Normal_palette_line_2+$18, Normal_palette_line_2+$1A, Normal_palette_line_2+$1C
+		dc.w Normal_palette_line_2+$0E			; Liliam: bugfix - LRZ2 boss flash
 word_79FEE:
 		dc.w   $406,  $646,  $424,     0
-		dc.w   $EEE,  $EEE,  $EEE,  $EEE
+		dc.w   $204					; Liliam: bugfix - LRZ2 boss flash
+		dc.w   $AAA,  $AAA,  $CCC,  $EEE,  $CCC		;
+;		dc.w   $EEE,  $EEE,  $EEE,  $EEE		;
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -180123,25 +180185,25 @@ word_7A184:
 		dc.b  $20,   8,   2,   0
 ChildObjDat_7A18C:
 		dc.w 2-1
-		dc.l Obj_LRZEndBoss_SpikeRing
+		dc.l Obj_LRZEndBossSpikeRing
 		dc.b    0,-$12
-		dc.l Obj_LRZEndBoss_RobotnikHead
+		dc.l Obj_LRZEndBossRobotnikHead
 		dc.b -$15,   1
 ChildObjDat_LRZEncoreBoss:						; Liliam: Encore mode - LRZ2 boss
 		dc.w 2-1
-		dc.l Obj_LRZEncoreBoss_SpikeRing
+		dc.l Obj_LRZEncoreBossSpikeRing
 		dc.b    0,-$12
-		dc.l Obj_LRZEncoreBoss_RobotnikHead
+		dc.l Obj_LRZEncoreBossRobotnikHead
 		dc.b -$15,   1
 ChildObjDat_7A19A:
 		dc.w 2-1
-		dc.l Obj_LRZEndBoss_Bomb
+		dc.l Obj_LRZEndBossBomb
 		dc.b    0,-$18
-		dc.l Obj_LRZEndBoss_Exhaust
+		dc.l Obj_LRZEndBossExhaust
 		dc.b    0,-$37
 ChildObjDat_7A1A8:
 		dc.w 1-1
-		dc.l Obj_LRZEncoreBoss_BombSmoke
+		dc.l Obj_LRZEndBossSmoke
 		dc.b    0, $10
 ChildObjDat_7A1B0:
 		dc.w 1-1
@@ -180186,6 +180248,9 @@ byte_7A1E9:
 		even
 Pal_LRZEndBoss:
 		binclude "Levels/LRZ/Palettes/End Boss.bin"
+		even
+Pal_LRZEncoreBoss:							; Liliam: Encore mode - LRZ2 boss
+		binclude "Levels/LRZ/Palettes/Encore Boss.bin"
 		even
 ; ---------------------------------------------------------------------------
 
@@ -222137,6 +222202,7 @@ Map_LRZMiniboss:
 Map_SOZGhosts:
 		include "General/Sprites/SOZ Ghosts/Map - SOZ Ghosts.asm"
 Map_LRZEndBoss:
+		; Liliam: bugfix - fix misaligned sprite
 		include "Levels/LRZ/Misc Object Data/Map - End Boss.asm"
 Map_LRZ3Platform:
 		include "Levels/LRZ/Misc Object Data/Map - Act 3 Platform.asm"
