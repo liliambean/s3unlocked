@@ -5513,7 +5513,7 @@ Pal_FromWhite_SpecialStage:					; Liliam: ported from S1 - Naka fade for special
 		move.b	(Palette_fade_count).w,d0
 
 	.loop:
-		bsr.s	Pal_DecColor3
+		bsr.s	Pal_DecColor4
 		dbf	d0,.loop
 		rts
 ; End of function Pal_FromWhite_SpecialStage
@@ -5522,7 +5522,7 @@ Pal_FromWhite_SpecialStage:					; Liliam: ported from S1 - Naka fade for special
 ; =============== S U B R O U T I N E =======================================
 
 
-Pal_DecColor3:							; Liliam: ported from S1 - Naka fade for special stage
+Pal_DecColor4:							; Liliam: ported from S1 - Naka fade for special stage
 		move.w	(a1)+,d2
 		move.w	d2,d1
 		andi.w	#$EEE,d2
@@ -5569,7 +5569,7 @@ Pal_DecColor3:							; Liliam: ported from S1 - Naka fade for special stage
 	.done:
 		move.w	d2,(a0)+
 		rts
-; End of function Pal_DecColor3
+; End of function Pal_DecColor4
 
 
 ; =============== S U B R O U T I N E =======================================
@@ -134345,19 +134345,19 @@ Ending_LoadEyecatchArt:
 		lea	(ArtKosM_ANDKnuckles).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_ANDKnuckles),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#8,d1					; Liliam: ending - use S3 logo eyecatch for Encore mode
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_5B46C				;
-;		move.w	(Player_mode).w,d0			;
+		moveq	#8,d1						; Liliam: ending - use S3 logo eyecatch for Encore mode
+		tst.b	(Encore_mode).w					;
+		bne.s	loc_5B46C					;
+;		move.w	(Player_mode).w,d0				;
 		moveq	#0,d1
-;		andi.w	#3,d0					; Liliam: ending - Tails uses same routines as Sonic
-;		subq.w	#2,d0					;
-;		bmi.s	loc_5B452				;
-;		beq.s	loc_5B44E				;
-;		addi.w	#$18,d1					;
+;		andi.w	#3,d0						; Liliam: ending - Tails uses same routines as Sonic
+;		subq.w	#2,d0						;
+;		bmi.s	loc_5B452					;
+;		beq.s	loc_5B44E					;
+;		addi.w	#$18,d1						;
 
 ;loc_5B44E:
-;		addi.w	#$18,d1					;
+;		addi.w	#$18,d1						;
 
 ;loc_5B452:
 ;		tst.w	(SK_alone_flag).w		; Liliam: removed S&K alone mode
@@ -134368,8 +134368,8 @@ Ending_LoadEyecatchArt:
 loc_5B45C:
 		tst.b	(Ending_completion_level).w
 		bmi.s	loc_5B46C
-;		beq.s	loc_5B468				; Liliam: ending - use normal eyecatch for super emerald ending
-;		addi.w	#4,d1					;
+;		beq.s	loc_5B468					; Liliam: ending - use normal eyecatch for super emerald ending
+;		addi.w	#4,d1						;
 
 ;loc_5B468:
 		addi.w	#4,d1
@@ -134381,39 +134381,39 @@ loc_5B46C:
 
 ; ---------------------------------------------------------------------------
 off_5B472:
-;		dc.l loc_5B4C4				; Liliam: removed S&K alone mode
-;		dc.l loc_5B4C4				;
-;		dc.l loc_5B4C4				;
-		dc.l sub_5B4E8
-		dc.l sub_5B4E8
-		dc.l loc_5B4F8
+;		dc.l Ending_LoadSKLogo			; Liliam: removed S&K alone mode
+;		dc.l Ending_LoadSKLogo			;
+;		dc.l Ending_LoadSKLogo			;
+		dc.l Ending_LoadS3Logo
+		dc.l Ending_LoadS3Logo
+		dc.l Ending_LoadS3Eyecatch
 
-;		dc.l sub_5B4E8				; Liliam: removed S&K alone mode
-;		dc.l sub_5B4E8				;
-;		dc.l loc_5B4F8				;
-;		dc.l sub_5B4E8					; Liliam: ending - Tails uses same routines as Sonic
-;		dc.l sub_5B4E8					;
-;		dc.l loc_5B4F8					;
+;		dc.l Ending_LoadS3Logo			; Liliam: removed S&K alone mode
+;		dc.l Ending_LoadS3Logo			;
+;		dc.l Ending_LoadS3Eyecatch		;
+;		dc.l Ending_LoadS3Logo					; Liliam: ending - Tails uses same routines as Sonic
+;		dc.l Ending_LoadS3Logo					;
+;		dc.l Ending_LoadS3Eyecatch				;
 
-;		dc.l loc_5B4C4				; Liliam: removed S&K alone mode
-;		dc.l loc_5B4BA				;
-;		dc.l loc_5B4BA				;
-		dc.l sub_5B4E8
-		dc.l loc_5B4DE
-;		dc.l loc_5B4D4					; Liliam: ending - use normal eyecatch for super emerald ending
+;		dc.l Ending_LoadSKLogo			; Liliam: removed S&K alone mode
+;		dc.l Ending_LoadSKLogoKnux		;
+;		dc.l Ending_LoadSKLogoKnux		;
+		dc.l Ending_LoadS3Logo
+		dc.l Ending_LoadS3LogoKnux
+;		dc.l Ending_LoadS3EyecatchKnux				; Liliam: ending - use normal eyecatch for super emerald ending
 ; ---------------------------------------------------------------------------
 
-;loc_5B4BA:
+;Ending_LoadSKLogoKnux:
 		; Liliam: removed S&K alone mode
 
-;loc_5B4C4:
+;Ending_LoadSKLogo:
 		; Liliam: removed S&K alone mode
 ; ---------------------------------------------------------------------------
 
-;loc_5B4D4:
+;Ending_LoadS3EyecatchKnux:
 		; Liliam: removed original implementation
 
-loc_5B4DE:
+Ending_LoadS3LogoKnux:
 		lea	(ArtKosM_KnuxEndPose).l,a1			; Liliam: removed S&K lock-on code
 		move.w	#tiles_to_bytes(ArtTile_Ending_KnuxEndPose),d2	;
 		jsr	(Queue_Kos_Module).l				;
@@ -134423,16 +134423,16 @@ loc_5B4DE:
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_5B4E8:
+Ending_LoadS3Logo:
 		lea	(ArtKosM_S3PoseBanner).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_Logo),d2
 		jmp	(Queue_Kos_Module).l
-; End of function sub_5B4E8
+; End of function Ending_LoadS3Logo
 
 ; ---------------------------------------------------------------------------
 
-loc_5B4F8:
-		bsr.s	sub_5B4E8
+Ending_LoadS3Eyecatch:
+		bsr.s	Ending_LoadS3Logo
 		lea	PLC_S3EndingGraphics(pc),a1
 		jmp	(Load_PLC_Raw).l
 ; ---------------------------------------------------------------------------
@@ -137782,7 +137782,7 @@ loc_24053E:
 		move.w	d0,(_unkFA84).w
 		lea	S3CreditsText(pc),a1
 		move.w	(a1,d0.w),d0
-		beq.w	loc_5F0DA
+		beq.w	Ending_ReturnToTitle
 		lea	(a1,d0.w),a1
 		bsr.s	sub_240A4A
 		move.b	#VInt_ID_18,(V_int_routine).w
@@ -139163,7 +139163,7 @@ loc_5DFCC:
 loc_5DFD8:
 		jsr	(Refresh_ChildPosition).l
 		cmpi.w	#$50,x_pos(a0)
-		bls.w	loc_5EC36
+		bls.w	Ending_Delete
 		jmp	(Child_Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -139727,7 +139727,7 @@ word_5E554:
 
 loc_5E568:
 		btst	#3,(Cutscene_flags).w
-		bne.w	loc_5EC36
+		bne.w	Ending_Delete
 		lea	AniRaw_602A1(pc),a1
 		jsr	(Animate_RawNoSST).l
 		subq.w	#1,$2E(a0)
@@ -139741,7 +139741,7 @@ loc_5E58E:
 
 loc_5E594:
 		btst	#3,(Cutscene_flags).w
-		bne.w	loc_5EC36
+		bne.w	Ending_Delete
 		jsr	(Swing_UpAndDown).l
 		jsr	(MoveSprite2).l
 		lea	AniRaw_602A1(pc),a1
@@ -139760,7 +139760,7 @@ loc_5E5D4:
 
 loc_5E5DA:
 		btst	#3,(Cutscene_flags).w
-		bne.w	loc_5EC36
+		bne.w	Ending_Delete
 		jsr	(Swing_UpAndDown).l
 		jsr	(MoveSprite2).l
 		move.w	$3A(a0),d0
@@ -139791,7 +139791,7 @@ loc_5E612:
 
 loc_5E64A:
 		btst	#3,(Cutscene_flags).w
-		bne.w	loc_5EC36
+		bne.w	Ending_Delete
 		subq.w	#1,$2E(a0)
 		bpl.s	locret_5E684
 		move.l	#loc_5E686,(a0)
@@ -139809,7 +139809,7 @@ locret_5E684:
 
 loc_5E686:
 		btst	#3,(Cutscene_flags).w
-		bne.w	loc_5EC36
+		bne.w	Ending_Delete
 		jsr	(MoveSprite).l
 		clr.b	mapping_frame(a0)
 		tst.w	y_vel(a0)
@@ -140268,13 +140268,13 @@ loc_5EC14:
 		jsr	(Refresh_ChildPositionAdjusted).l
 		movea.w	parent3(a0),a1
 		btst	#4,$38(a1)
-		bne.s	loc_5EC36
+		bne.s	Ending_Delete
 		btst	#1,(V_int_run_count+3).w
 		bne.w	locret_5FF1A
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_5EC36:
+Ending_Delete:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -140295,7 +140295,7 @@ loc_5EC4E:
 		jsr	(Refresh_ChildPositionAdjusted).l
 		movea.w	parent3(a0),a1
 		btst	#4,$38(a1)
-		bne.s	loc_5EC36
+		bne.s	Ending_Delete
 		move.b	#$16,mapping_frame(a0)
 		btst	#1,(V_int_run_count+3).w
 		beq.s	loc_5EC88
@@ -140380,7 +140380,7 @@ byte_5ED0E:
 loc_5ED18:
 		movea.w	parent3(a0),a1
 		btst	#4,$38(a1)
-		bne.w	loc_5EC36
+		bne.w	Ending_Delete
 		bsr.w	sub_6008A
 		jsr	(Refresh_ChildPositionAdjusted).l
 		jmp	(Draw_Sprite).l
@@ -140398,7 +140398,7 @@ loc_5ED4A:
 		jsr	(Refresh_ChildPositionAdjusted).l
 		movea.w	parent3(a0),a1
 		btst	#5,$38(a1)
-		bne.w	loc_5EC36
+		bne.w	Ending_Delete
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -140413,7 +140413,7 @@ loc_5ED7E:
 		jsr	(Refresh_ChildPositionAdjusted).l
 		movea.w	parent3(a0),a1
 		btst	#1,$38(a1)
-		bne.w	loc_5EC36
+		bne.w	Ending_Delete
 		move.b	#$18,mapping_frame(a0)
 		btst	#1,(V_int_run_count+3).w
 		beq.s	loc_5EDA6
@@ -140631,19 +140631,19 @@ Obj_5EF68:
 
 Ending_LoadEyecatchObjects:
 		clr.b	(Super_palette_status).w
-		moveq	#$10,d1					; Liliam: ending - use S3 logo eyecatch for Encore mode
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_5EFAA				;
-;		move.w	(Player_mode).w,d0			;
+		moveq	#$10,d1						; Liliam: ending - use S3 logo eyecatch for Encore mode
+		tst.b	(Encore_mode).w					;
+		bne.s	loc_5EFAA					;
+;		move.w	(Player_mode).w,d0				;
 		moveq	#0,d1
-;		andi.w	#3,d0					; Liliam: ending - Tails uses same routines as Sonic
-;		subq.w	#2,d0					;
-;		bmi.s	loc_5EF90				;
-;		beq.s	loc_5EF8C				;
-;		addi.w	#$30,d1					;
+;		andi.w	#3,d0						; Liliam: ending - Tails uses same routines as Sonic
+;		subq.w	#2,d0						;
+;		bmi.s	loc_5EF90					;
+;		beq.s	loc_5EF8C					;
+;		addi.w	#$30,d1						;
 
 ;loc_5EF8C:
-;		addi.w	#$30,d1					;
+;		addi.w	#$30,d1						;
 
 ;loc_5EF90:
 ;		tst.w	(SK_alone_flag).w		; Liliam: removed S&K alone mode
@@ -140654,8 +140654,8 @@ Ending_LoadEyecatchObjects:
 loc_5EF9A:
 		tst.b	(Ending_completion_level).w
 		bmi.s	loc_5EFAA
-;		beq.s	loc_5EFA6				; Liliam: ending - use normal eyecatch for super emerald ending
-;		addi.w	#8,d1					;
+;		beq.s	loc_5EFA6					; Liliam: ending - use normal eyecatch for super emerald ending
+;		addi.w	#8,d1						;
 
 ;loc_5EFA6:
 		addi.w	#8,d1
@@ -140670,51 +140670,51 @@ locret_5EFB4:
 ;		jmp	(a2)					;
 ; ---------------------------------------------------------------------------
 off_5EFB6:
-;		dc.l loc_5F046, loc_5F0E2		; Liliam: removed S&K alone mode
-;		dc.l loc_5F046, loc_5F106		;
-;		dc.l loc_5F046, loc_5F106		;
-		dc.l loc_5F05C, loc_5F0E2
-		dc.l loc_5F05C, loc_5F106
-		dc.l loc_5F05C, loc_5F116
+;		dc.l Ending_MakeSKLogo, Ending_MakeRobotnik	; Liliam: removed S&K alone mode
+;		dc.l Ending_MakeSKLogo, Ending_MakeEggRobo	;
+;		dc.l Ending_MakeSKLogo, Ending_MakeEggRobo	;
+		dc.l Ending_MakeS3Logo, Ending_MakeRobotnik
+		dc.l Ending_MakeS3Logo, Ending_MakeEggRobo
+		dc.l Ending_MakeS3Logo, Ending_MakeS3Eyecatch
 
-;		dc.l loc_5F05C, loc_5F0E2		; Liliam: removed S&K alone mode
-;		dc.l loc_5F05C, loc_5F106		;
-;		dc.l loc_5F05C, loc_5F116		;
-;		dc.l loc_5F05C, loc_5F0E2			; Liliam: ending - Tails uses same routines as Sonic
-;		dc.l loc_5F05C, loc_5F106			;
-;		dc.l loc_5F05C, loc_5F116			;
+;		dc.l Ending_MakeS3Logo, Ending_MakeRobotnik	; Liliam: removed S&K alone mode
+;		dc.l Ending_MakeS3Logo, Ending_MakeEggRobo	;
+;		dc.l Ending_MakeS3Logo, Ending_MakeS3Eyecatch	;
+;		dc.l Ending_MakeS3Logo, Ending_MakeRobotnik		; Liliam: ending - Tails uses same routines as Sonic
+;		dc.l Ending_MakeS3Logo, Ending_MakeEggRobo		;
+;		dc.l Ending_MakeS3Logo, Ending_MakeS3Eyecatch		;
 
-;		dc.l loc_5F090, loc_5F126		; Liliam: removed S&K alone mode
-;		dc.l loc_5F072, loc_5F0DA		;
-;		dc.l loc_5F072, loc_5F0DA		;
-		dc.l loc_5F0C4, loc_5F126
-		dc.l loc_5F0A6, loc_5F0DA
-;		dc.l loc_5F0A6, loc_5F116			; Liliam: ending - use normal eyecatch for super emerald ending
+;		dc.l Ending_MakeSKLogoKB,Ending_MakeMechaSonic	; Liliam: removed S&K alone mode
+;		dc.l Ending_MakeSKLogoK, Ending_ReturnToTitle	;
+;		dc.l Ending_MakeSKLogoK, Ending_ReturnToTitle	;
+		dc.l Ending_MakeS3LogoKB,Ending_MakeMechaSonic
+		dc.l Ending_MakeS3LogoK, Ending_ReturnToTitle
+;		dc.l Ending_MakeS3LogoK, Ending_MakeS3Eyecatch		; Liliam: ending - use normal eyecatch for super emerald ending
 ; ---------------------------------------------------------------------------
 
-;loc_5F046:
+;Ending_MakeSKLogo:
 		; Liliam: removed S&K alone mode
 ; ---------------------------------------------------------------------------
 
-loc_5F05C:
+Ending_MakeS3Logo:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F070
-		move.l	#Obj_EndingS3KLogo,(a1)
+		move.l	#Obj_EndingS3Logo,(a1)
 		move.b	#4,subtype(a1)
 
 locret_5F070:
 		rts
 ; ---------------------------------------------------------------------------
 
-;loc_5F072:
+;Ending_MakeSKLogoK:
 		; Liliam: removed S&K alone mode
 ; ---------------------------------------------------------------------------
 
-;loc_5F090:
+;Ending_MakeSKLogoKB:
 		; Liliam: removed S&K alone mode
 ; ---------------------------------------------------------------------------
 
-loc_5F0A6:
+Ending_MakeS3LogoK:
 		jsr	(AllocateObject).l
 		bne.s	loc_5F0B4
 		move.l	#Obj_KnuxEndPose,(a1)
@@ -140722,29 +140722,29 @@ loc_5F0A6:
 loc_5F0B4:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F0C2
-		move.l	#Obj_EndingS3KLogo,(a1)
+		move.l	#Obj_EndingS3Logo,(a1)
 
 locret_5F0C2:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_5F0C4:
+Ending_MakeS3LogoKB:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F0D8
-		move.l	#Obj_EndingS3KLogo,(a1)
+		move.l	#Obj_EndingS3Logo,(a1)
 		move.b	#8,subtype(a1)
 
 locret_5F0D8:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_5F0DA:
+Ending_ReturnToTitle:
 		move.b	#GameMode_UnlockScreen,(Game_mode).w	; Liliam: extra skills
 ;		move.b	#GameMode_SegaScreen,(Game_mode).w	;
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_5F0E2:
+Ending_MakeRobotnik:
 		jsr	(AllocateObject).l
 		bne.s	loc_5F0F0
 		move.l	#Obj_EndingEyecatch_Eggman,(a1)
@@ -140759,7 +140759,7 @@ locret_5F104:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_5F106:
+Ending_MakeEggRobo:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F114
 		move.l	#Obj_EndingEyecatch_EggRobo,(a1)
@@ -140768,7 +140768,7 @@ locret_5F114:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_5F116:
+Ending_MakeS3Eyecatch:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F124
 		move.l	#Obj_EndingEyecatch_S3Sprites,(a1)
@@ -140777,7 +140777,7 @@ locret_5F124:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_5F126:
+Ending_MakeMechaSonic:
 		jsr	(AllocateObject).l
 		bne.s	loc_5F134
 		move.l	#Obj_EndingEyecatch_MechaSonic,(a1)
@@ -140814,7 +140814,7 @@ Ending_SlowFade:
 		move.w	a1,$44(a0)
 		move.l	#Obj_FadeSelectedToBlack,(a1)
 		move.w	#5,$3A(a1)
-		move.w	#$3F,$3C(a1)
+		move.w	#bytesToWcnt(Normal_palette_end-Normal_palette),$3C(a1)
 		move.w	#Normal_palette,$30(a1)
 		rts
 ; ---------------------------------------------------------------------------
@@ -140845,12 +140845,12 @@ loc_5F204:
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Obj_EndingS3KLogo:
+Obj_EndingS3Logo:
 		lea	ObjDat3_60124(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		move.l	#loc_5F1F6,(a0)
 		lea	word_5F260(pc),a1
-		bsr.w	sub_5FF1C
+		bsr.w	Ending_SetLogoPositionAndFade
 		lea	(Pal_EndingS3KLogo).l,a1
 		lea	(Target_palette_line_2).w,a2
 		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
@@ -140862,13 +140862,13 @@ loc_5F22E:
 		beq.s	loc_5F246				;
 		jsr	(AllocateObject).l
 		bne.s	loc_5F246
-		move.l	#loc_5F526,(a1)
+		move.l	#Obj_EndingS3LogoANDKnuckles,(a1)
 		move.w	a0,parent3(a1)
 
 loc_5F246:
 		jsr	(AllocateObject).l
 		bne.s	locret_5F25E
-		move.l	#loc_5F4FA,(a1)
+		move.l	#Obj_EndingS3LogoTM,(a1)
 		move.w	a0,parent3(a1)
 ;		move.b	#2,subtype(a1)			; Liliam: removed S&K alone mode
 
@@ -140881,7 +140881,7 @@ word_5F260:
 		dc.w   $120,   $F0
 ; ---------------------------------------------------------------------------
 
-loc_5F26C:
+Obj_EndingEyecatch_S3Logo:
 		lea	ObjDat3_60154(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 ;		move.l	#loc_5F1F6,(a0)				; Liliam: removed dead code
@@ -140893,7 +140893,7 @@ loc_5F26C:
 
 ;loc_5F294:
 		lea	word_5F2E2(pc),a1
-		bsr.w	sub_5FF1C
+		bsr.w	Ending_SetLogoPositionAndFade
 		lea	(Pal_EndingS3KLogo).l,a1
 		lea	(Target_palette_line_2).w,a2
 		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
@@ -140903,7 +140903,7 @@ loc_5F2A8:
 		dbf	d6,loc_5F2A8
 		jsr	(AllocateObject).l
 		bne.s	loc_5F2C6
-		move.l	#loc_5F4FA,(a1)
+		move.l	#Obj_EndingS3LogoTM,(a1)
 		move.w	a0,parent3(a1)
 		move.b	#2,subtype(a1)			; Liliam: removed S&K alone mode
 ;		move.b	#4,subtype(a1)			;
@@ -140911,7 +140911,7 @@ loc_5F2A8:
 loc_5F2C6:
 		jsr	(AllocateObject).l
 		bne.s	loc_5F2D8
-		move.l	#loc_5F546,(a1)
+		move.l	#Obj_EndingEyecatch_S3LogoANDKnuckles,(a1)
 		move.w	a0,parent3(a1)
 
 loc_5F2D8:
@@ -140946,13 +140946,13 @@ loc_5F314:
 		jmp	(Draw_Sprite).l				;
 ; ---------------------------------------------------------------------------
 
-loc_5F31C:
+Obj_EndingEyecatch_Sonic:
 		lea	word_60160(pc),a1
 		jsr	(SetUp_ObjAttributes2).l
 		bclr	#2,render_flags(a0)
 		move.l	#loc_5F376,(a0)
 		lea	byte_5F36E(pc),a1
-		bsr.w	sub_5FEFE
+		bsr.w	Ending_SetEyecatchPosition
 		lea	(Pal_SonicTails).l,a1
 		lea	(Target_palette).w,a2
 		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d6
@@ -140962,10 +140962,10 @@ loc_5F346:
 		dbf	d6,loc_5F346
 		jsr	(AllocateObject).l
 		bne.s	locret_5F36C
-		move.l	#loc_5FF62,(a1)
+		move.l	#Obj_FadeSelectedToWhite,(a1)
 		move.w	#Normal_palette+2,$30(a1)
 		move.w	#Target_palette+2,$32(a1)
-		move.w	#$E,$3A(a1)
+		move.w	#bytesToWcnt(Normal_palette_line_2-(Normal_palette+2)),$3A(a1)
 
 locret_5F36C:
 		rts
@@ -140997,13 +140997,13 @@ loc_5F39E:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_5F3AA:
+Obj_EndingEyecatch_Tails:
 		lea	word_60168(pc),a1
 		jsr	(SetUp_ObjAttributes2).l
 		bclr	#2,render_flags(a0)
 		move.l	#loc_5F3DA,(a0)
 		lea	byte_5F3D2(pc),a1
-		bsr.w	sub_5FEFE
+		bsr.w	Ending_SetEyecatchPosition
 		lea	ChildObjDat_60204(pc),a2
 		jmp	(CreateChild1_Normal).l
 ; ---------------------------------------------------------------------------
@@ -141022,7 +141022,7 @@ loc_5F3DA:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_5F3EA:
+Obj_EndingEyecatch_TailsTail:
 		lea	word_60170(pc),a1
 		jsr	(SetUp_ObjAttributes3).l
 		bclr	#2,render_flags(a0)
@@ -141034,13 +141034,13 @@ loc_5F400:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_5F410:
+Obj_EndingEyecatch_Knuckles:
 		lea	ObjDat3_60176(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		bclr	#2,render_flags(a0)
 		move.l	#loc_5F46A,(a0)
 		lea	byte_5F462(pc),a1
-		bsr.w	sub_5FEFE
+		bsr.w	Ending_SetEyecatchPosition
 		lea	(Pal_EndingEyecatchKnuckles).l,a1
 		lea	(Target_palette_line_3).w,a2
 		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_3),d6
@@ -141050,10 +141050,10 @@ loc_5F43A:
 		dbf	d6,loc_5F43A
 		jsr	(AllocateObject).l
 		bne.s	locret_5F460
-		move.l	#loc_5FF62,(a1)
+		move.l	#Obj_FadeSelectedToWhite,(a1)
 		move.w	#Normal_palette_line_3+2,$30(a1)
 		move.w	#Target_palette_line_3+2,$32(a1)
-		move.w	#$E,$3A(a1)
+		move.w	#bytesToWcnt(Normal_palette_line_4-(Normal_palette_line_3+2)),$3A(a1)
 
 locret_5F460:
 		rts
@@ -141071,7 +141071,7 @@ byte_5F462:
 loc_5F46A:
 		lea	(AniRaw_66771).l,a1
 		jsr	(Animate_Raw2NoSSTMultiDelay).l
-		bsr.w	KnucklesEnding_Load_PLC
+		bsr.w	Ending_Knuckles_Load_PLC
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -141111,15 +141111,15 @@ loc_5F4E4:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_5F4FA:
+Obj_EndingS3LogoTM:
 		tst.b	(Graphics_flags).w
-		bpl.w	loc_5EC36
+		bpl.w	Ending_Delete
 		lea	ObjDat3_60130(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		bclr	#2,render_flags(a0)
 		move.l	#Child_Draw_Sprite,(a0)
 		lea	byte_5F520(pc),a1
-		bra.w	loc_5FFD4
+		bra.w	Ending_SetLogoChildPosition
 ; ---------------------------------------------------------------------------
 byte_5F520:
 ;		dc.b  $48,   8				; Liliam: removed S&K alone mode
@@ -141127,25 +141127,25 @@ byte_5F520:
 		dc.b  $48,-$34
 ; ---------------------------------------------------------------------------
 
-loc_5F526:
+Obj_EndingS3LogoANDKnuckles:
 		lea	ObjDat3_6013C(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		bclr	#2,render_flags(a0)
 		move.l	#Child_Draw_Sprite,(a0)
 		lea	byte_5F544(pc),a1
-		bra.w	loc_5FFD4
+		bra.w	Ending_SetLogoChildPosition
 ; ---------------------------------------------------------------------------
 byte_5F544:
 		dc.b    0, $14
 ; ---------------------------------------------------------------------------
 
-loc_5F546:
+Obj_EndingEyecatch_S3LogoANDKnuckles:
 		lea	ObjDat3_60148(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		bclr	#2,render_flags(a0)
 		move.l	#Child_Draw_Sprite,(a0)
 		lea	byte_5F564(pc),a1
-		bra.w	loc_5FFD4
+		bra.w	Ending_SetLogoChildPosition
 ; ---------------------------------------------------------------------------
 byte_5F564:
 		dc.b    2, $48					; Liliam: ending - add 'Unlocked' branding
@@ -141475,7 +141475,7 @@ loc_5F8FA:
 		moveq	#5,d0
 		move.w	d0,$3A(a1)
 		move.w	d0,$2E(a1)
-		move.w	#$F,$3C(a1)
+		move.w	#bytesToWcnt(Normal_palette_line_2-Normal_palette),$3C(a1)
 		move.w	#Normal_palette,$30(a1)
 		move.w	#Target_palette,$32(a1)
 
@@ -141516,7 +141516,7 @@ loc_5F970:
 
 loc_5F986:
 		tst.b	(Ending_clouds_timer).w
-		beq.w	loc_5EC36
+		beq.w	Ending_Delete
 		move.b	(V_int_run_count+3).w,d0
 		and.b	(Ending_clouds_timer).w,d0
 		bne.w	locret_5FA56
@@ -141642,9 +141642,9 @@ loc_5FAA0:
 
 loc_5FAB4:
 		cmpi.w	#$200,x_pos(a0)
-		bhs.w	loc_5EC36
+		bhs.w	Ending_Delete
 		cmpi.w	#$200,y_pos(a0)
-		bhs.w	loc_5EC36
+		bhs.w	Ending_Delete
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -141674,7 +141674,7 @@ loc_5FB14:
 
 loc_5FB1A:
 		tst.b	(Graphics_flags).w
-		bpl.w	loc_5EC36
+		bpl.w	Ending_Delete
 		move.l	#Map_ANDKnuckles,mappings(a0)
 		move.w	#make_art_tile(ArtTile_BlueSphere_S3KLogo+$2F,3,0),art_tile(a0)		; Liliam: blue sphere - use S3 branding
 ;		move.w	#make_art_tile(ArtTile_BlueSphere_Difficulty+$48,3,0),art_tile(a0)	;
@@ -141684,7 +141684,7 @@ loc_5FB1A:
 		move.b	#2,mapping_frame(a0)
 		move.l	#Child_Draw_Sprite,(a0)
 		lea	byte_5F520(pc),a1
-		bra.w	loc_5FFD4
+		bra.w	Ending_SetLogoChildPosition
 ; ---------------------------------------------------------------------------
 
 Obj_Difficulty_Eggman:
@@ -141716,7 +141716,7 @@ Obj_PalCycle_SuperKnuxEndPose:
 
 loc_5FBA0:
 		tst.b	(Palette_cycle_counters+$00).w
-		bne.w	loc_5EC36
+		bne.w	Ending_Delete
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.w	locret_5FBE0
 		move.b	#2,anim_frame_timer(a0)
@@ -141758,7 +141758,7 @@ loc_5FC2A:
 		moveq	#$F-1,d0
 
 loc_5FC3C:
-		jsr	(sub_85EB4).l
+		jsr	(Pal_AddColor3).l
 		dbf	d0,loc_5FC3C
 		subq.b	#1,$39(a0)
 		bmi.s	loc_5FC4E
@@ -141783,7 +141783,7 @@ loc_5FC62:
 		moveq	#$F-1,d0
 
 loc_5FC78:
-		jsr	(sub_85F2A).l
+		jsr	(Pal_DecColor3).l
 		dbf	d0,loc_5FC78
 		subq.b	#1,$39(a0)
 		bpl.s	locret_5FC4C
@@ -141843,7 +141843,7 @@ Obj_PalCycle_SuperTailsEndPose:
 
 loc_5FCEC:
 		btst	#3,(Cutscene_flags).w
-		bne.w	loc_5EC36
+		bne.w	Ending_Delete
 		jmp	(Run_PalRotationScript).l
 ; ---------------------------------------------------------------------------
 
@@ -141857,7 +141857,7 @@ Obj_PalCycle_SuperSonicEndPose:
 
 loc_5FD16:
 		tst.b	(Palette_cycle_counters+$00).w
-		bne.w	loc_5EC36
+		bne.w	Ending_Delete
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	locret_5FD4C
 		move.b	$3B(a0),anim_frame_timer(a0)
@@ -141897,7 +141897,7 @@ loc_5FD66:
 		bpl.w	locret_5FF1A
 		jsr	(AllocateObject).l
 		bne.s	loc_5FD82
-		move.l	#loc_5F26C,(a1)
+		move.l	#Obj_EndingEyecatch_S3Logo,(a1)
 ;		move.b	#4,subtype(a1)				; Liliam: removed dead code
 
 loc_5FD82:
@@ -141933,7 +141933,7 @@ sub_5FDA4:
 		moveq	#5,d0
 		move.w	d0,$3A(a1)
 		move.w	d0,$2E(a1)
-		move.w	#$F,$3C(a1)
+		move.w	#bytesToWcnt(Normal_palette_line_3-Normal_palette_line_2),$3C(a1)
 		move.w	#Normal_palette_line_2,$30(a1)
 		move.w	#Target_palette_line_2,$32(a1)
 
@@ -142042,7 +142042,7 @@ loc_5FEA2:
 ; =============== S U B R O U T I N E =======================================
 
 
-KnucklesEnding_Load_PLC:
+Ending_Knuckles_Load_PLC:
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0
 		cmp.b	$3A(a0),d0
@@ -142075,13 +142075,13 @@ loc_5FED4:
 
 locret_5FEFC:
 		rts
-; End of function KnucklesEnding_Load_PLC
+; End of function Ending_Knuckles_Load_PLC
 
 
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_5FEFE:
+Ending_SetEyecatchPosition:
 		move.w	(Player_mode).w,d0
 		cmpi.b	#4,d0					; Liliam: ending - add extra characters
 		blo.s	loc_5FF06				;
@@ -142100,13 +142100,13 @@ loc_5FF06:
 
 locret_5FF1A:
 		rts
-; End of function sub_5FEFE
+; End of function Ending_SetEyecatchPosition
 
 
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_5FF1C:
+Ending_SetLogoPositionAndFade:
 		moveq	#0,d0
 		move.b	subtype(a0),d0
 		adda.w	d0,a1
@@ -142122,22 +142122,22 @@ loc_5FF3A:
 		dbf	d1,loc_5FF3A
 		jsr	(AllocateObject).l
 		bne.s	locret_5FF60
-		move.l	#loc_5FF62,(a1)
+		move.l	#Obj_FadeSelectedToWhite,(a1)
 		move.w	#Normal_palette_line_2,$30(a1)
 		move.w	#Target_palette_line_2,$32(a1)
-		move.w	#$F,$3A(a1)
+		move.w	#bytesToWcnt(Normal_palette_line_3-Normal_palette_line_2),$3A(a1)
 
 locret_5FF60:
 		rts
-; End of function sub_5FF1C
+; End of function Ending_SetLogoPositionAndFade
 
 ; ---------------------------------------------------------------------------
 
-loc_5FF62:
+Obj_FadeSelectedToWhite:
 		move.b	#7,$39(a0)
-		move.l	#loc_5FF6E,(a0)
+		move.l	#Obj_FadeSelectedToWhite_Main,(a0)
 
-loc_5FF6E:
+Obj_FadeSelectedToWhite_Main:
 		subq.w	#1,$2E(a0)
 		bpl.s	locret_5FF92
 		move.w	#3,$2E(a0)
@@ -142145,7 +142145,7 @@ loc_5FF6E:
 		move.w	$3A(a0),d0
 
 loc_5FF82:
-		jsr	(sub_85EB4).l
+		jsr	(Pal_AddColor3).l
 		dbf	d0,loc_5FF82
 		subq.b	#1,$39(a0)
 		bmi.s	loc_5FF94
@@ -142155,11 +142155,11 @@ locret_5FF92:
 ; ---------------------------------------------------------------------------
 
 loc_5FF94:
-		move.l	#loc_5FFA6,(a0)
+		move.l	#Obj_FadeSelectedFromWhite_Main,(a0)
 		move.b	#7,$39(a0)
 		move.w	#3,$2E(a0)
 
-loc_5FFA6:
+Obj_FadeSelectedFromWhite_Main:
 		subq.w	#1,$2E(a0)
 		bpl.s	locret_5FF92
 		move.w	#3,$2E(a0)
@@ -142168,14 +142168,14 @@ loc_5FFA6:
 		move.w	$3A(a0),d0
 
 loc_5FFBE:
-		jsr	(sub_85F2A).l
+		jsr	(Pal_DecColor3).l
 		dbf	d0,loc_5FFBE
 		subq.b	#1,$39(a0)
 		bpl.s	locret_5FF92
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_5FFD4:
+Ending_SetLogoChildPosition:
 		moveq	#0,d0
 		move.b	subtype(a0),d0
 		lea	(a1,d0.w),a1
@@ -142428,15 +142428,15 @@ ChildObjDat_601E8:
 		dc.b -$40,  -4
 ChildObjDat_601F0:
 		dc.w 3-1
-		dc.l loc_5F31C
+		dc.l Obj_EndingEyecatch_Sonic
 		dc.b    0,   0
-		dc.l loc_5F3AA
+		dc.l Obj_EndingEyecatch_Tails
 		dc.b    0,   0
-		dc.l loc_5F410
+		dc.l Obj_EndingEyecatch_Knuckles
 		dc.b    0,   0
 ChildObjDat_60204:
 		dc.w 1-1
-		dc.l loc_5F3EA
+		dc.l Obj_EndingEyecatch_TailsTail
 		dc.b -$10,   8
 ChildObjDat_6020C:
 		dc.w 1-1
@@ -146372,7 +146372,7 @@ loc_63870:
 		jsr	(AllocateObject).l
 		bne.s	loc_6389C
 		move.w	a1,$44(a0)
-		move.l	#loc_85E64,(a1)
+		move.l	#Obj_FadeScreenToWhite,(a1)
 		move.w	#7,$3A(a1)
 		st	subtype(a1)
 		lea	ChildObjDat_66650(pc),a2
@@ -174391,7 +174391,7 @@ loc_765C0:
 		dbf	d6,loc_765C0
 		jsr	(AllocateObject).l
 		bne.s	loc_765DE
-		move.l	#loc_85E64,(a1)
+		move.l	#Obj_FadeScreenToWhite,(a1)
 		st	subtype(a1)
 		move.w	#3,$3A(a1)
 
@@ -174904,7 +174904,7 @@ loc_76AE8:
 		bne.s	locret_76B28
 		move.l	#Obj_FadeSelectedFromBlack,(a1)
 		move.w	#3,$3A(a1)
-		move.w	#$F,$3C(a1)
+		move.w	#bytesToWcnt(Normal_palette_line_3-Normal_palette_line_2),$3C(a1)
 		move.w	#Normal_palette_line_2,$30(a1)
 		move.w	#Target_palette_line_2,$32(a1)
 
@@ -178430,7 +178430,7 @@ loc_7944C:
 		dbf	d6,loc_7944C
 		jsr	(AllocateObject).l
 		bne.s	loc_7946A
-		move.l	#loc_85E64,(a1)
+		move.l	#Obj_FadeScreenToWhite,(a1)
 		move.w	a1,$44(a0)
 		move.w	#3,$3A(a1)
 
@@ -178460,7 +178460,7 @@ loc_79486:
 		jsr	(Play_SFX).l
 		jsr	(AllocateObject).l
 		bne.s	loc_794BE
-		move.l	#loc_85EE6,(a1)
+		move.l	#Obj_FadeScreenFromWhite,(a1)
 		move.w	a1,$44(a0)
 
 loc_794BE:
@@ -182694,7 +182694,7 @@ loc_7BC90:
 		jsr	(AllocateObject).l
 		bne.s	locret_7BCAE
 		move.w	a1,$44(a0)
-		move.l	#loc_85E64,(a1)
+		move.l	#Obj_FadeScreenToWhite,(a1)
 		move.w	#7,$3A(a1)
 
 locret_7BCAE:
@@ -182750,7 +182750,7 @@ loc_7BCFC:
 loc_7BD1C:
 		jsr	(AllocateObject).l
 		bne.s	loc_7BD2A
-		move.l	#loc_85EE6,(a1)
+		move.l	#Obj_FadeScreenFromWhite,(a1)
 
 loc_7BD2A:
 		jmp	(Delete_Current_Sprite).l
@@ -184512,10 +184512,10 @@ loc_7D0A8:
 		bpl.s	locret_7D0CA
 		move.w	#5,$2E(a0)
 		lea	(Normal_palette).w,a1
-		moveq	#$40-1,d0
+		moveq	#bytesToWcnt(Normal_palette_end-Normal_palette),d0
 
 loc_7D0BA:
-		jsr	(sub_85EB4).l
+		jsr	(Pal_AddColor3).l
 		dbf	d0,loc_7D0BA
 		subq.b	#1,$39(a0)
 		bmi.s	loc_7D0CC
@@ -184537,10 +184537,10 @@ loc_7D0E0:
 		move.w	#3,$2E(a0)
 		lea	(Normal_palette).w,a1
 		lea	(Target_palette).w,a2
-		moveq	#$40-1,d0
+		moveq	#bytesToWcnt(Normal_palette_end-Normal_palette),d0
 
 loc_7D0F6:
-		jsr	(sub_85F2A).l
+		jsr	(Pal_DecColor3).l
 		dbf	d0,loc_7D0F6
 		subq.b	#1,$39(a0)
 		bpl.s	locret_7D0CA
@@ -189335,7 +189335,7 @@ loc_80382:
 		move.l	#loc_803D6,(a0)
 		jsr	(AllocateObject).l
 		bne.s	loc_803B4
-		move.l	#loc_85E64,(a1)
+		move.l	#Obj_FadeScreenToWhite,(a1)
 		move.w	a1,$44(a0)
 		move.w	#3,$3A(a1)
 		rts
@@ -189350,7 +189350,7 @@ loc_803B4:
 loc_803BE:
 		move.w	d0,(a1)+
 		dbf	d1,loc_803BE
-		move.l	#loc_85E64,(a2)
+		move.l	#Obj_FadeScreenToWhite,(a2)
 		move.w	a2,$44(a0)
 		move.w	#3,$3A(a2)
 
@@ -191734,7 +191734,7 @@ loc_81C3E:
 		move.b	#4,routine(a0)
 		jsr	(AllocateObject).l
 		bne.s	locret_81C6E
-		move.l	#loc_85E64,(a1)
+		move.l	#Obj_FadeScreenToWhite,(a1)
 		move.w	a1,$44(a0)
 		move.w	#7,$3A(a1)
 
@@ -193821,10 +193821,10 @@ loc_8311A:
 		bpl.w	locret_82ABA
 		move.w	$3A(a0),$2E(a0)
 		lea	(Normal_palette).w,a1
-		moveq	#$40-1,d0
+		moveq	#bytesToWcnt(Normal_palette_end-Normal_palette),d0
 
 loc_8312E:
-		jsr	sub_85EB4(pc)
+		jsr	Pal_AddColor3(pc)
 		dbf	d0,loc_8312E
 		subq.b	#1,$39(a0)
 		bmi.s	loc_8313E
@@ -193832,7 +193832,7 @@ loc_8312E:
 ; ---------------------------------------------------------------------------
 
 loc_8313E:
-		move.l	#loc_85EE6,(a0)
+		move.l	#Obj_FadeScreenFromWhite,(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -197347,11 +197347,11 @@ locret_854E4:
 ; ---------------------------------------------------------------------------
 
 Obj_FadeSelectedToBlack:
-		move.l	#loc_8555E,(a0)
+		move.l	#Obj_FadeSelectedToBlack_Main,(a0)
 		move.b	#7,$39(a0)
 		st	(Palette_rotation_disable).w
 
-loc_8555E:
+Obj_FadeSelectedToBlack_Main:
 		subq.w	#1,$2E(a0)
 		bpl.s	locret_8558E
 		move.w	$3A(a0),$2E(a0)
@@ -197402,11 +197402,11 @@ loc_855AC:
 ; ---------------------------------------------------------------------------
 
 Obj_FadeSelectedFromBlack:
-		move.l	#loc_855C2,(a0)
+		move.l	#Obj_FadeSelectedFromBlack_Main,(a0)
 		move.b	#7,$39(a0)
 		st	(Palette_rotation_disable).w
 
-loc_855C2:
+Obj_FadeSelectedFromBlack_Main:
 		subq.w	#1,$2E(a0)
 		bpl.s	locret_855F6
 		move.w	$3A(a0),$2E(a0)
@@ -198949,7 +198949,7 @@ Play_SFX_Continuous:
 
 ; ---------------------------------------------------------------------------
 
-loc_85E64:
+Obj_FadeScreenToWhite:
 		move.b	#7,$39(a0)
 		move.l	#loc_85E74,(a0)
 		st	(Palette_rotation_disable).w
@@ -198959,10 +198959,10 @@ loc_85E74:
 		bpl.s	locret_85EA8
 		move.w	$3A(a0),$2E(a0)
 		lea	(Normal_palette).w,a1
-		moveq	#$40-1,d0
+		moveq	#bytesToWcnt(Normal_palette_end-Normal_palette),d0
 
 loc_85E86:
-		bsr.w	sub_85EB4
+		bsr.w	Pal_AddColor3
 		dbf	d0,loc_85E86
 		subq.b	#1,$39(a0)
 		bmi.s	loc_85E96
@@ -198972,7 +198972,7 @@ loc_85E86:
 loc_85E96:
 		tst.b	subtype(a0)
 		beq.s	loc_85EAA
-		move.l	#loc_85EE6,(a0)
+		move.l	#Obj_FadeScreenFromWhite,(a0)
 		bset	#5,$38(a0)
 
 locret_85EA8:
@@ -198986,7 +198986,7 @@ loc_85EAA:
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_85EB4:
+Pal_AddColor3:
 		moveq	#$E,d2
 		move.b	(a1),d3
 		and.b	d2,d3
@@ -199014,11 +199014,11 @@ loc_85EE0:
 		or.b	d3,d4
 		move.b	d4,(a1)+
 		rts
-; End of function sub_85EB4
+; End of function Pal_AddColor3
 
 ; ---------------------------------------------------------------------------
 
-loc_85EE6:
+Obj_FadeScreenFromWhite:
 		move.b	#7,$39(a0)
 		move.w	#3,$2E(a0)
 		move.l	#loc_85EF8,(a0)
@@ -199029,10 +199029,10 @@ loc_85EF8:
 		move.w	#3,$2E(a0)
 		lea	(Normal_palette).w,a1
 		lea	(Target_palette).w,a2
-		moveq	#$40-1,d0
+		moveq	#bytesToWcnt(Normal_palette_end-Normal_palette),d0
 
 loc_85F10:
-		bsr.w	sub_85F2A
+		bsr.w	Pal_DecColor3
 		dbf	d0,loc_85F10
 		subq.b	#1,$39(a0)
 		bpl.w	locret_8405E
@@ -199042,7 +199042,7 @@ loc_85F10:
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_85F2A:
+Pal_DecColor3:
 		move.b	(a2)+,d2
 		andi.b	#$E,d2
 		move.b	(a1),d3
@@ -199074,7 +199074,7 @@ loc_85F62:
 		or.b	d4,d5
 		move.b	d5,(a1)+
 		rts
-; End of function sub_85F2A
+; End of function Pal_DecColor3
 
 ; ---------------------------------------------------------------------------
 		; Liliam: removed dead code
