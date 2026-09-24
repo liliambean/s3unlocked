@@ -1445,7 +1445,6 @@ ArtTile_LBZFinalBoss2                 = $03D9
 ArtTile_LBZEndBoss                    = $0425
 ArtTile_LBZTubeTrans                  = $0455
 ArtTile_LBZMinibossBox                = $0456
-ArtTile_LBZ2MinibossBox               = $03B3	; Liliam: start from actual act 2 start
 ArtTile_LBZ2DeathEggSmall             = $04AE
 ArtTile_LBZKnuxBomb                   = $04D6
 ArtTile_LBZMiniboss                   = $03E8	; Liliam: bugfix - LBZ1 boss flash

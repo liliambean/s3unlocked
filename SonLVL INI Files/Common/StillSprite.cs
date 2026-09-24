@@ -179,9 +179,9 @@ namespace S3KObjectDefinitions.LBZ
 				"../Levels/LBZ/Nemesis Art/Misc Art.bin", CompressionType.Nemesis));
 
 			var indexer = new MultiFileIndexer<byte>();
-			indexer.AddFile(bytes, -2368);
+			indexer.AddFile(bytes, -3392);
 			var art1 = indexer.ToArray();
-			indexer.AddFile(bytes, -3584);
+			indexer.AddFile(bytes, -4608);
 			var art2 = indexer.ToArray();
 
 			BuildSpritesSubtypes(

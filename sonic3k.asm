@@ -45733,16 +45733,57 @@ loc_1C9FA:
 ; ---------------------------------------------------------------------------
 
 locret_1CA0A:
-;		rts						; Liliam: place ICZ1 teleporter in layout
+;		rts							; Liliam: place ICZ1 teleporter in layout
 
 locret_1CA0C:
-		rts
-; ---------------------------------------------------------------------------
+;		rts							;
 
 ICZ2_Resize:
 		; Liliam: removed original implementation
+		rts
+; ---------------------------------------------------------------------------
 
 LBZ1_Resize:
+		moveq	#0,d0					; Liliam: Encore mode - layouts
+		move.b	(Dynamic_resize_routine).w,d0		;
+		move.w	LBZ1_Resize_Index(pc,d0.w),d0		;
+		jmp	LBZ1_Resize_Index(pc,d0.w)		;
+; ---------------------------------------------------------------------------
+LBZ1_Resize_Index:						; Liliam: Encore mode - layouts
+		dc.w LBZ1_Resize1-LBZ1_Resize_Index
+		dc.w LBZ1_Resize2-LBZ1_Resize_Index
+		dc.w LBZ1_Resize3-LBZ1_Resize_Index
+		dc.w locret_1CA3E-LBZ1_Resize_Index
+; ---------------------------------------------------------------------------
+
+LBZ1_Resize1:							; Liliam: Encore mode - layouts
+		cmpi.w	#$3B40,(Camera_X_pos).w
+		blo.s	locret_1CA3E
+		addq.b	#2,(Dynamic_resize_routine).w
+
+LBZ1_Resize2:
+		cmpi.w	#$3B40,(Camera_X_pos).w
+		blo.s	LBZ1_ResizeReset
+		move.w	#$148,d0
+		cmp.w	(Camera_Y_pos).w,d0
+		blo.s	locret_1CA3E
+		move.w	d0,(Camera_max_Y_pos).w
+		move.w	d0,(Camera_target_max_Y_pos).w
+		addq.b	#2,(Dynamic_resize_routine).w
+
+LBZ1_Resize3:
+		cmpi.w	#$3B40,(Camera_X_pos).w
+		bhs.s	locret_1CA3E
+		move.w	#$B20,d0
+		move.w	d0,(Camera_max_Y_pos).w
+		move.w	d0,(Camera_target_max_Y_pos).w
+
+LBZ1_ResizeReset:
+		clr.b	(Dynamic_resize_routine).w
+		rts
+; ---------------------------------------------------------------------------
+
+locret_1CA3E:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -45758,9 +45799,7 @@ LBZ2_Resize_Index:
 ; ---------------------------------------------------------------------------
 
 loc_1CA52:
-		tst.b	(Anim_Counters+$F).w			; Liliam: camera - fix LBZ2 boss entry lock
-		beq.s	locret_1CAA8.return			;
-		move.w	#$B20,d1				;
+		move.w	#$B20,d1				; Liliam: camera - fix LBZ2 boss entry lock
 		cmpi.w	#$3826,(Camera_X_pos).w			;
 		blo.s	locret_1CAA8				;
 		move.w	#$59C,d1				;
@@ -45769,6 +45808,8 @@ loc_1CA52:
 		move.w	#$328,d1				;
 		cmpi.w	#$500,(Camera_Y_pos).w
 		blo.s	locret_1CAA8
+		tst.b	(Anim_Counters+$F).w			;
+		beq.s	locret_1CAA8.return			;
 		addq.b	#2,(Dynamic_resize_routine).w
 		lea	(LBZ2_16x16_DeathEgg_Kos).l,a1
 		lea	(Block_table).w,a2
@@ -52740,6 +52781,17 @@ loc_218B0:
 
 
 sub_218CE:
+		tst.w	x_vel(a1)				; Liliam: Encore mode - layouts
+		bne.s	.done					;
+		movea.l	$34(a0),a4				;
+		move.w	x_pos(a0),d0				;
+		cmp.w	x_pos(a1),d0				;
+		blo.s	loc_21928				;
+		movea.l	$38(a0),a4				;
+		bra.s	loc_21928				;
+; ---------------------------------------------------------------------------
+
+	.done:
 		move.w	d1,x_vel(a1)
 		addq.w	#4,x_pos(a1)
 		movea.l	$34(a0),a4
@@ -52768,7 +52820,7 @@ loc_21928:
 		move.l	#loc_21692,(a0)
 		addq.b	#1,mapping_frame(a0)
 		bsr.w	BreakObjectToPieces
-		cmpi.w	#$301,(Current_zone_and_act).w		; Liliam: Knuckles route fixup
+		cmpi.w	#$301,(Current_zone_and_act).w		; Liliam: Encore mode - layouts
 		bne.w	BreakableWall_ReleasePlayers		;
 		move.w	#$C40,(Target_water_level).w		;
 		bra.w	BreakableWall_ReleasePlayers		; Liliam: bugfix - release player from object
@@ -122571,6 +122623,14 @@ loc_53EDC:
 		and.w	(Camera_Y_pos_mask).w,d1
 		move.w	d1,(a1)+	; Set up tile offsets for VScroll array
 		dbf	d0,loc_53EDC
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - layouts
+		beq.s	loc_53EE8				;
+		movea.w	$20(a3),a1				;
+		move.b	#$E5,$97(a1)				;
+		bra.s	loc_53F0A				;
+; ---------------------------------------------------------------------------
+
+loc_53EE8:
 		cmpi.w	#3,(Player_mode).w
 		beq.s	loc_53F06
 		cmpi.w	#$3B60,(Camera_X_pos).w	; Skip this if Knuckles
@@ -122676,7 +122736,9 @@ LBZ1_LayoutExitMod2:
 LBZ1_LayoutExitMod3:
 		movea.w	(a3),a5
 		lea	$98(a5),a5
-		bra.w	LBZ1_DoMod3				; Liliam: reinsert S3 screen events
+		cmpi.b	#2,(Dynamic_resize_routine).w		; Liliam: Encore mode - layouts
+		bne.w	LBZ1_DoMod3				;
+		rts						;
 ;		jmp	(LBZ1_DoMod3).l				;
 ; ---------------------------------------------------------------------------
 
@@ -144717,13 +144779,15 @@ loc_6264A:
 ; ---------------------------------------------------------------------------
 CutsceneKnux_LBZ1_Index:
 		dc.w loc_62678-CutsceneKnux_LBZ1_Index
-		dc.w loc_626B2-CutsceneKnux_LBZ1_Index
+		dc.w LBZ1Cutscene_Wait-CutsceneKnux_LBZ1_Index	; Liliam: camera - fix LBZ1 Knuckles cutscene lock
+;		dc.w loc_626B2-CutsceneKnux_LBZ1_Index		;
 		dc.w loc_62014-CutsceneKnux_LBZ1_Index
 		dc.w loc_626EE-CutsceneKnux_LBZ1_Index
 		dc.w loc_62014-CutsceneKnux_LBZ1_Index
 		dc.w loc_62354-CutsceneKnux_LBZ1_Index
 		dc.w loc_62354-CutsceneKnux_LBZ1_Index
 		dc.w loc_62778-CutsceneKnux_LBZ1_Index
+		dc.w loc_626B2-CutsceneKnux_LBZ1_Index		;
 ; ---------------------------------------------------------------------------
 
 loc_62678:
@@ -144734,8 +144798,7 @@ loc_62678:
 		jsr	(SetUp_ObjAttributesSlotted).l
 		move.b	#$16,mapping_frame(a0)
 		move.w	#$A0,(Camera_min_Y_pos).w
-		bsr.w	CutsceneKnux_LoadPal_S3			; Liliam: Encore mode - use Robotnik for cutscenes
-;		lea	Pal_CutsceneKnux(pc),a1			;
+;		lea	Pal_CutsceneKnux(pc),a1			; Liliam: camera - fix LBZ1 Knuckles cutscene lock
 ;		jsr	(PalLoad_Line1).l			;
 		lea	ChildObjDat_6657C(pc),a2
 		jmp	(CreateChild1_Normal).l
@@ -144745,10 +144808,22 @@ loc_626AC:
 		jmp	(Go_Delete_SpriteSlotted2).l
 ; ---------------------------------------------------------------------------
 
+LBZ1Cutscene_Wait:						; Liliam: Encore mode - use Robotnik for cutscenes
+		tst.b	render_flags(a0)
+		bpl.w	locret_627FE
+		move.b	#$10,routine(a0)
+		bra.w	CutsceneKnux_LoadPal_S3
+; ---------------------------------------------------------------------------
+
 loc_626B2:
 		btst	#3,$38(a0)
 		bne.s	loc_626BC
-		rts
+		tst.b	render_flags(a0)			; Liliam: camera - fix LBZ1 Knuckles cutscene lock
+		bmi.w	locret_627FE				;
+		move.b	#2,routine(a0)				;
+		moveq	#PalID_LBZ1,d0				;
+		jmp	(LoadPaletteLine1_Immediate).l		;
+;		rts						;
 ; ---------------------------------------------------------------------------
 
 loc_626BC:
@@ -144758,6 +144833,7 @@ loc_626BC:
 		move.l	#loc_626D6,$34(a0)
 		move.w	#$148,(Camera_max_Y_pos).w		; Liliam: cutscene skip - LBZ1 pre-boss
 		move.w	#$148,(Camera_target_max_Y_pos).w	;
+		move.b	#6,(Dynamic_resize_routine).w		;
 		jmp	(Make_CutsceneSkipObj).l		;
 ;		rts						;
 ; ---------------------------------------------------------------------------
@@ -211029,7 +211105,7 @@ LBZ2MinibossBox_Init:
 		move.b	#$20,width_pixels(a0)						;
 		move.b	#8,height_pixels(a0)						;
 		ori.b	#4,render_flags(a0)						;
-		move.w	#make_art_tile(ArtTile_LBZ2MinibossBox,2,0),art_tile(a0);
+		move.w	#make_art_tile(ArtTile_LBZMisc-$10,2,0),art_tile(a0)		;
 		move.w	#$380,priority(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -211133,7 +211209,7 @@ locret_8D044:
 		rts
 ; ---------------------------------------------------------------------------
 PLC_AfterMiniboss_LBZ: plrlistheader				; Liliam: bugfix - LBZ1 boss flash
-		plreq ArtTile_LBZMisc, ArtNem_LBZMisc
+		plreq ArtTile_LBZMisc-$20, ArtNem_LBZMisc
 PLC_AfterMiniboss_LBZ_End
 ; ---------------------------------------------------------------------------
 
@@ -211410,6 +211486,12 @@ loc_8D344:
 		move.w	#$100,x_vel(a0)
 		move.w	#$1DF,$2E(a0)
 		move.l	#loc_8D38A,$34(a0)
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - layouts
+		beq.s	loc_8D364				;
+		move.w	#$DF,$2E(a0)				;
+		move.l	#loc_8D450,$34(a0)			;
+
+loc_8D364:
 		jmp	(Swing_Setup1).l
 ; ---------------------------------------------------------------------------
 
@@ -218686,14 +218768,14 @@ PLC_ICZ2: plrlistheader
 PLC_ICZ2_End
 
 PLC_LBZ1: plrlistheader
-		plreq ArtTile_LBZ2MinibossBox, ArtNem_LBZMinibossBox		; Liliam: start from actual act 2 start
-		plreq ArtTile_LBZMisc, ArtNem_LBZMisc
+		plreq ArtTile_LBZMisc-$20, ArtNem_LBZMisc			; Liliam: start from actual act 2 start
+;		plreq ArtTile_LBZMisc, ArtNem_LBZMisc				;
 		plreq ArtTile_LBZTubeTrans, ArtNem_LBZTubeTrans
 PLC_LBZ1_End
 
 PLC_LBZ2: plrlistheader
-		plreq ArtTile_LBZ2MinibossBox, ArtNem_LBZMinibossBox		; Liliam: start from actual act 2 start
-		plreq ArtTile_LBZMisc, ArtNem_LBZMisc
+		plreq ArtTile_LBZMisc-$20, ArtNem_LBZMisc			; Liliam: start from actual act 2 start
+;		plreq ArtTile_LBZMisc, ArtNem_LBZMisc				;
 ;		plreq ArtTile_Bubbles, ArtNem_Bubbles				;
 PLC_LBZ2_End
 
@@ -219309,6 +219391,7 @@ sub_92C54:
 		move.w	d0,x_pos+2(a1)
 		move.w	d0,y_pos+2(a1)
 		move.w	d0,angle(a1)				; Liliam: bugfix - clear flags
+		move.b	d0,flip_type(a1)			;
 		move.b	d0,object_control(a1)
 		move.b	d0,double_jump_flag(a1)			;
 ;		move.b	d0,spin_dash_flag(a1)			;
@@ -220887,9 +220970,6 @@ ArtKosM_LBZMiniboss:						; Liliam: reinsert S3 data
 ArtKosM_LBZMinibossBox:						; Liliam: reinsert S3 data
 		binclude "Levels/LBZ/KosinskiM Art/Miniboss Box.bin"
 		even
-ArtNem_LBZMinibossBox:									; Liliam: start from actual act 2 start
-		binclude "Levels/LBZ/Nemesis Art/Miniboss Box.bin"
-		even
 ArtNem_LBZFinalBoss1:						; Liliam: reinsert S3 data
 		binclude "Levels/LBZ/Nemesis Art/Final Boss 1.bin"
 		even
@@ -221294,6 +221374,7 @@ ArtNem_FBZMisc2:
 		binclude "Levels/FBZ/Nemesis Art/Misc Art 2.bin"
 		even
 ArtNem_LBZMisc:							; Liliam: reinsert S3 data
+		; Liliam: start from actual act 2 start
 		binclude "Levels/LBZ/Nemesis Art/Misc Art.bin"
 		even
 ArtNem_LBZTubeTrans:						; Liliam: reinsert S3 data

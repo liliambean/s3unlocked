@@ -90,7 +90,10 @@ namespace S3KObjectDefinitions.LBZ
 		public override void Init(ObjectData data)
 		{
 			var version = LevelData.Game.MappingsVersion;
-			var art = LevelData.ReadFile("../Levels/LBZ/Nemesis Art/Misc Art.bin", CompressionType.Nemesis);
+			var indexer = new MultiFileIndexer<byte>();
+			indexer.AddFile(new List<byte>(LevelData.ReadFile(
+				"../Levels/LBZ/Nemesis Art/Misc Art.bin", CompressionType.Nemesis)), -1024);
+			var art = indexer.ToArray();
 			var map = LevelData.ASMToBin("../Levels/LBZ/Misc Object Data/Map - Moving Platform.asm", version);
 
 			BuildSprites(art, map, 0x00);

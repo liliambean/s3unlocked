@@ -115,7 +115,11 @@ namespace S3KObjectDefinitions.LBZ
 	{
 		public override void Init(ObjectData data)
 		{
-			BuildSpritesProperties("../Levels/LBZ/Nemesis Art/Act 2 Misc Art.bin",
+			var indexer = new MultiFileIndexer<byte>();
+			indexer.AddFile(new List<byte>(LevelData.ReadFile(
+				"../Levels/LBZ/Nemesis Art/Misc Art.bin", CompressionType.Nemesis)), 1984);
+
+			BuildSpritesProperties(indexer.ToArray(),
 				"../Levels/LBZ/Misc Object Data/Map - Breakable Wall.asm", 1,
 				new string[] { "Knuckles only" },
 				new Func<int, bool>[] { subtype => (subtype & 0x80) == 0 },
