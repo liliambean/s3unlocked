@@ -119062,8 +119062,9 @@ CNZ1_BGDeformArray:
 ; ---------------------------------------------------------------------------
 
 CNZ2_ScreenInit:
-		cmpi.b	#8,(Last_star_post_hit).w		; Liliam: cutscene skip - CNZ2 blackout
-		bne.s	loc_52108				;
+		tst.b	(Saved2_last_star_post_hit).w		; Liliam: cutscene skip - CNZ2 blackout
+		bpl.s	loc_52108				;
+		bclr	#7,(Saved2_last_star_post_hit).w	;
 		jsr	(AllocateObject).l			;
 		bne.s	loc_52108				;
 		move.w	#$18,(Special_events_routine).w		;
@@ -198595,18 +198596,12 @@ CutsceneSkip_CNZ2:						; Liliam: cutscene skip - CNZ level end
 ; ---------------------------------------------------------------------------
 
 	.restartLevel:						; Liliam: cutscene skip - CNZ2 blackout
-		move.b	#8,(Last_star_post_hit).w
-		move.w	#$1DA0,(Saved_X_pos).w
-		move.w	#$32C,(Saved_Y_pos).w
-		jsr	(Save_Level_Data).l
-		move.w	#$B20,(Saved_camera_max_Y_pos).w
-		move.w	#$350,(Saved_mean_water_level).w
-		move.w	#1,(Restart_level_flag).w
-		move.b	#1,(Act3_flag).w
-		st	(Respawn_table_keep).w
-		clr.b	(Cutscene_Knux_addr).w
-		clr.w	(Slotted_object_bits).w
-		rts
+		ori.b	#$80,(Last_star_post_hit).w
+		move.w	#$1DA0,x_pos(a0)
+		move.w	#$32C,y_pos(a0)
+		move.w	#$B20,(Camera_max_Y_pos).w
+		move.w	#$350,(Mean_water_level).w
+		bra.s	CutsceneSkip_RestartLevel
 ; ---------------------------------------------------------------------------
 
 CutsceneSkip_FBZ2:						; Liliam: cutscene skip - FBZ level end
@@ -198640,7 +198635,15 @@ CutsceneSkip_MHZ1:						; Liliam: cutscene skip - MHZ1 intro
 		jsr	(MHZ1_Save_StarPost).l
 		move.w	#$388,x_pos(a0)
 		move.w	#$5AC,y_pos(a0)
-		bra.s	CutsceneSkip_RestartLevel
+
+CutsceneSkip_RestartLevel:
+		move.w	#1,(Restart_level_flag).w
+		move.b	#1,(Act3_flag).w
+		move.b	#1,(Special_bonus_entry_flag).w
+		st	(Respawn_table_keep).w
+		clr.b	(Cutscene_Knux_addr).w
+		clr.w	(Slotted_object_bits).w
+		jmp	(Save_Level_Data2).l
 ; ---------------------------------------------------------------------------
 
 CutsceneSkip_MHZ2:						; Liliam: cutscene skip - MHZ2 level end
@@ -198654,15 +198657,7 @@ CutsceneSkip_MHZ2:						; Liliam: cutscene skip - MHZ2 level end
 		jsr	(MHZ2_Save_StarPost).l
 		move.w	(Saved_X_pos).w,x_pos(a0)
 		move.w	(Saved_Y_pos).w,y_pos(a0)
-
-CutsceneSkip_RestartLevel:
-		move.w	#1,(Restart_level_flag).w
-		move.b	#1,(Act3_flag).w
-		move.b	#1,(Special_bonus_entry_flag).w
-		st	(Respawn_table_keep).w
-		clr.b	(Cutscene_Knux_addr).w
-		clr.w	(Slotted_object_bits).w
-		jmp	(Save_Level_Data2).l
+		bra.s	CutsceneSkip_RestartLevel
 ; ---------------------------------------------------------------------------
 
 CutsceneSkip_SOZ1:						; Liliam: cutscene skip - SOZ act transition
