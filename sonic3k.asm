@@ -134433,13 +134433,14 @@ Ending_LoadS3Logo:
 
 Ending_LoadS3Eyecatch:
 		bsr.s	Ending_LoadS3Logo
-		lea	PLC_S3EndingGraphics(pc),a1
-		jmp	(Load_PLC_Raw).l
+		lea	(ArtKosM_S3EndingGraphics).l,a1			; Liliam: ending - use S3 logo eyecatch for Encore mode
+		move.w	#tiles_to_bytes(ArtTile_Ending_S3Sprites),d2	;
+		jmp	(Queue_Kos_Module).l				;
+;		lea	PLC_S3EndingGraphics(pc),a1			;
+;		jmp	(Load_PLC_Raw).l				;
 ; ---------------------------------------------------------------------------
-PLC_S3EndingGraphics: plrlistheader
-		plreq ArtTile_Ending_S3Sprites, ArtNem_S3EndingGraphics
-PLC_S3EndingGraphics_End
-
+;PLC_S3EndingGraphics:
+		; Liliam: ending - use S3 logo eyecatch for Encore mode
 ;PLC_CreditsKnuxPose:
 		; Liliam: removed S&K lock-on code
 
@@ -221703,18 +221704,6 @@ ArtNem_EggRoboStand:
 ArtNem_DEZHPZRobotnikShip:								; Liliam: move Egg Mobile boss flash out of palette line 1
 		binclude "General/Sprites/Robotnik/HPZ Ship.bin"
 		even
-ArtNem_EndingMasterEmerald:							; Liliam: bugfix - queue Master Emerald for ending
-		binclude "General/Sprites/SSZ Master Emerald/Master Emerald.bin"
-		even
-ArtNem_S3EndingGraphics:					; Liliam: reinsert S3 data
-		binclude "General/Ending/Nemesis Art/S3 Ending Graphics.bin"
-		even
-ArtNem_SSZ2Extra:						; Liliam: Metal Sonic - final boss
-		binclude "Levels/SSZ/Nemesis Art/SSZ2 Extra.bin"
-		even
-ArtKosM_DeathEggRobot:						; Liliam: Metal Sonic - final boss
-		binclude "Levels/SSZ/KosinskiM Art/Death Egg Robot.bin"
-		even
 ArtKosM_KnuxFinalBossCrane:
 		binclude "General/Sprites/Robotnik/Robotnik Ship Crane.bin"
 		even
@@ -221770,6 +221759,9 @@ ArtKosM_KnuxEnding:
 		; Liliam: removed S&K alone mode
 ArtKosM_S3PoseBanner:
 		binclude "General/Ending/KosinskiM Art/Sonic 3 Pose Banner.bin"
+		even
+ArtKosM_S3EndingGraphics:						; Liliam: ending - use S3 logo eyecatch for Encore mode
+		binclude "General/Ending/KosinskiM Art/Sonic 3 Ending Graphics.bin"
 		even
 ArtUnc_KnuxIntroLay:
 		binclude "General/Sprites/Knuckles/Cutscene/Intro Laying.bin"
@@ -221947,6 +221939,15 @@ ArtKosM_SSZMTZOrbs:
 		even
 ArtKosM_MechaSonicExtra:
 		binclude "General/Sprites/Mecha Sonic/Mecha Sonic Extra Art.bin"
+		even
+ArtKosM_DeathEggRobot:						; Liliam: Metal Sonic - final boss
+		binclude "Levels/SSZ/KosinskiM Art/Death Egg Robot.bin"
+		even
+ArtNem_SSZ2Extra:						; Liliam: Metal Sonic - final boss
+		binclude "Levels/SSZ/Nemesis Art/SSZ2 Extra.bin"
+		even
+ArtNem_EndingMasterEmerald:							; Liliam: bugfix - queue Master Emerald for ending
+		binclude "General/Sprites/SSZ Master Emerald/Master Emerald.bin"
 		even
 ;ArtKosM_EndingMasterEmerald:
 		; Liliam: bugfix - queue Master Emerald for ending
