@@ -1344,6 +1344,9 @@ ArtTile_Ending_Logo                   = $026E	; Liliam: ending - add extra chara
 ;ArtTile_Ending_Logo                  = $0415	;
 ArtTile_Ending_MasterEmerald          = $052E
 ArtTile_Ending_Knuckles               = $05E0
+ArtTile_Ending_Amy                    = $05A0	; Liliam: ending - use S3 logo eyecatch for Encore mode
+ArtTile_Ending_Ray                    = $05C0	;
+ArtTile_Ending_MetalSonic             = $0440	;
 
 ; Game objects.
 ArtTile_AIZEndBoss                    = $0180

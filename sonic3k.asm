@@ -140934,9 +140934,59 @@ loc_5F2C6:
 		move.w	a0,parent3(a1)
 
 loc_5F2D8:
-		lea	ChildObjDat_601F0(pc),a2
-		jmp	(CreateChild1_Normal).l
+;		lea	ChildObjDat_601F0(pc),a2						; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		jmp	(CreateChild1_Normal).l							;
+		move.w	(Encore_stocks_packed).w,d0						;
+		jsr	(Encore_UnpackStocks).l							;
+		moveq	#0,d3									;
+		move.b	(Encore_unlocked_chars).w,d2						;
+		move.b	(Encore_available_chars).w,d3						;
+		eori.b	#%1111111,d3								;
+		and.b	d2,d3									;
+		moveq	#0,d2									;
+		moveq	#0,d1									;
+		move.b	(Encore_P1_character).w,d0						;
+		cmp.b	(Encore_P2_character).w,d0						;
+		beq.s	.loop									;
+		btst	#0,Encore_stocks-Reserved_object_3(a0)					;
+		beq.s	.loop									;
+		addq.w	#2,d1									;
+
+	.loop:
+		btst	d2,d3									;
+		beq.s	.skip									;
+		jsr	(AllocateObject).l							;
+		bne.s	.skip									;
+		move.w	d2,d0									;
+		lsl.w	#2,d0									;
+		move.l	Ending_EyecatchObjPtrs(pc,d0.w),(a1)					;
+		move.w	x_pos(a0),x_pos(a1)							;
+		move.w	y_pos(a0),y_pos(a1)							;
+		move.w	d1,subtype(a1)								;
+		addq.w	#2,d1									;
+
+	.skip:
+		addq.b	#1,d2									;
+		cmpi.b	#7,d2									;
+		blo.s	.loop									;
+		rts										;
 ; ---------------------------------------------------------------------------
+Ending_EyecatchObjPtrs:										; Liliam: ending - use S3 logo eyecatch for Encore mode
+		dc.l Obj_EndingEyecatch_Sonic
+		dc.l Obj_EndingEyecatch_Tails
+		dc.l Obj_EndingEyecatch_Knuckles
+		dc.l Obj_EndingEyecatch_Amy
+		dc.l Obj_EndingEyecatch_Mighty
+		dc.l Obj_EndingEyecatch_Ray
+		dc.l Obj_EndingEyecatch_MetalSonic
+Ending_EyecatchObjOffsets:									; Liliam: ending - use S3 logo eyecatch for Encore mode
+		dc.b     -2, $44
+		dc.b  $1C-2, $2C
+		dc.b -$1C-2, $2C
+		dc.b -$38-2, $40
+		dc.b  $38-2, $40
+		dc.b  $58-2, $38
+		dc.b -$58-2, $38
 ;word_5F2E2:
 		; Liliam: ending - use S3 logo eyecatch for Encore mode
 ; ---------------------------------------------------------------------------
@@ -140965,11 +141015,12 @@ loc_5F314:
 
 Obj_EndingEyecatch_Sonic:
 		lea	word_60160(pc),a1
-		jsr	(SetUp_ObjAttributes2).l
+		jsr	(SetUp_ObjAttributes).l							; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		jsr	(SetUp_ObjAttributes2).l						;
 		bclr	#2,render_flags(a0)
 		move.l	#loc_5F376,(a0)
-		lea	byte_5F36E(pc),a1
-		bra.w	Ending_SetEyecatchPosition						; Liliam: ending - use S3 logo eyecatch for Encore mode
+		bra.w	Ending_SetEyecatchPosition						;
+;		lea	byte_5F36E(pc),a1							;
 ;		bsr.w	Ending_SetEyecatchPosition						;
 ;		lea	(Pal_SonicTails).l,a1							;
 ;		lea	(Target_palette).w,a2							;
@@ -140988,11 +141039,8 @@ Obj_EndingEyecatch_Sonic:
 ;locret_5F36C:
 ;		rts										;
 ; ---------------------------------------------------------------------------
-byte_5F36E:
-		dc.b    0, $40
-;		dc.b    0, $40									; Liliam: ending - use S3 logo eyecatch for Encore mode
-;		dc.b -$1C, $2C									;
-;		dc.b -$1C, $2C									;
+;byte_5F36E:
+		; Liliam: ending - use S3 logo eyecatch for Encore mode
 ; ---------------------------------------------------------------------------
 
 loc_5F376:
@@ -141015,20 +141063,17 @@ loc_5F39E:
 
 Obj_EndingEyecatch_Tails:
 		lea	word_60168(pc),a1
-		jsr	(SetUp_ObjAttributes2).l
+		jsr	(SetUp_ObjAttributes).l							; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		jsr	(SetUp_ObjAttributes2).l						;
 		bclr	#2,render_flags(a0)
 		move.l	#loc_5F3DA,(a0)
-		lea	byte_5F3D2(pc),a1
+;		lea	byte_5F3D2(pc),a1							;
 		bsr.w	Ending_SetEyecatchPosition
 		lea	ChildObjDat_60204(pc),a2
 		jmp	(CreateChild1_Normal).l
 ; ---------------------------------------------------------------------------
-byte_5F3D2:
-		dc.b  $1C, $2C									; Liliam: ending - use S3 logo eyecatch for Encore mode
-;		dc.b  $24, $2C									;
-;		dc.b  $24, $2C									;
-;		dc.b    8, $40									;
-;		dc.b  $24, $2C									;
+;byte_5F3D2:
+		; Liliam: ending - use S3 logo eyecatch for Encore mode
 ; ---------------------------------------------------------------------------
 
 loc_5F3DA:
@@ -141054,8 +141099,8 @@ Obj_EndingEyecatch_Knuckles:
 		jsr	(SetUp_ObjAttributes).l
 		bclr	#2,render_flags(a0)
 		move.l	#loc_5F46A,(a0)
-		lea	byte_5F462(pc),a1
 		bra.w	Ending_SetEyecatchPosition						; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		lea	byte_5F462(pc),a1							;
 ;		bsr.w	Ending_SetEyecatchPosition						;
 ;		lea	(Pal_EndingEyecatchKnuckles).l,a1					;
 ;		lea	(Target_palette_line_3).w,a2						;
@@ -141074,17 +141119,66 @@ Obj_EndingEyecatch_Knuckles:
 ;locret_5F460:
 ;		rts										;
 ; ---------------------------------------------------------------------------
-byte_5F462:
-		dc.b -$1C, $2C
-;		dc.b -$1C, $2C									; Liliam: ending - use S3 logo eyecatch for Encore mode
-;		dc.b  $1C, $2C									;
-;		dc.b    0, $40									;
+;byte_5F462:
+		; Liliam: ending - use S3 logo eyecatch for Encore mode
 ; ---------------------------------------------------------------------------
 
 loc_5F46A:
 		lea	(AniRaw_66771).l,a1
 		jsr	(Animate_Raw2NoSSTMultiDelay).l
 		bsr.w	Ending_Knuckles_Load_PLC
+		jmp	(Draw_Sprite).l
+; ---------------------------------------------------------------------------
+
+Obj_EndingEyecatch_Amy:										; Liliam: ending - use S3 logo eyecatch for Encore mode
+		lea	ObjDat_EndingEyecatch_Amy(pc),a1
+		jsr	(SetUp_ObjAttributes).l
+		bclr	#2,render_flags(a0)
+		addq.w	#4,y_pos(a0)
+		move.l	#Obj_EndingEyecatch_Extra,(a0)
+		move.w	#3<<1,character_id(a0)
+		move.w	#$505,anim(a0)
+		move.b	#$8B,anim_frame(a0)
+		bra.w	Ending_SetEyecatchPosition
+; ---------------------------------------------------------------------------
+
+Obj_EndingEyecatch_Mighty:									; Liliam: ending - use S3 logo eyecatch for Encore mode
+		lea	ObjDat_EndingEyecatch_Mighty(pc),a1
+		jsr	(SetUp_ObjAttributes).l
+		bclr	#2,render_flags(a0)
+		move.l	#loc_5F39E,(a0)
+		move.l	#AniRaw_EndingEyecatch_Mighty,$30(a0)
+		bra.w	Ending_SetEyecatchPosition
+; ---------------------------------------------------------------------------
+
+Obj_EndingEyecatch_Ray:										; Liliam: ending - use S3 logo eyecatch for Encore mode
+		lea	ObjDat_EndingEyecatch_Ray(pc),a1
+		jsr	(SetUp_ObjAttributes).l
+		bclr	#2,render_flags(a0)
+		move.l	#Obj_EndingEyecatch_Extra,(a0)
+		move.w	#5<<1,character_id(a0)
+		move.w	#$1313,anim(a0)
+		move.b	#$26,anim_frame(a0)
+		bra.w	Ending_SetEyecatchPosition
+; ---------------------------------------------------------------------------
+
+Obj_EndingEyecatch_MetalSonic:									; Liliam: ending - use S3 logo eyecatch for Encore mode
+		lea	ObjDat_EndingEyecatch_MetalSonic(pc),a1
+		jsr	(SetUp_ObjAttributes).l
+		bclr	#2,render_flags(a0)
+		move.b	#$13,anim(a0)
+		move.l	#Obj_EndingEyecatch_Extra,(a0)
+		move.w	#6<<1,character_id(a0)
+		bra.w	Ending_SetEyecatchPosition
+; ---------------------------------------------------------------------------
+
+Obj_EndingEyecatch_Extra:									; Liliam: ending - use S3 logo eyecatch for Encore mode
+		move.w	character_id(a0),d1
+		jsr	(Animate_Extra).l
+		move.w	character_id(a0),d1
+		move.b	$25(a0),(Player_prev_frame_P2).w
+		jsr	(Extra_Load_PLC.continued).l
+		move.b	(Player_prev_frame_P2).w,$25(a0)
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -142102,17 +142196,21 @@ locret_5FEFC:
 
 
 Ending_SetEyecatchPosition:
-;		move.w	(Player_mode).w,d0							; Liliam: ending - use S3 logo eyecatch for Encore mode
+		lea	Ending_EyecatchObjOffsets(pc),a1					; Liliam: ending - use S3 logo eyecatch for Encore mode
+		move.w	subtype(a0),d0								;
+;		move.w	(Player_mode).w,d0							;
 ;		andi.w	#3,d0									;
 ;		add.w	d0,d0									;
-;		adda.w	d0,a1									;
+		adda.w	d0,a1
 		move.b	(a1)+,d0
 		ext.w	d0
-		subq.w	#2,d0									;
 		add.w	d0,x_pos(a0)
 		move.b	(a1)+,d0
 		ext.w	d0
 		add.w	d0,y_pos(a0)
+		cmpi.b	#$40,d0									;
+		blo.s	locret_5FF1A								;
+		move.w	#$80,priority(a0)							;
 
 locret_5FF1A:
 		rts
@@ -142376,10 +142474,12 @@ ObjDat3_60154:
 		dc.w   $180
 		dc.b  $50, $50,   0,   0
 word_60160:
+		dc.l Map_S3EndingGraphics							; Liliam: ending - use S3 logo eyecatch for Encore mode
 		dc.w make_art_tile(ArtTile_Ending_S3Sprites,0,1)
 		dc.w   $100
 		dc.b  $20, $20,   1,   0
 word_60168:
+		dc.l Map_S3EndingGraphics							; Liliam: ending - use S3 logo eyecatch for Encore mode
 		dc.w make_art_tile(ArtTile_Ending_S3Sprites,0,1)
 		dc.w   $100
 		dc.b  $20, $20,  $A,   0
@@ -142389,6 +142489,26 @@ word_60170:
 ObjDat3_60176:
 		dc.l Map_Knuckles
 		dc.w make_art_tile(ArtTile_Ending_Knuckles,2,1)
+		dc.w   $100
+		dc.b  $20, $20, $D8,   0
+ObjDat_EndingEyecatch_Amy:									; Liliam: ending - use S3 logo eyecatch for Encore mode
+		dc.l Map_Amy
+		dc.w make_art_tile(ArtTile_Ending_Amy,3,1)
+		dc.w   $100
+		dc.b  $20, $20, $D8,   0
+ObjDat_EndingEyecatch_Mighty:									; Liliam: ending - use S3 logo eyecatch for Encore mode
+		dc.l Map_S3EndingGraphics
+		dc.w make_art_tile(ArtTile_Ending_S3Sprites,0,1)
+		dc.w   $100
+		dc.b  $20, $20,  $A,   0
+ObjDat_EndingEyecatch_Ray:									; Liliam: ending - use S3 logo eyecatch for Encore mode
+		dc.l Map_Ray
+		dc.w make_art_tile(ArtTile_Ending_Ray,1,1)
+		dc.w   $100
+		dc.b  $20, $20, $D8,   0
+ObjDat_EndingEyecatch_MetalSonic:								; Liliam: ending - use S3 logo eyecatch for Encore mode
+		dc.l Map_MetalSonic
+		dc.w make_art_tile(ArtTile_Ending_MetalSonic,1,1)
 		dc.w   $100
 		dc.b  $20, $20, $D8,   0
 ObjDat3_60182:
@@ -142444,14 +142564,8 @@ ChildObjDat_601E8:
 		dc.w 1-1
 		dc.l loc_5DF80
 		dc.b -$40,  -4
-ChildObjDat_601F0:
-		dc.w 3-1
-		dc.l Obj_EndingEyecatch_Sonic
-		dc.b    0,   0
-		dc.l Obj_EndingEyecatch_Tails
-		dc.b    0,   0
-		dc.l Obj_EndingEyecatch_Knuckles
-		dc.b    0,   0
+;ChildObjDat_601F0:
+		; Liliam: ending - use S3 logo eyecatch for Encore mode
 ChildObjDat_60204:
 		dc.w 1-1
 		dc.l Obj_EndingEyecatch_TailsTail
@@ -142496,7 +142610,10 @@ AniRaw_60260:
 AniRaw_6026B:
 		dc.b   $F,  $A,  $B, $FC
 AniRaw_6026F:
-		dc.b   $B,   5,   6,   7,   8,   9, $FC
+		dc.b    7,   5,   6,   7,   8,   9, $FC						; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		dc.b   $B,   5,   6,   7,   8,   9, $FC						;
+AniRaw_EndingEyecatch_Mighty:									; Liliam: ending - use S3 logo eyecatch for Encore mode
+		dc.b    2,  $C,  $D, $FC
 AniRaw_60276:
 		dc.b    7,   0,   1,   2,   3, $FC
 AniRaw_6027C:
