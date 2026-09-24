@@ -41872,7 +41872,8 @@ CombineRing_Common:							; Liliam: Encore mode - combine ring
 CombineRing_Explode:							; Liliam: Encore mode - combine ring
 		addq.w	#4,sp
 		move.w	$46(a0),d5
-		clr.w	$46(a0)
+		lea	$46(a0),a3
+		lea	$3E(a0),a2
 		clr.b	mapping_frame(a0)
 		bra.w	CombineRing_Done
 ; ---------------------------------------------------------------------------

@@ -59,6 +59,7 @@ word_DC96:	dc.w 3
 		dc.b  $80,   9, $20, $36,   0, $30
 word_DCB6:	dc.w 1
 		dc.b  $80,   9, $20, $36,   0, $30
+Map_HUD_Barrier_Combine:
 Map_HUD_Barrier_Super:
 		dc.w 1
 		dc.b  $88,   5,   0, $38, $FF, $F8
@@ -71,7 +72,6 @@ Map_HUD_Barrier_Thunder:
 Map_HUD_Barrier_Aqua:
 		dc.w 1
 		dc.b  $88,   5,   0, $30, $FF, $F8
-Map_HUD_Barrier_Combine:
 Map_HUD_Barrier_Aqua2:
 		dc.w 1
 		dc.b  $88,   5,   0, $18, $FF, $F8
