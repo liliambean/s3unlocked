@@ -43396,6 +43396,8 @@ loc_1B5AC:
 
 Delete_Sprite_If_Not_In_Range:
 		move.w	x_pos(a0),d0
+
+loc_1B5D8:
 		andi.w	#$FF80,d0
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#$280,d0
@@ -45572,7 +45574,8 @@ loc_1C930:
 		blo.s	locret_1C96C
 		cmpi.w	#$700,d0
 		bhs.s	locret_1C96C
-		cmpi.w	#$3A00,(Camera_X_pos).w
+;		cmpi.w	#$3A00,(Camera_X_pos).w			; Liliam: camera - fix MGZ2 boss entry lock
+		cmpi.w	#$3A80,(Player_1+x_pos).w		;
 		blo.s	locret_1C96C
 		clr.w	(Events_fg_2).w				; Liliam: camera - repurpose MGZ2 ceiling raiser
 		move.w	#$6A0,d0
@@ -45594,23 +45597,18 @@ locret_1C96C:
 ; ---------------------------------------------------------------------------
 
 loc_1C96E:
-		cmpi.w	#$3A00,(Camera_X_pos).w
+;		cmpi.w	#$3A00,(Camera_X_pos).w			; Liliam: camera - fix MGZ2 boss entry lock
+		cmpi.w	#$3A80,(Player_1+x_pos).w		;
 		blo.s	loc_1C9A8
-		move.w	(Camera_Y_pos).w,d1			; Liliam: camera - fix MGZ2 boss entry lock
+		move.w	(Camera_Y_pos).w,d1			;
 		cmp.w	#$6A0,d1				;
-		beq.s	loc_1C976				;
-		bhi.s	locret_1C96C				;
-
-	.apply:
-		move.w	d1,(Camera_min_Y_pos).w			;
-		rts						;
-; ---------------------------------------------------------------------------
-
-loc_1C976:
+		bhi.s	locret_1C9C8				;
+		blo.s	MGZ2_VerticalCameraLock			;
+		tst.b	(Encore_mode).w				;
+		bne.s	MGZ2_VerticalCameraLock			;
 		move.w	#$3C80,d0
 		cmp.w	(Camera_X_pos).w,d0
-		bhi.s	loc_1C96E.apply				; Liliam: camera - fix MGZ2 boss entry lock
-;		bhi.s	locret_1C9C6				;
+		bhi.s	MGZ2_VerticalCameraLock
 		move.w	d0,(Camera_min_X_pos).w
 		move.w	d0,(Camera_target_min_X_pos).w
 		jsr	(AllocateObject).l
@@ -45640,8 +45638,9 @@ loc_1C9C6:
 		bra.w	loc_1C9F8				;
 ; ---------------------------------------------------------------------------
 
-;locret_1C9C6:
-;		rts						; Liliam: camera - fix MGZ2 boss entry lock
+MGZ2_VerticalCameraLock:
+		move.w	d1,(Camera_min_Y_pos).w			; Liliam: camera - fix MGZ2 boss entry lock
+;		rts						;
 
 locret_1C9C8:
 		rts
@@ -78803,6 +78802,9 @@ byte_33F6C:
 		even
 ; ---------------------------------------------------------------------------
 
+Obj_MGZSwingingPlatform2:
+		moveq	#-1,d0					; Liliam: Encore mode - layouts
+
 Obj_MGZSwingingPlatform:
 		move.l	#Map_MGZSwingingPlatform,mappings(a0)
 		move.w	#make_art_tile(ArtTile_MGZMisc1,2,0),art_tile(a0)
@@ -78834,15 +78836,37 @@ loc_3400C:
 		move.w	a1,$3C(a0)
 
 loc_3401C:
-		moveq	#1,d0
-		btst	#0,status(a0)
+		move.b	#1,$36(a0)				; Liliam: Encore mode - layouts
+;		moveq	#1,d0					;
+		btst	#Status_Facing,status(a0)
 		beq.s	loc_34028
-		neg.w	d0
+		move.b	#-1,$36(a0)				;
+;		neg.w	d0					;
 
 loc_34028:
-		move.b	d0,$36(a0)
+;		move.b	d0,$36(a0)				;
 		move.b	subtype(a0),d0
 		move.b	d0,$34(a0)
+		move.l	#loc_3403A,(a0)				;
+		tst.l	d0					;
+		bpl.s	loc_3403A				;
+		move.l	#Obj_MGZSwingingPlatform2_Wait,(a0)	;
+
+Obj_MGZSwingingPlatform2_Wait:
+		tst.b	(Events_fg_2+1).w			;
+		beq.s	MGZSwingingPlatform2_CheckDelete	;
+		move.l	#Obj_MGZSwingingPlatform2_Rotate,(a0)	;
+
+Obj_MGZSwingingPlatform2_Rotate:
+		move.b	$36(a0),d0				;
+		add.b	d0,$34(a0)				;
+		cmpi.b	#8,$34(a0)				;
+		bls.s	loc_34034				;
+		cmpi.b	#$7A,$34(a0)				;
+		blo.s	MGZSwingingPlatform2_CheckDelete	;
+		sub.b	d0,$34(a0)				;
+
+loc_34034:
 		move.l	#loc_3403A,(a0)
 
 loc_3403A:
@@ -78864,6 +78888,11 @@ loc_3403A:
 
 loc_3406E:
 		jmp	(Sprite_OnScreen_Test).l
+; ---------------------------------------------------------------------------
+
+MGZSwingingPlatform2_CheckDelete:				; Liliam: Encore mode - layouts
+		move.w	$30(a0),d0
+		jmp	(loc_1B5D8).l
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -79127,6 +79156,8 @@ loc_34364:
 		andi.w	#$F,d0
 		cmpi.b	#9,d0					; Liliam: Knuckles route fixup
 		bne.s	loc_3436C				;
+		tst.b	(Encore_mode).w				;
+		bne.s	loc_34376				;
 		cmpi.w	#3,(Player_mode).w			;
 		beq.s	loc_34376				;
 		cmpi.w	#7,(Player_mode).w			;
@@ -117480,16 +117511,26 @@ locret_514A8:
 
 
 MGZ2_QuakeEvent:
-		tst.w	(Events_fg_2).w
+		move.w	(Events_fg_2).w,d0			; Liliam: Encore mode - layouts
+;		tst.w	(Events_fg_2).w				;
 		beq.s	loc_514D8
 		bpl.s	loc_514BE
 		cmpi.w	#7,(Player_mode).w			; Liliam: Metal Sonic route fixup
 		beq.s	loc_514CE				;
-		tst.l	(Nem_decomp_queue).w
+;		tst.l	(Nem_decomp_queue).w			; Liliam: Encore mode - layouts
+		tst.l	(Nem_decomp_queue+6*3).w		;
 		bne.s	loc_514D8
-		move.w	#$FF,(Events_fg_2).w
+		clr.b	(Events_fg_2).w				;
+		moveq	#$80-$1F,d0				;
+;		move.w	#$FF,(Events_fg_2).w			;
 
 loc_514BE:
+		addq.b	#1,d0					;
+		beq.s	.moveCamera				;
+		move.b	d0,(Events_fg_2+1).w			;
+		bpl.s	loc_514D8				;
+
+	.moveCamera:
 		move.w	(Camera_min_Y_pos).w,d0
 		cmp.w	(Camera_Y_pos).w,d0			; Liliam: camera - repurpose MGZ2 ceiling raiser
 		blo.s	loc_514CE				;
@@ -117497,7 +117538,7 @@ loc_514BE:
 ;		cmpi.w	#$1E0,d0				;
 ;		beq.s	loc_514D8				;
 		subq.w	#2,d0
-		bcc.s	loc_514D4
+		bhs.s	loc_514D4
 
 loc_514CE:
 		moveq	#0,d0
@@ -158523,11 +158564,11 @@ loc_6C200:
 ;		jsr	(Load_PLC_Raw).l			;
 		lea	(Pal_MGZ).l,a1
 		jsr	(PalLoad_Line1).l
-;		move.w	#$1DF,(Camera_min_Y_pos).w		; Liliam: camera - fix MGZ2 level size
+;		move.w	#$1DF,(Camera_min_Y_pos).w		; Liliam: camera - repurpose MGZ2 ceiling raiser
 		st	(Events_fg_2).w
 		btst	#0,render_flags(a0)
 		bne.s	loc_6C29E
-		move.w	#$3EC0,(Camera_stored_max_X_pos).w	;
+		move.w	#$3EC0,(Camera_stored_max_X_pos).w	; Liliam: camera - fix MGZ2 level size
 ;		move.w	#$6000,(Camera_stored_max_X_pos).w	;
 		jsr	(AllocateObject).l
 		bne.s	locret_6C29C

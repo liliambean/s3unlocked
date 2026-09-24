@@ -6,6 +6,14 @@ using SonicRetro.SonLVL.API;
 
 namespace S3KObjectDefinitions.MGZ
 {
+	class SwingingPlatformEncore : SwingingPlatform
+	{
+		public override string Name
+		{
+			get { return "Swinging Platform (Encore)"; }
+		}
+	}
+
 	class SwingingPlatform : ObjectDefinition
 	{
 		private PropertySpec[] properties;
