@@ -38837,13 +38837,16 @@ DashDust_Smoke_TensionBridge:					; Liliam: extra skills - hammer drop
 ; ---------------------------------------------------------------------------
 
 DashDust_HammerDrop:						; Liliam: extra skills - hammer drop
+		move.b	#2,routine(a0)
+		tst.b	anim(a0)
+		bne.w	DashDust_Main
 		movea.w	parent(a0),a2
 		cmpi.b	#Status_HammerDrop,double_jump_flag(a2)
-		beq.w	loc_18CD6
+		beq.w	DashDust_Main
 		cmpi.b	#State_Hurt,routine(a2)
-		bhs.w	loc_18CD6
+		bhs.w	DashDust_Main
 		cmpi.b	#12,air_left(a2)
-		blo.w	loc_18CD6
+		blo.w	DashDust_Main
 		lea	(Collision_response_list).w,a4
 		move.w	(a4)+,d6
 		beq.s	.createDust
@@ -38900,13 +38903,12 @@ DashDust_HammerDrop:						; Liliam: extra skills - hammer drop
 	.nextObject:
 		bsr.w	CreateNewSprite4
 		dbne	d3,.loop
-		bsr.w	DashDust_Load_DPLC
-		bra.s	loc_18CD6
+		bra.w	DashDust_Load_DPLC
 ; ---------------------------------------------------------------------------
 
 	.done:
 		move.l	(sp)+,a0
-		bra.s	loc_18CD6
+		rts
 ; ---------------------------------------------------------------------------
 
 DashDust_Delete:
