@@ -113760,6 +113760,7 @@ SpecialEvents_Index:
 		dc.l MHZ2_DoBossLoop
 		dc.l SOZ2_DoRisingSand
 		dc.l LRZ3_DoAutoscroll
+		dc.l CNZ2_DoFlashPalette			; Liliam: cutscene skip - CNZ2 blackout
 ; ---------------------------------------------------------------------------
 
 locret_4F366:
@@ -119061,6 +119062,14 @@ CNZ1_BGDeformArray:
 ; ---------------------------------------------------------------------------
 
 CNZ2_ScreenInit:
+		cmpi.b	#8,(Last_star_post_hit).w		; Liliam: cutscene skip - CNZ2 blackout
+		bne.s	loc_52108				;
+		jsr	(AllocateObject).l			;
+		bne.s	loc_52108				;
+		move.w	#$18,(Special_events_routine).w		;
+		st	(_unkFAA3).w				;
+
+loc_52108:
 		jsr	Reset_TileOffsetPositionActual(pc)
 		jmp	Refresh_PlaneFull(pc)
 ; ---------------------------------------------------------------------------
@@ -144277,6 +144286,8 @@ CutsceneKnux_CNZ2A:
 		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
 ;		cmpi.b	#2,(Player_1+character_id).w		;
 		beq.w	CutsceneKnux_Delete
+		cmpi.b	#8,(Last_star_post_hit).w		; Liliam: cutscene skip - CNZ2 blackout
+		bhs.w	CutsceneKnux_Delete			;
 		lea	word_6228E(pc),a1
 		jsr	(Check_CameraInRange).l
 		moveq	#0,d0
@@ -144315,6 +144326,7 @@ loc_622E4:
 loc_62308:
 		jsr	(Boss_FadeMusic_SetUpCamera).l		; Liliam: bugfix - use correct music for cutscene
 ;		jsr	(FadeMusic_SetUpCamera).l		;
+		jsr	(Make_CutsceneSkipObj).l		; Liliam: cutscene skip - CNZ2 blackout
 		lea	(Normal_palette_line_2).w,a1
 		lea	(Target_palette_line_2).w,a2
 		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
@@ -144405,6 +144417,7 @@ loc_623FE:
 		jsr	(MoveSprite).l
 		tst.b	render_flags(a0)
 		bmi.w	locret_6206C
+		move.b	#1,(Update_HUD_timer).w			; Liliam: cutscene skip - CNZ2 blackout
 		lea	ChildObjDat_66568(pc),a2
 		jsr	(CreateChild1_Normal).l
 		move.w	(Camera_stored_max_Y_pos).w,(Camera_target_max_Y_pos).w
@@ -144481,21 +144494,40 @@ locret_624BA:
 ; ---------------------------------------------------------------------------
 
 loc_624BC:
-		lea	(Pal_CNZFlash_Water).l,a3					; Liliam: bugfix - also darken CNZ water palette
+		jsr	(Delete_Current_Sprite).l		; Liliam: cutscene skip - CNZ2 blackout
 		tst.b	subtype(a0)
 		beq.s	loc_624CA
+		lea	(Pal_CNZ_Encore+$20).l,a1		; Liliam: Encore mode - palette
+		tst.b	(Encore_flags).w			;
+		bmi.s	loc_624C8				;
 		lea	(Pal_CNZ+$20).l,a1
+
+loc_624C8:
 		bsr.s	sub_624AE
-		lea	(Pal_CNZ_Water+$40).l,a3					;
+		adda.w	#(Pal_CNZ_Water+$40)-(Pal_CNZ+$60),a1				; Liliam: bugfix - also darken CNZ water palette
+		bra.s	loc_624CA.applyWater						;
+; ---------------------------------------------------------------------------
 
 loc_624CA:
-		lea	(Water_palette_line_3).w,a2					;
+		lea	Pal_CNZFlash_Encore+$40(pc),a1		; Liliam: Encore mode - palette
+		tst.b	(Encore_flags).w			;
+		bmi.s	.apply					;
+		lea	Pal_CNZFlash+$40(pc),a1			;
+
+	.apply:
+		lea	(Normal_palette_line_3).w,a2					; Liliam: bugfix - also darken CNZ water palette
 		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_3),d0	;
+		bsr.s	loc_624B4							;
+
+	.applyWater:
+		suba.w	#Normal_palette_end-Water_palette_line_3,a2			;
+		moveq	#bytesToLcnt(Water_palette_end-Water_palette_line_3),d0		;
 
 	.loop:
-		move.l	(a3)+,(a2)+							;
+		move.l	(a1)+,(a2)+							;
 		dbf	d0,.loop							;
-		jmp	(Delete_Current_Sprite).l
+		rts									;
+;		jmp	(Delete_Current_Sprite).l					;
 ; ---------------------------------------------------------------------------
 word_624D0:
 		dc.w      8
@@ -144505,6 +144537,26 @@ word_624D0:
 		dc.w      4
 		dc.w      8
 		dc.w      8
+; ---------------------------------------------------------------------------
+
+CNZ2_DoFlashPalette:						; Liliam: cutscene skip - CNZ2 blackout
+		bsr.s	loc_624CA
+		jsr	(AnPal_CNZ).l
+		clr.l	(Palette_cycle_counter0).w
+		clr.l	(Palette_cycle_counters+$02).w
+		clr.w	(Palette_cycle_counters+$08).w
+		clr.w	(Special_events_routine).w
+		lea	(Normal_palette_line_3).w,a1
+		lea	(Water_palette_line_3).w,a2
+		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_3),d0
+
+	.loop:
+		move.l	(a1),Target_palette-Normal_palette(a1)
+		move.l	(a2),Target_water_palette-Water_palette(a2)
+		clr.l	(a1)+
+		clr.l	(a2)+
+		dbf	d0,.loop
+		jmp	(Pal_PrepFade_FromBlack).l
 ; ---------------------------------------------------------------------------
 
 CutsceneKnux_CNZ2B:
@@ -150909,7 +150961,13 @@ Pal_CutsceneKnux:
 Pal_CNZFlash:
 		binclude "Levels/CNZ/Palettes/Flash.bin"
 		even
-Pal_CNZFlash_Water:									; Liliam: bugfix - also darken CNZ water palette
+Pal_CNZFlashWater:									; Liliam: bugfix - also darken CNZ water palette
+		binclude "Levels/CNZ/Palettes/Flash Water.bin"
+		even
+Pal_CNZFlash_Encore:						; Liliam: Encore mode - palette
+		binclude "Levels/CNZ/Palettes/Flash.bin"
+		even
+Pal_CNZFlashWater_Encore:					; Liliam: Encore mode - palette
 		binclude "Levels/CNZ/Palettes/Flash Water.bin"
 		even
 Pal_KnuxSSZEnd:
@@ -174002,7 +174060,7 @@ loc_76278:
 		st	(Ctrl_2_locked).w
 		move.w	#(button_up_mask<<8)|button_up_mask,(Ctrl_2_logical).w
 		jsr	(SonicTails_ChangeFlipX).l
-		jsr	(Make_CutsceneSkipObj).l		; Liliam: cutscene skip - CNZ/MHZ level end
+		jsr	(Make_CutsceneSkipObj).l		; Liliam: cutscene skip - MHZ level end
 		move.w	#$1BF,$2E(a0)
 		move.w	#$55,(Events_fg_4).w
 		move.w	#$5000,(Camera_stored_max_X_pos).w
@@ -198529,9 +198587,26 @@ CutsceneSkip_MGZ2:						; Liliam: cutscene skip - MGZ level end
 		bra.w	StartNewLevel
 ; ---------------------------------------------------------------------------
 
-CutsceneSkip_CNZ2:						; Liliam: cutscene skip - CNZ/MHZ level end
+CutsceneSkip_CNZ2:						; Liliam: cutscene skip - CNZ level end
+		tst.b	(Level_results_done).w
+		beq.s	.restartLevel
 		move.w	#$400,d0
-		bra.w	StartNewLevel
+		bra.w	StartNewLevel_Alternate
+; ---------------------------------------------------------------------------
+
+	.restartLevel:						; Liliam: cutscene skip - CNZ2 blackout
+		move.b	#8,(Last_star_post_hit).w
+		move.w	#$1DA0,(Saved_X_pos).w
+		move.w	#$32C,(Saved_Y_pos).w
+		jsr	(Save_Level_Data).l
+		move.w	#$B20,(Saved_camera_max_Y_pos).w
+		move.w	#$350,(Saved_mean_water_level).w
+		move.w	#1,(Restart_level_flag).w
+		move.b	#1,(Act3_flag).w
+		st	(Respawn_table_keep).w
+		clr.b	(Cutscene_Knux_addr).w
+		clr.w	(Slotted_object_bits).w
+		rts
 ; ---------------------------------------------------------------------------
 
 CutsceneSkip_FBZ2:						; Liliam: cutscene skip - FBZ level end
@@ -198568,9 +198643,14 @@ CutsceneSkip_MHZ1:						; Liliam: cutscene skip - MHZ1 intro
 		bra.s	CutsceneSkip_RestartLevel
 ; ---------------------------------------------------------------------------
 
-CutsceneSkip_MHZ2:						; Liliam: cutscene skip - MHZ2 intro
+CutsceneSkip_MHZ2:						; Liliam: cutscene skip - MHZ2 level end
 		tst.b	(Level_results_done).w
-		bne.s	CutsceneSkip_CNZ2
+		beq.s	.restartLevel
+		move.w	#$400,d0
+		bra.w	StartNewLevel
+; ---------------------------------------------------------------------------
+
+	.restartLevel:						; Liliam: cutscene skip - MHZ2 intro
 		jsr	(MHZ2_Save_StarPost).l
 		move.w	(Saved_X_pos).w,x_pos(a0)
 		move.w	(Saved_Y_pos).w,y_pos(a0)
@@ -198602,7 +198682,7 @@ CutsceneSkip_SSZ:						; Liliam: cutscene skip - SSZ level end
 		bra.w	StartNewLevel
 ; ---------------------------------------------------------------------------
 
-	.restartLevel:
+	.restartLevel:						; Liliam: cutscene skip - SSZ intro
 		move.w	#1,(Restart_level_flag).w
 		st	(Act3_flag).w
 		st	(Respawn_table_keep).w

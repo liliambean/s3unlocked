@@ -615,13 +615,13 @@ Ring_consumption_list		ds.w $3F		; the remaining part of the ring consumption ta
 Ring_consumption_table_end =	*
 
 SStage_layout_buffer =		*			; $600 bytes ; yes, this area is used to for special stage layouts!
-Target_water_palette		ds.b $80		; used by palette fading routines
-Target_water_palette_end =	*
 Water_palette			ds.b $80		; this is what actually gets displayed
 Water_palette_line_2 =		Water_palette+$20	; $20 bytes
 Water_palette_line_3 =		Water_palette+$40	; $20 bytes
 Water_palette_line_4 =		Water_palette+$60	; $20 bytes
 Water_palette_end =		*
+Target_water_palette		ds.b $80		; used by palette fading routines
+Target_water_palette_end =	*
 Plane_buffer			ds.b $480		; used by level drawing routines
 VRAM_buffer			ds.b $80		; used to temporarily hold data while it is being transferred from one VRAM location to another
 
