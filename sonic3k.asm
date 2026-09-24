@@ -41396,14 +41396,17 @@ Obj_BouncingRing:
 ;		add.b	d7,d0					;
 ;		andi.b	#7,d0					;
 ;		bne.s	loc_1A7B0				;
-		tst.b	render_flags(a0)
-		bpl.s	loc_1A79C
-		moveq	#8,d0					; Liliam: QOL - speed up ring loss
+;		tst.b	render_flags(a0)			;
+;		bpl.s	loc_1A79C				;
 
-loc_1A780:
+		moveq	#8,d0					; Liliam: QOL - speed up ring loss
 		jsr	(RingCheckFloorDist).l
 		tst.w	d1
 		bpl.s	loc_1A79C
+		cmpi.w	#-8,d1					; Liliam: QOL - stop running ring collision inside walls
+		blo.s	LostRing_Convert			;
+
+loc_1A78A:
 		add.w	d1,y_pos(a0)
 		move.l	y_vel+$10(a0),d0			; Liliam: QOL - speed up ring loss
 		asr.l	#2,d0					;
@@ -41448,6 +41451,48 @@ loc_1A7B6:
 		; Liliam: QOL - speed up ring loss
 ; ---------------------------------------------------------------------------
 
+LostRing_Convert:						; Liliam: QOL - stop running ring collision inside walls
+		move.l	#Obj_LostRing,(a0)
+		bra.s	Obj_LostRing.checkCollision
+; ---------------------------------------------------------------------------
+
+Obj_LostCombineRing:						; Liliam: QOL - stop running ring collision inside walls
+		tst.b	render_flags(a0)
+		bpl.w	Delete_Current_Sprite
+		bsr.w	CombineRing_Common
+		bra.s	Obj_LostRing.moveSprite
+; ---------------------------------------------------------------------------
+
+Obj_LostRing:							; Liliam: QOL - stop running ring collision inside walls
+		tst.b	render_flags(a0)
+		bpl.w	Delete_Current_Sprite
+		tst.b	(Ring_spill_anim_counter).w
+		beq.w	Delete_Current_Sprite
+
+	.moveSprite:
+		move.l	x_vel(a0),d0
+		add.l	d0,x_pos(a0)
+		move.l	y_vel+$10(a0),d0
+		add.l	d0,y_pos(a0)
+		addi.l	#$1800,y_vel+$10(a0)
+
+	.checkCollision:
+		cmpi.b	#90,(Player_1+invulnerability_timer).w
+		bhi.s	.wrapVertical
+		jsr	(Add_SpriteToCollisionResponseList).l
+
+	.wrapVertical:
+		cmpi.w	#-$100,(Camera_min_Y_pos).w
+		bne.s	.wrapHorizontal
+		move.w	(Screen_Y_wrap_value).w,d0
+		and.w	d0,y_pos(a0)
+
+	.wrapHorizontal:
+		move.w	(Level_repeat_offset).w,d0
+		sub.w	d0,x_pos(a0)
+		bra.w	Draw_Sprite
+; ---------------------------------------------------------------------------
+
 Obj_BouncingRing_ReverseGravity:
 ;		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)		; Liliam: QOL - extend ring animation
 		tst.b	(Ring_spill_anim_counter).w		; Liliam: bugfix - delete bouncing rings consistently
@@ -41467,14 +41512,17 @@ Obj_BouncingRing_ReverseGravity:
 ;		add.b	d7,d0					;
 ;		andi.b	#7,d0					;
 ;		bne.s	loc_1A83C				;
-		tst.b	render_flags(a0)
-		bpl.s	loc_1A828
-		moveq	#8,d0					; Liliam: QOL - speed up ring loss
+;		tst.b	render_flags(a0)			;
+;		bpl.s	loc_1A828				;
 
-loc_1A80C:
+		moveq	#8,d0					; Liliam: QOL - speed up ring loss
 		jsr	(RingCheckFloorDist_ReverseGravity).l
 		tst.w	d1
 		bpl.s	loc_1A828
+		cmpi.w	#-8,d1					; Liliam: QOL - stop running ring collision inside walls
+		blo.s	LostRing_ReverseGravity_Convert		;
+
+loc_1A816:
 		sub.w	d1,y_pos(a0)
 		move.l	y_vel+$10(a0),d0			; Liliam: QOL - speed up ring loss
 		asr.l	#2,d0					;
@@ -41504,6 +41552,48 @@ loc_1A842:
 		bne.s	.wrapHorizontal				;
 		move.w	(Screen_Y_wrap_value).w,d0		;
 		and.w	d0,y_pos(a0)				;
+
+	.wrapHorizontal:
+		move.w	(Level_repeat_offset).w,d0
+		sub.w	d0,x_pos(a0)
+		bra.w	Draw_Sprite
+; ---------------------------------------------------------------------------
+
+LostRing_ReverseGravity_Convert:				; Liliam: QOL - stop running ring collision inside walls
+		move.l	#Obj_LostRing_ReverseGravity,(a0)
+		bra.s	Obj_LostRing_ReverseGravity.checkCollision
+; ---------------------------------------------------------------------------
+
+Obj_LostCombineRing_ReverseGravity:				; Liliam: QOL - stop running ring collision inside walls
+		tst.b	render_flags(a0)
+		bpl.w	Delete_Current_Sprite
+		bsr.w	CombineRing_Common
+		bra.s	Obj_LostRing_ReverseGravity.moveSprite
+; ---------------------------------------------------------------------------
+
+Obj_LostRing_ReverseGravity:					; Liliam: QOL - stop running ring collision inside walls
+		tst.b	render_flags(a0)
+		bpl.w	Delete_Current_Sprite
+		tst.b	(Ring_spill_anim_counter).w
+		beq.w	Delete_Current_Sprite
+
+	.moveSprite:
+		move.l	x_vel(a0),d0
+		add.l	d0,x_pos(a0)
+		move.l	y_vel+$10(a0),d0
+		add.l	d0,y_pos(a0)
+		subi.l	#$1800,y_vel+$10(a0)
+
+	.checkCollision:
+		cmpi.b	#90,(Player_1+invulnerability_timer).w
+		bhi.s	.wrapVertical
+		jsr	(Add_SpriteToCollisionResponseList).l
+
+	.wrapVertical:
+		cmpi.w	#-$100,(Camera_min_Y_pos).w
+		bne.s	.wrapHorizontal
+		move.w	(Screen_Y_wrap_value).w,d0
+		and.w	d0,y_pos(a0)
 
 	.wrapHorizontal:
 		move.w	(Level_repeat_offset).w,d0
@@ -41824,7 +41914,13 @@ Obj_CombineRing:
 		addi.l	#$1800,y_vel+$10(a0)
 		bmi.w	loc_1A7B0
 		moveq	#$C,d0
-		bra.w	loc_1A780
+		jsr	(RingCheckFloorDist).l
+		tst.w	d1
+		bpl.w	loc_1A79C
+		cmpi.w	#-8,d1
+		bhs.w	loc_1A78A
+		move.l	#Obj_LostCombineRing,(a0)
+		bra.w	Obj_LostRing.checkCollision
 ; ---------------------------------------------------------------------------
 
 Obj_CombineRing_ReverseGravity:						; Liliam: Encore mode - combine ring
@@ -41836,7 +41932,13 @@ Obj_CombineRing_ReverseGravity:						; Liliam: Encore mode - combine ring
 		subi.l	#$1800,y_vel+$10(a0)
 		bpl.w	loc_1A83C
 		moveq	#$C,d0
-		bra.w	loc_1A80C
+		jsr	(RingCheckFloorDist_ReverseGravity).l
+		tst.w	d1
+		bpl.w	loc_1A828
+		cmpi.w	#-8,d1
+		bhs.w	loc_1A816
+		move.l	#Obj_LostCombineRing_ReverseGravity,(a0)
+		bra.w	Obj_LostRing_ReverseGravity.checkCollision
 ; ---------------------------------------------------------------------------
 
 CombineRing_Common:							; Liliam: Encore mode - combine ring
