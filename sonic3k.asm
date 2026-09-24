@@ -48118,9 +48118,9 @@ loc_1E094:
 		rts
 ; ---------------------------------------------------------------------------
 SolidObject_AnimReset:						; Liliam: bugfix - fix stuck animation
-		dc.b    1,   1, $02,   1,   1,   1,   1,   1,   1, $09,   1,   1,   1,   1,   1,   1
-		dc.b    1,   1,   1, $13,   1,   1, $16, $17, $18,   1, $1A,   1,   1,   1,   1,   1
-		dc.b    1,   1,   1,   1,   1,   1,   1,   1
+		dc.b    0,   0, $02,   0,   0,   0,   0,   0,   0, $09,   0,   0,   0,   0,   0,   0
+		dc.b    0,   0,   0, $13,   0,   0, $16, $17, $18,   0, $1A,   0,   0,   0,   0,   0
+		dc.b    0,   0,   0,   0,   0,   0,   0,   0
 ; ---------------------------------------------------------------------------
 
 loc_1E0A2:
@@ -48129,12 +48129,13 @@ loc_1E0A2:
 		btst	d4,status(a0)
 		beq.s	loc_1E0D0
 		move.b	anim(a1),d4				; Liliam: bugfix - fix stuck animation
-		move.b	SolidObject_AnimReset(pc,d4.w),anim(a1)	;
+		move.b	SolidObject_AnimReset(pc,d4.w),d4	;
+		bne.s	sub_1E0C2				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		beq.s	sub_1E0C2				;
 ;		cmpi.b	#9,anim(a1)				;
 ;		beq.s	sub_1E0C2				;
-;		move.w	#1,anim(a1)				;
+		move.w	#1,anim(a1)
 ; End of function SolidObjectFull_Offset_1P
 
 
