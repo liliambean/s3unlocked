@@ -62,42 +62,42 @@ word_23826:	dc.w 2
 		dc.b    0,  $C, $30, $18, $FF, $F0
 		dc.b  $F8,   4, $10, $20, $FF, $F8
 word_23834:	dc.w 4
-		dc.b  $F1,   8,   0,   0, $FF, $EB
-		dc.b  $F9,   8,   0,   3, $FF, $F3
-		dc.b    1,   5,   0,   6, $FF, $FB
+		dc.b  $F1,   8,   0,  $A, $FF, $EB
+		dc.b  $F9,   8,   0,  $D, $FF, $F3
+		dc.b    1,   5,   0, $10, $FF, $FB
 		dc.b  $FB,   5,   0, $14, $FF, $F1
 word_2384E:	dc.w 3
-		dc.b  $F7,   8,   0,   0, $FF, $E6
-		dc.b  $FF,   8,   0,   3, $FF, $EE
-		dc.b    7,   5,   0,   6, $FF, $F6
+		dc.b  $F7,   8,   0,  $A, $FF, $E6
+		dc.b  $FF,   8,   0,  $D, $FF, $EE
+		dc.b    7,   5,   0, $10, $FF, $F6
 word_23862:	dc.w 5
-		dc.b  $E6,   8,   0,   0, $FF, $F6
-		dc.b  $EE,   8,   0,   3, $FF, $FE
-		dc.b  $F6,   5,   0,   6,   0,   6
+		dc.b  $E6,   8,   0,  $A, $FF, $F6
+		dc.b  $EE,   8,   0,  $D, $FF, $FE
+		dc.b  $F6,   5,   0, $10,   0,   6
 		dc.b  $F5,   4,   0, $18, $FF, $FA
 		dc.b  $FD,   4,   0, $1A, $FF, $F2
 word_23882:	dc.w 4
-		dc.b    7,   8, $10,   0, $FF, $EB
-		dc.b  $FF,   8, $10,   3, $FF, $F3
-		dc.b  $EF,   5, $10,   6, $FF, $FB
+		dc.b    7,   8, $10,  $A, $FF, $EB
+		dc.b  $FF,   8, $10,  $D, $FF, $F3
+		dc.b  $EF,   5, $10, $10, $FF, $FB
 		dc.b  $F5,   5, $10, $14, $FF, $F1
 word_2389C:	dc.w 4
-		dc.b  $F1,   8, $20,  $A, $FF, $EB
-		dc.b  $F9,   8, $20,  $D, $FF, $F3
-		dc.b    1,   5, $20, $10, $FF, $FB
+		dc.b  $F1,   8, $20,   0, $FF, $EB
+		dc.b  $F9,   8, $20,   3, $FF, $F3
+		dc.b    1,   5, $20,   6, $FF, $FB
 		dc.b  $FB,   5,   0, $14, $FF, $F1
 word_238B6:	dc.w 3
-		dc.b  $F7,   8, $20,  $A, $FF, $E6
-		dc.b  $FF,   8, $20,  $D, $FF, $EE
-		dc.b    7,   5, $20, $10, $FF, $F6
+		dc.b  $F7,   8, $20,   0, $FF, $E6
+		dc.b  $FF,   8, $20,   3, $FF, $EE
+		dc.b    7,   5, $20,   6, $FF, $F6
 word_238CA:	dc.w 5
-		dc.b  $E6,   8, $20,  $A, $FF, $F6
-		dc.b  $EE,   8, $20,  $D, $FF, $FE
-		dc.b  $F6,   5, $20, $10,   0,   6
+		dc.b  $E6,   8, $20,   0, $FF, $F6
+		dc.b  $EE,   8, $20,   3, $FF, $FE
+		dc.b  $F6,   5, $20,   6,   0,   6
 		dc.b  $F5,   4,   0, $18, $FF, $FA
 		dc.b  $FD,   4,   0, $1A, $FF, $F2
 word_238EA:	dc.w 4
-		dc.b    7,   8, $30,  $A, $FF, $EB
-		dc.b  $FF,   8, $30,  $D, $FF, $F3
-		dc.b  $EF,   5, $30, $10, $FF, $FB
+		dc.b    7,   8, $30,   0, $FF, $EB
+		dc.b  $FF,   8, $30,   3, $FF, $F3
+		dc.b  $EF,   5, $30,   6, $FF, $FB
 		dc.b  $F5,   5, $10, $14, $FF, $F1

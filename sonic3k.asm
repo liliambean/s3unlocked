@@ -158258,7 +158258,7 @@ Obj_MGZ2DrillingRobotnik:
 		lea	(ArtKosM_MGZEndBossDebris).l,a1
 		move.w	#tiles_to_bytes(ArtTile_MGZEndBossDebris),d2
 		jsr	(Queue_Kos_Module).l
-		lea	(PLC_RobotnikShip).l,a1			; Liliam: bugfix - stop loading capsule art and having to reload everything again (yes, really)
+		lea	(PLC_RobotnikShip).l,a1			; Liliam: bugfix - stop clobbering level art
 		jsr	(Load_PLC_Raw).l			;
 ;		moveq	#PLCID_MGZEndBoss,d0			;
 ;		jsr	(Load_PLC).l				;
@@ -158513,7 +158513,7 @@ loc_6C200:
 		lea	(ArtKosM_Mantis).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Mantis),d2
 		jsr	(Queue_Kos_Module).l
-;		lea	(PLC_MonitorsSpikesSprings).l,a1	; Liliam: bugfix - stop loading capsule art and having to reload everything again (yes, really)
+;		lea	(PLC_MonitorsSpikesSprings).l,a1	; Liliam: bugfix - stop clobbering level art
 ;		jsr	(Load_PLC_Raw).l			;
 		lea	(Pal_MGZ).l,a1
 		jsr	(PalLoad_Line1).l
@@ -158626,7 +158626,8 @@ loc_6C354:
 		lea	(ArtKosM_MGZEndBossDebris).l,a1
 		move.w	#tiles_to_bytes(ArtTile_MGZEndBossDebris),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#PLCID_MGZEndBoss,d0
+		moveq	#PLCID_EndBoss,d0			; Liliam: bugfix - stop clobbering level art
+;		moveq	#PLCID_MGZEndBoss,d0			;
 		jsr	(Load_PLC).l
 		lea	Pal_MGZEndBoss(pc),a1
 		jsr	(PalLoad_Line1).l
