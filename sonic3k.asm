@@ -79736,7 +79736,8 @@ sub_349BA:
 loc_349F4:
 		move.w	#-$600,y_vel(a1)
 		bset	#Status_InAir,status(a1)
-		jsr	(Player_SetRollHeight).l		; Liliam: bugfix - set correct player height
+		move.b	#1,jumping(a1)				; Liliam: bugfix - set correct player height
+		jsr	(Player_SetRollHeight).l		;
 ;		move.b	#$E,y_radius(a1)			;
 ;		move.b	#7,x_radius(a1)				;
 		move.b	#2,anim(a1)

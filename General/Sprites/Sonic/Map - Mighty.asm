@@ -1042,11 +1042,11 @@ Map_Mighty_PoleCurrent2:
 		dc.b  $FB,   1,   0, $11,   0,  $F
 Map_Mighty_Pulley:
 		dc.w 5
-		dc.b  $EC,   3,   0,   0, $FF, $FC
-		dc.b  $F4,   6,   0,   4, $FF, $EC
-		dc.b  $F4,   3,   0,  $A,   0,   4
-		dc.b  $FC,   1,   0,  $E,   0,  $C
-		dc.b   $C,   4,   0, $10, $FF, $F4
+		dc.b  $EC,   3,   0,   0, $FF, $FB
+		dc.b  $F4,   6,   0,   4, $FF, $EB
+		dc.b  $F4,   3,   0,  $A,   0,   3
+		dc.b  $FC,   1,   0,  $E,   0,  $B
+		dc.b   $C,   4,   0, $10, $FF, $F3
 Map_Mighty_BarCurrent1:
 		dc.w 3
 		dc.b  $ED,  $B,   0,   0, $FF, $F3

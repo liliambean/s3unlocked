@@ -1032,10 +1032,10 @@ Map_Amy_PoleCurrent2:
 		dc.b  $FA,   1,   0,  $C,   0,   6
 Map_Amy_Pulley:
 		dc.w 4
-		dc.b  $F0,   7,   0,   0, $FF, $F3
-		dc.b  $F8,   1,   0,   8, $FF, $EB
-		dc.b  $F8,   2,   0,  $A,   0,   3
-		dc.b    0,   1,   0,  $D,   0,  $B
+		dc.b  $ED,   7,   0,   0, $FF, $F2
+		dc.b  $F5,   1,   0,   8, $FF, $EA
+		dc.b  $F5,   2,   0,  $A,   0,   2
+		dc.b  $FD,   1,   0,  $D,   0,  $A
 Map_Amy_BarCurrent1:
 Map_Amy_BarCurrent2:
 		dc.w 3

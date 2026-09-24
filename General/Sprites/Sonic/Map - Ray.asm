@@ -1108,11 +1108,11 @@ Map_Ray_PoleCurrent2:
 		dc.b  $FB,   9,   0,  $C,   0,   7
 Map_Ray_Pulley:
 		dc.w 5
-		dc.b  $EB,   7,   0,   0, $FF, $F2
-		dc.b  $F3,   3,   0,   8, $FF, $EA
-		dc.b  $F3,   3,   0,  $C,   0,   2
-		dc.b  $FB,   2,   0, $10,   0,  $A
-		dc.b   $B,   4,   0, $13, $FF, $F2
+		dc.b  $EB,   7,   0,   0, $FF, $F1
+		dc.b  $F3,   3,   0,   8, $FF, $E9
+		dc.b  $F3,   3,   0,  $C,   0,   1
+		dc.b  $FB,   2,   0, $10,   0,   9
+		dc.b   $B,   4,   0, $13, $FF, $F1
 Map_Ray_BarCurrent1:
 		dc.w 5
 		dc.b  $E5,   3,   0,   0, $FF, $FE
