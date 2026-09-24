@@ -82366,8 +82366,6 @@ loc_36A1A:
 		jsr	(Animate_Sprite).l
 		tst.b	routine(a0)
 		beq.s	loc_36A32
-
-loc_36A2C:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -82404,8 +82402,6 @@ Map_2PItem:
 ; ---------------------------------------------------------------------------
 
 Obj_2PGoalMarker:
-		tst.w	(Competition_mode).w			; Liliam: Encore mode - add extra levels
-		beq.w	loc_36A2C				;
 		move.l	#Map_2PGoalMarker,mappings(a0)
 		move.w	#make_art_tile(ArtTile_2PStartPost,0,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
@@ -223561,15 +223557,15 @@ SpriteLocPtrs_Encore:						; Liliam: Encore mode - layouts
 		dc.l DDZ2_Sprites
 		dc.l Ending_Sprites
 		dc.l Ending_Sprites
+		dc.l ALZ_Sprites
 		dc.l ALZ_Sprites_Encore
-		dc.l ALZ_Sprites_Encore
+		dc.l BPZ_Sprites
 		dc.l BPZ_Sprites_Encore
-		dc.l BPZ_Sprites_Encore
+		dc.l DPZ_Sprites
 		dc.l DPZ_Sprites_Encore
-		dc.l DPZ_Sprites_Encore
+		dc.l CGZ_Sprites
 		dc.l CGZ_Sprites_Encore
-		dc.l CGZ_Sprites_Encore
-		dc.l EMZ_Sprites_Encore
+		dc.l EMZ_Sprites
 		dc.l EMZ_Sprites_Encore
 		dc.l Gumball_Sprites
 		dc.l Gumball_Sprites
@@ -223577,8 +223573,8 @@ SpriteLocPtrs_Encore:						; Liliam: Encore mode - layouts
 		dc.l Pachinko_Sprites
 		dc.l Slots_Sprites
 		dc.l Slots_Sprites
-		dc.l LRZ3_Sprites_Encore
-		dc.l HPZ_Sprites_Encore
+		dc.l LRZ3_Sprites
+		dc.l HPZ_Sprites
 		dc.l DEZ3_Sprites
 		dc.l HPZMini_Sprites
 SpriteLocPtrs:
@@ -223611,15 +223607,15 @@ SpriteLocPtrs:
 		dc.l Ending_Sprites
 		dc.l Ending_Sprites
 		dc.l ALZ_Sprites
-		dc.l ALZ_Sprites
+		dc.l ALZ_Sprites_Encore				; Liliam: Encore mode - layouts
 		dc.l BPZ_Sprites
-		dc.l BPZ_Sprites
+		dc.l BPZ_Sprites_Encore				; Liliam: Encore mode - layouts
 		dc.l DPZ_Sprites
-		dc.l DPZ_Sprites
+		dc.l DPZ_Sprites_Encore				; Liliam: Encore mode - layouts
 		dc.l CGZ_Sprites
-		dc.l CGZ_Sprites
+		dc.l CGZ_Sprites_Encore				; Liliam: Encore mode - layouts
 		dc.l EMZ_Sprites
-		dc.l EMZ_Sprites
+		dc.l EMZ_Sprites_Encore				; Liliam: Encore mode - layouts
 		dc.l Gumball_Sprites
 		dc.l Gumball_Sprites
 		dc.l Pachinko_Sprites
@@ -223797,10 +223793,10 @@ AIZ2_Sprites:
 		binclude "Levels/AIZ/Object Pos/2.bin"
 		even
 AIZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/AIZ/Object Pos/1.bin"
+		binclude "Levels/AIZ/Object Pos/Encore 1.bin"
 		even
 AIZ2_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/AIZ/Object Pos/2.bin"
+		binclude "Levels/AIZ/Object Pos/Encore 2.bin"
 		even
 AIZ1_Rings:
 		binclude "Levels/AIZ/Ring Pos/1.bin"
@@ -223819,7 +223815,7 @@ HCZ2_Sprites:
 		binclude "Levels/HCZ/Object Pos/2.bin"
 		even
 HCZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/HCZ/Object Pos/1.bin"
+		binclude "Levels/HCZ/Object Pos/Encore 1.bin"
 		even
 HCZ2_Sprites_Encore:						; Liliam: Encore mode - layouts
 		binclude "Levels/HCZ/Object Pos/Encore 2.bin"
@@ -223837,7 +223833,7 @@ MGZ1_Sprites:
 		binclude "Levels/MGZ/Object Pos/1.bin"
 		even
 MGZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/MGZ/Object Pos/1.bin"
+		binclude "Levels/MGZ/Object Pos/Encore 1.bin"
 		even
 MGZ1_Rings:
 		binclude "Levels/MGZ/Ring Pos/1.bin"
@@ -223865,10 +223861,10 @@ CNZ2_Sprites:
 		binclude "Levels/CNZ/Object Pos/2.bin"
 		even
 CNZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/CNZ/Object Pos/1.bin"
+		binclude "Levels/CNZ/Object Pos/Encore 1.bin"
 		even
 CNZ2_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/CNZ/Object Pos/2.bin"
+		binclude "Levels/CNZ/Object Pos/Encore 2.bin"
 		even
 CNZ1_Rings:
 		binclude "Levels/CNZ/Ring Pos/1.bin"
@@ -223887,10 +223883,10 @@ FBZ2_Sprites:
 		binclude "Levels/FBZ/Object Pos/2.bin"
 		even
 FBZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/FBZ/Object Pos/1.bin"
+		binclude "Levels/FBZ/Object Pos/Encore 1.bin"
 		even
 FBZ2_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/FBZ/Object Pos/2.bin"
+		binclude "Levels/FBZ/Object Pos/Encore 2.bin"
 		even
 FBZ1_Rings:
 		binclude "Levels/FBZ/Ring Pos/1.bin"
@@ -224037,10 +224033,10 @@ ICZ2_Sprites:
 		binclude "Levels/ICZ/Object Pos/2.bin"
 		even
 ICZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/ICZ/Object Pos/1.bin"
+		binclude "Levels/ICZ/Object Pos/Encore 1.bin"
 		even
 ICZ2_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/ICZ/Object Pos/2.bin"
+		binclude "Levels/ICZ/Object Pos/Encore 2.bin"
 		even
 ICZ1_Rings:
 		binclude "Levels/ICZ/Ring Pos/1.bin"
@@ -224475,10 +224471,10 @@ MHZ2_Sprites:
 		binclude "Levels/MHZ/Object Pos/2.bin"
 		even
 MHZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/MHZ/Object Pos/1.bin"
+		binclude "Levels/MHZ/Object Pos/Encore 1.bin"
 		even
 MHZ2_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/MHZ/Object Pos/2.bin"
+		binclude "Levels/MHZ/Object Pos/Encore 2.bin"
 		even
 MHZ1_Rings:
 		binclude "Levels/MHZ/Ring Pos/1.bin"
@@ -224496,10 +224492,10 @@ SOZ2_Sprites:
 		binclude "Levels/SOZ/Object Pos/2.bin"
 		even
 SOZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/SOZ/Object Pos/1.bin"
+		binclude "Levels/SOZ/Object Pos/Encore 1.bin"
 		even
 SOZ2_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/SOZ/Object Pos/2.bin"
+		binclude "Levels/SOZ/Object Pos/Encore 2.bin"
 		even
 SOZ1_Rings:
 		binclude "Levels/SOZ/Ring Pos/1.bin"
@@ -224671,10 +224667,10 @@ LRZ2_Sprites:
 		binclude "Levels/LRZ/Object Pos/2.bin"
 		even
 LRZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/LRZ/Object Pos/1.bin"
+		binclude "Levels/LRZ/Object Pos/Encore 1.bin"
 		even
 LRZ2_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/LRZ/Object Pos/2.bin"
+		binclude "Levels/LRZ/Object Pos/Encore 2.bin"
 		even
 LRZ1_Rings:
 		binclude "Levels/LRZ/Ring Pos/1.bin"
@@ -224689,7 +224685,7 @@ SSZ1_Sprites:
 		binclude "Levels/SSZ/Object Pos/1.bin"
 		even
 SSZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/SSZ/Object Pos/1.bin"
+		binclude "Levels/SSZ/Object Pos/Encore.bin"
 		even
 SSZ2_Sprites:
 		; Liliam: Metal Sonic - final boss
@@ -224711,10 +224707,10 @@ DEZ2_Sprites:
 		binclude "Levels/DEZ/Object Pos/2.bin"
 		even
 DEZ1_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/DEZ/Object Pos/1.bin"
+		binclude "Levels/DEZ/Object Pos/Encore 1.bin"
 		even
 DEZ2_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/DEZ/Object Pos/2.bin"
+		binclude "Levels/DEZ/Object Pos/Encore 2.bin"
 		even
 DEZ1_Rings:
 		binclude "Levels/DEZ/Ring Pos/1.bin"
@@ -224904,7 +224900,7 @@ ALZ_Sprites:
 		binclude "Levels/ALZ/Object Pos/1.bin"
 		even
 ALZ_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/ALZ/Object Pos/1.bin"
+		binclude "Levels/ALZ/Object Pos/Encore.bin"
 		even
 ALZ_Rings:
 		binclude "Levels/ALZ/Ring Pos/1.bin"
@@ -224916,7 +224912,7 @@ BPZ_Sprites:
 		binclude "Levels/BPZ/Object Pos/1.bin"
 		even
 BPZ_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/BPZ/Object Pos/1.bin"
+		binclude "Levels/BPZ/Object Pos/Encore.bin"
 		even
 BPZ_Rings:
 		binclude "Levels/BPZ/Ring Pos/1.bin"
@@ -224928,7 +224924,7 @@ DPZ_Sprites:
 		binclude "Levels/DPZ/Object Pos/1.bin"
 		even
 DPZ_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/DPZ/Object Pos/1.bin"
+		binclude "Levels/DPZ/Object Pos/Encore.bin"
 		even
 DPZ_Rings:
 		binclude "Levels/DPZ/Ring Pos/1.bin"
@@ -224940,7 +224936,7 @@ CGZ_Sprites:
 		binclude "Levels/CGZ/Object Pos/1.bin"
 		even
 CGZ_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/CGZ/Object Pos/1.bin"
+		binclude "Levels/CGZ/Object Pos/Encore.bin"
 		even
 CGZ_Rings:
 		binclude "Levels/CGZ/Ring Pos/1.bin"
@@ -224952,7 +224948,7 @@ EMZ_Sprites:
 		binclude "Levels/EMZ/Object Pos/1.bin"
 		even
 EMZ_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/EMZ/Object Pos/1.bin"
+		binclude "Levels/EMZ/Object Pos/Encore.bin"
 		even
 EMZ_Rings:
 		binclude "Levels/EMZ/Ring Pos/1.bin"
@@ -224988,12 +224984,6 @@ LRZ3_Sprites:
 		even
 HPZ_Sprites:
 		; Liliam: bugfix - adjust path swap object positioning
-		binclude "Levels/HPZ/Object Pos/1.bin"
-		even
-LRZ3_Sprites_Encore:						; Liliam: Encore mode - layouts
-		binclude "Levels/LRZ/Object Pos/3.bin"
-		even
-HPZ_Sprites_Encore:						; Liliam: Encore mode - layouts
 		binclude "Levels/HPZ/Object Pos/1.bin"
 		even
 LRZ3_Rings:
