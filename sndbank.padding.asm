@@ -905,13 +905,10 @@ loc_220D32:
 
 Obj_AIZSurfboardIntro_CheckDelete:
 		tst.b	(Kos_modules_left).w			; Liliam: ported from S3 - restore surfboard intro
-		bne.s	loc_220D38				;
+		bne.s	loc_220D32				;
 		addq.b	#2,(Dynamic_resize_routine).w		;
-		jmp	(Delete_Current_Sprite).l		;
-; ---------------------------------------------------------------------------
-
-loc_220D38:
-		jmp	(Sprite_OnScreen_Test).l
+		jmp	(AIZPlaneIntro_LoadPalette).l		;
+;		jmp	(Sprite_OnScreen_Test).l		;
 
 ; =============== S U B R O U T I N E =======================================
 

@@ -151818,6 +151818,8 @@ loc_6798A:
 		bmi.w	locret_67512
 		tst.b	subtype(a0)							; Liliam: QOL - reduce flicker to avoid eye strain
 		bne.s	loc_67990							;
+
+AIZPlaneIntro_LoadPalette:
 		lea	(Pal_AIZ_Encore+$40).l,a1					;
 		lea	(Normal_palette_line_4).w,a2					;
 		moveq	#bytesToLcnt(Normal_palette_end-Normal_palette_line_4),d0	;
@@ -151826,8 +151828,8 @@ loc_6798A:
 		lea	(Pal_AIZ+$40).l,a1						;
 
 	.loop:
-		move.l	(a1)+,(a2)+
-		dbf	d0,.loop
+		move.l	(a1)+,(a2)+							;
+		dbf	d0,.loop							;
 		movea.w	parent3(a0),a1							;
 		jsr	(Delete_Referenced_Sprite).l					;
 
