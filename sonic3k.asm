@@ -4545,33 +4545,20 @@ SuperHyper_PalCycle_RevertMighty:					; Liliam: animate super forms consistently
 		bsr.s	SuperHyper_PalCycle_RevertKnuckles
 		subq.b	#4,d0
 		andi.b	#$1F,d0
-		tst.b	(Super_palette_status).w
-		bne.s	.doExtraColor
-		moveq	#0,d0
-		lea	(Pal_Mighty+$A).l,a0
-		lea	(Normal_palette+$A).w,a1
-		lea	(Pal_WaterKnux+$C).l,a2
-		bsr.w	SuperHyper_PalCycle_Apply
-		moveq	#$18,d0
+		bsr.w	SuperHyper_PalCycle_ApplyMighty
+		tst.w	(Palette_frame).w
+		bne.s	locret_37EC
 
-	.doExtraColor:
-		lea	(PalCycle_SuperMighty).l,a0
-		move.w	(a0,d0.w),(Normal_palette+$14).w
 		tst.b	(Water_flag).w
-		beq.s	locret_37EC
+		beq.s	.checkDone
 		move.w	PalCycle_SuperMighty_Water-PalCycle_SuperMighty(a0,d0.w),(Water_palette+$14).w
-		rts
-; ---------------------------------------------------------------------------
+		lea	Pal_WaterKnux+$C(pc),a0
+		move.l	(a0)+,(Water_palette+$A).w
+		move.w	(a0)+,(Water_palette+$E).w
 
-SuperHyper_PalCycle_RevertRay:						; Liliam: animate super forms consistently
-		moveq	#0,d0
-		move.w	(Palette_frame).w,d1
-		subq.w	#6,(Palette_frame).w
-		bhs.s	loc_384A
-		move.w	d0,(Palette_frame).w
-		move.w	d0,(Palette_frame_Tails).w
-		move.b	d0,(Super_palette_status).w
-		move.l	(Pal_Ray+$10).l,(Normal_palette+$10).w
+	.checkDone:
+		tst.b	(Super_palette_status).w
+		beq.w	SuperHyper_PalCycle_ResetMighty
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -4597,6 +4584,7 @@ SuperHyper_PalCycle_ApplyRevert:
 
 SuperHyper_PalCycle_RevertTails:
 SuperHyper_PalCycle_RevertAmy:
+SuperHyper_PalCycle_RevertRay:
 		moveq	#0,d0
 		move.w	(Palette_frame).w,d1				; Liliam: animate super forms consistently
 		subq.w	#6,(Palette_frame).w				;
@@ -4753,7 +4741,12 @@ loc_38F6:
 SuperHyper_PalCycle_ApplyTails:
 		cmpi.w	#4,(Player_mode).w				;
 		beq.s	SuperHyper_PalCycle_ApplyAmy			;
+		lea	(PalCycle_SuperRay).l,a0			;
+		cmpi.w	#6,(Player_mode).w				;
+		beq.s	loc_3914					;
 		lea	(PalCycle_SuperTails).l,a0			;
+
+loc_3914:
 		lea	(Normal_palette+$10).w,a1
 		move.l	(a0,d0.w),(a1)+		; Write first two palette entries
 		move.w	4(a0,d0.w),2(a1)	; Write last palette entry
@@ -4770,12 +4763,43 @@ locret_3938:
 ;		bra.w	loc_386E					;
 ; ---------------------------------------------------------------------------
 
+SuperHyper_PalCycle_Mighty:						; Liliam: animate super forms consistently
+		subq.b	#1,(Palette_timer).w
+		bpl.s	locret_3938
+		move.b	#2,(Palette_timer).w
+
+		lea	(Normal_palette+$A).w,a1
+		bsr.s	sub_394A
+		lea	(PalCycle_SuperKnuckles_Water+$36).l,a2
+		addq.b	#2,d0
+		andi.b	#$1F,d0
+		bsr.s	SuperHyper_PalCycle_ApplyMighty
+		tst.w	(Palette_frame).w
+		bne.s	locret_3938
+
+SuperHyper_PalCycle_ResetMighty:
+		lea	(Pal_Mighty+$A).l,a0
+		move.l	(a0)+,(Normal_palette+$A).w
+		move.w	(a0)+,(Normal_palette+$E).w
+		rts
+; ---------------------------------------------------------------------------
+
+SuperHyper_PalCycle_ApplyMighty:
+		lea	(PalCycle_SuperMighty).l,a0
+		move.w	(a0,d0.w),(Normal_palette+$14).w
+		tst.b	(Water_flag).w
+		beq.s	locret_3938
+		move.w	PalCycle_SuperMighty_Water-PalCycle_SuperMighty(a0,d0.w),(Water_palette+$14).w
+		rts
+; ---------------------------------------------------------------------------
+
 SuperHyper_PalCycle_Knuckles:
 		; run frame timer
 		subq.b	#1,(Palette_timer).w
 		bpl.w	locret_37EC
 		move.b	#2,(Palette_timer).w
 
+sub_394A:
 		lea	(PalCycle_SuperKnuckles).l,a0
 		lea	(PalCycle_SuperKnuckles_Water).l,a2		; Liliam: animate super forms consistently
 		move.w	(Palette_frame).w,d0
@@ -4796,22 +4820,6 @@ SuperHyper_PalCycle_Apply:
 ;		lea	(Water_palette+$04).w,a1			;
 		move.l	(a0,d0.w),(a1)+	; Write first two palette entries
 		move.w	4(a0,d0.w),(a1)	; Write last palette entry
-		rts
-; ---------------------------------------------------------------------------
-
-SuperHyper_PalCycle_Mighty:						; Liliam: animate super forms consistently
-		moveq	#-1,d0
-		lea	(Normal_palette+$A).w,a1
-		bsr.s	SuperHyper_PalCycle_Knuckles
-		tst.w	d0
-		bmi.s	locret_3938
-		addq.b	#2,d0
-		andi.b	#$1F,d0
-		lea	(PalCycle_SuperMighty).l,a0
-		move.w	(a0,d0.w),(Normal_palette+$14).w
-		tst.b	(Water_flag).w
-		beq.s	locret_3938
-		move.w	PalCycle_SuperMighty_Water-PalCycle_SuperMighty(a0,d0.w),(Water_palette+$14).w
 		rts
 ; End of function SuperHyper_PalCycle
 
@@ -4910,33 +4918,40 @@ PalCycle_SuperKnuckles_Water:						;
 		dc.w $EAE,$C6E,$A6A
 		dc.w $E8E,$A4C,$848
 		dc.w $C6C,$82A,$626
-		dc.w $A4C,$60A,$404
+		dc.w $A4C,$60A,$406
 PalCycle_SuperAmy:							; Liliam: animate super forms consistently
 		dc.w $C6E,$82C,$8AE
-		dc.w $A8E,$82E,$AAE
-		dc.w $AAE,$86E,$CCE
-		dc.w $CCE,$A8E,$EEE
-		dc.w $AAE,$86E,$CCE
-		dc.w $A8E,$82E,$AAE
+		dc.w $C8E,$82E,$AAE
+		dc.w $CAE,$86E,$CCE
+		dc.w $ECE,$A8E,$EEE
+		dc.w $CAE,$86E,$CCE
+		dc.w $C8E,$82E,$AAE
 PalCycle_SuperAmy_Water:						; Liliam: animate super forms consistently
-		dc.w $84C,$60A,$AAE
-		dc.w $86C,$60C,$CAE
-		dc.w $A8C,$64C,$CCE
-		dc.w $CAC,$86C,$ECE
-		dc.w $A8C,$64C,$CCE
-		dc.w $86C,$60C,$CAE
+		dc.w $A6C,$82A,$AAE
+		dc.w $A6E,$82C,$CAE
+		dc.w $A8E,$84C,$ECE
+		dc.w $CAE,$A6C,$EEE
+		dc.w $A8E,$84C,$ECE
+		dc.w $A6E,$82C,$CAE
 PalCycle_SuperMighty:							; Liliam: animate super forms consistently
 		dc.w $EEE,$AAE,0
 		dc.w $ECE,$CAE,0
 		dc.w $CAE,$ECE,0
 		dc.w $AAE,$EEE,0
-		dc.w $8AE,$EEE
+		dc.w $8AE,$EEE,$8AE
 PalCycle_SuperMighty_Water:						; Liliam: animate super forms consistently
 		dc.w $EEE,$CAE,0
 		dc.w $ECE,$EAE,0
 		dc.w $EAE,$ECE,0
 		dc.w $CAE,$EEE,0
-		dc.w $AAE,$EEE
+		dc.w $AAE,$EEE,$AAE
+PalCycle_SuperRay:							; Liliam: animate super forms consistently
+		dc.w $0CE,$0AE,$46A
+		dc.w $4EE,$0CE,$46C
+		dc.w $AEE,$2EE,$48C
+		dc.w $EEE,$8EE,$68C
+		dc.w $AEE,$2EE,$48C
+		dc.w $4EE,$0CE,$46C
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -9572,8 +9587,8 @@ loc_7A00:
 
 loc_7A18:
 		lea	Pal_WaterKnux(pc),a1			; Liliam: Encore mode - palette
-		lea	(Target_water_palette+$A).w,a2		;
-		moveq	#$3-1,d0				;
+		lea	(Target_water_palette+$0A).w,a2		;
+		moveq	#3-1,d0					;
 		tst.b	(Encore_mode).w				;
 		bne.s	.replaceReds				;
 		move.w	(Player_mode).w,d1			;
@@ -9583,21 +9598,19 @@ loc_7A18:
 		blo.s	locret_7A20				;
 		beq.s	.replaceBlues				;
 
-		addq.l	#$3*2,a1				; Liliam: add extra characters
-		moveq	#$3-1,d0				;
+		addq.l	#$06-$00,a1				; Liliam: add extra characters
 		cmpi.b	#7,d1					;
 		beq.s	.replaceBlues				;
 
-		addq.l	#$3*2,a1				;
-		moveq	#$3-1,d0				;
+		addq.l	#$0C-$06,a1				;
 		cmpi.b	#4,d1					;
 		bne.s	.replaceReds				;
 
-		addq.l	#$3*2,a1				;
-		moveq	#$5-1,d0				;
+		addq.l	#$12-$0C,a1				;
+		moveq	#5-1,d0					;
 
 	.replaceBlues:
-		subq.w	#6,a2					;
+		subq.w	#$0A-$04,a2				;
 
 	.replaceReds:
 		move.w	(a1),Water_palette-Target_water_palette(a2)	; Liliam: bugfix - color underwater Knuckles consistently
