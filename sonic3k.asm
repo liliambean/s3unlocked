@@ -134345,10 +134345,10 @@ Ending_LoadEyecatchArt:
 		lea	(ArtKosM_ANDKnuckles).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Ending_ANDKnuckles),d2
 		jsr	(Queue_Kos_Module).l
-		moveq	#8,d1						; Liliam: ending - use S3 logo eyecatch for Encore mode
-		tst.b	(Encore_mode).w					;
-		bne.s	loc_5B46C					;
-;		move.w	(Player_mode).w,d0				;
+		moveq	#8,d1									; Liliam: ending - use S3 logo eyecatch for Encore mode
+		tst.b	(Encore_mode).w								;
+		bne.s	loc_5B46C								;
+;		move.w	(Player_mode).w,d0							;
 		moveq	#0,d1
 ;		andi.w	#3,d0						; Liliam: ending - Tails uses same routines as Sonic
 ;		subq.w	#2,d0						;
@@ -134433,11 +134433,11 @@ Ending_LoadS3Logo:
 
 Ending_LoadS3Eyecatch:
 		bsr.s	Ending_LoadS3Logo
-		lea	(ArtKosM_S3EndingGraphics).l,a1			; Liliam: ending - use S3 logo eyecatch for Encore mode
-		move.w	#tiles_to_bytes(ArtTile_Ending_S3Sprites),d2	;
-		jmp	(Queue_Kos_Module).l				;
-;		lea	PLC_S3EndingGraphics(pc),a1			;
-;		jmp	(Load_PLC_Raw).l				;
+		lea	(ArtKosM_S3EndingGraphics).l,a1						; Liliam: ending - use S3 logo eyecatch for Encore mode
+		move.w	#tiles_to_bytes(ArtTile_Ending_S3Sprites),d2				;
+		jmp	(Queue_Kos_Module).l							;
+;		lea	PLC_S3EndingGraphics(pc),a1						;
+;		jmp	(Load_PLC_Raw).l							;
 ; ---------------------------------------------------------------------------
 ;PLC_S3EndingGraphics:
 		; Liliam: ending - use S3 logo eyecatch for Encore mode
@@ -140632,10 +140632,10 @@ Obj_5EF68:
 
 Ending_LoadEyecatchObjects:
 		clr.b	(Super_palette_status).w
-		moveq	#$10,d1						; Liliam: ending - use S3 logo eyecatch for Encore mode
-		tst.b	(Encore_mode).w					;
-		bne.s	loc_5EFAA					;
-;		move.w	(Player_mode).w,d0				;
+		moveq	#$10,d1									; Liliam: ending - use S3 logo eyecatch for Encore mode
+		tst.b	(Encore_mode).w								;
+		bne.s	loc_5EFAA								;
+;		move.w	(Player_mode).w,d0							;
 		moveq	#0,d1
 ;		andi.w	#3,d0						; Liliam: ending - Tails uses same routines as Sonic
 ;		subq.w	#2,d0						;
@@ -140885,23 +140885,41 @@ word_5F260:
 Obj_EndingEyecatch_S3Logo:
 		lea	ObjDat3_60154(pc),a1
 		jsr	(SetUp_ObjAttributes).l
-;		move.l	#loc_5F1F6,(a0)				; Liliam: removed dead code
-;		tst.b	subtype(a0)				;
-;		beq.s	loc_5F294				;
+;		move.l	#loc_5F1F6,(a0)								; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		tst.b	subtype(a0)								;
+;		beq.s	loc_5F294								;
 		move.l	#loc_5F2EA,(a0)
 		move.w	#$4AF,$2E(a0)
 		bclr	#2,(Cutscene_flags).w
+		move.w	#$11E,x_pos(a0)								;
+		move.w	#$F0,y_pos(a0)								;
+		bclr	#2,render_flags(a0)							;
+		jsr	(AllocateObject).l							;
+		bne.s	loc_5F294								;
+		move.l	#Obj_FadeSelectedToWhite,(a1)						;
+		move.w	#Normal_palette,$30(a1)							;
+		move.w	#Target_palette,$32(a1)							;
+		move.w	#bytesToWcnt(Normal_palette_line_3-Normal_palette),$3A(a1)		;
+		jsr	(AllocateObject).l							;
+		bne.s	loc_5F294								;
+		move.l	#Obj_FadeSelectedToWhite,(a1)						;
+		move.w	#Normal_palette_line_3+2,$30(a1)					;
+		move.w	#Target_palette_line_3+2,$32(a1)					;
+		move.w	#bytesToWcnt(Normal_palette_end-(Normal_palette_line_3+2)),$3A(a1)	;
 
-;loc_5F294:
-		lea	word_5F2E2(pc),a1
-		bsr.w	Ending_SetLogoPositionAndFade
+loc_5F294:
+;		lea	word_5F2E2(pc),a1							;
+;		bsr.w	Ending_SetLogoPositionAndFade						;
 		lea	(Pal_EndingS3KLogo).l,a1
-		lea	(Target_palette_line_2).w,a2
-		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6
+		lea	(Target_palette).w,a2							;
+;		lea	(Target_palette_line_2).w,a2						;
+;		moveq	#bytesToLcnt(Target_palette_line_3-Target_palette_line_2),d6		;
+		moveq	#bytesToLcnt(Target_palette_end-Target_palette),d6			;
 
 loc_5F2A8:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_5F2A8
+		move.w	#$600,(Target_palette+$0C).w						;
 		jsr	(AllocateObject).l
 		bne.s	loc_5F2C6
 		move.l	#Obj_EndingS3LogoTM,(a1)
@@ -140919,10 +140937,8 @@ loc_5F2D8:
 		lea	ChildObjDat_601F0(pc),a2
 		jmp	(CreateChild1_Normal).l
 ; ---------------------------------------------------------------------------
-word_5F2E2:
-		dc.w   $11E,   $F0				; Liliam: ending - add 'Unlocked' branding
-;		dc.w   $120,   $F0				;
-;		dc.w   $120,   $F0				; Liliam: removed dead code
+;word_5F2E2:
+		; Liliam: ending - use S3 logo eyecatch for Encore mode
 ; ---------------------------------------------------------------------------
 
 loc_5F2EA:
@@ -140943,8 +140959,8 @@ loc_5F2F8:
 loc_5F314:
 		move.b	#GameMode_UnlockScreen,(Game_mode).w	; Liliam: extra skills
 ;		move.b	#GameMode_SegaScreen,(Game_mode).w	;
-;		rts						; Liliam: bugfix - sprite draw bug
-		jmp	(Draw_Sprite).l				;
+		jmp	(Draw_Sprite).l				; Liliam: bugfix - sprite draw bug
+;		rts						;
 ; ---------------------------------------------------------------------------
 
 Obj_EndingEyecatch_Sonic:
@@ -140953,23 +140969,24 @@ Obj_EndingEyecatch_Sonic:
 		bclr	#2,render_flags(a0)
 		move.l	#loc_5F376,(a0)
 		lea	byte_5F36E(pc),a1
-		bsr.w	Ending_SetEyecatchPosition
-		lea	(Pal_SonicTails).l,a1
-		lea	(Target_palette).w,a2
-		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d6
+		bra.w	Ending_SetEyecatchPosition						; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		bsr.w	Ending_SetEyecatchPosition						;
+;		lea	(Pal_SonicTails).l,a1							;
+;		lea	(Target_palette).w,a2							;
+;		moveq	#bytesToLcnt(Target_palette_line_2-Target_palette),d6			;
 
-loc_5F346:
-		move.l	(a1)+,(a2)+
-		dbf	d6,loc_5F346
-		jsr	(AllocateObject).l
-		bne.s	locret_5F36C
-		move.l	#Obj_FadeSelectedToWhite,(a1)
-		move.w	#Normal_palette+2,$30(a1)
-		move.w	#Target_palette+2,$32(a1)
-		move.w	#bytesToWcnt(Normal_palette_line_2-(Normal_palette+2)),$3A(a1)
+;loc_5F346:
+;		move.l	(a1)+,(a2)+								;
+;		dbf	d6,loc_5F346								;
+;		jsr	(AllocateObject).l							;
+;		bne.s	locret_5F36C								;
+;		move.l	#Obj_FadeSelectedToWhite,(a1)						;
+;		move.w	#Normal_palette+2,$30(a1)						;
+;		move.w	#Target_palette+2,$32(a1)						;
+;		move.w	#bytesToWcnt(Normal_palette_line_2-(Normal_palette+2)),$3A(a1)		;
 
-locret_5F36C:
-		rts
+;locret_5F36C:
+;		rts										;
 ; ---------------------------------------------------------------------------
 byte_5F36E:
 		dc.b    0, $40
@@ -141041,23 +141058,24 @@ Obj_EndingEyecatch_Knuckles:
 		bclr	#2,render_flags(a0)
 		move.l	#loc_5F46A,(a0)
 		lea	byte_5F462(pc),a1
-		bsr.w	Ending_SetEyecatchPosition
-		lea	(Pal_EndingEyecatchKnuckles).l,a1
-		lea	(Target_palette_line_3).w,a2
-		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_3),d6
+		bra.w	Ending_SetEyecatchPosition						; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		bsr.w	Ending_SetEyecatchPosition						;
+;		lea	(Pal_EndingEyecatchKnuckles).l,a1					;
+;		lea	(Target_palette_line_3).w,a2						;
+;		moveq	#bytesToLcnt(Target_palette_line_4-Target_palette_line_3),d6		;
 
-loc_5F43A:
-		move.l	(a1)+,(a2)+
-		dbf	d6,loc_5F43A
-		jsr	(AllocateObject).l
-		bne.s	locret_5F460
-		move.l	#Obj_FadeSelectedToWhite,(a1)
-		move.w	#Normal_palette_line_3+2,$30(a1)
-		move.w	#Target_palette_line_3+2,$32(a1)
-		move.w	#bytesToWcnt(Normal_palette_line_4-(Normal_palette_line_3+2)),$3A(a1)
+;loc_5F43A:
+;		move.l	(a1)+,(a2)+								;
+;		dbf	d6,loc_5F43A								;
+;		jsr	(AllocateObject).l							;
+;		bne.s	locret_5F460								;
+;		move.l	#Obj_FadeSelectedToWhite,(a1)						;
+;		move.w	#Normal_palette_line_3+2,$30(a1)					;
+;		move.w	#Target_palette_line_3+2,$32(a1)					;
+;		move.w	#bytesToWcnt(Normal_palette_line_4-(Normal_palette_line_3+2)),$3A(a1)	;
 
-locret_5F460:
-		rts
+;locret_5F460:
+;		rts										;
 ; ---------------------------------------------------------------------------
 byte_5F462:
 		dc.b -$20, $2C					; Liliam: ending - add 'Unlocked' branding
@@ -141118,6 +141136,11 @@ Obj_EndingS3LogoTM:
 		lea	ObjDat3_60130(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		bclr	#2,render_flags(a0)
+		tst.b	subtype(a0)								; Liliam: ending - use S3 logo eyecatch for Encore mode
+		beq.s	loc_5F512								;
+		andi.w	#high_priority|tile_mask,art_tile(a0)					;
+
+loc_5F512:
 		move.l	#Child_Draw_Sprite,(a0)
 		lea	byte_5F520(pc),a1
 		bra.w	Ending_SetLogoChildPosition
@@ -141896,13 +141919,16 @@ Obj_EndingEyecatch_S3Sprites:
 loc_5FD66:
 		subq.w	#1,$2E(a0)
 		bpl.w	locret_5FF1A
-		jsr	(AllocateObject).l
-		bne.s	loc_5FD82
-		move.l	#Obj_EndingEyecatch_S3Logo,(a1)
-;		move.b	#4,subtype(a1)				; Liliam: removed dead code
+		move.l	#Obj_EndingEyecatch_S3Logo,(a0)						; Liliam: ending - use S3 logo eyecatch for Encore mode
+		move.w	#VDP_Plane_B|(VRAM_Plane_A_Name_Table>>13),(VDP_control_port).l		;
+		rts										;
+;		jsr	(AllocateObject).l							;
+;		bne.s	loc_5FD82								;
+;		move.l	#Obj_EndingEyecatch_S3Logo,(a1)						;
+;		move.b	#4,subtype(a1)								;
 
-loc_5FD82:
-		jmp	(Delete_Current_Sprite).l
+;loc_5FD82:
+;		jmp	(Delete_Current_Sprite).l						;
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -142350,12 +142376,14 @@ ObjDat3_6013C:
 		dc.b  $20,   4,   0,   0
 ObjDat3_60148:
 		dc.l Map_ANDKnuckles
-		dc.w make_art_tile(ArtTile_Ending_ANDKnuckles,1,1)
+		dc.w make_art_tile(ArtTile_Ending_ANDKnuckles,0,1)				; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		dc.w make_art_tile(ArtTile_Ending_ANDKnuckles,1,1)				;
 		dc.w   $300
 		dc.b  $38,   8,   1,   0
 ObjDat3_60154:
 		dc.l Map_S3EndingGraphics
-		dc.w make_art_tile(ArtTile_Ending_S3Sprites,1,1)
+		dc.w make_art_tile(ArtTile_Ending_S3Sprites,0,1)				; Liliam: ending - use S3 logo eyecatch for Encore mode
+;		dc.w make_art_tile(ArtTile_Ending_S3Sprites,1,1)				;
 		dc.w   $180
 		dc.b  $50, $50,   0,   0
 word_60160:
@@ -142524,8 +142552,6 @@ Map_SonicPlaneEnding:
 		; Liliam: removed S&K alone mode
 Map_S3PoseBanner:
 		include "General/Ending/Map - Sonic 3 Pose Banner.asm"
-Map_S3EndingGraphics:						; Liliam: reinsert S3 data
-		include "General/Ending/Map - S3 Ending Graphics.asm"
 Map_IslandLiftGfx:
 		include "General/Ending/Map - Island Lift Sprites.asm"
 Map_EndingAnimals:
@@ -142536,6 +142562,9 @@ Map_EndingPoses:
 Map_ANDKnuckles:
 		; Liliam: ending - add 'Unlocked' branding
 		include "General/Ending/Map - ANDKnuckles Subtitle.asm"
+Map_S3EndingGraphics:						; Liliam: reinsert S3 data
+		; Liliam: ending - use S3 logo eyecatch for Encore mode
+		include "General/Ending/Map - S3 Ending Graphics.asm"
 Map_EndingEyecatchEggRobo:
 		include "General/Ending/Map - Ending Egg Robo Eyecatch.asm"
 Map_EndingEyecatchEggman:
@@ -142552,7 +142581,7 @@ Pal_S3Credits:							; Liliam: ported from S3 - restore staff roll
 ;Pal_EndingSKLogo:
 		; Liliam: removed S&K alone mode
 Pal_EndingS3KLogo:
-		; Liliam: blue sphere - use S3 branding
+		; Liliam: ending - use S3 logo eyecatch for Encore mode
 		binclude "General/Ending/Palettes/S3K Logo.bin"
 		even
 Pal_EndingEyecatchKnuckles:
@@ -221760,7 +221789,7 @@ ArtKosM_KnuxEnding:
 ArtKosM_S3PoseBanner:
 		binclude "General/Ending/KosinskiM Art/Sonic 3 Pose Banner.bin"
 		even
-ArtKosM_S3EndingGraphics:						; Liliam: ending - use S3 logo eyecatch for Encore mode
+ArtKosM_S3EndingGraphics:									; Liliam: ending - use S3 logo eyecatch for Encore mode
 		binclude "General/Ending/KosinskiM Art/Sonic 3 Ending Graphics.bin"
 		even
 ArtUnc_KnuxIntroLay:

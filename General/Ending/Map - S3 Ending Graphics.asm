@@ -34,60 +34,60 @@ Frame_2417AC:	dc.w $10
 		dc.b  $18,   1,   0, $9F, $FF, $F0
 		dc.b  $28,   6,   0, $A1, $FF, $E8
 Frame_24180E:	dc.w 3
-		dc.b  $EC,  $B,   0, $A7, $FF, $F4
-		dc.b  $F4,   1,   0, $B3,   0,  $C
-		dc.b   $C,   8,   0, $B5, $FF, $FC
+		dc.b  $EC,  $B, $20, $A7, $FF, $F4
+		dc.b  $F4,   1, $20, $B3,   0,  $C
+		dc.b   $C,   8, $20, $B5, $FF, $FC
 Frame_241822:	dc.w 3
-		dc.b  $EC,  $B,   0, $A7, $FF, $F4
-		dc.b  $F4,   1,   0, $B3,   0,  $C
-		dc.b   $C,   8,   0, $B8, $FF, $FC
+		dc.b  $EC,  $B, $20, $A7, $FF, $F4
+		dc.b  $F4,   1, $20, $B3,   0,  $C
+		dc.b   $C,   8, $20, $B8, $FF, $FC
 Frame_241836:	dc.w 4
-		dc.b  $F4,   0,   0, $BB, $FF, $EC
-		dc.b  $EC,   9,   0, $BC, $FF, $F4
-		dc.b  $FC,  $D,   0, $C2, $FF, $F4
-		dc.b   $C,   4,   0, $CA, $FF, $FC
+		dc.b  $F4,   0, $20, $BB, $FF, $EC
+		dc.b  $EC,   9, $20, $BC, $FF, $F4
+		dc.b  $FC,  $D, $20, $C2, $FF, $F4
+		dc.b   $C,   4, $20, $CA, $FF, $FC
 Frame_241850:	dc.w 3
-		dc.b  $F4,   0,   0, $CC, $FF, $EC
-		dc.b  $EC,  $E,   0, $CD, $FF, $F4
-		dc.b    4,   9,   0, $D9, $FF, $F4
+		dc.b  $F4,   0, $20, $CC, $FF, $EC
+		dc.b  $EC,  $E, $20, $CD, $FF, $F4
+		dc.b    4,   9, $20, $D9, $FF, $F4
 Frame_241864:	dc.w 1
-		dc.b  $F4,   6,   0, $DF, $FF, $FC
+		dc.b  $F4,   6, $40, $DF, $FF, $FC
 Frame_24186C:	dc.w 2
-		dc.b  $F4,   0,   0, $E5,   0,   4
-		dc.b  $FC,   9,   0, $E6, $FF, $F4
+		dc.b  $F4,   0, $40, $E5,   0,   4
+		dc.b  $FC,   9, $40, $E6, $FF, $F4
 Frame_24187A:	dc.w 2
-		dc.b  $F4,   4,   0, $EC, $FF, $FC
-		dc.b  $FC,   9,   0, $EE, $FF, $F4
+		dc.b  $F4,   4, $40, $EC, $FF, $FC
+		dc.b  $FC,   9, $40, $EE, $FF, $F4
 Frame_241888:	dc.w 1
-		dc.b  $FC,   9,   0, $F4, $FF, $F4
+		dc.b  $FC,   9, $40, $F4, $FF, $F4
 Frame_241890:	dc.w 2
-		dc.b  $F4,   4,   0, $FA, $FF, $FC
-		dc.b  $FC,   9,   0, $FC, $FF, $F4
+		dc.b  $F4,   4, $40, $FA, $FF, $FC
+		dc.b  $FC,   9, $40, $FC, $FF, $F4
 Frame_24189E:	dc.w 2
-		dc.b  $EC,   0,   1,   2, $FF, $F4
-		dc.b  $F4,  $B,   1,   3, $FF, $F4
+		dc.b  $EC,   0, $41,   2, $FF, $F4
+		dc.b  $F4,  $B, $41,   3, $FF, $F4
 Frame_2418AC:	dc.w 2
-		dc.b  $EC,   0,   1,   2, $FF, $F4
-		dc.b  $F4,  $B,   1,  $F, $FF, $F4
+		dc.b  $EC,   0, $41,   2, $FF, $F4
+		dc.b  $F4,  $B, $41,  $F, $FF, $F4
 Frame_2418BA:	dc.w 5
-		dc.b  $E4,   0,   1, $1B, $FF, $FC
-		dc.b  $EC,  $F,   1, $1C, $FF, $EC
-		dc.b  $EC,   2,   1, $2C,   0,  $C
-		dc.b   $C,  $D,   1, $2F, $FF, $EC
-		dc.b  $14,   0,   1, $37,   0,  $C
+		dc.b  $E4,   0, $41, $1B, $FF, $FC
+		dc.b  $EC,  $F, $41, $1C, $FF, $EC
+		dc.b  $EC,   2, $41, $2C,   0,  $C
+		dc.b   $C,  $D, $41, $2F, $FF, $EC
+		dc.b  $14,   0, $41, $37,   0,  $C
 Frame_2418DA:	dc.w 5
-		dc.b  $E4,   0,   1, $38, $FF, $FC
-		dc.b  $EC,  $F,   1, $39, $FF, $EC
-		dc.b  $F4,   1,   1, $49,   0,  $C
-		dc.b   $C,  $D,   1, $4B, $FF, $EC
-		dc.b  $14,   0,   1, $37,   0,  $C
+		dc.b  $E4,   0, $41, $38, $FF, $FC
+		dc.b  $EC,  $F, $41, $39, $FF, $EC
+		dc.b  $F4,   1, $41, $49,   0,  $C
+		dc.b   $C,  $D, $41, $4B, $FF, $EC
+		dc.b  $14,   0, $41, $37,   0,  $C
 Frame_2418FA:	dc.w 2
-		dc.b  $EC,   9,   1, $53, $FF, $F0
-		dc.b  $FC,  $E,   1, $59, $FF, $F0
+		dc.b  $EC,   9, $41, $53, $FF, $F0
+		dc.b  $FC,  $E, $41, $59, $FF, $F0
 Frame_241908:	dc.w 2
-		dc.b  $EC,   9,   1, $53, $FF, $F0
-		dc.b  $FC,  $E,   1, $65, $FF, $F0
+		dc.b  $EC,   9, $41, $53, $FF, $F0
+		dc.b  $FC,  $E, $41, $65, $FF, $F0
 Frame_241916:	dc.w 3
-		dc.b  $EC,  $B,   1, $71, $FF, $F0
-		dc.b  $F4,   1,   1, $7D,   0,   8
-		dc.b   $C,  $C,   1, $7F, $FF, $F0
+		dc.b  $EC,  $B, $41, $71, $FF, $F0
+		dc.b  $F4,   1, $41, $7D,   0,   8
+		dc.b   $C,  $C, $41, $7F, $FF, $F0
