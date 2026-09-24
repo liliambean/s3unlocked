@@ -9,7 +9,7 @@
 		dc.l Obj_Spikes				; 8
 		dc.l Obj_AIZ1Tree			; 9
 		dc.l Obj_AIZ1ZiplinePeg			; 10
-		dc.l Obj_HCZFBZSpikeBlock		; 11	; Liliam: spikes - allow Metal Sonic destruction
+		dc.l Obj_Ring				; 11
 		dc.l Obj_AIZGiantRideVine		; 12
 		dc.l Obj_BreakableWall			; 13
 		dc.l Obj_TwistedRamp			; 14
@@ -220,8 +220,8 @@
 		dc.l Obj_Ring				; 219
 		dc.l Obj_Ring				; 220
 		dc.l Obj_Ring				; 221
-		dc.l Obj_Ring				; 222
-		dc.l Obj_Ring				; 223
+		dc.l Obj_HCZFBZSpikeBlock		; 222	; Liliam: spikes - allow Metal Sonic destruction
+		dc.l Obj_FBZMagneticPendulum		; 223	;
 		dc.l Obj_FBZWallMissile			; 224
 		dc.l Obj_FBZMine			; 225
 		dc.l Obj_FBZElevator			; 226
@@ -236,21 +236,3 @@
 		dc.l Obj_Ring				; 235	;
 		dc.l Obj_PachinkoMagnetOrb		; 236
 		dc.l Obj_PachinkoItemOrb		; 237
-		dc.l Obj_Ring				; 238
-		dc.l Obj_Ring				; 239
-		dc.l Obj_Ring				; 240
-		dc.l Obj_Ring				; 241
-		dc.l Obj_Ring				; 242
-		dc.l Obj_Ring				; 243
-		dc.l Obj_Ring				; 244
-		dc.l Obj_Ring				; 245
-		dc.l Obj_Ring				; 246
-		dc.l Obj_Ring				; 247
-		dc.l Obj_Ring				; 248
-		dc.l Obj_Ring				; 249
-		dc.l Obj_Ring				; 250
-		dc.l Obj_Ring				; 251
-		dc.l Obj_Ring				; 252
-		dc.l Obj_Ring				; 253
-		dc.l Obj_Ring				; 254
-		dc.l Obj_FBZMagneticPendulum		; 255
