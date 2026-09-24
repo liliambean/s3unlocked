@@ -52768,6 +52768,9 @@ loc_21928:
 		move.l	#loc_21692,(a0)
 		addq.b	#1,mapping_frame(a0)
 		bsr.w	BreakObjectToPieces
+		cmpi.w	#$301,(Current_zone_and_act).w		; Liliam: Knuckles route fixup
+		bne.w	BreakableWall_ReleasePlayers		;
+		move.w	#$C40,(Target_water_level).w		;
 		bra.w	BreakableWall_ReleasePlayers		; Liliam: bugfix - release player from object
 ;		bra.w	loc_21692				;
 ; End of function sub_218CE
@@ -119051,12 +119054,26 @@ CNZ1_BGDeformArray:
 
 CNZ2_ScreenInit:
 		tst.b	(Saved2_last_star_post_hit).w		; Liliam: cutscene skip - CNZ2 blackout
-		bpl.s	loc_52108				;
+		bpl.s	.checkLayoutMod				;
 		bclr	#7,(Saved2_last_star_post_hit).w	;
 		jsr	(AllocateObject).l			;
-		bne.s	loc_52108				;
+		bne.s	.checkLayoutMod				;
 		move.w	#$18,(Special_events_routine).w		;
 		st	(_unkFAA3).w				;
+
+	.checkLayoutMod:
+		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
+		beq.s	loc_52108							;
+		movea.w	(Level_layout_main+$40).w,a1					;
+		lea	$8E(a1),a1							;
+		move.w	(Level_layout_header).w,d0					;
+		move.b	#$14,(a1)							;
+		adda.w	d0,a1								;
+		move.b	#$F,(a1)							;
+		adda.w	d0,a1								;
+		move.b	#$F,(a1)							;
+		adda.w	d0,a1								;
+		move.b	#$88,(a1)							;
 
 loc_52108:
 		jsr	Reset_TileOffsetPositionActual(pc)
