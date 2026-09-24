@@ -7179,7 +7179,7 @@ loc_6268:
 		tst.w	(Competition_mode).w			; Liliam: QOL - fade in player palette if title card suppressed
 		bne.s	loc_62CC				;
 		cmpi.w	#$D01,(Apparent_zone_and_act).w		;
-		beq.s	loc_62CC				;
+		beq.s	loc_62FE				;
 		cmpi.w	#$1701,(Current_zone_and_act).w
 		beq.s	loc_62FE
 		tst.b	(Act3_flag).w
@@ -7204,11 +7204,11 @@ loc_62CC:
 		bne.s	loc_62CC
 		tst.l	(Nem_decomp_queue).w
 		bne.s	loc_62CC
+		tst.w	(Competition_mode).w				; Liliam: HUD - Encore mode HUD
+		bne.s	loc_6310					;
 
 loc_62FE:
-		tst.w	(Competition_mode).w			; Liliam: title cards - keep power-ups if suppressed
-		bne.s	loc_6310				;
-;		clr.b	(Act3_flag).w				;
+;		clr.b	(Act3_flag).w				; Liliam: title cards - keep power-ups if suppressed
 		move	#$2700,sr
 		jsr	(HUD_DrawInitial).l
 		move.b	#1,(Update_HUD_life_count).w			; Liliam: HUD - Encore mode HUD
@@ -9367,7 +9367,6 @@ LoadLevel_ReloadTitleCardPLCs:					; Liliam: Encore mode - restart level
 		bsr.s	Load_PLC_MonitorsSpikesSprings
 		jsr	(LoadEnemyArt).l
 		jsr	(PLCLoad_AnimalsAndExplosion).l
-		clr.b	(Respawn_table_keep).w
 		bra.w	loc_7870
 
 ; =============== S U B R O U T I N E =======================================
@@ -9484,8 +9483,8 @@ loc_78CA:
 loc_78F2:
 		move.b	#1,(Water_flag).w
 		move.w	#0,(Competition_mode).w
-		tst.b	(Water_flag).w
-		beq.s	LoadWaterPalette
+;		tst.b	(Water_flag).w			; Liliam: ???
+;		beq.s	LoadWaterPalette		;
 		move.w	#$4EF9,(H_int_jump).w
 		move.l	#HInt2,(H_int_addr).w
 		cmpi.b	#1,(Current_zone).w
@@ -9783,6 +9782,7 @@ loc_7BF4:
 		clr.b	(Last_star_post_hit).w
 		clr.b	(Saved_last_star_post_hit).w		; Liliam: title screen - quick return by pressing B
 		clr.b	(Special_bonus_entry_flag).w
+		clr.b	(Respawn_table_keep).w			; Liliam: cutscene skip object
 		clr.b	(Blue_spheres_stage_flag).w
 		clr.w	(Debug_mode_flag).w			; Liliam: level select - access all special stages from act 1
 ;		nop						;
@@ -198462,6 +198462,7 @@ CutsceneSkip_RestartLevel:
 		move.b	#1,(Act3_flag).w
 		move.b	#1,(Special_bonus_entry_flag).w
 		st	(Respawn_table_keep).w
+		clr.b	(Cutscene_Knux_addr).w
 		clr.w	(Slotted_object_bits).w
 		jmp	(Save_Level_Data2).l
 ; ---------------------------------------------------------------------------
@@ -198577,6 +198578,7 @@ loc_85E3A:
 		move.w	#1,(Restart_level_flag).w
 		clr.b	(Last_star_post_hit).w
 		clr.b	(Special_bonus_entry_flag).w
+		clr.b	(Respawn_table_keep).w			; Liliam: cutscene skip object
 		rts
 ; End of function StartNewLevel
 
@@ -199356,12 +199358,12 @@ StartNewLevel_HPZ:						; Liliam: HPZ - improve transition from LRZ2
 		move.w	#1,(Restart_level_flag).w
 		clr.b	(Last_star_post_hit).w
 		clr.b	(Special_bonus_entry_flag).w
+		clr.b	(Respawn_table_keep).w
 		st	(Act3_flag).w
 		btst	#Status_Invincible,status_secondary(a1)
 		beq.s	loc_863F0
 		move.b	#1,(Act3_flag).w
 		rts
-; ---------------------------------------------------------------------------
 ; ---------------------------------------------------------------------------
 ;word_86426:
 		; Liliam: HPZ - improve transition from LRZ2
