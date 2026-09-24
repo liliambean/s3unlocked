@@ -144698,7 +144698,7 @@ locret_624BA:
 ; ---------------------------------------------------------------------------
 
 loc_624BC:
-		jsr	(Delete_Current_Sprite).l		; Liliam: cutscene skip - CNZ2 blackout
+		move.l	#Delete_Current_Sprite,(a0)		; Liliam: cutscene skip - CNZ2 blackout
 		tst.b	subtype(a0)
 		beq.s	loc_624CA
 		lea	(Pal_CNZ_Encore+$20).l,a1		; Liliam: Encore mode - palette
