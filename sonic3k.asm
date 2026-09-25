@@ -223161,13 +223161,13 @@ ArtNem_Seal:
 ArtNem_Pig:
 		binclude "General/Sprites/Animals/Pig.bin"
 		even
-ArtNem_BlueFlicky:
+ArtNem_BlueFlicky = *+1					; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Animals/Blue Flicky.bin"
 		even
-ArtNem_Chicken:
+ArtNem_Chicken = *+1					; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Animals/Chicken.bin"
 		even
-ArtNem_Penguin:
+ArtNem_Penguin = *+1					; Liliam: convert to 1P Ray palette
 		binclude "General/Sprites/Animals/Penguin.bin"
 		even
 ArtNem_Squirrel:
