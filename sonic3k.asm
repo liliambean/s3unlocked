@@ -164581,7 +164581,7 @@ loc_6FF50:
 		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
 		move.w	#$2C80,d0				; Liliam: camera - fix FBZ2 boss entry lock
 		cmp.w	(Camera_min_X_pos).w,d0			;
-		bhi.s	locret_6FF32				;
+		bhi.s	loc_6FFAA				;
 		move.w	d0,(Camera_min_X_pos).w			;
 		jmp	(Go_Delete_Sprite).l			;
 ;		jmp	(Sprite_CheckDeleteXY).l		;
