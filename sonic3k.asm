@@ -118586,7 +118586,7 @@ loc_51BAA:
 		moveq	#0,d1
 		clr.w	(Events_bg+$04).w
 		moveq	#4-1,d3
-		addi.w	#$260,d5				; Liliam: CNZ1 boss - resize level on line clear
+		addi.w	#$258,d5				; Liliam: CNZ1 boss - raise entry lock
 		cmp.w	(Camera_target_max_Y_pos).w,d5		;
 		bls.s	loc_51C38				;
 		move.w	d5,(Camera_target_max_Y_pos).w		;
@@ -118660,6 +118660,9 @@ CNZ1BGE_Normal:
 		sub.w	d0,(Player_2+y_pos).w
 		sub.w	d0,(Camera_Y_pos).w
 		sub.w	d0,(Camera_Y_pos_copy).w
+		move.w	d0,d1					; Liliam: bugfix - offset power-ups along with players
+		moveq	#0,d0					;
+		jsr	Offset_SomeObjectsDuringTransition(pc)	;
 		jsr	Reset_TileOffsetPositionActual(pc)
 
 loc_51CD2:
@@ -118668,7 +118671,7 @@ loc_51CD2:
 		lea	(Pal_CNZMiniboss).l,a1
 		jsr	(PalLoad_Line1).l
 		move.w	#$2F80,(Camera_min_X_pos).w		; Liliam: camera - fix CNZ1 boss entry lock
-		move.w	#$260,d0				; Liliam: CNZ1 boss - raise entry lock
+		move.w	#$258,d0				; Liliam: CNZ1 boss - raise entry lock
 		move.w	d0,(Camera_max_Y_pos).w			;
 		move.w	d0,(Camera_target_max_Y_pos).w		;
 		move.w	#$1C0,d0
@@ -118720,7 +118723,10 @@ CNZ1BGE_AfterBoss:
 		jsr	CNZ1_BossLevelScroll2(pc)
 		jsr	DrawBGAsYouMove(pc)
 		jsr	PlainDeformation(pc)
-		jmp	Get_BGActualEffectiveDiff(pc)
+;		jmp	Get_BGActualEffectiveDiff(pc)		; Liliam: camera - fix CNZ1 end lock
+		jsr	Get_BGActualEffectiveDiff(pc)		;
+		subq.w	#1,(Camera_Y_diff).w			;
+		rts						;
 ; ---------------------------------------------------------------------------
 
 loc_51D6E:
@@ -119046,27 +119052,25 @@ loc_520C0:
 		adda.w	d0,a1
 		dbf	d2,loc_520C0
 		addq.b	#4,routine(a0)
-		rts						; Liliam: camera - fix CNZ1 end lock
 
 Obj_CNZMinibossScrollWait3:
-		cmpi.w	#$1C0,(Events_bg+$08).w		; Wait till scroll offset is $1C0
-		bhs.s	loc_520DE
+;		cmpi.w	#$1C0,(Events_bg+$08).w			; Liliam: camera - fix CNZ1 end lock
+;		bhs.s	loc_520DE				;
 		move.l	(Events_bg+$0C).w,d0
 		add.l	d0,(Events_bg+$08).w
-		move.w	#$400,d0				; Liliam: camera - fix CNZ1 end lock
+		move.w	#$400,d0				;
 		sub.w	(Events_bg+$08).w,d0			;
 		move.w	d0,(Camera_target_max_Y_pos).w		;
 		cmp.w	(Camera_Y_pos).w,d0			;
-		bhs.s	locret_520DC				;
+		bhs.s	loc_520DE				;
 		move.w	d0,(Camera_max_Y_pos).w			;
 		move.w	d0,(Camera_Y_pos).w			;
-
-locret_520DC:
-		rts
-; ---------------------------------------------------------------------------
+;		rts						;
 
 loc_520DE:
-		st	(Events_fg_5).w				; Set flag to continue next BG event
+		cmpi.w	#$1C0,(Events_bg+$08).w			;
+		blo.s	locret_520FC				;
+		st	(Events_fg_5).w
 		jmp	(Delete_Current_Sprite).l
 
 ; =============== S U B R O U T I N E =======================================
