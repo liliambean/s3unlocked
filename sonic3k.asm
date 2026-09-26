@@ -68172,9 +68172,12 @@ loc_2C444:
 loc_2C44E:
 		jsr	(RideObject_SetRide).l
 		move.b	#$80,flip_type(a1)
-		tst.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
-		beq.s	loc_2C460				;
-		clr.b	double_jump_flag(a1)			;
+		move.w	y_pos(a0),d0				; Liliam: bugfix - fix stuck animation
+		cmp.w	y_pos(a1),d0				;
+		bpl.s	LBZRollingDrum_CheckDoubleJump		;
+		move.b	#$80,flip_angle(a1)			;
+
+loc_2C45A:
 		clr.b	anim(a1)				;
 ;		move.w	#1,anim(a1)				;
 
@@ -68185,6 +68188,13 @@ loc_2C460:
 
 locret_2C46C:
 		rts
+; ---------------------------------------------------------------------------
+
+LBZRollingDrum_CheckDoubleJump:					; Liliam: allow glide-landing on objects
+		tst.b	double_jump_flag(a1)
+		beq.s	loc_2C460
+		clr.b	double_jump_flag(a1)
+		bra.s	loc_2C45A
 ; ---------------------------------------------------------------------------
 
 loc_2C46E:
