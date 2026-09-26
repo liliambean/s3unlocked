@@ -97296,7 +97296,7 @@ sub_42EC0:
 loc_42ED0:
 		bsr.s	ExplodingTrigger_LoadArray		; Liliam: hyper touch - stop bouncing players on defeat
 		bset	d3,(a3)
-		jsr	(Respawn_Sprite).l			; Liliam: bugfix - prevent deadlock
+		jsr	(Respawn_SpriteAndChildren).l		; Liliam: bugfix - prevent deadlock
 		move.l	#Obj_LRZShootingTrigger_Delete,(a0)	;
 ;		move.l	#Obj_Explosion,(a0)			;
 		move.b	#2,routine(a0)
