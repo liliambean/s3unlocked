@@ -173152,6 +173152,8 @@ Obj_MHZMiniboss_EndScroll:					; Liliam: camera - allow misaligned MHZ2 start
 	.loop:
 		tst.l	(a1)
 		beq.s	.next
+		cmpi.l	#Obj_BouncingRing,(a1)
+		beq.s	.next
 		cmpi.w	#$4400,x_pos(a1)
 		blo.s	.next
 		subi.w	#$200,x_pos(a1)
