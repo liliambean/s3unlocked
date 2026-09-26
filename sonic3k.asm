@@ -41385,7 +41385,12 @@ loc_1A7B6:
 		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
 		bne.s	.wrapHorizontal				;
 		move.w	(Screen_Y_wrap_value).w,d0		;
-		and.w	d0,y_pos(a0)				;
+		and.w	y_pos(a0),d0				;
+		cmp.w	y_pos(a0),d0				;
+		beq.s	.wrapHorizontal				;
+		tst.b	render_flags(a0)			;
+		bpl.w	Delete_Current_Sprite			;
+		move.w	d0,y_pos(a0)				;
 
 	.wrapHorizontal:
 		move.w	(Level_repeat_offset).w,d0
@@ -41501,7 +41506,12 @@ loc_1A842:
 		cmpi.w	#-$100,(Camera_min_Y_pos).w		; Liliam: bugfix - vertical wrapping
 		bne.s	.wrapHorizontal				;
 		move.w	(Screen_Y_wrap_value).w,d0		;
-		and.w	d0,y_pos(a0)				;
+		and.w	y_pos(a0),d0				;
+		cmp.w	y_pos(a0),d0				;
+		beq.s	.wrapHorizontal				;
+		tst.b	render_flags(a0)			;
+		bpl.w	Delete_Current_Sprite			;
+		move.w	d0,y_pos(a0)				;
 
 	.wrapHorizontal:
 		move.w	(Level_repeat_offset).w,d0
