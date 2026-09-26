@@ -60463,6 +60463,7 @@ locret_26FD2:
 
 loc_26FD4:
 		bclr	d6,status(a0)		; Release player if offscreen somehow
+		bset	#Status_InAir,status(a1)		; Liliam: bugfix - release player from object
 		bclr	#Status_OnObj,status(a1)
 		move.w	#$100,priority(a1)
 		clr.b	object_control(a1)
@@ -60476,6 +60477,7 @@ loc_26FF4:
 		move.w	y_pos(a0),d0
 		subi.w	#$10,d0
 		move.w	d0,y_pos(a1)
+		bclr	#Status_InAir,status(a1)		; Liliam: bugfix - clear airborne flag for camera
 		move.w	#$280,priority(a1)	; Set character priority
 		move.b	angle(a0),d0
 		addi.b	#$20,d0
