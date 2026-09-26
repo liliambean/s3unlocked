@@ -44254,16 +44254,16 @@ loc_1BE9E:
 ;		cmpi.w	#2,(Player_mode).w			;
 ;		bhs.s	loc_1BEC6				;
 
-		move.w	#$A0,d1				; Liliam: bugfix - remove hiccup in Sonic's intro
+		move.w	#$A0,(Player_1+x_pos).w		; Liliam: bugfix - remove hiccup in Sonic's intro
 ;		move.w	#$40,d1				;
-		move.w	d1,(Player_1+x_pos).w
-		move.w	#$440,d0				; Liliam: AIZ intro - add spark trail
-;		move.w	#$420,d0				;
+;		move.w	d1,(Player_1+x_pos).w		;
+;		move.w	#$420,d0				; Liliam: AIZ intro - add spark trail
+		move.w	#$440,d0				;
 		move.w	d0,(Player_1+y_pos).w
 		move.w	#0,d1
 		move.w	d1,(Camera_min_X_pos).w
-		move.w	d1,(Camera_target_min_X_pos).w
-		move.w	d1,(Camera_min_X_pos_P2).w
+;		move.w	d1,(Camera_target_min_X_pos).w		;
+;		move.w	d1,(Camera_min_X_pos_P2).w		;
 
 loc_1BEC6:
 		cmpi.w	#$500,(Current_zone_and_act).w
@@ -44296,7 +44296,7 @@ loc_1BED8:
 ;		move.w	d0,(Camera_target_min_Y_pos).w			;
 ;		move.w	d0,(Camera_min_Y_pos_P2).w			;
 		move.w	d0,(Camera_Y_pos).w
-		move.w	d0,(Camera_Y_pos_P2).w
+;		move.w	d0,(Camera_Y_pos_P2).w				;
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -44308,12 +44308,12 @@ loc_1BF1E:
 ;		cmpi.w	#3,(Player_mode).w			;
 ;		bhs.s	loc_1BF48				;
 		; Liliam: removed S&K alone mode
-		move.w	#$120,d2				; Liliam: improve Death Egg transition to MHZ
-;		move.w	#$C0,d2					;
-		move.w	d2,(Camera_min_X_pos).w
-		move.w	d2,(Camera_target_min_X_pos).w
-		move.w	d2,(Camera_min_X_pos_P2).w
+		move.w	#$120,(Camera_min_X_pos).w		; Liliam: improve Death Egg transition to MHZ
 		move.w	#$1C0,d1				;
+;		move.w	#$C0,d2					;
+;		move.w	d2,(Camera_min_X_pos).w			;
+;		move.w	d2,(Camera_target_min_X_pos).w		;
+;		move.w	d2,(Camera_min_X_pos_P2).w		;
 ;		move.w	#$160,d1				;
 
 loc_1BF48:
@@ -44355,7 +44355,7 @@ loc_1BF68:
 
 loc_1BF70:
 		addi.w	#$B0,d1		; Only if in Hidden Palace, in Death Egg 1, in Lava Reef 1 as Knuckles, in Carnival Night 1 as Knuckles
-							; This is likely for level intros that start behind the camera
+					; This is likely for level intros that start behind the camera
 
 loc_1BF74:
 		subi.w	#$A0,d1
@@ -45610,7 +45610,7 @@ loc_1C96E:
 		cmp.w	(Camera_X_pos).w,d0
 		bhi.s	MGZ2_VerticalCameraLock
 		move.w	d0,(Camera_min_X_pos).w
-		move.w	d0,(Camera_target_min_X_pos).w
+;		move.w	d0,(Camera_target_min_X_pos).w		;
 		jsr	(AllocateObject).l
 		bne.s	loc_1C9A2
 		move.l	#Obj_MGZEndBoss,(a1)
