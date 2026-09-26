@@ -52797,9 +52797,10 @@ loc_218B0:
 
 
 sub_218CE:
-		tst.w	x_vel(a1)				; Liliam: Encore mode - layouts
+		tst.w	d1					; Liliam: Encore mode - layouts
 		bne.s	.done					;
 		movea.l	$34(a0),a4				;
+		bclr	#Status_Push,status(a1)			;
 		move.w	x_pos(a0),d0				;
 		cmp.w	x_pos(a1),d0				;
 		blo.s	loc_21928				;
@@ -145886,7 +145887,8 @@ CutsceneKnux_MHZ2:
 ;		cmpi.b	#2,(Player_1+character_id).w		;
 		beq.s	loc_6311A
 		cmpi.b	#7,(Last_star_post_hit).w
-		bhs.w	CutsceneKnux_Delete
+		bhs.s	loc_6311A						; Liliam: place MHZ2 knux switch in layout
+;		bhs.w	CutsceneKnux_Delete					;
 		lea	word_630D0(pc),a1
 		jsr	(Check_CameraInRange).l
 		moveq	#0,d0
@@ -145902,6 +145904,7 @@ CutsceneKnux_MHZ2:
 loc_6311A:
 		lea	ChildObjDat_665BC(pc),a2
 		jsr	(CreateChild1_Normal).l
+		move.b	#2,subtype(a1)						; Liliam: place MHZ2 knux switch in layout
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
 CutsceneKnux_MHZ2_Index:
@@ -146058,23 +146061,24 @@ loc_632AE:
 ; ---------------------------------------------------------------------------
 		; Liliam: removed dead code
 
-loc_632CA:
+Obj_MHZKnuxSwitch:
 		lea	ObjDat3_66456(pc),a1
 		jsr	(SetUp_ObjAttributes).l
 		move.l	#loc_63308,(a0)
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
-		bne.s	loc_632F8
+		tst.b	subtype(a0)						; Liliam: place MHZ2 knux switch in layout
+		beq.s	loc_63308						;
+;		cmpi.b	#2,(Player_1+character_id).w				;
+;		bne.s	loc_632F8						;
 		move.l	#Sprite_OnScreen_Test,(a0)
-;		move.w	#make_art_tile(ArtTile_MHZKnuxSwitch,0,1),art_tile(a0)	; Liliam: cutscene knux - use level art for MHZ2 switch
+;		move.w	#make_art_tile(ArtTile_MHZKnuxSwitch,0,1),art_tile(a0)	;
 		movea.w	parent3(a0),a1
 		move.w	respawn_addr(a1),respawn_addr(a0)
 
-loc_632F8:
-		rts								;
+;loc_632F8:
 ;		lea	(ArtKosM_MHZKnuxSwitch).l,a1				;
 ;		move.w	#tiles_to_bytes(ArtTile_MHZKnuxSwitch),d2		;
 ;		jmp	(Queue_Kos_Module).l					;
+		jmp	(Sprite_OnScreen_Test).l				;
 ; ---------------------------------------------------------------------------
 
 loc_63308:
@@ -150811,7 +150815,7 @@ ObjDat_MHZ1CutsceneButton:
 		dc.b  $80, $80,   0,   0
 ObjDat3_66456:
 		dc.l Map_MHZKnuxSwitch
-		dc.w make_art_tile(ArtTile_MHZKnuxSwitch,0,1)			; Liliam: cutscene knux - use level art for MHZ2 switch
+		dc.w make_art_tile(ArtTile_MHZKnuxSwitch,0,1)			; Liliam: place MHZ2 knux switch in layout
 ;		dc.w make_art_tile(ArtTile_MHZKnuxSwitch,1,1)			;
 		dc.w   $300
 		dc.b  $10, $10,   0,   0
@@ -150973,7 +150977,7 @@ ChildObjDat_665B6:
 		dc.l loc_6300C
 ChildObjDat_665BC:
 		dc.w 1-1
-		dc.l loc_632CA
+		dc.l Obj_MHZKnuxSwitch
 		dc.b   -8,   0
 ChildObjDat_665C4:
 		dc.w 7-1
@@ -221988,7 +221992,7 @@ ArtUnc_MHZKnuxPress:
 		binclude "General/Sprites/Knuckles/Cutscene/MHZ2 Press.bin"
 		even
 ;ArtKosM_MHZKnuxSwitch:
-		; Liliam: cutscene knux - use level art for MHZ2 switch
+		; Liliam: place MHZ2 knux switch in layout
 ArtKosM_MHZEndBoss:
 		binclude "Levels/MHZ/KosinskiM Art/End Boss.bin"
 		even
