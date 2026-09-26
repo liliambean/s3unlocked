@@ -185668,6 +185668,13 @@ word_7DDA4:
 Obj_DEZMiniboss:
 		lea	word_7DDA4(pc),a1
 		jsr	(Check_CameraInRange).l
+		move.w	#$28C,d0				; Liliam: camera - fix DEZ1 boss entry lock
+		cmp.w	(Camera_Y_pos).w,d0			;
+		blo.s	loc_7DDBE				;
+		move.w	d0,(Camera_max_Y_pos).w			;
+		move.w	d0,(Camera_target_max_Y_pos).w		;
+
+loc_7DDBE:
 		move.b	#mus_Miniboss,boss_saved_mus(a0)
 		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
 		beq.s	loc_7DDC4				;
