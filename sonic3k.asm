@@ -24571,13 +24571,15 @@ Player_RecordPos:
 		bne.s	Player_RecordPosCompetition	; if so, branch
 		cmpa.w	#Player_1,a0			; is Sonic the sidekick?
 		bne.s	locret_10D9E			; if so, branch
+
+Debug_RecordPos:
 		move.w	(Pos_table_index).w,d0
 		lea	(Pos_table).w,a1
 		lea	(a1,d0.w),a1
 		move.w	x_pos(a0),(a1)+			; write location to pos_table
 		move.w	y_pos(a0),(a1)+
 		addq.b	#4,(Pos_table_index+1).w	; increment index as the post-increments did a1
-		lea	(Pos_table_P2).w,a1
+		lea	(Stat_table).w,a1
 		lea	(a1,d0.w),a1
 		move.w	(Ctrl_1_logical).w,(a1)+
 		move.b	status(a0),(a1)+
@@ -24617,7 +24619,7 @@ Reset_Player_Position_Array:
 		cmpa.w	#Player_1,a0			; is object player 1?
 		bne.s	Reset_Player_Position_ArrayP2	; if not, branch
 		lea	(Pos_table).w,a1
-		lea	(Pos_table_P2).w,a2
+		lea	(Stat_table).w,a2
 		move.w	#bytesToLcnt(Pos_table_end-Pos_table),d0
 		move.w	status(a0),d1				; Liliam: face left at left-facing star posts
 		andi.l	#1<<Status_Facing<<8,d1			;
@@ -219384,6 +219386,8 @@ loc_92A38:
 ;		move.w	(Screen_Y_wrap_value).w,d0		; Liliam: debug - properly apply camera boundaries
 ;		and.w	d0,(Player_1+y_pos).w			;
 ;		and.w	d0,(Camera_Y_pos).w			;
+		clr.w	(H_scroll_frame_offset).w		; Liliam: debug - stop player 2 endless jumping
+		clr.w	(Ctrl_1_logical).w			;
 		clr.b	(Scroll_lock).w
 		clr.b	(WindTunnel_flag).w				; Liliam: Encore mode - pick RAM variables by SST
 ;		clr.w	(WindTunnel_flag).w				;
@@ -219429,8 +219433,16 @@ loc_92AA0:
 		move.b	#1,(Debug_camera_speed).w
 
 loc_92AB0:
-		jsr	(Debug_ResetScroll).l			; Liliam: bugfix - recenter camera during object control
+		lea	(Player_2).w,a0				; Liliam: debug - stop player 2 endless jumping
+		jsr	(Debug_RecordPos).l			;
+		lea	(Player_1).w,a0				;
+		tst.b	(Tails_CPU_pos_table_offset).w		;
+		bmi.s	.done					;
+		move.b	#$43,(Tails_CPU_pos_table_offset).w	;
+
+	.done:
 		bset	#Status_InAir,status(a0)		; Liliam: debug - set airborne flag for camera
+		jsr	(Debug_ResetScroll).l			; Liliam: bugfix - recenter camera during object control
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#1,d0
