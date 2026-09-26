@@ -50938,13 +50938,17 @@ loc_1FE9E:
 		move.b	mapping_frame(a0),d0
 		cmpi.b	#9,(Current_zone).w
 		bne.s	loc_1FEBE
-		subi.b	#$A,d0					; Liliam: HPZ - improve transition from LRZ2
-		bpl.s	loc_1FEAC				;
+		tst.b	(Current_act).w				; Liliam: HPZ - improve transition from LRZ2
+		beq.s	loc_1FEAC				;
+		subi.b	#$A,d0					;
+		bpl.s	.nothighpriority			;
 		not.b	d0					;
 
-loc_1FEAC:
+	.nothighpriority:
 		addi.b	#$A,d0					;
 		move.b	d0,mapping_frame(a0)			;
+
+loc_1FEAC:
 		subq.b	#4,d0
 		move.l	#loc_1FC66,(a0)
 		add.w	d0,d0
