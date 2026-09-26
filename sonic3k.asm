@@ -45794,12 +45794,27 @@ LBZ2_Resize:
 		jmp	LBZ2_Resize_Index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 LBZ2_Resize_Index:
+		dc.w LBZ2_Resize1-LBZ2_Resize_Index		; Liliam: camera - fix LBZ2 boss entry lock
+		dc.w LBZ2_Resize2-LBZ2_Resize_Index		;
 		dc.w loc_1CA52-LBZ2_Resize_Index
 		dc.w locret_1CAAA-LBZ2_Resize_Index
 ; ---------------------------------------------------------------------------
 
+LBZ2_Resize1:
+		addq.b	#2,(Dynamic_resize_routine).w		; Liliam: camera - fix LBZ2 boss entry lock
+		tst.b	(Level_results_started).w		;
+		beq.s	LBZ2_Resize2.done			;
+
+LBZ2_Resize2:
+		cmpi.w	#$B20,(Camera_max_Y_pos).w		;
+		bne.s	locret_1CA3E				;
+		clr.b	(Level_results_done).w			;
+
+	.done:
+		addq.b	#2,(Dynamic_resize_routine).w		;
+
 loc_1CA52:
-		move.w	#$B20,d1				; Liliam: camera - fix LBZ2 boss entry lock
+		move.w	#$B20,d1				;
 		cmpi.w	#$3826,(Camera_X_pos).w			;
 		blo.s	locret_1CAA8				;
 		move.w	#$59C,d1				;
@@ -119201,7 +119216,7 @@ loc_521AA:
 loc_521BE:
 ;		move.w	#$4750,(Camera_min_X_pos).w		; Liliam: camera - fix CNZ2 Knuckles end lock
 ;		move.w	#$48E0,(Camera_max_X_pos).w		;
-		clr.b	(Level_results_done).w
+;		clr.b	(Level_results_done).w						; Liliam: Encore mode - FBZ level order
 		addq.w	#4,(Events_routine_fg).w
 
 loc_521D2:
@@ -169706,7 +169721,7 @@ loc_735B6:
 		beq.s	loc_735FC
 		move.l	#loc_72B18,(a0)
 		clr.b	(Update_HUD_timer).w				;
-		tst.b	(Dynamic_resize_routine).w			;
+		tst.b	(Anim_Counters+$F).w				;
 		bne.s	locret_735B4					;
 		move.l	#loc_746F4,(a0)					;
 		jsr	(AllocateObject).l				;
@@ -171119,7 +171134,7 @@ loc_7430E:
 ; ---------------------------------------------------------------------------
 
 loc_74314:
-		tst.b	(Dynamic_resize_routine).w		; Liliam: ported from S3 - restore Big Arm for all characters
+		tst.b	(Anim_Counters+$F).w			; Liliam: ported from S3 - restore Big Arm for all characters
 		beq.s	LBZFinalBoss2_FadeDone			;
 		move.w	#$9F,$2E(a0)				;
 		move.l	#LBZFinalBoss2_FadeDone,$34(a0)		;
@@ -171509,7 +171524,7 @@ loc_746C8:
 
 loc_746D8:
 		move.l	#loc_72B18,(a0)				; Liliam: ported from S3 - restore Big Arm for all characters
-		tst.b	(Dynamic_resize_routine).w		;
+		tst.b	(Anim_Counters+$F).w			;
 		bne.s	loc_746DE				;
 		move.l	#loc_746F4,(a0)
 		jsr	(AllocateObject).l			;
@@ -172125,6 +172140,7 @@ loc_74DA4:
 		bset	#3,$38(a1)
 		lea	(ChildObjDat_690D8).l,a2
 		jsr	(CreateChild1_Normal).l
+		move.b	#6,(Dynamic_resize_routine).w		; Liliam: camera - fix LBZ2 boss entry lock
 		move.w	#$4740,(Camera_max_X_pos).w		; Liliam: camera - release Knuckles LBZ end lock gradually
 		move.w	#$4A0,(Camera_target_max_Y_pos).w	;
 		clr.w	(Camera_min_Y_pos).w			;
@@ -198917,7 +198933,7 @@ CutsceneSkip_LBZ2:						; Liliam: cutscene skip - LBZ level end
 		tst.b	(Level_results_done).w
 		beq.w	LBZ2RobotnikShip_CutsceneSkip
 		move.w	#$700,d0
-		tst.b	(Dynamic_resize_routine).w
+		tst.b	(Anim_Counters+$F).w
 		bne.w	StartNewLevel
 		bra.w	StartNewLevel_Alternate
 ; ---------------------------------------------------------------------------
@@ -211677,7 +211693,6 @@ loc_8D2B6:
 		moveq	#signextendB(sfx_Rising),d0
 		jsr	(Play_SFX).l
 		jsr	(Make_CutsceneSkipObj).l		; Liliam: cutscene skip - LBZ2 pre-boss
-		clr.b	(Level_results_done).w			;
 		st	(Anim_Counters+$F).w
 		move.w	#$4390,(Camera_stored_max_X_pos).w	; Liliam: camera - fix LBZ2 boss entry lock
 ;		move.w	#$6000,(Camera_stored_max_X_pos).w	;
