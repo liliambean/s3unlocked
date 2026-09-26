@@ -186968,8 +186968,10 @@ sub_7EB4C:
 		movea.w	d0,a1
 		tst.b	invulnerability_timer(a1)
 		bne.s	locret_7EB6C
-		btst	#Status_OnObj,status(a1)
-		bne.s	locret_7EB6C
+		cmpi.b	#State_NoControl,routine(a1)		; Liliam: bugfix - release player from object
+		bhs.s	locret_7EB6C				;
+;		btst	#Status_OnObj,status(a1)		;
+;		bne.s	locret_7EB6C				;
 		btst	#Status_Invincible,status_secondary(a1)
 		bne.s	locret_7EB6C
 		move.l	d0,-(sp)
@@ -190761,6 +190763,8 @@ loc_80FD6:
 		movea.w	d0,a1
 		tst.b	invulnerability_timer(a1)
 		bne.s	locret_80FF0
+		cmpi.b	#State_NoControl,routine(a1)		; Liliam: bugfix - release player from object
+		bhs.s	locret_80FF0				;
 		btst	#Status_Invincible,status_secondary(a1)
 		bne.s	locret_80FF0
 		jsr	HurtCharacter_Directly(pc)
