@@ -170860,6 +170860,7 @@ Obj_LBZ2InvisibleBarrier:					; Liliam: improve LBZ2 pre-boss cutscene
 		tst.b	(Level_started_flag).w
 		bne.s	.return
 		move.b	#1,object_control(a1)
+		move.w	#4*60,(Tails_CPU_flight_timer).w
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -170881,7 +170882,8 @@ Obj_LBZ2InvisibleBarrier:					; Liliam: improve LBZ2 pre-boss cutscene
 		bclr	#Status_Push,status(a1)
 		tst.b	(Level_started_flag).w
 		bne.s	.return
-		move.w	#10*60,(Tails_CPU_idle_timer).w
+		st	(Ctrl_2_locked).w
+		clr.w	(Ctrl_2_logical).w
 
 	.return:
 		rts
@@ -211817,6 +211819,7 @@ loc_8D47C:
 		cmpi.w	#$4440,x_pos(a0)
 		blo.s	loc_8D4C2
 		move.l	#loc_8D4CC,(a0)
+		clr.b	(Ctrl_2_locked).w			; Liliam: improve LBZ2 pre-boss cutscene
 		clr.w	(Screen_shake_flag).w
 		move.b	#1,(Update_HUD_timer).w			; Liliam: cutscene skip - LBZ2 pre-boss
 		lea	(Player_1).w,a1
@@ -211919,6 +211922,7 @@ Obj_LBZ2RobotnikShip_CutsceneSkip:				; Liliam: cutscene skip - LBZ2 pre-boss
 		move.w	#$E000,d7
 		jsr	(Refresh_PlaneDirect).l
 		jsr	(Pal_FadeFromBlack).l
+		clr.b	(Ctrl_2_locked).w
 		clr.w	(Events_bg+$0E).w
 		movea.w	(Events_bg+$00).w,a0
 		move.w	#$100,x_vel(a0)
