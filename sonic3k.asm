@@ -15950,10 +15950,6 @@ SaveScreen_PickPlayerStart:
 ; ---------------------------------------------------------------------------
 
 SaveScreen_EncoreStart:
-		clr.l	(Encore_characters).w				; Liliam: Encore mode - save data
-		move.b	#1,(Encore_unlocked_chars).w			;
-		move.l	(Encore_characters).w,(Saved_encore_chars).w	;
-
 		cmpi.w	#$400,(Current_zone_and_act).w		; Liliam: Encore mode - player starts
 		beq.s	SaveScreen_AlternateStart		;
 		cmpi.w	#$800,(Current_zone_and_act).w		;
@@ -16522,7 +16518,7 @@ SaveGame_MetalSonicHologram:					; Liliam: Metal Sonic hologram object
 		move.l	(Save_pointer).w,d0
 		beq.s	locret_C56E
 		bsr.s	MetalSonicHologram_LoadSRAM
-		move.l	(Collected_holograms_array).w,(a1)
+		move.l	(Collected_holograms_array).w,(a2)
 		bra.w	Write_SaveEncore
 ; ---------------------------------------------------------------------------
 
@@ -16534,7 +16530,7 @@ MetalSonicHologram_LoadSRAM:
 		andi.b	#6,d0					;
 		lsl.b	#1,d0					;
 		addi.w	#Encore_saved_data+SRAM_next_slot*3,d0	;
-		movea.l	d0,a1					;
+		movea.l	d0,a2					;
 
 locret_C56E:
 		rts
@@ -17625,18 +17621,14 @@ loc_D31C:
 ;		bne.s	loc_D396					;
 		move.w	(Player_2+object_control).w,d0
 		or.w	(Events_bg+$12).w,d0
-		bne.s	loc_D396
+		bne.w	loc_D396					;
+;		bne.s	loc_D396					;
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.w	#button_confirm_mask,d0
 		beq.s	loc_D376
 		move.b	#GameMode_Level,(Game_mode).w
-		clr.w	(Player_mode).w					;
-		tst.b	(Encore_mode).w					;
-		bne.s	loc_D342					;
 		move.w	(Dataselect_nosave_player).w,(Player_option).w
 		move.w	(Dataselect_nosave_player).w,(Player_mode).w	; Liliam: prevent other characters from playing DDZ
-
-loc_D342:
 		clr.w	(Current_zone_and_act).w
 		clr.w	(Apparent_zone_and_act).w
 		clr.w	(Current_special_stage).w
@@ -17644,11 +17636,19 @@ loc_D342:
 		clr.l	(Collected_emeralds_array).w
 		clr.w	(Collected_emeralds_array+4).w
 		clr.b	(Collected_emeralds_array+6).w
-		clr.l	(Collected_holograms_array).w		; Liliam: Metal Sonic hologram object
 		clr.l	(Collected_special_ring_array).w
 		clr.b	(Emeralds_converted_flag).w
 		clr.l	(Save_pointer).w
 		jsr	(SaveScreen_InitGameVars).l
+		tst.b	(Encore_mode).w					; Liliam: Encore mode - save data
+		beq.s	loc_D370					;
+		clr.l	(Player_mode).w					;
+		clr.l	(Collected_holograms_array).w			;
+		clr.l	(Encore_characters).w				;
+		clr.l	(Saved_encore_chars).w				;
+		move.b	#1,(Encore_unlocked_chars).w			;
+
+loc_D370:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -17702,7 +17702,7 @@ loc_D3B0:
 		addi.l	#Encore_saved_data,d0				;
 		move.l	d0,saveslot_save_pointer(a0)			;
 		bsr.w	MetalSonicHologram_LoadSRAM			;
-		move.l	(a1),d0						;
+		move.l	(a2),d0						;
 		moveq	#0,d1						;
 		jsr	(PopCount32).l					;
 		cmpi.b	#HologramPerfectCount,d1			;
@@ -17980,6 +17980,9 @@ loc_D57E:
 		jsr	(SaveScreen_InitGameVars).l
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - save data
 		beq.s	loc_D5DE					;
+		clr.l	(Player_mode).w					;
+		bsr.w	SaveScreen_LoadHologramSRAM			;
+		move.l	(a2),(Collected_holograms_array).w		;
 		move.w	SRAM_player_mode(a1),d1				;
 		lsr.w	#3,d1						;
 		moveq	#7,d0						;
@@ -17990,12 +17993,9 @@ loc_D57E:
 		and.b	d1,d0						;
 		move.b	d0,(Encore_P2_character).w			;
 		move.w	SRAM_life_count(a1),(Encore_stocks_packed).w	;
-		clr.l	(Player_mode).w					;
+		move.l	(Encore_characters).w,(Saved_encore_chars).w	;
 		lsr.w	#3,d1						;
 		move.b	d1,(Encore_unlocked_chars).w			;
-		bsr.w	SaveScreen_LoadHologramSRAM			;
-		move.l	(a1),(Collected_holograms_array).w		;
-		move.l	(Encore_characters).w,(Saved_encore_chars).w	;
 		move.b	#GameMode_Level,(Game_mode).w			;
 		jmp	(Draw_Sprite).l					;
 ; ---------------------------------------------------------------------------
@@ -18056,13 +18056,16 @@ loc_D604:
 		clr.l	(Collected_emeralds_array).w
 		clr.w	(Collected_emeralds_array+4).w
 		clr.b	(Collected_emeralds_array+6).w
-		clr.l	(Collected_holograms_array).w		; Liliam: Metal Sonic hologram object
 		clr.l	(Collected_special_ring_array).w
 		clr.b	(Emeralds_converted_flag).w
 		move.l	a1,(Save_pointer).w
 		jsr	(SaveScreen_InitGameVars).l
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - save data
 		beq.s	loc_D66C					;
+		clr.l	(Collected_holograms_array).w			;
+		clr.l	(Encore_characters).w				;
+		clr.l	(Saved_encore_chars).w				;
+		move.b	#1,(Encore_unlocked_chars).w			;
 		st	(SRAM_mask_interrupts_flag).w			;
 		bsr.w	Write_SaveEncore				;
 		jmp	(Draw_Sprite).l					;
@@ -135087,8 +135090,16 @@ loc_5C3A4:
 		dbf	d1,loc_5C3A4						;
 		jsr	(Init_SpriteTable).l
 		move.w	#(11*60)-1,(Demo_timer).w
+		move.w	(Player_mode).w,d0						; Liliam: simplify player palette selection
+		tst.b	(Encore_mode).w							;
+		beq.s	loc_5C3B0							;
+		moveq	#PalID_EncoreMode,d0						;
+		move.l	(Saved_encore_chars).w,(Encore_characters).w	; Liliam: Encore mode - save data
+
+loc_5C3B0:
+		jsr	(LoadPalette_NoEncore).l					; Liliam: simplify player palette selection
 		lea	(Pal_ContinueScreen).l,a1
-		lea	(Target_palette_line_2).w,a2					; Liliam: simplify player palette selection
+		lea	(Target_palette_line_2).w,a2					;
 		moveq	#bytesToLcnt(Target_palette_end-Target_palette_line_2),d6	;
 ;		lea	(Target_palette).w,a2						;
 ;		moveq	#bytesToLcnt(Target_palette_end-Target_palette),d6		;
@@ -135096,14 +135107,6 @@ loc_5C3A4:
 loc_5C3BC:
 		move.l	(a1)+,(a2)+
 		dbf	d6,loc_5C3BC
-		move.w	(Player_mode).w,d0						;
-		tst.b	(Encore_mode).w							;
-		beq.s	loc_5C3C2							;
-		moveq	#PalID_EncoreMode,d0						;
-		move.w	#$E66,(Target_palette_line_3+$A).w				;
-
-loc_5C3C2:
-		jsr	(LoadPalette_NoEncore).l					;
 		lea	S3CreditsText_Continue(pc),a1				; Liliam: ported from S3 - restore continue font
 		bsr.w	sub_240A4A						;
 ;		lea	aCONTINUE(pc),a1					;
@@ -135169,7 +135172,6 @@ loc_5C48A:
 		move.b	#GameMode_Level,(Game_mode).w
 		move.b	#3,(Life_count).w
 		move.b	#3,(Life_count_P2).w
-		move.l	(Saved_encore_chars).w,(Encore_characters).w	; Liliam: Encore mode - save data
 		moveq	#0,d0
 		move.w	d0,(Ring_count).w
 		move.l	d0,(Timer).w
@@ -135516,7 +135518,7 @@ loc_5C7B2:
 		move.w	#$280,priority(a0)
 		clr.b	(Player_prev_frame_P2).w
 		move.w	#5<<8,anim(a0)
-		move.w	#$D8<<8,mapping_frame(a0)		; Liliam: simplify player anim selection
+		move.w	#$BB<<8,mapping_frame(a0)		; Liliam: simplify player anim selection
 ;		move.w	#$AD<<8,mapping_frame(a0)		;
 		move.w	#40-1,$2E(a0)
 		rts
@@ -136075,7 +136077,7 @@ AniRaw_ContinueMetalSonic:
 		dc.b   $B, $B0, $B1, $FF, $FC			; Liliam: simplify player anim selection
 ;		dc.b   $B, $BD, $BE, $FF, $FC			;
 AniRaw_ContinueTails:						; Liliam: continues - add extra characters
-		dc.b    7, $B2, $B3, $FF, $FC
+		dc.b    7, $C0, $C1, $FF, $FC
 AniRaw_ContinueKnuckles_Encore:					; Liliam: continues - add extra characters
 		dc.b  $11, $ED, $EE, $FF, $FC
 AniRaw_ContinueAmy:						; Liliam: continues - add extra characters
