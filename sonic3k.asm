@@ -44343,7 +44343,10 @@ loc_1BF50:
 		bne.s	loc_1BF74
 		tst.b	(Alternate_start_flag).w					;
 		beq.s	loc_1BF74							;
-		move.w	#$660,d0							;
+		move.w	#$650,d0							;
+		move.w	#$20,(Camera_min_X_pos).w					;
+		move.b	#$8A,(Player_1+mapping_frame).w					;
+		move.b	#3,(Player_1+object_control).w					;
 		bra.s	loc_1BF74							;
 ; ---------------------------------------------------------------------------
 
@@ -92636,7 +92639,6 @@ Obj_SOZMushroomParachute:								; Liliam: Encore mode - FBZ level order
 		move.w	#make_art_tile(ArtTile_SOZMushroomParachute,1,1),art_tile(a0)
 		move.w	#$80,priority(a0)
 		move.w	#-$80,y_vel(a0)
-		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -92655,6 +92657,7 @@ Obj_SOZMushroomParachute_Main:								; Liliam: Encore mode - FBZ level order
 		cmpi.l	#loc_3F572,(a0)
 		bne.s	Obj_SOZMushroomParachute_Return
 		move.l	#Obj_SOZMushroomParachute_CheckDelete,(a0)
+		move.b	#$43,(Tails_CPU_pos_table_offset).w
 
 Obj_SOZMushroomParachute_Return:
 		rts
