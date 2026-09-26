@@ -185668,6 +185668,13 @@ word_7DDA4:
 Obj_DEZMiniboss:
 		lea	word_7DDA4(pc),a1
 		jsr	(Check_CameraInRange).l
+		move.w	#$28C,d0				; Liliam: camera - fix DEZ1 boss entry lock
+		cmp.w	(Camera_Y_pos).w,d0			;
+		blo.s	loc_7DDBE				;
+		move.w	d0,(Camera_max_Y_pos).w			;
+		move.w	d0,(Camera_target_max_Y_pos).w		;
+
+loc_7DDBE:
 		move.b	#mus_Miniboss,boss_saved_mus(a0)
 		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
 		beq.s	loc_7DDC4				;
@@ -185719,7 +185726,7 @@ loc_7DE46:
 ; ---------------------------------------------------------------------------
 
 loc_7DE4E:
-		move.l	#loc_7DE6E,(a0)
+		move.l	#Obj_DEZMiniboss_Part1,(a0)
 
 loc_7DE54:
 		move.b	#0,routine(a0)
@@ -185729,7 +185736,7 @@ loc_7DE54:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_7DE6E:
+Obj_DEZMiniboss_Part1:
 		moveq	#0,d0
 		move.b	routine(a0),d0
 		move.w	off_7DE92(pc,d0.w),d1
@@ -185912,7 +185919,7 @@ loc_7E016:
 ; ---------------------------------------------------------------------------
 
 loc_7E044:
-		move.l	#loc_7E0A6,(a0)
+		move.l	#Obj_DEZMiniboss_Part2,(a0)
 		clr.b	routine(a0)
 		bclr	#6,status(a0)
 		clr.b	collision_property(a0)
@@ -185941,7 +185948,65 @@ sub_7E08C:
 
 ; ---------------------------------------------------------------------------
 
-loc_7E0A6:
+Obj_DEZ1KnuxLevelSizeAdjust:					; Liliam: Encore mode - layouts
+		movea.w	parent3(a0),a1
+		tst.b	routine(a1)
+		beq.s	Obj_DEZ1KnuxLevelSizeAdjust_Main.return
+		move.l	#Obj_DEZ1KnuxLevelSizeAdjust_Main,(a0)
+
+Obj_DEZ1KnuxLevelSizeAdjust_Main:
+		movea.w	parent3(a0),a1
+		btst	#6,status(a1)
+		beq.s	.checkPlayers
+		move.w	#$36C0,(Camera_max_X_pos).w
+		move.w	(Camera_X_pos).w,d0
+		subi.w	#$36C0,d0
+		ble.s	.delete
+		addq.w	#1,d0
+		andi.b	#$FE,d0
+		move.w	d0,$30(a0)
+		move.l	#.checkDelete,(a0)
+
+	.checkDelete:
+		bsr.s	.restore
+		tst.b	$31(a0)
+		bne.s	.return
+
+	.delete:
+		jmp	(Delete_Current_Sprite).l
+; ---------------------------------------------------------------------------
+
+	.checkPlayers:
+		tst.l	(Player_2).w
+		bne.s	.checkRestore
+		cmpi.b	#2,(Player_1+character_id).w
+		bne.s	.checkRestore
+		tst.b	$31(a0)
+		bmi.s	.return
+		addq.b	#2,$31(a0)
+		bra.s	.apply
+; ---------------------------------------------------------------------------
+
+	.checkRestore:
+		tst.b	$31(a0)
+		beq.s	.return
+
+	.restore:
+		subq.b	#2,$31(a0)
+
+	.apply:
+		move.w	$30(a0),d0
+		addi.w	#$36C0,d0
+		move.w	d0,(Camera_max_X_pos).w
+		cmp.w	(Camera_X_pos).w,d0
+		bhs.s	.return
+		move.w d0,(Camera_X_pos).w
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
+Obj_DEZMiniboss_Part2:
 		move.b	(V_int_run_count+3).w,d0
 		andi.b	#$3F,d0
 		bne.s	loc_7E0B8
@@ -186602,7 +186667,7 @@ loc_7E786:
 loc_7E79C:
 		bsr.w	sub_7ED6C
 		movea.w	parent3(a0),a1
-		cmpi.l	#loc_7DE6E,(a1)
+		cmpi.l	#Obj_DEZMiniboss_Part1,(a1)
 		beq.s	loc_7E7AE
 		rts
 ; ---------------------------------------------------------------------------
@@ -187468,7 +187533,10 @@ word_7EF88:
 		dc.w   $100
 		dc.b  $10, $14, $23,   0
 ChildObjDat_7EF8E:
-		dc.w 1-1
+;		dc.w 1-1					; Liliam: Encore mode - layouts
+		dc.w 2-1					;
+		dc.l Obj_DEZ1KnuxLevelSizeAdjust		;
+		dc.b    0,   0					;
 		dc.l loc_7E768
 		dc.b    0,  -4
 ChildObjDat_7EF96:
