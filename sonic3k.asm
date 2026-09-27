@@ -7311,10 +7311,11 @@ loc_6404:
 		move.w	d0,(Total_ring_count_P2).w
 		move.w	d0,(Monitors_broken).w
 		move.w	d0,(Monitors_broken_P2).w
-		move.w	d0,(Barrier_HUD_frame).w			; Liliam: HUD - barrier HUD
-;		move.w	d0,(Loser_time_left).w				;
+;		move.w	d0,(Loser_time_left).w				; Liliam: HUD - barrier HUD
 		move.b	d0,(LRZ_rocks_routine).w
-		move.b	d0,(Super_Sonic_Knux_flag).w
+		move.w	d0,(Barrier_HUD_frame).w			;
+		move.w	d0,(Super_Sonic_Knux_flag).w			;
+;		move.b	d0,(Super_Sonic_Knux_flag).w			;
 		bsr.w	OscillateNumInit
 		move.b	#1,(Update_HUD_score).w
 		move.b	#1,(Update_HUD_ring_count).w
