@@ -4947,11 +4947,11 @@ PalCycle_SuperMighty_Water:						; Liliam: animate super forms consistently
 		dc.w $AAE,$EEE,$AAE
 PalCycle_SuperRay:							; Liliam: animate super forms consistently
 		dc.w $0CE,$0AE,$46A
-		dc.w $4EE,$0CE,$46C
-		dc.w $AEE,$2EE,$48C
-		dc.w $EEE,$8EE,$68C
-		dc.w $AEE,$2EE,$48C
-		dc.w $4EE,$0CE,$46C
+		dc.w $6CE,$2AE,$46C
+		dc.w $8EE,$2CE,$48C
+		dc.w $EEE,$8CE,$68C
+		dc.w $8EE,$2CE,$48C
+		dc.w $6CE,$2AE,$46C
 
 ; =============== S U B R O U T I N E =======================================
 
