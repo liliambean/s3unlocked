@@ -35,6 +35,8 @@ namespace S3KObjectDefinitions.DEZ
 		public override void Init(ObjectData data)
 		{
 			BuildSpritesSubtypes("../Levels/DEZ/Nemesis Art/Misc Art.bin", -960, 2, -1, 1);
+			horizontalSubtype = 3;
+			sprites[1] = sprites[0];
 		}
 	}
 }
@@ -49,7 +51,7 @@ namespace S3KObjectDefinitions.Common
 		protected Sprite[][] sprites;
 
 		private byte verticalSubtype;
-		private byte horizontalSubtype;
+		protected byte horizontalSubtype;
 
 		public override string Name
 		{
@@ -102,8 +104,8 @@ namespace S3KObjectDefinitions.Common
 			var bitmap = new BitmapBits(sprite.Width, sprite.Height);
 			bitmap.DrawRectangle(LevelData.ColorWhite, 0, 0, sprite.Width - 1, sprite.Height - 1);
 
-			var xoffset = index == 0 ? 0 : obj.XFlip ? -64 : 64;
-			var yoffset = index == 0 ? -64 : 0;
+			var xoffset = obj.SubType < 0x80 ? 0 : obj.XFlip ? -64 : 64;
+			var yoffset = obj.SubType < 0x80 ? -64 : 0;
 			return new Sprite(bitmap, sprite.X + xoffset, sprite.Y + yoffset);
 		}
 
@@ -120,9 +122,10 @@ namespace S3KObjectDefinitions.Common
 
 			subtypeNames = new Dictionary<byte, string>
 			{
-				{ 0x00, "Hydrocity (vertical)" },
-				{ 0x01, "Carnival Night (vertical)" },
-				{ 0x02, "Death Egg (vertical)" },
+				{ 0x00, "Hydrocity" },
+				{ 0x01, "Carnival Night" },
+				{ 0x02, "Death Egg" },
+				{ 0x03, "Death Egg (gravity room)" },
 				{ 0x80, "Carnival Night (horizontal)" }
 			};
 

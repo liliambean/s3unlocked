@@ -74277,11 +74277,18 @@ Obj_Door:
 		moveq	#0,d0
 		move.b	subtype(a0),d0
 		bmi.w	loc_30FD2
+		moveq	#-$80,d1				; Liliam: bugfix - scale activation radius with width
+		cmpi.b	#2,d0					;
+		bls.s	loc_30E2E				;
+		move.w	#-$200,d1				;
+		moveq	#2,d0					;
+
+loc_30E2E:
 		move.b	d0,mapping_frame(a0)
 		add.w	d0,d0
 		add.w	d0,d0
 		lea	byte_30E18(pc,d0.w),a1
-		moveq	#0,d3					; Liliam: bugfix - scale activation radius with width
+		moveq	#0,d3					;
 		move.b	(a1),d3					;
 		move.b	(a1)+,width_pixels(a0)
 		move.b	(a1)+,height_pixels(a0)
@@ -74290,19 +74297,20 @@ Obj_Door:
 		ori.b	#4,render_flags(a0)
 		move.w	#$300,priority(a0)
 		move.w	y_pos(a0),$32(a0)
-		move.w	#-$80,d2				;
-		addi.w	#$10,d3					;
 ;		move.w	x_pos(a0),d2				;
 ;		move.w	d2,d3					;
 ;		subi.w	#$200,d2				;
 ;		addi.w	#$18,d3					;
+		move.w	d1,d2					;
+		addi.w	#$10,d3					;
 		btst	#Status_Facing,status(a0)
 		beq.s	loc_30E7E
-		neg.w	d3					;
-		move.w	d3,d2					;
-		move.w	#$80,d3					;
 ;		subi.w	#-$1E8,d2				;
 ;		addi.w	#$1E8,d3				;
+		move.w	d3,d2					;
+		move.w	d1,d3					;
+		neg.w	d2					;
+		neg.w	d3					;
 
 loc_30E7E:
 		add.w	x_pos(a0),d2				;
@@ -105194,9 +105202,17 @@ Obj_DEZGravityRoom:
 		andi.w	#$FF80,d0
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#$680,d0
-		bhi.w	loc_49638
-		rts
-; ---------------------------------------------------------------------------
+;		bhi.w	loc_49638				; Liliam: bugfix - release player from object
+		bls.s	locret_495D6				;
+		tst.b	$30(a0)					;
+		beq.s	loc_49636				;
+		clr.b	(Player_1+object_control).w		;
+
+loc_49636:
+		tst.b	$31(a0)					;
+		beq.s	loc_49638				;
+		clr.b	(Player_2+object_control).w		;
+;		rts						;
 
 loc_49638:
 		move.w	respawn_addr(a0),d0
