@@ -137794,7 +137794,7 @@ S3Credits:							; Liliam: ported from S3 - restore staff roll
 		move.l	#vdpComm(tiles_to_bytes(ArtTile_S3Fonts_BigText),VRAM,WRITE),(VDP_control_port).l
 		lea	(ArtNem_S3CreditsText).l,a0
 		jsr	(Nem_Decomp).l
-		move.l	#vdpComm(tiles_to_bytes(ArtTile_S3Fonts_BigText+$8A),VRAM,WRITE),(VDP_control_port).l	; Liliam: use S3 staff roll for hack credits
+		move.l	#vdpComm(tiles_to_bytes(ArtTile_S3Fonts_BigText+$8B),VRAM,WRITE),(VDP_control_port).l	; Liliam: use S3 staff roll for hack credits
 		lea	(ArtNem_ContinueDigits).l,a0								;
 		jsr	(Nem_Decomp).l										;
 		lea	S3CreditsText_TitleCard_Genesis(pc),a1							;
@@ -138031,7 +138031,7 @@ S3CreditsText_TitleCard:
 		dc.b "a fan modification of",0
 		even
 		dc.w $88A
-		dc.b "sonic the hedgehog ] ^ knuckles",0
+		dc.b "sonic the hedgehog _ { knuckles",0
 		even
 		dc.w $996
 		dc.b "for sega mega drive",0
@@ -138045,7 +138045,7 @@ S3CreditsText_TitleCard_Genesis:
 		dc.b "a fan modification of",0
 		even
 		dc.w $88A
-		dc.b "sonic the hedgehog ] ^ knuckles",0
+		dc.b "sonic the hedgehog _ { knuckles",0
 		even
 		dc.w $99A
 		dc.b "for sega genesis",0
@@ -138053,7 +138053,7 @@ S3CreditsText_TitleCard_Genesis:
 S3CreditsText_Author:
 		dc.w 2
 		dc.w $414
-		dc.b "design_ programming",0
+		dc.b "design` programming",0
 		even
 		dc.w $512
 		dc.b "and original graphics",0
@@ -138064,13 +138064,13 @@ S3CreditsText_Author:
 S3CreditsText_AdditionalGraphics:
 		dc.w 3
 		dc.w $28C
-		dc.b "amy [up ^ bonus plate sprites",0
+		dc.b "amy ]up { bonus plate sprites",0
 		even
 		dc.w $49C
 		dc.b "E-122-PSI",0
 		even
 		dc.w $78E
-		dc.b "mighty ^ ray ending sprites",0
+		dc.b "mighty { ray ending sprites",0
 		even
 		dc.w $992
 		dc.b "DELTA CONDUIT",0
@@ -138084,7 +138084,7 @@ S3CreditsText_AdditionalCode:
 		dc.b "RUBBERDUCKYCOOLY",0
 		even
 		dc.w $78E
-		dc.b "upgraded s]^k sound driver",0
+		dc.b "upgraded s_{k sound driver",0
 		even
 		dc.w $996
 		dc.b "FLAMEWING",0
@@ -138092,7 +138092,7 @@ S3CreditsText_AdditionalCode:
 S3CreditsText_DisasmAuthor:
 		dc.w 2
 		dc.w $410
-		dc.b "original sonic ^ knuckles",0
+		dc.b "original sonic { knuckles",0
 		even
 		dc.w $516
 		dc.b "split disassembly by",0
@@ -138154,8 +138154,8 @@ S3CreditsText_DisasmContributors3:
 		dc.w $714
 		dc.b "LAVAGAMING1",0
 		even
-		dc.w $90E
-		dc.b "L,IL,IAM  BRONZE",0
+		dc.w $916
+		dc.b "L,IL,IAMBEAN",0
 		even
 		dc.w $B1A
 		dc.b "L,INNCAKI",0
@@ -138220,13 +138220,13 @@ S3CreditsText_ToolAuthors1:
 		dc.b "tools used during development",0
 		even
 		dc.w $396
-		dc.b "sonmaped_ rotsprite",0
+		dc.b "sonmaped` rotsprite",0
 		even
 		dc.w $596
 		dc.b "XENOWHIRL",0
 		even
 		dc.w $88C
-		dc.b "sonlvl_ sonpln_ spriteplotter",0
+		dc.b "sonlvl` sonpln` spriteplotter",0
 		even
 		dc.w $A92
 		dc.b "MAINMEMORY",0
@@ -138254,13 +138254,13 @@ S3CreditsText_ToolAuthors3:
 		dc.b "tools used during development",0
 		even
 		dc.w $3A0
-		dc.b "notepad``",0
+		dc.b "notepad[[",0
 		even
 		dc.w $59C
 		dc.b "DON HO",0
 		even
 		dc.w $8A4
-		dc.b "xvi]",$5C,0
+		dc.b "xvi_^",0
 		even
 		dc.w $A8E
 		dc.b "CHRISTIAN MAAS",0
@@ -138319,7 +138319,7 @@ S3CreditsText_SpecialThanks2:
 		dc.b "CHAINSPIKE",0
 		even
 		dc.w $98C
-		dc.b "for keeping the sonic ] flame",0
+		dc.b "for keeping the sonic _ flame",0
 		even
 		dc.w $A92
 		dc.b "alive when i burned out",0
@@ -138358,29 +138358,29 @@ S3CreditsText_SpecialThanks5:
 		dc.b "thank you to everyone who",0
 		even
 		dc.w $60E
-		dc.b "ever reached out on bluesky_",0
+		dc.b "ever reached out on bluesky`",0
 		even
 		dc.w $712
-		dc.b "discord_ youtube_ or my",0
+		dc.b "discord` youtube` or my",0
 		even
 		dc.w $810
-		dc.b "tragically neglected blog",0
+		dc.b "tragically neglected blog",$5C,0
 		even
 S3CreditsText_EndCard:
 		dc.w 1
-		dc.w $51E
-		dc.b "created by",0
+		dc.w $61C
+		dc.b "trans rights",$5C,0
 		even
-		dc.w $70E
-		dc.b "L,IL,IAM  BRONZE",0
+		dc.w $71A
+		dc.b "now and always",$5C,0
 		even
 S3Credits_PlaneMapSmall:					; Liliam: ported from S3 - restore staff roll
-		dc.w  $B6, $B7							; Liliam: continues - add extra glyphs
-		dc.w  $B8, $B9							;
-		dc.w  $BA, $BB							;
-		dc.w  $27, $28							;
+		dc.w  $B2, $B3							; Liliam: continues - add extra glyphs
+		dc.w    0, $B4							;
+		dc.w  $B7, $B8							;
+		dc.w  $B9, $BA							;
+		dc.w  $BB, $BC							;
 		dc.w    0, $29							;
-		dc.w  $B2, $B3							;
 		dc.w    1,   2
 		dc.w    3,   4
 		dc.w    5,   6
@@ -138407,6 +138407,7 @@ S3Credits_PlaneMapSmall:					; Liliam: ported from S3 - restore staff roll
 		dc.w  $23, $18
 		dc.w  $24,  $F
 		dc.w  $25, $26
+		dc.w  $27, $28							; Liliam: continues - add extra glyphs
 S3Credits_PlaneMapLarge:					; Liliam: ported from S3 - restore staff roll
 		dc.w word_24146C-S3Credits_PlaneMapLarge
 		dc.w word_24147A-S3Credits_PlaneMapLarge
