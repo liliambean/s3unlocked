@@ -132527,6 +132527,8 @@ HPZSE_FromLRZ2:							; Liliam: HPZ - add Knuckles LRZ2 results
 		beq.s	loc_5A172
 		move.l	d0,(Timer).w
 		st	(Update_HUD_timer).w
+		cmpi.l	#Obj_TitleCard,(Title_card_object).w
+		beq.s	loc_5A172
 		jsr	(LoadEnemyArt).l
 		lea	(Block_table).w,a2
 		bra.s	loc_5A172
@@ -135208,7 +135210,8 @@ loc_5C48A:
 		move.l	d0,(Score_P2).w
 		move.l	#5000,(Next_extra_life_score).w
 		move.l	#5000,(Next_extra_life_score_P2).w
-		move.b	(Apparent_zone).w,d1			; Liliam: continues - restart from act 1
+		move.b	d0,(Last_star_post_hit).w		; Liliam: continues - restart from act 1
+		move.b	(Apparent_zone).w,d1			;
 		move.b	d1,(Current_zone).w			;
 		cmpi.b	#$A,d1					;
 		blo.s	loc_5C4C6				;
