@@ -78442,6 +78442,8 @@ loc_339FC:
 
 loc_33A0E:
 		move.b	#0,angle(a1)
+		clr.b	jumping(a1)				; Liliam: bugfix - clear roll state
+		bclr	#Status_RollJump,status(a1)		;
 		bclr	#Status_Roll,status(a1)
 		move.b	default_x_radius(a1),x_radius(a1)	; Liliam: bugfix - set correct player height
 		move.b	default_y_radius(a1),y_radius(a1)	;
