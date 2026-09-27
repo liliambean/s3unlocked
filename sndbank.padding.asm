@@ -715,9 +715,9 @@ Obj_HologramSprites_Main:
 ChildObjDat_MetalSonicHologram:
 		dc.w 2-1
 		dc.l Obj_HologramDust
-		dc.b -$15,   -7
+		dc.b  -$15,   -7
 		dc.l Obj_HologramSprites
-		dc.b -$58, -$12
+		dc.b  -$58, -$12
 ; ---------------------------------------------------------------------------
 
 Obj_AIZSurfboardIntro:						; Liliam: ported from S3 - restore surfboard intro
@@ -2589,30 +2589,26 @@ SSZ2EggRoboRun_Delete:
 ObjDat_SSZ2EggRoboRun:
 		dc.l Map_EggRoboStand
 		dc.w make_art_tile(ArtTile_SSZ2EggRoboStand,0,1)
-		dc.w $300
-		dc.b $20
-		dc.b $20
-		dc.b 0
-		dc.b 0
-PLC_SSZ2Extra:	dc.w 2
-		dc.l ArtNem_EggRoboStand
-		dc.w tiles_to_bytes(ArtTile_SSZ2EggRoboStand)
-		dc.l ArtNem_EggRoboRun
-		dc.w tiles_to_bytes(ArtTile_SSZ2EggRoboRun)
-		dc.l ArtNem_SSZ2Extra
-		dc.w tiles_to_bytes(ArtTile_SSZ2Extra)
+		dc.w   $300
+		dc.b  $20, $20,   0,   0
+PLC_SSZ2Extra:	plrlistheader
+		plreq ArtTile_SSZ2EggRoboStand, ArtNem_EggRoboStand
+		plreq ArtTile_SSZ2EggRoboRun, ArtNem_EggRoboRun
+		plreq ArtTile_SSZ2Extra, ArtNem_SSZ2Extra
+PLC_SSZ2Extra_End
+
 ChildObjDat_SSZ2EggRoboRun:
-		dc.w 2
+		dc.w 3-1
 		dc.l loc_62458
-		dc.w $C380
+		dc.b  $C3, $80
 		dc.l Obj_SSZ2EggRoboPanel
-		dc.w $F408
+		dc.b  $F4,   8
 		dc.l Obj_DeathEggRobot
-		dc.w $39
+		dc.b    0, $39
 ChildObjDat_MechaSonic_FlyDown:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_MechaSonicFlame
-		dc.w $2C
+		dc.b    0, $2C
 ; ---------------------------------------------------------------------------
 
 Obj_MechaSonicFlame:
@@ -2630,11 +2626,8 @@ Obj_MechaSonicFlame_Main:
 ObjDat_MechaSonicFlame:
 		dc.l Map_SSZ2Extra
 		dc.w make_art_tile(ArtTile_SSZ2Extra,0,0)
-		dc.w $280
-		dc.b 9
-		dc.b $C
-		dc.b 0
-		dc.b 0
+		dc.w   $280
+		dc.b    9,  $C,   0,   0
 ; ---------------------------------------------------------------------------
 
 Obj_SSZ2EggRoboPanel:
@@ -2645,11 +2638,8 @@ Obj_SSZ2EggRoboPanel:
 ObjDat_SSZ2EggRoboPanel:
 		dc.l Map_SSZ2Extra
 		dc.w make_art_tile(ArtTile_SSZ2Extra,0,1)
-		dc.w $180
-		dc.b $C
-		dc.b $14
-		dc.b 1
-		dc.b 0
+		dc.w   $180
+		dc.b   $C, $14,   1,   0
 ; ---------------------------------------------------------------------------
 
 Obj_DeathEggRobot:
@@ -2659,7 +2649,8 @@ Obj_DeathEggRobot:
 		jsr	off_3D51A_S2(pc,d1.w)
 		jmp	(Draw_And_Touch_Sprite).l
 ; ---------------------------------------------------------------------------
-off_3D51A_S2:	dc.w loc_3D52A_S2-off_3D51A_S2
+off_3D51A_S2:
+		dc.w loc_3D52A_S2-off_3D51A_S2
 		dc.w loc_3D5A8_S2-off_3D51A_S2
 		dc.w loc_3D5C2_S2-off_3D51A_S2
 		dc.w loc_3D5EA_S2-off_3D51A_S2
@@ -2763,10 +2754,8 @@ loc_3D640_S2:
 locret_3D67E_S2:
 		rts
 ; ---------------------------------------------------------------------------
-byte_3D680_S2:	dc.b   2
-		dc.b   0
-		dc.b   2
-		dc.b   4
+byte_3D680_S2:
+		dc.b    2,   0,   2,   4
 		even
 ; ---------------------------------------------------------------------------
 
@@ -2777,7 +2766,8 @@ loc_3D684_S2:
 		move.w	off_3D696_S2(pc,d0.w),d1
 		jmp	off_3D696_S2(pc,d1.w)
 ; ---------------------------------------------------------------------------
-off_3D696_S2:	dc.w loc_3D6AA_S2-off_3D696_S2
+off_3D696_S2:
+		dc.w loc_3D6AA_S2-off_3D696_S2
 		dc.w loc_3D702_S2-off_3D696_S2
 		dc.w loc_3D83C_S2-off_3D696_S2
 ; ---------------------------------------------------------------------------
@@ -2788,7 +2778,8 @@ loc_3D6AA_S2:
 		move.w	off_3D6B8_S2(pc,d0.w),d1
 		jmp	off_3D6B8_S2(pc,d1.w)
 ; ---------------------------------------------------------------------------
-off_3D6B8_S2:	dc.w loc_3D6C0_S2-off_3D6B8_S2
+off_3D6B8_S2:
+		dc.w loc_3D6C0_S2-off_3D6B8_S2
 		dc.w loc_3D6CE_S2-off_3D6B8_S2
 		dc.w loc_3D6C0_S2-off_3D6B8_S2
 		dc.w loc_3D6E8_S2-off_3D6B8_S2
@@ -2831,7 +2822,8 @@ loc_3D702_S2:
 		move.w	off_3D710_S2(pc,d0.w),d1
 		jmp	off_3D710_S2(pc,d1.w)
 ; ---------------------------------------------------------------------------
-off_3D710_S2:	dc.w loc_3D6C0_S2-off_3D710_S2
+off_3D710_S2:
+		dc.w loc_3D6C0_S2-off_3D710_S2
 		dc.w loc_3D720_S2-off_3D710_S2
 		dc.w loc_3D744_S2-off_3D710_S2
 		dc.w loc_3D6C0_S2-off_3D710_S2
@@ -2955,7 +2947,8 @@ loc_3D83C_S2:
 		move.w	off_3D84A_S2(pc,d0.w),d1
 		jmp	off_3D84A_S2(pc,d1.w)
 ; ---------------------------------------------------------------------------
-off_3D84A_S2:	dc.w loc_3D6C0_S2-off_3D84A_S2
+off_3D84A_S2:
+		dc.w loc_3D6C0_S2-off_3D84A_S2
 		dc.w loc_3D856_S2-off_3D84A_S2
 		dc.w loc_3D6C0_S2-off_3D84A_S2
 		dc.w loc_3D89E_S2-off_3D84A_S2
@@ -3018,7 +3011,8 @@ loc_3D8D2_S2:
 		move.w	off_3D8E0_S2(pc,d0.w),d1
 		jmp	off_3D8E0_S2(pc,d1.w)
 ; ---------------------------------------------------------------------------
-off_3D8E0_S2:	dc.w loc_3D8E6_S2-off_3D8E0_S2
+off_3D8E0_S2:
+		dc.w loc_3D8E6_S2-off_3D8E0_S2
 		dc.w loc_3D922_S2-off_3D8E0_S2
 		dc.w loc_3D93C_S2-off_3D8E0_S2
 ; ---------------------------------------------------------------------------
@@ -3099,7 +3093,8 @@ loc_3D984_S2:
 		move.w	off_3D9AC_S2(pc,d0.w),d1
 		jmp	off_3D9AC_S2(pc,d1.w)
 ; ---------------------------------------------------------------------------
-off_3D9AC_S2:	dc.w loc_3D9B0_S2-off_3D9AC_S2
+off_3D9AC_S2:
+		dc.w loc_3D9B0_S2-off_3D9AC_S2
 		dc.w loc_3D9D6_S2-off_3D9AC_S2
 ; ---------------------------------------------------------------------------
 
@@ -3145,11 +3140,12 @@ Obj_DeathEggRobot_Shoulder:
 		bsr.w	DeathEggRobot_RefreshChildPosition
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
-off_3DA34_S2:	dc.w loc_3DA3C_S2-off_3DA34_S2
+off_3DA34_S2:
+		dc.w loc_3DA3C_S2-off_3DA34_S2
 		dc.w locret_3DA48_S2-off_3DA34_S2
 ; ---------------------------------------------------------------------------
-word_3DA38_S2:	dc.w     8
-		dc.w $FFE6
+word_3DA38_S2:
+		dc.w      8,   -$1A
 ; ---------------------------------------------------------------------------
 
 loc_3DA3C_S2:
@@ -3170,7 +3166,8 @@ Obj_DeathEggRobot_FrontLowerLeg:
 		jsr	off_3DA62_S2(pc,d1.w)
 		jmp	(Draw_And_Touch_Sprite).l
 ; ---------------------------------------------------------------------------
-off_3DA62_S2:	dc.w loc_3DA66_S2-off_3DA62_S2
+off_3DA62_S2:
+		dc.w loc_3DA66_S2-off_3DA62_S2
 		dc.w locret_3DA72_S2-off_3DA62_S2
 ; ---------------------------------------------------------------------------
 
@@ -3194,7 +3191,8 @@ Obj_DeathEggRobot_FrontForearm:
 		bne.w	locret_3DA72_S2
 		jmp	(Draw_And_Touch_Sprite).l
 ; ---------------------------------------------------------------------------
-off_3DA96_S2:	dc.w loc_3DAA0_S2-off_3DA96_S2
+off_3DA96_S2:
+		dc.w loc_3DAA0_S2-off_3DA96_S2
 		dc.w loc_3DAAC_S2-off_3DA96_S2
 		dc.w loc_3DACC_S2-off_3DA96_S2
 		dc.w loc_3DB32_S2-off_3DA96_S2
@@ -3263,10 +3261,11 @@ loc_3DB20_S2:
 		moveq	#signextendB(sfx_BossHand),d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
-word_3DB2A_S2:	dc.w  $200
-		dc.w  $100
-		dc.w   $80
-		dc.w     0
+word_3DB2A_S2:
+		dc.w   $200
+		dc.w   $100
+		dc.w    $80
+		dc.w      0
 ; ---------------------------------------------------------------------------
 
 loc_3DB32_S2:
@@ -3306,7 +3305,8 @@ Obj_DeathEggRobot_ArmSegment:
 		jsr	off_3DB8C_S2(pc,d1.w)
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
-off_3DB8C_S2:	dc.w loc_3DB90_S2-off_3DB8C_S2
+off_3DB8C_S2:
+		dc.w loc_3DB90_S2-off_3DB8C_S2
 		dc.w locret_3DB9C_S2-off_3DB8C_S2
 ; ---------------------------------------------------------------------------
 
@@ -3330,7 +3330,8 @@ Obj_DeathEggRobot_FrontThigh:
 		jsr	off_3DBB6_S2(pc,d1.w)
 		jmp	(Draw_And_Touch_Sprite).l
 ; ---------------------------------------------------------------------------
-off_3DBB6_S2:	dc.w loc_3DBBA_S2-off_3DBB6_S2
+off_3DBB6_S2:
+		dc.w loc_3DBBA_S2-off_3DBB6_S2
 		dc.w locret_3DBC6_S2-off_3DBB6_S2
 ; ---------------------------------------------------------------------------
 
@@ -3360,8 +3361,8 @@ off_3DBE8_S2:	dc.w loc_3DBF6_S2-off_3DBE8_S2
 		dc.w loc_3DC2A_S2-off_3DBE8_S2
 		dc.w loc_3DC46_S2-off_3DBE8_S2
 ; ---------------------------------------------------------------------------
-word_3DBF2_S2:	dc.w     0
-		dc.w $FFCC
+word_3DBF2_S2:
+		dc.w      0,   -$34
 ; ---------------------------------------------------------------------------
 
 loc_3DBF6_S2:
@@ -3414,14 +3415,15 @@ Obj_DeathEggRobot_Jet:
 		lea	word_3DC70_S2(pc),a1
 		bra.w	DeathEggRobot_RefreshChildPosition
 ; ---------------------------------------------------------------------------
-off_3DC66_S2:	dc.w loc_3DC74_S2-off_3DC66_S2
+off_3DC66_S2:
+		dc.w loc_3DC74_S2-off_3DC66_S2
 		dc.w loc_3DC80_S2-off_3DC66_S2
 		dc.w loc_3DC86_S2-off_3DC66_S2
 		dc.w loc_3DC94_S2-off_3DC66_S2
 		dc.w loc_3DC80_S2-off_3DC66_S2
 ; ---------------------------------------------------------------------------
-word_3DC70_S2:	dc.w   $30
-		dc.w   $10
+word_3DC70_S2:
+		dc.w    $30,    $10
 ; ---------------------------------------------------------------------------
 
 loc_3DC74_S2:
@@ -3454,7 +3456,8 @@ Obj_DeathEggRobot_BackLowerLeg:
 		jsr	off_3DCB4_S2(pc,d1.w)
 		jmp	(Draw_And_Touch_Sprite).l
 ; ---------------------------------------------------------------------------
-off_3DCB4_S2:	dc.w loc_3DCB8_S2-off_3DCB4_S2
+off_3DCB4_S2:
+		dc.w loc_3DCB8_S2-off_3DCB4_S2
 		dc.w locret_3DCCA_S2-off_3DCB4_S2
 ; ---------------------------------------------------------------------------
 
@@ -3477,7 +3480,8 @@ Obj_DeathEggRobot_BackForearm:
 		jsr	off_3DCE4_S2(pc,d1.w)
 		jmp	(Draw_And_Touch_Sprite).l
 ; ---------------------------------------------------------------------------
-off_3DCE4_S2:	dc.w loc_3DCEE_S2-off_3DCE4_S2
+off_3DCE4_S2:
+		dc.w loc_3DCEE_S2-off_3DCE4_S2
 		dc.w loc_3DD00_S2-off_3DCE4_S2
 		dc.w loc_3DACC_S2-off_3DCE4_S2
 		dc.w loc_3DB32_S2-off_3DCE4_S2
@@ -3513,7 +3517,8 @@ Obj_DeathEggRobot_BackThigh:
 		jsr	off_3DD38_S2(pc,d1.w)
 		jmp	(Draw_And_Touch_Sprite).l
 ; ---------------------------------------------------------------------------
-off_3DD38_S2:	dc.w loc_3DD3C_S2-off_3DD38_S2
+off_3DD38_S2:
+		dc.w loc_3DD3C_S2-off_3DD38_S2
 		dc.w locret_3DD4E_S2-off_3DD38_S2
 ; ---------------------------------------------------------------------------
 
@@ -3535,7 +3540,8 @@ Obj_DeathEggRobot_TargettingSensor:
 		move.w	off_3DD5E_S2(pc,d0.w),d1
 		jmp	off_3DD5E_S2(pc,d1.w)
 ; ---------------------------------------------------------------------------
-off_3DD5E_S2:	dc.w loc_3DD64_S2-off_3DD5E_S2
+off_3DD5E_S2:
+		dc.w loc_3DD64_S2-off_3DD5E_S2
 		dc.w loc_3DDA6_S2-off_3DD5E_S2
 		dc.w loc_3DE3C_S2-off_3DD5E_S2
 ; ---------------------------------------------------------------------------
@@ -3639,7 +3645,8 @@ Obj_DeathEggRobot_TargettingLock:
 		move.w	off_3DE7E_S2(pc,d0.w),d1
 		jmp	off_3DE7E_S2(pc,d1.w)
 ; ---------------------------------------------------------------------------
-off_3DE7E_S2:	dc.w loc_3DE82_S2-off_3DE7E_S2
+off_3DE7E_S2:
+		dc.w loc_3DE82_S2-off_3DE7E_S2
 		dc.w loc_3DEA2_S2-off_3DE7E_S2
 ; ---------------------------------------------------------------------------
 
@@ -3673,7 +3680,8 @@ Obj_DeathEggRobot_Bomb:
 		jsr	(Animate_Sprite).l
 		jmp	(Draw_And_Touch_Sprite).l
 ; ---------------------------------------------------------------------------
-off_3DED0_S2:	dc.w loc_3DED8_S2-off_3DED0_S2
+off_3DED0_S2:
+		dc.w loc_3DED8_S2-off_3DED0_S2
 		dc.w loc_3DF04_S2-off_3DED0_S2
 		dc.w loc_3DF36_S2-off_3DED0_S2
 		dc.w loc_3DF80_S2-off_3DED0_S2
@@ -3689,8 +3697,8 @@ loc_3DED8_S2:
 		lea	word_3DF00_S2(pc),a1
 		bra.w	DeathEggRobot_RefreshChildPosition
 ; ---------------------------------------------------------------------------
-word_3DF00_S2:	dc.w   $34
-		dc.w $FFDC
+word_3DF00_S2:
+		dc.w    $34,   -$24
 ; ---------------------------------------------------------------------------
 
 loc_3DF04_S2:
@@ -3921,7 +3929,7 @@ DeathEggRobot_InitCollision:
 		lea	DeathEggRobot_ChildOffsets(pc),a1
 		lea	DeathEggRobot_ChildCollision(pc),a2
 		moveq	#0,d0
-		moveq	#7,d6
+		moveq	#8-1,d6
 
 loc_3E0FA_S2:
 		move.b	(a1)+,d0
@@ -3954,7 +3962,7 @@ DeathEggRobot_ChildOffsets:
 DeathEggRobot_RemoveCollision:
 		lea	DeathEggRobot_ChildOffsets(pc),a1
 		moveq	#0,d0
-		moveq	#9,d6
+		moveq	#8-1,d6
 
 loc_3E126_S2:
 		move.b	(a1)+,d0
@@ -3995,7 +4003,7 @@ DeathEggRobot_SetDirection:
 		move.b	render_flags(a0),d0
 		andi.b	#1,d0
 		moveq	#0,d1
-		moveq	#9,d6
+		moveq	#8-1,d6
 		lea	DeathEggRobot_ChildOffsets(pc),a1
 
 loc_3E176_S2:
@@ -4098,7 +4106,8 @@ sub_3E23E_S2:
 		move.w	off_3E24C_S2-2(pc,d1.w),d1
 		jmp	off_3E24C_S2(pc,d1.w)
 ; ---------------------------------------------------------------------------
-off_3E24C_S2:	dc.w loc_3E252_S2-off_3E24C_S2
+off_3E24C_S2:
+		dc.w loc_3E252_S2-off_3E24C_S2
 		dc.w loc_3E27A_S2-off_3E24C_S2
 		dc.w loc_3E27E_S2-off_3E24C_S2
 ; ---------------------------------------------------------------------------
@@ -4187,13 +4196,10 @@ ObjDat_DeathEggRobot:
 		dc.l Map_DeathEggRobot
 		dc.w make_art_tile(ArtTile_SSZ2DeathEggRobot,0,1)
 ObjDat3_DeathEggRobot:
-		dc.w $200
-		dc.b $44
-		dc.b $24
-		dc.b 4
-		dc.b 0
+		dc.w   $200
+		dc.b  $44, $24,   4,   0
 ChildObjDat_DeathEggRobot:
-		dc.w $B
+		dc.w $C-1
 		dc.l Obj_DeathEggRobot_Head		; $2C
 		dc.l Obj_DeathEggRobot_BackForearm	; $2E
 		dc.l Obj_DeathEggRobot_BackLowerLeg	; $30
@@ -4207,36 +4213,42 @@ ChildObjDat_DeathEggRobot:
 		dc.l Obj_DeathEggRobot_ArmSegment	; $44
 		dc.l Obj_DeathEggRobot_ArmSegment	; $46
 ChildObjDat_DeathEggRobotSensor:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_DeathEggRobot_TargettingSensor
 ChildObjDat_DeathEggRobotLock:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_DeathEggRobot_TargettingLock
 ChildObjDat_DeathEggRobotBomb:
-		dc.w 1
+		dc.w 2-1
 		dc.l Obj_DeathEggRobot_Bomb
 		dc.l Obj_DeathEggRobot_BombBarrel
 Pal_DeathEggRobot:
 		binclude "Levels/SSZ/Palettes/Death Egg Robot.bin"
 Ani_DeathEggRobot_Head:
 		dc.w byte_3E59C_S2-Ani_DeathEggRobot_Head
-byte_3E59C_S2:	dc.b    0, $34,   1,   3,   2,   3,   3,   3, $FC
+byte_3E59C_S2:
+		dc.b    0, $34,   1,   3,   2,   3,   3,   3, $FC
 		even
 Ani_DeathEggRobot_Jet:
 		dc.w byte_3E5B2_S2-Ani_DeathEggRobot_Jet
 		dc.w byte_3E5B6_S2-Ani_DeathEggRobot_Jet
 		dc.w byte_3E5D0_S2-Ani_DeathEggRobot_Jet
 		dc.w byte_3E5EA_S2-Ani_DeathEggRobot_Jet
-byte_3E5B2_S2:	dc.b    1,  $A,   0, $FF
-byte_3E5B6_S2:	dc.b    1,  $A,  $B,  $A,  $A,  $B,  $B,  $A,  $A,  $A,  $B,  $B,  $B,  $A,  $A,  $A
+byte_3E5B2_S2:
+		dc.b    1,  $A,   0, $FF
+byte_3E5B6_S2:
+		dc.b    1,  $A,  $B,  $A,  $A,  $B,  $B,  $A,  $A,  $A,  $B,  $B,  $B,  $A,  $A,  $A
 		dc.b   $A,  $A,  $B,  $B,  $B,  $B,  $B,  $B, $FC,   0
-byte_3E5D0_S2:	dc.b    1,  $B,  $B,  $B,  $B,  $B,  $B,  $A,  $A,  $A,  $A,  $A,  $B,  $B,  $B,  $A
+byte_3E5D0_S2:
+		dc.b    1,  $B,  $B,  $B,  $B,  $B,  $B,  $A,  $A,  $A,  $A,  $A,  $B,  $B,  $B,  $A
 		dc.b   $A,  $A,  $B,  $B,  $A,  $A,  $B,  $A, $FD,   0
-byte_3E5EA_S2:	dc.b    1,  $B,   0, $FF
+byte_3E5EA_S2:
+		dc.b    1,  $B,   0, $FF
 		even
 Ani_DeathEggRobot_TargettingSensor:
 		dc.w byte_3E5F0_S2-Ani_DeathEggRobot_TargettingSensor
-byte_3E5F0_S2:	dc.b    3,  $C,  $D,  $E,  $F, $10, $FF
+byte_3E5F0_S2:
+		dc.b    3,  $C,  $D,  $E,  $F, $10, $FF
 		even
 Ani_DeathEggRobot_Bomb:
 		dc.w Ani_DeathEggRobot_Bomb0-Ani_DeathEggRobot_Bomb

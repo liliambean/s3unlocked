@@ -222544,13 +222544,16 @@ Map_DeathEggRobot:						; Liliam: Metal Sonic - final boss
 		include "Levels/SSZ/Misc Object Data/Map - Death Egg Robot.asm"
 
 		; Liliam: Metal Sonic - final boss START
-off_3E2F6_S2:	dc.l Ani_3E318_S2
+off_3E2F6_S2:
+		dc.l Ani_3E318_S2
 		dc.b    0,   1,   2,   3, $FF,   0
 		even
-off_3E300_S2:	dc.l Ani_3E318_S2
+off_3E300_S2:
+		dc.l Ani_3E318_S2
 		dc.b    5,   6,   7,   8, $FF,   0
 		even
-off_3E30A_S2:	dc.l Ani_3E318_S2
+off_3E30A_S2:
+		dc.l Ani_3E318_S2
 		dc.b    0,   1,   2,   3,   4,   5,   6,   7,   8, $C0
 		even
 
@@ -222562,7 +222565,8 @@ c7ani macro pieceOffset,deltax,deltay
 		dc.b	pieceOffset,deltax,deltay
 		endm
 
-Ani_3E318_S2:	dc.w byte_3E32A_S2-Ani_3E318_S2
+Ani_3E318_S2:
+		dc.w byte_3E32A_S2-Ani_3E318_S2
 		dc.w byte_3E33E_S2-Ani_3E318_S2
 		dc.w byte_3E352_S2-Ani_3E318_S2
 		dc.w byte_3E366_S2-Ani_3E318_S2
@@ -222664,10 +222668,13 @@ byte_3E3BC_S2:	c7anilistheader 8
 		c7ani objoff_46, $18, $FC
 byte_3E3BC_S2_End
 		even
-off_3E3D0_S2:	dc.l Ani_3E3D8_S2
+
+off_3E3D0_S2:
+		dc.l Ani_3E3D8_S2
 		dc.b    0,   1,   2, $C0
 		even
-Ani_3E3D8_S2:	dc.w byte_3E3DE_S2-Ani_3E3D8_S2
+Ani_3E3D8_S2:
+		dc.w byte_3E3DE_S2-Ani_3E3D8_S2
 		dc.w byte_3E3F2_S2-Ani_3E3D8_S2
 		dc.w byte_3E3F8_S2-Ani_3E3D8_S2
 
@@ -222697,16 +222704,20 @@ byte_3E3F8_S2:	c7anilistheader 8
 		c7ani objoff_46, $00, $F8
 byte_3E3F8_S2_End
 		even
-off_3E40C_S2:	dc.l Ani_3E438_S2
+
+off_3E40C_S2:
+		dc.l Ani_3E438_S2
 		dc.b    0,   1,   2,   3, $40, sfx_MechaLand
 		dc.b    4,   5,   6,   7,   8, $40, sfx_MechaLand
 		dc.b    9,  $A,   1,   2,   3, $40, sfx_MechaLand
 		dc.b    4,   5,   6,   7,   8, $40, sfx_MechaLand, $C0
 		even
-off_3E42C_S2:	dc.l Ani_3E438_S2
+off_3E42C_S2:
+		dc.l Ani_3E438_S2
 		dc.b  $88, $87, $86, $85,  $B, $40, sfx_MechaLand, $C0
 		even
-Ani_3E438_S2:	dc.w byte_3E450_S2-Ani_3E438_S2
+Ani_3E438_S2:
+		dc.w byte_3E450_S2-Ani_3E438_S2
 		dc.w byte_3E468_S2-Ani_3E438_S2
 		dc.w byte_3E480_S2-Ani_3E438_S2
 		dc.w byte_3E494_S2-Ani_3E438_S2
@@ -222856,8 +222867,9 @@ byte_3E544_S2:	c7anilistheader $10
 		c7ani objoff_44, $00, $08
 		c7ani objoff_46, $00, $08
 byte_3E544_S2_End
-		; Liliam: Metal Sonic - final boss END
 		even
+		; Liliam: Metal Sonic - final boss END
+
 ArtKosM_TitleCardNum1_HCZ:					; Liliam: title cards - display unique act icons
 		binclude "General/Sprites/Title Card/Title Card HCZ 1.bin"
 		even
