@@ -137863,12 +137863,18 @@ loc_24053E:
 		move.w	d0,(_unkFA84).w
 		lea	S3CreditsText(pc),a1
 		move.w	(a1,d0.w),d0
-		beq.w	Ending_ReturnToTitle
+		beq.s	loc_2405FA
 		lea	(a1,d0.w),a1
 		bsr.s	sub_240A4A
 		move.b	#VInt_ID_18,(V_int_routine).w
 		jsr	(Wait_VSync).l
 		jmp	(Pal_FadeFromBlack).l
+; ---------------------------------------------------------------------------
+
+loc_2405FA:
+		; Liliam: use S3 staff roll for hack credits
+		move.b	#GameMode_SegaScreen,(Game_mode).w
+		rts
 ; End of function sub_240530
 
 
