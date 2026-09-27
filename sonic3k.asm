@@ -28357,6 +28357,8 @@ Animate_Player:							; Liliam: add extra characters
 		moveq	#0,d1
 		move.b	character_id(a0),d1
 		bsr.s	Perform_Player_Anim
+
+ContinuePlayer_Load_PLC:
 		movea.l	a0,a1
 		moveq	#0,d0
 		move.b	mapping_frame(a1),d0
@@ -135114,13 +135116,22 @@ loc_5C3BC:
 ;		move.w	#make_art_tile(ArtTile_Continue_Text,0,1),d6		;
 ;		jsr	(sub_5B318).l						;
 
-		move.b	(Encore_P1_character).w,d4		; Liliam: continues - add extra characters
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_5C3E2				;
-		move.w	(Player_mode).w,d4			;
+		tst.b	(Encore_mode).w				; Liliam: continues - add extra characters
+		beq.s	loc_5C3D4				;
+		move.b	(Encore_P1_character).w,d0		;
+		move.b	(Encore_P2_character).w,d1		;
+		cmp.b	d0,d1					;
+		beq.s	loc_5C3E2				;
+		move.l	#Obj_Continue_SonicAlone,(Player_2).w	;
+		move.b	d1,(Player_2+character_id).w		;
+		bra.s	loc_5C3E2				;
+; ---------------------------------------------------------------------------
+
+loc_5C3D4:
+		move.w	(Player_mode).w,d0			; Liliam: continues - add extra characters
 		beq.s	loc_5C3EE				;
-		subq.b	#1,d4					;
-		cmpi.b	#2,d4					;
+		subq.b	#1,d0					;
+		cmpi.b	#2,d0					;
 ;		cmpi.w	#3,(Player_mode).w			;
 		beq.s	loc_5C3FE
 ;		tst.w	(SK_alone_flag).w			;
@@ -135128,7 +135139,7 @@ loc_5C3BC:
 
 loc_5C3E2:
 		move.l	#Obj_Continue_SonicAlone,(Player_1).w
-		move.b	d4,(Player_1+character_id).w		;
+		move.b	d0,(Player_1+character_id).w		;
 		bra.w	loc_5C3FE
 ; ---------------------------------------------------------------------------
 
@@ -135374,7 +135385,7 @@ Obj_Continue_SonicAlone:
 		move.b	routine(a0),d0
 		move.w	Continue_SonicAlone_Index(pc,d0.w),d1
 		jsr	Continue_SonicAlone_Index(pc,d1.w)
-		jsr	(Player_Load_PLC).l			; Liliam: continues - add extra characters
+		jsr	(ContinuePlayer_Load_PLC).l		; Liliam: continues - add extra characters
 ;		jsr	(Sonic_Load_PLC).l			;
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -135404,10 +135415,10 @@ loc_5C684:
 		move.b	#$14,height_pixels(a0)
 		move.w	#$120,x_pos(a0)
 		move.w	#$120,y_pos(a0)
-		cmpi.b	#3,d4					;
+		cmpi.b	#3<<2,d0				;
 		beq.s	.setTailsHeight				;
-		cmpi.b	#1,d4					;
-		bne.s	loc_5C6B6				;
+		cmpi.b	#1<<2,d0				;
+		bne.s	.checkPlayer				;
 		clr.b	(Reverse_gravity_flag).w		;
 		move.b	#5,anim(a0)				;
 		move.l	#Obj_Tails_Tail,(Tails_tails).w		;
@@ -135415,6 +135426,12 @@ loc_5C684:
 
 	.setTailsHeight:
 		addq.w	#4,y_pos(a0)				;
+
+	.checkPlayer:
+		cmpa.w	#Player_1,a0				;
+		beq.s	loc_5C6B6				;
+		move.w	#ArtTile_Player_2,art_tile(a0)		;
+		subi.w	#$20,x_pos(a0)				;
 
 loc_5C6B6:
 		movea.w	(Continue_object_addr).w,a1
@@ -135459,6 +135476,12 @@ loc_5C6F4:
 
 loc_5C70A:
 		move.b	#8,routine(a0)
+		tst.l	(Player_2).l				; Liliam: continues - add extra characters
+		beq.s	loc_5C710				;
+		cmpa.w	#Player_1,a0				;
+		beq.s	locret_5C716				;
+
+loc_5C710:
 		move.b	#1,(Continue_screen_exit).w
 
 locret_5C716:
