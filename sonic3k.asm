@@ -198883,6 +198883,7 @@ Make_CutsceneSkipObj:						; Liliam: cutscene skip object
 		bne.s	CutsceneSkip_Return
 		jsr	(AllocateObject).l
 		bne.s	CutsceneSkip_Return
+		clr.b	(Update_HUD_score).w
 		clr.b	(Update_HUD_timer).w
 		move.l	#Obj_CutsceneSkip_CheckDelete,(a1)
 		move.l	#Map_CutsceneSkip,mappings(a1)
