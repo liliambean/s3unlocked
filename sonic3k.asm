@@ -179445,22 +179445,37 @@ LRZEncoreBoss_Jump:
 
 LRZEncoreBoss_Chase:
 		btst	#6,status(a0)
-		bne.w	.done
+		bne.s	LRZEncoreBoss_Return
 		move.b	angle(a0),d0
-		bne.s	.findPlayer
+		bne.s	.swingUpAndDown
 		moveq	#signextendB(sfx_BossProjectile),d0
 		jsr	(Play_SFX).l
 		lea	ChildObjDat_7A19A(pc),a2
 		jsr	(CreateChild1_Normal).l
 		move.b	angle(a0),d0
 
-	.findPlayer:
+	.swingUpAndDown:
 		jsr	(GetSineCosine).l
 		ext.l	d1
 		swap	d1
 		ror.l	#7,d1
 		addi.l	#$4308000,d1
 		move.l	d1,y_pos(a0)
+		move.w	(Camera_X_pos).w,d0
+		subi.w	#$28,d0
+		cmp.w	x_pos(a0),d0
+		bgt.s	.outOfBounds
+		addi.w	#321+(2*$28),d0
+		cmp.w	x_pos(a0),d0
+		bgt.s	.findPlayer
+
+	.outOfBounds:
+		move.w	d0,x_pos(a0)
+		clr.w	x_pos+2(a0)
+		clr.w	x_vel(a0)
+		clr.b	angle(a0)
+
+	.findPlayer:
 		addq.b	#2,angle(a0)
 		move.w	(Player_1+x_pos).w,d0
 		sub.w	x_pos(a0),d0
@@ -179484,7 +179499,7 @@ LRZEncoreBoss_Chase:
 	.moveRight:
 		cmpi.w	#$180,x_vel(a0)
 		bge.s	.done
-		addq.w	#8,x_vel(a0)
+		addq.w	#4,x_vel(a0)
 		jmp	(MoveSprite2).l
 ; ---------------------------------------------------------------------------
 
@@ -179504,7 +179519,7 @@ LRZEncoreBoss_Chase:
 	.moveLeft:
 		cmpi.w	#-$180,x_vel(a0)
 		ble.s	.done
-		subq.w	#8,x_vel(a0)
+		subq.w	#4,x_vel(a0)
 
 	.done:
 		jmp	(MoveSprite2).l
@@ -179528,9 +179543,18 @@ LRZEncoreBoss_CheckHit:							; Liliam: Encore mode - LRZ2 boss
 		move.w	#$700,ground_vel(a1)
 		move.w	x_vel(a1),d0
 		asr.w	#2,d0
+		bpl.s	.movingRight
+		cmp.w	x_vel(a0),d0
+		bge.s	.checkBombHit
 		move.w	d0,x_vel(a0)
-		bmi.s	.checkBombHit
+		bra.s	.checkBombHit
+; ---------------------------------------------------------------------------
+
+	.movingRight:
 		neg.w	ground_vel(a1)
+		cmp.w	x_vel(a0),d0
+		ble.s	.checkBombHit
+		move.w	d0,x_vel(a0)
 		bra.s	.checkBombHit
 ; ---------------------------------------------------------------------------
 
