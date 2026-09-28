@@ -116113,6 +116113,8 @@ loc_502FA:
 
 
 sub_50318:
+		cmpi.b	#State_NoControl,routine(a1)		; Liliam: Encore mode - restart level
+		bhs.s	locret_50348				;
 		cmpi.b	#5,anim(a1)
 		bne.s	loc_50324
 		clr.b	anim(a1)				; If Sonic is standing, set him to the running animation
