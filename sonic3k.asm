@@ -22478,7 +22478,8 @@ Kill_Character:
 loc_1036E:
 ;		clr.b	status_secondary(a0)			;
 		clr.b	status_tertiary(a0)
-		move.b	#State_Dead_2P,routine(a0)		; Liliam: Encore mode - expand player routines
+		move.b	(Ctrl_2_locked).w,spin_dash_flag(a0)	; Liliam: Encore mode - expand player routines
+		move.b	#State_Dead_2P,routine(a0)		;
 		tst.w	(Competition_mode).w			;
 		bne.s	loc_1037C				;
 		tst.b	(Encore_mode).w				;
@@ -24254,11 +24255,11 @@ Sonic_Index:
 		dc.w Sonic_Init-Sonic_Index
 		dc.w Sonic_Control-Sonic_Index
 		dc.w Sonic_Hurt-Sonic_Index
+		dc.w Sonic_Dead_2P-Sonic_Index			; Liliam: Encore mode - expand player routines
+		dc.w Sonic_GameOver_2P-Sonic_Index		;
+		dc.w Sonic_Drown-Sonic_Index			;
 		dc.w Sonic_Dead-Sonic_Index
 		dc.w Sonic_GameOver-Sonic_Index
-		dc.w Sonic_Drown-Sonic_Index			; Liliam: Encore mode - expand player routines
-		dc.w Sonic_Dead-Sonic_Index			;
-		dc.w Sonic_GameOver-Sonic_Index			;
 ;		dc.w Sonic_Respawn-Sonic_Index			;
 ;		dc.w Sonic_Drown-Sonic_Index			;
 ; ---------------------------------------------------------------------------
@@ -24545,6 +24546,17 @@ loc_10D32:
 		jmp	(Change_Music_Tempo).l
 ; ---------------------------------------------------------------------------
 
+Player_RecordPosDead_2P:
+		cmpa.w	#Player_1,a0				; Liliam: Encore mode - expand player routines
+		bne.s	Sonic_ExitChk				;
+		st	(Ctrl_2_locked).w			;
+		move.w	(Ctrl_1).w,(Ctrl_2_logical).w		;
+
+Debug_RecordPos:
+		lea	(Player_2).w,a0				;
+		bsr.s	sub_10D72				;
+		lea	(Player_1).w,a0				;
+
 Sonic_ExitChk:
 		rts
 ; ---------------------------------------------------------------------------
@@ -24576,7 +24588,7 @@ Player_RecordPos:
 		cmpa.w	#Player_1,a0			; is Sonic the sidekick?
 		bne.s	locret_10D9E			; if so, branch
 
-Debug_RecordPos:
+sub_10D72:
 		move.w	(Pos_table_index).w,d0
 		lea	(Pos_table).w,a1
 		lea	(a1,d0.w),a1
@@ -25724,40 +25736,6 @@ Player_Boundary_Sides:
 		bra.s	Player_Boundary_CheckBottom
 ; End of function Player_LevelBound
 
-; ---------------------------------------------------------------------------
-
-Player_ResetScroll:						; Liliam: bugfix - recenter camera during object control
-		tst.b	(Scroll_lock).w
-		bne.s	Debug_ResetScroll.return
-		cmpa.w	#Player_1,a0
-		bne.s	Debug_ResetScroll.return
-
-Debug_ResetScroll:
-		moveq	#2,d0
-		cmpi.w	#$60,(Distance_from_top).w
-		beq.s	.return
-		bhs.s	.resetScroll
-		moveq	#-2,d0
-
-	.resetScroll:
-		sub.w	d0,(Distance_from_top).w
-		btst	#Status_InAir,status(a0)
-		beq.s	.moveCamera
-		cmpi.w	#$40,(Distance_from_top).w
-		bls.s	.moveCamera
-		cmpi.w	#$80,(Distance_from_top).w
-		blo.s	.return
-
-	.moveCamera:
-		add.w	(Camera_Y_pos).w,d0
-		cmp.w	(Camera_min_Y_pos).w,d0
-		blt.s	.return
-		cmp.w	(Camera_max_Y_pos).w,d0
-		bgt.s	.return
-		move.w	d0,(Camera_Y_pos).w
-
-	.return:
-		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -27419,6 +27397,9 @@ loc_12302:
 		; Liliam: Encore mode - restart level
 ; ---------------------------------------------------------------------------
 
+Sonic_Dead_2P:
+		bsr.w	Player_RecordPosDead_2P			; Liliam: Encore mode - expand player routines
+
 Sonic_Dead:
 		cmpa.w	#Player_1,a0				; Liliam: Encore mode - block debug mode for player 2
 		bne.s	loc_123AA				;
@@ -27427,6 +27408,7 @@ Sonic_Dead:
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	loc_123AA
 		move.w	#1,(Debug_placement_mode).w
+		move.b	spin_dash_flag(a0),(Ctrl_2_locked).w	; Liliam: Encore mode - expand player routines
 		clr.b	(Ctrl_1_locked).w
 		rts
 ; ---------------------------------------------------------------------------
@@ -27588,6 +27570,9 @@ loc_1252A:
 ; End of function Player_CheckGameOver
 
 ; ---------------------------------------------------------------------------
+
+Sonic_GameOver_2P:
+		bsr.w	Player_RecordPosDead_2P			; Liliam: Encore mode - expand player routines
 
 Sonic_GameOver:
 		tst.w	$3E(a0)
@@ -29253,11 +29238,11 @@ Tails_Index:
 		dc.w Tails_Init-Tails_Index
 		dc.w Tails_Control-Tails_Index
 		dc.w Tails_Hurt-Tails_Index
+		dc.w Tails_Dead_2P-Tails_Index			; Liliam: Encore mode - expand player routines
+		dc.w Tails_GameOver_2P-Tails_Index		;
+		dc.w Tails_Drown-Tails_Index			;
 		dc.w Tails_Dead-Tails_Index
 		dc.w Tails_GameOver-Tails_Index
-		dc.w Tails_Drown-Tails_Index			; Liliam: Encore mode - expand player routines
-		dc.w Tails_Dead-Tails_Index			;
-		dc.w Tails_GameOver-Tails_Index			;
 ;		dc.w Tails_Respawn-Tails_Index			;
 ;		dc.w Tails_Drown-Tails_Index			;
 ; ---------------------------------------------------------------------------
@@ -32847,6 +32832,9 @@ loc_15788:
 
 ; ---------------------------------------------------------------------------
 
+Tails_Dead_2P:
+		bsr.w	Player_RecordPosDead_2P			; Liliam: Encore mode - expand player routines
+
 Tails_Dead:
 		cmpa.w	#Player_1,a0				; Liliam: Encore mode - block debug mode for player 2
 ;		cmpi.w	#2,(Player_mode).w			;
@@ -32856,6 +32844,7 @@ Tails_Dead:
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	loc_157B0
 		move.w	#1,(Debug_placement_mode).w
+		move.b	spin_dash_flag(a0),(Ctrl_2_locked).w	; Liliam: Encore mode - expand player routines
 		clr.b	(Ctrl_1_locked).w
 		rts
 ; ---------------------------------------------------------------------------
@@ -32880,6 +32869,9 @@ loc_157C8:
 		bsr.w	Tails_UpdateSprite
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
+
+Tails_GameOver_2P:
+		bsr.w	Player_RecordPosDead_2P			; Liliam: Encore mode - expand player routines
 
 Tails_GameOver:
 		tst.w	$3E(a0)
@@ -34336,11 +34328,11 @@ Knuckles_Index:
 		dc.w Knuckles_Init-Knuckles_Index
 		dc.w Knuckles_Control-Knuckles_Index
 		dc.w Knuckles_Hurt-Knuckles_Index
+		dc.w Knuckles_Dead_2P-Knuckles_Index		; Liliam: Encore mode - expand player routines
+		dc.w Knuckles_GameOver_2P-Knuckles_Index	;
+		dc.w Knuckles_Drown-Knuckles_Index		;
 		dc.w Knuckles_Dead-Knuckles_Index
 		dc.w Knuckles_GameOver-Knuckles_Index
-		dc.w Knuckles_Drown-Knuckles_Index		; Liliam: Encore mode - expand player routines
-		dc.w Knuckles_Dead-Knuckles_Index		;
-		dc.w Knuckles_GameOver-Knuckles_Index		;
 ;		dc.w Knuckles_Respawn-Knuckles_Index		;
 ;		dc.w Knuckles_Drown-Knuckles_Index		;
 ; ---------------------------------------------------------------------------
@@ -37256,6 +37248,40 @@ locret_17BB4:
 
 ; ---------------------------------------------------------------------------
 
+Player_ResetScroll:						; Liliam: bugfix - recenter camera during object control
+		tst.b	(Scroll_lock).w
+		bne.s	Debug_ResetScroll.return
+		cmpa.w	#Player_1,a0
+		bne.s	Debug_ResetScroll.return
+
+Debug_ResetScroll:
+		moveq	#2,d0
+		cmpi.w	#$60,(Distance_from_top).w
+		beq.s	.return
+		bhs.s	.resetScroll
+		moveq	#-2,d0
+
+	.resetScroll:
+		sub.w	d0,(Distance_from_top).w
+		btst	#Status_InAir,status(a0)
+		beq.s	.moveCamera
+		cmpi.w	#$40,(Distance_from_top).w
+		bls.s	.moveCamera
+		cmpi.w	#$80,(Distance_from_top).w
+		blo.s	.return
+
+	.moveCamera:
+		add.w	(Camera_Y_pos).w,d0
+		cmp.w	(Camera_min_Y_pos).w,d0
+		blt.s	.return
+		cmp.w	(Camera_max_Y_pos).w,d0
+		bgt.s	.return
+		move.w	d0,(Camera_Y_pos).w
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
 Knuckles_Hurt:
 		cmpa.w	#Player_1,a0				; Liliam: Encore mode - block debug mode for player 2
 		bne.s	loc_17BD0				;
@@ -37337,6 +37363,9 @@ loc_17C82:
 
 ; ---------------------------------------------------------------------------
 
+Knuckles_Dead_2P:
+		bsr.w	Player_RecordPosDead_2P			; Liliam: Encore mode - expand player routines
+
 Knuckles_Dead:
 		cmpa.w	#Player_1,a0				; Liliam: Encore mode - block debug mode for player 2
 		bne.s	loc_17CA2				;
@@ -37345,6 +37374,7 @@ Knuckles_Dead:
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	loc_17CA2
 		move.w	#1,(Debug_placement_mode).w
+		move.b	spin_dash_flag(a0),(Ctrl_2_locked).w	; Liliam: Encore mode - expand player routines
 		clr.b	(Ctrl_1_locked).w
 		rts
 ; ---------------------------------------------------------------------------
@@ -37356,6 +37386,9 @@ loc_17CA2:
 		bsr.w	Knux_UpdateSprite
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
+
+Knuckles_GameOver_2P:
+		bsr.w	Player_RecordPosDead_2P			; Liliam: Encore mode - expand player routines
 
 Knuckles_GameOver:
 		tst.w	$3E(a0)
@@ -37411,7 +37444,7 @@ Encore_CheckRestart:						; Liliam: Encore mode - restart level
 		jsr	(Play_Music).l
 
 	.clearPlayer:
-		jsr	(Delete_Current_Sprite).l
+		bsr.w	Delete_Current_Sprite
 		clr.b	(Dust+$38).w
 		cmpa.w	(Tails_tails+$30).w,a0
 		bne.s	.checkBoostMode
@@ -37427,11 +37460,12 @@ Encore_CheckRestart:						; Liliam: Encore mode - restart level
 		cmp.b	(Encore_P2_character).w,d3
 		beq.s	.swapPlayers
 		lsl.w	#2,d3
-		lea	(Player_ObjectPtrs).l,a1
+		lea	Player_ObjectPtrs(pc),a1
 		move.l	(a1,d3.w),(a0)
 		move.b	#1,(Reserved_object_3+routine).w
 
 	.swapPlayers:
+		clr.b	(Ctrl_2_locked).w
 		clr.b	(Scroll_lock).w
 		clr.b	(Deform_lock).w
 		move.b	#1,(Update_HUD_life_count).w
@@ -38213,7 +38247,8 @@ loc_1857C:
 		move.b	#$17,anim(a2)
 		subq.w	#1,$30(a0)
 		bne.s	loc_18590
-		move.b	#State_Dead_2P,routine(a2)		; Liliam: Encore mode - expand player routines
+		move.b	(Ctrl_2_locked).w,spin_dash_flag(a2)	; Liliam: Encore mode - expand player routines
+		move.b	#State_Dead_2P,routine(a2)		;
 		tst.b	(Encore_mode).w				;
 		bne.s	locret_1858E				;
 		move.b	#State_Dead,routine(a2)
@@ -40794,8 +40829,10 @@ Obj_EncoreHelper_Main:
 		move.b	(Encore_P1_character).w,d0
 		move.b	(Encore_P2_character).w,(Encore_P1_character).w
 		move.b	d0,(Encore_P2_character).w
-		move.b	#$43,(Tails_CPU_pos_table_offset).w
 		moveq	#signextendB(sfx_EncoreSwap),d0
+		tst.b	(Tails_CPU_pos_table_offset).w
+		bmi.s	.playSFX
+		move.b	#$43,(Tails_CPU_pos_table_offset).w
 
 	.playSFX:
 		jsr	(Play_SFX).l
@@ -40812,6 +40849,11 @@ Obj_EncoreHelper_Main:
 		move.b	(Reverse_gravity_flag).w,sub2_mapframe(a0)
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
+EncoreHelper_StatusLookup:					; Liliam: Encore mode - player swap
+		dc.b %0000000, %0010000, %0001000, %0011000
+		dc.b %1000000, %1010000, %1001000, %1011000
+		dc.b %0100000, %0110000, %0101000, %0111000
+		dc.b %1100000, %1110000, %1101000, %1111000
 EncoreHelper_ColiChgObjPtrs:					; Liliam: Encore mode - player swap
 		dc.l Obj_PathSwap_Vertical
 		dc.l Obj_PathSwap_Horizontal
@@ -40820,11 +40862,6 @@ EncoreHelper_ColiChgObjPtrs:					; Liliam: Encore mode - player swap
 		dc.l Obj_AutoSpin_Vertical
 		dc.l Obj_AutoSpin_Horizontal
 		dc.w $FFFF
-EncoreHelper_StatusLookup:					; Liliam: Encore mode - player swap
-		dc.b %0000000, %0010000, %0001000, %0011000
-		dc.b %1000000, %1010000, %1001000, %1011000
-		dc.b %0100000, %0110000, %0101000, %0111000
-		dc.b %1100000, %1110000, %1101000, %1111000
 Map_EncoreHelper:						; Liliam: Encore mode - player swap
 		include "General/Sprites/Enemy Misc/Map - Encore Cursor.asm"
 ; ---------------------------------------------------------------------------
@@ -41072,7 +41109,6 @@ Obj_EncoreRespawn_Release:
 		movea.l	Player_ObjectPtrs(pc,d0.w),a1
 		move.l	a1,(a0)
 		move.w	#6,(Tails_CPU_routine).w
-		move.b	#$43,(Tails_CPU_pos_table_offset).w
 		clr.b	(Player_prev_frame_P2).w
 		jmp	(a1)
 ; ---------------------------------------------------------------------------
@@ -219588,9 +219624,7 @@ loc_92AA0:
 		move.b	#1,(Debug_camera_speed).w
 
 loc_92AB0:
-		lea	(Player_2).w,a0				; Liliam: debug - stop player 2 endless jumping
-		jsr	(Debug_RecordPos).l			;
-		lea	(Player_1).w,a0				;
+		jsr	(Debug_RecordPos).l			; Liliam: debug - stop player 2 endless jumping
 		tst.b	(Tails_CPU_pos_table_offset).w		;
 		bmi.s	.done					;
 		move.b	#$43,(Tails_CPU_pos_table_offset).w	;
