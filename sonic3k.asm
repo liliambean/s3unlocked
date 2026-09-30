@@ -111547,12 +111547,14 @@ loc_4DDE2:
 ;		rts									;
 ; ---------------------------------------------------------------------------
 PLC_SphereResults: plrlistheader
-		plreq ArtTile_SSZMasterEmerald, ArtNem_EndingMasterEmerald	; Liliam: bugfix - queue Master Emerald for ending
-		plreq ArtTile_BlueSphere_Difficulty+$EF, ArtNem_RobotnikShip
-		plreq ArtTile_BlueSphere_Difficulty+$EF, ArtNem_EggRoboHead	; Liliam: bugfix - queue Egg Robo head
-		plreq ArtTile_BlueSphere_Difficulty+$141, ArtNem_Chicken
+		plreq ArtTile_BlueSphere_Difficulty+$EF, ArtNem_RobotnikShip-1	; Liliam: convert to 1P Ray palette
+;		plreq ArtTile_BlueSphere_Difficulty+$EF, ArtNem_RobotnikShip	;
+;		plreq ArtTile_BlueSphere_Difficulty+$141, ArtNem_Chicken	;
+		plreq ArtTile_BlueSphere_Difficulty+$141, ArtNem_Chicken-1	;
 		plreq ArtTile_BlueSphere_Difficulty+$14F, ArtNem_Squirrel
 		plreq ArtTile_BlueSphere_Difficulty+$161, ArtNem_Rabbit
+		plreq ArtTile_BlueSphere_Difficulty+$EF, ArtNem_EggRoboHead	; Liliam: bugfix - queue Egg Robo head
+		plreq ArtTile_SSZMasterEmerald, ArtNem_EndingMasterEmerald	; Liliam: bugfix - queue Master Emerald for ending
 ;		plreq ArtTile_BlueSphere_Tails, ArtNem_BlueSphereTails		; Liliam: blue sphere - use actual Tails anim
 PLC_SphereResults_End
 
