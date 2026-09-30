@@ -136194,20 +136194,16 @@ UnlockScreen:							; Liliam: extra skills
 		move.b	(Demo_mode_flag).w,(Game_mode).w
 		clr.w	(Demo_mode_flag).w
 		tst.b	(Encore_mode).w
-		bne.s	.encoreMode
-		move.w	(Player_mode).w,d0
-		bne.s	.checkFlags
-		addq.w	#1,d0
+		beq.s	.notEncore
+		lea	(Tails_CPU_interact).w,a1
+		move.w	(a1)+,d0
 
-	.checkFlags:
-		bset	d0,(Unlock_flags).w
-		bne.w	UnlockScreen_Return
-		move.w	d0,-(sp)
-		bset	d0,(Skill_options).w
-		bra.s	.unlock
-; ---------------------------------------------------------------------------
-
-	.encoreMode:
+	.loop:
+		move.l	a1,-(sp)
+		bsr.s	UnlockScreen_CheckPlayer
+		movea.l	(sp)+,a1
+		move.w	(a1)+,d0
+		bpl.s	.loop
 		btst	#Unlock_MetalSonic,(Unlock_flags).w
 	if NoHolograms
 		bra.w	UnlockScreen_Return
@@ -136221,8 +136217,23 @@ UnlockScreen:							; Liliam: extra skills
 		blo.w	UnlockScreen_Return
 		move.w	#8,-(sp)
 		bset	#Unlock_MetalSonic,(Unlock_flags).w
+		bra.s	UnlockScreen_Common
+; ---------------------------------------------------------------------------
 
-	.unlock:
+	.notEncore:
+		move.w	(Player_mode).w,d0
+		bne.s	UnlockScreen_CheckPlayer.checkFlags
+
+UnlockScreen_CheckPlayer:
+		addq.w	#1,d0
+
+	.checkFlags:
+		bset	d0,(Unlock_flags).w
+		bne.w	UnlockScreen_Return
+		move.w	d0,-(sp)
+		bset	d0,(Skill_options).w
+
+UnlockScreen_Common:
 		st	(SRAM_mask_interrupts_flag).w
 		jsr	(Write_SaveExtra).l
 		jsr	(Pal_FadeToBlack).l
@@ -136273,9 +136284,12 @@ UnlockScreen:							; Liliam: extra skills
 	.loop:
 		move.l	(a0)+,(a1)+
 		dbf	d0,.loop
+		move.l	#UnlockScreen_Return,(V_int_1E_addr).w
+		tst.w	(Current_music).w
+		beq.s	UnlockScreen_MainLoop
+		clr.w	(Current_music).w
 		moveq	#signextendB(cmd_Stop),d0
 		jsr	(Play_Music).l
-		move.l	#UnlockScreen_Return,(V_int_1E_addr).w
 
 UnlockScreen_MainLoop:
 		move.b	#VInt_ID_1E,(V_int_routine).w
@@ -141069,6 +141083,7 @@ loc_5F2D8:
 ;		jmp	(CreateChild1_Normal).l							;
 		move.w	(Encore_stocks_packed).w,d0						;
 		jsr	(Encore_UnpackStocks).l							;
+		lea	(Tails_CPU_interact).w,a2						;
 		moveq	#0,d3									;
 		move.b	(Encore_unlocked_chars).w,d2						;
 		move.b	(Encore_available_chars).w,d3						;
@@ -141086,6 +141101,7 @@ loc_5F2D8:
 	.loop:
 		btst	d2,d3									;
 		beq.s	.skip									;
+		move.w	d2,(a2)+								;
 		jsr	(AllocateObject).l							;
 		bne.s	.skip									;
 		move.w	d2,d0									;
@@ -141100,6 +141116,7 @@ loc_5F2D8:
 		addq.b	#1,d2									;
 		cmpi.b	#7,d2									;
 		blo.s	.loop									;
+		move.b	#-1,(a2)								;
 		rts										;
 ; ---------------------------------------------------------------------------
 Ending_EyecatchObjPtrs:										; Liliam: ending - use S3 logo eyecatch for Encore mode
