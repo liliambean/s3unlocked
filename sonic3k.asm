@@ -136193,6 +136193,8 @@ plane_height =	28
 UnlockScreen:							; Liliam: extra skills
 		move.b	(Demo_mode_flag).w,(Game_mode).w
 		clr.w	(Demo_mode_flag).w
+		cmpi.b	#GameMode_LevelSelect,(Game_mode).w
+		beq.w	UnlockScreen_Return
 		tst.b	(Encore_mode).w
 		beq.s	.notEncore
 		lea	(Tails_CPU_interact).w,a1
