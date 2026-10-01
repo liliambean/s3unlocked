@@ -8403,8 +8403,8 @@ loc_6FA4:
 		add.l	d1,y_pos(a1)
 		move.b	#$F,anim(a1)
 		bset	#Status_InAir,status(a1)
-		move.b	#0,double_jump_flag(a1)
 		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
+		move.b	#0,double_jump_flag(a1)
 		tst.b	$C(a2)
 		bne.s	loc_7030
 		bclr	#Status_Facing,status(a1)		; Liliam: face right in horizontal HCZ water tunnels
@@ -72915,7 +72915,11 @@ Player_ClearRollHeight2:
 		clr.b	jumping(a1)				; Liliam: bugfix - clear roll state
 		bclr	#Status_RollJump,status(a1)		;
 		bclr	#Status_Roll,status(a1)			;
-		beq.s	locret_2FC7C				;
+		bne.s	.setHeight				;
+		tst.b	double_jump_flag(a1)			;
+		bpl.s	locret_2FC7C				;
+
+	.setHeight:
 		move.b	y_radius(a1),d0				;
 		move.b	default_y_radius(a1),y_radius(a1)	;
 		move.b	default_x_radius(a1),x_radius(a1)	;
@@ -73733,9 +73737,9 @@ loc_307C6:
 		add.w	d1,y_pos(a1)
 		bset	#Status_InAir,status(a1)
 ;		bclr	#Status_RollJump,status(a1)		; Liliam: bugfix - clear roll state
+		bsr.w	Player_ClearRollHeight			;
 		move.w	#0,y_vel(a1)
 		move.b	#0,double_jump_flag(a1)
-		bsr.w	Player_ClearRollHeight			;
 ;		move.b	#0,jumping(a1)				;
 		btst	#6,subtype(a0)
 		bne.s	loc_30826
@@ -75739,9 +75743,9 @@ loc_31EDE:
 		move.b	#State_Control,routine(a1)		; Liliam: bugfix - release player from object
 		bset	#Status_InAir,status(a1)
 ;		bclr	#Status_RollJump,status(a1)		; Liliam: bugfix - clear roll state
+		bsr.w	Player_ClearRollHeight			;
 		move.w	#0,y_vel(a1)
 		move.b	#0,double_jump_flag(a1)
-		bsr.w	Player_ClearRollHeight			;
 ;		move.b	#0,jumping(a1)				;
 		moveq	#1,d6
 		move.w	#1,ground_vel(a1)
@@ -76957,9 +76961,9 @@ loc_32A30:
 
 loc_32A5A:
 ;		clr.b	jumping(a1)				; Liliam: bugfix - clear roll state
-		clr.b	double_jump_flag(a1)			;
 		bset	#Status_InAir,status(a1)
 		bsr.w	Player_ClearRollHeight			;
+		clr.b	double_jump_flag(a1)			;
 ;		bclr	#Status_RollJump,status(a1)		;
 		bclr	#Status_Push,status(a1)
 		moveq	#signextendB(sfx_SmallBumpers),d0
@@ -93381,8 +93385,8 @@ loc_3FC0E:
 		asr.w	#6,d1
 		add.w	d1,y_pos(a1)
 		bset	#Status_InAir,status(a1)
-		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
-;		bclr	#Status_RollJump,status(a1)		;
+;		bclr	#Status_RollJump,status(a1)		; Liliam: bugfix - clear roll state
+		jsr	(Player_ClearRollHeight).l		;
 		move.w	#0,y_vel(a1)
 		move.b	#0,double_jump_flag(a1)
 ;		move.b	#0,jumping(a1)				;
@@ -105199,8 +105203,8 @@ loc_49578:
 		asr.w	#4,d1
 		add.w	d1,y_pos(a1)
 		bset	#Status_InAir,status(a1)
-		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
-;		bclr	#Status_RollJump,status(a1)		;
+;		bclr	#Status_RollJump,status(a1)		; Liliam: bugfix - clear roll state
+		jsr	(Player_ClearRollHeight).l		;
 		move.w	#0,y_vel(a1)
 		move.b	#0,double_jump_flag(a1)
 ;		move.b	#0,jumping(a1)				;
