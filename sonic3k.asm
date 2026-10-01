@@ -23753,9 +23753,9 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 		bra.s	.lookup
 ; ---------------------------------------------------------------------------
 ability_timer = $39
-glide_angle = $40
+glide_angle = $2D
 glide_anim_timer = $30
-glide_sfx_timer = $2D
+glide_sfx_timer = $31
 glide_speed_cap = $28
 AirGlide_Dive = 1
 AirGlide_AnimUp = 0
@@ -24061,6 +24061,7 @@ Ray_AirGlide:							; Liliam: extra skills - air glide (credit: Rubberduckycooly
 
 	.cancel:
 		clr.b	double_jump_flag(a0)
+		move.b	#4,flip_speed(a0)
 
 	.stopSFX:
 		moveq	#signextendB(cmd_StopSFX),d0
