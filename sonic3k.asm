@@ -34,7 +34,7 @@ FixMusicAndSFXDataBugs = 1
 VariableRollHeight = 1
 ; If 1, Tails and Amy's roll heights are adjusted
 
-DevMode = 1
+DevMode = 0
 ; If 1, enables some cheats to help with development
 
 NoEncorePalettes = 1
@@ -71,8 +71,8 @@ Vectors:	dc.l		0,	EntryPoint,	ErrorTrap,	ErrorTrap	; 0
 		dc.l	ErrorTrap,	ErrorTrap,	ErrorTrap,	ErrorTrap	; 60
 Header:		dc.b "SEGA GENESIS    "
 Copyright:	dc.b "(C)SEGA 1994.JUN"
-Domestic_Name:	dc.b "SONIC 3 UNLOCKED                                "
-Overseas_Name:	dc.b "SONIC 3 UNLOCKED                                "
+Domestic_Name:	dc.b "SONIC 3 UNLOCKED (Demo Version)                 "
+Overseas_Name:	dc.b "SONIC 3 UNLOCKED (Demo Version)                 "
 Serial_Number:	dc.b "GM MK-1563 -00"
 Checksum:	dc.w $DFB3
 Input:		dc.b "J               "
