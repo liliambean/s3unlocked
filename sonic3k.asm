@@ -24035,10 +24035,18 @@ Ray_AirGlide:							; Liliam: extra skills - air glide (credit: Rubberduckycooly
 	.done:
 		bsr.w	Player_LevelBound
 		jsr	(MoveSprite_TestGravity2).l
+		move.w	y_vel(a0),-(sp)
 		bset	#Status_Roll,status(a0)
 		bsr.w	SonicKnux_DoLevelCollision
+		move.w	(sp)+,d0
 		bclr	#Status_Roll,status(a0)
 		beq.s	.return
+		tst.w	y_vel(a0)
+		bne.s	.checkRelease
+		tst.w	d0
+		bne.s	.hitCeiling
+
+	.checkRelease:
 		tst.w	x_vel(a0)
 		beq.s	.hitWall
 		move.b	(Ctrl_1_held_logical).w,d0
@@ -24066,6 +24074,11 @@ Ray_AirGlide:							; Liliam: extra skills - air glide (credit: Rubberduckycooly
 	.stopSFX:
 		moveq	#signextendB(cmd_StopSFX),d0
 		jmp	(Play_Music).l
+; ---------------------------------------------------------------------------
+
+	.hitCeiling:
+		clr.w	ground_vel(a0)
+		rts
 ; ---------------------------------------------------------------------------
 
 	.hitWall:
