@@ -23715,6 +23715,7 @@ MightyRay_TriangleJump:						; Liliam: extra skills - triangle jump
 		lsl.w	#2,d0
 		lea	(MightyRay_TriangleJumpSpeeds-4).l,a1
 		move.l	(a1,d0.w),x_vel(a0)
+		move.b	#1,jumping(a0)
 		clr.b	double_jump_flag(a0)
 		btst	#Status_Underwater,status(a0)
 		beq.s	.detach
