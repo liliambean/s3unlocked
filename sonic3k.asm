@@ -23459,19 +23459,6 @@ Amy_HammerAttack_Touch:						; Liliam: extra skills - hammer attack
 		rts
 ; ---------------------------------------------------------------------------
 
-Amy_TouchFloor_CheckHammerRush:					; Liliam: extra skills - hammer attack
-		tst.b	double_jump_property(a0)
-		bpl.w	Amy_TouchFloor
-		bsr.w	Amy_TouchFloor
-
-Amy_HammerRush_Release:
-		move.b	#$1D,anim(a0)
-		move.b	#60,double_jump_property(a0)
-		bset	#Status_WaterSlide,status_secondary(a0)
-		moveq	#signextendB(sfx_Dash),d0
-		jmp	(Play_SFX).l
-; ---------------------------------------------------------------------------
-
 Obj_Mighty:							; Liliam: add extra characters
 		move.l	#.main,(a0)
 		move.b	#4,character_id(a0)
@@ -24680,6 +24667,20 @@ locret_10E24:
 ; End of function Reset_Player_Position_Array
 
 ; ---------------------------------------------------------------------------
+
+Player_WaterResistFix:						; Liliam: bugfix - player speeds fix
+		cmp.w	(Target_water_level).w,d0
+		bhs.s	.return
+		move.b	(Water_speed),d0
+		cmp.b	y_vel(a0),d0
+		blt.s	.return
+		ext.w	d0
+		ror.w	#6,d0
+		move.w	d0,y_vel(a0)
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
 ; Subroutine for Sonic when he's underwater
 ; ---------------------------------------------------------------------------
 
@@ -24703,7 +24704,7 @@ Sonic_InWater:
 		bne.s	locret_10E2C	; if already underwater, branch
 		tst.w	y_vel(a0)				; Liliam: bugfix - player speeds fix
 		bmi.s	locret_10E2C				;
-		bsr.w	Player_WaterResistFix			;
+		bsr.s	Player_WaterResistFix			;
 		addq.b	#1,(Water_entered_counter).w
 		movea.l	a0,a1
 		bsr.w	Player_ResetAirTimer
@@ -27203,6 +27204,19 @@ Sonic_DropDash_Release:
 
 	.setanim:
 		move.b	#2,anim(a0)
+		jmp	(Play_SFX).l
+; ---------------------------------------------------------------------------
+
+Amy_TouchFloor_CheckHammerRush:					; Liliam: extra skills - hammer attack
+		tst.b	double_jump_property(a0)
+		bpl.s	Amy_TouchFloor
+		bsr.s	Amy_TouchFloor
+
+Amy_HammerRush_Release:
+		move.b	#$1D,anim(a0)
+		move.b	#60,double_jump_property(a0)
+		bset	#Status_WaterSlide,status_secondary(a0)
+		moveq	#signextendB(sfx_Dash),d0
 		jmp	(Play_SFX).l
 
 ; =============== S U B R O U T I N E =======================================
@@ -35175,15 +35189,20 @@ Knuckles_Wall_Climb:
 		move.w	x_pos(a0),d0
 		cmp.w	x_pos+2(a0),d0
 		bne.w	Knuckles_LetGoOfWall
-		move.w	y_pos(a0),d0				; Liliam: bugfix - release Knuckles from wall
-		cmp.w	y_pos+2(a0),d0				;
-		bne.w	Knuckles_LetGoOfWall			;
 
 		; If an object is now carrying Knuckles, then detach him from the
 		; wall.
 		btst	#Status_OnObj,status(a0)
 		bne.w	Knuckles_LetGoOfWall
 
+		move.w	y_pos(a0),d2				; Liliam: bugfix - release Knuckles from wall
+		cmp.w	y_pos+2(a0),d2				;
+		beq.s	loc_16BD4				;
+		bsr.w	GetDistanceFromWall			;
+		tst.w	d1					;
+		bne.w	Knuckles_LetGoOfWall			;
+
+loc_16BD4:
 		move.w	#0,ground_vel(a0)
 		move.w	#0,x_vel(a0)
 		move.w	#0,y_vel(a0)
@@ -35536,7 +35555,6 @@ loc_16BFA:
 		; If Knuckles has not moved, skip this.
 		tst.w	d1
 		beq.s	.notMoving
-		move.w	y_pos(a0),y_pos+2(a0)			; Liliam: bugfix - release Knuckles from wall
 
 		; Only animate every 4 frames.
 		subq.b	#1,double_jump_property(a0)
@@ -35565,6 +35583,7 @@ loc_16BFA:
 .notMoving:
 		move.b	#$20,anim_frame_timer(a0)
 		move.b	#0,anim_frame(a0)
+		move.w	y_pos(a0),y_pos+2(a0)			; Liliam: bugfix - release Knuckles from wall
 
 		move.w	(Ctrl_1_logical).w,d0
 		andi.w	#button_ABC_mask,d0
@@ -35629,7 +35648,8 @@ Knuckles_LetGoOfWall:
 		move.b	default_y_radius(a0),y_radius(a0)
 		move.b	default_x_radius(a0),x_radius(a0)
 
-		clr.b	anim(a6)				; Liliam: extra skills - climb dash
+		clr.b	spin_dash_flag(a0)			; Liliam: extra skills - climb dash
+		clr.b	anim(a6)				;
 		rts
 ; End of function Knuckles_Glide
 
@@ -38413,20 +38433,6 @@ loc_186BC:
 		rts
 ; End of function Player_ResetAirTimer
 
-; ---------------------------------------------------------------------------
-
-Player_WaterResistFix:						; Liliam: bugfix - player speeds fix
-		cmp.w	(Target_water_level).w,d0
-		bhs.s	.return
-		move.b	(Water_speed),d0
-		cmp.b	y_vel(a0),d0
-		blt.s	.return
-		ext.w	d0
-		ror.w	#6,d0
-		move.w	d0,y_vel(a0)
-
-	.return:
-		rts
 ; ---------------------------------------------------------------------------
 Ani_AirCountdown:
 		; Liliam: ported from S1 - restore original anim
@@ -48246,7 +48252,8 @@ loc_1E0D4:
 		tst.w	d3
 		bmi.s	loc_1E0E0
 		cmpi.w	#$10,d3
-		blo.s	loc_1E154
+		blo.w	loc_1E154				; Liliam: bugfix - improve flying underneath objects
+;		blo.s	loc_1E154				;
 		bra.s	loc_1E0A2
 ; ---------------------------------------------------------------------------
 
@@ -48265,6 +48272,20 @@ loc_1E0F6:
 		move.w	#0,ground_vel(a1)
 
 loc_1E0FC:
+		tst.b	double_jump_flag(a1)			; Liliam: bugfix - improve flying underneath objects
+		beq.s	.done					;
+		bmi.s	.adjustDisplacement			;
+		cmpi.b	#1,character_id(a1)			;
+		beq.s	.adjustDisplacement			;
+		cmpi.b	#2,character_id(a1)			;
+		bne.s	.done					;
+		cmpi.b	#2,double_jump_flag(a1)			;
+		beq.s	.done					;
+
+	.adjustDisplacement:
+		addq.w	#4,d3					;
+
+	.done:
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	loc_1E104
 		neg.w	d3
