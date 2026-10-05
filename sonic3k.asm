@@ -21100,6 +21100,8 @@ loc_F782:
 		ext.w	d0
 		add.w	d0,d2
 		bpl.s	loc_F798			; Liliam: bugfix - stop colliding with offscreen garbage
+		tst.w	(Camera_min_Y_pos).w		;
+		bmi.s	loc_F798			;
 		clr.w	d2				;
 
 loc_F798:
@@ -21118,6 +21120,8 @@ loc_F798:
 		ext.w	d0
 		add.w	d0,d2
 		bpl.s	loc_F7C4			; Liliam: bugfix - stop colliding with offscreen garbage
+		tst.w	(Camera_min_Y_pos).w		;
+		bmi.s	loc_F7C4			;
 		clr.w	d2				;
 
 loc_F7C4:
@@ -21423,6 +21427,8 @@ sub_FA1A:
 CheckRightWallDist:
 		move.w	y_pos(a0),d2
 		bpl.s	loc_FA7E			; Liliam: bugfix - stop colliding with offscreen garbage
+		tst.w	(Camera_min_Y_pos).w		;
+		bmi.s	loc_FA7E			;
 		clr.w	d2				;
 
 loc_FA7E:
@@ -21487,6 +21493,8 @@ Sonic_CheckCeiling:
 		sub.w	d0,d2
 		eori.w	#$F,d2
 		bpl.s	loc_FB08			; Liliam: bugfix - stop colliding with offscreen garbage
+		tst.w	(Camera_min_Y_pos).w		;
+		bmi.s	loc_FB08			;
 		clr.w	d2				;
 
 loc_FB08:
@@ -21506,6 +21514,8 @@ loc_FB08:
 		sub.w	d0,d2
 		eori.w	#$F,d2
 		bpl.s	loc_FB38			; Liliam: bugfix - stop colliding with offscreen garbage
+		tst.w	(Camera_min_Y_pos).w		;
+		bmi.s	loc_FB38			;
 		clr.w	d2				;
 
 loc_FB38:
@@ -21748,6 +21758,8 @@ sub_FD32:
 CheckLeftWallDist:
 		move.w	y_pos(a0),d2
 		bpl.s	loc_FD9E			; Liliam: bugfix - stop colliding with offscreen garbage
+		tst.w	(Camera_min_Y_pos).w		;
+		bmi.s	loc_FD9E			;
 		clr.w	d2				;
 
 loc_FD9E:
