@@ -23317,14 +23317,8 @@ Amy_Normal:
 
 	.throwBuffered:
 		moveq	#-1,d1
-		lea	(Dynamic_object_RAM_end).w,a1
-
-	.allocateObj:
-		lea	-next_object(a1),a1
-		tst.l	(a1)
-		bne.s	.allocateObj
-		cmpa.w	#Dynamic_object_RAM,a1
-		blo.s	.updateTimer
+		jsr	(AllocateObjectFromEnd).l
+		bne.s	.updateTimer
 		moveq	#-$1F,d1
 		move.l	#Obj_HyperAmyHammer,(a1)
 		move.w	x_pos(a0),x_pos(a1)
@@ -44082,6 +44076,17 @@ AllocateObjectAfterCurrent:
 		even
 ; End of function AllocateObject
 
+; ---------------------------------------------------------------------------
+
+AllocateObjectFromEnd:						; Liliam: cutscene skip object
+		lea	(Dynamic_object_RAM_end).w,a1
+		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d0
+
+	.loop:
+		lea	-next_object(a1),a1
+		tst.l	(a1)
+		dbeq	d0,.loop
+		rts
 ; ---------------------------------------------------------------------------
 
 Clear_SpriteRingMem:
@@ -179526,7 +179531,6 @@ LRZEncoreBoss_Init:							; Liliam: Encore mode - LRZ2 boss
 		moveq	#signextendB(mus_EndBoss),d0
 		move.w	d0,(Current_music).w
 		jsr	(Play_Music).l
-		lea	(Dynamic_object_RAM_end).w,a1
 		lea	ChildObjDat_LRZEncoreBoss+2(pc),a2
 		moveq	#0,d2
 		moveq	#0,d6
@@ -179534,11 +179538,8 @@ LRZEncoreBoss_Init:							; Liliam: Encore mode - LRZ2 boss
 		moveq	#0,d6
 
 	.allocateObj:
-		lea	-next_object(a1),a1
-		tst.l	(a1)
-		bne.s	.allocateObj
-		cmpa.w	#Dynamic_object_RAM,a1
-		blo.s	LRZEncoreBoss_Return
+		jsr	(AllocateObjectFromEnd).l
+		bne.s	LRZEncoreBoss_Return
 		jmp	(CreateChild1_Normal.loop+8).l
 ; ---------------------------------------------------------------------------
 
@@ -198996,7 +198997,7 @@ Child1_Act2LevelSize:
 Make_CutsceneSkipObj:						; Liliam: cutscene skip object
 		tst.w	(Debug_placement_mode).w
 		bne.s	CutsceneSkip_Return
-		jsr	(AllocateObject).l
+		jsr	(AllocateObjectFromEnd).l
 		bne.s	CutsceneSkip_Return
 		clr.b	(Update_HUD_score).w
 		clr.b	(Update_HUD_timer).w
