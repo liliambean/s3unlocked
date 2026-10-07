@@ -135550,7 +135550,8 @@ loc_5C684:
 		cmpa.w	#Player_1,a0				;
 		beq.s	loc_5C6B6				;
 		move.w	#ArtTile_Player_2,art_tile(a0)		;
-		subi.w	#$20,x_pos(a0)				;
+		addi.w	#$10,(Player_1+x_pos).w			;
+		subi.w	#$10,x_pos(a0)				;
 
 loc_5C6B6:
 		movea.w	(Continue_object_addr).w,a1
@@ -135569,6 +135570,9 @@ loc_5C6CC:
 		move.b	(a1,d4.w),mapping_frame(a0)		;
 ;		move.b	#$BA,mapping_frame(a0)			;
 		move.w	#7,$2E(a0)
+		tst.l	(Player_2).l				;
+		beq.s	locret_5C6F2				;
+		addq.w	#2,$2E(a0)				;
 		rts
 ; ---------------------------------------------------------------------------
 
