@@ -4448,9 +4448,9 @@ SuperHyper_PalCycle:
 		subq.b	#1,d0
 		beq.s	SuperHyper_PalCycle_FadeIn			; Liliam: animate super forms consistently
 		subq.b	#1,d0						;
-		bne.w	SuperHyper_PalCycle_RevertHyperTails		;
+		beq.s	SuperHyper_PalCycle_Revert			;
 ;		bne.w	SuperHyper_PalCycle_Revert			;
-		bra.s	SuperHyper_PalCycle_Revert			;
+		bra.w	SuperHyper_PalCycle_RevertHyperTails		;
 ; ---------------------------------------------------------------------------
 
 SuperHyper_PalCycle_FadeIn:
@@ -9215,7 +9215,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		tst.b	(Player_1+double_jump_flag).w
 		bne.s	.setSuperIcon
 		tst.b	(Super_ready_HUD_flag).w
-		bmi.w	.done
+		bmi.w	.useSafeColors
 		move.l	#ArtUnc_CutsceneSkip+$100,d1
 		move.w	#tiles_to_bytes(ArtTile_Player_1+$17),d2
 		move.w	#$90,d3
@@ -9224,8 +9224,8 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 
 	.setSuperIcon:
 		move.b	d1,(Super_ready_HUD_flag).w
-		moveq	#0,d1
-		bra.s	.done
+		moveq	#2,d1
+		bra.s	.setIcon
 ; ---------------------------------------------------------------------------
 
 	.encoreMode:
@@ -9258,17 +9258,22 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		btst	#Status_BublShield,d0
 		beq.s	.checkCombineRing
 		tst.b	(Encore_mode).w
-		bne.s	.done
+		bne.s	.useSafeColors
 		cmpi.w	#3,(Player_mode).w
-		beq.s	.done
+		beq.s	.useSafeColors
 		cmpi.w	#4,(Player_mode).w
-		beq.s	.done
-		tst.b	(Super_palette_status).w
+		beq.s	.useSafeColors
+		bhi.s	.setIcon
+		move.b	(Super_palette_status).w,d0
 		beq.s	.setIcon
+		tst.b	(Player_1+character_id).w
+		beq.s	.useSafeColors
 		tst.b	(Super_Tails_flag).w
-		bpl.s	.setIcon
+		bmi.s	.useSafeColors
+		cmpi.b	#3,d0
+		bne.s	.setIcon
 
-	.done:
+	.useSafeColors:
 		addq.w	#2,d1
 
 	.setIcon:
@@ -46874,53 +46879,59 @@ locret_1D564:
 ; ---------------------------------------------------------------------------
 
 Monitor_SetupAquaBarrier:					; Liliam: bugfix - use safe colors for aqua barrier icon
+		move.b	#-1,character_id(a0)
 		move.b	subtype(a0),d0
 		tst.b	(Encore_mode).w
 		bne.s	Monitor_SetupEncoreRoulette
 		cmpi.b	#7,d0
-		bne.s	Monitor_SetupDone
+		bne.s	Monitor_SetContents
 		cmpi.w	#3,(Player_mode).w
-		beq.s	Monitor_SetupDone
+		beq.s	Monitor_SetContents
 		cmpi.w	#4,(Player_mode).w
-		beq.s	Monitor_SetupDone
+		beq.s	Monitor_SetContents
+		bhi.s	locret_1D564
 		move.l	#Obj_Monitor_CheckSuperPalette,(a0)
-		moveq	#0,d0
-		bra.s	Monitor_SetupDone
+		bra.s	Monitor_SetContents
 ; ---------------------------------------------------------------------------
 
 Obj_Monitor_CheckSuperPalette:					; Liliam: bugfix - use safe colors for aqua barrier icon
 		cmpi.b	#4,routine(a0)
 		beq.s	Monitor_RemoveHandler
 		clr.w	anim(a0)
-		tst.b	(Super_palette_status).w
+		move.b	(Super_palette_status).w,d0
 		beq.w	Obj_Monitor
+		tst.b	(Player_1+character_id).w
+		beq.s	.useSafeColors
 		tst.b	(Super_Tails_flag).w
-		bpl.w	Obj_Monitor
+		bmi.s	.useSafeColors
+		cmpi.b	#3,d0
+		bne.w	Obj_Monitor
+
+	.useSafeColors:
 		move.w	#$707,anim(a0)
 		bra.w	Obj_Monitor
 ; ---------------------------------------------------------------------------
 
 Monitor_SetupEncoreRoulette:					; Liliam: Encore mode - item roulette monitor
 		cmpi.b	#1,d0
-		bne.s	Monitor_SetupDone
+		bne.s	Monitor_SetContents
 		moveq	#2,d0
 		move.l	#Obj_Monitor_EncoreRoulette,(a0)
 		tst.b	(Encore_available_chars).w
-		beq.s	Monitor_SetupDone
+		beq.s	Monitor_SetContents
 		lea	(Dynamic_object_RAM).w,a1
 		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d1
 		move.l	#Obj_Monitor_EncoreStock,d2
 
 	.loop:
 		cmp.l	(a1),d2
-		beq.s	Monitor_SetupDone
+		beq.s	Monitor_SetContents
 		lea	next_object(a1),a1
 		dbf	d1,.loop
 		move.l	d2,(a0)
 
-Monitor_SetupDone:
+Monitor_SetContents:
 		move.b	d0,anim(a0)
-		move.b	#-1,character_id(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
