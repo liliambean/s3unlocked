@@ -32772,6 +32772,7 @@ loc_1565E:
 		tst.b	double_jump_flag(a0)			; Liliam: bugfix - fix stuck animation
 		beq.s	locret_1569A				;
 		move.b	#0,double_jump_flag(a0)
+		move.b	#0,double_jump_property(a0)		;
 		move.b	#0,anim(a0)				;
 
 locret_1569A:
