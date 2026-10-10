@@ -54740,6 +54740,7 @@ loc_22FAE:
 		clr.b	jumping(a1)
 		clr.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
 		clr.b	spin_dash_flag(a1)
+		bsr.w	Player_CancelDropDash			; Liliam: extra skills - drop dash
 		move.b	#$10,anim(a1)
 		move.b	#State_Control,routine(a1)
 		move.b	subtype(a0),d0
@@ -54751,7 +54752,6 @@ loc_22FE0:
 		beq.s	loc_23020
 		tst.b	character_id(a1)			; Liliam: simplify player anim selection
 		bne.s	loc_22FE6				;
-		bsr.w	Player_CancelDropDash			;
 		tst.b	(Super_Sonic_Knux_flag).w		;
 		bne.s	loc_23020				;
 
@@ -55256,6 +55256,8 @@ loc_23542:
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
 		clr.b	double_jump_flag(a1)			; Liliam: allow glide-landing on objects
+		clr.b	spin_dash_flag(a1)			;
+		bsr.w	Player_CancelDropDash			; Liliam: extra skills - drop dash
 		move.b	#$10,anim(a1)
 		move.b	#State_Control,routine(a1)
 		move.b	subtype(a0),d0
