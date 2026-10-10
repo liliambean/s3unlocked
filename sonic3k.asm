@@ -27171,8 +27171,10 @@ Sonic_DropDash_Release:
 		move.w	d2,ground_vel(a0)
 
 	.checkplayer:
+		lea	(Dust_P2).w,a6
 		cmpa.w	#Player_1,a0
 		bne.s	.checkair
+		lea	(Dust).w,a6
 		move.w	ground_vel(a0),d1
 		bpl.s	.calcoffset
 		neg.w	d1
@@ -50744,9 +50746,10 @@ BreakableRock_CheckBreak:
 
 BreakableRock_Break:
 		cmpi.b	#Status_HammerDrop,d0			; Liliam: extra skills - hammer drop
-		beq.w	BreakableRock_ResumeHammerDrop		;
+		beq.w	Player_ResumeHammerDrop			;
+		bsr.s	Player_CancelDropDash			; Liliam: extra skills - drop dash
 		bset	#Status_Roll,status(a1)
-		bsr.w	BreakableRock_SetRollHeight		; Liliam: bugfix - set correct player height
+		bsr.w	Player_SetRollHeight			; Liliam: bugfix - set correct player height
 ;		move.b	#$E,y_radius(a1)			;
 ;		move.b	#7,x_radius(a1)				;
 		move.b	#2,anim(a1)
@@ -50759,6 +50762,19 @@ loc_1FBCC:
 		rts
 ; End of function BreakableRock_Break
 
+; ---------------------------------------------------------------------------
+
+Player_CancelDropDash:						; Liliam: extra skills - drop dash
+		cmpi.b	#7,Dust-Player_1+anim(a1)
+		bne.s	.return
+		clr.b	Dust-Player_1+anim(a1)
+		move.w	x_vel(a1),ground_vel(a1)
+		cmpa.w	#Player_1,a1
+		bne.s	.return
+		clr.w	(H_scroll_frame_offset).w
+
+	.return:
+		rts
 ; ---------------------------------------------------------------------------
 
 loc_1FBE0:
@@ -51134,7 +51150,7 @@ loc_1FF48:
 		bne.s	loc_1FF84
 		move.b	status(a0),d0				; Liliam: extra skills - hammer drop
 		andi.b	#standing_mask,d0			;
-		bne.s	BreakableRock_CheckHammerDrop		;
+		bne.w	BreakableRock_CheckHammerDrop		;
 		move.w	$2E(a0),d0
 		jmp	(Sprite_OnScreen_Test2).l
 ; ---------------------------------------------------------------------------
@@ -51158,33 +51174,6 @@ loc_1FFA8:
 		lea	(Player_2).w,a1
 		move.w	$36(a0),y_vel(a1)
 		bra.s	loc_1FFC4
-; ---------------------------------------------------------------------------
-
-BreakableRock_CheckHammerDrop:					; Liliam: extra skills - hammer drop
-		btst	#p1_standing_bit,d0
-		beq.s	.player2
-		lea	(Player_1).w,a1
-		cmpi.b	#Status_HammerDrop,$34(a0)
-		beq.s	.destroy
-
-	.player2:
-		btst	#p2_standing_bit,d0
-		beq.s	loc_1FFBA
-		lea	(Player_2).w,a1
-		cmpi.b	#Status_HammerDrop,$35(a0)
-		bne.s	loc_1FFBA
-
-	.destroy:
-		move.l	#loc_1FFC4,-(sp)
-
-BreakableRock_ResumeHammerDrop:
-		bset	#Status_InAir,status(a1)
-		bset	#Status_Roll,status(a1)
-		bclr	#Status_OnObj,status(a1)
-		move.b	#Status_HammerDrop,double_jump_flag(a1)
-		move.w	#$A<<8,anim(a1)
-		move.w	#$C00,y_vel(a1)
-		bra.s	Player_SetRollHeight
 ; ---------------------------------------------------------------------------
 
 loc_1FFBA:
@@ -51212,14 +51201,30 @@ loc_1FFF4:
 		bra.w	loc_1FC16
 ; ---------------------------------------------------------------------------
 
-BreakableRock_SetRollHeight:					; Liliam: bugfix - set correct player height
-		cmpi.b	#7,Dust-Player_1+anim(a1)
-		bne.s	Player_SetRollHeight
-		clr.b	Dust-Player_1+anim(a1)
-		move.w	x_vel(a1),ground_vel(a1)
-		cmpa.w	#Player_1,a1
-		bne.s	Player_SetRollHeight
-		clr.w	(H_scroll_frame_offset).w
+BreakableRock_CheckHammerDrop:					; Liliam: extra skills - hammer drop
+		btst	#p1_standing_bit,d0
+		beq.s	.player2
+		lea	(Player_1).w,a1
+		cmpi.b	#Status_HammerDrop,$34(a0)
+		beq.s	.destroy
+
+	.player2:
+		btst	#p2_standing_bit,d0
+		beq.s	loc_1FFBA
+		lea	(Player_2).w,a1
+		cmpi.b	#Status_HammerDrop,$35(a0)
+		bne.s	loc_1FFBA
+
+	.destroy:
+		move.l	#loc_1FFC4,-(sp)
+
+Player_ResumeHammerDrop:
+		bset	#Status_InAir,status(a1)
+		bset	#Status_Roll,status(a1)
+		bclr	#Status_OnObj,status(a1)
+		move.b	#Status_HammerDrop,double_jump_flag(a1)
+		move.w	#$A<<8,anim(a1)
+		move.w	#$C00,y_vel(a1)
 
 Player_SetRollHeight:
 		move.b	#TailsRollHeight,y_radius(a1)
@@ -54743,6 +54748,7 @@ loc_22FE0:
 		beq.s	loc_23020
 		tst.b	character_id(a1)			; Liliam: simplify player anim selection
 		bne.s	loc_22FE6				;
+		bsr.w	Player_CancelDropDash			;
 		tst.b	(Super_Sonic_Knux_flag).w		;
 		bne.s	loc_23020				;
 
@@ -66188,7 +66194,7 @@ CorkFloor_CheckHammerDrop:					; Liliam: extra skills - hammer drop
 		move.l	#loc_2A68C,-(sp)
 
 CorkFloor_ResumeHammerDrop:
-		jmp	(BreakableRock_ResumeHammerDrop).l
+		jmp	(Player_ResumeHammerDrop).l
 ; ---------------------------------------------------------------------------
 
 loc_2A686:
@@ -66328,8 +66334,9 @@ sub_2A7B0:
 sub_2A7B6:
 		cmpi.b	#Status_HammerDrop,d0			; Liliam: extra skills - hammer drop
 		beq.w	CorkFloor_ResumeHammerDrop		;
+		jsr	(Player_CancelDropDash).l		; Liliam: extra skills - drop dash
 		bset	#Status_Roll,status(a1)
-		jsr	(BreakableRock_SetRollHeight).l		; Liliam: bugfix - set correct player height
+		jsr	(Player_SetRollHeight).l		; Liliam: bugfix - set correct player height
 ;		move.b	#$E,y_radius(a1)			;
 ;		move.b	#7,x_radius(a1)				;
 		move.b	#2,anim(a1)
@@ -206006,14 +206013,16 @@ loc_89CDE:
 ; ---------------------------------------------------------------------------
 
 FBZSpring_LaunchUp:						; Liliam: bugfix - horrors beyond comprehension
-		move.b	#State_Control,routine(a1)
 		move.b	#$10,anim(a1)
+		move.b	#State_Control,routine(a1)
+		move.b	default_y_radius(a1),y_radius(a1)
+		move.b	default_x_radius(a1),x_radius(a1)
 		move.w	#-$A00,y_vel(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
 		clr.b	spin_dash_flag(a1)
-		rts
+		jmp	(Player_CancelDropDash).l
 ; ---------------------------------------------------------------------------
 
 loc_89CE2:
