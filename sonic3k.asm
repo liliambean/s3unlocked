@@ -9194,9 +9194,9 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		tst.b	(Encore_mode).w
 		bne.s	.encoreMode
 		tst.w	(Super_Sonic_Knux_flag).w
-		bne.s	.checkBarrier
+		bne.w	.checkBarrier
 		tst.b	(Update_HUD_timer).w
-		beq.s	.notReady
+		beq.w	.notReady
 		cmpi.b	#6,(Player_1+character_id).w
 		beq.s	.notReady
 		cmpi.w	#50,(Ring_count).w
@@ -9211,20 +9211,28 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 	.setReadyFlag:
 		move.b	#1,(Super_ready_flag).w
 		tst.b	(Player_1+jumping).w
-		beq.s	.setSuperIcon
+		beq.s	.resetHint
 		tst.b	(Player_1+double_jump_flag).w
-		bne.s	.setSuperIcon
-		tst.b	(Super_ready_HUD_flag).w
-		bmi.w	.useSafeColors
+		bne.s	.resetHint
+		move.w	(Barrier_HUD_scroll).w,d0
+		bne.s	.scrollHint
 		move.l	#ArtUnc_CutsceneSkip+$100,d1
 		move.w	#tiles_to_bytes(ArtTile_Player_1+$17),d2
 		move.w	#$90,d3
 		bsr.w	Add_To_DMA_Queue
-		moveq	#-1,d1
+		addq.w	#4,(Barrier_HUD_scroll).w
 
-	.setSuperIcon:
-		move.b	d1,(Super_ready_HUD_flag).w
+	.scrollHint:
 		moveq	#2,d1
+		cmpi.b	#$20,d0
+		bhs.s	.setIcon
+		addq.w	#7,(Barrier_HUD_scroll).w
+		bra.s	.setIcon
+; ---------------------------------------------------------------------------
+
+	.resetHint:
+		moveq	#4,d1
+		clr.w	(Barrier_HUD_scroll).w
 		bra.s	.setIcon
 ; ---------------------------------------------------------------------------
 
@@ -9235,12 +9243,11 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 	.checkCombineRing:
 		btst	#Status_CombineRing,(Player_1+status_secondary).w
 		beq.s	.setIcon
-		moveq	#$C,d1
+		moveq	#$E,d1
 		bra.s	.setIcon
 ; ---------------------------------------------------------------------------
 
 	.notReady:
-		move.b	d1,(Super_ready_HUD_flag).w
 		tst.b	(Player_1+invincibility_timer).w
 		beq.s	.setIcon
 
@@ -9248,7 +9255,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		move.b	(Player_1+status_secondary).w,d0
 		andi.b	#1<<Status_CombineRing|1<<Status_FireShield|1<<Status_LtngShield|1<<Status_BublShield,d0
 		beq.s	.setIcon
-		moveq	#4,d1
+		moveq	#6,d1
 		btst	#Status_FireShield,d0
 		bne.s	.setIcon
 		addq.w	#2,d1
@@ -9281,13 +9288,20 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		beq.s	ChangeRingFrame
 		tst.b	(Barrier_HUD_DMA_flag).w
 		bmi.s	ChangeRingFrame
-		move.b	#$E,(Barrier_HUD_frame+1).w
+		moveq	#$10,d0
+		cmpi.b	#2,d1
+		bne.s	.setDMAIcon
+		addq.w	#2,d0
+		addq.w	#2,d1
+
+	.setDMAIcon:
+		move.b	d0,(Barrier_HUD_frame+1).w
 		cmp.b	(Barrier_HUD_DMA_flag).w,d1
 		beq.s	ChangeRingFrame
 		move.b	d1,(Barrier_HUD_DMA_flag).w
 		tst.b	(Encore_mode).w
 		beq.s	.checkRay
-		cmpi.b	#$A,d1
+		cmpi.b	#$C,d1
 		bne.s	.queueDMA
 		subq.b	#2,d1
 
@@ -9298,7 +9312,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 
 	.queueDMA:
 		lsl.w	#6,d1
-		addi.l	#ArtUnc_BarrierHUD-$80,d1
+		addi.l	#ArtUnc_BarrierHUD-$100,d1
 		move.w	#tiles_to_bytes(ArtTile_StarPost),d2
 		moveq	#$40,d3
 		bsr.w	Add_To_DMA_Queue
@@ -18809,14 +18823,8 @@ loc_DB68:
 		move.w	#$100,d1					;
 		move.w	#make_art_tile(ArtTile_Monitors,0,1),d5		;
 		move.w	(Barrier_HUD_frame).w,d4			;
+		sub.w	(Barrier_HUD_scroll).w,d0			;
 		bsr.s	Render_HUD_Dynamic				;
-		tst.b	(Super_ready_HUD_flag).w			;
-		beq.s	.done						;
-		lea	Map_HUD_Barrier(pc),a1				;
-		moveq	#$10,d4						;
-		bsr.s	Render_HUD_Dynamic				;
-
-	.done:
 		moveq	#0,d4
 		btst	#3,(Level_frame_counter+1).w
 		bne.s	loc_DB84
@@ -24353,8 +24361,8 @@ Sonic_Control:
 		beq.s	loc_10BF0			; if not, branch
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		bne.s	loc_10BCE				;
-		tst.b	(Super_ready_HUD_flag).w		;
-		bmi.s	loc_10BCE				;
+		tst.w	(Barrier_HUD_scroll).w			;
+		bne.s	loc_10BCE				;
 		bclr	#button_A,(Ctrl_1_pressed).w	; is button A pressed?
 		beq.s	loc_10BCE			; if not, branch
 		eori.b	#1,(Reverse_gravity_flag).w	; toggle reverse gravity
@@ -25982,10 +25990,10 @@ loc_11908:
 		cmpa.w	#Player_1,a0				; Liliam: Encore mode - block jump moves for player 2
 		beq.s	loc_1190C				;
 		tst.w	(Tails_CPU_idle_timer).w		;
-		beq.s	locret_1192A				;
+		beq.s	locret_118FE				;
 
 		andi.b	#button_ABC_mask,d0			;
-		beq.s	locret_1192A				;
+		beq.s	locret_118FE				;
 		bclr	#Status_RollJump,status(a0)		;
 
 		move.b	character_id(a0),d0			; Liliam: add extra characters
@@ -26003,13 +26011,10 @@ Sonic_InstaShield:
 ; ---------------------------------------------------------------------------
 
 loc_1190C:
-;		andi.b	#button_ABC_mask,d0				; Liliam: HUD - barrier HUD
-;		beq.w	locret_11A14					;
-		tst.b	(Super_ready_flag).w				;
+		tst.b	(Super_ready_flag).w				; Liliam: HUD - barrier HUD
 		beq.s	loc_1191A					;
-		ori.b	#1,(Super_ready_HUD_flag).w			;
-
-loc_11914:
+;		andi.b	#button_ABC_mask,d0				;
+;		beq.w	locret_11A14					;
 ;		bclr	#Status_RollJump,status(a0)			;
 		btst	#button_A,d0					;
 		bne.w	Sonic_Transform					;
@@ -26177,7 +26182,7 @@ Sonic_Transform:
 ;		move.b	#$1F,anim(a0)				;
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
-		clr.b	(Super_ready_HUD_flag).w			; Liliam: HUD - barrier HUD
+		clr.w	(Barrier_HUD_scroll).w			; Liliam: HUD - barrier HUD
 
 		cmpi.b	#7,(Super_emerald_count).w		; does Sonic have all 7 Super Emeralds?
 		blo.s	.super					; if not, turn Super
@@ -29377,8 +29382,8 @@ Tails_Control:
 		beq.s	loc_13808
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		bne.s	loc_137E0				;
-		tst.b	(Super_ready_HUD_flag).w		;
-		bmi.s	loc_137E0				;
+		tst.w	(Barrier_HUD_scroll).w			;
+		bne.s	loc_137E0				;
 		bclr	#button_A,(Ctrl_1_pressed).w
 		beq.s	loc_137E0
 		eori.b	#1,(Reverse_gravity_flag).w
@@ -32177,9 +32182,6 @@ Tails_Test_For_Flight:
 ;		bne.s	loc_1515C					;
 ;		cmpi.b	#7,(Super_emerald_count).w			;
 ;		blo.s	loc_1515C					;
-		ori.b	#1,(Super_ready_HUD_flag).w			;
-
-loc_15146:
 ;		cmpi.w	#50,(Ring_count).w				;
 ;		blo.s	loc_1515C					;
 ;		tst.b	(Update_HUD_timer).w				;
@@ -32238,7 +32240,7 @@ Tails_Transform:
 ;		move.b	#$29,anim(a0)				;
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
-		clr.b	(Super_ready_HUD_flag).w			; Liliam: HUD - barrier HUD
+		clr.w	(Barrier_HUD_scroll).w			; Liliam: HUD - barrier HUD
 
 		move.l	#Obj_SuperSonic_Stars,(Super_stars).w		; Liliam: Hyper Tails
 		cmpi.b	#7,(Super_emerald_count).w			;
@@ -34450,8 +34452,8 @@ Knuckles_Control:
 		beq.s	loc_165A2
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		bne.s	loc_16580				;
-		tst.b	(Super_ready_HUD_flag).w		;
-		bmi.s	loc_16580				;
+		tst.w	(Barrier_HUD_scroll).w			;
+		bne.s	loc_16580				;
 		bclr	#button_A,(Ctrl_1_pressed).w
 		beq.s	loc_16580
 		eori.b	#1,(Reverse_gravity_flag).w
@@ -36894,7 +36896,6 @@ loc_17842:
 ;		blo.s	loc_1786C					;
 ;		tst.b	(Emeralds_converted_flag).w			;
 ;		bne.s	loc_1786C					;
-		ori.b	#1,(Super_ready_HUD_flag).w			;
 
 ;loc_1785E:
 ;		cmpi.w	#50,(Ring_count).w				;
@@ -36967,7 +36968,7 @@ Knux_Transform:
 ;		move.b	#$1F,anim(a0)				;
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
-		clr.b	(Super_ready_HUD_flag).w			; Liliam: HUD - barrier HUD
+		clr.w	(Barrier_HUD_scroll).w			; Liliam: HUD - barrier HUD
 
 		cmpi.b	#7,(Super_emerald_count).w		; does Knuckles have all 7 Super Emeralds?
 		blo.s	.super					; if not, turn Super
@@ -200250,7 +200251,7 @@ Give_SuperSonic:
 		move.b	#$16,anim(a1)				;
 ;		move.b	#$1F,(Player_1+anim).w			;
 		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
-		clr.b	(Super_ready_HUD_flag).w			; Liliam: HUD - barrier HUD
+		clr.w	(Barrier_HUD_scroll).w			; Liliam: HUD - barrier HUD
 
 		cmpi.b	#1,character_id(a1)			; Liliam: add extra characters
 ;		cmpi.w	#2,(Player_mode).w			;

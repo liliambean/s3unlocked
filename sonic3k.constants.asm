@@ -774,10 +774,9 @@ Pal_fade_delay			ds.w 1			; timer for palette fade routines
 Collision_addr			ds.l 1			; points to the primary or secondary collision data as appropriate
 			ds.b $10			; unused
 Boss_flag			ds.b 1			; set if a boss fight is going on
-Super_ready_flag		ds.b 1		; Liliam: HUD - barrier HUD
-Super_ready_HUD_flag		ds.b 1		; Liliam: HUD - barrier HUD
 Barrier_HUD_DMA_flag		ds.b 1		; Liliam: HUD - barrier HUD
 Barrier_HUD_frame		ds.w 1		; Liliam: HUD - barrier HUD
+Barrier_HUD_scroll		ds.w 1		; Liliam: HUD - barrier HUD
 _unkF7B0			ds.b 4
 
 Primary_collision_addr		ds.l 1
@@ -916,9 +915,10 @@ Current_zone_and_act =		*
 Current_zone			ds.b 1
 Current_act			ds.b 1
 Life_count			ds.b 1
-			ds.b 3				; unused
-Current_special_stage		ds.b 1
 Continue_count			ds.b 1
+			ds.w 1				; unused
+Current_special_stage		ds.b 1
+Super_ready_flag		ds.b 1		; Liliam: HUD - barrier HUD
 Super_Sonic_Knux_flag		ds.b 1
 Super_Tails_flag		ds.b 1
 Time_over_flag			ds.b 1
