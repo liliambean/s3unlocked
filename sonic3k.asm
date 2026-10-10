@@ -52566,22 +52566,24 @@ loc_21568:
 
 BreakableWall_CheckAmyBreak:					; Liliam: extra skills - hammer attack
 		beq.s	.inAir
+		moveq	#0,d0
+		btst	#Status_Roll,status(a1)
+		bne.s	.return
 		tst.b	double_jump_property(a1)
 		bne.s	.checkAmy
-		btst	#Status_Roll,status(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
 	.inAir:
 		tst.b	double_jump_flag(a1)
-		bne.s	.checkAmy
-		rts
-; ---------------------------------------------------------------------------
+		beq.s	.return
 
 	.checkAmy:
 		cmpi.b	#3,character_id(a1)
-		seq	d1
-		tst.b	d1
+		seq	d0
+		tst.b	d0
+
+	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
