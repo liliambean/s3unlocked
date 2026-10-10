@@ -7588,7 +7588,13 @@ loc_6834:
 loc_685C:
 		bset	#Status_InAir,status(a1)
 		cmpi.w	#2,(Player_mode).w
+		beq.s	loc_686A				; Liliam: add extra characters
+		tst.b	(Encore_mode).w				;
+		beq.s	loc_6870				;
+		cmpi.b	#1,(Encore_P1_character).w		;
 		bne.s	loc_6870
+
+loc_686A:
 		move.b	#1,jumping(a1)
 
 loc_6870:
@@ -7596,6 +7602,12 @@ loc_6870:
 		beq.s	loc_6886
 		move.b	#$1B,anim(a2)
 		bset	#Status_InAir,status(a2)
+		tst.b	(Encore_mode).w				; Liliam: add extra characters
+		beq.s	loc_6880				;
+		cmpi.b	#1,(Encore_P2_character).w		;
+		bne.s	loc_6886				;
+
+loc_6880:
 		move.b	#1,jumping(a2)
 
 loc_6886:
@@ -139585,8 +139597,8 @@ loc_5E1F0:
 		bclr	#7,art_tile(a1)
 		move.b	#$83,$2E(a1)
 		move.b	#5,anim(a1)
-		cmpi.b	#1,character_id(a1)			; Liliam: ending - add extra characters
-;		cmpi.w	#2,(Player_mode).w			;
+;		cmpi.w	#2,(Player_mode).w			; Liliam: ending - add extra characters
+		cmpi.b	#1,character_id(a1)			;
 		bne.s	loc_5E228
 		lea	(Tails_tails).w,a2
 		move.l	#Obj_Tails_Tail,(a2)
@@ -144598,8 +144610,8 @@ loc_620EA:
 ; ---------------------------------------------------------------------------
 
 CutsceneKnux_HCZ2:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.s	CutsceneKnux_Delete
 		lea	word_62150(pc),a1
 		jsr	(Check_CameraInRange).l
@@ -144736,8 +144748,8 @@ word_62296:
 ; ---------------------------------------------------------------------------
 
 CutsceneKnux_CNZ2A:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.w	CutsceneKnux_Delete
 		cmpi.b	#8,(Last_star_post_hit).w		; Liliam: cutscene skip - CNZ2 blackout
 		bhs.w	CutsceneKnux_Delete			;
@@ -145013,8 +145025,8 @@ CNZ2_DoFlashPalette:						; Liliam: cutscene skip - CNZ2 blackout
 ; ---------------------------------------------------------------------------
 
 CutsceneKnux_CNZ2B:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.w	CutsceneKnux_Delete
 		lea	word_62520(pc),a1
 		jsr	(Check_CameraInRange).l
@@ -145147,8 +145159,8 @@ loc_62630:
 ; ---------------------------------------------------------------------------
 
 CutsceneKnux_LBZ1:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.w	CutsceneKnux_Delete
 		move.l	#loc_6264A,(a0)				; Liliam: cutscene skip - LBZ1 pre-boss
 
@@ -145375,8 +145387,8 @@ loc_628A0:
 ; ---------------------------------------------------------------------------
 
 CutsceneKnux_LBZ2:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.w	CutsceneKnux_Delete
 		move.l	#loc_628B4,(a0)				; Liliam: cutscene skip - LBZ2 pre-boss
 		movea.w	(Events_bg+$00).w,a1			;
@@ -145725,8 +145737,8 @@ loc_62C90:
 ; ---------------------------------------------------------------------------
 
 Obj_MHZ1CutsceneKnuckles:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.w	CutsceneKnux_Delete
 		tst.b	(Last_star_post_hit).w
 		bne.w	CutsceneKnux_Delete
@@ -145887,8 +145899,8 @@ Obj_MHZ1CutsceneButton:
 		bne.s	loc_62E56
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - MHZ1 intro
 		bne.s	loc_62E56				;
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.s	loc_62E56
 		move.l	#loc_62E5C,(a0)
 
@@ -146100,8 +146112,8 @@ word_630DC:
 CutsceneKnux_MHZ2:
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - MHZ2 intro
 		bne.s	loc_6311A				;
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.s	loc_6311A
 		cmpi.b	#7,(Last_star_post_hit).w
 		bhs.s	loc_6311A						; Liliam: place MHZ2 knux switch in layout
@@ -146989,8 +147001,8 @@ locret_63B20:
 ; ---------------------------------------------------------------------------
 
 Obj_LRZ2CutsceneKnuckles:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.w	CutsceneKnux_Delete
 		move.l	#loc_63B40,(a0)
 ;		jsr	(AllocateObject).l			; Liliam: bugfix - lock player 2 controls consistently
@@ -147160,8 +147172,8 @@ loc_63D14:
 ; ---------------------------------------------------------------------------
 
 loc_63D1A:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.w	Obj_HPZEggCapsuleEmpty			; Liliam: HPZ - add Knuckles LRZ2 results
 ;		beq.w	CutsceneKnux_Delete			;
 		lea	word_63CEC(pc),a1
@@ -150051,8 +150063,8 @@ loc_65BC2:
 ; ---------------------------------------------------------------------------
 
 Obj_CutsceneButton:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.w	CutsceneKnux_Delete
 		lea	ObjDat_CutsceneButton(pc),a1
 		jsr	(SetUp_ObjAttributes).l
@@ -152227,8 +152239,8 @@ Obj_RobotnikHeadInit:
 		move.w	parent3(a1),$44(a0)
 
 loc_67B0C:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.s	loc_67B14				;
 		cmpi.w	#$A01,(Current_zone_and_act).w		; Liliam: bugfix - use Egg Robo for SSZ2 intro
 		beq.s	loc_67B14				;
@@ -152332,8 +152344,8 @@ Obj_FBZRobotnikHeadInit:
 ; ---------------------------------------------------------------------------
 
 loc_67BD8:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		bne.w	Obj_RobotnikHeadEnd
 		lea	PLC_FBZ2EggRoboHead(pc),a1			; Liliam: bugfix - display correct boss heads in FBZ2
 		jmp	(Load_PLC_Raw).l				;
@@ -154654,8 +154666,8 @@ loc_69526:
 
 loc_69546:
 		jsr	(Stop_Object).l
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		ç
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.s	loc_6957A
 		move.l	#loc_69588,(a0)
 		jsr	(AllocateObject).l
@@ -164630,8 +164642,8 @@ loc_6FD66:
 		cmpi.w	#7,(Player_mode).w				;
 		beq.s	loc_6FD76					;
 		lea	PLC_FBZ2Subboss_SonicTails(pc),a1
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		bne.s	loc_6FD76
 		lea	PLC_FBZ2Subboss_Knuckles(pc),a1
 
@@ -164924,8 +164936,8 @@ loc_70034:
 		addi.w	#$D8,x_pos(a0)
 		addi.w	#$74,y_pos(a0)
 		move.l	#byte_703F4,$30(a0)
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		bne.s	locret_70066
 		move.l	#Map_EggRoboStand,mappings(a0)
 
@@ -164990,8 +165002,8 @@ loc_7009A:
 		clr.b	anim_frame_timer(a0)
 		clr.b	anim_frame(a0)
 		bset	#0,render_flags(a0)
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		bne.s	loc_700E4
 		move.l	#Map_EggRoboRun,mappings(a0)
 
@@ -176475,8 +176487,8 @@ loc_77974:
 		move.w	y_pos(a1),y_pos(a0)
 		move.w	x_vel(a1),x_vel(a0)
 		clr.w	y_vel(a0)
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,character_id(a1)			;
+;		cmpi.b	#2,character_id(a1)			; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.s	loc_779B8
 		move.l	#loc_779C0,(a0)
 		move.b	#$81,object_control(a1)
@@ -200265,8 +200277,8 @@ Give_SuperSonic:
 		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
 		clr.w	(Barrier_HUD_scroll).w			; Liliam: HUD - barrier HUD
 
-		cmpi.b	#1,character_id(a1)			; Liliam: add extra characters
-;		cmpi.w	#2,(Player_mode).w			;
+;		cmpi.w	#2,(Player_mode).w			; Liliam: add extra characters
+		cmpi.b	#1,character_id(a1)			;
 		bne.s	.notTails
 ;		move.b	#0,(Super_Sonic_Knux_flag).w		; Liliam: bugfix - give Sonic correct super form after credits
 ;		move.b	#1,(Super_Tails_flag).w			;
@@ -207022,8 +207034,8 @@ loc_8A504:
 ; ---------------------------------------------------------------------------
 
 loc_8A50C:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		bne.s	loc_8A516
 		rts
 ; ---------------------------------------------------------------------------
@@ -211275,8 +211287,8 @@ byte_8CB4B:
 ; ---------------------------------------------------------------------------
 
 Obj_LBZ1Robotnik:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.s	loc_8CB90
 		lea	word_8CB96(pc),a1
 		jsr	Check_CameraInRange(pc)
@@ -211494,8 +211506,8 @@ loc_8CDB4:
 ; ---------------------------------------------------------------------------
 
 Obj_LBZMinibossBox:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.s	loc_8CDEA
 		tst.b	(LBZ1_Robotnik_carrying_flag).w
 		bne.s	loc_8CDEA
@@ -214754,8 +214766,8 @@ Obj_SOZGhosts:
 		move.w	#$A0,y_pos(a0)
 
 loc_8F0CA:
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		beq.s	loc_8F0DA
 		tst.b	(Last_star_post_hit).w
 		beq.w	locret_8F436
@@ -215060,8 +215072,8 @@ Obj_SOZGhostCapsule:
 		jsr	(CreateChild1_Normal).l
 		tst.b	(Last_star_post_hit).w
 		bne.s	loc_8F424
-		cmpi.w	#3,(Player_mode).w			; Liliam: Encore mode - pick by mode rather than character
-;		cmpi.b	#2,(Player_1+character_id).w		;
+;		cmpi.b	#2,(Player_1+character_id).w		; Liliam: Encore mode - pick by mode rather than character
+		cmpi.w	#3,(Player_mode).w			;
 		bne.s	locret_8F436
 
 loc_8F424:
