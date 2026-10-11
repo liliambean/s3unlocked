@@ -138332,20 +138332,23 @@ S3CreditsText_DisasmContributors4:
 		dc.b "NO,TAZ",0
 		even
 S3CreditsText_DisasmContributors5:
-		dc.w 4
-		dc.w $210
+		dc.w 5
+		dc.w $110
 		dc.b "disassembly contributors",0
 		even
-		dc.w $418
+		dc.w $318
 		dc.b "PIKANOOB",0
 		even
-		dc.w $616
+		dc.w $516
 		dc.b "POKEPUNCH",0
 		even
-		dc.w $81E
+		dc.w $71C
+		dc.b "SELBI182",0
+		even
+		dc.w $91E
 		dc.b "SHOBIZ",0
 		even
-		dc.w $A18
+		dc.w $B18
 		dc.b "SNKENJ,O,I",0
 		even
 S3CreditsText_DisasmContributors6:
