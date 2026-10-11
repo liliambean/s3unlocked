@@ -9208,7 +9208,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		tst.w	(Super_Sonic_Knux_flag).w
 		bne.w	.checkBarrier
 		tst.b	(Update_HUD_timer).w
-		beq.w	.notReady
+		beq.s	.notReady
 		cmpi.b	#6,(Player_1+character_id).w
 		beq.s	.notReady
 		cmpi.w	#50,(Ring_count).w
@@ -9223,9 +9223,9 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 	.setReadyFlag:
 		move.b	#1,(Super_ready_flag).w
 		tst.b	(Player_1+jumping).w
-		beq.s	.resetHint
+		beq.s	.clearHint
 		tst.b	(Player_1+double_jump_flag).w
-		bne.s	.resetHint
+		bne.s	.clearHint
 		move.w	(Barrier_HUD_scroll).w,d0
 		bne.s	.scrollHint
 		move.l	#ArtUnc_CutsceneSkip+$100,d1
@@ -9237,26 +9237,24 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 	.scrollHint:
 		moveq	#2,d1
 		cmpi.b	#$20,d0
-		bhs.s	.setIcon
+		bhs.s	.setSpecialIcon
 		addq.w	#7,(Barrier_HUD_scroll).w
-		bra.s	.setIcon
-; ---------------------------------------------------------------------------
-
-	.resetHint:
-		moveq	#4,d1
-		clr.w	(Barrier_HUD_scroll).w
-		bra.s	.setIcon
+		bra.s	.setSpecialIcon
 ; ---------------------------------------------------------------------------
 
 	.encoreMode:
 		tst.b	(Player_1+invincibility_timer).w
 		bne.s	.checkBarrier
-
-	.checkCombineRing:
 		btst	#Status_CombineRing,(Player_1+status_secondary).w
 		beq.s	.setIcon
-		moveq	#$E,d1
-		bra.s	.setIcon
+		moveq	#$A,d1
+
+	.clearHint:
+		clr.w	(Barrier_HUD_scroll).w
+
+	.setCombineRing:
+		addq.w	#4,d1
+		bra.s	.setSpecialIcon
 ; ---------------------------------------------------------------------------
 
 	.notReady:
@@ -9264,8 +9262,8 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		beq.s	.setIcon
 
 	.checkBarrier:
-		move.b	(Player_1+status_secondary).w,d0
-		andi.b	#1<<Status_CombineRing|1<<Status_FireShield|1<<Status_LtngShield|1<<Status_BublShield,d0
+		moveq	#1<<Status_CombineRing|1<<Status_FireShield|1<<Status_LtngShield|1<<Status_BublShield,d0
+		and.b	(Player_1+status_secondary).w,d0
 		beq.s	.setIcon
 		moveq	#6,d1
 		btst	#Status_FireShield,d0
@@ -9275,7 +9273,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		bne.s	.setIcon
 		addq.w	#2,d1
 		btst	#Status_BublShield,d0
-		beq.s	.checkCombineRing
+		beq.s	.setCombineRing
 		tst.b	(Encore_mode).w
 		bne.s	.useSafeColors
 		cmpi.w	#3,(Player_mode).w
@@ -9296,6 +9294,9 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		addq.w	#2,d1
 
 	.setIcon:
+		clr.w	(Barrier_HUD_scroll).w
+
+	.setSpecialIcon:
 		move.w	d1,(Barrier_HUD_frame).w
 		beq.s	ChangeRingFrame
 		tst.b	(Barrier_HUD_DMA_flag).w
@@ -26194,7 +26195,6 @@ Sonic_Transform:
 ;		move.b	#$1F,anim(a0)				;
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
-		clr.w	(Barrier_HUD_scroll).w			; Liliam: HUD - barrier HUD
 
 		cmpi.b	#7,(Super_emerald_count).w		; does Sonic have all 7 Super Emeralds?
 		blo.s	.super					; if not, turn Super
@@ -32254,7 +32254,6 @@ Tails_Transform:
 ;		move.b	#$29,anim(a0)				;
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
-		clr.w	(Barrier_HUD_scroll).w			; Liliam: HUD - barrier HUD
 
 		move.l	#Obj_SuperSonic_Stars,(Super_stars).w		; Liliam: Hyper Tails
 		cmpi.b	#7,(Super_emerald_count).w			;
@@ -36983,7 +36982,6 @@ Knux_Transform:
 ;		move.b	#$1F,anim(a0)				;
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
-		clr.w	(Barrier_HUD_scroll).w			; Liliam: HUD - barrier HUD
 
 		cmpi.b	#7,(Super_emerald_count).w		; does Knuckles have all 7 Super Emeralds?
 		blo.s	.super					; if not, turn Super
@@ -200275,7 +200273,6 @@ Give_SuperSonic:
 		move.b	#$16,anim(a1)				;
 ;		move.b	#$1F,(Player_1+anim).w			;
 		jsr	(Player_ClearRollHeight).l		; Liliam: bugfix - clear roll state
-		clr.w	(Barrier_HUD_scroll).w			; Liliam: HUD - barrier HUD
 
 ;		cmpi.w	#2,(Player_mode).w			; Liliam: add extra characters
 		cmpi.b	#1,character_id(a1)			;
