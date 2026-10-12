@@ -45,7 +45,7 @@ Swapping may be blocked, for instance, if either character has their controls lo
 When player 2 is not on screen, pressing the **A button** will instead **call** them to your position. Player 2 may also manually jump to player 1's position by pressing the **Start button** on the player 2 controller.
 <br clear="right" />
 
-Due to technical limitations, characters in Encore Mode are all rendered using the same 15-color palette, so there is some slight deviation in their appearance when compared to 1 Player mode:
+Note that due to technical limitations, characters in Encore Mode are all rendered using the same 15-color palette, so there is some slight deviation in their appearance when compared to 1 Player mode:
 
 <img src="assets/chars-main.png"></img>
 <img src="assets/chars-encore.png"></img>
