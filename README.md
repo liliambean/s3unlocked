@@ -43,18 +43,18 @@ Words
 <br clear="right" />
 <img align="right" src="assets/encore-stocks.png"></img>
 <br clear="right" />
+<img align="right" src="assets/item-roulette.png"></img>
+<br clear="right" />
+<img align="right" src="assets/item-change.png"></img>
+<br clear="right" />
+<img align="right" src="assets/item-combine.png"></img>
+<br clear="right" />
 <img align="right" src="assets/hud-barrier.png"></img>
 <br clear="right" />
 <img align="right" src="assets/hud-cutscene.png"></img>
 <br clear="right" />
-<img align="right" src="assets/item-change.png"></img>
+<img align="right" src="assets/continue.png"></img>
 <br clear="right" />
-<img align="right" src="assets/item-roulette.png"></img>
-<br clear="right" />
-<img align="right" src="assets/item-combine.png"></img>
-<br clear="right" />
-<img align="left" src="assets/continue.png"></img>
-<br clear="left" />
 
 
 
