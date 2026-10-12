@@ -37,18 +37,23 @@ Press the left and right buttons to alternate between gaining altitude and momen
 # Encore Mode
 Words
 
-<img src="assets/chars-main.png"></img>
-<img src="assets/chars-encore.png"></img>
 <img align="right" src="assets/encore-swap.png"></img>
 <br clear="right" />
 <img align="right" src="assets/encore-stocks.png"></img>
 <br clear="right" />
+
+<img src="assets/chars-main.png"></img>
+<img src="assets/chars-encore.png"></img>
+
+### Extra items in Encore Mode
 <img align="right" src="assets/item-roulette.png"></img>
 <br clear="right" />
 <img align="right" src="assets/item-change.png"></img>
 <br clear="right" />
 <img align="right" src="assets/item-combine.png"></img>
 <br clear="right" />
+
+# New features
 <img align="right" src="assets/hud-barrier.png"></img>
 <br clear="right" />
 <img align="right" src="assets/hud-cutscene.png"></img>
