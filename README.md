@@ -61,7 +61,7 @@ Characters rescued as part of the story or by completing a Bonus Stage will imme
 In Encore Mode, whenever you would normally lose a life, you will instead lose your current character. Control then **swaps** to your partner character, a new partner is pulled from top of the stock queue, and the game continues. If a swap is not possible, the game will instead restart from the last star post, or from the beginning of the stage. Lost characters can be rescued again through normal means.
 <br clear="right" />
 
-## Item boxes exclusive to Encore Mode
+## Items exclusive to Encore Mode
 <img align="right" src="assets/item-roulette.png"></img>
 ### Roulette
 Cycles through all available characters, and awards you whichever one was being displayed when the item box was destroyed. Once there are no more characters left to rescue, Roulette item boxes cycle through a set of normal items instead.
