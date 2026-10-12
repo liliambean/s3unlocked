@@ -10,9 +10,23 @@
 **Many, many bugfixes and quality of life improvements** have been made, with the goal of producing the best version of Sonic 3 on original hardware.
 
 Read on if you want more information on everything that's been added. Enjoy!
+<br clear="left" />
 
 ## New characters
-Boink
+<img align="right" src="assets/char-amy.png"></img>
+### Amy Rose
+Amy does what Sonic don't
+<br clear="right" />
+
+<img align="left" src="assets/char-mighty.png"></img>
+### Mighty the Armadillo
+Amy does what Sonic don't
+<br clear="left" />
+
+<img align="right" src="assets/char-ray.png"></img>
+### Ray the Flying Squirrel
+Amy does what Sonic don't
+<br clear="right" />
 
 ## Sonic 3 Unlocked
 ![Sonic 3 Unlocked title screen](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot1.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot2.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot3.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot4.png)
