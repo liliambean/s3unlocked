@@ -12,7 +12,7 @@
 Read on if you want more information on everything that's been added. Enjoy!
 <br clear="left" />
 
-## New characters
+# New characters
 ### Amy Rose
 <img align="right" src="assets/char-amy.png"></img>
 Amy excels at offense. Her **Hammer Attack** increases her attack radius without increasing her hitbox, but unlike Sonic's insta-shield, Amy does *not* become invincible, so watch out for fire and spikes when attacking bosses!
@@ -34,7 +34,7 @@ What he lacks in offense and defense, Ray makes up in movement. His **Air Glide*
 Press the left and right buttons to alternate between gaining altitude and momentum. Release the jump button to revert back into a rolling state, perfect for taking out enemies that jump in your way.
 <br clear="right" />
 
-## Encore Mode
+# Encore Mode
 Words
 
 <img src="assets/chars-main.png"></img>
