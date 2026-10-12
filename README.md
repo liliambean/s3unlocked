@@ -5,9 +5,9 @@
 
 **Encore Mode** also makes a return from Sonic Mania Plus, allowing you to play a remixed version of the story.
 
-**Unlockable extras** are available, with many more to come in the future.
-
 **Many, many bugfixes and quality of life improvements** have been made, with the goal of producing the best version of Sonic 3 on original hardware.
+
+Finally, various **unlockable extras** are available, with many more to come in the future.
 
 Read on if you want more information on everything that's been added. Enjoy!
 <br clear="right" />
