@@ -13,21 +13,21 @@ Read on if you want more information on everything that's been added. Enjoy!
 <br clear="right" />
 
 # New characters
-### Amy Rose
+## Amy Rose
 <img align="right" src="assets/char-amy.png"></img>
 Amy excels at offense. Her **Hammer Attack** increases her attack radius without increasing her hitbox, but unlike Sonic's insta-shield, Amy does *not* become invincible, so watch out for fire and spikes when attacking bosses!
 
 Hold down the jump button to charge up Amy's **Hammer Rush** ability, which not only makes short work of enemies and breakable walls, but allows her to run up steep slopes with ease.
 <br clear="right" />
 
-### Mighty the Armadillo
+## Mighty the Armadillo
 <img align="right" src="assets/char-mighty.png"></img>
 Mighty is a slower, more defensive character. While rolling, his **shell** prevents him from being damaged by spikes, and with enough momentum, allows him to take certain exclusive routes.
 
 His **Hammer Drop** ability allows him to pierce straight through both enemies and breakable floors, opening up a few shortcuts. The impact will also cause any nearby monitors to fall to the ground.
 <br clear="right" />
 
-### Ray the Flying Squirrel
+## Ray the Flying Squirrel
 <img align="right" src="assets/char-ray.png"></img>
 What he lacks in offense and defense, Ray makes up in movement. His **Air Glide** ability allows him to soar freely in the air, and with enough space around him, pick up tremendous speed.
 
@@ -50,10 +50,16 @@ Due to technical limitations, characters in Encore Mode are all rendered using t
 <img src="assets/chars-main.png"></img>
 <img src="assets/chars-encore.png"></img>
 
+## Rescuing characters
 <img align="right" src="assets/encore-stocks.png"></img>
+Apart from characters who get rescued as part of the story, more characters can be added to your roster by finding special item boxes or completing a Bonus Stage. Enter a Bonus Stage by activating a star post while carrying 35 or more rings. 
+
+When a character is rescued, they will immediately join the game if nobody else is currently taking up the player 2 slot. If there are already two characters in play, you will instead be awarded a **stock**, represented by the character's initial on the bottom left portion of the HUD.
+
+Characters rescued as part of the story or by completing a Bonus Stage will immediately join the game and convert your existing partner character into a stock. Item boxes will add to your stocks without changing your current partner.
 <br clear="right" />
 
-### Extra items in Encore Mode
+## Item boxes exclusive to Encore Mode
 <img align="right" src="assets/item-roulette.png"></img>
 <br clear="right" />
 <img align="right" src="assets/item-change.png"></img>
