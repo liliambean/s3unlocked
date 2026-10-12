@@ -5,14 +5,14 @@
 
 **Encore Mode** also makes a return from Sonic Mania Plus, allowing you to play a remixed version of the story.
 
-**Unlockable extras** are available, with many more to come in the future.
+**Unlockable bonuses** are available, with many more to come in the future.
 
-**Many, many bugfixes and quality of life improvements** have been made, with the goal of producing the most polished version of Sonic 3 on original hardware. Read on if you want more information on everything that's been added. Enjoy!
+**Many, many bugfixes and quality of life improvements** have been made, with the goal of producing the most polished version of Sonic 3 on original hardware. Read on if you want more information on what's been added. Enjoy!
 
-# New characters
+## New characters
 Boink
 
-# Sonic 3 Unlocked
+## Sonic 3 Unlocked
 ![Sonic 3 Unlocked title screen](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot1.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot2.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot3.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot4.png)
 
 Sonic 3 Unlocked is a _work-in-progress_ modification of Sonic the Hedgehog 3 for the Sega Mega Drive. __No stable releases have been made available as of writing__ -- download and build at your own risk.
