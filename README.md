@@ -56,7 +56,9 @@ Apart from characters who get rescued as part of the story, more characters can 
 
 When a character is rescued, they will immediately join the game if nobody else is taking up the player 2 slot. If there are already two characters in play, you will instead be awarded a **stock**, represented by the character's initial on the bottom left portion of the HUD.
 
-Characters rescued as part of the story or by completing a Bonus Stage will immediately join the game and send your current partner to the end of the stock queue. Item boxes will add new characters to your stocks without replacing your current partner.
+Characters rescued as part of the story or by completing a Bonus Stage will immediately join the game and send your current partner character to the end of the **stock queue**. Item boxes will add new characters to your stocks without replacing your partner character.
+
+In Encore Mode, whenever you would otherwise lose a life, you instead lose your current character. Control is then **swapped** to your partner, a new character is pulled from top of the stock queue, and the game continues. If your partner is not on screen, or a swap is not possible for any other reason, the game restarts from the last star post, or the beginning of the stage. Lost characters can be rescued again through the normal means.
 <br clear="right" />
 
 ## Item boxes exclusive to Encore Mode
