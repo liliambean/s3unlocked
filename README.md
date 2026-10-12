@@ -13,22 +13,22 @@ Read on if you want more information on everything that's been added. Enjoy!
 <br clear="left" />
 
 ## New characters
-<img align="right" src="assets/char-amy.png"></img>
 ### Amy Rose
+<img align="right" src="assets/char-amy.png"></img>
 Amy excels at offense. Her **Hammer Attack** increases her attack radius without increasing her hitbox, but unlike Sonic's insta-shield, Amy does *not* become invincible, so watch out for fire and spikes when attacking bosses!
 
-Hold down the jump button to charge up Amy's **Hammer Rush** ability, which not only makes short work of enemies and breakable walls, but allows her to run up steep slopes with ease.\
+Hold down the jump button to charge up Amy's **Hammer Rush** ability, which not only makes short work of enemies and breakable walls, but allows her to run up steep slopes with ease.
 <br clear="right" />
 
-<img align="right" src="assets/char-mighty.png"></img>
 ### Mighty the Armadillo
+<img align="right" src="assets/char-mighty.png"></img>
 Mighty is a slower, more defensive character. While rolling, his **shell** prevents him from being damaged by spikes, and with enough momentum, allows him to take certain exclusive routes.
 
-His **Hammer Drop** ability allows him to pierce straight through both enemies and breakable floors, opening up a few shortcuts. The impact will also cause any nearby monitors to fall to the ground.\
+His **Hammer Drop** ability allows him to pierce straight through both enemies and breakable floors, opening up a few shortcuts. The impact will also cause any nearby monitors to fall to the ground.
 <br clear="right" />
 
-<img align="right" src="assets/char-ray.png"></img>
 ### Ray the Flying Squirrel
+<img align="right" src="assets/char-ray.png"></img>
 What he lacks in offense and defense, Ray makes up in movement. His **Air Glide** ability allows him to soar freely through the air, and with enough open space around him, pick up tremendous speed.
 
 Press the left and right buttons to alternate between gaining altitude and horizontal momentum. Release the jump button to revert back into a rolling state, perfect for taking out enemies that jump in your way.
