@@ -87,11 +87,11 @@ Combines all of your rings into one. When you take damage, only one ring will fl
 <img align="right" src="assets/hud-skip.png"></img>
 **Cutscene skips:** Most cutscenes in the game can now be skipped. Whenever the HUD is hidden from view, press the Start button to activate the button prompt, followed by the A button. Score countdowns can also be skipped by pressing the Start button.
 
-**Tails assist:** Double jump moves are now blocked when you hold the Up button and no other directions. This is to facilitate grabbing onto Tails, whose flight can now be controlled by player 1 as in the Marble Garden Zone boss.
+**Tails assist:** Double jump moves are now blocked when you hold the Up button and no other directions. This is to facilitate grabbing onto Tails, whose flight can now be controlled by player 1 as in the Marble Garden Zone 2 boss.
 <br clear="right" />
 
 <img align="right" src="assets/hud-options.png"></img>
-**Hidden abilities:** A hidden ability is available for each character, and can be unlocked by clearing 1 Player mode, or by successfully keeping the character through the end of Encore Mode. Unlocked abilities can be enabled or disabled in the Options menu, which is accessed by pressing the A button in the Data Select menu.
+**Hidden abilities:** A hidden ability is available for each character, which can be unlocked by clearing 1 Player mode, or by successfully keeping the character through the end of Encore Mode. Unlocked abilities can be enabled or disabled in the Options menu, which is accessed by pressing the A button in the Data Select menu.
 
 **Erase save data:** Saved data can be erased by selecting the Delete option in the Data Select menu, followed by pressing the A button.
 <br clear="right" />
