@@ -81,7 +81,7 @@ Combines all of your rings into one. When you take damage, only one ring will fl
 <img align="right" src="assets/hud-barrier.png"></img>
 **Barrier HUD:** When elemental barriers cannot be displayed, either due to a Super form or an invincibility power-up being active, they are now represented by an icon on the top right corner of the screen. When you have the Combine Ring power-up, it will also appear here.
 
-**Super button:** Super transformations are now bound exclusively to the A button, so you can keep using your character's double jump action without triggering them. The barrier HUD is temporarily replaced with a button prompt when the super transformation is ready.
+**Super button:** Super transformations are now bound exclusively to the A button, so you can keep using your character's double jump action without triggering them. The barrier HUD is temporarily replaced with a button prompt for the super transformation when it is available.
 <br clear="right" />
 
 <img align="right" src="assets/hud-skip.png"></img>
