@@ -35,15 +35,21 @@ Press the left and right buttons to alternate between gaining altitude and momen
 <br clear="right" />
 
 # Encore Mode
-Words
-
 <img align="right" src="assets/encore-swap.png"></img>
+Encore Mode can be accessed from the title screen. As in Sonic Mania Plus, progress for this mode is saved separately from 1 Player mode.
+
+In Encore Mode, you play as two characters simultaneously, and can change between them at any time. Press the **A button** while both characters are on screen to **swap** which one you're currently controlling. Swapping may be blocked, for instance, if either character has their controls locked, or if the end of the stage has been reached. Which character is currently being controlled by player 1 will briefly have an arrow displayed over their head.
+
+When player 2 is not on screen, pressing the **A button** will instead **call** them to your position. Player 2 may also manually jump to player 1's position by pressing the **Start button** on the player 2 controller.
 <br clear="right" />
-<img align="right" src="assets/encore-stocks.png"></img>
-<br clear="right" />
+
+Due to technical reasons, characters in Encore Mode are all rendered using the same 15-color palette, so there is some slight deviation in their appearance when compared to 1 Player mode.
 
 <img src="assets/chars-main.png"></img>
 <img src="assets/chars-encore.png"></img>
+
+<img align="right" src="assets/encore-stocks.png"></img>
+<br clear="right" />
 
 ### Extra items in Encore Mode
 <img align="right" src="assets/item-roulette.png"></img>
