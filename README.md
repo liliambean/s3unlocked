@@ -34,6 +34,30 @@ What he lacks in offense and defense, Ray makes up in movement. His **Air Glide*
 Press the left and right buttons to alternate between gaining altitude and momentum. Release the jump button to revert back into a rolling state, perfect for taking out enemies that jump in your way.
 <br clear="right" />
 
+## Encore Mode
+Words
+
+<img src="assets/chars-main.png"></img>
+<img src="assets/chars-encore.png"></img>
+<img align="right" src="assets/encore-swap.png"></img>
+<br clear="right" />
+<img align="right" src="assets/encore-stocks.png"></img>
+<br clear="right" />
+<img align="right" src="assets/hud-barrier.png"></img>
+<br clear="right" />
+<img align="right" src="assets/hud-cutscene.png"></img>
+<br clear="right" />
+<img align="right" src="assets/item-change.png"></img>
+<br clear="right" />
+<img align="right" src="assets/item-roulette.png"></img>
+<br clear="right" />
+<img align="right" src="assets/item-combine.png"></img>
+<br clear="right" />
+<img align="left" src="assets/continue.png"></img>
+<br clear="left" />
+
+
+
 ## Sonic 3 Unlocked
 ![Sonic 3 Unlocked title screen](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot1.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot2.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot3.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot4.png)
 
