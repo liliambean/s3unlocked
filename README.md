@@ -78,14 +78,14 @@ Combines all of your rings into one. When you take damage, only one ring will fl
 <br clear="right" />
 
 # New features
-<img align="right" src="assets/hud-barrier.png"></img>
+<img align="right" src="assets/hud-options.png"></img>
 <br clear="right" />
-<img align="right" src="assets/hud-cutscene.png"></img>
+<img align="right" src="assets/hud-skip.png"></img>
+<br clear="right" />
+<img align="right" src="assets/hud-barrier.png"></img>
 <br clear="right" />
 <img align="right" src="assets/continue.png"></img>
 <br clear="right" />
-
-
 
 ## Sonic 3 Unlocked
 ![Sonic 3 Unlocked title screen](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot1.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot2.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot3.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot4.png)
