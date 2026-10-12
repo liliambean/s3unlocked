@@ -81,17 +81,19 @@ Combines all of your rings into one. When you take damage, only one ring will fl
 <img align="right" src="assets/hud-barrier.png"></img>
 **Barrier HUD:** When elemental barriers cannot be displayed, either from being turning Super or having an invincibility power-up, they are now represented by an icon at the top right corner of the screen. When you have the Combine Ring power-up, it will also appear there.
 
-**Super button:** Super transformations are now bound exclusively to the A button, so you can keep using your character's double jump action without triggering them. The barrier HUD is temporarily replaced with a button prompt for this action.
+**Super button:** Super transformations are now bound exclusively to the A button, and you can keep using your character's double jump action without triggering them. The barrier HUD is temporarily replaced with a button prompt for this action.
 <br clear="right" />
 
 <img align="right" src="assets/hud-skip.png"></img>
-**Cutscene skips:** Most cutscenes in the game can now be skipped. Whenever the HUD is hidden from view, simply press the Start button to display the button prompt, then press the A button. Score countdowns can also be skipped by pressing the Start button.
+**Cutscene skips:** Most cutscenes in the game can now be skipped. Whenever the HUD is hidden from view, press the Start button to display the button prompt, then press the A button. Score countdowns can also be skipped by pressing the Start button.
+
+**Tails assist:** Double jump moves are blocked if you hold the Up button and no other directions. This is to facilitate being picked up by Tails, whose flight can now be controlled by player 1 even when Tails is the support character.
 <br clear="right" />
 
 <img align="right" src="assets/hud-options.png"></img>
-**Hidden abilities:** Each characters now has an extra ability, unlocked when 1 Player mode is cleared, or when they are successfully carried to the end of an Encore Mode game. Unlocked abilities can be confirmed and enabled/disabled in the Options menu, accessible by pressing the A button while in the Data Select menu.
+**Hidden abilities:** A hidden ability is available for each character, and can be unlocked by clearing 1 Player mode, or by successfully keeping the character through the end of Encore Mode. Unlocked abilities can be enabled or disabled in the Options menu, which is accessed by pressing the A button in the Data Select menu.
 
-**Erase save data:** Saved data can now be erased by selecting the Delete option in the Data Select menu, followed by pressing the A button.
+**Erase save data:** Saved data can be erased by selecting the Delete option in the Data Select menu, followed by pressing the A button.
 <br clear="right" />
 <img align="right" src="assets/continue.png"></img>
 <br clear="right" />
