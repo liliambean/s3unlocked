@@ -29,7 +29,7 @@ His **Hammer Drop** ability allows him to pierce straight through both enemies a
 
 ### Ray the Flying Squirrel
 <img align="right" src="assets/char-ray.png"></img>
-What he lacks in offense and defense, Ray makes up in movement. His **Air Glide** ability allows him to soar freely through the air, and with enough open space around him, pick up tremendous speed.
+What he lacks in offense and defense, Ray makes up in movement. His **Air Glide** ability allows him to soar freely through the air, and with enough space around him, pick up tremendous speed.
 
 Press the left and right buttons to alternate between gaining altitude and momentum. Release the jump button to revert back into a rolling state, perfect for taking out enemies that jump in your way.
 <br clear="right" />
