@@ -62,7 +62,7 @@ Characters rescued as part of the story or by completing a Bonus Stage will imme
 ## Item boxes exclusive to Encore Mode
 <img align="right" src="assets/item-roulette.png"></img>
 ### Roulette
-Cycles through all available characters, and awards what was being displayed when the item box was destroyed. Once there are no more characters left to rescue, roulette boxes cycle through the normal set of items instead.
+Cycles through all available characters, and awards you whoever was being displayed when the item box was destroyed. Once there are no more characters left to rescue, roulette boxes cycle through the normal set of items instead.
 <br clear="right" />
 
 <img align="right" src="assets/item-change.png"></img>
