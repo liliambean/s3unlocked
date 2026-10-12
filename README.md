@@ -7,7 +7,9 @@
 
 **Unlockable bonuses** are available, with many more to come in the future.
 
-**Many, many bugfixes and quality of life improvements** have been made, with the goal of producing the most polished version of Sonic 3 available on original hardware. Read on if you want more information on what's been added. Enjoy!
+**Many, many bugfixes and quality of life improvements** have been made, with the goal of producing the most polished version of Sonic 3 available on original hardware.
+
+Read on if you want more information on everything that's been added. Enjoy!
 
 ## New characters
 Boink
