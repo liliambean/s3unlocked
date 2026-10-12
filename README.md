@@ -69,7 +69,7 @@ Cycles through all available characters, and awards you whichever one was being 
 
 <img align="right" src="assets/item-change.png"></img>
 ### Change
-Sends your current character to the end of the stock queue, and replaces them with the character at the top of the queue. Once there are no more characters left to rescue, this item can also be found inside of Bonus Stages.
+Sends your current character to the end of the stock queue, and replaces them with the character at the top of the queue. Once there are no more characters left to rescue, this item can also occasionally be found in Bonus Stages.
 <br clear="right" />
 
 <img align="right" src="assets/item-combine.png"></img>
