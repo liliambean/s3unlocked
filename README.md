@@ -74,7 +74,7 @@ Sends your current character to the end of the stock queue, and replaces them wi
 
 <img align="right" src="assets/item-combine.png"></img>
 ### Combine Ring
-Combines all of your rings into one. When you take damage, only one ring will fly out. Collect the ring before it explodes, and it will restore all of the rings you have just lost.
+Combines all of your rings into one. When you take damage, only one ring will fly out. Collect the ring before it explodes, and it will restore all of the rings you just lost.
 <br clear="right" />
 
 # New features
