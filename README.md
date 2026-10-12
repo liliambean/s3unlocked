@@ -91,29 +91,28 @@ Combines all of your rings into one. When you take damage, only one ring will fl
 <br clear="right" />
 
 <img align="right" src="assets/hud-options.png"></img>
-**Hidden abilities:** A hidden ability is available for each character, which can be unlocked by clearing 1 Player mode or successfully keeping the character through the end of Encore Mode. Unlocked abilities can be enabled or disabled in the Options menu, which is accessed by pressing the A button in the Data Select menu.
+**Hidden abilities:** A hidden ability is available for each character, which can be unlocked by clearing 1 Player mode or successfully keeping the character through the end of Encore Mode. Unlocked abilities can be enabled or disabled in the Options menu, which is accessed by pressing the A button while in the Data Select menu.
 
 **Erase save data:** Saved data can be erased by selecting the Delete option in the Data Select menu, followed by pressing the A button.
 <br clear="right" />
+
+## Museum
+Coming soon.
+
+## Other changes
 <img align="right" src="assets/continue.png"></img>
+**Continues:**
+
+**Super Tails:**
+
+**Expanded sine tables:**
+
+**Expanded animations:**
+
+**QOL changes:**
 <br clear="right" />
 
-# Museum
-Coming soon
-
-## Sonic 3 Unlocked
-![Sonic 3 Unlocked title screen](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot1.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot2.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot3.png) ![Sonic 3 Unlocked screenshot](https://github.com/liliambean/s3unlocked/blob/main/assets/screenshot4.png)
-
-Sonic 3 Unlocked is a _work-in-progress_ modification of Sonic the Hedgehog 3 for the Sega Mega Drive. __No stable releases have been made available as of writing__ -- download and build at your own risk.
-\
-\
-The final version is expected to include:
-- Additional playable characters and stages
-- Encore Mode (from Sonic Mania Plus)
-- Unlockables and optional collectibles
-- Various fixes and quality-of-life improvements
-
-## AI Disclosure
-![No AI usage logo](https://github.com/liliambean/s3unlocked/blob/main/assets/disclosure.png)
-
-What, are you kidding? Get out of here.
+#  Feedback and bug reports
+## Future releases
+## A note for data miners
+## Closing words
