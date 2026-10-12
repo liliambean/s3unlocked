@@ -56,15 +56,23 @@ Apart from characters who get rescued as part of the story, more characters can 
 
 When a character is rescued, they will immediately join the game if nobody else is taking up the player 2 slot. If there are already two characters in play, you will instead be awarded a **stock**, represented by the character's initial on the bottom left portion of the HUD.
 
-Characters rescued as part of the story or by completing a Bonus Stage will immediately join the game and convert your current partner character into a stock. Item boxes will add to your stocks without changing your current partner.
+Characters rescued as part of the story or by completing a Bonus Stage will immediately join the game and convert your current partner character into a stock. Item boxes will push a new character to your queue of stocks without changing your current partner.
 <br clear="right" />
 
 ## Item boxes exclusive to Encore Mode
 <img align="right" src="assets/item-roulette.png"></img>
+### Roulette
+Cycles through all available characters, and awards the one that was being displayed when the item box was destroyed. Once there are no more characters left to rescue, roulette boxes cycle through normal items instead.
 <br clear="right" />
+
 <img align="right" src="assets/item-change.png"></img>
+### Change
+Pushes the current character to the end of your stock queue, and replaces them with the character at the top of the queue. Once there are no more characters left to rescue, this item can also be obtained from a Bonus Stage.
 <br clear="right" />
+
 <img align="right" src="assets/item-combine.png"></img>
+### Combine Ring
+Combines all of your rings into one. When you take damage, only one ring will fly out. Collect it before it explodes, and it will restore all of the rings you just lost.
 <br clear="right" />
 
 # New features
