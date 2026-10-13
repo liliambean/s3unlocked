@@ -123,7 +123,7 @@ I began work on Sonic 3 Unlocked in *February 2018,* more than eight years prior
 
 In July 2026, I left that team because of a corporate mandate that would force me to use AI in my day-to-day work.
 
-I have never touched an LLM. At this point, I am convinced they are the devil's spawn. The damage they have done to the video game reverse engineering community is **tremendous** and **gross** and ***sickening***. I am *sad* at having seen so many people show their full and complete *ass,* demonstrating their sheer lack of *respect* for the knowledge and skills that other people have spent their *lives* building.
+I have never touched an LLM. At this point, I am convinced they are the devil's spawn. The damage they have done to the video game reverse engineering community is **tremendous** and **gross** and ***sickening***. I am *sad* at having seen so many people show their full and complete *ass,* demonstrating their sheer lack of respect for the knowledge and skills that other people have spent their *lives* building.
 
 Sonic 3 Unlocked is **made by me**. Let that be clear.
 
