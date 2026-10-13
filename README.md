@@ -117,3 +117,18 @@ Coming soon.
 ## A note for data miners
 
 # Does this thing use AI?
+Hi, my name is Liliam. I am a trans non-binary, AuDHD, mostly self-taught programmer and pixel artist. As we are wont to be.
+
+I began work on Sonic 3 Unlocked in *February 2018,* more than eight years prior to its first demo release in 2026. About two years later, I quit my crappy job in IT consulting where I was essentially being fleeced. I landed a much better position, in a team I looked up to, doing modest but honest work.
+
+In July 2026, I left that team because of a corporate mandate that would force me to use AI in my day-to-day work.
+
+I have never touched an LLM. At this point, I am convinced they are the devil's spawn. The damage they have done to the video game reverse engineering community is **tremendous** and **gross** and ***sickening***. I am *sad* at having seen so many people show their full and complete *ass,* demonstrating their sheer lack of *respect* for the knowledge and skills that other people have spent their *lives* building.
+
+Sonic 3 Unlocked is **made by me**. Let that be clear.
+
+However, it is also built on the thankless work of **everyone** who has ever contributed to the Sonic & Knuckles disassembly. It couldn't have been made without dozens of different tools created by **extremely talented people** across several decades. It is **heavily inspired** by not only Sonic Mania and Sonic Origins, but fan projects such as Sonic 3 Complete and Sonic 3: Angel Island Revisited.
+
+Art is resistance. Keep creating.
+
+Do not let the machine take away from you that which brings you joy.
