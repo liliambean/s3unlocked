@@ -127,7 +127,7 @@ I have never touched an LLM. At this point, I am convinced they are the devil's 
 
 Sonic 3 Unlocked is **made by me**. Let that be clear.
 
-However, it is also built on the thankless work of **everyone** who has ever contributed to the Sonic & Knuckles disassembly. It couldn't have been made without dozens of different tools created by **extremely talented people** across several decades. It is **heavily inspired** by not only Sonic Mania and Sonic Origins, but fan projects such as Sonic 3 Complete and Sonic 3: Angel Island Revisited.
+However, it is also built on the thankless work of **everyone** who has ever contributed to the Sonic 3 & Knuckles disassembly. It couldn't have been made without dozens of different tools created by **extremely talented people** across several decades. It is **heavily inspired** not only by Sonic Mania and Sonic Origins, but fan projects such as Sonic 3 Complete and Sonic 3: Angel Island Revisited.
 
 Art is resistance. Keep creating.
 
