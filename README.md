@@ -91,7 +91,7 @@ Combines all of your rings into one. When you take damage, only one ring will fl
 <br clear="right" />
 
 <img align="right" src="assets/hud-options.png"></img>
-**Hidden abilities:** An extra skill is available for each character, unlockable by clearing 1 Player mode or by successfully keeping the character through the end of Encore Mode. Abilities can be toggled via the Options menu, which can be accessed by pressing the A button in the Data Select menu.
+**Hidden abilities:** An extra skill is available for each character, unlockable by clearing 1 Player mode or successfully keeping the character through the end of Encore Mode. Abilities can be toggled via the Options menu, which can be accessed by pressing the A button in the Data Select menu.
 
 **Erase data menu:** Individual sections of save RAM can be erased by selecting the Delete option in the Data Select menu and then pressing the A button. This can be used, for example, to reset Museum completion data back to its initial state without affecting saved games.
 <br clear="right" />
