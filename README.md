@@ -52,7 +52,7 @@ Note that due to technical limitations, characters in Encore Mode are all render
 
 ## Rescuing characters
 <img align="right" src="assets/encore-stocks.png"></img>
-Apart from characters who get rescued as part of the story, more characters can be added to your roster by finding special **item boxes** or completing a **Bonus Stage**. Enter a Bonus Stage by activating a star post while carrying 35 or more rings. 
+Apart from characters that get rescued as part of the story, more characters can be added to your roster by finding special **item boxes** or completing a **Bonus Stage**. Enter a Bonus Stage by activating a star post while carrying 35 or more rings. 
 
 When a character is rescued, they will immediately join the game if nobody else is taking up the player 2 slot. If there are already two characters in play, you will instead be awarded a **stock**, represented by the character's initial on the bottom left portion of the HUD.
 
