@@ -38,7 +38,7 @@ Press the left and right buttons to alternate between gaining altitude and momen
 <img align="right" src="assets/encore-swap.png"></img>
 Encore Mode is an extra gameplay mode accessible from the title screen. As in Sonic Mania Plus, progress for this mode is saved separately from 1 Player mode.
 
-In Encore Mode, you play as two characters simultaneously, and can change between them at any time. Press the **A button** while both characters are on screen to **swap** which one you're currently controlling.
+In Encore Mode, you play as two characters simultaneously, and can alternate between them at any time. Press the **A button** while both characters are on screen to **swap** which one you're currently controlling.
 
 Swapping may be blocked, for instance, if either character has their controls locked, or if the end of the stage has been reached. In any case though, the character which is currently being controlled by player 1 will briefly be indicated by an arrow over their head.
 
