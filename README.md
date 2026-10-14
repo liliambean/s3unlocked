@@ -78,20 +78,20 @@ Combines all of your rings into one. When you take damage, only one ring will fl
 <br clear="right" />
 
 # New features
-<img align="right" src="assets/hud-barrier.png"></img>
-**Barrier HUD:** When elemental barriers cannot be displayed, either due to a Super form or an invincibility power-up being active, they are now represented by an icon on the top right corner of the screen. When you have the Combine Ring power-up, it will also appear here.
-
-**Super button:** Super transformations are now bound exclusively to the A button, so you can keep using your character's double jump move without triggering them. The barrier HUD is temporarily replaced with a button prompt for the super transformation when it is available.
-<br clear="right" />
-
 <img align="right" src="assets/hud-skip.png"></img>
 **Cutscene skips:** Most cutscenes in the game can now be skipped. When the HUD is hidden from view, press the Start button to reveal a button prompt for the cutscene skip, then press the A button to confirm. Score countdowns can also be skipped by pressing the Start button.
+<br clear="right" />
 
-**Tails assist:** Double jump moves are now blocked when you hold the Up button and no other direction. This is to make it easier to be grabbed by Tails, whose flight can now be controlled by player 1 as in the Marble Garden Zone 2 boss.
+<img align="right" src="assets/hud-barrier.png"></img>
+**Barrier HUD:** When elemental barriers cannot be displayed, either due to a Super form or an invincibility power-up being active, they are represented by an icon on the top right corner of the screen. When you have the Combine Ring power-up, it will also appear here.
+
+**Super button:** Super forms are now bound exclusively to the A button, so you can keep using your character's double jump moves. The barrier HUD is temporarily replaced with a button prompt for this purpose.
+
+**Tails assist:** Double jump moves are now blocked when you hold the Up button and no other direction. This is to make it easier to be picked up by Tails, whose flight can now be controlled by player 1 as in the Marble Garden Zone 2 boss.
 <br clear="right" />
 
 <img align="right" src="assets/hud-options.png"></img>
-**Hidden abilities:** An extra skill is available for each character, unlockable by clearing 1 Player mode or successfully keeping the character through the end of Encore Mode. Abilities can be toggled via the Options menu, which can be accessed by pressing the A button in the Data Select menu.
+**Hidden abilities:** An extra skill is available for each character, unlockable by clearing 1 Player mode or successfully keeping the character through the end of Encore Mode. Abilities can be toggled via the Options menu, accessible by pressing the A button in the Data Select menu.
 
 **Erase data menu:** Individual sections of save RAM can be erased by selecting the Delete option in the Data Select menu and then pressing the A button. This can be used, for example, to reset Museum completion data back to its initial state without affecting saved games.
 <br clear="right" />
