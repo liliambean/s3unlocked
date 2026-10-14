@@ -15,28 +15,28 @@ Read on for more information on the biggest changes. Enjoy!
 # New characters
 ## Amy Rose
 <img align="right" src="assets/char-amy.png"></img>
-Amy excels at offense. Her **Hammer Attack** increases her attack radius without increasing her hitbox, but unlike Sonic's insta-shield, Amy does *not* become invincible, so watch out for fire and spikes when attacking bosses!
+Amy excels at offense. Her **Hammer Attack** increases her attack radius without increasing her hitbox, but unlike Sonic's insta-shield, she does *not* become invincible. Watch out for fire and spikes when attacking bosses!
 
 Hold down the jump button to charge up Amy's **Hammer Rush** ability, which not only makes short work of enemies and breakable walls, but allows her to run up steep slopes with ease.
 <br clear="right" />
 
 ## Mighty the Armadillo
 <img align="right" src="assets/char-mighty.png"></img>
-Mighty is a slower, more defensive character. While rolling, his **shell** prevents him from being damaged by spikes, and with enough momentum, allows him to take certain exclusive routes.
+Mighty is a slower, more defensive character. While rolling, his **shell** prevents him from being damaged by spikes, and with enough momentum, this even opens up some exclusive routes.
 
-His **Hammer Drop** ability allows him to pierce straight through both enemies and breakable floors, opening up a few shortcuts. The impact will also cause any nearby monitors to fall to the ground.
+His **Hammer Drop** ability allows him to pierce straight through both enemies and breakable floors, allowing him to take a few shortcuts. The impact will also cause any nearby monitors to fall to the ground.
 <br clear="right" />
 
 ## Ray the Flying Squirrel
 <img align="right" src="assets/char-ray.png"></img>
 What he lacks in offense and defense, Ray makes up in movement. His **Air Glide** ability allows him to soar freely in the air, and with enough space around him, pick up tremendous speed.
 
-Press the left and right buttons to alternate between gaining altitude and momentum. Release the jump button to revert back into a rolling state, perfect for taking out enemies that jump in your way.
+Press the left and right buttons to alternate between gaining altitude and momentum. Release the jump button to revert back into a rolling state, perfect for taking out any enemies that jump in your way.
 <br clear="right" />
 
 # Encore Mode
 <img align="right" src="assets/encore-swap.png"></img>
-Encore Mode can be accessed from the title screen. As in Sonic Mania Plus, progress for this mode is saved separately from 1 Player mode.
+Encore Mode is an extra game mode that can be accessed from the title screen. As in Sonic Mania, progress for this mode is saved separately from 1 Player mode.
 
 In Encore Mode, you play as two characters simultaneously, and can change between them at any time. Press the **A button** while both characters are on screen to **swap** which one you're currently controlling.
 
