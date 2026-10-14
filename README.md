@@ -85,7 +85,7 @@ Combines all of your rings into one. When you take damage, only one ring will fl
 <br clear="right" />
 
 <img align="right" src="assets/hud-skip.png"></img>
-**Cutscene skips:** Most cutscenes in the game can now be skipped. When the HUD is hidden from view, press the Start button to reveal a button prompt for the cutscene skip, then press the A button. Score countdowns can also be skipped by pressing the Start button.
+**Cutscene skips:** Most cutscenes in the game can now be skipped. When the HUD is hidden from view, press the Start button to reveal a button prompt for the cutscene skip, then press the A button to confirm. Score countdowns can also be skipped by pressing the Start button.
 
 **Tails assist:** Double jump moves are now blocked when you hold the Up button and no other directions. This is to facilitate grabbing onto Tails, whose flight can now be controlled by player 1 as in the Marble Garden Zone 2 boss.
 <br clear="right" />
