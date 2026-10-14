@@ -40,7 +40,7 @@ Encore Mode is an extra gameplay mode accessible from the title screen. As in So
 
 In Encore Mode, you play as two characters simultaneously, and can alternate between them at any time. Press the **A button** while both characters are on screen to **swap** which one you're currently controlling.
 
-Swapping may be blocked, for instance, if either character's controls are locked, or if the end of the stage has been reached. In any case though, the character which is currently being controlled by player 1 will briefly be indicated by an arrow over their head.
+Swapping may be blocked, for instance, if either character's controls are locked, or if the end of the stage has been reached. In any case, the character which is currently being controlled by player 1 will briefly be indicated by an arrow over their head.
 
 When player 2 is not on screen, pressing the **A button** will instead **call** them to your position. Player 2 may also manually jump to player 1's position by pressing the **Start button** on the player 2 controller.
 <br clear="right" />
