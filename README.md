@@ -1,5 +1,5 @@
 <img align="right" src="assets/title.png"></img>
-**Sonic 3 Unlocked** is an extensive modification of *Sonic the Hedgehog 3* which aims to bring over modern sensibilities from the Retro Engine titles back into the Mega Drive original.
+**Sonic 3 Unlocked** is an extensive modification of *Sonic the Hedgehog 3* that aims to bring over modern sensibilities from the Retro Engine titles back into the Mega Drive original.
 
 **Amy Rose**, **Mighty the Armadillo** and **Ray the Flying Squirrel** join as playable characters, bringing with them their full movesets from Sonic Origins and Sonic Mania.
 
