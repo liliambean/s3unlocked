@@ -1,15 +1,15 @@
 <img align="right" src="assets/title.png"></img>
-**Sonic 3 Unlocked** is an extensive modification of *Sonic the Hedgehog 3* that aims to bring over modern sensibilities from the Retro Engine titles back into the Mega Drive original.
+**Sonic 3 Unlocked** is an extensive modification of *Sonic the Hedgehog 3* that aims to bring modern sensibilities from the Retro Engine series of games back into the Mega Drive original.
 
 **Amy Rose**, **Mighty the Armadillo** and **Ray the Flying Squirrel** join as playable characters, bringing with them their full movesets from Sonic Origins and Sonic Mania.
 
-**Encore Mode** also makes a return from Sonic Mania Plus, allowing you to play a remixed version of the story.
+**Encore Mode** also makes a return from Sonic Mania Plus, allowing you to play a slightly remixed version of the story.
 
-**Many, many bugfixes and quality of life improvements** have been made, with the goal of producing the best version of Sonic 3 available on original hardware.
+Several **unlockable extras** have been added, with more planned in the future.
 
-Finally, various **unlockable extras** are available, with many more planned in the future.
+Finally, **many many bugfixes and quality of life improvements** have been made, with the goal of producing the most polished version of Sonic 3 available on original hardware.
 
-Read on if you want more information on everything that's been added. Enjoy!
+Read on for more information on the biggest changes. Enjoy!
 <br clear="right" />
 
 # New characters
