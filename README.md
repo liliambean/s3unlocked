@@ -64,7 +64,7 @@ In Encore Mode, whenever you would normally lose a life, you will instead lose t
 ## Items exclusive to Encore Mode
 <img align="right" src="assets/item-roulette.png"></img>
 ### Roulette
-Cycles through all available characters, and awards you whichever one was last displayed when the item box was destroyed. Once there are no more characters left to rescue, Roulette item boxes cycle through a set of normal items instead.
+Cycles through all available characters, and awards you whichever one was last displayed once the item box is destroyed. Once there are no more characters left to rescue, Roulette item boxes cycle through a set of normal items instead.
 <br clear="right" />
 
 <img align="right" src="assets/item-change.png"></img>
