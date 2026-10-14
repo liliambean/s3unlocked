@@ -97,7 +97,7 @@ Combines all of your rings into one. When you take damage, only one ring will fl
 <br clear="right" />
 
 ## Museum
-Coming soon.
+Coming soon
 
 ## Other changes
 <img align="right" src="assets/continue.png"></img>
