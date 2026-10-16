@@ -112,7 +112,7 @@ Coming soon
 **QOL changes:**
 <br clear="right" />
 
-#  Feedback and bug reports
+# Feedback and bug reports
 ## Future releases
 ## A note for data miners
 From its inception, Sonic 3 Unlocked has been developed in public. It is **trivial** to browse through the source code and find in-progress features that are meant for future versions. If you are curious to seek these features out, all I ask is that you do not reveal them to people who've chosen to be surprised by them in the long run. Thank you.
@@ -120,11 +120,11 @@ From its inception, Sonic 3 Unlocked has been developed in public. It is **trivi
 # Does this thing use AI?
 Hi, my name is Liliam. I am a trans non-binary, AuDHD, mostly self-taught programmer and pixel artist. As we are wont to be, haha.
 
-I began work on Sonic 3 Unlocked in February 2018, over *eight years* prior to its first demo release in 2026. About two years after this, I quit my crappy job in IT consulting for  a much better position in a team I looked up to, doing modest but honest work.
+I began work on Sonic 3 Unlocked in February 2018, over *eight years* prior to its first demo release in 2026. About two years after this, I quit my crappy job in IT consulting for a much better position in a team I looked up to, doing modest but honest work.
 
 In July 2026, I left that team due to a corporate mandate that would force me to use AI in day-to-day development.
 
-I have never touched an LLM. At this point, I am convinced they are the devil's spawn. The damage they have done to the video game reverse engineering community is **tremendous** and ***nauseating***. I am *saddened* by so many people, old and new, having shown their full ass, showcasing a lack of respect for the skills and knowledge that other people have spent their entire adult lives building.
+I have never touched an LLM. At this point, I am convinced they are the devil's spawn. The damage they have done to the video game reverse engineering community is **tremendous** and ***nauseating***. I am *saddened* from so many people, old and new, showing their full ass and displaying a complete lack of respect for the skills and knowledge that others have spent their entire adult lives building.
 
 Sonic 3 Unlocked is something **I made** because the **process** of making things is **fun**.
 
