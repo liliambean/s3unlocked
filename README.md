@@ -125,10 +125,21 @@ In July 2026, I left that team due to a corporate mandate that would force me to
 
 I have never touched an LLM. At this point, I am convinced they are the devil's spawn. The damage they have done to the video game reverse engineering community is **tremendous** and ***nauseating***. I am *saddened* by so many people, old and new, having shown their full ass, demonstrating their lack of respect for the skills and knowledge that other people have spent their entire adult lives building.
 
-Sonic 3 Unlocked is something **I made** because the process of making things **is fun.**
-
-However, it is also built on the thankless work of **everyone** who has ever contributed to the Sonic 3 & Knuckles disassembly. It couldn't have been made without dozens of different tools created by **extremely talented people** across several decades. It is **heavily inspired** not only by Sonic Mania and Sonic Origins, but fan projects such as Sonic 3 Complete and Sonic 3: Angel Island Revisited.
+Sonic 3 Unlocked is something **I made** because the process of making things **is fun**.
 
 Art is resistance. Keep creating.
 
-Do not let the machine take away from you that which brings you joy.
+## Further attribution
+Amy and Mighty/Ray's sprites are taken from Sonic Origins Plus and Sonic Mania Plus respectively, color-reduced to fit the Mega Drive palette by me. Some of the poses for these characters, along with the vast majority of original graphics added to the game, were also authored by me.
+
+The major exceptions are listed in the in-game Credits option, accessible from the title screen. The large ending sprites for Mighty and Ray were made by **Delta Conduit**, and Amy's 1-up icon and end sign were made by **E-122 Psi**, although not specifically for this project.
+
+Additional graphics are direct references to official Sonic games, and as such are sourced directly from them. Examples include the background of the Encore mode bonus stage, or the shattered Super Emeralds in Hidden Palace Zone.
+
+Some music tracks have also been imported from official Sonic games, including tracks from the November 3rd, 1993 prototype of Sonic 3. This was facilitated by the reverse engineering work on the SMPS format by **Natsumi**, **Clownacy**, and others. Sonic 3 Unlocked uses Flamedriver, a bugfixed version of the Sonic 3 sound driver by **flamewing**. A full list of credits for code reuse is available from the in-game Credits option, under the "disassembly contributors" section.
+
+Special thanks to **hiddenpalace.org** for obtaining and dumping the prototype build of Sonic 3 from which most of the extra music tracks were sourced.
+
+Sonic Mania code was decompiled and reverse engineered in order to provide accurate implementations of Sonic's drop dash and Ray's air glide abilities. The drop dash was decompiled and translated to Mega Drive assembly code by **MainMemory**, and the air glide was decompiled by **Rubberduckycooly** and translated by me.
+
+Any other gameplay features were eyeballed and did not reference any code from Sonic Mania, Sonic Origins or other titles. However, Sonic 3 Unlocked is quite obviously inspired by these games, as well as fan projects **Sonic 3 Complete** and **Sonic 3: Angel Island Revisited**. To all the designers, artists and developers behind these works: thank you!
