@@ -126,7 +126,7 @@ In July 2026, I left that team due to a corporate mandate that would force me to
 
 I have never touched an LLM. At this point, I am convinced they are the devil's spawn. The damage they have done to the video game reverse engineering community is **tremendous** and ***nauseating***. I am *saddened* by so many people, old and new, having shown their full ass, showcasing a lack of respect for the skills and knowledge that other people have spent their entire adult lives building.
 
-Sonic 3 Unlocked is something **I made** because the process of making things **is fun**.
+Sonic 3 Unlocked is something **I made** because the **process** of making things is **fun**.
 
 Art is resistance. Keep creating.
 
