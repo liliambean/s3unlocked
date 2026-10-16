@@ -137,7 +137,7 @@ The major exceptions are listed in the in-game Credits option, accessible from t
 
 Additional graphics are direct references to official Sonic games, and as such are sourced directly from them. Examples include the background of the Encore mode bonus stage, or the shattered Super Emeralds in Hidden Palace Zone.
 
-Some music tracks have also been imported from official Sonic games, including tracks from the November 3rd, 1993 prototype of Sonic 3. This was facilitated by the reverse engineering work on the SMPS format by **Natsumi**, **Clownacy**, and others. Sonic 3 Unlocked uses Flamedriver, a bugfixed version of the Sonic 3 sound driver by **flamewing**. A full list of credits for code reuse is available from the in-game Credits option, under the "disassembly contributors" section.
+Several music tracks have also been imported from official Sonic games, including tracks from the November 3rd, 1993 prototype of Sonic 3. This was facilitated by the reverse engineering work on the SMPS format by **Natsumi**, **Clownacy**, and others. Sonic 3 Unlocked uses Flamedriver, a bugfixed version of the Sonic 3 sound driver by **flamewing**. A full list of credits for code reuse is available from the in-game Credits option, under 'disassembly contributors'.
 
 Special thanks to **hiddenpalace.org** for obtaining and dumping the prototype build of Sonic 3 from which most of the extra music tracks were sourced.
 
