@@ -141,6 +141,6 @@ Several music tracks have also been imported from official Sonic games, includin
 
 Special thanks to **hiddenpalace.org** for obtaining and dumping the prototype build of Sonic 3 from which most of the extra music tracks were sourced.
 
-Sonic Mania code was decompiled and reverse engineered in order to provide accurate implementations of Sonic's drop dash and Ray's air glide abilities. The drop dash was decompiled and translated to Mega Drive assembly code by **MainMemory**, and the air glide was decompiled by **Rubberduckycooly** and translated by me.
+Sonic Mania code was decompiled and reverse engineered in order to provide accurate implementations of Sonic's Drop Dash and Ray's Air Glide abilities. The Drop Dash was decompiled and converted to Mega Drive assembly code by **MainMemory**, and the Air Glide was decompiled by **Rubberduckycooly** and converted by me.
 
 Any other gameplay features were eyeballed and did not reference any code from Sonic Mania, Sonic Origins or other titles. However, Sonic 3 Unlocked is quite obviously inspired by these games, as well as fan projects **Sonic 3 Complete** and **Sonic 3: Angel Island Revisited**. To all the designers, artists and developers behind these works: thank you!
