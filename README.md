@@ -93,7 +93,7 @@ Combines all of your rings into one. When you take damage, only one ring will fl
 <img align="right" src="assets/hud-options.png"></img>
 **Hidden abilities:** An extra skill is available for each character, unlocked by clearing 1 Player mode or successfully keeping the character through the end of Encore Mode. These abilities can be toggled via the Options menu, accessible by pressing the A button in the Data Select menu.
 
-**Erase Data menu:** Individual sections of save RAM can be erased from this menu, accessible by activating the Delete option in the Data Select menu and  pressing the A button. This can be used, for example, to reset Museum completion data to its initial state without affecting saved games.
+**Erase Data menu:** Individual sections of save RAM can be erased from this menu, accessible by activating the Delete option in the Data Select menu and pressing the A button. This can be used, for example, to reset Museum completion data to its initial state without affecting saved games.
 <br clear="right" />
 
 ## Museum
@@ -115,7 +115,7 @@ Coming soon
 #  Feedback and bug reports
 ## Future releases
 ## A note for data miners
-From its inception, Sonic 3 Unlocked has been developed in public. It is **trivial** to browse through the source code and find in-progress features that are meant for future versions. If you are curious to seek these features out, all I ask is that you do not expose them to people who've chosen to be surprised by them in the long run. Thank you.
+From its inception, Sonic 3 Unlocked has been developed in public. It is **trivial** to browse through the source code and find in-progress features that are meant for future versions. If you are curious to seek these features out, all I ask is that you do not reveal them to people who've chosen to be surprised by them in the long run. Thank you.
 
 # Does this thing use AI?
 Hi, my name is Liliam. I am a trans non-binary, AuDHD, mostly self-taught programmer and pixel artist. As we are wont to be, haha.
