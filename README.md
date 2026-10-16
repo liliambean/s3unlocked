@@ -115,7 +115,7 @@ Coming soon
 #  Feedback and bug reports
 ## Future releases
 ## A note for data miners
-From its inception, Sonic 3 Unlocked has been developed in public. It is **trivial** to browse through the source code and find in-progress features that are meant for future versions. If you are curious to seek these features out, all I ask is that you do not expose them to people who may have chosen to be surprised by them in the long run. Thank you.
+From its inception, Sonic 3 Unlocked has been developed in public. It is **trivial** to browse through the source code and find in-progress features that are meant for future versions. If you are curious to seek these features out, all I ask is that you do not expose them to people who have chosen to be surprised by them in the long run. Thank you.
 
 # Does this thing use AI?
 Hi, my name is Liliam. I am a trans non-binary, AuDHD, mostly self-taught programmer and pixel artist. As we are wont to be, haha.
