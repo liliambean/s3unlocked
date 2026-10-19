@@ -38202,9 +38202,10 @@ AirCountdown_Countdown:
 		bhs.w	locret_18680
 		btst	#Status_BublShield,status_secondary(a2)
 		bne.w	locret_18680
-		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Tails
-;		tst.b	(Super_Sonic_Knux_flag).w			;
+		tst.b	(Super_Sonic_Knux_flag).w
 		bmi.w	locret_18680
+		tst.b	(Super_Tails_flag).w				; Liliam: Hyper Tails
+		bmi.w	locret_18680					;
 		btst	#Status_Underwater,status(a2)
 		beq.w	locret_18680
 		subq.w	#1,$3C(a0)
@@ -198720,7 +198721,9 @@ loc_85B6C:
 		btst	#Status_Invincible,(Player_1+status_secondary).w
 		beq.s	loc_85B84
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
-		tst.w	(Super_Sonic_Knux_flag).w		;
+		tst.b	(Super_Sonic_Knux_flag).w		;
+		bmi.s	loc_85B84				;
+		tst.b	(Super_Tails_flag).w			;
 		bmi.s	loc_85B84				;
 		moveq	#signextendB(mus_Invincibility),d0
 		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
