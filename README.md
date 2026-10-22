@@ -9,6 +9,8 @@ Several **unlockable extras** have been added, with a few more planned for futur
 
 Finally, **many many bugfixes and quality of life improvements** have been made, with the goal of producing the most polished version of Sonic 3 available on original hardware.
 
+Download the demo from the [SHC 2026 website](https://shc.zone/entries/contest2026/1570).
+
 Read on for more information on the biggest changes. Enjoy!
 <br clear="right" />
 
