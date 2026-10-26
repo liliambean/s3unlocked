@@ -59349,6 +59349,7 @@ loc_26220:
 		addq.w	#1,(a2)
 		cmpi.w	#4,(a2)
 		beq.s	loc_26244
+		jsr	(Player_ClearSpinDash).l		; Liliam: bugfix - clear flags
 		move.w	x_vel(a1),d0
 		btst	#0,render_flags(a0)
 		beq.s	loc_26236
@@ -59386,6 +59387,9 @@ loc_26276:
 		bclr	#p1_pushing_bit,status(a0)
 		bclr	#p2_pushing_bit,status(a0)
 		bclr	#Status_Push,status(a1)
+		cmpi.b	#5,anim(a1)				; Liliam: bugfix - fix stuck animation
+		bne.s	loc_26294				;
+		clr.b	anim(a1)				;
 
 loc_26294:
 		moveq	#signextendB(sfx_Spring),d0
