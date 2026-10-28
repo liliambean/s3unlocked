@@ -1099,13 +1099,13 @@ Map_Ray_360RunB:
 		dc.b    9,   8,   8,  $C, $FF, $F3
 Map_Ray_PoleCurrent1:
 		dc.w 3
-		dc.b  $F3,  $E,   0,   0, $FF, $E7
-		dc.b  $FB,   8,   0,  $C,   0,   7
-		dc.b    3,   4,   0,  $F,   0,   7
+		dc.b  $F3,  $E,   0,   0, $FF, $E6
+		dc.b  $FB,   8,   0,  $C,   0,   6
+		dc.b    3,   4,   0,  $F,   0,   6
 Map_Ray_PoleCurrent2:
 		dc.w 2
-		dc.b  $F3,  $E,   0,   0, $FF, $E7
-		dc.b  $FB,   9,   0,  $C,   0,   7
+		dc.b  $F3,  $E,   0,   0, $FF, $E6
+		dc.b  $FB,   9,   0,  $C,   0,   6
 Map_Ray_Pulley:
 		dc.w 5
 		dc.b  $EB,   7,   0,   0, $FF, $F1

@@ -1030,16 +1030,16 @@ Map_Mighty_360RunC:
 		dc.b    9,   4,   8,  $F, $FF, $F8
 Map_Mighty_PoleCurrent1:
 		dc.w 4
-		dc.b  $EB,   3,   0,   0, $FF, $F7
-		dc.b  $F3,   6,   0,   4, $FF, $E7
-		dc.b  $F3,   6,   0,  $A, $FF, $FF
-		dc.b  $FB,   1,   0, $10,   0,  $F
+		dc.b  $EB,   3,   0,   0, $FF, $F6
+		dc.b  $F3,   6,   0,   4, $FF, $E6
+		dc.b  $F3,   6,   0,  $A, $FF, $FE
+		dc.b  $FB,   1,   0, $10,   0,  $E
 Map_Mighty_PoleCurrent2:
 		dc.w 4
-		dc.b  $EB,   7,   0,   0, $FF, $F7
-		dc.b  $F3,   6,   0,   8, $FF, $E7
-		dc.b  $F3,   2,   0,  $E,   0,   7
-		dc.b  $FB,   1,   0, $11,   0,  $F
+		dc.b  $EB,   7,   0,   0, $FF, $F6
+		dc.b  $F3,   6,   0,   8, $FF, $E6
+		dc.b  $F3,   2,   0,  $E,   0,   6
+		dc.b  $FB,   1,   0, $11,   0,  $E
 Map_Mighty_Pulley:
 		dc.w 5
 		dc.b  $EC,   3,   0,   0, $FF, $FB
@@ -1048,10 +1048,6 @@ Map_Mighty_Pulley:
 		dc.b  $FC,   1,   0,  $E,   0,  $B
 		dc.b   $C,   4,   0, $10, $FF, $F3
 Map_Mighty_BarCurrent1:
-		dc.w 3
-		dc.b  $ED,  $B,   0,   0, $FF, $F3
-		dc.b  $FD,   1,   0,  $C,   0,  $B
-		dc.b   $D,   9,   0,  $E, $FF, $F3
 Map_Mighty_BarCurrent2:
 		dc.w 3
 		dc.b  $ED,  $B,   0,   0, $FF, $F2

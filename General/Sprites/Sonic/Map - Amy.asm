@@ -1023,13 +1023,10 @@ Map_Amy_PoleSwingRide:
 		dc.b  $EC,  $F,   0,   0, $FF, $EB
 		dc.b  $FC,   1,   0, $10,   0,  $B
 Map_Amy_PoleCurrent1:
+Map_Amy_PoleCurrent2:
 		dc.w 2
 		dc.b  $F4,  $E,   0,   0, $FF, $E6
 		dc.b  $FC,   1,   0,  $C,   0,   6
-Map_Amy_PoleCurrent2:
-		dc.w 2
-		dc.b  $F2,  $E,   0,   0, $FF, $E6
-		dc.b  $FA,   1,   0,  $C,   0,   6
 Map_Amy_Pulley:
 		dc.w 4
 		dc.b  $ED,   7,   0,   0, $FF, $F2
@@ -1039,9 +1036,9 @@ Map_Amy_Pulley:
 Map_Amy_BarCurrent1:
 Map_Amy_BarCurrent2:
 		dc.w 3
-		dc.b  $F5,   7,   0,   0, $FF, $F5
-		dc.b  $FD,   3,   0,   8,   0,   5
-		dc.b  $15,   4,   0,  $C, $FF, $F5
+		dc.b  $F1,   7,   0,   0, $FF, $F5
+		dc.b  $F9,   3,   0,   8,   0,   5
+		dc.b  $11,   4,   0,  $C, $FF, $F5
 Map_Amy_HammerAttack1:
 Map_Amy_HammerAttack3:
 		dc.w 4
