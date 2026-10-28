@@ -126089,6 +126089,11 @@ loc_55CEA:
 		move.w	d1,(Player_2+y_pos).w
 		move.w	#$A0,d0
 		move.w	#$34C,d1
+		tst.b	(Dust+$38).w				; Liliam: bugfix - set correct camera height
+		beq.s	loc_55D24				;
+		move.w	#$350,d1				;
+
+loc_55D24:
 		move.w	d0,(Camera_X_pos).w
 		move.w	d1,(Camera_Y_pos).w
 		move.w	d0,(Camera_X_pos_copy).w
@@ -126697,7 +126702,8 @@ loc_56366:
 		movea.l	(sp)+,a0
 		subq.w	#1,(Events_bg+$00).w
 		bpl.s	loc_563A6
-		move.l	#$6000,d0
+;		move.l	#$6000,d0				; Liliam: camera - fix SOZ2 level size
+		move.l	#$5140,d0				;
 		move.l	d0,(Camera_min_X_pos).w
 		move.l	d0,(Camera_target_min_X_pos).w
 		move.l	#-$FFF800,d0
@@ -186596,7 +186602,7 @@ loc_7E44C:
 		tst.w	y_vel(a0)
 		bmi.s	loc_7E490
 		move.w	#$3AC,d0
-		tst.b	(Dust+$38).w				; Liliam: bugfix - set correct player height
+		tst.b	(Dust+$38).w				; Liliam: bugfix - set correct camera height
 		beq.s	loc_7E468				;
 ;		cmpi.w	#2,(Player_mode).w			;
 ;		bne.s	loc_7E468				;
