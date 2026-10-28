@@ -62068,6 +62068,8 @@ loc_27D32:
 		addq.w	#2,a3
 		tst.b	(Current_act).w
 		bne.w	loc_27DF8
+		cmpi.w	#$14,(Events_routine_bg).w		; Liliam: bugfix - stop clobbering level art
+		beq.w	loc_27DF8				;
 		moveq	#0,d1
 		move.w	(Camera_Y_pos_BG_copy).w,d1
 		sub.w	(Events_bg+$12).w,d1
