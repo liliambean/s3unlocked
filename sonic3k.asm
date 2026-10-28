@@ -70580,19 +70580,19 @@ Obj_LevelResultsWait:
 ;		jmp	(Play_Music).l				;
 
 	.checkButton:
-		btst	#button_start,(Ctrl_1_pressed).w	;
+		bclr	#button_start,(Ctrl_1_pressed).w	;
 		beq.s	locret_2DC34				;
-		moveq	#0,d0					;
 
 	.addToScore:
+		moveq	#0,d0					;
 		move.w	(Time_bonus_countdown).w,d0		;
 		add.w	d0,(Total_bonus_countup).w		;
 		jsr	(HUD_AddToScore).l			;
+		moveq	#0,d0					;
 		move.w	(Ring_bonus_countdown).w,d0		;
 		add.w	d0,(Total_bonus_countup).w		;
 		jsr	(HUD_AddToScore).l			;
 		clr.l	(Time_bonus_countdown).w		;
-		bclr	#button_start,(Ctrl_1_pressed).w	;
 		tst.b	(Update_HUD_life_count).w		;
 		beq.s	loc_2DCA0				;
 		move.w	#200,$20(a0)				;
@@ -70600,9 +70600,9 @@ Obj_LevelResultsWait:
 ; ---------------------------------------------------------------------------
 
 loc_2DC5C:
-		moveq	#0,d0
-		btst	#button_start,(Ctrl_1_pressed).w	; Liliam: cutscene skip - results
+		bclr	#button_start,(Ctrl_1_pressed).w	; Liliam: cutscene skip - results
 		bne.s	Obj_LevelResultsWait.addToScore		;
+		moveq	#0,d0
 		tst.w	(Time_bonus_countdown).w
 		beq.s	loc_2DC6E
 		addi.w	#10,d0
@@ -71371,6 +71371,8 @@ loc_2E3DA:
 loc_2E404:
 		move.w	#6*60,$2E(a0)
 		addq.b	#2,routine(a0)
+
+locret_2E40E:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -71378,16 +71380,18 @@ loc_2E410:
 		tst.w	$2E(a0)
 		beq.s	loc_2E484
 		subq.w	#1,$2E(a0)
-		bne.s	loc_2E474.checkTimer			; Liliam: cutscene skip - results
-		bsr.s	loc_2E484				;
-;		bne.s	loc_2E474				;
+		bne.s	loc_2E474
+		bsr.s	loc_2E484				; Liliam: cutscene skip - results
 
 SpecialStage_Results_HPZFade:
 		; Liliam: removed S&K alone mode
 		tst.b	(SK_special_stage_flag).w
-		beq.s	loc_2E474
+		beq.s	locret_2E40E				;
+;		beq.s	loc_2E474				;
 		tst.w	(Special_stage_spheres_left).w
-		bne.s	loc_2E474
+		bne.s	locret_2E40E				;
+;		bne.s	loc_2E474				;
+
 		move.w	d7,-(sp)							; Liliam: bugfix - HPZ SS results palette screwery
 		moveq	#PalID_HPZ,d0							;
 		jsr	(LoadPalette).l							;
@@ -71408,27 +71412,24 @@ SpecialStage_Results_HPZFade:
 ;		move.w	#$EEE,$7E(a1)							;
 
 loc_2E474:
-		rts						; Liliam: cutscene skip - results
-; ---------------------------------------------------------------------------
-
-	.checkTimer:
 		cmpi.w	#289,$2E(a0)
 		blo.s	.checkButton				; Liliam: cutscene skip - results
-		bhi.w	locret_2E4C2				;
+		bhi.s	locret_2E40E				;
 ;		bne.s	locret_2E4C2				;
 		moveq	#signextendB(mus_GotThroughAct),d0
 		jsr	(Play_Music).l				;
 ;		jmp	(Play_Music).l				;
 
 	.checkButton:
-		btst	#button_start,(Ctrl_1_pressed).w	;
+		bclr	#button_start,(Ctrl_1_pressed).w	;
 		beq.s	locret_2E4C2				;
 		bsr.s	SpecialStage_Results_HPZFade		;
-		moveq	#0,d0					;
 
 	.addToScore:
+		moveq	#0,d0					;
 		move.w	(Time_bonus_countdown).w,d0		;
 		jsr	(HUD_AddToScore).l			;
+		moveq	#0,d0					;
 		move.w	(Ring_bonus_countdown).w,d0		;
 		jsr	(HUD_AddToScore).l			;
 		clr.l	(Time_bonus_countdown).w		;
@@ -71439,9 +71440,9 @@ loc_2E474:
 ; ---------------------------------------------------------------------------
 
 loc_2E484:
-		moveq	#0,d0
-		btst	#button_start,(Ctrl_1_pressed).w	; Liliam: cutscene skip - results
+		bclr	#button_start,(Ctrl_1_pressed).w	;
 		bne.s	loc_2E474.addToScore			;
+		moveq	#0,d0
 		tst.w	(Time_bonus_countdown).w
 		beq.s	loc_2E496
 		addi.w	#10,d0
