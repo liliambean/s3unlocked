@@ -183165,6 +183165,7 @@ loc_7BCB0:
 		movea.w	$44(a0),a1
 		btst	#7,status(a1)
 		beq.w	locret_7B448
+		clr.w	(Debug_mode_flag).w			; Liliam: bugfix - block debug in demo mode
 		cmpi.w	#3,(Player_mode).w			; Liliam: allow other characters to play SSZ2
 		beq.s	loc_7BCC2				;
 		st	(SRAM_mask_interrupts_flag).w		;
@@ -189911,6 +189912,7 @@ loc_80402:
 loc_8040C:
 ;		cmpi.w	#3,(Player_mode).w			; Liliam: ending - allow start from Knuckles' ending
 ;		beq.s	loc_8041E				;
+		clr.w	(Debug_mode_flag).w			; Liliam: bugfix - block debug in demo mode
 		move.w	#$D01,d0
 		jmp	(StartNewLevel).l
 ; ---------------------------------------------------------------------------
@@ -192290,6 +192292,7 @@ loc_81C70:
 loc_81CA4:
 		subq.w	#1,$2E(a0)
 		bpl.w	locret_82ABA
+		clr.w	(Debug_mode_flag).w			; Liliam: bugfix - block debug in demo mode
 		st	(SRAM_mask_interrupts_flag).w
 		jsr	(SaveGame).l
 		move.w	#$D01,d0
