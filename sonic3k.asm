@@ -162582,7 +162582,8 @@ loc_6E7B6:
 		jsr	(AllocateObject).l			; Liliam: bugfix - lock player 2 controls consistently
 		bne.s	locret_6E7B4				;
 		move.l	#Obj_CutsceneLockPlayer2,(a1)		;
-		rts
+		jmp	(Make_CutsceneSkipObj).l		; Liliam: cutscene skip - CNZ level end
+;		rts						;
 ; ---------------------------------------------------------------------------
 
 loc_6E7E4:
@@ -199283,6 +199284,8 @@ CutsceneSkip_MGZ2:						; Liliam: cutscene skip - MGZ level end
 CutsceneSkip_CNZ2:						; Liliam: cutscene skip - CNZ level end
 		tst.b	(Level_results_done).w
 		beq.s	.restartLevel
+		tst.b	(Encore_mode).w
+		beq.s	CutsceneSkip_StartICZ
 		move.w	#$400,d0
 		bra.w	StartNewLevel_Alternate
 ; ---------------------------------------------------------------------------
@@ -199297,10 +199300,12 @@ CutsceneSkip_CNZ2:						; Liliam: cutscene skip - CNZ level end
 ; ---------------------------------------------------------------------------
 
 CutsceneSkip_FBZ2:						; Liliam: cutscene skip - FBZ level end
-		move.w	#$500,d0
-		tst.b	(Encore_mode).w
-		bne.w	StartNewLevel
 		move.w	#$800,d0
+		tst.b	(Encore_mode).w
+		beq.w	StartNewLevel
+
+CutsceneSkip_StartICZ:
+		move.w	#$500,d0
 		bra.w	StartNewLevel
 ; ---------------------------------------------------------------------------
 
