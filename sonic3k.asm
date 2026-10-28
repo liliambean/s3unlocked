@@ -9204,15 +9204,15 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		moveq	#0,d1
 		move.b	d1,(Super_ready_flag).w
 		tst.b	(Encore_mode).w
-		bne.s	.encoreMode
+		bne.w	.encoreMode
 		tst.w	(Super_Sonic_Knux_flag).w
 		bne.w	.checkBarrier
 		tst.b	(Update_HUD_timer).w
-		beq.s	.notReady
+		beq.w	.notReady
 		cmpi.b	#6,(Player_1+character_id).w
-		beq.s	.notReady
+		beq.w	.notReady
 		cmpi.w	#50,(Ring_count).w
-		blo.s	.notReady
+		blo.w	.notReady
 		cmpi.b	#7,(Super_emerald_count).w
 		bhs.s	.setReadyFlag
 		cmpi.b	#7,(Chaos_emerald_count).w
@@ -9222,20 +9222,40 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 
 	.setReadyFlag:
 		move.b	#1,(Super_ready_flag).w
+		moveq	#2,d1
 		tst.b	(Player_1+jumping).w
 		beq.s	.clearHint
 		tst.b	(Player_1+double_jump_flag).w
-		bne.s	.clearHint
+		bne.s	.checkAmy
 		move.w	(Barrier_HUD_scroll).w,d0
 		bne.s	.scrollHint
 		move.l	#ArtUnc_CutsceneSkip+$100,d1
-		move.w	#tiles_to_bytes(ArtTile_Player_1+$17),d2
 		move.w	#$90,d3
-		bsr.w	Add_To_DMA_Queue
 		addq.w	#4,(Barrier_HUD_scroll).w
+		tst.b	(Dust+$39).w
+		bne.s	.loadAmyHint
+		move.w	#tiles_to_bytes(ArtTile_SuperHint),d2
+		bsr.w	Add_To_DMA_Queue
+		move.w	(Barrier_HUD_scroll).w,d0
+		moveq	#2,d1
+		bra.s	.scrollHint
+; ---------------------------------------------------------------------------
+
+	.loadAmyHint:
+		move.w	#tiles_to_bytes(ArtTile_SuperHint2),d2
+		bsr.w	Add_To_DMA_Queue
+		bra.s	.setAmyHint
+; ---------------------------------------------------------------------------
+
+	.checkAmy:
+		tst.b	(Dust+$39).w
+		ble.s	.clearHint
+
+	.setAmyHint:
+		move.w	(Barrier_HUD_scroll).w,d0
+		moveq	#4,d1
 
 	.scrollHint:
-		moveq	#2,d1
 		cmpi.b	#$20,d0
 		bhs.s	.setSpecialIcon
 		addq.w	#7,(Barrier_HUD_scroll).w
@@ -9247,7 +9267,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		bne.s	.checkBarrier
 		btst	#Status_CombineRing,(Player_1+status_secondary).w
 		beq.s	.setIcon
-		moveq	#$A,d1
+		moveq	#$C,d1
 
 	.clearHint:
 		clr.w	(Barrier_HUD_scroll).w
@@ -9265,7 +9285,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		moveq	#1<<Status_CombineRing|1<<Status_FireShield|1<<Status_LtngShield|1<<Status_BublShield,d0
 		and.b	(Player_1+status_secondary).w,d0
 		beq.s	.setIcon
-		moveq	#6,d1
+		moveq	#8,d1
 		btst	#Status_FireShield,d0
 		bne.s	.setIcon
 		addq.w	#2,d1
@@ -9301,11 +9321,11 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		beq.s	ChangeRingFrame
 		tst.b	(Barrier_HUD_DMA_flag).w
 		bmi.s	ChangeRingFrame
-		moveq	#$10,d0
-		cmpi.b	#2,d1
-		bne.s	.setDMAIcon
-		addq.w	#2,d0
-		addq.w	#2,d1
+		moveq	#$12,d0
+		cmpi.b	#6,d1
+		bhs.s	.setDMAIcon
+		add.w	d1,d0
+		moveq	#6,d1
 
 	.setDMAIcon:
 		move.b	d0,(Barrier_HUD_frame+1).w
@@ -9325,7 +9345,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 
 	.queueDMA:
 		lsl.w	#6,d1
-		addi.l	#ArtUnc_BarrierHUD-$100,d1
+		addi.l	#ArtUnc_BarrierHUD-$180,d1
 		move.w	#tiles_to_bytes(ArtTile_StarPost),d2
 		moveq	#$40,d3
 		bsr.w	Add_To_DMA_Queue
@@ -33721,13 +33741,17 @@ locret_160A4:
 ; ---------------------------------------------------------------------------
 
 Obj_Tails_Tail:
-		; Init
 		move.l	#Map_Tails_Tail,mappings(a0)
-		movea.w	$30(a0),a2					; Liliam: Encore mode - pick art_tile by parent
+;		move.w	#ArtTile_TailsTail,art_tile(a0)			; Liliam: Encore mode - pick art_tile by parent
+		movea.w	$30(a0),a2					;
 		move.w	art_tile(a2),d0					;
 		addi.w	#ArtTile_TailsTail-ArtTile_Player_2,d0		;
-		move.w	d0,art_tile(a0)					;
-;		move.w	#ArtTile_TailsTail,art_tile(a0)			;
+		cmpi.w	#$12,(Tails_CPU_routine).w		; Liliam: extra skills - double jump
+		bne.s	loc_160AE				;
+		subq.w	#1,d0					;
+
+loc_160AE:
+		move.w	d0,art_tile(a0)				;
 		move.w	#$100,priority(a0)
 		move.b	#$18,width_pixels(a0)
 		move.b	#$18,height_pixels(a0)
@@ -33744,7 +33768,7 @@ Obj_Tails_Tail_Main:
 
 Obj_Tails_Tail_NoDraw:
 		; Here, several SSTs are inherited from the parent, normally Tails
-		movea.w	$30(a0),a2	; Is Parent in S2
+		movea.w	$30(a0),a2
 		move.b	angle(a2),angle(a0)
 		move.b	status(a2),status(a0)
 		move.w	x_pos(a2),x_pos(a0)
@@ -94940,8 +94964,10 @@ loc_40C2A:
 		btst	#0,d6
 		beq.s	loc_40C66
 		lea	(Player_1).w,a1
-		cmpi.b	#2,anim(a1)
-		bne.s	loc_40C66
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.s	loc_40C66				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.s	loc_40C66				;
 		asr	x_vel(a1)
 		asr	ground_vel(a1)
 		bra.s	loc_40C80
@@ -94951,8 +94977,10 @@ loc_40C66:
 		btst	#1,d6
 		beq.s	loc_40CE6
 		lea	(Player_2).w,a1
-		cmpi.b	#2,anim(a1)
-		bne.s	loc_40CE6
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.s	loc_40CE6				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.s	loc_40CE6				;
 		asr	x_vel(a1)
 		asr	ground_vel(a1)
 
@@ -200618,11 +200646,12 @@ loc_86770:
 		beq.s	loc_867A0
 		movea.w	d0,a1
 		tst.w	y_vel(a1)
-		bpl.s	loc_867A0
-		cmpi.b	#2,anim(a1)
-		beq.s	loc_867AA
-		cmpi.b	#1,character_id(a1)
-		beq.s	loc_867AA
+		bmi.s	loc_867AA				; Liliam: extra skills - double jump
+;		bpl.s	loc_867A0				;
+;		cmpi.b	#2,anim(a1)				;
+;		beq.s	loc_867AA				;
+;		cmpi.b	#1,character_id(a1)			;
+;		beq.s	loc_867AA				;
 
 loc_867A0:
 		swap	d0

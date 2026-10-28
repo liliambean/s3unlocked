@@ -8,6 +8,7 @@ Map_HUD_:
 Map_HUD_Barrier:
 		dc.w Map_HUD_Blank-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_SuperHint-Map_HUD_Barrier
+		dc.w Map_HUD_Barrier_SuperHint2-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_Super-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_Flame-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_Thunder-Map_HUD_Barrier
@@ -16,6 +17,7 @@ Map_HUD_Barrier:
 		dc.w Map_HUD_Barrier_Combine-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_DMA-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_DMAHint-Map_HUD_Barrier
+		dc.w Map_HUD_Barrier_DMAHint2-Map_HUD_Barrier
 Map_HUD_EncoreStocks:
 		dc.w Map_HUD_EncoreStocks0-Map_HUD_EncoreStocks
 		dc.w Map_HUD_Blank-Map_HUD_EncoreStocks
@@ -64,6 +66,10 @@ Map_HUD_Barrier_SuperHint:
 		dc.w 2
 		dc.b  $88,   5,   0, $38,   0,   3
 		dc.b  $86,  $A,   1, $D3,   0, $18
+Map_HUD_Barrier_SuperHint2:
+		dc.w 2
+		dc.b  $88,   5,   0, $38,   0,   3
+		dc.b  $86,  $A,   1, $EF,   0, $18
 Map_HUD_Barrier_Combine:
 Map_HUD_Barrier_Super:
 		dc.w 1
@@ -87,6 +93,10 @@ Map_HUD_Barrier_DMAHint:
 		dc.w 2
 		dc.b  $88,   5,   1, $26,   0,   3
 		dc.b  $86,  $A,   1, $D3,   0, $18
+Map_HUD_Barrier_DMAHint2:
+		dc.w 2
+		dc.b  $88,   5,   1, $26,   0,   3
+		dc.b  $86,  $A,   1, $EF,   0, $18
 Map_HUD_EncoreStocks0:
 		dc.w 1
 		dc.b  $40,   5,   1, $10,   0,   0
