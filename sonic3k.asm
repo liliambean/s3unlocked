@@ -9282,7 +9282,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 ; ---------------------------------------------------------------------------
 
 	.loadAmyHint:
-		move.w	#tiles_to_bytes(ArtTile_SuperHint2),d2
+		move.w	#tiles_to_bytes(ArtTile_DashDust_P2),d2
 		bsr.w	Add_To_DMA_Queue
 		bra.s	.setAmyHint
 ; ---------------------------------------------------------------------------
@@ -33786,12 +33786,7 @@ Obj_Tails_Tail:
 		movea.w	$30(a0),a2					;
 		move.w	art_tile(a2),d0					;
 		addi.w	#ArtTile_TailsTail-ArtTile_Player_2,d0		;
-		cmpi.w	#$12,(Tails_CPU_routine).w		; Liliam: extra skills - double jump
-		bne.s	loc_160AE				;
-		subq.w	#1,d0					;
-
-loc_160AE:
-		move.w	d0,art_tile(a0)				;
+		move.w	d0,art_tile(a0)					;
 		move.w	#$100,priority(a0)
 		move.b	#$18,width_pixels(a0)
 		move.b	#$18,height_pixels(a0)
@@ -200709,7 +200704,7 @@ loc_86770:
 		beq.s	loc_867A0
 		movea.w	d0,a1
 		tst.w	y_vel(a1)
-		bmi.s	loc_867AA				; Liliam: extra skills - double jump
+		bmi.s	loc_867AA				; Liliam: simplify roll anim selection
 ;		bpl.s	loc_867A0				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		beq.s	loc_867AA				;

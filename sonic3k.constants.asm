@@ -1623,7 +1623,6 @@ ArtTile_StarPost                      = $05EA	;
 ArtTile_EncoreCursor                  = $05FE	;
 ArtTile_Player_1                      = $0680
 ArtTile_SuperHint                     = $0697	; Liliam: HUD - barrier HUD
-ArtTile_SuperHint2                    = $06B3	; Liliam: extra skills - double jump
 ArtTile_SignpostStub                  = $05EE	; Liliam: extra skills - hammer attack
 ;ArtTile_SignpostStub                 = $069E	;
 ArtTile_Player_2                      = $06A0
