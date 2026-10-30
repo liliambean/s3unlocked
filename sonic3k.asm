@@ -4442,6 +4442,8 @@ AnPal_PalHPZ:
 
 
 SuperHyper_PalCycle:
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed?
+		bne.w	SuperHyper_PalCycle_Encore		;
 		move.b	(Super_palette_status).w,d0	; 0 = off | 1 = fading | -1 = fading done
 		beq.w	locret_37EC			; return, if player isn't super
 		bmi.w	SuperHyper_PalCycle_Main	; branch, if fade-in is done
@@ -4535,8 +4537,8 @@ SuperHyper_PalCycle_Revert_Index:					; Liliam: animate super forms consistently
 ; ---------------------------------------------------------------------------
 
 SuperHyper_PalCycle_RevertKnuckles:					; Liliam: animate super forms consistently
-		lea	(PalCycle_SuperKnucklesRevert).l,a0
-		lea	(PalCycle_SuperKnucklesRevert_Water).l,a2
+		lea	PalCycle_SuperKnucklesRevert(pc),a0
+		lea	PalCycle_SuperKnucklesRevert_Water(pc),a2
 		bra.s	SuperHyper_PalCycle_ApplyRevert
 ; ---------------------------------------------------------------------------
 
@@ -4565,7 +4567,7 @@ SuperHyper_PalCycle_RevertMighty:					; Liliam: animate super forms consistently
 SuperHyper_PalCycle_RevertSonic:
 		; decrement palette frame and update Sonic's palette
 		lea	(PalCycle_SuperSonic).l,a0
-		lea	(PalCycle_SuperSonic_Water).l,a2		; Liliam: animate super forms consistently
+		lea	PalCycle_SuperSonic_Water(pc),a2		; Liliam: animate super forms consistently
 
 SuperHyper_PalCycle_ApplyRevert:
 		move.w	(Palette_frame).w,d0
@@ -4656,8 +4658,8 @@ SuperHyper_PalCycle_Sonic:
 SuperHyper_PalCycle_SuperFlickies:
 		; increment palette frame and update Sonic's palette
 ;		lea	(PalCycle_SuperSonic).l,a0			; Liliam: animate super forms consistently
-		lea	(PalCycle_SuperSonic+$24).l,a0			;
-		lea	(PalCycle_SuperSonic_Water+$24).l,a2		;
+		lea	PalCycle_SuperSonic+$24(pc),a0			;
+		lea	PalCycle_SuperSonic_Water+$24(pc),a2		;
 		move.w	(Palette_frame).w,d0
 		addq.w	#6,(Palette_frame).w
 		cmpi.w	#$12,(Palette_frame).w				;
@@ -4680,7 +4682,7 @@ SuperHyper_PalCycle_HyperSonic:
 
 		; increment palette frame and update Sonic's palette
 		lea	(PalCycle_HyperSonic).l,a0
-		lea	(PalCycle_HyperSonic_Water).l,a2		; Liliam: animate super forms consistently
+		lea	PalCycle_HyperSonic_Water(pc),a2		; Liliam: animate super forms consistently
 		move.w	(Palette_frame).w,d0
 		addq.w	#6,(Palette_frame).w
 		cmpi.w	#$48,(Palette_frame).w
@@ -4691,7 +4693,7 @@ SuperHyper_PalCycle_HyperSonic:
 ; ---------------------------------------------------------------------------
 
 SuperHyper_PalCycle_ApplyAmy:
-		lea	(PalCycle_SuperAmy).l,a0			; Liliam: animate super forms consistently
+		lea	PalCycle_SuperAmy(pc),a0			; Liliam: animate super forms consistently
 		lea	(Normal_palette+$A).w,a1			;
 ;		lea	(Normal_palette+$4).w,a1			;
 		move.l	(a0,d0.w),(a1)+
@@ -4699,7 +4701,7 @@ SuperHyper_PalCycle_ApplyAmy:
 ;		move.w	4(a0,d0.w),(a1)					;
 		tst.b	(Water_flag).w
 		beq.w	locret_37EC
-		lea	(PalCycle_SuperAmy_Water).l,a0			;
+		lea	PalCycle_SuperAmy_Water(pc),a0			;
 		lea	(Water_palette+$A).w,a1				;
 ;		lea	(Water_palette+$4).w,a1				;
 		move.l	(a0,d0.w),(a1)+
@@ -4741,10 +4743,10 @@ loc_38F6:
 SuperHyper_PalCycle_ApplyTails:
 		cmpi.w	#4,(Player_mode).w				;
 		beq.s	SuperHyper_PalCycle_ApplyAmy			;
-		lea	(PalCycle_SuperRay).l,a0			;
+		lea	PalCycle_SuperRay(pc),a0			;
 		cmpi.w	#6,(Player_mode).w				;
 		beq.s	loc_3914					;
-		lea	(PalCycle_SuperTails).l,a0			;
+		lea	PalCycle_SuperTails(pc),a0			;
 
 loc_3914:
 		lea	(Normal_palette+$10).w,a1
@@ -4753,7 +4755,7 @@ loc_3914:
 		tst.b	(Water_flag).w
 ;		beq.w	loc_386E					;
 		beq.s	locret_3938					;
-		lea	(PalCycle_SuperTails_Water).l,a0		;
+		lea	PalCycle_SuperTails_Water(pc),a0		;
 		lea	(Water_palette+$10).w,a1
 		move.l	(a0,d0.w),(a1)+		; Write first two palette entries
 		move.w	4(a0,d0.w),2(a1)	; Write last palette entry
@@ -4770,7 +4772,7 @@ SuperHyper_PalCycle_Mighty:						; Liliam: animate super forms consistently
 
 		lea	(Normal_palette+$A).w,a1
 		bsr.s	sub_394A
-		lea	(PalCycle_SuperKnuckles_Water+$36).l,a2
+		lea	PalCycle_SuperKnuckles_Water+$36(pc),a2
 		addq.b	#2,d0
 		andi.b	#$1F,d0
 		bsr.s	SuperHyper_PalCycle_ApplyMighty
@@ -4785,7 +4787,7 @@ SuperHyper_PalCycle_ResetMighty:
 ; ---------------------------------------------------------------------------
 
 SuperHyper_PalCycle_ApplyMighty:
-		lea	(PalCycle_SuperMighty).l,a0
+		lea	PalCycle_SuperMighty(pc),a0
 		move.w	(a0,d0.w),(Normal_palette+$14).w
 		tst.b	(Water_flag).w
 		beq.s	locret_3938
@@ -4801,7 +4803,7 @@ SuperHyper_PalCycle_Knuckles:
 
 sub_394A:
 		lea	(PalCycle_SuperKnuckles).l,a0
-		lea	(PalCycle_SuperKnuckles_Water).l,a2		; Liliam: animate super forms consistently
+		lea	PalCycle_SuperKnuckles_Water(pc),a2		; Liliam: animate super forms consistently
 		move.w	(Palette_frame).w,d0
 		addq.w	#6,(Palette_frame).w
 		cmpi.w	#$3C,(Palette_frame).w
@@ -4952,6 +4954,43 @@ PalCycle_SuperRay:							; Liliam: animate super forms consistently
 		dc.w $EEE,$8CE,$68C
 		dc.w $8EE,$2CE,$48C
 		dc.w $6CE,$2AE,$46C
+; ---------------------------------------------------------------------------
+
+SuperHyper_PalCycle_Encore:					; Liliam: Encore mode - no super forms allowed?
+		tst.b	(Super_palette_status).w
+		bne.s	.return
+		subq.b	#1,(Palette_timer).w
+		bpl.s	.return
+		move.b	#2,(Palette_timer).w
+		move.w	(Palette_frame).w,d0
+		subq.b	#1,(Palette_frame+1).w
+		bpl.s	.getIndex
+		move.b	#13,(Palette_frame+1).w
+
+	.getIndex:
+		move.b	PalCycle_EncoreSuper_Index(pc,d0.w),d0
+		lea	(PalCycle_EncoreSuper).l,a0
+		lea	(a0,d0.w),a0
+		lea	(Normal_palette+4).w,a1
+		bsr.s	.apply
+		tst.b	(Water_flag).w
+		beq.s	.return
+		lea	(PalCycle_EncoreSuper_Water).l,a0
+		lea	(a0,d0.w),a0
+		lea	(Water_palette+4).w,a1
+
+	.apply:
+		moveq	#7-1,d1
+
+	.loop:
+		move.l	(a0)+,(a1)+
+		dbf	d1,.loop
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+PalCycle_EncoreSuper_Index:					; Liliam: Encore mode - no super forms allowed?
+		dc.b  $A4, $A4, $A4, $A4, $A4, $84, $64, $44, $24,   4, $24, $44, $64, $84
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -220580,6 +220619,14 @@ Pal_MetalSonic:							; Liliam: add extra characters
 		even
 Pal_EncoreMode:							; Liliam: Encore mode - palette
 		binclude "General/Sprites/Knuckles/Palettes/Encore.bin"
+		even
+PalCycle_EncoreSuper:						; Liliam: Encore mode - no super forms allowed?
+		binclude "General/Sprites/Knuckles/Palettes/Encore Super 1.bin"
+		binclude "General/Sprites/Knuckles/Palettes/Encore Super 2.bin"
+		even
+PalCycle_EncoreSuper_Water:					; Liliam: Encore mode - no super forms allowed?
+		binclude "General/Sprites/Knuckles/Palettes/Encore Super Water 1.bin"
+		binclude "General/Sprites/Knuckles/Palettes/Encore Super Water 2.bin"
 		even
 Pal_AIZIntro:
 		; Liliam: Knuckles intro - apply bomb flash to waterfall
