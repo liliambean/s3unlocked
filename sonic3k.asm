@@ -184404,7 +184404,8 @@ loc_7CA78:
 		jsr	CreateChild1_Normal(pc)
 		lea	(ArtKosM_KnuxFinalBossCrane).l,a1
 		move.w	#tiles_to_bytes(ArtTile_SSZBossCrane),d2
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -189655,7 +189656,8 @@ loc_8011E:
 loc_8013A:
 		lea	(ArtKosM_KnuxFinalBossCrane).l,a1
 		move.w	#tiles_to_bytes(ArtTile_DEZBossCrane),d2
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+;		jsr	(Queue_Kos_Module).l			;
 		lea	(ArtKosM_DEZFinalBossDebris).l,a1
 		move.w	#tiles_to_bytes(ArtTile_DEZFinalBossDebris),d2
 		jsr	(Queue_Kos_Module).l
@@ -191375,12 +191377,12 @@ sub_81230:
 
 ; ---------------------------------------------------------------------------
 word_8123E:
-		dc.w Normal_palette_line_2+$12			; Liliam: bugfix - DEZ3 boss flash
-;		dc.w Normal_palette_line_2+$14			;
+;		dc.w Normal_palette_line_2+$14			; Liliam: bugfix - DEZ3 boss flash
 ;		dc.w Normal_palette_line_2+$16			;
 		dc.w Normal_palette_line_2+$18
 		dc.w Normal_palette_line_2+$1A
 		dc.w Normal_palette_line_2+$1C
+		dc.w Normal_palette_line_2+$12			;
 		dc.w Normal_palette_line_2+$14			;
 		dc.w Normal_palette_line_2+$16			;
 word_81248:
