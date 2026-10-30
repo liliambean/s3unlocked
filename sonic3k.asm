@@ -5809,8 +5809,9 @@ loc_3E22:
 
 Sega_Screen:
 		bsr.w	Pal_FadeToBlack				; Liliam: title screen - quick return by pressing B
-		bra.s	loc_3E32				;
+		andi.b	#$7C,(Game_mode).w			;
 ;		move.b	#GameMode_TitleScreen,(Game_mode).w	;
+		bra.s	loc_3E32				;
 ;		rts						;
 ; ---------------------------------------------------------------------------
 
@@ -183167,6 +183168,7 @@ loc_7BCB0:
 		btst	#7,status(a1)
 		beq.w	locret_7B448
 		clr.w	(Debug_mode_flag).w			; Liliam: bugfix - block debug in demo mode
+		move.b	#1,(Demo_mode_flag).w			;
 		cmpi.w	#3,(Player_mode).w			; Liliam: allow other characters to play SSZ2
 		beq.s	loc_7BCC2				;
 		st	(SRAM_mask_interrupts_flag).w		;
@@ -189916,6 +189918,7 @@ loc_8040C:
 ;		cmpi.w	#3,(Player_mode).w			; Liliam: ending - allow start from Knuckles' ending
 ;		beq.s	loc_8041E				;
 		clr.w	(Debug_mode_flag).w			; Liliam: bugfix - block debug in demo mode
+		move.b	#1,(Demo_mode_flag).w			;
 		move.w	#$D01,d0
 		jmp	(StartNewLevel).l
 ; ---------------------------------------------------------------------------
@@ -192296,6 +192299,7 @@ loc_81CA4:
 		subq.w	#1,$2E(a0)
 		bpl.w	locret_82ABA
 		clr.w	(Debug_mode_flag).w			; Liliam: bugfix - block debug in demo mode
+		move.b	#1,(Demo_mode_flag).w			;
 		st	(SRAM_mask_interrupts_flag).w
 		jsr	(SaveGame).l
 		move.w	#$D01,d0

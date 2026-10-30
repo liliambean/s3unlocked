@@ -2481,18 +2481,18 @@ SSZ2EggRoboRun_State1:
 		move.l	#byte_703F4,$30(a0)
 		move.w	#120,$2E(a0)
 		move.w	(Camera_max_X_pos).w,d0
-		addi.w	#$178,d0
+		addi.w	#$180,d0
 		move.w	d0,x_pos(a0)
 		move.w	#$4A4,y_pos(a0)
 		move.w	d0,d1
 		subi.w	#$F0,d0
-		addi.w	#$318,d1
+		addi.w	#$310,d1
 		move.w	d0,objoff_38(a0)
 		move.w	d1,objoff_3A(a0)
 		lea	ChildObjDat_SSZ2EggRoboRun(pc),a2
 		jsr	(CreateChild1_Normal).l
 		bne.w	SSZ2EggRoboRun_Delete
-		addi.w	#$348,x_pos(a1)
+		addi.w	#$340,x_pos(a1)
 		lea	(ArtKosM_DeathEggRobot).l,a1
 		move.w	#tiles_to_bytes(ArtTile_SSZ2DeathEggRobot),d2
 		jmp	(Queue_Kos_Module).l
@@ -3127,6 +3127,8 @@ loc_3D9E6_S2:
 ; ---------------------------------------------------------------------------
 
 loc_3D9F2_S2:
+		clr.w	(Debug_mode_flag).w
+		move.b	#1,(Demo_mode_flag).w
 		move.w	#$D01,d0
 		jmp	(StartNewLevel).l
 ; ---------------------------------------------------------------------------
