@@ -140216,7 +140216,9 @@ loc_5E80A:
 		move.w	#-$6C0,y_vel(a0)
 		tst.w	(Ending_running_flag).w			; Liliam: cutscene skip - ending part Knuckles
 		bpl.s	locret_5E830				;
-		jsr	(Restore_LevelMusic).l
+		moveq	#signextendB(mus_Credits3),d0		; Liliam: ending - use S3 credits music
+		jsr	(Play_Music).l				;
+;		jsr	(Restore_LevelMusic).l			;
 
 locret_5E830:
 		rts
@@ -183180,7 +183182,6 @@ loc_7BCB0:
 loc_7BCC2:
 		move.l	#loc_7BCFC,(a0)
 		move.w	#(2*60)-1,$2E(a0)
-		move.w	#$D01,(Apparent_zone_and_act).w		; Liliam: ending - use S3 credits music
 		st	(_unkFAA2).w
 		st	(Events_fg_4+1).w
 		lea	(Player_1).w,a1

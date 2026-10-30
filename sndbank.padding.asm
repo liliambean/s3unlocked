@@ -3129,6 +3129,8 @@ loc_3D9E6_S2:
 loc_3D9F2_S2:
 		clr.w	(Debug_mode_flag).w
 		move.b	#1,(Demo_mode_flag).w
+		st	(SRAM_mask_interrupts_flag).w
+		jsr	(SaveGame).l
 		move.w	#$D01,d0
 		jmp	(StartNewLevel).l
 ; ---------------------------------------------------------------------------
