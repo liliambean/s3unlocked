@@ -4442,8 +4442,6 @@ AnPal_PalHPZ:
 
 
 SuperHyper_PalCycle:
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed?
-		bne.w	SuperHyper_PalCycle_Encore		;
 		move.b	(Super_palette_status).w,d0	; 0 = off | 1 = fading | -1 = fading done
 		beq.w	locret_37EC			; return, if player isn't super
 		bmi.w	SuperHyper_PalCycle_Main	; branch, if fade-in is done
@@ -4479,12 +4477,13 @@ SuperHyper_PalCycle_FadeIn:
 		blo.s	SuperHyper_PalCycle_FadeInCheckHyper
 		move.b	#-1,(Super_palette_status).w
 		move.b	#0,(Player_1+object_control).w
-		move.w	#0,(Palette_frame).w				;
-		move.w	#0,(Palette_frame_Tails).w			;
+		clr.b	(Palette_timer).w				;
+		clr.w	(Palette_frame).w				;
+		clr.w	(Palette_frame_Tails).w				;
 
 SuperHyper_PalCycle_FadeInCheckHyper:
-		tst.b	(Player_1+character_id).w			;
-		beq.s	SuperHyper_PalCycle_ApplyFadeIn			;
+		cmpi.w	#2,(Player_mode).w				;
+		blo.s	SuperHyper_PalCycle_ApplyFadeIn			;
 		tst.b	(Super_Tails_flag).w				;
 		bpl.s	locret_37EC					;
 
@@ -4520,6 +4519,8 @@ SuperHyper_PalCycle_Revert:
 		bpl.s	locret_37EC
 		move.b	#3,(Palette_timer).w
 
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed?
+		bne.w	SuperHyper_PalCycle_Revert_Encore	;
 		lea	(Normal_palette+$4).w,a1			;
 		move.w	(Player_mode).w,d0				;
 		add.w	d0,d0						;
@@ -4625,6 +4626,8 @@ loc_384A:
 ; ---------------------------------------------------------------------------
 
 SuperHyper_PalCycle_Main:
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed?
+		bne.w	SuperHyper_PalCycle_Encore		;
 		lea	(Normal_palette+$4).w,a1			; Liliam: animate super forms consistently
 		move.w	(Player_mode).w,d0				;
 		add.w	d0,d0						;
@@ -4956,9 +4959,16 @@ PalCycle_SuperRay:							; Liliam: animate super forms consistently
 		dc.w $6CE,$2AE,$46C
 ; ---------------------------------------------------------------------------
 
+SuperHyper_PalCycle_Revert_Encore:				; Liliam: Encore mode - no super forms allowed?
+		move.w	(Palette_frame).w,d0
+		divu.w	#6,d0
+		addq.w	#5,d0
+		bsr.s	SuperHyper_PalCycle_Encore.getIndex
+		lea	(Normal_palette+$4).w,a1
+		bra.w	SuperHyper_PalCycle_RevertSonic
+; ---------------------------------------------------------------------------
+
 SuperHyper_PalCycle_Encore:					; Liliam: Encore mode - no super forms allowed?
-		tst.b	(Super_palette_status).w
-		bne.s	.return
 		subq.b	#1,(Palette_timer).w
 		bpl.s	.return
 		move.b	#2,(Palette_timer).w
@@ -4971,13 +4981,13 @@ SuperHyper_PalCycle_Encore:					; Liliam: Encore mode - no super forms allowed?
 		move.b	PalCycle_EncoreSuper_Index(pc,d0.w),d0
 		lea	(PalCycle_EncoreSuper).l,a0
 		lea	(a0,d0.w),a0
-		lea	(Normal_palette+4).w,a1
+		lea	(Normal_palette+$4).w,a1
 		bsr.s	.apply
 		tst.b	(Water_flag).w
 		beq.s	.return
 		lea	(PalCycle_EncoreSuper_Water).l,a0
 		lea	(a0,d0.w),a0
-		lea	(Water_palette+4).w,a1
+		lea	(Water_palette+$4).w,a1
 
 	.apply:
 		moveq	#7-1,d1
@@ -4990,7 +5000,7 @@ SuperHyper_PalCycle_Encore:					; Liliam: Encore mode - no super forms allowed?
 		rts
 ; ---------------------------------------------------------------------------
 PalCycle_EncoreSuper_Index:					; Liliam: Encore mode - no super forms allowed?
-		dc.b  $A4, $A4, $A4, $A4, $A4, $84, $64, $44, $24,   4, $24, $44, $64, $84
+		dc.b  $84, $A4, $A4, $A4, $A4, $A4, $84, $64, $44, $24,   4, $24, $44, $64
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -9243,8 +9253,6 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		bhs.w	ChangeRingFrame
 		moveq	#0,d1
 		move.b	d1,(Super_ready_flag).w
-		tst.b	(Encore_mode).w
-		bne.w	.encoreMode
 		tst.w	(Super_Sonic_Knux_flag).w
 		bne.w	.checkBarrier
 		tst.b	(Update_HUD_timer).w
@@ -9302,7 +9310,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		bra.s	.setSpecialIcon
 ; ---------------------------------------------------------------------------
 
-	.encoreMode:
+	.notReady:
 		tst.b	(Player_1+invincibility_timer).w
 		bne.s	.checkBarrier
 		btst	#Status_CombineRing,(Player_1+status_secondary).w
@@ -9316,10 +9324,6 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		addq.w	#4,d1
 		bra.s	.setSpecialIcon
 ; ---------------------------------------------------------------------------
-
-	.notReady:
-		tst.b	(Player_1+invincibility_timer).w
-		beq.s	.setIcon
 
 	.checkBarrier:
 		moveq	#1<<Status_CombineRing|1<<Status_FireShield|1<<Status_LtngShield|1<<Status_BublShield,d0
@@ -24461,6 +24465,8 @@ loc_10BF0:
 
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		beq.s	loc_10BFC				;
+		tst.w	(Barrier_HUD_scroll).w			;
+		bne.s	loc_10BFC				;
 		cmpi.b	#8,anim(a0)				;
 		blo.s	.disable				;
 		cmpi.b	#$A,anim(a0)				;
@@ -26256,6 +26262,8 @@ Sonic_Transform:
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
 
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed?
+		bne.s	.super					;
 		cmpi.b	#7,(Super_emerald_count).w		; does Sonic have all 7 Super Emeralds?
 		blo.s	.super					; if not, turn Super
 		move.b	#-1,(Super_Sonic_Knux_flag).w		; set flag to Hyper Sonic
@@ -29489,6 +29497,8 @@ loc_13808:
 		move.w	(Ctrl_1).w,d0				; Liliam: Encore mode - disable A button
 		tst.b	(Disable_A_button_flag).w		;
 		beq.s	loc_13826				;
+		tst.w	(Barrier_HUD_scroll).w			;
+		bne.s	loc_13826				;
 		cmpi.b	#8,anim(a0)				;
 		blo.s	.disable				;
 		cmpi.b	#$A,anim(a0)				;
@@ -30254,6 +30264,8 @@ Tails_CPU_Main_EncoreCall:
 		tst.b	(Ctrl_2_logical).w
 		bmi.s	.jumpToP1
 		tst.w	(Debug_placement_mode).w
+		bne.s	locret_13EC8
+		tst.w	(Barrier_HUD_scroll).w
 		bne.s	locret_13EC8
 		btst	#button_A,(Ctrl_1_pressed).w
 		beq.s	locret_13EC8
@@ -32316,6 +32328,8 @@ Tails_Transform:
 		jsr	(Player_ClearRollHeight2).l		;
 
 		move.l	#Obj_SuperSonic_Stars,(Super_stars).w		; Liliam: Hyper Tails
+		tst.b	(Encore_mode).w					;
+		bne.s	loc_151D0					;
 		cmpi.b	#7,(Super_emerald_count).w			;
 		blo.s	loc_151D0					;
 		move.b	#-1,(Super_Tails_flag).w			;
@@ -34520,7 +34534,7 @@ Knuckles_Init_Continued:
 
 Knuckles_Control:
 		cmpa.w	#Player_1,a0				; Liliam: Encore mode - block debug mode for player 2
-		bne.s	loc_165A2.controlP2			;
+		bne.w	loc_165A2.controlP2			;
 		tst.w	(Debug_mode_flag).w
 		beq.s	loc_165A2
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
@@ -34552,6 +34566,8 @@ loc_165A2:
 
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		beq.s	loc_165AE				;
+		tst.w	(Barrier_HUD_scroll).w			;
+		bne.s	loc_165AE				;
 		cmpi.b	#8,anim(a0)				;
 		blo.s	.disable				;
 		cmpi.b	#$A,anim(a0)				;
@@ -37042,6 +37058,8 @@ Knux_Transform:
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
 
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed?
+		bne.s	.super					;
 		cmpi.b	#7,(Super_emerald_count).w		; does Knuckles have all 7 Super Emeralds?
 		blo.s	.super					; if not, turn Super
 		move.b	#-1,(Super_Sonic_Knux_flag).w		; set flag to Hyper Knuckles
@@ -40806,6 +40824,8 @@ Obj_EncoreHelper_Main:
 
 	.checkPlayer1:
 		tst.w	(Debug_placement_mode).w
+		bne.s	.return
+		tst.w	(Barrier_HUD_scroll).w
 		bne.s	.return
 		btst	#button_A,(Ctrl_1_pressed).w
 		beq.s	.return
