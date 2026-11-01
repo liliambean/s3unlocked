@@ -4482,10 +4482,10 @@ SuperHyper_PalCycle_FadeIn:
 		clr.w	(Palette_frame_Tails).w				;
 
 SuperHyper_PalCycle_FadeInCheckHyper:
-		cmpi.w	#2,(Player_mode).w				;
-		blo.s	SuperHyper_PalCycle_ApplyFadeIn			;
 		tst.b	(Super_Tails_flag).w				;
-		bpl.s	locret_37EC					;
+		bne.s	SuperHyper_PalCycle_ApplyFadeIn			;
+		cmpi.w	#2,(Player_mode).w				;
+		bhs.s	locret_37EC					;
 
 SuperHyper_PalCycle_ApplyFadeIn:
 		lea	(Normal_palette+$04).w,a1
@@ -4725,7 +4725,7 @@ SuperHyper_PalCycle_Ray:
 ;		move.b	#$B,(Palette_timer_Tails).w			;
 
 		tst.b	(Super_Tails_flag).w				;
-		bpl.s	loc_38F6					;
+		beq.s	loc_38F6					;
 		bsr.w	SuperHyper_PalCycle_SuperFlickies		;
 
 loc_38F6:
@@ -9255,7 +9255,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		bhs.w	ChangeRingFrame
 		moveq	#0,d1
 		move.b	d1,(Super_ready_flag).w
-		tst.w	(Super_Sonic_Knux_flag).w
+		tst.b	(Super_Sonic_Knux_flag).w
 		bne.w	.checkBarrier
 		tst.b	(Update_HUD_timer).w
 		beq.w	.notReady
@@ -9352,7 +9352,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		tst.b	(Player_1+character_id).w
 		beq.s	.useSafeColors
 		tst.b	(Super_Tails_flag).w
-		bmi.s	.useSafeColors
+		bne.s	.useSafeColors
 		cmpi.b	#3,d0
 		bne.s	.setIcon
 
@@ -22604,7 +22604,7 @@ loc_1037C:
 		move.w	art_tile(a0),(Debug_saved_art_tile).w
 		btst	#Status_Invincible,status_secondary(a0)	; Liliam: bugfix - clear super form on death
 		beq.s	loc_103AA				;
-		tst.w	(Super_Sonic_Knux_flag).w		;
+		tst.b	(Super_Sonic_Knux_flag).w		;
 		beq.s	.restoreMusic				;
 		bsr.w	SonicKnux_SuperHyper.revert		;
 
@@ -24420,7 +24420,7 @@ Sonic_Init:
 Sonic_Init_Continued:
 		move.b	#0,flips_remaining(a0)
 		move.b	#4,flip_speed(a0)
-		move.b	#0,(Super_Sonic_Knux_flag).w
+;		move.b	#0,(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - no super forms allowed?
 		move.b	#30,air_left(a0)
 ;		subi.w	#$20,x_pos(a0)				; Liliam: reset array to actual player position
 ;		addi.w	#4,y_pos(a0)				;
@@ -26366,9 +26366,11 @@ Sonic_HyperDash_Velocities:
 ; ---------------------------------------------------------------------------
 
 Tails_Super:
-		tst.b	(Super_Tails_flag).w
+		tst.b	(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - no super forms allowed?
+;		tst.b	(Super_Tails_flag).w			;
 		beq.w	SonicKnux_SuperHyper.return
-		bpl.s	SonicKnux_SuperHyper.notHyperTails		; Liliam: animate super forms consistently
+		tst.b	(Super_Tails_flag).w				; Liliam: animate super forms consistently
+		beq.s	SonicKnux_SuperHyper.notHyperTails		;
 		moveq	#3,d0						;
 		bra.s	SonicKnux_SuperHyper.continued
 
@@ -26383,6 +26385,8 @@ SonicKnux_SuperHyper:
 		moveq	#2,d0						; Liliam: animate super forms consistently
 
 	.continued:
+		cmpa.w	#Player_1,a0				; Liliam: Encore mode - no super forms allowed?
+		bne.w	.return					;
 		tst.b	(Update_HUD_timer).w	; Level over?
 		beq.s	.revertToNormal
 		subq.w	#1,(Super_frame_count).w
@@ -26419,7 +26423,7 @@ SonicKnux_SuperHyper:
 		lea	(Max_speed).w,a4				; Liliam: animate super forms consistently
 		moveq	#3,d0						;
 		tst.b	(Super_Tails_flag).w				;
-		bmi.s	.revertToNormal					;
+		bne.s	.revertToNormal					;
 		moveq	#2,d0						;
 
 	.revertToNormal:
@@ -29437,7 +29441,7 @@ loc_13770:
 Tails_Init_Continued:
 		move.b	#0,flips_remaining(a0)
 		move.b	#4,flip_speed(a0)
-		move.b	#0,(Super_Tails_flag).w
+;		move.b	#0,(Super_Tails_flag).w			; Liliam: Encore mode - no super forms allowed?
 		move.b	#30,air_left(a0)
 		bsr.w	Reset_Player_Position_Array		; Liliam: reset array to actual player position
 
@@ -29678,7 +29682,7 @@ loc_1394E:
 		tst.w	(Competition_mode).w
 		bne.s	loc_139A8
 		move.w	#$800,Max_speed-Max_speed(a4)		; Liliam: bugfix - player speeds fix
-		tst.b	(Super_Tails_flag).w			;
+		tst.b	(Super_Sonic_Knux_flag).w		;
 		bne.s	loc_13998				;
 		move.w	#$600,Max_speed-Max_speed(a4)
 		move.w	#$C,Acceleration-Max_speed(a4)
@@ -31558,7 +31562,8 @@ loc_14B24:
 		subq.w	#2,(a5)
 
 loc_14B26:
-		tst.b	(Super_Tails_flag).w
+		tst.b	(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - no super forms allowed?
+;		tst.b	(Super_Tails_flag).w			;
 		beq.s	loc_14B30
 		move.w	#$C,d5
 
@@ -31833,7 +31838,8 @@ loc_14D3A:
 		asr.w	#1,d5
 
 loc_14D3C:
-		tst.b	(Super_Tails_flag).w
+		tst.b	(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - no super forms allowed?
+;		tst.b	(Super_Tails_flag).w			;
 		beq.s	loc_14D46
 		move.w	#6,d5
 
@@ -32321,7 +32327,8 @@ locret_151A2:
 Tails_Transform:
 		move.b	#1,(Super_palette_status).w	; set Super/Hyper palette status to 'fading'
 		move.b	#$F,(Palette_timer).w
-		move.b	#1,(Super_Tails_flag).w			; set flag to Super Tails
+		move.b	#1,(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - no super forms allowed?
+;		move.b	#1,(Super_Tails_flag).w			;
 		move.w	#60,(Super_frame_count).w
 		move.b	#$81,object_control(a0)
 		move.b	#$16,anim(a0)				; Liliam: simplify player anim selection
@@ -32334,7 +32341,8 @@ Tails_Transform:
 		bne.s	loc_151D0					;
 		cmpi.b	#7,(Super_emerald_count).w			;
 		blo.s	loc_151D0					;
-		move.b	#-1,(Super_Tails_flag).w			;
+		move.b	#1,(Super_Tails_flag).w				;
+		move.b	#-1,(Super_Sonic_Knux_flag).w			;
 		move.l	#Obj_SuperTailsBirds,(Invincibility_stars).w
 		move.l	#Obj_HyperSonicKnux_Trail,(Super_stars).w	;
 		move.l	#Obj_HyperTails_Trail,(Dust_P2).w		;
@@ -32356,7 +32364,7 @@ loc_151D4:
 		bne.w	locret_151A2				;
 
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
-		tst.b	(Super_Tails_flag).w			;
+		tst.b	(Super_Sonic_Knux_flag).w		;
 		bmi.s	loc_151F6				;
 		cmpi.b	#12,air_left(a0)			;
 		blo.w	locret_151A2				;
@@ -32443,7 +32451,8 @@ loc_152A8:
 		move.b	spin_dash_counter(a0),d0
 		add.w	d0,d0
 		move.w	word_1530E(pc,d0.w),ground_vel(a0)
-		tst.b	(Super_Tails_flag).w
+		tst.b	(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - no super forms allowed?
+;		tst.b	(Super_Tails_flag).w			;
 		beq.s	loc_152C8
 		move.w	word_15320(pc,d0.w),ground_vel(a0)
 
@@ -34524,7 +34533,7 @@ Knuckles_Init:
 Knuckles_Init_Continued:
 		move.b	#0,flips_remaining(a0)
 		move.b	#4,flip_speed(a0)
-		move.b	#0,(Super_Sonic_Knux_flag).w
+;		move.b	#0,(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - no super forms allowed?
 		move.b	#30,air_left(a0)
 		bsr.w	Reset_Player_Position_Array		; Liliam: reset array to actual player position
 ;		subi.w	#$20,x_pos(a0)				;
@@ -38283,8 +38292,6 @@ AirCountdown_Countdown:
 		bne.w	locret_18680
 		tst.b	(Super_Sonic_Knux_flag).w
 		bmi.w	locret_18680
-		tst.b	(Super_Tails_flag).w				; Liliam: Hyper Tails
-		bmi.w	locret_18680					;
 		btst	#Status_Underwater,status(a2)
 		beq.w	locret_18680
 		subq.w	#1,$3C(a0)
@@ -38410,7 +38417,7 @@ loc_18590:
 
 loc_18592:
 ;		bra.s	AirCountdown_MakeItem			;
-		tst.w	(Super_Sonic_Knux_flag).w		;
+		tst.b	(Super_Sonic_Knux_flag).w		;
 		beq.s	loc_18594				;
 		move.l	a0,-(sp)				;
 		movea.l	a2,a0					;
@@ -38586,8 +38593,8 @@ loc_1880E:
 loc_18868:
 		tst.b	(Super_Sonic_Knux_flag).w
 		bne.w	Delete_Current_Sprite
-		tst.b	(Super_Tails_flag).w
-		bne.w	Delete_Current_Sprite
+;		tst.b	(Super_Tails_flag).w			; Liliam: Encore mode - no super forms allowed?
+;		bne.w	Delete_Current_Sprite			;
 		movea.w	parent(a0),a1
 		btst	#Status_Invincible,status_secondary(a1)
 		beq.w	Delete_Current_Sprite
@@ -38636,8 +38643,8 @@ loc_188B0:
 Obj_188E8:
 		tst.b	(Super_Sonic_Knux_flag).w
 		bne.w	Delete_Current_Sprite
-		tst.b	(Super_Tails_flag).w
-		bne.w	Delete_Current_Sprite
+;		tst.b	(Super_Tails_flag).w			; Liliam: Encore mode - no super forms allowed?
+;		bne.w	Delete_Current_Sprite			;
 		movea.w	parent(a0),a1
 		btst	#Status_Invincible,status_secondary(a1)
 		beq.w	Delete_Current_Sprite
@@ -39376,8 +39383,7 @@ Obj_SuperSonic_Stars:
 		move.l	#loc_191A4,(a0)
 
 loc_191A4:
-		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Tails
-;		tst.b	(Super_Sonic_Knux_flag).w			;
+		tst.b	(Super_Sonic_Knux_flag).w
 		beq.w	loc_19230
 
 loc_191AC:
@@ -40112,7 +40118,7 @@ Obj_SuperTailsBirds_Init:
 		move.l	#Obj_SuperTailsBirds_Main,(a0)
 
 Obj_SuperTailsBirds_Main:
-		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Ray
+		tst.b	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Ray
 ;		tst.b	(Super_Tails_flag).w				;
 		bne.s	.tails_still_super
 
@@ -40538,8 +40544,7 @@ loc_1A4AC:
 Obj_HyperSonicKnux_Trail_Main:
 		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - disable in debug mode
 		bne.w	locret_1A462				;
-		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Tails
-;		tst.b	(Super_Sonic_Knux_flag).w			;
+		tst.b	(Super_Sonic_Knux_flag).w
 		beq.w	Delete_Current_Sprite		; If so, branch and delete
 
 loc_1A4D8:
@@ -40581,8 +40586,8 @@ Obj_HyperTails_Trail:							; Liliam: Hyper Tails
 Obj_HyperTails_Trail_Main:
 		tst.w	(Debug_placement_mode).w
 		bne.w	locret_1A462
-		tst.b	(Super_Tails_flag).w
-		bpl.w	Delete_Current_Sprite
+		tst.b	(Super_Sonic_Knux_flag).w
+		beq.w	Delete_Current_Sprite
 		moveq	#$C,d1
 		btst	#0,(Level_frame_counter+1).w
 		beq.s	.evenframe
@@ -46999,7 +47004,7 @@ Obj_Monitor_CheckSuperPalette:					; Liliam: bugfix - use safe colors for aqua b
 		tst.b	(Player_1+character_id).w
 		beq.s	.useSafeColors
 		tst.b	(Super_Tails_flag).w
-		bmi.s	.useSafeColors
+		bne.s	.useSafeColors
 		cmpi.b	#3,d0
 		bne.w	Obj_Monitor
 
@@ -47529,7 +47534,7 @@ Monitor_Give_SpeedShoes:
 ;		cmpi.w	#2,(Player_mode).w				;
 ;		beq.s	loc_1D93A					;
 		move.w	#$C00,(Max_speed).w
-		tst.w	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - player speeds fix
+		tst.b	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - player speeds fix
 		bne.s	loc_1D94C				;
 		move.w	#$18,(Acceleration).w
 		move.w	#$80,(Deceleration).w
@@ -47619,8 +47624,8 @@ Monitor_Give_Invincibility:
 		addq.w	#1,(a2)
 		tst.b	(Super_Sonic_Knux_flag).w
 		bne.s	locret_1DA5E
-		tst.b	(Super_Tails_flag).w
-		bne.s	locret_1DA5E
+;		tst.b	(Super_Tails_flag).w			; Liliam: Encore mode - no super forms allowed?
+;		bne.s	locret_1DA5E				;
 		bset	#Status_Invincible,status_secondary(a1)
 		move.b	#(20*60)/8,invincibility_timer(a1)
 		tst.b	(Boss_flag).w
@@ -47675,7 +47680,7 @@ loc_1DA62:
 		beq.s	locret_1DB2C					;
 
 		moveq	#1,d1					; Liliam: bugfix - give Sonic correct super form after credits
-		tst.w	(Super_Sonic_Knux_flag).w		;
+		tst.b	(Super_Sonic_Knux_flag).w		;
 		beq.s	loc_1DA68				;
 		moveq	#-1,d1					;
 
@@ -51031,8 +51036,7 @@ loc_1FD4E:
 ;		bra.w	loc_1FDEA				;
 
 ;loc_1FD72:
-		tst.w	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - Super Tails wall-breaking powers
-;		tst.b	(Super_Sonic_Knux_flag).w		;
+		tst.b	(Super_Sonic_Knux_flag).w
 		bne.s	loc_1FDA4
 ;		cmpi.b	#2,character_id(a1)			; Liliam: simplify double jump selection
 		tst.b	character_id(a1)			;
@@ -52707,8 +52711,7 @@ loc_215B2:
 		move.w	d6,d0
 		andi.w	#1,d0
 		beq.s	loc_2162A
-		tst.w	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - Super Tails wall-breaking powers
-;		tst.b	(Super_Sonic_Knux_flag).w		;
+		tst.b	(Super_Sonic_Knux_flag).w
 		bne.s	loc_215F4
 		bsr.s	BreakableWall_CheckKnuxBreak		; Liliam: extra skills - boost mode
 ;		cmpi.b	#2,character_id(a1)			;
@@ -198856,8 +198859,6 @@ loc_85B6C:
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
 		tst.b	(Super_Sonic_Knux_flag).w		;
 		bmi.s	loc_85B84				;
-		tst.b	(Super_Tails_flag).w			;
-		bmi.s	loc_85B84				;
 		moveq	#signextendB(mus_Invincibility),d0
 		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
 		beq.s	loc_85B84				;
@@ -200427,13 +200428,14 @@ Give_SuperSonic:
 ;		move.w	#$18,(Acceleration_P2).w			;
 ;		move.w	#$C0,(Deceleration_P2).w			;
 
-		cmp.b	(Super_Tails_flag).w,d1				; Liliam: bugfix - don't queue art if already super
+		cmp.b	(Super_Sonic_Knux_flag).w,d1			; Liliam: bugfix - don't queue art if already super
 		beq.w	.continued					;
 		move.l	#Obj_SuperSonic_Stars,(Super_stars).w		;
-		move.b	d1,(Super_Tails_flag).w				;
+		move.b	d1,(Super_Sonic_Knux_flag).w			;
 		bpl.w	.continued					;
 		move.l	#Obj_SuperTailsBirds,(Invincibility_stars).w
 		move.l	#Obj_HyperTails_Trail,(Dust_P2).w		; Liliam: Hyper Tails
+		move.b	#1,(Super_Tails_flag).w				;
 		bra.s	.hyper						;
 ;		bra.s	.continued					;
 ; ---------------------------------------------------------------------------
