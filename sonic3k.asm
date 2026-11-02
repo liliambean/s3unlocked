@@ -34441,7 +34441,7 @@ Knuckles_FrameCycle:
 
 loc_1646C:
 		addq.b	#1,mapping_frame(a0)
-		cmpi.b	#$FE,mapping_frame(a0)			; Liliam: simplify player anim selection
+		cmpi.b	#$FC,mapping_frame(a0)			; Liliam: simplify player anim selection
 ;		cmpi.b	#$FB,mapping_frame(a0)			;
 		blo.s	loc_1647E
 		move.b	#0,mapping_frame(a0)
@@ -34994,7 +34994,7 @@ loc_16920:
 
 loc_1693E:
 		move.b	#3,double_jump_flag(a0)
-		move.b	#$FD,mapping_frame(a0)			; Liliam: simplify player anim selection
+		move.b	#$EB,mapping_frame(a0)			; Liliam: simplify player anim selection
 ;		move.b	#$CC,mapping_frame(a0)			;
 		move.b	#$7F,anim_frame_timer(a0)
 		move.b	#0,anim_frame(a0)
@@ -37787,8 +37787,7 @@ loc_17D7E:
 		moveq	#0,d1
 		move.b	anim_frame(a0),d1
 		move.b	1(a1,d1.w),d0
-		cmpi.b	#$FD,d0					; Liliam: simplify player anim selection
-;		cmpi.b	#$FC,d0					;
+		cmpi.b	#$FC,d0
 		bhs.s	loc_17D98
 
 loc_17D8E:
@@ -37818,8 +37817,8 @@ loc_17DA8:
 ; ---------------------------------------------------------------------------
 
 loc_17DBC:
-;		addq.b	#1,d0					; Liliam: simplify player anim selection
-;		bne.s	locret_17DC6				;
+		addq.b	#1,d0
+		bne.s	locret_17DC6
 		move.b	2(a1,d1.w),anim(a0)
 
 locret_17DC6:
@@ -38022,6 +38021,8 @@ Knuckles_Load_PLC_Difficulty:
 		bmi.s	locret_18162
 		move.l	#ArtUnc_Knux,d6
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - special Knuckles art for palette
+		beq.s	loc_1813A					;
+		cmpi.w	#$FB*2,d0					;
 		beq.s	loc_1813A					;
 		move.l	#ArtUnc_EncoreKnux,d6				;
 

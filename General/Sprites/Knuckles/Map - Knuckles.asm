@@ -165,16 +165,14 @@ Map_Knuckles_:
 		dc.w Map_Knuckles_PoleCurrent1-Map_Knuckles_
 		dc.w Map_Knuckles_PoleCurrent2-Map_Knuckles_
 		dc.w Map_Knuckles_Pulley-Map_Knuckles_
-		dc.w Map_Knuckles_BarCurrent1-Map_Knuckles_
-		dc.w Map_Knuckles_BarCurrent2-Map_Knuckles_
+		dc.w Map_Knuckles_Stand1-Map_Knuckles_
+		dc.w Map_Knuckles_Stand2-Map_Knuckles_
 		dc.w Map_Knuckles_ClimbDash1-Map_Knuckles_
 		dc.w Map_Knuckles_ClimbDash2-Map_Knuckles_
 		dc.w Map_Knuckles_ClimbDash3-Map_Knuckles_
 		dc.w Map_Knuckles_ClimbDash4-Map_Knuckles_
 		dc.w Map_Knuckles_ClimbDash5-Map_Knuckles_
 		dc.w Map_Knuckles_ClimbDash6-Map_Knuckles_
-		dc.w Map_Knuckles_Stand1-Map_Knuckles_
-		dc.w Map_Knuckles_Stand2-Map_Knuckles_
 		dc.w Map_Knuckles_Stand3-Map_Knuckles_
 		dc.w Map_Knuckles_Stand4-Map_Knuckles_
 		dc.w Map_Knuckles_Stand5-Map_Knuckles_
@@ -182,6 +180,8 @@ Map_Knuckles_:
 		dc.w Map_Knuckles_Stand7-Map_Knuckles_
 		dc.w Map_Knuckles_Stand8-Map_Knuckles_
 		dc.w Map_Knuckles_Stand9-Map_Knuckles_
+		dc.w Map_Knuckles_StandA-Map_Knuckles_
+		dc.w Map_Knuckles_StandB-Map_Knuckles_
 		dc.w Map_Knuckles_Climb1-Map_Knuckles_
 		dc.w Map_Knuckles_Climb2-Map_Knuckles_
 		dc.w Map_Knuckles_Climb3-Map_Knuckles_
@@ -234,10 +234,10 @@ Map_Knuckles_:
 		dc.w Map_Knuckles_Clear4-Map_Knuckles_
 		dc.w Map_Knuckles_Spring-Map_Knuckles_
 		dc.w Map_Knuckles_Transform1-Map_Knuckles_
-		dc.w Map_Knuckles_Transform2-Map_Knuckles_
-		dc.w Map_Knuckles_Transform3-Map_Knuckles_
-		dc.w Map_Knuckles_Idle1-Map_Knuckles_
-		dc.w Map_Knuckles_Idle2-Map_Knuckles_
+		dc.w Map_Knuckles_GlideLand1-Map_Knuckles_
+		dc.w Map_Knuckles_BalanceA-Map_Knuckles_
+		dc.w Map_Knuckles_BalanceB-Map_Knuckles_
+		dc.w Map_Knuckles_BalanceC-Map_Knuckles_
 		dc.w Map_Knuckles_Skid1-Map_Knuckles_
 		dc.w Map_Knuckles_Skid2-Map_Knuckles_
 		dc.w Map_Knuckles_Balance1-Map_Knuckles_
@@ -249,10 +249,8 @@ Map_Knuckles_:
 		dc.w Map_Knuckles_Balance7-Map_Knuckles_
 		dc.w Map_Knuckles_Balance8-Map_Knuckles_
 		dc.w Map_Knuckles_Balance9-Map_Knuckles_
-		dc.w Map_Knuckles_BalanceA-Map_Knuckles_
-		dc.w Map_Knuckles_BalanceB-Map_Knuckles_
-		dc.w Map_Knuckles_BalanceC-Map_Knuckles_
-		dc.w Map_Knuckles_GlideLand1-Map_Knuckles_
+		dc.w Map_Knuckles_Transform2-Map_Knuckles_
+		dc.w Map_Knuckles_Transform3-Map_Knuckles_
 Map_CutsceneKnux:
 		dc.w Map_Knuckles_Blank-Map_CutsceneKnux
 		dc.w Map_Knuckles_BalanceA-Map_CutsceneKnux
@@ -287,10 +285,10 @@ Map_CutsceneKnux:
 		dc.w Map_Knuckles_Chuckle3-Map_CutsceneKnux
 		dc.w Map_Knuckles_Chuckle4-Map_CutsceneKnux
 		dc.w Map_Knuckles_Stand0-Map_CutsceneKnux
-		dc.w Map_Knuckles_Stand2-Map_CutsceneKnux
-		dc.w Map_Knuckles_Stand3-Map_CutsceneKnux
-		dc.w Map_Knuckles_Stand7-Map_CutsceneKnux
+		dc.w Map_Knuckles_Stand4-Map_CutsceneKnux
+		dc.w Map_Knuckles_Stand5-Map_CutsceneKnux
 		dc.w Map_Knuckles_Stand9-Map_CutsceneKnux
+		dc.w Map_Knuckles_StandB-Map_CutsceneKnux
 Map_Knuckles_Blank:
 		dc.w 0
 Map_Knuckles_Walk1:
@@ -619,7 +617,7 @@ Map_Knuckles_360Stand2:
 Map_Knuckles_360Stand3:
 Map_Knuckles_CorkscrewStandC:
 Map_Knuckles_Stand0:
-Map_Knuckles_Stand2:
+Map_Knuckles_Stand4:
 		dc.w 2
 		dc.b  $EC,   9,   0,   0, $FF, $F3
 		dc.b  $FC,  $E,   0,   6, $FF, $F3
@@ -683,10 +681,9 @@ Map_Knuckles_360Stand1:
 		dc.b  $F4,  $C,   0,   3, $FF, $F4
 		dc.b  $FC,  $A,   0,   7, $FF, $F4
 Map_Knuckles_360Stand4:
-Map_Knuckles_360Stand7:
 		dc.w 2
-		dc.b  $EC,  $B,   0,   0, $FF, $F3
-		dc.b   $C,   8,   0,  $C, $FF, $F3
+		dc.b  $EC,   9,   0,   0, $FF, $F4
+		dc.b  $FC,  $A,   0,   6, $FF, $F4
 Map_Knuckles_360Stand5:
 		dc.w 3
 		dc.b  $EC,   8,   0,   0, $FF, $F2
@@ -696,6 +693,10 @@ Map_Knuckles_360Stand6:
 		dc.w 2
 		dc.b  $EC,  $B,   0,   0, $FF, $F2
 		dc.b   $C,   8,   0,  $C, $FF, $F2
+Map_Knuckles_360Stand7:
+		dc.w 2
+		dc.b  $EC,  $B,   0,   0, $FF, $F3
+		dc.b   $C,   8,   0,  $C, $FF, $F3
 Map_Knuckles_PoleSwing1:
 		dc.w 2
 		dc.b  $F5,  $E,   0,   0, $FF, $E3
@@ -886,8 +887,8 @@ Map_Knuckles_Hang1:
 		dc.b  $F0,  $A,   0,   2, $FF, $F1
 		dc.b    8,   9,   0,  $B, $FF, $F9
 		dc.b  $18,   4,   0, $11, $FF, $F9
-Map_Knuckles_Hang2:
 Map_Knuckles_360Hang2:
+Map_Knuckles_Hang2:
 		dc.w 2
 		dc.b  $E8,  $B,   0,   0, $FF, $F2
 		dc.b    8,   9,   0,  $C, $FF, $FA
@@ -1000,9 +1001,10 @@ Map_Knuckles_360Run9:
 		dc.b  $E9,  $B,   8,   0, $FF, $F4
 		dc.b    9,   8,   8,  $C, $FF, $F4
 Map_Knuckles_360RunA:
-		dc.w 2
-		dc.b  $EC,  $B,   0,   0, $FF, $F4
-		dc.b   $C,   0,   0,  $C, $FF, $FC
+		dc.w 3
+		dc.b  $ED,   9,   0,   0, $FF, $F4
+		dc.b  $FD,   9,   0,   6, $FF, $F4
+		dc.b   $D,   0,   0,  $C, $FF, $FC
 Map_Knuckles_360RunB:
 		dc.w 2
 		dc.b  $E9,  $B,   0,   0, $FF, $F4
@@ -1028,12 +1030,6 @@ Map_Knuckles_Pulley:
 		dc.b  $F3,   1,   0,   0, $FF, $E7
 		dc.b  $F3,  $E,   0,   2, $FF, $EF
 		dc.b   $B,   4,   0,  $E, $FF, $FF
-Map_Knuckles_BarCurrent1:
-Map_Knuckles_BarCurrent2:
-		dc.w 3
-		dc.b  $16,   8,   0,   0, $FF, $F4
-		dc.b  $F6,  $B,   0,   3, $FF, $F4
-		dc.b  $E6,   5,   0,  $F, $FF, $F4
 Map_Knuckles_ClimbDash1:
 Map_Knuckles_ClimbDash2:
 Map_Knuckles_ClimbDash3:
@@ -1049,32 +1045,32 @@ Map_Knuckles_ClimbDash6:
 		dc.b  $F4,  $C,   0,   3, $FF, $EF
 		dc.b  $FC,  $C,   0,   7, $FF, $EF
 		dc.b    4,   8,   0,  $B, $FF, $F7
-Map_Knuckles_Idle1:
-Map_Knuckles_Idle2:
 Map_Knuckles_Stand1:
+Map_Knuckles_Stand2:
+Map_Knuckles_Stand3:
 		dc.w 2
 		dc.b  $EC,  $B,   0,   0, $FF, $F1
 		dc.b   $C,  $C,   0,  $C, $FF, $F1
-Map_Knuckles_Stand3:
-Map_Knuckles_Stand4:
 Map_Knuckles_Stand5:
 Map_Knuckles_Stand6:
+Map_Knuckles_Stand7:
+Map_Knuckles_Stand8:
 		dc.w 4
 		dc.b  $EC,   8,   0,   0, $FF, $F3
 		dc.b  $F4,  $D,   0,   3, $FF, $F3
 		dc.b    4,   8,   0,  $B, $FF, $F3
 		dc.b   $C,  $C,   0,  $E, $FF, $F3
-Map_Knuckles_Stand7:
+Map_Knuckles_Stand9:
 		dc.w 3
 		dc.b  $EC,   8,   0,   0, $FF, $F5
 		dc.b  $F4,  $D,   0,   3, $FF, $F5
 		dc.b    4,   9,   0,  $B, $FF, $F5
-Map_Knuckles_Stand8:
+Map_Knuckles_StandA:
 		dc.w 3
 		dc.b  $EC,  $A,   0,   0, $FF, $F5
 		dc.b  $F4,   5,   0,   9,   0,  $D
 		dc.b    4,   9,   0,  $D, $FF, $F5
-Map_Knuckles_Stand9:
+Map_Knuckles_StandB:
 		dc.w 4
 		dc.b  $EC,  $E,   0,   0, $FF, $F3
 		dc.b  $F4,   1,   0,  $C,   0, $13
@@ -1285,16 +1281,30 @@ Map_Knuckles_Transform1:
 		dc.b  $EC,   9,   0,   0, $FF, $F4
 		dc.b  $FC,  $C,   0,   6, $FF, $F4
 		dc.b    4,   9,   0,  $A, $FF, $F4
-Map_Knuckles_Transform2:
-		dc.w 3
-		dc.b  $EC,  $C,   0,   0, $FF, $E9
-		dc.b  $F4,   2,   0,   4, $FF, $E9
-		dc.b  $F4,  $F,   0,   7, $FF, $F1
-Map_Knuckles_Transform3:
-		dc.w 3
-		dc.b  $EB,  $C,   0,   0, $FF, $EA
-		dc.b  $F3,  $F,   0,   4, $FF, $EA
-		dc.b  $F3,   3,   0, $14,   0,  $A
+Map_Knuckles_GlideLand1:
+		dc.w 4
+		dc.b  $F3,   4,   0,   0, $FF, $FC
+		dc.b  $FB,  $C,   0,   2, $FF, $F4
+		dc.b    3,  $C,   0,   6, $FF, $E4
+		dc.b    3,   8,   0,  $A,   0,   4
+Map_Knuckles_BalanceA:
+		dc.w 4
+		dc.b  $EC,  $F,   0,   0, $FF, $F6
+		dc.b  $EC,   1,   0, $10,   0, $16
+		dc.b  $FC,   1,   0, $12, $FF, $EE
+		dc.b   $C,   4,   0, $14, $FF, $F6
+Map_Knuckles_BalanceB:
+		dc.w 4
+		dc.b  $E4,   9,   0,   0, $FF, $F9
+		dc.b  $F4,   5,   0,   6,   0, $11
+		dc.b    4,   0,   0,  $A, $FF, $E9
+		dc.b  $F4,  $F,   0,  $B, $FF, $F1
+Map_Knuckles_BalanceC:
+		dc.w 4
+		dc.b  $EC,  $F,   0,   0, $FF, $F6
+		dc.b  $E4,   0,   0, $10,   0,   6
+		dc.b  $FC,   5,   0, $11, $FF, $E6
+		dc.b   $C,   4,   0, $15, $FF, $F6
 Map_Knuckles_Skid1:
 		dc.w 2
 		dc.b  $EC,   4,   0,   0, $FF, $F8
@@ -1359,30 +1369,16 @@ Map_Knuckles_Balance9:
 		dc.b  $F4,   1,   0,  $C,   0, $16
 		dc.b    4,   9,   0,  $E, $FF, $EE
 		dc.b    4,   4,   0, $14,   0,   6
-Map_Knuckles_BalanceA:
-		dc.w 4
-		dc.b  $EC,  $F,   0,   0, $FF, $F6
-		dc.b  $EC,   1,   0, $10,   0, $16
-		dc.b  $FC,   1,   0, $12, $FF, $EE
-		dc.b   $C,   4,   0, $14, $FF, $F6
-Map_Knuckles_BalanceB:
-		dc.w 4
-		dc.b  $E4,   9,   0,   0, $FF, $F9
-		dc.b  $F4,   5,   0,   6,   0, $11
-		dc.b    4,   0,   0,  $A, $FF, $E9
-		dc.b  $F4,  $F,   0,  $B, $FF, $F1
-Map_Knuckles_BalanceC:
-		dc.w 4
-		dc.b  $EC,  $F,   0,   0, $FF, $F6
-		dc.b  $E4,   0,   0, $10,   0,   6
-		dc.b  $FC,   5,   0, $11, $FF, $E6
-		dc.b   $C,   4,   0, $15, $FF, $F6
-Map_Knuckles_GlideLand1:
-		dc.w 4
-		dc.b  $F3,   4,   0,   0, $FF, $FC
-		dc.b  $FB,  $C,   0,   2, $FF, $F4
-		dc.b    3,  $C,   0,   6, $FF, $E4
-		dc.b    3,   8,   0,  $A,   0,   4
+Map_Knuckles_Transform2:
+		dc.w 3
+		dc.b  $EC,  $C,   0,   0, $FF, $E9
+		dc.b  $F4,   2,   0,   4, $FF, $E9
+		dc.b  $F4,  $F,   0,   7, $FF, $F1
+Map_Knuckles_Transform3:
+		dc.w 3
+		dc.b  $EB,  $C,   0,   0, $FF, $EA
+		dc.b  $F3,  $F,   0,   4, $FF, $EA
+		dc.b  $F3,   3,   0, $14,   0,  $A
 Map_Knuckles_Jump1:
 Map_Knuckles_Jump2:
 Map_Knuckles_Jump3:

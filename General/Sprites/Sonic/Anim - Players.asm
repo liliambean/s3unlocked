@@ -82,7 +82,7 @@ AniTails:
 		dc.w Ani_TailsClear-AniTails		; 13
 		dc.w Ani_PlayerHang-AniTails		; 14
 		dc.w Ani_PlayerBubble-AniTails		; 15
-		dc.w Ani_TailsKnuxTransform-AniTails	; 16
+		dc.w Ani_TailsTransform-AniTails	; 16
 		dc.w Ani_TailsDrown-AniTails		; 17
 		dc.w Ani_PlayerDeath-AniTails		; 18
 		dc.w Ani_PlayerSlide-AniTails		; 19
@@ -123,7 +123,7 @@ AniKnuckles:
 		dc.w Ani_KnucklesClear-AniKnuckles	; 13
 		dc.w Ani_PlayerHang-AniKnuckles		; 14
 		dc.w Ani_PlayerBubble-AniKnuckles	; 15
-		dc.w Ani_TailsKnuxTransform-AniKnuckles	; 16
+		dc.w Ani_KnucklesTransform-AniKnuckles	; 16
 		dc.w Ani_PlayerDrown-AniKnuckles	; 17
 		dc.w Ani_PlayerDeath-AniKnuckles	; 18
 		dc.w Ani_KnucklesSlide-AniKnuckles	; 19
@@ -265,10 +265,10 @@ Ani_TailsStand:		dc.b    7, $BB, $BB, $BB, $BB, $BB, $BB, $BB, $BB, $BB, $BB, $B
 			dc.b  $FE, $1C
 Ani_KnucklesStand:	dc.b    5, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48
 			dc.b  $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48
-			dc.b  $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $ED, $ED, $ED, $EE, $EE, $EE, $ED, $ED, $ED
-			dc.b  $EE, $EE, $EE, $ED, $ED, $ED, $EE, $EE, $EE, $ED, $ED, $ED, $EE, $EE, $EE, $ED, $ED, $ED, $EE, $EE
-			dc.b  $EE, $ED, $ED, $ED, $EE, $EE, $EE, $ED, $ED, $ED, $EE, $EE, $EE, $ED, $ED, $ED, $EE, $EE, $EE, $ED
-			dc.b  $ED, $ED, $EE, $EE, $EE, $AE, $AE, $AE, $AE, $AE, $AF, $B0, $B1, $B2, $B3, $B0, $B1, $B2, $B3, $B0
+			dc.b  $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $A6, $A6, $A6, $A7, $A7, $A7, $A6, $A6, $A6
+			dc.b  $A7, $A7, $A7, $A6, $A6, $A6, $A7, $A7, $A7, $A6, $A6, $A6, $A7, $A7, $A7, $A6, $A6, $A6, $A7, $A7
+			dc.b  $A7, $A6, $A6, $A6, $A7, $A7, $A7, $A6, $A6, $A6, $A7, $A7, $A7, $A6, $A6, $A6, $A7, $A7, $A7, $A6
+			dc.b  $A6, $A6, $A7, $A7, $A7, $AE, $AE, $AE, $AE, $AE, $AF, $B0, $B1, $B2, $B3, $B0, $B1, $B2, $B3, $B0
 			dc.b  $B1, $B2, $B3, $B0, $B1, $B2, $B3, $B0, $B1, $B2, $B3, $B0, $B1, $B2, $B3, $B0, $B1, $B2, $B3, $B0
 			dc.b  $B1, $B2, $B3, $B4, $B5, $B4, $B5, $B6, $B6, $B0, $AF, $FF
 Ani_AmyStand:		dc.b    7, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48, $48
@@ -299,7 +299,7 @@ Ani_SonicBalance1:	dc.b    7, $F7, $F8, $F9, $FF
 Ani_SuperSonicBalance:	dc.b    7, $F7, $F8, $F9, $F8, $FA, $FB, $FC, $FB, $FF
 Ani_TailsBalance:	dc.b  $13, $E9, $ED, $FF
 Ani_KnucklesBalance1:	dc.b    3, $F1, $F1, $F2, $F2, $F3, $F3, $F4, $F4, $F5, $F5, $F6, $F6, $F7, $F7, $F7, $F7, $F7, $F7, $F7
-			dc.b  $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F8, $F8, $F8, $F9, $F9, $F9, $FA, $FA, $FB, $FB, $FC, $FC
+			dc.b  $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F8, $F8, $F8, $F9, $F9, $F9, $EC, $EC, $ED, $ED, $EE, $EE
 			dc.b  $FE,   6
 Ani_AmyBalance1:	dc.b    7, $BA, $BB, $BC, $BD, $FF
 Ani_MightyBalance1:	dc.b    7, $F5, $F6, $F7, $F8, $FF
@@ -315,7 +315,7 @@ Ani_MightyHammerDrop:	dc.b    0, $A8, $A9, $AA, $AA, $AA, $AB, $AC, $AD, $AE, $F
 Ani_PlayerPulley:	dc.b   $F, $A5, $FF
 Ani_SonicBalance2:	dc.b    5, $FA, $FB, $FC, $FF
 Ani_KnucklesBalance2:	dc.b    3, $F3, $F3, $F4, $F4, $F5, $F5, $F6, $F6, $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F7, $F7
-			dc.b  $F7, $F7, $F7, $F7, $F8, $F8, $F8, $F9, $F9, $F9, $FA, $FA, $FB, $FB, $FC, $FC, $FE,   6
+			dc.b  $F7, $F7, $F7, $F7, $F8, $F8, $F8, $F9, $F9, $F9, $EC, $EC, $ED, $ED, $EE, $EE, $FE,   6
 Ani_MightyBalance2:	dc.b    7, $F9, $FA, $FB, $FC, $FF
 Ani_RayBalance2:	dc.b    7, $B7, $B8, $B9, $BA, $FF
 Ani_PlayerSkid:		dc.b    3, $EF, $F0, $F1, $F2, $FD,   0
@@ -341,7 +341,8 @@ Ani_RayClear:		dc.b    0, $58, $58, $58, $58, $BB, $BB, $BB, $BB, $BC, $BC, $BD,
 Ani_PlayerHang:		dc.b  $13, $87, $FF
 Ani_PlayerBubble:	dc.b    7, $CF, $CF, $CF,   7,   8, $FD,   0
 Ani_SonicTransform:	dc.b    2, $EA, $EA, $EB, $EB, $EC, $ED, $EE, $ED, $EE, $ED, $EE, $ED, $FD,   0
-Ani_TailsKnuxTransform:	dc.b    2, $EA, $EA, $EB, $EC, $EB, $EC, $EB, $EC, $EB, $EC, $EB, $EC, $FD,   0
+Ani_TailsTransform:	dc.b    2, $EA, $EA, $EB, $EC, $EB, $EC, $EB, $EC, $EB, $EC, $EB, $EC, $FD,   0
+Ani_KnucklesTransform:	dc.b    2, $EA, $EA, $FA, $FB, $FA, $FB, $FA, $FB, $FA, $FB, $FA, $FB, $FD,   0
 Ani_PlayerTransform:	dc.b    2, $EB, $EB, $EC, $EC, $ED, $EE, $ED, $EE, $ED, $EE, $ED, $EE, $FD,   0
 Ani_PlayerDrown:	dc.b  $20, $D5, $FF
 Ani_TailsDrown:
