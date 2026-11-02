@@ -4990,7 +4990,7 @@ SuperHyper_PalCycle_Encore:					; Liliam: Encore mode - no super forms allowed?
 		lea	(Water_palette+$4).w,a1
 
 	.apply:
-		moveq	#7-1,d1
+		moveq	#5-1,d1
 
 	.loop:
 		move.l	(a0)+,(a1)+
