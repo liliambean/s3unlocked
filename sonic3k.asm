@@ -7101,7 +7101,9 @@ loc_613E:
 		move.w	#VDP_WinYPos|Window_Disable,(a6)
 		move.w	#VDP_BGColor|(palette_line_2>>9)|$00,(a6)
 		move.w	#VDP_Option3|VDPReg3_DisableSH,(a6)
-		tst.w	(Demo_mode_flag).w			; Liliam: bugfix - block debug in demo mode
+		tst.b	(Encore_restart_flag).w			; Liliam: bugfix - block debug in demo mode
+		bne.s	loc_6182				;
+		tst.w	(Demo_mode_flag).w			;
 		bne.s	loc_6182				;
 		tst.b	(Debug_cheat_flag).w
 		beq.s	loc_6182
