@@ -119084,6 +119084,7 @@ loc_51EC0:
 ;		jsr	(LoadPalette_Immediate).l		;
 		movem.l	(sp)+,d7-a0/a2-a3
 		bclr	#7,(Disable_wall_grab).w		; Wall gliding is possible again
+		bsr.w	Adjust_CNZ2Layout						; Liliam: Encore mode - FBZ level order
 		move.w	#$3000,d0
 		move.w	#-$200,d1
 		sub.w	d0,(Player_1+x_pos).w
@@ -119339,30 +119340,35 @@ CNZ1_BGDeformArray:
 
 CNZ2_ScreenInit:
 		tst.b	(Saved2_last_star_post_hit).w		; Liliam: cutscene skip - CNZ2 blackout
-		bpl.s	.checkLayoutMod				;
+		bpl.s	loc_52108				;
 		bclr	#7,(Saved2_last_star_post_hit).w	;
 		jsr	(AllocateObject).l			;
-		bne.s	.checkLayoutMod				;
+		bne.s	loc_52108				;
 		move.w	#$18,(Special_events_routine).w		;
 		st	(_unkFAA3).w				;
 
-	.checkLayoutMod:
-		tst.b	(Encore_mode).w							; Liliam: Encore mode - FBZ level order
-		beq.s	loc_52108							;
-		movea.w	(Level_layout_main+$40).w,a1					;
-		lea	$8E(a1),a1							;
-		move.w	(Level_layout_header).w,d0					;
-		move.b	#$14,(a1)							;
-		adda.w	d0,a1								;
-		move.b	#$F,(a1)							;
-		adda.w	d0,a1								;
-		move.b	#$F,(a1)							;
-		adda.w	d0,a1								;
-		move.b	#$88,(a1)							;
-
 loc_52108:
+		bsr.s	Adjust_CNZ2Layout						; Liliam: Encore mode - FBZ level order
 		jsr	Reset_TileOffsetPositionActual(pc)
 		jmp	Refresh_PlaneFull(pc)
+; ---------------------------------------------------------------------------
+
+Adjust_CNZ2Layout:									; Liliam: Encore mode - FBZ level order
+		tst.b	(Encore_mode).w
+		beq.s	.return
+		movea.w	(Level_layout_main+$40).w,a1
+		lea	$8E(a1),a1
+		move.w	(Level_layout_header).w,d0
+		move.b	#$14,(a1)
+		adda.w	d0,a1
+		move.b	#$F,(a1)
+		adda.w	d0,a1
+		move.b	#$F,(a1)
+		adda.w	d0,a1
+		move.b	#$88,(a1)
+
+	.return:
+		rts
 ; ---------------------------------------------------------------------------
 
 CNZ2_ScreenEvent:
