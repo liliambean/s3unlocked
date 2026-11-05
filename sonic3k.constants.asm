@@ -1293,6 +1293,24 @@ ArtTile_SStage_Player1                = $07D4
 ArtTile_SStage_Player2                = $07A8	; Liliam: special stage - add extra characters
 ;ArtTile_SStage_Player2               = $07EB	;
 
+; Title cards.
+ArtTile_TitleCard                     = $0510	; Liliam: title cards - move 'ZONE' letters for sprite limit
+ArtTile_TitleCard_ActGfx              = $0500	;
+;ArtTile_TitleCard                    = $0500	;
+;ArtTile_TitleCardSK                  = $0510	;
+;ArtTile_TitleCard_ActGfx             = $053D	;
+ArtTile_TitleCard_LevelGfx            = $054D
+
+; Level results.
+ArtTile_Results_General               = $0520
+ArtTile_Results_ActGfx                = $0568
+ArtTile_Results_CharName              = $0578
+ArtTile_Results_CharName2             = $05A0
+ArtTile_SSResults_CharName            = $04F1
+ArtTile_SSResults_SUPER               = $050F
+ArtTile_SSResults                     = $0523
+ArtTile_SSResults_General             = $05B8
+
 ; Title screen.
 ArtTile_Title_Buffer                  = $0300
 ArtTile_Title_Misc                    = $0400

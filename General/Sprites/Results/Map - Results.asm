@@ -279,8 +279,8 @@ word_2F70C:	dc.w 2
 		dc.b    0,   5, $85, $33,   0,  $F
 Map_ResultsAMY:
 		dc.w 2
-		dc.b    0,  $D, $85, $78,   0,  $E
-		dc.b    0,   9, $85, $80,   0, $2E
+		dc.b    0,  $D, $85, $78,   0, $13
+		dc.b    0,   9, $85, $80,   0, $33
 Map_ResultsMIGHTY:
 		dc.w 3
 		dc.b    0,  $D, $85, $78, $FF, $F1

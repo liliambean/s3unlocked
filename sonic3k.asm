@@ -69970,15 +69970,14 @@ Obj_TitleCardInit:
 ;		; Liliam: moved to loc_62B6 - suppress for 2P mode rather than levels
 
 		lea	(ArtKosM_TitleCardRedAct).l,a1
-		move.w	#tiles_to_bytes($510),d2		; Liliam: title cards - move 'ZONE' letters for sprite limit
-;		move.w	#tiles_to_bytes($500),d2		;
+		move.w	#tiles_to_bytes(ArtTile_TitleCard),d2
 		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
 ;		jsr	(Queue_Kos_Module).l			;
 		; Liliam: removed S&K alone mode
 		tst.b	(Encore_mode).w				; Liliam: title cards - add 'Unlocked' branding
 		beq.s	loc_2D6F4				;
 		lea	(ArtKosM_TitleCardBlueAct).l,a1
-;		move.w	#tiles_to_bytes($510),d2		;
+;		move.w	#tiles_to_bytes(ArtTile_TitleCardSK),d2	;
 		jsr	(Queue_Kos_Module).l
 
 loc_2D6F4:
@@ -69997,8 +69996,7 @@ loc_2D6F4:
 ;		lea	(ArtKosM_TitleCardNum1).l,a1		;
 
 ;loc_2D716:
-		move.w	#tiles_to_bytes($500),d2	; Liliam: title cards - move 'ZONE' letters for sprite limit
-;		move.w	#tiles_to_bytes($53D),d2	;
+		move.w	#tiles_to_bytes(ArtTile_TitleCard_ActGfx),d2
 		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
 ;		jsr	(Queue_Kos_Module).l			;
 		lea	TitleCard_LevelGfx(pc),a1
@@ -70019,7 +70017,7 @@ loc_2D6F4:
 loc_2D746:
 		lsl.w	#2,d0
 		movea.l	(a1,d0.w),a1
-		move.w	#tiles_to_bytes($54D),d2
+		move.w	#tiles_to_bytes(ArtTile_TitleCard_LevelGfx),d2
 		jsr	(Queue_Kos_Module).l
 		move.w	#90,$2E(a0)			; Set wait value
 		clr.w	$32(a0)
@@ -70448,7 +70446,7 @@ Obj_LevelResultsInit:
 		moveq	#signextendB(cmd_FadeOut),d0
 		jsr	(Play_Music).l				; Fade music
 		lea	(ArtKosM_ResultsGeneral).l,a1
-		move.w	#tiles_to_bytes($520),d2
+		move.w	#tiles_to_bytes(ArtTile_Results_General),d2
 		jsr	(Queue_Kos_Module).l			; General art for
 
 		lea	TitleCard_ActGfx(pc),a1			; Liliam: title cards - display unique act icons
@@ -70467,17 +70465,17 @@ Obj_LevelResultsInit:
 
 loc_2DB1C:
 		move.w	d0,subtype(a0)
-		move.w	#tiles_to_bytes($568),d2
+		move.w	#tiles_to_bytes(ArtTile_Results_ActGfx),d2
 		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
 ;		jsr	(Queue_Kos_Module).l			;
 		; Liliam: removed original implementation
 		moveq	#0,d0					; Liliam: simplify results art selection
 		move.b	(Player_1+character_id).w,d0		;
 		bsr.w	LevelResults_CharNamePickArt		;
-		move.w	#tiles_to_bytes($578),d2
+		move.w	#tiles_to_bytes(ArtTile_Results_CharName),d2
 		tst.w	subtype(a0)
 		beq.s	loc_2DB66
-		move.w	#tiles_to_bytes($5A0),d2
+		move.w	#tiles_to_bytes(ArtTile_Results_CharName2),d2
 
 loc_2DB66:
 		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
@@ -70760,7 +70758,7 @@ Obj_LevResultsCharName:
 		movea.w	parent2(a0),a1
 		tst.w	subtype(a1)
 		beq.s	loc_2DD8E
-		move.w	#$28,d0
+		move.w	#ArtTile_Results_CharName2-ArtTile_Results_CharName,d0
 
 loc_2DD8E:
 		move.w	d0,art_tile(a0)			; Offset VRAM depending on act number
@@ -71090,7 +71088,7 @@ loc_2DF8C:
 		lea	PLC_SpecialResultsText(pc),a1
 		jsr	(Load_PLC_Raw).l
 		lea	(ArtKosM_ResultsGeneral).l,a1
-		move.w	#tiles_to_bytes($5B8),d2
+		move.w	#tiles_to_bytes(ArtTile_SSResults_General),d2
 		jsr	(Queue_Kos_Module).l
 		cmpi.w	#3,(Player_mode).w
 		bne.s	loc_2E04E
@@ -71100,26 +71098,47 @@ loc_2DF8C:
 		lea	(ArtKosM_SSResultsHYPERk).l,a1
 		bra.s	loc_2E06A
 ; ---------------------------------------------------------------------------
+SSResults_CharNamePtrs:						; Liliam: simplify results art selection
+		dc.l ArtKosM_SSResultsSUPER
+		dc.l ArtKosM_SSResultsSUPER_Encore
+		dc.l ArtKosM_SSResultsHYPER
+		dc.l ArtKosM_SSResultsHYPER_Encore
+; ---------------------------------------------------------------------------
 
 loc_2E04E:
-		lea	(ArtKosM_SSResultsSUPER).l,a1
+;		lea	(ArtKosM_SSResultsSUPER).l,a1		; Liliam: simplify results art selection
+		moveq	#0,d0					;
 ;		cmpi.w	#2,(Player_mode).w				; Liliam: Hyper Tails
 ;		beq.s	loc_2E06A					;
+		cmpi.w	#3,(Player_mode).w			; Liliam: simplify results art selection
+		blo.s	loc_2E05C				;
+		cmpi.w	#6,(Player_mode).w			;
+		bhs.s	loc_2E05C				;
+		addq.w	#4,d0					;
+
+loc_2E05C:
 		cmpi.b	#7,(Super_emerald_count).w
-		blo.s	loc_2E06A
-		lea	(ArtKosM_SSResultsHYPER).l,a1
+		blo.s	loc_2E064				;
+;		blo.s	loc_2E06A				;
+		addq.w	#8,d0					;
+
+loc_2E064:
+		movea.l	SSResults_CharNamePtrs(pc,d0.w),a1	;
+;		lea	(ArtKosM_SSResultsHYPER).l,a1		;
 
 loc_2E06A:
-		move.w	#tiles_to_bytes($50F),d2
-		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
+		move.w	#tiles_to_bytes(ArtTile_SSResults_SUPER),d2
+		cmpi.w	#6,(Player_mode).w			; Liliam: convert to 1P Ray palette
+		seq	(Ray_palette_flag).w			;
+		jsr	(Queue_Kos_Module_Ray).l		;
 ;		jsr	(Queue_Kos_Module).l			;
 		; Liliam: removed original implementation
 		bsr.w	SSResults_CharNamePickArt		; Liliam: simplify results art selection
-		move.w	#tiles_to_bytes($4F1),d2
+		move.w	#tiles_to_bytes(ArtTile_SSResults_CharName),d2
 		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
 ;		jsr	(Queue_Kos_Module).l			;
 		lea	(ArtKosM_SSResults).l,a1
-		move.w	#tiles_to_bytes($523),d2
+		move.w	#tiles_to_bytes(ArtTile_SSResults),d2
 		jsr	(Queue_Kos_Module).l
 		move.l	#locret_2DF62,(V_int_1E_addr).w
 
@@ -72147,7 +72166,7 @@ loc_2EAF6:
 ;		add.w	d0,x_pos(a0)				;
 ;		add.w	d0,$46(a0)				;
 		add.b	d1,mapping_frame(a0)
-		move.w	#-$87,art_tile(a0)
+		move.w	#ArtTile_SSResults_CharName-ArtTile_Results_CharName,art_tile(a0)
 		; Liliam: removed S&K alone mode
 ;		tst.b	(SK_special_stage_flag).w					; Liliam: bugfix - HPZ SS results palette screwery
 ;		beq.w	loc_2EA4A							;
@@ -72385,7 +72404,7 @@ SSResults_ContinueIconLoadArt:					; Liliam: simplify results art selection
 		jmp	(Queue_Kos_Module).l
 ; ---------------------------------------------------------------------------
 LevelResults_CharNameCoords:					; Liliam: results - center character name
-		dc.w    0,   0,-$18,   4,  -8,   8,-$1E,   0
+		dc.w    0,   0,-$18,   8,  -8,   8,-$1E,   0
 LevelResults_CharNameFrames:					; Liliam: results - center character name
 		dc.b    0,   2,   3, $23, $24, $25, $26,   1
 		even
@@ -222169,11 +222188,17 @@ ArtKosM_SSResultsSUPER:
 ArtKosM_SSResultsSUPERk:
 		binclude "General/Special Stage/KosinskiM Art/SSResults SUPER (K).bin"
 		even
+ArtKosM_SSResultsSUPER_Encore:					; Liliam: simplify results art selection
+		binclude "General/Special Stage/KosinskiM Art/SSResults SUPER Encore.bin"
+		even
 ArtKosM_SSResultsHYPER:
 		binclude "General/Special Stage/KosinskiM Art/SSResults HYPER.bin"
 		even
 ArtKosM_SSResultsHYPERk:
 		binclude "General/Special Stage/KosinskiM Art/SSResults HYPER (K).bin"
+		even
+ArtKosM_SSResultsHYPER_Encore:					; Liliam: simplify results art selection
+		binclude "General/Special Stage/KosinskiM Art/SSResults HYPER Encore.bin"
 		even
 ArtKosM_ResultsSONIC:
 		binclude "General/Sprites/Results/Results SONIC.bin"
