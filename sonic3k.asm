@@ -71246,6 +71246,7 @@ loc_2E054:
 		cmpi.w	#3,(Player_mode).w			; Liliam: simplify results art selection
 		blo.s	loc_2E05C				;
 		cmpi.w	#6,(Player_mode).w			;
+		seq	(Ray_palette_flag).w			;
 		bhs.s	loc_2E05C				;
 		addq.w	#4,d0					;
 
@@ -71261,9 +71262,7 @@ loc_2E064:
 
 loc_2E06A:
 		move.w	#tiles_to_bytes(ArtTile_SSResults_SUPER),d2
-		cmpi.w	#6,(Player_mode).w			; Liliam: convert to 1P Ray palette
-		seq	(Ray_palette_flag).w			;
-		jsr	(Queue_Kos_Module_Ray).l		;
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
 ;		jsr	(Queue_Kos_Module).l			;
 		; Liliam: removed original implementation
 		bsr.w	SSResults_CharNamePickArt		; Liliam: simplify results art selection
