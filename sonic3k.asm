@@ -71230,6 +71230,17 @@ SSResults_CharNamePtrs:						; Liliam: simplify results art selection
 loc_2E04E:
 ;		lea	(ArtKosM_SSResultsSUPER).l,a1		; Liliam: simplify results art selection
 		moveq	#0,d0					;
+		tst.b	(Encore_mode).w				;
+		beq.s	loc_2E054				;
+		cmpi.b	#2,(Encore_P1_character).w		;
+		blo.s	loc_2E064				;
+		cmpi.b	#5,(Encore_P1_character).w		;
+		bhs.s	loc_2E064				;
+		addq.w	#4,d0					;
+		bra.s	loc_2E064				;
+; ---------------------------------------------------------------------------
+
+loc_2E054:
 ;		cmpi.w	#2,(Player_mode).w				; Liliam: Hyper Tails
 ;		beq.s	loc_2E06A					;
 		cmpi.w	#3,(Player_mode).w			; Liliam: simplify results art selection
@@ -71942,29 +71953,11 @@ locret_2E7D8:
 
 loc_2E7DA:
 		tst.w	$2E(a0)
-		bne.s	loc_2E7E0					; Liliam: Encore mode - special stage
-		tst.b	(Encore_mode).w					;
 		beq.w	loc_2E7E6
-		lea	(Dynamic_object_RAM+(object_size*67)).w,a1	;
-		move.l	#Obj_SSResultsEncore,(a1)			;
-		move.w	#3*60,$2E(a0)					;
-		move.b	#$A,routine(a0)					;
-		rts							;
-; ---------------------------------------------------------------------------
 
 loc_2E7E0:
 		subq.w	#1,$2E(a0)
 		rts
-; ---------------------------------------------------------------------------
-
-Obj_SSResultsEncore:							; Liliam: Encore mode - special stage
-		move.w	-$3A(a0),d0
-		cmp.w	-4(a0),d0
-		bne.s	locret_2E7D8
-		clr.b	(Emerald_animation_flag).w
-		moveq	#signextendB(sfx_SuperEmerald),d0
-		jsr	(Play_SFX).l
-		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
 SSResults_WaitForFade:							; Liliam: Encore mode - special stage
@@ -71993,7 +71986,12 @@ SSResults_SlowFade:
 SSResults_CutsceneSkip:						; Liliam: cutscene skip - HPZ SS results
 		movem.l	d7/a0,-(sp)
 		jsr	(Pal_FadeToBlack).l
+		moveq	#8,d0
+		tst.b	(Encore_mode).w
+		bne.s	.loadPalette
 		move.w	(Player_mode).w,d0
+
+	.loadPalette:
 		jsr	(LoadPalette_Immediate_NoEncore).l
 		movem.l	(sp)+,d7/a0
 		lea	(Object_RAM).w,a1
@@ -199600,8 +199598,6 @@ CutsceneSkip_HPZSSEntry:					; Liliam: cutscene skip - HPZ SS entry
 ; ---------------------------------------------------------------------------
 
 CutsceneSkip_HPZSSResults:					; Liliam: cutscene skip - HPZ SS results
-		tst.b	(Encore_mode).w
-		bne.s	.restartLevel
 		cmpi.b	#7,(Super_emerald_count).w
 		blo.s	.restartLevel
 		jmp	(SSResults_CutsceneSkip).l
