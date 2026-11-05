@@ -26303,6 +26303,8 @@ loc_11A6E:
 		bne.w	locret_11A14				;
 
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
+		tst.b	(Encore_mode).w				;
+		bne.s	loc_11A90				;
 		tst.b	(Super_Sonic_Knux_flag).w		;
 		bmi.s	loc_11A90				;
 		cmpi.b	#12,air_left(a0)			;
@@ -32376,6 +32378,8 @@ loc_151D4:
 		bne.w	locret_151A2				;
 
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
+		tst.b	(Encore_mode).w				;
+		bne.s	loc_151F6				;
 		tst.b	(Super_Sonic_Knux_flag).w		;
 		bmi.s	loc_151F6				;
 		cmpi.b	#12,air_left(a0)			;
@@ -37115,6 +37119,8 @@ loc_17916:
 		bne.w	locret_178CC				;
 
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
+		tst.b	(Encore_mode).w				;
+		bne.s	loc_17938				;
 		tst.b	(Super_Sonic_Knux_flag).w		;
 		bmi.s	loc_17938				;
 		cmpi.b	#12,air_left(a0)			;
@@ -198919,6 +198925,8 @@ loc_85B6C:
 		btst	#Status_Invincible,(Player_1+status_secondary).w
 		beq.s	loc_85B84
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
+		tst.b	(Encore_mode).w				;
+		bne.s	loc_85B84				;
 		tst.b	(Super_Sonic_Knux_flag).w		;
 		bmi.s	loc_85B84				;
 		moveq	#signextendB(mus_Invincibility),d0
