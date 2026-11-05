@@ -30322,6 +30322,13 @@ Tails_CPU_Respawn:
 		move.w	#$7F00,x_pos(a0)
 		move.w	#0,y_pos(a0)
 		move.b	#0,double_jump_flag(a0)
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed?
+		beq.s	locret_13EFA				;
+		tst.b	(Super_Sonic_Knux_flag).w		;
+		beq.s	locret_13EFA				;
+		bset	#Status_Invincible,status_secondary(a0)	;
+
+locret_13EFA:
 		rts
 ; End of function Tails_CPU_Respawn
 
@@ -40793,6 +40800,7 @@ Encore_InitPlayerSpeeds:					; Liliam: Encore mode - no super forms allowed?
 
 Encore_UpdatePlayerSpeeds:					; Liliam: Encore mode - no super forms allowed?
 		move.w	#$C00,(Max_speed).w
+		bset	#Status_Invincible,(Player_2+status_secondary).w
 		btst	#Status_SpeedShoes,(Player_1+status_secondary).w
 		bne.s	.player1
 		move.w	#$A00,(Max_speed).w
