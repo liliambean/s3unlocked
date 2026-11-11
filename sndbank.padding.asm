@@ -587,7 +587,7 @@ MetalSonicHologram_Delete:
 ; ---------------------------------------------------------------------------
 
 MetalSonicHologram_RestoreArt:
-		lea	(ArtKosM_BadnikExplosion).l,a1
+		lea	(ArtKosM_Explosion).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Explosion),d2
 		jmp	(Queue_Kos_Module).l
 ; ---------------------------------------------------------------------------

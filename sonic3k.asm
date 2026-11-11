@@ -40939,7 +40939,7 @@ EncoreHelper_ColiChgObjPtrs:					; Liliam: Encore mode - player swap
 		dc.l Obj_AutoSpin_Horizontal
 		dc.w $FFFF
 Map_EncoreHelper:						; Liliam: Encore mode - player swap
-		include "General/Sprites/Enemy Misc/Map - Encore Cursor.asm"
+		include "General/Sprites/Starpost/Map - Encore Cursor.asm"
 ; ---------------------------------------------------------------------------
 
 EncoreHelper_SwapChildObjects:					; Liliam: Encore mode - player swap
@@ -49019,7 +49019,7 @@ loc_1E752:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 Map_Explosion:
-		include "General/Sprites/Enemy Misc/Map - Explosion.asm"
+		include "General/Sprites/SS Entry/Map - Explosion.asm"
 ; ---------------------------------------------------------------------------
 
 Obj_AIZ1Tree:
@@ -69283,7 +69283,7 @@ Map_Animals5:
 		include "General/Sprites/Animals/Map - Animals 5.asm"
 Map_EnemyScore:
 		; Liliam: Encore mode - player swap
-		include "General/Sprites/Enemy Misc/Map - Enemy Points.asm"
+		include "General/Sprites/Starpost/Map - Enemy Points.asm"
 ; ---------------------------------------------------------------------------
 
 Obj_HPZStarPost:						; Liliam: HPZ - add Knuckles LRZ2 results
@@ -144179,7 +144179,7 @@ loc_61928:
 loc_6196A:
 		move.l	#$EE0088,(Normal_palette_line_2+$A).w
 		move.w	#$44,(Normal_palette_line_2+$1E).w			; Restore the part of the palette that was changed
-		lea	(ArtKosM_BadnikExplosion).l,a1
+		lea	(ArtKosM_Explosion).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Explosion),d2
 		jsr	(Queue_Kos_Module).l			; Restore the overwritten badnik explosion art
 		jmp	(Go_Delete_SpriteSlotted).l
@@ -162590,7 +162590,7 @@ loc_6E778:
 		cmpi.w	#$4A30,(Player_1+x_pos).w
 		blo.s	locret_6E7B4
 		move.l	#loc_6E7B6,(a0)
-		lea	(ArtKosM_BadnikExplosion).l,a1
+		lea	(ArtKosM_Explosion).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Explosion),d2
 		jsr	(Queue_Kos_Module).l
 		jsr	(AllocateObject).l
@@ -189850,7 +189850,7 @@ loc_802DE:
 		move.l	#loc_8642E,(a1)
 
 loc_802FE:
-		lea	(ArtKosM_BadnikExplosion).l,a1
+		lea	(ArtKosM_Explosion).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Explosion),d2
 		jmp	(Queue_Kos_Module).l
 ; ---------------------------------------------------------------------------
@@ -219251,7 +219251,7 @@ PLC_SonicLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_SonicLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+		plreq ArtTile_EnemyScore, ArtNem_StarPost
 PLC_SonicLifeIcon_End
 
 PLC_AmyLifeIcon: plrlistheader							; Liliam: Amy life icon/universal level graphics
@@ -219259,7 +219259,7 @@ PLC_AmyLifeIcon: plrlistheader							; Liliam: Amy life icon/universal level gra
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon_Amy
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+		plreq ArtTile_EnemyScore, ArtNem_StarPost
 PLC_AmyLifeIcon_End
 
 PLC_MightyLifeIcon: plrlistheader						; Liliam: Mighty life icon/universal level graphics
@@ -219267,14 +219267,14 @@ PLC_MightyLifeIcon: plrlistheader						; Liliam: Mighty life icon/universal leve
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+		plreq ArtTile_EnemyScore, ArtNem_StarPost
 PLC_MightyLifeIcon_End
 
 PLC_RayLifeIcon: plrlistheader							; Liliam: Ray life icon/universal level graphics
 		plreq ArtTile_PlayerLifeIcon, ArtNem_RayLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+		plreq ArtTile_EnemyScore, ArtNem_StarPost
 PLC_RayLifeIcon_End
 
 PLC_MetalLifeIcon: plrlistheader						; Liliam: Metal Sonic life icon/universal level graphics
@@ -219282,7 +219282,7 @@ PLC_MetalLifeIcon: plrlistheader						; Liliam: Metal Sonic life icon/universal 
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+		plreq ArtTile_EnemyScore, ArtNem_StarPost
 PLC_MetalLifeIcon_End
 
 ;PLC_02:
@@ -219299,7 +219299,7 @@ PLC_KnucklesLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_KnucklesLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+		plreq ArtTile_EnemyScore, ArtNem_StarPost
 PLC_KnucklesLifeIcon_End
 
 ;PLC_06:
@@ -219309,7 +219309,7 @@ PLC_TailsLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_TailsLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+		plreq ArtTile_EnemyScore, ArtNem_StarPost
 PLC_TailsLifeIcon_End
 
 ;PLC_08:
@@ -219318,7 +219318,7 @@ PLC_TailsLifeIcon_End
 PLC_EncoreMode: plrlistheader							; Liliam: Encore mode universal level graphics
 		plreq ArtTile_Monitors, ArtNem_Monitors_Encore
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+		plreq ArtTile_EnemyScore, ArtNem_StarPost
 		plreq ArtTile_EncoreCursor-1, ArtNem_EncoreCursor
 PLC_EncoreMode_End
 
@@ -219628,7 +219628,7 @@ PLC_MilesLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_MilesLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_EnemyPtsStarPost
+		plreq ArtTile_EnemyScore, ArtNem_StarPost
 PLC_MilesLifeIcon_End
 
 PLC_AIZMinibossCutscene: plrlistheader						; Liliam: bugfix - stop double-loading AIZ2 PLCs
@@ -221498,8 +221498,8 @@ ArtUnc_SSEntryRing:
 ArtUnc_SSEntryFlash:
 		binclude "General/Sprites/SS Entry/Entry Flash.bin"
 		even
-ArtKosM_BadnikExplosion:
-		binclude "General/Sprites/SS Entry/Badnik Explosion.bin"
+ArtKosM_Explosion:
+		binclude "General/Sprites/SS Entry/Explosion KosM.bin"
 		even
 ArtNem_AIZMiniboss:						; Liliam: reinsert S3 data
 		binclude "Levels/AIZ/Nemesis Art/Miniboss.bin"
@@ -223614,7 +223614,7 @@ ArtNem_GameOver:
 		binclude "General/Sprites/Game Over/GameOver.bin"
 		even
 ArtNem_Explosion:
-		binclude "General/Sprites/Enemy Misc/Explosion.bin"
+		binclude "General/Sprites/SS Entry/Explosion.bin"
 		even
 		; Liliam: removed unused data
 ArtNem_SpikesSprings:
@@ -223625,12 +223625,12 @@ ArtNem_RingHUDText:
 		; Liliam: QOL - extend ring animation
 		binclude "General/Sprites/Ring/RingHUDText.bin"
 		even
-ArtNem_EnemyPtsStarPost = *+1					; Liliam: convert to 1P Ray palette
+ArtNem_StarPost = *+1						; Liliam: convert to 1P Ray palette
 		; Liliam: museum - photo piece object
-		binclude "General/Sprites/Enemy Misc/EnemyPtsStarpost.bin"
+		binclude "General/Sprites/Starpost/Starpost.bin"
 		even
 ArtNem_EncoreCursor:						; Liliam: Encore mode - player swap
-		binclude "General/Sprites/Enemy Misc/Encore Cursor.bin"
+		binclude "General/Sprites/Starpost/Encore Cursor.bin"
 		even
 ArtNem_Seal:
 		binclude "General/Sprites/Animals/Seal.bin"

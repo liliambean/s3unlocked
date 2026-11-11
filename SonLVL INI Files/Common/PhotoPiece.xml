@@ -2,7 +2,7 @@
 <ObjDef xmlns="http://www.sonicretro.org" Name="Photo Piece" Image="main" Depth="2">
   <Images>
     <ImageFromMappings id="main">
-      <ArtFile filename="../General/Sprites/Enemy Misc/EnemyPtsStarpost.bin" offset="-832" />
+      <ArtFile filename="../General/Sprites/Starpost/Starpost.bin" offset="-832" />
       <ArtFile filename="../General/Sprites/Ring/Ring.bin" compression="Uncompressed" offset="6080" />
       <MapFile type="ASM" filename="../General/Sprites/Ring/Map - Photo Piece.asm" frame="0" />
     </ImageFromMappings>
