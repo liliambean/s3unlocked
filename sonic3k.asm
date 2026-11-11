@@ -40775,6 +40775,8 @@ Obj_EncoreHelper_Main:
 	.checkPlayer1:
 		tst.w	(Debug_placement_mode).w
 		bne.s	.return
+		tst.b	(AIZ_skip_intro_flag).w
+		beq.s	.return
 		btst	#button_A,(Ctrl_1_pressed).w
 		beq.s	.return
 		lea	(Player_1).w,a1
