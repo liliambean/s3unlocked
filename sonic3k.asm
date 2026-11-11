@@ -9245,7 +9245,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 ; ---------------------------------------------------------------------------
 
 	.loadAmyHint:
-		move.w	#tiles_to_bytes(ArtTile_SuperHint2),d2
+		move.w	#tiles_to_bytes(ArtTile_DashDust_P2),d2
 		bsr.w	Add_To_DMA_Queue
 		bra.s	.setAmyHint
 ; ---------------------------------------------------------------------------
@@ -9349,7 +9349,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 	.queueDMA:
 		lsl.w	#6,d1
 		addi.l	#ArtUnc_BarrierHUD-$180,d1
-		move.w	#tiles_to_bytes(ArtTile_StarPost),d2
+		move.w	#tiles_to_bytes(ArtTile_StarPostStars),d2
 		moveq	#$40,d3
 		bsr.w	Add_To_DMA_Queue
 
@@ -9422,9 +9422,6 @@ Load_PLC_MonitorsSpikesSprings:					; Liliam: Encore mode - change character ite
 		lea	(PLC_MonitorsSpikesSprings_Encore).l,a1
 		tst.b	(Encore_mode).w
 		bne.w	Load_PLC_Raw
-		lea	(PLC_MonitorsSpikesSprings_Ray).l,a1
-		cmpi.w	#6,(Player_mode).w
-		beq.w	Load_PLC_Raw
 		lea	(PLC_MonitorsSpikesSprings_Amy).l,a1
 		cmpi.w	#4,(Player_mode).w
 		beq.w	Load_PLC_Raw
@@ -33749,12 +33746,7 @@ Obj_Tails_Tail:
 		movea.w	$30(a0),a2					;
 		move.w	art_tile(a2),d0					;
 		addi.w	#ArtTile_TailsTail-ArtTile_Player_2,d0		;
-		cmpi.w	#$12,(Tails_CPU_routine).w		; Liliam: extra skills - double jump
-		bne.s	loc_160AE				;
-		subq.w	#1,d0					;
-
-loc_160AE:
-		move.w	d0,art_tile(a0)				;
+		move.w	d0,art_tile(a0)					;
 		move.w	#$100,priority(a0)
 		move.b	#$18,width_pixels(a0)
 		move.b	#$18,height_pixels(a0)
@@ -47034,7 +47026,7 @@ Obj_Monitor_EncoreStock:					; Liliam: Encore mode - character stock monitor
 		move.b	d1,character_id(a0)
 		lsl.w	#7,d1
 		addi.l	#ArtUnc_EncorePlayerIcons,d1
-		move.w	#tiles_to_bytes(ArtTile_Monitors+$1C),d2
+		move.w	#tiles_to_bytes(ArtTile_RobotnikLifeIcon),d2
 		moveq	#$40,d3
 		jsr	(Add_To_DMA_Queue).l
 
@@ -47810,7 +47802,7 @@ loc_1DB2E:
 PLC_RobotnikLifeIcon:						; Liliam: Encore mode - character stock monitor
 		dc.w 0
 		dc.l ArtNem_RobotnikLifeIcon
-		dc.w tiles_to_bytes(ArtTile_Monitors+$1C)
+		dc.w tiles_to_bytes(ArtTile_RobotnikLifeIcon)
 Ani_Monitor:
 		; Liliam: Encore mode - combine ring
 		include "General/Sprites/Monitors/Anim - Monitor.asm"
@@ -49420,8 +49412,8 @@ locret_1EB30:
 
 Obj_InvisibleBlock:
 		move.l	#Map_InvisibleBlock,mappings(a0)
-		move.w	#make_art_tile(ArtTile_Monitors-8,0,1),art_tile(a0)	; Liliam: use static icon for solid blocks
-;		move.w	#make_art_tile(ArtTile_Ring,0,1),art_tile(a0)		;
+		move.w	#make_art_tile(ArtTile_Monitors-8,0,1),art_tile(a0)		; Liliam: use static icon for solid blocks
+;		move.w	#make_art_tile(ArtTile_Ring,0,1),art_tile(a0)			;
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
 		bset	#7,status(a0)
@@ -50052,8 +50044,8 @@ Obj_InvisibleLavaBlock:
 
 Obj_InvisibleHurtBlock:
 		move.l	#Map_InvisibleBlock,mappings(a0)
-		move.w	#make_art_tile(ArtTile_Monitors,0,1),art_tile(a0)	; Liliam: use Robotnik icon for hurt blocks
-;		move.w	#make_art_tile(ArtTile_Ring,0,1),art_tile(a0)		;
+		move.w	#make_art_tile(ArtTile_RobotnikLifeIcon-$1C,0,1),art_tile(a0)	; Liliam: use Robotnik icon for hurt blocks
+;		move.w	#make_art_tile(ArtTile_Ring,0,1),art_tile(a0)			;
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
 		bset	#7,status(a0)
@@ -50212,8 +50204,8 @@ locret_1F59E:
 
 Obj_InvisibleKillBlock:
 		move.l	#Map_InvisibleBlock,mappings(a0)
-		move.w	#make_art_tile(ArtTile_Monitors,0,1),art_tile(a0)	; Liliam: use Robotnik icon for hurt blocks
-;		move.w	#make_art_tile(ArtTile_Ring,0,1),art_tile(a0)		;
+		move.w	#make_art_tile(ArtTile_RobotnikLifeIcon-$1C,0,1),art_tile(a0)	; Liliam: use Robotnik icon for hurt blocks
+;		move.w	#make_art_tile(ArtTile_Ring,0,1),art_tile(a0)			;
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
 		bset	#7,status(a0)
@@ -69108,7 +69100,7 @@ sub_2CCD2:
 
 Obj_EnemyScore:
 		move.l	#Map_EnemyScore,mappings(a0)
-		move.w	#make_art_tile(ArtTile_EnemyScore,0,1),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_StarPost,0,1),art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
 		move.b	#8,width_pixels(a0)
@@ -69438,7 +69430,7 @@ locret_2D0F6:
 ; ---------------------------------------------------------------------------
 
 loc_2D0F8:
-		lea	(Ani_Starpost).l,a1
+		lea	(Ani_StarPost).l,a1
 		jsr	(Animate_Sprite).l
 		jmp	(Sprite_OnScreen_Test).l
 ; ---------------------------------------------------------------------------
@@ -69617,12 +69609,12 @@ locret_2D336:
 ; End of function Load_Starpost_Settings
 
 ; ---------------------------------------------------------------------------
-Ani_Starpost:
+Ani_StarPost:
 		include "General/Sprites/Starpost/Anim - Starpost.asm"
 Map_StarPost:
-		; Liliam: convert to 1P Ray palette
+		; Liliam: HUD - barrier HUD
 		include "General/Sprites/Starpost/Map - Starpost.asm"
-Map_StarpostStars:
+Map_StarPostStars:
 		include "General/Sprites/Starpost/Map - Starpost Stars.asm"
 
 ; =============== S U B R O U T I N E =======================================
@@ -69641,8 +69633,8 @@ loc_2D3CC:
 		jsr	(AllocateObject).l
 		bne.s	loc_2D436
 		move.l	(a0),(a1)
-		move.l	#Map_StarpostStars,mappings(a1)
-		move.w	#make_art_tile(ArtTile_StarPost,0,0),art_tile(a1)
+		move.l	#Map_StarPostStars,mappings(a1)
+		move.w	#make_art_tile(ArtTile_StarPostStars,0,0),art_tile(a1)
 		move.b	#4,render_flags(a1)
 		move.b	#8,routine(a1)
 		move.w	x_pos(a0),d0
@@ -69664,10 +69656,10 @@ loc_2D3CC:
 loc_2D436:
 		; Liliam: removed original implementation
 		move.w	(Ring_count).w,d3			; Liliam: Encore mode - bonus stage
-		bsr.s	Starpost_PickBonusStage			;
+		bsr.s	StarPost_PickBonusStage			;
 		lsl.w	#2,d3					;
-		move.l	Starpost_BonusStarsPtrs(pc,d3.w),d1	;
-		move.w	#tiles_to_bytes(ArtTile_StarPost),d2
+		move.l	StarPost_BonusStarsPtrs(pc,d3.w),d1	;
+		move.w	#tiles_to_bytes(ArtTile_StarPostStars),d2
 		move.w	#$60,d3					;
 		jmp	(Add_To_DMA_Queue).l			;
 ;		jmp	(Queue_Kos_Module).l			;
@@ -69675,7 +69667,7 @@ loc_2D436:
 
 ; ---------------------------------------------------------------------------
 
-Starpost_PickBonusStage:					; Liliam: Encore mode - bonus stage
+StarPost_PickBonusStage:					; Liliam: Encore mode - bonus stage
 		tst.b	(Encore_mode).w
 		bne.s	.encoreMode
 		ext.l	d3
@@ -69706,12 +69698,12 @@ Starpost_PickBonusStage:					; Liliam: Encore mode - bonus stage
 		moveq	#3,d3
 		rts
 ; ---------------------------------------------------------------------------
-Starpost_BonusStarsPtrs:					; Liliam: Encore mode - bonus stage
+StarPost_BonusStarsPtrs:					; Liliam: Encore mode - bonus stage
 		dc.l ArtUnc_StarPostStars3
 		dc.l ArtUnc_StarPostStars2
 		dc.l ArtUnc_StarPostStars1
 		dc.l ArtUnc_StarPostStars_Encore
-Starpost_BonusZoneNums:						; Liliam: Encore mode - bonus stage
+StarPost_BonusZoneNums:						; Liliam: Encore mode - bonus stage
 		dc.w $1500
 		dc.w $1400
 		dc.w $1300
@@ -69726,9 +69718,9 @@ loc_2D47E:
 		move.b	#2,(Special_bonus_entry_flag).w
 		; Liliam: removed original implementation
 		move.w	(Saved_ring_count).w,d3			; Liliam: Encore mode - bonus stage
-		bsr.s	Starpost_PickBonusStage			;
+		bsr.s	StarPost_PickBonusStage			;
 		add.w	d3,d3					;
-		move.w	Starpost_BonusZoneNums(pc,d3.w),d1	;
+		move.w	StarPost_BonusZoneNums(pc,d3.w),d1	;
 		tst.b	(Encore_mode).w				;
 		beq.s	loc_2D4CA				;
 		move.b	#1,d1					;
@@ -149944,9 +149936,6 @@ Load_PLC_Monitors:						; Liliam: Encore mode - change character item
 		lea	(PLC_Monitors_Encore).l,a1
 		tst.b	(Encore_mode).w
 		bne.s	.loadPLC
-		lea	(PLC_Monitors_Ray).l,a1
-		cmpi.w	#6,(Player_mode).w
-		beq.s	.loadPLC
 		lea	(PLC_Monitors_Amy).l,a1
 		cmpi.w	#4,(Player_mode).w
 		beq.s	.loadPLC
@@ -195167,26 +195156,21 @@ PLC_MonitorsSpikesSprings_End
 
 PLC_MonitorsSpikesSprings_Encore: plrlistheader			; Liliam: Encore mode - change character item
 		plreq ArtTile_Monitors, ArtNem_Monitors_Encore
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
 		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
 PLC_MonitorsSpikesSprings_Encore_End
 
 PLC_MonitorsSpikesSprings_Extra: plrlistheader			; Liliam: Encore mode - special Robotnik icon for palette
 		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
 		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
 PLC_MonitorsSpikesSprings_Extra_End
 
 PLC_MonitorsSpikesSprings_Amy: plrlistheader			; Liliam: Encore mode - special Robotnik icon for palette
 		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon_Amy
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon_Amy
 		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
 PLC_MonitorsSpikesSprings_Amy_End
-
-PLC_MonitorsSpikesSprings_Ray: plrlistheader			; Liliam: convert to 1P Ray palette
-		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
-		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
-		plreq ArtTile_SpikesSprings+$10, ArtNem_RedSpring_Ray
-PLC_MonitorsSpikesSprings_Ray_End
 
 PLC_Monitors: plrlistheader
 		plreq ArtTile_Monitors, ArtNem_Monitors
@@ -195194,21 +195178,18 @@ PLC_Monitors_End
 
 PLC_Monitors_Encore: plrlistheader				; Liliam: Encore mode - change character item
 		plreq ArtTile_Monitors, ArtNem_Monitors_Encore
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
 PLC_Monitors_Encore_End
 
 PLC_Monitors_Extra: plrlistheader				; Liliam: Encore mode - special Robotnik icon for palette
 		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
 PLC_Monitors_Extra_End
 
 PLC_Monitors_Amy: plrlistheader					; Liliam: Encore mode - special Robotnik icon for palette
 		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon_Amy
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon_Amy
 PLC_Monitors_Amy_End
-
-PLC_Monitors_Ray: plrlistheader					; Liliam: convert to 1P Ray palette
-		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
-PLC_Monitors_Ray_End
 
 		; Liliam: removed unused data
 
@@ -198856,24 +198837,20 @@ PLC_EndSignStuff_End
 PLC_EndSignStuff_Encore: plrlistheader				; Liliam: Encore mode - change character item
 		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
 		plreq ArtTile_Monitors, ArtNem_Monitors_Encore
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
 PLC_EndSignStuff_Encore_End
 
 PLC_EndSignStuff_Extra: plrlistheader				; Liliam: Encore mode - special Robotnik icon for palette
 		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
 		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
 PLC_EndSignStuff_Extra_End
 
 PLC_EndSignStuff_Amy: plrlistheader				; Liliam: Encore mode - special Robotnik icon for palette
 		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
 		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon_Amy
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon_Amy
 PLC_EndSignStuff_Amy_End
-
-PLC_EndSignStuff_Ray: plrlistheader				; Liliam: convert to 1P Ray palette
-		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
-		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
-PLC_EndSignStuff_Ray_End
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlWait:
@@ -198890,9 +198867,6 @@ loc_85BEC:
 		lea	PLC_EndSignStuff_Encore(pc),a1		; Liliam: Encore mode - special Robotnik icon for palette
 		tst.b	(Encore_mode).w				;
 		bne.s	loc_85BF0				;
-		lea	PLC_EndSignStuff_Ray(pc),a1		;
-		cmpi.w	#6,(Player_mode).w			;
-		beq.s	loc_85BF0				;
 		lea	PLC_EndSignStuff_Amy(pc),a1		;
 		cmpi.w	#4,(Player_mode).w			;
 		beq.s	loc_85BF0				;
@@ -200699,7 +200673,7 @@ loc_86770:
 		beq.s	loc_867A0
 		movea.w	d0,a1
 		tst.w	y_vel(a1)
-		bmi.s	loc_867AA				; Liliam: extra skills - double jump
+		bmi.s	loc_867AA				; Liliam: simplify roll anim selection
 ;		bpl.s	loc_867A0				;
 ;		cmpi.b	#2,anim(a1)				;
 ;		beq.s	loc_867AA				;
@@ -219251,38 +219225,39 @@ PLC_SonicLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_SonicLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_StarPost
+		plreq ArtTile_StarPost, ArtNem_StarPost
 PLC_SonicLifeIcon_End
 
 PLC_AmyLifeIcon: plrlistheader							; Liliam: Amy life icon/universal level graphics
 		plreq ArtTile_PlayerLifeIcon, ArtNem_AmyLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon_Amy
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_StarPost
+		plreq ArtTile_StarPost, ArtNem_StarPost
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon_Amy
 PLC_AmyLifeIcon_End
 
 PLC_MightyLifeIcon: plrlistheader						; Liliam: Mighty life icon/universal level graphics
 		plreq ArtTile_PlayerLifeIcon, ArtNem_MightyLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_StarPost
+		plreq ArtTile_StarPost, ArtNem_StarPost
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
 PLC_MightyLifeIcon_End
 
 PLC_RayLifeIcon: plrlistheader							; Liliam: Ray life icon/universal level graphics
 		plreq ArtTile_PlayerLifeIcon, ArtNem_RayLifeIcon
-		plreq ArtTile_Monitors, ArtNem_Monitors_Ray
+		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_StarPost
+		plreq ArtTile_StarPost, ArtNem_StarPost
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
 PLC_RayLifeIcon_End
 
 PLC_MetalLifeIcon: plrlistheader						; Liliam: Metal Sonic life icon/universal level graphics
 		plreq ArtTile_PlayerLifeIcon, ArtNem_MetalLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_Monitors+$1C, ArtNem_RobotnikLifeIcon
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_StarPost
+		plreq ArtTile_StarPost, ArtNem_StarPost
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
 PLC_MetalLifeIcon_End
 
 ;PLC_02:
@@ -219299,7 +219274,7 @@ PLC_KnucklesLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_KnucklesLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_StarPost
+		plreq ArtTile_StarPost, ArtNem_StarPost
 PLC_KnucklesLifeIcon_End
 
 ;PLC_06:
@@ -219309,7 +219284,7 @@ PLC_TailsLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_TailsLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_StarPost
+		plreq ArtTile_StarPost, ArtNem_StarPost
 PLC_TailsLifeIcon_End
 
 ;PLC_08:
@@ -219318,8 +219293,9 @@ PLC_TailsLifeIcon_End
 PLC_EncoreMode: plrlistheader							; Liliam: Encore mode universal level graphics
 		plreq ArtTile_Monitors, ArtNem_Monitors_Encore
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_StarPost
+		plreq ArtTile_StarPost, ArtNem_StarPost
 		plreq ArtTile_EncoreCursor-1, ArtNem_EncoreCursor
+		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
 PLC_EncoreMode_End
 
 ;PLC_09:
@@ -219628,7 +219604,7 @@ PLC_MilesLifeIcon: plrlistheader
 		plreq ArtTile_PlayerLifeIcon, ArtNem_MilesLifeIcon
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
-		plreq ArtTile_EnemyScore, ArtNem_StarPost
+		plreq ArtTile_StarPost, ArtNem_StarPost
 PLC_MilesLifeIcon_End
 
 PLC_AIZMinibossCutscene: plrlistheader						; Liliam: bugfix - stop double-loading AIZ2 PLCs
@@ -223586,24 +223562,18 @@ ArtNem_RayLifeIcon:						; Liliam: add extra characters
 ArtNem_MetalLifeIcon:						; Liliam: add extra characters
 		binclude "General/Sprites/HUD Icon/Metal Sonic Life Icon.bin"
 		even
-ArtNem_RobotnikLifeIcon:					; Liliam: Encore mode - special Robotnik icon for palette
+ArtNem_RobotnikLifeIcon = *+1					; Liliam: Encore mode - special Robotnik icon for palette
 		binclude "General/Sprites/Monitors/Robotnik Life Icon.bin"
 		even
 ArtNem_RobotnikLifeIcon_Amy:					; Liliam: Encore mode - special Robotnik icon for palette
 		binclude "General/Sprites/Monitors/Robotnik Life Icon Amy.bin"
 		even
-ArtNem_Monitors:
+ArtNem_Monitors = *+1						; Liliam: convert to 1P Ray palette
 		; Liliam: bugfix - use safe colors for aqua barrier icon
 		binclude "General/Sprites/Monitors/Monitors.bin"
 		even
 ArtNem_Monitors_Encore:						; Liliam: Encore mode - change character item
 		binclude "General/Sprites/Monitors/Monitors Encore.bin"
-		even
-ArtNem_Monitors_Ray:						; Liliam: convert to 1P Ray palette
-		binclude "General/Sprites/Monitors/Ray Monitors.bin"
-		even
-ArtNem_RedSpring_Ray:						; Liliam: convert to 1P Ray palette
-		binclude "General/Sprites/Level Misc/Ray Red Spring.bin"
 		even
 ;ArtNem_S2Signpost:
 		; Liliam: removed unused data
@@ -223620,6 +223590,9 @@ ArtNem_Explosion:
 ArtNem_SpikesSprings:
 		; Liliam: QOL - allow taking DEZ1 Tails route
 		binclude "General/Sprites/Level Misc/SpikesSprings.bin"
+		even
+ArtNem_RedSpring_Ray:						; Liliam: convert to 1P Ray palette
+		binclude "General/Sprites/Level Misc/Ray Red Spring.bin"
 		even
 ArtNem_RingHUDText:
 		; Liliam: QOL - extend ring animation

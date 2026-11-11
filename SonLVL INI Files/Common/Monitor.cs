@@ -68,7 +68,9 @@ namespace S3KObjectDefinitions.Common
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
 				"../General/Sprites/Monitors/Monitors Encore.bin", CompressionType.Nemesis)), 0);
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
-				"../General/Sprites/HUD Icon/Sonic Life Icon.bin", CompressionType.Nemesis)), 25088);
+				"../General/Sprites/HUD Icon/Sonic Life Icon.bin", CompressionType.Nemesis)), 0x6200);
+			indexer.AddFile(new List<byte>(LevelData.ReadFile(
+				"../General/Sprites/Starpost/Starpost.bin", CompressionType.Nemesis)), 0x2400);
 
 			var art = indexer.ToArray();
 			var map = LevelData.ASMToBin(

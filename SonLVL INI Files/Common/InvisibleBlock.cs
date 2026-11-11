@@ -80,7 +80,7 @@ namespace S3KObjectDefinitions.Common
 
 		public override void Init(ObjectData data)
 		{
-			BuildSprites(0x100);
+			BuildSprites("../General/Sprites/Monitors/Monitors.bin", 0x100);
 		}
 	}
 
@@ -90,12 +90,12 @@ namespace S3KObjectDefinitions.Common
 
 		public override void Init(ObjectData data)
 		{
-			BuildSprites(0);
+			BuildSprites("../General/Sprites/Starpost/Starpost.bin", 0x140);
 		}
 
-		protected void BuildSprites(int offset)
+		protected void BuildSprites(string path, int offset)
 		{
-			var artfile = ObjectHelper.OpenArtFile("../General/Sprites/Monitors/Monitors.bin", CompressionType.Nemesis);
+			var artfile = ObjectHelper.OpenArtFile(path, CompressionType.Nemesis);
 			if (offset != 0)
 			{
 				var indexer = new MultiFileIndexer<byte>();

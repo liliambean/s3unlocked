@@ -25,7 +25,7 @@ word_1DBD0:	dc.w 3
 		dc.b  $F0,  $E,   0,   0, $FF, $F0
 		dc.b    8,  $C,   0,  $C, $FF, $F0
 word_1DBDE:	dc.w 3
-		dc.b  $F3,   5,   0, $1C, $FF, $F8
+		dc.b  $F3,   5,   1, $32, $FF, $F8
 		dc.b  $F0,  $E,   0,   0, $FF, $F0
 		dc.b    8,  $C,   0,  $C, $FF, $F0
 word_1DBEC:	dc.w 3
