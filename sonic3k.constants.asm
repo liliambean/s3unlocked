@@ -729,7 +729,7 @@ Tails_CPU_auto_fly_timer	ds.b 1			; counts up until CPU Tails automatically flie
 Tails_CPU_auto_jump_flag	ds.b 1			; set to #1 when CPU Tails needs to jump of his own accord, regardless of whether Sonic jumped or not
 Rings_manager_routine		ds.b 1
 Level_started_flag		ds.b 1
-_unkF712			ds.b $1C		; Gumball Machine and HPZ Emerald throne room object respawn table
+Competition_respawn_table	ds.b $1C		; Gumball Machine and HPZ Emerald throne room object respawn table
 AIZ1_palette_cycle_flag		ds.b 1			; selects which palette cycles are used in AIZ1
 Bonus_stage_flag		ds.b 1		; Liliam: Encore mode - bonus stage
 Water_flag			ds.b 1
@@ -738,7 +738,7 @@ Encore_flags			ds.b 1		; Liliam: Encore mode - palette
 			ds.b $B				; unused
 Flying_carrying_Sonic_flag	ds.b 1			; set when Tails carries Sonic in a Sonic and Tails game
 Flying_picking_Sonic_timer	ds.b 1			; until this is 0 Tails can't pick Sonic up
-_unkF740			ds.w 1
+Scaled_patterns_left		ds.w 1
 			ds.w 1				; unused
 Flying_saved_X_vel		ds.w 1
 			ds.w 1				; unused
@@ -777,8 +777,8 @@ Boss_flag			ds.b 1			; set if a boss fight is going on
 Barrier_HUD_DMA_flag		ds.b 1		; Liliam: HUD - barrier HUD
 Barrier_HUD_frame		ds.w 1		; Liliam: HUD - barrier HUD
 Barrier_HUD_scroll		ds.w 1		; Liliam: HUD - barrier HUD
-_unkF7B0			ds.b 4
 
+Corkscrew_flags			ds.b 4
 Primary_collision_addr		ds.l 1
 Secondary_collision_addr	ds.l 1
 			ds.l 1				; unused

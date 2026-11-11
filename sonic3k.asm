@@ -33289,9 +33289,9 @@ loc_15AA6:
 CutsceneTails_LoadPLC:						; Liliam: convert to 1P Ray palette
 		tst.b	(Kos_modules_left).w
 		bne.s	.return
-		tst.w	(_unkF740).w
+		tst.w	(Scaled_patterns_left).w
 		beq.s	.convert
-		clr.w	(_unkF740).w
+		clr.w	(Scaled_patterns_left).w
 
 	.return:
 		rts
@@ -43646,7 +43646,7 @@ loc_1B720:
 		addq.b	#8,(Object_load_routine).w
 		jsr	AllocateObject(pc)
 		bne.s	loc_1B74C
-		lea	(_unkF712).w,a3
+		lea	(Competition_respawn_table).w,a3
 		movea.l	(Object_index_addr).w,a4
 		move.w	#$800,d6
 		cmpi.w	#$1701,(Current_zone_and_act).w
@@ -56877,7 +56877,7 @@ Map_2PSpikes:
 
 Init_ArtScaling:
 		moveq	#0,d1
-		move.w	d1,(_unkF740).w
+		move.w	d1,(Scaled_patterns_left).w
 		movea.w	d1,a0
 		movea.w	d1,a1
 		movea.w	d1,a2
@@ -56945,7 +56945,7 @@ loc_2469A:
 		move.b	d1,mapping_frame(a0)	; Scale level correlates with mapping frame
 		add.w	d1,d1
 		move.w	word_2464A(pc,d1.w),d1
-		move.w	(_unkF740).w,d2
+		move.w	(Scaled_patterns_left).w,d2
 		add.w	d1,d2
 		cmpi.w	#$80,d2
 		bhi.s	loc_246D2
@@ -56958,7 +56958,7 @@ loc_2469A:
 		adda.w	d2,a2
 		bsr.s	sub_246DA
 		movem.l	(sp)+,d1/d5-a0/a2/a4
-		add.w	d1,(_unkF740).w
+		add.w	d1,(Scaled_patterns_left).w
 		rts
 ; ---------------------------------------------------------------------------
 ;		rts
@@ -68303,11 +68303,11 @@ Obj_LBZRollingDrum:
 
 loc_2C3CA:
 		lea	(Player_1).w,a1
-		lea	(_unkF7B0+0).w,a2
+		lea	(Corkscrew_flags).w,a2
 		moveq	#p1_standing_bit,d6
 		bsr.s	sub_2C3E8
 		lea	(Player_2).w,a1
-		lea	(_unkF7B0+1).w,a2
+		lea	(Corkscrew_flags+1).w,a2
 		addq.b	#p2_standing_bit-p1_standing_bit,d6
 		bsr.s	sub_2C3E8
 		jmp	(Delete_Sprite_If_Not_In_Range).l
@@ -86502,11 +86502,11 @@ loc_39F58:
 		move.w	d4,d5
 		add.w	d5,d5
 		lea	(Player_1).w,a1
-		lea	(_unkF7B0+0).w,a2
+		lea	(Corkscrew_flags).w,a2
 		moveq	#p1_standing_bit,d6
 		bsr.s	sub_39F7E
 		lea	(Player_2).w,a1
-		lea	(_unkF7B0+1).w,a2
+		lea	(Corkscrew_flags+1).w,a2
 		addq.b	#p2_standing_bit-p1_standing_bit,d6
 		bsr.s	sub_39F7E
 		jmp	(Delete_Sprite_If_Not_In_Range).l
@@ -86642,11 +86642,11 @@ loc_3A0B0:
 		move.w	d4,d5
 		add.w	d5,d5
 		lea	(Player_1).w,a1
-		lea	(_unkF7B0+0).w,a2
+		lea	(Corkscrew_flags).w,a2
 		moveq	#p1_standing_bit,d6
 		bsr.s	sub_3A0D6
 		lea	(Player_2).w,a1
-		lea	(_unkF7B0+1).w,a2
+		lea	(Corkscrew_flags+1).w,a2
 	if FixBugs
 		; Set the entirety of d6 to be the standing bit, which fixes d6's dirtiness.
 		moveq	#p2_standing_bit,d6
@@ -104740,11 +104740,11 @@ loc_48EEC:
 		move.w	d4,d5
 		add.w	d5,d5
 		lea	(Player_1).w,a1
-		lea	(_unkF7B0+0).w,a2
+		lea	(Corkscrew_flags).w,a2
 		moveq	#p1_standing_bit,d6
 		bsr.s	sub_48F12
 		lea	(Player_2).w,a1
-		lea	(_unkF7B0+1).w,a2
+		lea	(Corkscrew_flags+1).w,a2
 		addq.b	#p2_standing_bit-p1_standing_bit,d6
 		bsr.s	sub_48F12
 		jmp	(Delete_Sprite_If_Not_In_Range).l
@@ -104887,11 +104887,11 @@ loc_4906A:
 		move.w	d4,d5
 		add.w	d5,d5
 		lea	(Player_1).w,a1
-		lea	(_unkF7B0+0).w,a2
+		lea	(Corkscrew_flags).w,a2
 		moveq	#p1_standing_bit,d6
 		bsr.s	sub_49090
 		lea	(Player_2).w,a1
-		lea	(_unkF7B0+1).w,a2
+		lea	(Corkscrew_flags+1).w,a2
 	if FixBugs
 		; Set the entirety of d6 to be the standing bit, which fixes d6's dirtiness.
 		moveq	#p2_standing_bit,d6
@@ -199891,7 +199891,7 @@ loc_8613A:
 
 
 Perform_Art_Scaling:
-		clr.w	(_unkF740).w
+		clr.w	(Scaled_patterns_left).w
 		move.l	a0,-(sp)
 		jsr	Init_ArtScaling
 		movea.l	(sp)+,a0
@@ -199899,7 +199899,7 @@ Perform_Art_Scaling:
 		move.w	art_tile(a0),d0
 		jsr	(sub_2468A).l
 		movea.l	(sp)+,a0
-		move.w	(_unkF740).w,d3
+		move.w	(Scaled_patterns_left).w,d3
 		lsl.w	#4,d3
 		move.l	#Kos_decomp_buffer,d1
 		move.w	$3A(a0),d2
