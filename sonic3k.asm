@@ -221682,6 +221682,7 @@ ArtNem_SignpostStub:
 		binclude "General/Sprites/Signpost/Stub.bin"
 		even
 ArtNem_EggCapsule = *+1					; Liliam: convert to 1P Ray palette
+		; Liliam: bugfix - egg capsule palette assignment
 		binclude "General/Sprites/Egg Capsule/Egg Capsule.bin"
 		even
 ArtNem_CreditsText:
