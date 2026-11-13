@@ -16202,6 +16202,7 @@ loc_C256:
 	.done:
 		clr.w	(Dataselect_nosave_player).w
 		move.b	#1,(Dataselect_entry).w
+		move.b	#$A,(Debug_monitor_subtype).w		; Liliam: debug - allow selection of monitor contents
 		rts
 ; End of function SRAM_Load
 
