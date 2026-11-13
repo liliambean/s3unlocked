@@ -1549,6 +1549,12 @@ EncoreHandoff_Delete:
 
 EncoreHandoff_LoadMappings:
 		move.b	d0,character_id(a0)
+		bne.s	.notSonic
+		move.l	#Map_SuperSonic,mappings(a0)
+		tst.b	(Super_Sonic_Knux_flag).w
+		bne.s	EncoreHandoff_Return
+
+	.notSonic:
 		ext.w	d0
 		lsl.w	#2,d0
 		lea	(Player_MappingPtrs).l,a1

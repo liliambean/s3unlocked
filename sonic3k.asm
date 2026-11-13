@@ -4477,14 +4477,15 @@ SuperHyper_PalCycle_FadeIn:
 		blo.s	SuperHyper_PalCycle_FadeInCheckHyper
 		move.b	#-1,(Super_palette_status).w
 		move.b	#0,(Player_1+object_control).w
-		move.w	#0,(Palette_frame).w				;
-		move.w	#0,(Palette_frame_Tails).w			;
+		clr.b	(Palette_timer).w				;
+		clr.w	(Palette_frame).w				;
+		clr.w	(Palette_frame_Tails).w				;
 
 SuperHyper_PalCycle_FadeInCheckHyper:
-		tst.b	(Player_1+character_id).w			;
-		beq.s	SuperHyper_PalCycle_ApplyFadeIn			;
 		tst.b	(Super_Tails_flag).w				;
-		bpl.s	locret_37EC					;
+		bne.s	SuperHyper_PalCycle_ApplyFadeIn			;
+		cmpi.w	#2,(Player_mode).w				;
+		bhs.s	locret_37EC					;
 
 SuperHyper_PalCycle_ApplyFadeIn:
 		lea	(Normal_palette+$04).w,a1
@@ -4518,7 +4519,9 @@ SuperHyper_PalCycle_Revert:
 		bpl.s	locret_37EC
 		move.b	#3,(Palette_timer).w
 
-		lea	(Normal_palette+$4).w,a1			;
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - super forms
+		bne.w	SuperHyper_PalCycle_Revert_Encore	;
+		lea	(Normal_palette+$4).w,a1			; Liliam: animate super forms consistently
 		move.w	(Player_mode).w,d0				;
 		add.w	d0,d0						;
 		move.w	SuperHyper_PalCycle_Revert_Index(pc,d0.w),d0	;
@@ -4535,8 +4538,8 @@ SuperHyper_PalCycle_Revert_Index:					; Liliam: animate super forms consistently
 ; ---------------------------------------------------------------------------
 
 SuperHyper_PalCycle_RevertKnuckles:					; Liliam: animate super forms consistently
-		lea	(PalCycle_SuperKnucklesRevert).l,a0
-		lea	(PalCycle_SuperKnucklesRevert_Water).l,a2
+		lea	PalCycle_SuperKnucklesRevert(pc),a0
+		lea	PalCycle_SuperKnucklesRevert_Water(pc),a2
 		bra.s	SuperHyper_PalCycle_ApplyRevert
 ; ---------------------------------------------------------------------------
 
@@ -4565,7 +4568,7 @@ SuperHyper_PalCycle_RevertMighty:					; Liliam: animate super forms consistently
 SuperHyper_PalCycle_RevertSonic:
 		; decrement palette frame and update Sonic's palette
 		lea	(PalCycle_SuperSonic).l,a0
-		lea	(PalCycle_SuperSonic_Water).l,a2		; Liliam: animate super forms consistently
+		lea	PalCycle_SuperSonic_Water(pc),a2		; Liliam: animate super forms consistently
 
 SuperHyper_PalCycle_ApplyRevert:
 		move.w	(Palette_frame).w,d0
@@ -4624,6 +4627,8 @@ loc_384A:
 ; ---------------------------------------------------------------------------
 
 SuperHyper_PalCycle_Main:
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - super forms
+		bne.w	SuperHyper_PalCycle_Encore		;
 		lea	(Normal_palette+$4).w,a1			; Liliam: animate super forms consistently
 		move.w	(Player_mode).w,d0				;
 		add.w	d0,d0						;
@@ -4657,8 +4662,8 @@ SuperHyper_PalCycle_Sonic:
 SuperHyper_PalCycle_SuperFlickies:
 		; increment palette frame and update Sonic's palette
 ;		lea	(PalCycle_SuperSonic).l,a0			; Liliam: animate super forms consistently
-		lea	(PalCycle_SuperSonic+$24).l,a0			;
-		lea	(PalCycle_SuperSonic_Water+$24).l,a2		;
+		lea	PalCycle_SuperSonic+$24(pc),a0			;
+		lea	PalCycle_SuperSonic_Water+$24(pc),a2		;
 		move.w	(Palette_frame).w,d0
 		addq.w	#6,(Palette_frame).w
 		cmpi.w	#$12,(Palette_frame).w				;
@@ -4681,7 +4686,7 @@ SuperHyper_PalCycle_HyperSonic:
 
 		; increment palette frame and update Sonic's palette
 		lea	(PalCycle_HyperSonic).l,a0
-		lea	(PalCycle_HyperSonic_Water).l,a2		; Liliam: animate super forms consistently
+		lea	PalCycle_HyperSonic_Water(pc),a2		; Liliam: animate super forms consistently
 		move.w	(Palette_frame).w,d0
 		addq.w	#6,(Palette_frame).w
 		cmpi.w	#$48,(Palette_frame).w
@@ -4692,7 +4697,7 @@ SuperHyper_PalCycle_HyperSonic:
 ; ---------------------------------------------------------------------------
 
 SuperHyper_PalCycle_ApplyAmy:
-		lea	(PalCycle_SuperAmy).l,a0			; Liliam: animate super forms consistently
+		lea	PalCycle_SuperAmy(pc),a0			; Liliam: animate super forms consistently
 		lea	(Normal_palette+$A).w,a1			;
 ;		lea	(Normal_palette+$4).w,a1			;
 		move.l	(a0,d0.w),(a1)+
@@ -4700,7 +4705,7 @@ SuperHyper_PalCycle_ApplyAmy:
 ;		move.w	4(a0,d0.w),(a1)					;
 		tst.b	(Water_flag).w
 		beq.w	locret_37EC
-		lea	(PalCycle_SuperAmy_Water).l,a0			;
+		lea	PalCycle_SuperAmy_Water(pc),a0			;
 		lea	(Water_palette+$A).w,a1				;
 ;		lea	(Water_palette+$4).w,a1				;
 		move.l	(a0,d0.w),(a1)+
@@ -4721,7 +4726,7 @@ SuperHyper_PalCycle_Ray:
 ;		move.b	#$B,(Palette_timer_Tails).w			;
 
 		tst.b	(Super_Tails_flag).w				;
-		bpl.s	loc_38F6					;
+		beq.s	loc_38F6					;
 		bsr.w	SuperHyper_PalCycle_SuperFlickies		;
 
 loc_38F6:
@@ -4742,10 +4747,10 @@ loc_38F6:
 SuperHyper_PalCycle_ApplyTails:
 		cmpi.w	#4,(Player_mode).w				;
 		beq.s	SuperHyper_PalCycle_ApplyAmy			;
-		lea	(PalCycle_SuperRay).l,a0			;
+		lea	PalCycle_SuperRay(pc),a0			;
 		cmpi.w	#6,(Player_mode).w				;
 		beq.s	loc_3914					;
-		lea	(PalCycle_SuperTails).l,a0			;
+		lea	PalCycle_SuperTails(pc),a0			;
 
 loc_3914:
 		lea	(Normal_palette+$10).w,a1
@@ -4754,7 +4759,7 @@ loc_3914:
 		tst.b	(Water_flag).w
 ;		beq.w	loc_386E					;
 		beq.s	locret_3938					;
-		lea	(PalCycle_SuperTails_Water).l,a0		;
+		lea	PalCycle_SuperTails_Water(pc),a0		;
 		lea	(Water_palette+$10).w,a1
 		move.l	(a0,d0.w),(a1)+		; Write first two palette entries
 		move.w	4(a0,d0.w),2(a1)	; Write last palette entry
@@ -4771,7 +4776,7 @@ SuperHyper_PalCycle_Mighty:						; Liliam: animate super forms consistently
 
 		lea	(Normal_palette+$A).w,a1
 		bsr.s	sub_394A
-		lea	(PalCycle_SuperKnuckles_Water+$36).l,a2
+		lea	PalCycle_SuperKnuckles_Water+$36(pc),a2
 		addq.b	#2,d0
 		andi.b	#$1F,d0
 		bsr.s	SuperHyper_PalCycle_ApplyMighty
@@ -4786,7 +4791,7 @@ SuperHyper_PalCycle_ResetMighty:
 ; ---------------------------------------------------------------------------
 
 SuperHyper_PalCycle_ApplyMighty:
-		lea	(PalCycle_SuperMighty).l,a0
+		lea	PalCycle_SuperMighty(pc),a0
 		move.w	(a0,d0.w),(Normal_palette+$14).w
 		tst.b	(Water_flag).w
 		beq.s	locret_3938
@@ -4802,7 +4807,7 @@ SuperHyper_PalCycle_Knuckles:
 
 sub_394A:
 		lea	(PalCycle_SuperKnuckles).l,a0
-		lea	(PalCycle_SuperKnuckles_Water).l,a2		; Liliam: animate super forms consistently
+		lea	PalCycle_SuperKnuckles_Water(pc),a2		; Liliam: animate super forms consistently
 		move.w	(Palette_frame).w,d0
 		addq.w	#6,(Palette_frame).w
 		cmpi.w	#$3C,(Palette_frame).w
@@ -4953,6 +4958,50 @@ PalCycle_SuperRay:							; Liliam: animate super forms consistently
 		dc.w $EEE,$8CE,$68C
 		dc.w $8EE,$2CE,$48C
 		dc.w $6CE,$2AE,$46C
+; ---------------------------------------------------------------------------
+
+SuperHyper_PalCycle_Revert_Encore:				; Liliam: Encore mode - super forms
+		move.w	(Palette_frame).w,d0
+		divu.w	#6,d0
+		addq.w	#5,d0
+		bsr.s	SuperHyper_PalCycle_Encore.getIndex
+		lea	(Normal_palette+$4).w,a1
+		bra.w	SuperHyper_PalCycle_RevertSonic
+; ---------------------------------------------------------------------------
+
+SuperHyper_PalCycle_Encore:					; Liliam: Encore mode - super forms
+		subq.b	#1,(Palette_timer).w
+		bpl.s	.return
+		move.b	#2,(Palette_timer).w
+		move.w	(Palette_frame).w,d0
+		subq.b	#1,(Palette_frame+1).w
+		bpl.s	.getIndex
+		move.b	#13,(Palette_frame+1).w
+
+	.getIndex:
+		move.b	PalCycle_EncoreSuper_Index(pc,d0.w),d0
+		lea	(PalCycle_EncoreSuper).l,a0
+		lea	(a0,d0.w),a0
+		lea	(Normal_palette+$4).w,a1
+		bsr.s	.apply
+		tst.b	(Water_flag).w
+		beq.s	.return
+		lea	(PalCycle_EncoreSuper_Water).l,a0
+		lea	(a0,d0.w),a0
+		lea	(Water_palette+$4).w,a1
+
+	.apply:
+		moveq	#5-1,d1
+
+	.loop:
+		move.l	(a0)+,(a1)+
+		dbf	d1,.loop
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+PalCycle_EncoreSuper_Index:					; Liliam: Encore mode - super forms
+		dc.b  $84, $A4, $A4, $A4, $A4, $A4, $84, $64, $44, $24,   4, $24, $44, $64
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -9255,9 +9304,7 @@ ChangeRingFrame_BarrierHUD:						; Liliam: HUD - barrier HUD
 		bhs.w	ChangeRingFrame
 		moveq	#0,d1
 		move.b	d1,(Super_ready_flag).w
-		tst.b	(Encore_mode).w
-		bne.w	.encoreMode
-		tst.w	(Super_Sonic_Knux_flag).w
+		tst.b	(Super_Sonic_Knux_flag).w
 		bne.w	.checkBarrier
 		tst.b	(Update_HUD_timer).w
 		beq.w	.notReady
@@ -9274,68 +9321,66 @@ ChangeRingFrame_BarrierHUD:						; Liliam: HUD - barrier HUD
 
 	.setReadyFlag:
 		move.b	#1,(Super_ready_flag).w
-		moveq	#2,d1
+		moveq	#6,d1
 		tst.b	(Player_1+jumping).w
 		beq.s	.clearHint
 		tst.b	(Player_1+double_jump_flag).w
-		bne.s	.checkAmy
+		beq.s	.notDoubleJump
+		tst.b	(Dust+$39).w
+		ble.s	.clearHint
+		move.b	(Barrier_HUD_scroll).w,d0
+
+	.scrollHint:
+		cmpi.b	#$20,d0
+		bhs.w	ChangeRingFrame
+		addq.b	#7,(Barrier_HUD_scroll).w
+		bra.w	ChangeRingFrame
+; ---------------------------------------------------------------------------
+
+	.notDoubleJump:
 		move.b	(Barrier_HUD_scroll).w,d0
 		bne.s	.scrollHint
 		move.l	#ArtUnc_CutsceneSkip+$100,d1
 		move.w	#$90,d3
-		addq.b	#4,(Barrier_HUD_scroll).w
+		addi.b	#$B,(Barrier_HUD_scroll).w
 		tst.b	(Dust+$39).w
 		bne.s	.loadAmyHint
-		move.w	#tiles_to_bytes(ArtTile_SuperHint),d2
+		moveq	#$17,d2
+		or.w	(Player_1+art_tile).w,d2
+		lsl.w	#5,d2
 		bsr.w	Add_To_DMA_Queue
-		move.b	(Barrier_HUD_scroll).w,d0
-		moveq	#2,d1
-		bra.s	.scrollHint
+		btst	#5,(Player_1+art_tile+1).w
+		seq	d1
+		ext.w	d1
+		add.w	d1,d1
+		addq.w	#4,d1
+		bra.s	.setHintIcon
 ; ---------------------------------------------------------------------------
 
 	.loadAmyHint:
-		move.w	#tiles_to_bytes(ArtTile_DashDust_P2),d2
+		move.w	#tiles_to_bytes(ArtTile_DashDust_P2+$7),d2
 		bsr.w	Add_To_DMA_Queue
-		bra.s	.setAmyHint
-; ---------------------------------------------------------------------------
-
-	.checkAmy:
-		tst.b	(Dust+$39).w
-		ble.s	.clearHint
-
-	.setAmyHint:
-		move.b	(Barrier_HUD_scroll).w,d0
-		moveq	#4,d1
-
-	.scrollHint:
-		cmpi.b	#$20,d0
-		bhs.s	.setSpecialIcon
-		addq.b	#7,(Barrier_HUD_scroll).w
-		bra.s	.setSpecialIcon
-; ---------------------------------------------------------------------------
-
-	.encoreMode:
-		tst.b	(Player_1+invincibility_timer).w
-		bne.s	.checkBarrier
-		btst	#Status_CombineRing,(Player_1+status_secondary).w
-		beq.s	.setIcon
-		moveq	#$A,d1
-
-	.clearHint:
-		clr.b	(Barrier_HUD_scroll).w
-		addq.w	#4,d1
-		bra.s	.setSpecialIcon
+		moveq	#6,d1
+		bra.s	.setHintIcon
 ; ---------------------------------------------------------------------------
 
 	.notReady:
 		tst.b	(Player_1+invincibility_timer).w
+		bne.s	.checkBarrier
+		btst	#Status_CombineRing,(Player_1+status_secondary).w
 		beq.s	.setIcon
+		moveq	#$E,d1
+
+	.clearHint:
+		addq.w	#2,d1
+		bra.s	.setIcon
+; ---------------------------------------------------------------------------
 
 	.checkBarrier:
 		moveq	#1<<Status_CombineRing|1<<Status_FireShield|1<<Status_LtngShield|1<<Status_BublShield,d0
 		and.b	(Player_1+status_secondary).w,d0
 		beq.s	.setIcon
-		moveq	#8,d1
+		moveq	#$A,d1
 		btst	#Status_FireShield,d0
 		bne.s	.setIcon
 		addq.w	#2,d1
@@ -9355,7 +9400,7 @@ ChangeRingFrame_BarrierHUD:						; Liliam: HUD - barrier HUD
 		tst.b	(Player_1+character_id).w
 		beq.s	.setSafeIcon
 		tst.b	(Super_Tails_flag).w
-		bmi.s	.setSafeIcon
+		bne.s	.setSafeIcon
 		cmpi.b	#3,d0
 		bne.s	.setIcon
 
@@ -9365,16 +9410,16 @@ ChangeRingFrame_BarrierHUD:						; Liliam: HUD - barrier HUD
 	.setIcon:
 		clr.b	(Barrier_HUD_scroll).w
 
-	.setSpecialIcon:
+	.setHintIcon:
 		move.w	d1,(Barrier_HUD_frame).w
 		beq.s	ChangeRingFrame
 		tst.b	(Barrier_HUD_DMA_flag).w
 		bmi.s	ChangeRingFrame
-		moveq	#$12,d0
-		cmpi.b	#6,d1
+		moveq	#$14,d0
+		cmpi.b	#8,d1
 		bhs.s	.setDMAIcon
 		add.w	d1,d0
-		moveq	#6,d1
+		moveq	#8,d1
 
 	.setDMAIcon:
 		move.w	d0,(Barrier_HUD_frame).w
@@ -9387,7 +9432,7 @@ ChangeRingFrame_BarrierHUD:						; Liliam: HUD - barrier HUD
 
 	.queueIcon:
 		lsl.w	#7,d1
-		addi.l	#ArtUnc_BarrierHUD-$300,d1
+		addi.l	#ArtUnc_BarrierHUD-$400,d1
 		move.w	#tiles_to_bytes(ArtTile_StarPostStars),d2
 		moveq	#$40,d3
 		bsr.w	Add_To_DMA_Queue
@@ -22597,9 +22642,9 @@ loc_1037C:
 		move.w	art_tile(a0),(Debug_saved_art_tile).w
 		btst	#Status_Invincible,status_secondary(a0)	; Liliam: bugfix - clear super form on death
 		beq.s	loc_103AA				;
-		tst.w	(Super_Sonic_Knux_flag).w		;
+		tst.b	(Super_Sonic_Knux_flag).w		;
 		beq.s	.restoreMusic				;
-		bsr.w	SonicKnux_SuperHyper.revert		;
+		bsr.w	SonicKnux_SuperHyper.revertToNormal	;
 
 	.restoreMusic:
 		move.b	#2,invincibility_timer(a0)		;
@@ -22883,10 +22928,11 @@ Sonic2P_Index:
 		dc.w Sonic2P_Control-Sonic2P_Index
 		dc.w Sonic_Hurt-Sonic2P_Index
 		dc.w Sonic_Dead-Sonic2P_Index
-		dc.w Sonic_GameOver-Sonic2P_Index
-		dc.w Sonic_Drown-Sonic2P_Index			; Liliam: Encore mode - expand player routines
+		dc.w Player_GameOver-Sonic2P_Index		; Liliam: Encore mode - expand player routines
+		dc.w Sonic_Drown-Sonic2P_Index			;
 		dc.w Sonic_Dead-Sonic2P_Index			;
-		dc.w Sonic_GameOver-Sonic2P_Index		;
+		dc.w Player_GameOver-Sonic2P_Index		;
+;		dc.w Sonic_GameOver-Sonic2P_Index		;
 ;		dc.w Sonic_Respawn-Sonic2P_Index		;
 ; ---------------------------------------------------------------------------
 
@@ -24262,6 +24308,8 @@ Ray_AirGlide_CheckControls:					; Liliam: extra skills - air glide
 Obj_MetalSonic:							; Liliam: add extra characters
 		move.l	#.main,(a0)
 		move.b	#6,character_id(a0)
+		tst.b	(Super_Sonic_Knux_flag).w
+		bne.s	.main
 		move.l	#Obj_BoostMode,(Tails_tails_2P).w
 		move.w	a0,(Tails_tails_2P+parent2).w
 
@@ -24349,10 +24397,11 @@ Sonic_Index:
 		dc.w Sonic_Control-Sonic_Index
 		dc.w Sonic_Hurt-Sonic_Index
 		dc.w Sonic_Dead_2P-Sonic_Index			; Liliam: Encore mode - expand player routines
-		dc.w Sonic_GameOver_2P-Sonic_Index		;
+		dc.w Player_GameOver_2P-Sonic_Index		;
 		dc.w Sonic_Drown-Sonic_Index			;
 		dc.w Sonic_Dead-Sonic_Index
-		dc.w Sonic_GameOver-Sonic_Index
+		dc.w Player_GameOver-Sonic_Index		;
+;		dc.w Sonic_GameOver-Sonic_Index			;
 ;		dc.w Sonic_Respawn-Sonic_Index			;
 ;		dc.w Sonic_Drown-Sonic_Index			;
 ; ---------------------------------------------------------------------------
@@ -24379,11 +24428,11 @@ Sonic_Init:
 		cmpa.w	#Player_1,a0					;
 		bne.s	.player2					;
 		tst.b	(Last_star_post_hit).w				;
-		bne.s	.checkPriority					;
+		bne.s	.setPriority					;
 		move.b	#$C,top_solid_bit(a0)
 		move.b	#$D,lrb_solid_bit(a0)
 
-	.checkPriority:
+	.setPriority:
 ;		cmpi.b	#2,(Special_bonus_entry_flag).w			;
 ;		beq.s	Sonic_Init_Continued				;
 ;		move.w	x_pos(a0),(Saved_X_pos).w			;
@@ -24391,29 +24440,18 @@ Sonic_Init:
 ;		move.w	art_tile(a0),(Saved_art_tile).w			;
 ;		move.w	top_solid_bit(a0),(Saved_solid_bits).w		;
 		tst.w	d0						;
-		bmi.s	.setPriority					;
+		bpl.s	Sonic_Init_Continued				;
+		ori.w	#high_priority,art_tile(a0)			;
 		bra.s	Sonic_Init_Continued				;
 ; ---------------------------------------------------------------------------
 
 	.player2:
-		move.w	(Player_1+art_tile).w,d0			;
-		andi.w	#drawing_mask,d0				;
-		cmpi.w	#ArtTile_Player_2,d0				;
-		beq.s	.checkPriority2					;
-		move.w	#ArtTile_Player_2,art_tile(a0)			;
-
-	.checkPriority2:
-		move.w	(Player_1+top_solid_bit).w,top_solid_bit(a0)	;
-		tst.w	(Player_1+art_tile).w				;
-		bpl.s	Sonic_Init_Continued				;
-
-	.setPriority:
-		ori.w	#high_priority,art_tile(a0)			;
+		jsr	(Encore_InitPlayer2).l				; Liliam: Encore mode - pick art_tile by SST
 
 Sonic_Init_Continued:
 		move.b	#0,flips_remaining(a0)
 		move.b	#4,flip_speed(a0)
-		move.b	#0,(Super_Sonic_Knux_flag).w
+;		move.b	#0,(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - super forms
 		move.b	#30,air_left(a0)
 ;		subi.w	#$20,x_pos(a0)				; Liliam: reset array to actual player position
 ;		addi.w	#4,y_pos(a0)				;
@@ -24460,6 +24498,8 @@ loc_10BF0:
 
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		beq.s	loc_10BFC				;
+		tst.b	(Barrier_HUD_scroll).w			;
+		bne.s	loc_10BFC				;
 		cmpi.b	#8,anim(a0)				;
 		blo.s	.disable				;
 		cmpi.b	#$A,anim(a0)				;
@@ -25443,7 +25483,7 @@ loc_11438:
 		cmpi.b	#12,air_left(a0)
 		blo.s	locret_11480
 		move.b	#6,routine(a6)
-;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait for water splash
+;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait while buffer in use
 
 locret_11480:
 		rts
@@ -25509,7 +25549,7 @@ loc_114BE:
 		cmpi.b	#12,air_left(a0)
 		blo.s	locret_11506
 		move.b	#6,routine(a6)
-;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait for water splash
+;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait while buffer in use
 
 locret_11506:
 		rts
@@ -26254,6 +26294,8 @@ Sonic_Transform:
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
 
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - super forms
+		bne.s	.encoreMode				;
 		cmpi.b	#7,(Super_emerald_count).w
 		blo.s	.super
 		move.b	#-1,(Super_Sonic_Knux_flag).w
@@ -26262,6 +26304,9 @@ Sonic_Transform:
 		move.b	#30,air_left(a0)				; Liliam: bugfix - replenish air on hyper transform
 		bra.s	.continued
 ; ---------------------------------------------------------------------------
+
+	.encoreMode:
+		jsr	(Encore_GiveSuperPlayer2).l		; Liliam: Encore mode - super forms
 
 	.super:
 		move.b	#1,(Super_Sonic_Knux_flag).w		; set flag to Super Sonic
@@ -26284,6 +26329,8 @@ loc_11A6E:
 		bne.w	locret_11A14				;
 
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
+		tst.b	(Encore_mode).w				;
+		bne.s	loc_11A90				;
 		tst.b	(Super_Sonic_Knux_flag).w		;
 		bmi.s	loc_11A90				;
 		cmpi.b	#12,air_left(a0)			;
@@ -26355,11 +26402,9 @@ Sonic_HyperDash_Velocities:
 ; ---------------------------------------------------------------------------
 
 Tails_Super:
-		tst.b	(Super_Tails_flag).w
-		beq.w	SonicKnux_SuperHyper.return
-		bpl.s	SonicKnux_SuperHyper.notHyperTails		; Liliam: animate super forms consistently
-		moveq	#3,d0						;
-		bra.s	SonicKnux_SuperHyper.continued
+;		tst.b	(Super_Tails_flag).w			; Liliam: Encore mode - super forms
+;		beq.w	SonicKnux_SuperHyper.return		;
+;		bra.s	SonicKnux_SuperHyper.continued		;
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -26368,10 +26413,9 @@ SonicKnux_SuperHyper:
 		tst.b	(Super_Sonic_Knux_flag).w
 		beq.w	.return
 
-	.notHyperTails:
-		moveq	#2,d0						; Liliam: animate super forms consistently
-
 	.continued:
+		cmpa.w	#Player_1,a0				; Liliam: Encore mode - super forms
+		bne.w	.return					;
 		tst.b	(Update_HUD_timer).w	; Level over?
 		beq.s	.revertToNormal
 		subq.w	#1,(Super_frame_count).w
@@ -26399,37 +26443,53 @@ SonicKnux_SuperHyper:
 
 	.updateHUD:
 		subq.w	#1,(Ring_count).w
-		beq.s	.revertToNormal					; Liliam: animate super forms consistently
+		bne.w	.return						; Liliam: animate super forms consistently
 ;		bne.s	.return						;
-		rts							;
-; ---------------------------------------------------------------------------
-
-	.revert:
-		lea	(Max_speed).w,a4				; Liliam: animate super forms consistently
-		moveq	#3,d0						;
-		tst.b	(Super_Tails_flag).w				;
-		bmi.s	.revertToNormal					;
-		moveq	#2,d0						;
 
 	.revertToNormal:
-;		move.b	#2,(Super_palette_status).w			;
-		move.b	d0,(Super_palette_status).w			;
+		move.b	#3,(Super_palette_status).w			;
+		tst.b	(Super_Tails_flag).w				;
+		bne.s	.hyperTails					;
+		move.b	#2,(Super_palette_status).w
+
+	.hyperTails:
 		move.w	#$1E,(Palette_frame).w
 		clr.b	(Palette_timer).w				;
-		clr.b	(Disable_A_button_flag).w			; Liliam: Hyper Amy
 		move.b	#0,(Super_Sonic_Knux_flag).w
 		move.b	#0,(Super_Tails_flag).w
-		move.b	#-1,prev_anim(a0)			; Liliam: bugfix - fix stuck animation
-;		move.b	#-1,(Player_prev_frame).w		;
+		move.b	#1,invincibility_timer(a0)		; Liliam: bugfix - clear super form on death
+
+		tst.b	(Encore_mode).w					; Liliam: Hyper Amy
+		bne.s	.encoreMode					;
+		clr.b	(Disable_A_button_flag).w			;
+		bra.s	.player1					;
+; ---------------------------------------------------------------------------
+
+	.encoreMode:
+		tst.l	(Player_2).w				; Liliam: Encore mode - super forms
+		beq.s	.player1				;
+		lea	(Player_2).w,a0				;
+		lea	(Player_prev_frame_P2).w,a1		;
+		lea	(Max_speed_P2).w,a4			;
+		bsr.s	.player2				;
+		lea	(Player_1).w,a0				;
+
+	.player1:
+		lea	(Player_prev_frame).w,a1		;
+		lea	(Max_speed).w,a4			;
+
+	.player2:
+;		move.b	#-1,(Player_prev_frame).w		; Liliam: bugfix - fix stuck animation
+		move.b	#-1,prev_anim(a0)			;
 		tst.b	character_id(a0)
 		bne.s	.notSonic
 		move.l	#Map_Sonic,mappings(a0)
-		move.b	#-1,(Player_prev_frame).w		;
+		move.b	#-1,(a1)				;
 
 	.notSonic:
-;		move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting			;
-		move.b	#1,invincibility_timer(a0)
-		bclr	#Status_Invincible,status_secondary(a0)	; Liliam: bugfix - clear super form on death
+;		move.b	#1,prev_anim(a0)			; Liliam: bugfix - fix walk anim restarting
+;		move.b	#1,invincibility_timer(a0)		; Liliam: bugfix - clear super form on death
+		bclr	#Status_Invincible,status_secondary(a0)	;
 		move.w	#$600,Max_speed-Max_speed(a4)
 		move.w	#$C,Acceleration-Max_speed(a4)
 		move.w	#$80,Deceleration-Max_speed(a4)
@@ -27689,23 +27749,8 @@ loc_1252A:
 
 ; ---------------------------------------------------------------------------
 
-Sonic_GameOver_2P:
-		bsr.w	Player_RecordPosDead_2P			; Liliam: Encore mode - expand player routines
-
-Sonic_GameOver:
-		tst.w	$3E(a0)
-		beq.s	locret_1258E
-		subq.w	#1,$3E(a0)
-		bne.s	locret_1258E
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - restart level
-		bne.w	Encore_CheckRestart			;
-		move.w	#1,(Restart_level_flag).w
-		tst.b	(Last_star_post_hit).w			; Liliam: bugfix - restart from act 1 if skipped all star posts and died to ICZ1 boss (yes, really)
-		bne.s	locret_1258E				;
-		move.b	(Apparent_act).w,(Current_act).w	;
-
-locret_1258E:
-		rts
+;Sonic_GameOver:
+		; Liliam: Encore mode - expand player routines
 ; ---------------------------------------------------------------------------
 
 ;Sonic_Respawn:
@@ -28842,10 +28887,11 @@ Tails2P_Index:
 		dc.w Tails2P_Control-Tails2P_Index
 		dc.w Tails_Hurt-Tails2P_Index
 		dc.w Tails_Dead-Tails2P_Index
-		dc.w Tails_GameOver-Tails2P_Index
-		dc.w Tails_Drown-Tails2P_Index			; Liliam: Encore mode - expand player routines
+		dc.w Player_GameOver-Tails2P_Index		; Liliam: Encore mode - expand player routines
+		dc.w Tails_Drown-Tails2P_Index			;
 		dc.w Tails_Dead-Tails2P_Index			;
-		dc.w Tails_GameOver-Tails2P_Index		;
+		dc.w Player_GameOver-Tails2P_Index		;
+;		dc.w Player_GameOver-Tails2P_Index		;
 ;		dc.w Tails_Respawn-Tails2P_Index		;
 ; ---------------------------------------------------------------------------
 
@@ -29357,10 +29403,11 @@ Tails_Index:
 		dc.w Tails_Control-Tails_Index
 		dc.w Tails_Hurt-Tails_Index
 		dc.w Tails_Dead_2P-Tails_Index			; Liliam: Encore mode - expand player routines
-		dc.w Tails_GameOver_2P-Tails_Index		;
+		dc.w Player_GameOver_2P-Tails_Index		;
 		dc.w Tails_Drown-Tails_Index			;
 		dc.w Tails_Dead-Tails_Index
-		dc.w Tails_GameOver-Tails_Index
+		dc.w Player_GameOver-Tails_Index		;
+;		dc.w Tails_GameOver-Tails_Index			;
 ;		dc.w Tails_Respawn-Tails_Index			;
 ;		dc.w Tails_Drown-Tails_Index			;
 ; ---------------------------------------------------------------------------
@@ -29404,29 +29451,22 @@ loc_1373C:
 ;		move.w	art_tile(a0),(Saved_art_tile).w			;
 ;		move.w	top_solid_bit(a0),(Saved_solid_bits).w		;
 		tst.w	d0						;
-		bmi.s	loc_13770					;
+		bpl.s	Tails_Init_Continued				;
+		ori.w	#high_priority,art_tile(a0)			;
 		bra.s	Tails_Init_Continued
 ; ---------------------------------------------------------------------------
 
 loc_1375E:
-		move.w	(Player_1+art_tile).w,d0			;
-		andi.w	#drawing_mask,d0				;
-		cmpi.w	#ArtTile_Player_2,d0				;
-		beq.s	loc_13764					;
-		move.w	#ArtTile_Player_2,art_tile(a0)
-
-loc_13764:
-		move.w	(Player_1+top_solid_bit).w,top_solid_bit(a0)
-		tst.w	(Player_1+art_tile).w
-		bpl.s	Tails_Init_Continued
-
-loc_13770:
-		ori.w	#high_priority,art_tile(a0)
+		bsr.w	Encore_InitPlayer2				; Liliam: Encore mode - pick art_tile by SST
+;		move.w	(Player_1+top_solid_bit).w,top_solid_bit(a0)	;
+;		tst.w	(Player_1+art_tile).w				;
+;		bpl.s	Tails_Init_Continued				;
+;		ori.w	#high_priority,art_tile(a0)			;
 
 Tails_Init_Continued:
 		move.b	#0,flips_remaining(a0)
 		move.b	#4,flip_speed(a0)
-		move.b	#0,(Super_Tails_flag).w
+;		move.b	#0,(Super_Tails_flag).w			; Liliam: Encore mode - super forms
 		move.b	#30,air_left(a0)
 		bsr.w	Reset_Player_Position_Array		; Liliam: reset array to actual player position
 
@@ -29488,6 +29528,8 @@ loc_13808:
 		move.w	(Ctrl_1).w,d0				; Liliam: Encore mode - disable A button
 		tst.b	(Disable_A_button_flag).w		;
 		beq.s	loc_13826				;
+		tst.b	(Barrier_HUD_scroll).w			;
+		bne.s	loc_13826				;
 		cmpi.b	#8,anim(a0)				;
 		blo.s	.disable				;
 		cmpi.b	#$A,anim(a0)				;
@@ -29665,7 +29707,7 @@ loc_1394E:
 		tst.w	(Competition_mode).w
 		bne.s	loc_139A8
 		move.w	#$800,Max_speed-Max_speed(a4)		; Liliam: bugfix - player speeds fix
-		tst.b	(Super_Tails_flag).w			;
+		tst.b	(Super_Sonic_Knux_flag).w		;
 		bne.s	loc_13998				;
 		move.w	#$600,Max_speed-Max_speed(a4)
 		move.w	#$C,Acceleration-Max_speed(a4)
@@ -30254,6 +30296,8 @@ Tails_CPU_Main_EncoreCall:
 		bmi.s	.jumpToP1
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_13EC8
+		tst.b	(Barrier_HUD_scroll).w
+		bne.s	locret_13EC8
 		btst	#button_A,(Ctrl_1_pressed).w
 		beq.s	locret_13EC8
 		cmpi.b	#8,anim(a1)
@@ -30296,6 +30340,13 @@ Tails_CPU_Respawn:
 		move.w	#$7F00,x_pos(a0)
 		move.w	#0,y_pos(a0)
 		move.b	#0,double_jump_flag(a0)
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - super forms
+		beq.s	locret_13EFA				;
+		tst.b	(Super_Sonic_Knux_flag).w		;
+		beq.s	locret_13EFA				;
+		bset	#Status_Invincible,status_secondary(a0)	;
+
+locret_13EFA:
 		rts
 ; End of function Tails_CPU_Respawn
 
@@ -31543,7 +31594,8 @@ loc_14B24:
 		subq.w	#2,(a5)
 
 loc_14B26:
-		tst.b	(Super_Tails_flag).w
+		tst.b	(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - super forms
+;		tst.b	(Super_Tails_flag).w			;
 		beq.s	loc_14B30
 		move.w	#$C,d5
 
@@ -31727,7 +31779,7 @@ loc_14C62:
 		cmpi.b	#12,air_left(a0)
 		blo.s	locret_14CAA
 		move.b	#6,routine(a6)
-;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait for water splash
+;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait while buffer in use
 
 locret_14CAA:
 		rts
@@ -31793,7 +31845,7 @@ loc_14CE8:
 		cmpi.b	#12,air_left(a0)
 		blo.s	locret_14D30
 		move.b	#6,routine(a6)
-;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait for water splash
+;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait while buffer in use
 
 locret_14D30:
 		rts
@@ -31818,7 +31870,8 @@ loc_14D3A:
 		asr.w	#1,d5
 
 loc_14D3C:
-		tst.b	(Super_Tails_flag).w
+		tst.b	(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - super forms
+;		tst.b	(Super_Tails_flag).w			;
 		beq.s	loc_14D46
 		move.w	#6,d5
 
@@ -32306,7 +32359,7 @@ locret_151A2:
 Tails_Transform:
 		move.b	#1,(Super_palette_status).w
 		move.b	#$F,(Palette_timer).w
-		move.b	#1,(Super_Tails_flag).w			; set flag to Super Tails
+;		move.b	#1,(Super_Tails_flag).w			; Liliam: Encore mode - super forms
 		move.w	#60,(Super_frame_count).w
 		move.b	#$81,object_control(a0)
 		move.b	#$16,anim(a0)				; Liliam: simplify player anim selection
@@ -32314,16 +32367,27 @@ Tails_Transform:
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
 
-		move.l	#Obj_SuperSonic_Stars,(Super_stars).w		; Liliam: Hyper Tails
-		cmpi.b	#7,(Super_emerald_count).w			;
-		blo.s	loc_151D0					;
-		move.b	#-1,(Super_Tails_flag).w			;
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - super forms
+		bne.s	.encoreMode				;
+		cmpi.b	#7,(Super_emerald_count).w			; Liliam: Hyper Tails
+		blo.s	.super						;
+		move.b	#1,(Super_Tails_flag).w				;
+		move.b	#-1,(Super_Sonic_Knux_flag).w			;
 		move.l	#Obj_SuperTailsBirds,(Invincibility_stars).w
 		move.l	#Obj_HyperSonicKnux_Trail,(Super_stars).w	;
 		move.l	#Obj_HyperTails_Trail,(Dust_P2).w		;
 		move.b	#30,air_left(a0)				;
+		bra.s	.continued					;
+; ---------------------------------------------------------------------------
 
-loc_151D0:
+	.encoreMode:
+		bsr.w	Encore_GiveSuperPlayer2			; Liliam: Encore mode - super forms
+
+	.super:
+		move.b	#1,(Super_Sonic_Knux_flag).w		;
+		move.l	#Obj_SuperSonic_Stars,(Super_stars).w	;
+
+	.continued:
 		btst	#Status_SpeedShoes,status_secondary(a0)	; Liliam: bugfix - player speeds fix
 		bne.s	loc_151D4				;
 		move.w	#$800,Max_speed-Max_speed(a4)
@@ -32340,7 +32404,9 @@ loc_151D4:
 		bne.w	locret_151A2				;
 
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
-		tst.b	(Super_Tails_flag).w			;
+		tst.b	(Encore_mode).w				;
+		bne.s	loc_151F6				;
+		tst.b	(Super_Sonic_Knux_flag).w		;
 		bmi.s	loc_151F6				;
 		cmpi.b	#12,air_left(a0)			;
 		blo.w	locret_151A2				;
@@ -32427,7 +32493,8 @@ loc_152A8:
 		move.b	spin_dash_counter(a0),d0
 		add.w	d0,d0
 		move.w	word_1530E(pc,d0.w),ground_vel(a0)
-		tst.b	(Super_Tails_flag).w
+		tst.b	(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - super forms
+;		tst.b	(Super_Tails_flag).w			;
 		beq.s	loc_152C8
 		move.w	word_15320(pc,d0.w),ground_vel(a0)
 
@@ -32986,23 +33053,8 @@ loc_157C8:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Tails_GameOver_2P:
-		bsr.w	Player_RecordPosDead_2P			; Liliam: Encore mode - expand player routines
-
-Tails_GameOver:
-		tst.w	$3E(a0)
-		beq.s	locret_157F2
-		subq.w	#1,$3E(a0)
-		bne.s	locret_157F2
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - restart level
-		bne.w	Encore_CheckRestart			;
-		move.w	#1,(Restart_level_flag).w
-		tst.b	(Last_star_post_hit).w			; Liliam: bugfix - restart from act 1 if skipped all star posts and died to ICZ1 boss (yes, really)
-		bne.s	locret_157F2				;
-		move.b	(Apparent_act).w,(Current_act).w	;
-
-locret_157F2:
-		rts
+;Tails_GameOver:
+		; Liliam: Encore mode - expand player routines
 ; ---------------------------------------------------------------------------
 
 ;Tails_Respawn:
@@ -34416,7 +34468,7 @@ Knuckles_FrameCycle:
 
 loc_1646C:
 		addq.b	#1,mapping_frame(a0)
-		cmpi.b	#$FE,mapping_frame(a0)			; Liliam: simplify player anim selection
+		cmpi.b	#$FC,mapping_frame(a0)			; Liliam: simplify player anim selection
 ;		cmpi.b	#$FB,mapping_frame(a0)			;
 		blo.s	loc_1647E
 		move.b	#0,mapping_frame(a0)
@@ -34444,10 +34496,10 @@ Knuckles_Index:
 		dc.w Knuckles_Control-Knuckles_Index
 		dc.w Knuckles_Hurt-Knuckles_Index
 		dc.w Knuckles_Dead_2P-Knuckles_Index		; Liliam: Encore mode - expand player routines
-		dc.w Knuckles_GameOver_2P-Knuckles_Index	;
+		dc.w Player_GameOver_2P-Knuckles_Index		;
 		dc.w Knuckles_Drown-Knuckles_Index		;
 		dc.w Knuckles_Dead-Knuckles_Index
-		dc.w Knuckles_GameOver-Knuckles_Index
+		dc.w Player_GameOver-Knuckles_Index
 ;		dc.w Knuckles_Respawn-Knuckles_Index		;
 ;		dc.w Knuckles_Drown-Knuckles_Index		;
 ; ---------------------------------------------------------------------------
@@ -34474,11 +34526,11 @@ Knuckles_Init:
 		cmpa.w	#Player_1,a0					;
 		bne.s	.player2					;
 		tst.b	(Last_star_post_hit).w				;
-		bne.s	.checkPriority					;
+		bne.s	.setPriority					;
 		move.b	#$C,top_solid_bit(a0)
 		move.b	#$D,lrb_solid_bit(a0)
 
-	.checkPriority:
+	.setPriority:
 ;		cmpi.b	#2,(Special_bonus_entry_flag).w			;
 ;		beq.s	Knuckles_Init_Continued				;
 ;		move.w	x_pos(a0),(Saved_X_pos).w			;
@@ -34486,29 +34538,18 @@ Knuckles_Init:
 ;		move.w	art_tile(a0),(Saved_art_tile).w			;
 ;		move.w	top_solid_bit(a0),(Saved_solid_bits).w		;
 		tst.w	d0						;
-		bmi.s	.setPriority					;
+		bpl.s	Knuckles_Init_Continued			;
+		ori.w	#high_priority,art_tile(a0)			;
 		bra.s	Knuckles_Init_Continued				;
 ; ---------------------------------------------------------------------------
 
 	.player2:
-		move.w	(Player_1+art_tile).w,d0			;
-		andi.w	#drawing_mask,d0				;
-		cmpi.w	#ArtTile_Player_2,d0				;
-		beq.s	.checkPriority2					;
-		move.w	#ArtTile_Player_2,art_tile(a0)			;
-
-	.checkPriority2:
-		move.w	(Player_1+top_solid_bit).w,top_solid_bit(a0)	;
-		tst.w	(Player_1+art_tile).w				;
-		bpl.s	Knuckles_Init_Continued				;
-
-	.setPriority:
-		ori.w	#high_priority,art_tile(a0)			;
+		bsr.w	Encore_InitPlayer2				; Liliam: Encore mode - pick art_tile by SST
 
 Knuckles_Init_Continued:
 		move.b	#0,flips_remaining(a0)
 		move.b	#4,flip_speed(a0)
-		move.b	#0,(Super_Sonic_Knux_flag).w
+;		move.b	#0,(Super_Sonic_Knux_flag).w		; Liliam: Encore mode - super forms
 		move.b	#30,air_left(a0)
 		bsr.w	Reset_Player_Position_Array		; Liliam: reset array to actual player position
 ;		subi.w	#$20,x_pos(a0)				;
@@ -34520,7 +34561,7 @@ Knuckles_Init_Continued:
 
 Knuckles_Control:
 		cmpa.w	#Player_1,a0				; Liliam: Encore mode - block debug mode for player 2
-		bne.s	loc_165A2.controlP2			;
+		bne.w	loc_165A2.controlP2			;
 		tst.w	(Debug_mode_flag).w
 		beq.s	loc_165A2
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
@@ -34552,6 +34593,8 @@ loc_165A2:
 
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		beq.s	loc_165AE				;
+		tst.b	(Barrier_HUD_scroll).w			;
+		bne.s	loc_165AE				;
 		cmpi.b	#8,anim(a0)				;
 		blo.s	.disable				;
 		cmpi.b	#$A,anim(a0)				;
@@ -34967,7 +35010,7 @@ loc_16920:
 
 loc_1693E:
 		move.b	#3,double_jump_flag(a0)
-		move.b	#$FD,mapping_frame(a0)			; Liliam: simplify player anim selection
+		move.b	#$EB,mapping_frame(a0)			; Liliam: simplify player anim selection
 ;		move.b	#$CC,mapping_frame(a0)			;
 		move.b	#$7F,anim_frame_timer(a0)
 		move.b	#0,anim_frame(a0)
@@ -34979,7 +35022,7 @@ loc_1693E:
 
 		; Create dust clouds.
 		move.b	#6,routine(a6)
-;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait for water splash
+;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait while buffer in use
 
 locret_1696A:
 		rts
@@ -36498,7 +36541,7 @@ loc_1746A:
 		cmpi.b	#12,air_left(a0)
 		blo.s	locret_174B2
 		move.b	#6,routine(a6)
-;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait for water splash
+;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait while buffer in use
 
 locret_174B2:
 		rts
@@ -36564,7 +36607,7 @@ loc_174F0:
 		cmpi.b	#12,air_left(a0)
 		blo.s	locret_17538
 		move.b	#6,routine(a6)
-;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait for water splash
+;		move.b	#$15,mapping_frame(a6)			; Liliam: dash dust - wait while buffer in use
 
 locret_17538:
 		rts
@@ -37042,6 +37085,8 @@ Knux_Transform:
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
 
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - super forms
+		bne.s	.encoreMode				;
 		cmpi.b	#7,(Super_emerald_count).w
 		blo.s	.super
 		move.b	#-1,(Super_Sonic_Knux_flag).w
@@ -37065,6 +37110,9 @@ Knux_Transform:
 		bra.s	.continued
 ; ---------------------------------------------------------------------------
 
+	.encoreMode:
+		bsr.w	Encore_GiveSuperPlayer2			; Liliam: Encore mode - super forms
+
 	.super:
 		move.b	#1,(Super_Sonic_Knux_flag).w		; set flag to Super Knuckles
 		move.l	#Obj_SuperSonic_Stars,(Super_stars).w
@@ -37086,6 +37134,8 @@ loc_17916:
 		bne.w	locret_178CC				;
 
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
+		tst.b	(Encore_mode).w				;
+		bne.s	loc_17938				;
 		tst.b	(Super_Sonic_Knux_flag).w		;
 		bmi.s	loc_17938				;
 		cmpi.b	#12,air_left(a0)			;
@@ -37507,10 +37557,10 @@ loc_17CA2:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Knuckles_GameOver_2P:
+Player_GameOver_2P:
 		bsr.w	Player_RecordPosDead_2P			; Liliam: Encore mode - expand player routines
 
-Knuckles_GameOver:
+Player_GameOver:
 		tst.w	$3E(a0)
 		beq.s	locret_17CCC
 		subq.w	#1,$3E(a0)
@@ -37759,8 +37809,7 @@ loc_17D7E:
 		moveq	#0,d1
 		move.b	anim_frame(a0),d1
 		move.b	1(a1,d1.w),d0
-		cmpi.b	#$FD,d0					; Liliam: simplify player anim selection
-;		cmpi.b	#$FC,d0					;
+		cmpi.b	#$FC,d0
 		bhs.s	loc_17D98
 
 loc_17D8E:
@@ -37790,8 +37839,8 @@ loc_17DA8:
 ; ---------------------------------------------------------------------------
 
 loc_17DBC:
-;		addq.b	#1,d0					; Liliam: simplify player anim selection
-;		bne.s	locret_17DC6				;
+		addq.b	#1,d0
+		bne.s	locret_17DC6
 		move.b	2(a1,d1.w),anim(a0)
 
 locret_17DC6:
@@ -37994,6 +38043,8 @@ Knuckles_Load_PLC_Difficulty:
 		bmi.s	locret_18162
 		move.l	#ArtUnc_Knux,d6
 		tst.b	(Encore_mode).w					; Liliam: Encore mode - special Knuckles art for palette
+		beq.s	loc_1813A					;
+		cmpi.w	#2*$FB,d0					;
 		beq.s	loc_1813A					;
 		move.l	#ArtUnc_EncoreKnux,d6				;
 
@@ -38264,8 +38315,6 @@ AirCountdown_Countdown:
 		bne.w	locret_18680
 		tst.b	(Super_Sonic_Knux_flag).w
 		bmi.w	locret_18680
-		tst.b	(Super_Tails_flag).w				; Liliam: Hyper Tails
-		bmi.w	locret_18680					;
 		btst	#Status_Underwater,status(a2)
 		beq.w	locret_18680
 		subq.w	#1,$3C(a0)
@@ -38391,11 +38440,11 @@ loc_18590:
 
 loc_18592:
 ;		bra.s	AirCountdown_MakeItem			;
-		tst.w	(Super_Sonic_Knux_flag).w		;
+		tst.b	(Super_Sonic_Knux_flag).w		;
 		beq.s	loc_18594				;
 		move.l	a0,-(sp)				;
 		movea.l	a2,a0					;
-		bsr.w	SonicKnux_SuperHyper.revert		;
+		bsr.w	SonicKnux_SuperHyper.revertToNormal	;
 		movea.l	(sp)+,a0				;
 
 loc_18594:
@@ -38567,8 +38616,8 @@ loc_1880E:
 loc_18868:
 		tst.b	(Super_Sonic_Knux_flag).w
 		bne.w	Delete_Current_Sprite
-		tst.b	(Super_Tails_flag).w
-		bne.w	Delete_Current_Sprite
+;		tst.b	(Super_Tails_flag).w			; Liliam: Encore mode - super forms
+;		bne.w	Delete_Current_Sprite			;
 		movea.w	parent(a0),a1
 		btst	#Status_Invincible,status_secondary(a1)
 		beq.w	Delete_Current_Sprite
@@ -38617,8 +38666,8 @@ loc_188B0:
 Obj_188E8:
 		tst.b	(Super_Sonic_Knux_flag).w
 		bne.w	Delete_Current_Sprite
-		tst.b	(Super_Tails_flag).w
-		bne.w	Delete_Current_Sprite
+;		tst.b	(Super_Tails_flag).w			; Liliam: Encore mode - super forms
+;		bne.w	Delete_Current_Sprite			;
 		movea.w	parent(a0),a1
 		btst	#Status_Invincible,status_secondary(a1)
 		beq.w	Delete_Current_Sprite
@@ -38839,8 +38888,8 @@ loc_18C04:
 ; ---------------------------------------------------------------------------
 
 DashDust_InstaShield:						; Liliam: dash dust - player 2 insta-shield
-		cmpi.b	#12,air_left(a2)
-		blo.w	DashDust_InstaShield_Done
+		bsr.w	DashDust_CheckReset
+		bne.s	DashDust_InstaShield_Reset
 		move.w	x_pos(a2),x_pos(a0)
 		move.w	y_pos(a2),y_pos(a0)
 		move.b	status(a2),status(a0)
@@ -38859,13 +38908,13 @@ DashDust_InstaShield:						; Liliam: dash dust - player 2 insta-shield
 		lea	Ani_DashDust(pc),a1
 		jsr	Animate_Sprite(pc)
 		tst.b	mapping_frame(a0)
-		beq.w	DashDust_InstaShield_Done
+		beq.s	DashDust_InstaShield_Reset
 		move.l	#ArtUnc_InstaShield,d6
 		bsr.w	DashDust_Load_DPLC2
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-DashDust_InstaShield_Done:					; Liliam: dash dust - player 2 insta-shield
+DashDust_InstaShield_Reset:					; Liliam: dash dust - player 2 insta-shield
 		tst.b	double_jump_flag(a2)
 		beq.w	DashDust_Reset
 		move.b	#2,double_jump_flag(a2)
@@ -38874,14 +38923,13 @@ DashDust_InstaShield_Done:					; Liliam: dash dust - player 2 insta-shield
 
 DashDust_SpinDash:
 DashDust_ClimbDash:
-		cmpi.b	#12,air_left(a2)
-		blo.w	DashDust_Reset
+;		cmpi.b	#12,air_left(a2)			; Liliam: dash dust - wait while buffer in use
+;		blo.w	DashDust_Reset				;
 		cmpi.b	#State_Hurt,routine(a2)
-		bhs.w	DashDust_Reset				; Liliam: extra skills - drop dash
+		bhs.w	DashDust_Reset				;
 ;		bhs.s	DashDust_Reset				;
 		tst.b	spin_dash_flag(a2)
-		beq.w	DashDust_Reset				;
-;		beq.s	DashDust_Reset				;
+		beq.s	DashDust_Reset
 		move.w	x_pos(a2),x_pos(a0)
 		move.w	y_pos(a2),y_pos(a0)
 		move.b	status(a2),status(a0)
@@ -38911,16 +38959,17 @@ DashDust_Smoke_OnObj:
 		bsr.s	DashDust_RefreshPosition		; Liliam: extra skills - hammer drop
 
 DashDust_Smoke:
-		bsr.w	MoveSprite2				;
-		cmpi.b	#12,air_left(a2)
-		blo.s	DashDust_Reset
-		movea.w	parent3(a0),a1				; Liliam: dash dust - wait for water splash
-		cmpi.b	#1,anim(a1)				;
-		beq.s	DashDust_Reset				;
+		bsr.w	MoveSprite2				; Liliam: extra skills - hammer drop
+;		cmpi.b	#12,air_left(a2)			; Liliam: dash dust - wait while buffer in use
+;		blo.s	DashDust_Reset				;
 ;		btst	#6,status(a0)				;
-;		bne.s	DashDust_Reset				;
+		movea.w	parent3(a0),a1				;
+		tst.b	anim(a1)				;
+		bne.s	DashDust_Reset
 
 DashDust_Common:
+		bsr.s	DashDust_CheckReset			;
+		bne.s	DashDust_Reset				;
 		lea	(Ani_DashDust).l,a1
 		jsr	(Animate_Sprite).l
 		bsr.w	DashDust_Load_DPLC
@@ -38931,11 +38980,33 @@ DashDust_DropDash_OnObj:
 		bsr.s	DashDust_RefreshPosition		; Liliam: extra skills - drop dash
 
 DashDust_DropDash:
-		cmpi.b	#12,air_left(a2)			;
-		bhs.s	loc_18C6A				;
+		bsr.s	DashDust_CheckReset			;
+		beq.s	loc_18C6A				;
 
 DashDust_Reset:
-		move.b	#0,anim(a0)
+		move.w	#$FF,anim(a0)				; Liliam: dash dust - wait while buffer in use
+;		move.b	#0,anim(a0)				;
+		rts
+; ---------------------------------------------------------------------------
+
+DashDust_CheckReset:						; Liliam: dash dust - wait while buffer in use
+		cmpi.b	#12,air_left(a2)
+		blo.s	.reset
+		tst.b	(Super_ready_flag).w
+		beq.s	.return
+		tst.b	(Player_1+jumping).w
+		beq.s	.return
+		move.b	(Dust+$39).w,d0
+		beq.s	.return
+		cmpi.b	#-1,d0
+		beq.s	.return
+		cmpa.w	#Player_1,a2
+		beq.s	.return
+
+	.reset:
+		moveq	#1,d0
+
+	.return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -39004,12 +39075,12 @@ DashDust_HammerDrop:						; Liliam: extra skills - hammer drop
 		tst.b	anim(a0)
 		bne.w	DashDust_Main
 		movea.w	parent(a0),a2
-		cmpi.b	#Status_HammerDrop,double_jump_flag(a2)
-		beq.w	DashDust_Main
+		bsr.w	DashDust_CheckReset
+		bne.w	DashDust_Main
 		cmpi.b	#State_Hurt,routine(a2)
 		bhs.w	DashDust_Main
-		cmpi.b	#12,air_left(a2)
-		blo.w	DashDust_Main
+		cmpi.b	#Status_HammerDrop,double_jump_flag(a2)
+		beq.w	DashDust_Main
 		lea	(Collision_response_list).w,a4
 		move.w	(a4)+,d6
 		beq.s	.createDust
@@ -39079,10 +39150,12 @@ DashDust_Delete:
 ; ---------------------------------------------------------------------------
 
 DashDust_Skid:
-		tst.b	anim(a0)				; Liliam: dash dust - wait for water splash
+		tst.b	anim(a0)				; Liliam: dash dust - wait while buffer in use
+		bne.w	DashDust_Main				;
+		movea.w	parent(a0),a2
+		bsr.w	DashDust_CheckReset			;
 		bne.w	DashDust_Main				;
 		move.b	#$15,mapping_frame(a0)			;
-		movea.w	parent(a0),a2
 		moveq	#$10,d1
 		cmpi.b	#$D,anim(a2)
 		beq.s	loc_18CE4
@@ -39357,8 +39430,7 @@ Obj_SuperSonic_Stars:
 		move.l	#loc_191A4,(a0)
 
 loc_191A4:
-		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Tails
-;		tst.b	(Super_Sonic_Knux_flag).w			;
+		tst.b	(Super_Sonic_Knux_flag).w
 		beq.w	loc_19230
 
 loc_191AC:
@@ -39429,7 +39501,21 @@ loc_19222:
 ; ---------------------------------------------------------------------------
 
 loc_19230:
-		jmp	(Delete_Current_Sprite).l
+;		jmp	(Delete_Current_Sprite).l		; Liliam: Encore mode - super forms
+		bsr.w	Delete_Current_Sprite			;
+		lea	(Player_1).w,a1				;
+		cmpi.b	#6,character_id(a1)			;
+		beq.s	.spawnBoostMode				;
+		lea	(Player_2).w,a1				;
+		cmpi.b	#6,character_id(a1)			;
+		bne.s	.return					;
+
+	.spawnBoostMode:
+		move.l	#Obj_BoostMode,(a0)			;
+		move.w	a1,parent2(a0)				;
+
+	.return:
+		rts						;
 ; ---------------------------------------------------------------------------
 		; Liliam: removed dead code
 ; ---------------------------------------------------------------------------
@@ -40093,7 +40179,7 @@ Obj_SuperTailsBirds_Init:
 		move.l	#Obj_SuperTailsBirds_Main,(a0)
 
 Obj_SuperTailsBirds_Main:
-		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Ray
+		tst.b	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Ray
 ;		tst.b	(Super_Tails_flag).w				;
 		bne.s	.tails_still_super
 
@@ -40519,8 +40605,7 @@ loc_1A4AC:
 Obj_HyperSonicKnux_Trail_Main:
 		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - disable in debug mode
 		bne.w	locret_1A462				;
-		tst.w	(Super_Sonic_Knux_flag).w			; Liliam: Hyper Tails
-;		tst.b	(Super_Sonic_Knux_flag).w			;
+		tst.b	(Super_Sonic_Knux_flag).w
 		beq.w	Delete_Current_Sprite		; If so, branch and delete
 
 loc_1A4D8:
@@ -40562,8 +40647,8 @@ Obj_HyperTails_Trail:							; Liliam: Hyper Tails
 Obj_HyperTails_Trail_Main:
 		tst.w	(Debug_placement_mode).w
 		bne.w	locret_1A462
-		tst.b	(Super_Tails_flag).w
-		bpl.w	Delete_Current_Sprite
+		tst.b	(Super_Sonic_Knux_flag).w
+		beq.w	Delete_Current_Sprite
 		moveq	#$C,d1
 		btst	#0,(Level_frame_counter+1).w
 		beq.s	.evenframe
@@ -40739,6 +40824,69 @@ Obj_BoostMode_Main:
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
+Encore_InitPlayer2:							; Liliam: Encore mode - pick art_tile by SST
+		move.w	(Player_1+top_solid_bit).w,top_solid_bit(a0)
+		move.w	(Debug_saved_art_tile).w,d0
+		tst.w	(Debug_placement_mode).w
+		bgt.s	.checkArtTile
+		move.w	(Player_1+art_tile).w,d0
+
+	.checkArtTile:
+		move.w	d0,d1
+		andi.w	#drawing_mask,d1
+		cmpi.w	#ArtTile_Player_2,d1
+		beq.s	.checkPriority
+		move.w	#ArtTile_Player_2,art_tile(a0)
+
+	.checkPriority:
+		tst.w	d0
+		bpl.s	.checkSuper
+		ori.w	#high_priority,art_tile(a0)
+
+	.checkSuper:
+		tst.b	(Super_Sonic_Knux_flag).w
+		bne.s	Encore_SetSuperSpeeds.player2
+		rts
+; ---------------------------------------------------------------------------
+
+Encore_GiveSuperPlayer2:					; Liliam: Encore mode - super forms
+		tst.b	(Player_2+character_id).w
+		bne.s	Encore_SetSuperSpeeds
+		move.b	#-1,(Player_prev_frame_P2).w
+		cmpi.b	#5,(Player_2+anim).w
+		bne.s	Encore_SetSuperSpeeds
+		move.b	#-1,(Player_2+prev_anim).w
+
+Encore_SetSuperSpeeds:						; Liliam: Encore mode - super forms
+		move.w	#$C00,(Max_speed).w
+		bset	#Status_Invincible,(Player_2+status_secondary).w
+		btst	#Status_SpeedShoes,(Player_1+status_secondary).w
+		bne.s	.player1
+		move.w	#$A00,(Max_speed).w
+
+	.player1:
+		move.w	#$30,(Acceleration).w
+		move.w	#$100,(Deceleration).w
+		tst.b	(Player_1+character_id).w
+		beq.s	.player2
+		move.w	#$800,(Max_speed).w
+		move.w	#$18,(Acceleration).w
+		move.w	#$C0,(Deceleration).w
+
+	.player2:
+		move.w	#$A00,(Max_speed_P2).w
+		move.w	#$30,(Acceleration_P2).w
+		move.w	#$100,(Deceleration_P2).w
+		tst.b	(Player_2+character_id).w
+		beq.s	.return
+		move.w	#$800,(Max_speed_P2).w
+		move.w	#$18,(Acceleration_P2).w
+		move.w	#$C0,(Deceleration_P2).w
+
+	.return:
+		rts
+; ---------------------------------------------------------------------------
+
 Encore_UnpackStocks:							; Liliam: Encore mode - save data
 		lea	Encore_stocks-Reserved_object_3+1(a0),a1
 		moveq	#1,d1
@@ -40810,6 +40958,8 @@ Obj_EncoreHelper_Main:
 		bne.s	.return
 		tst.b	(AIZ_skip_intro_flag).w
 		beq.s	.return
+		tst.b	(Barrier_HUD_scroll).w
+		bne.s	.return
 		btst	#button_A,(Ctrl_1_pressed).w
 		beq.s	.return
 		lea	(Player_1).w,a1
@@ -40881,8 +41031,18 @@ Obj_EncoreHelper_Main:
 		bsr.w	EncoreHelper_SwapChildObjects
 		lea	(Tails_tails).w,a2
 		tst.l	(a2)
-		beq.s	.checkBoostMode
+		beq.s	.checkSuper
 		eori.w	#Player_2-Player_1,$30(a2)
+
+	.checkSuper:
+		tst.b	(Super_Sonic_Knux_flag).w
+		beq.s	.checkBoostMode
+		bsr.w	Encore_SetSuperSpeeds
+		tst.w	(Debug_placement_mode).w
+		ble.s	.swapObjects
+		move.w	(Debug_saved_art_tile).w,(Player_2+art_tile).w
+		bra.s	.swapObjects
+; ---------------------------------------------------------------------------
 
 	.checkBoostMode:
 		lea	(Tails_tails_2P).w,a2
@@ -47475,7 +47635,7 @@ Monitor_Give_SpeedShoes:
 ;		cmpi.w	#2,(Player_mode).w				;
 ;		beq.s	loc_1D93A					;
 		move.w	#$C00,(Max_speed).w
-		tst.w	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - player speeds fix
+		tst.b	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - player speeds fix
 		bne.s	loc_1D94C				;
 		move.w	#$18,(Acceleration).w
 		move.w	#$80,(Deceleration).w
@@ -47565,8 +47725,8 @@ Monitor_Give_Invincibility:
 		addq.w	#1,(a2)
 		tst.b	(Super_Sonic_Knux_flag).w
 		bne.s	locret_1DA5E
-		tst.b	(Super_Tails_flag).w
-		bne.s	locret_1DA5E
+;		tst.b	(Super_Tails_flag).w			; Liliam: Encore mode - super forms
+;		bne.s	locret_1DA5E				;
 		bset	#Status_Invincible,status_secondary(a1)
 		move.b	#(20*60)/8,invincibility_timer(a1)
 		tst.b	(Boss_flag).w
@@ -47610,27 +47770,35 @@ Monitor_Give_CombineRing:						; Liliam: Encore mode - combine ring
 
 Monitor_Give_SuperSonic:
 		addq.w	#1,(a2)
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed
-		bne.s	locret_1DA5E				;
 		moveq	#50,d0					; Liliam: bugfix - clamp ring count properly
 		jsr	(AddRings).l				;
 ;		addi.w	#50,(Ring_count).w			;
 
-		tst.b	(Update_HUD_timer).w			; Liliam: bugfix - no super forms allowed after hours
+		tst.b	(Update_HUD_timer).w			; Liliam: bugfix - no super forms after hours
 		beq.s	locret_1DB2C				;
-		cmpi.b	#6,(Player_1+character_id).w			; Liliam: Metal Sonic - no super forms allowed
-		beq.s	locret_1DB2C					;
+		cmpi.w	#7,(Player_mode).w			; Liliam: Metal Sonic - no super forms
+		beq.s	locret_1DB2C				;
 
+		; Liliam: removed original implementation
 		moveq	#1,d1					; Liliam: bugfix - give Sonic correct super form after credits
-		tst.w	(Super_Sonic_Knux_flag).w		;
-		beq.s	loc_1DA68				;
+		tst.b	(Encore_mode).w				;
+		bne.s	.encoreMode				;
+		tst.b	(Super_Sonic_Knux_flag).w		;
+		beq.s	.notEncore				;
 		moveq	#-1,d1					;
 
-loc_1DA68:
-		; Liliam: removed original implementation
+	.notEncore:
 		move.w	d1,-(sp)				;
 		jsr	(Give_SuperSonic).l			;
 		move.w	(sp)+,d1				;
+		bra.s	loc_1DB1C				;
+; ---------------------------------------------------------------------------
+
+	.encoreMode:
+		jsr	(Give_SuperSonic).l			; Liliam: Encore mode - super forms
+		bsr.w	Encore_GiveSuperPlayer2			;
+
+loc_1DB1C:
 		move.b	#3,(Aqua_barrier_DMA_flag).w		; Liliam: bugfix - use safe colors for aqua barrier icon
 		moveq	#signextendB(sfx_SuperTransform),d0
 		jsr	(Play_SFX).l
@@ -47638,6 +47806,8 @@ loc_1DA68:
 		bne.s	locret_1DB2C				;
 
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
+		tst.b	(Encore_mode).w				;
+		bne.s	loc_1DB26				;
 		tst.b	d1					;
 		bmi.s	loc_1DB26				;
 		cmpi.b	#12,(Player_1+air_left).w		;
@@ -47689,11 +47859,19 @@ Encore_RotateStocks:						; Liliam: Encore mode - change character item
 	.swapPlayers:
 		move.b	(a3),-1(a4)
 		move.b	d0,(a3)
+		move.b	d0,character_id(a1)
 		move.b	#1,(Update_HUD_life_count).w
 		move.b	#$A,(Encore_HUD_stocks_scroll+1).w
 		cmpa.w	(Tails_tails+$30).w,a1
-		bne.s	.checkBoostMode
+		bne.s	.checkSuper
 		move.l	#Delete_Current_Sprite,(Tails_tails).w
+
+	.checkSuper:
+		tst.b	(Super_Sonic_Knux_flag).w
+		beq.s	.checkBoostMode
+		bsr.w	Encore_SetSuperSpeeds
+		bra.s	.checkTails
+; ---------------------------------------------------------------------------
 
 	.checkBoostMode:
 		cmpa.w	(Tails_tails_2P+parent2).w,a1
@@ -47752,7 +47930,6 @@ Encore_RotateStocks:						; Liliam: Encore mode - change character item
 	.setPlayerPtrs:
 		move.b	#-1,(a2)
 		move.b	#-1,prev_anim(a1)
-		move.b	d0,character_id(a1)
 		lsl.w	#2,d0
 		lea	(Player_ObjectPtrs).l,a2
 		move.l	(a2,d0.w),(a1)
@@ -50976,8 +51153,7 @@ loc_1FD4E:
 ;		bra.w	loc_1FDEA				;
 
 ;loc_1FD72:
-		tst.w	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - Super Tails wall-breaking powers
-;		tst.b	(Super_Sonic_Knux_flag).w		;
+		tst.b	(Super_Sonic_Knux_flag).w
 		bne.s	loc_1FDA4
 ;		cmpi.b	#2,character_id(a1)			; Liliam: simplify double jump selection
 		tst.b	character_id(a1)			;
@@ -52652,8 +52828,7 @@ loc_215B2:
 		move.w	d6,d0
 		andi.w	#1,d0
 		beq.s	loc_2162A
-		tst.w	(Super_Sonic_Knux_flag).w		; Liliam: bugfix - Super Tails wall-breaking powers
-;		tst.b	(Super_Sonic_Knux_flag).w		;
+		tst.b	(Super_Sonic_Knux_flag).w
 		bne.s	loc_215F4
 		bsr.s	BreakableWall_CheckKnuxBreak		; Liliam: extra skills - boost mode
 ;		cmpi.b	#2,character_id(a1)			;
@@ -71107,11 +71282,23 @@ SSResults_CharNamePtrs:						; Liliam: simplify results art selection
 loc_2E04E:
 ;		lea	(ArtKosM_SSResultsSUPER).l,a1		; Liliam: simplify results art selection
 		moveq	#0,d0					;
+		tst.b	(Encore_mode).w				;
+		beq.s	loc_2E054				;
+		cmpi.b	#2,(Encore_P1_character).w		;
+		blo.s	loc_2E064				;
+		cmpi.b	#5,(Encore_P1_character).w		;
+		bhs.s	loc_2E064				;
+		addq.w	#4,d0					;
+		bra.s	loc_2E064				;
+; ---------------------------------------------------------------------------
+
+loc_2E054:
 ;		cmpi.w	#2,(Player_mode).w				; Liliam: Hyper Tails
 ;		beq.s	loc_2E06A					;
 		cmpi.w	#3,(Player_mode).w			; Liliam: simplify results art selection
 		blo.s	loc_2E05C				;
 		cmpi.w	#6,(Player_mode).w			;
+		seq	(Ray_palette_flag).w			;
 		bhs.s	loc_2E05C				;
 		addq.w	#4,d0					;
 
@@ -71127,9 +71314,7 @@ loc_2E064:
 
 loc_2E06A:
 		move.w	#tiles_to_bytes(ArtTile_SSResults_SUPER),d2
-		cmpi.w	#6,(Player_mode).w			; Liliam: convert to 1P Ray palette
-		seq	(Ray_palette_flag).w			;
-		jsr	(Queue_Kos_Module_Ray).l		;
+		jsr	(Queue_Kos_Module_Ray).l		; Liliam: convert to 1P Ray palette
 ;		jsr	(Queue_Kos_Module).l			;
 		; Liliam: removed original implementation
 		bsr.w	SSResults_CharNamePickArt		; Liliam: simplify results art selection
@@ -71819,29 +72004,11 @@ locret_2E7D8:
 
 loc_2E7DA:
 		tst.w	$2E(a0)
-		bne.s	loc_2E7E0					; Liliam: Encore mode - special stage
-		tst.b	(Encore_mode).w					;
 		beq.w	loc_2E7E6
-		lea	(Dynamic_object_RAM+(object_size*67)).w,a1	;
-		move.l	#Obj_SSResultsEncore,(a1)			;
-		move.w	#3*60,$2E(a0)					;
-		move.b	#$A,routine(a0)					;
-		rts							;
-; ---------------------------------------------------------------------------
 
 loc_2E7E0:
 		subq.w	#1,$2E(a0)
 		rts
-; ---------------------------------------------------------------------------
-
-Obj_SSResultsEncore:							; Liliam: Encore mode - special stage
-		move.w	-$3A(a0),d0
-		cmp.w	-4(a0),d0
-		bne.s	locret_2E7D8
-		clr.b	(Emerald_animation_flag).w
-		moveq	#signextendB(sfx_SuperEmerald),d0
-		jsr	(Play_SFX).l
-		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
 SSResults_WaitForFade:							; Liliam: Encore mode - special stage
@@ -71870,7 +72037,12 @@ SSResults_SlowFade:
 SSResults_CutsceneSkip:						; Liliam: cutscene skip - HPZ SS results
 		movem.l	d7/a0,-(sp)
 		jsr	(Pal_FadeToBlack).l
+		moveq	#8,d0
+		tst.b	(Encore_mode).w
+		bne.s	.loadPalette
 		move.w	(Player_mode).w,d0
+
+	.loadPalette:
 		jsr	(LoadPalette_Immediate_NoEncore).l
 		movem.l	(sp)+,d7/a0
 		lea	(Object_RAM).w,a1
@@ -133759,8 +133931,8 @@ loc_5ABFA:
 loc_5AC04:
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - skip over Knuckles meet & greet
 		bne.s	loc_5ABFA				;
-		cmpi.b	#6,(Player_1+character_id).w			; Liliam: Metal Sonic - no super forms allowed
-		beq.s	loc_5ABFA					;
+		cmpi.b	#6,(Player_1+character_id).w		; Liliam: Metal Sonic - no super forms in ending
+		beq.s	loc_5ABFA				;
 		jsr	(AllocateObject).l
 		bne.s	loc_5AC12
 		move.l	#Obj_EndingPlaneMini,(a1)
@@ -134724,9 +134896,9 @@ sub_5B514:
 		addi.w	#$12,d1
 
 loc_5B52C:
-		cmpi.b	#6,(Player_1+character_id).w			; Liliam: Metal Sonic - no super forms allowed
-		beq.s	loc_5B548					;
-		addq.w	#6,d1					; Liliam: Encore mode - no super forms allowed
+		cmpi.b	#6,(Player_1+character_id).w		; Liliam: Metal Sonic - no super forms in ending
+		beq.s	loc_5B548				;
+		addq.w	#6,d1					; Liliam: Encore mode - no super forms in ending
 		tst.b	(Encore_mode).w				;
 		bne.s	loc_5B54A				;
 		move.w	(Player_mode).w,d0
@@ -138828,7 +139000,7 @@ loc_5D8BC:
 ;		cmpi.w	#2,(Player_mode).w		; Liliam: ???
 		move.w	#$7FFF,(Super_frame_count).w
 		move.b	#1,(Update_HUD_timer).w
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms in ending
 		bne.s	loc_5D96A				;
 		tst.b	character_id(a1)			; Liliam: ending - add extra characters
 		bne.s	loc_5D96A				;
@@ -138993,7 +139165,7 @@ loc_5DACC:
 		move.w	d1,y_pos(a0)
 		move.w	d1,$3A(a0)
 		lea	(Player_1).w,a1
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms in ending
 		bne.s	loc_5DB1C				;
 		tst.b	character_id(a1)			; Liliam: ending - add extra characters
 		bne.s	loc_5DB1C				;
@@ -139646,8 +139818,8 @@ loc_5E1C2:
 		jsr	(Swing_Setup1).l
 		tst.b	(Encore_mode).w				; Liliam: Encore mode - skip over Knuckles meet & greet
 		bne.s	loc_5E1E8				;
-		cmpi.b	#6,(Player_1+character_id).w			; Liliam: Metal Sonic - no super forms allowed
-		beq.s	loc_5E1E8					;
+		cmpi.b	#6,(Player_1+character_id).w		; Liliam: Metal Sonic - no super forms in ending
+		beq.s	loc_5E1E8				;
 		cmpi.b	#2,(Ending_completion_level).w
 		beq.s	loc_5E1F0
 
@@ -139735,7 +139907,7 @@ loc_5E2C2:
 		movea.l	(sp)+,a0				;
 ;		clr.l	(Tails_tails).w				;
 		moveq	#0,d0
-		move.b	(Player_1+character_id),d0		; Liliam: Encore mode - no super forms allowed
+		move.b	(Player_1+character_id),d0		; Liliam: Encore mode - no super forms in ending
 		lsl.w	#2,d0					;
 		tst.b	(Encore_mode).w				;
 		beq.s	loc_5E304				;
@@ -139805,11 +139977,11 @@ loc_5E334:
 loc_5E388:
 		move.l	(a1)+,(a2)+
 		dbf	d0,loc_5E388
-		move.b	#$A,routine(a0)					; Liliam: Metal Sonic - no super forms allowed
-		cmpi.b	#6,(Player_1+character_id).w			;
-		beq.w	locret_5E440					;
+		move.b	#$A,routine(a0)				; Liliam: Metal Sonic - no super forms in ending
+		cmpi.b	#6,(Player_1+character_id).w		;
+		beq.w	locret_5E440				;
 
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms in ending
 		bne.s	loc_5E3C0				;
 		tst.b	(Player_1+character_id).w		; Liliam: bugfix - give Sonic correct super form after credits
 		bne.s	Ending_CheckTransform			;
@@ -139943,9 +140115,9 @@ loc_5E474:
 		lea	(Player_1).w,a1
 		move.b	#$83,$2E(a1)
 		clr.b	mapping_frame(a1)
-		move.b	#$18,routine(a0)				; Liliam: Metal Sonic - no super forms allowed
-		cmpi.b	#6,character_id(a1)				;
-		beq.s	locret_5E4B4					;
+		move.b	#$18,routine(a0)			; Liliam: Metal Sonic - no super forms in ending
+		cmpi.b	#6,character_id(a1)			;
+		beq.s	locret_5E4B4				;
 
 		move.b	#$10,routine(a0)			; Liliam: simplify ending pose selection
 		move.b	#$12,mapping_frame(a0)			;
@@ -139960,7 +140132,7 @@ locret_5E4B4:
 		rts
 ; ---------------------------------------------------------------------------
 
-Ending_MetalSonic_FlyIn:						; Liliam: Metal Sonic - no super forms allowed
+Ending_MetalSonic_FlyIn:					; Liliam: Metal Sonic - no super forms in ending
 		bsr.s	Ending_MetalSonic_Animate
 		subq.w	#8,x_pos(a0)
 		cmpi.w	#$160,x_pos(a0)
@@ -139996,7 +140168,7 @@ Ending_WaitForLogo:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Ending_MetalSonic_WaitForLogo:						; Liliam: Metal Sonic - no super forms allowed
+Ending_MetalSonic_WaitForLogo:					; Liliam: Metal Sonic - no super forms in ending
 		bsr.s	Ending_MetalSonic_Animate
 		btst	#3,(Cutscene_flags).w
 		beq.s	loc_5E4DC
@@ -140005,7 +140177,7 @@ loc_5E4FE:
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
 
-Ending_MetalSonic_Animate:						; Liliam: Metal Sonic - no super forms allowed
+Ending_MetalSonic_Animate:					; Liliam: Metal Sonic - no super forms in ending
 		addq.b	#1,mapping_frame(a0)
 		cmpi.b	#$10,mapping_frame(a0)
 		blo.s	.return
@@ -189924,7 +190096,7 @@ loc_803D6:
 		st	(SRAM_mask_interrupts_flag).w
 		jsr	(SaveGame).l
 		jsr	(Go_Delete_Sprite).l
-		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms in ending
 		bne.s	loc_8040C				;
 		cmpi.w	#2,(Player_mode).w
 		bhs.s	loc_8040C
@@ -198779,8 +198951,11 @@ loc_85B6C:
 		moveq	#signextendB(mus_HyperTheme),d0		; Liliam: special music for hyper forms
 		tst.b	(Super_Sonic_Knux_flag).w		;
 		bmi.s	loc_85B84				;
-		tst.b	(Super_Tails_flag).w			;
-		bmi.s	loc_85B84				;
+		beq.s	loc_85B82				;
+		tst.b	(Encore_mode).w				;
+		bne.s	loc_85B84				;
+
+loc_85B82:
 		moveq	#signextendB(mus_Invincibility),d0
 		btst	#EncoreFlags_Music,(Encore_flags).w	; Liliam: Encore mode - music
 		beq.s	loc_85B84				;
@@ -199444,8 +199619,6 @@ CutsceneSkip_HPZSSEntry:					; Liliam: cutscene skip - HPZ SS entry
 ; ---------------------------------------------------------------------------
 
 CutsceneSkip_HPZSSResults:					; Liliam: cutscene skip - HPZ SS results
-		tst.b	(Encore_mode).w
-		bne.s	.restartLevel
 		cmpi.b	#7,(Super_emerald_count).w
 		blo.s	.restartLevel
 		jmp	(SSResults_CutsceneSkip).l
@@ -200337,13 +200510,14 @@ Give_SuperSonic:
 ;		move.w	#$18,(Acceleration_P2).w			;
 ;		move.w	#$C0,(Deceleration_P2).w			;
 
-		cmp.b	(Super_Tails_flag).w,d1				; Liliam: bugfix - don't queue art if already super
+		cmp.b	(Super_Sonic_Knux_flag).w,d1			; Liliam: bugfix - don't queue art if already super
 		beq.w	.continued					;
 		move.l	#Obj_SuperSonic_Stars,(Super_stars).w		;
-		move.b	d1,(Super_Tails_flag).w				;
+		move.b	d1,(Super_Sonic_Knux_flag).w			;
 		bpl.w	.continued					;
 		move.l	#Obj_SuperTailsBirds,(Invincibility_stars).w
 		move.l	#Obj_HyperTails_Trail,(Dust_P2).w		; Liliam: Hyper Tails
+		move.b	#1,(Super_Tails_flag).w				;
 		bra.s	.hyper						;
 ;		bra.s	.continued					;
 ; ---------------------------------------------------------------------------
@@ -220572,6 +220746,14 @@ Pal_MetalSonic:							; Liliam: add extra characters
 Pal_EncoreMode:							; Liliam: Encore mode - palette
 		binclude "General/Sprites/Knuckles/Palettes/Encore.bin"
 		even
+PalCycle_EncoreSuper:						; Liliam: Encore mode - super forms
+		binclude "General/Sprites/Knuckles/Palettes/Encore Super 1.bin"
+		binclude "General/Sprites/Knuckles/Palettes/Encore Super 2.bin"
+		even
+PalCycle_EncoreSuper_Water:					; Liliam: Encore mode - super forms
+		binclude "General/Sprites/Knuckles/Palettes/Encore Super Water 1.bin"
+		binclude "General/Sprites/Knuckles/Palettes/Encore Super Water 2.bin"
+		even
 Pal_AIZIntro:
 		; Liliam: Knuckles intro - apply bomb flash to waterfall
 		binclude "Levels/AIZ/Palettes/Intro.bin"
@@ -221733,19 +221915,29 @@ ArtUnc_StarPostStars_Encore:					; Liliam: Encore mode - bonus stage
 ArtUnc_Knux:
 		; Liliam: simplify player anim selection
 		binclude "General/Sprites/Knuckles/Art/Knuckles.bin"
-ArtUnc_BossExplosion:						; Liliam: Metal Sonic hologram object
-		binclude "General/Sprites/Metal Sonic Hologram/Boss Explosion.bin"
-		binclude "General/Sprites/Metal Sonic Hologram/Hologram Count.bin"
-PalTable_CutsceneKnux_S3:					; Liliam: cutscene knux - convert palette
-		binclude "Levels/Misc/Pal - Cutscene Knux S3.bin"
-PalTable_CutsceneKnux_SK:					; Liliam: cutscene knux - convert palette
-		binclude "Levels/Misc/Pal - Cutscene Knux SK.bin"
+ArtUnc_CombineRing:							; Liliam: Encore mode - combine ring
+		binclude "General/Sprites/Ring/Combine Ring.bin"
+ArtUnc_Ring:									; Liliam: QOL - extend ring animation
+		binclude "General/Sprites/Ring/Ring.bin"
+ArtUnc_PhotoPieceDigits:					; Liliam: museum - photo piece object
+		binclude "General/Sprites/Ring/Photo Piece Digits.bin"
 		align $20000
 ; ---------------------------------------------------------------------------
 ArtUnc_CutsceneKnux:						; Liliam: Encore mode - special Knuckles art for palette
 		binclude "General/Sprites/Knuckles/Cutscene/Cutscene Main.bin"
 ArtUnc_EncoreKnux:						; Liliam: Encore mode - special Knuckles art for palette
 		binclude "General/Sprites/Knuckles/Cutscene/Encore Main.bin"
+MightyRay_TriangleJumpSpeeds:					; Liliam: extra skills - triangle jump
+		dc.w      0, -$600	; 01: up
+		dc.w      0,  $400	; 02: down
+		dc.w  -$400, -$380	; 03: no input
+		dc.w  -$700,     0	; 04: left
+		dc.w  -$500, -$600	; 05: left + up
+		dc.w  -$700,  $400	; 06: left + down
+		dc.w   $400, -$380	; 07: no input
+		dc.w   $700,     0	; 08: right
+		dc.w   $500, -$600	; 09: right + up
+		dc.w   $700,  $400	; 10: right + down
 		align $20000
 ; ---------------------------------------------------------------------------
 ArtUnc_Amy:							; Liliam: add extra characters
@@ -221796,23 +221988,17 @@ ArtUnc_Mighty:							; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Art/Mighty.bin"
 ArtUnc_CutsceneRobotnik:					; Liliam: Encore mode - use Robotnik for cutscenes
 		binclude "General/Sprites/Robotnik/Cutscene Main.bin"
+ArtUnc_BossExplosion:						; Liliam: Metal Sonic hologram object
+		binclude "General/Sprites/Metal Sonic Hologram/Boss Explosion.bin"
+		binclude "General/Sprites/Metal Sonic Hologram/Hologram Count.bin"
 PalTable_EncoreGray:						; Liliam: Encore mode - bonus stage
 		binclude "Levels/Misc/Pal - Encore Gray.bin"
+PalTable_CutsceneKnux_S3:					; Liliam: cutscene knux - convert palette
+		binclude "Levels/Misc/Pal - Cutscene Knux S3.bin"
+PalTable_CutsceneKnux_SK:					; Liliam: cutscene knux - convert palette
+		binclude "Levels/Misc/Pal - Cutscene Knux SK.bin"
 PalTable_Ray:							; Liliam: convert to 1P Ray palette
 		binclude "Levels/Misc/Pal - Ray.bin"
-MightyRay_TriangleJumpSpeeds:					; Liliam: extra skills - triangle jump
-		dc.w      0, -$600	; 01: up
-		dc.w      0,  $400	; 02: down
-		dc.w  -$400, -$380	; 03: no input
-		dc.w  -$700,     0	; 04: left
-		dc.w  -$500, -$600	; 05: left + up
-		dc.w  -$700,  $400	; 06: left + down
-		dc.w   $400, -$380	; 07: no input
-		dc.w   $700,     0	; 08: right
-		dc.w   $500, -$600	; 09: right + up
-		dc.w   $700,  $400	; 10: right + down
-Ani_Player:							; Liliam: simplify player anim selection
-		include "General/Sprites/Sonic/Anim - Players.asm"
 		align $20000
 ; ---------------------------------------------------------------------------
 ArtUnc_Ray:							; Liliam: add extra characters
@@ -221821,10 +222007,6 @@ ArtUnc_Ray:							; Liliam: add extra characters
 ; ---------------------------------------------------------------------------
 ArtUnc_MetalSonic:						; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Art/Metal Sonic.bin"
-ArtUnc_CombineRing:							; Liliam: Encore mode - combine ring
-		binclude "General/Sprites/Ring/Combine Ring.bin"
-ArtUnc_PhotoPieceDigits:					; Liliam: museum - photo piece object
-		binclude "General/Sprites/Ring/Photo Piece Digits.bin"
 		include "strings.asm"				; Liliam: options menu
 		align $20000
 ; ---------------------------------------------------------------------------
@@ -221833,8 +222015,8 @@ ArtUnc_Sonic_Extra:
 		binclude "General/Sprites/Sonic/Art/Sonic Extra.bin"
 ;ArtUnc_Tails_Extra:
 		; Liliam: simplify player anim selection
-ArtUnc_Ring:									; Liliam: QOL - extend ring animation
-		binclude "General/Sprites/Ring/Ring.bin"
+Ani_Player:							; Liliam: simplify player anim selection
+		include "General/Sprites/Sonic/Anim - Players.asm"
 Map_Sonic:
 		; Liliam: simplify player anim selection
 		include "General/Sprites/Sonic/Map - Sonic.asm"

@@ -165,16 +165,14 @@ PLC_Knuckles_:
 		dc.w PLC_Knuckles_PoleCurrent1-PLC_Knuckles_
 		dc.w PLC_Knuckles_PoleCurrent2-PLC_Knuckles_
 		dc.w PLC_Knuckles_Pulley-PLC_Knuckles_
-		dc.w PLC_Knuckles_BarCurrent1-PLC_Knuckles_
-		dc.w PLC_Knuckles_BarCurrent2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Stand1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Stand2-PLC_Knuckles_
 		dc.w PLC_Knuckles_ClimbDash1-PLC_Knuckles_
 		dc.w PLC_Knuckles_ClimbDash2-PLC_Knuckles_
 		dc.w PLC_Knuckles_ClimbDash3-PLC_Knuckles_
 		dc.w PLC_Knuckles_ClimbDash4-PLC_Knuckles_
 		dc.w PLC_Knuckles_ClimbDash5-PLC_Knuckles_
 		dc.w PLC_Knuckles_ClimbDash6-PLC_Knuckles_
-		dc.w PLC_Knuckles_Stand1-PLC_Knuckles_
-		dc.w PLC_Knuckles_Stand2-PLC_Knuckles_
 		dc.w PLC_Knuckles_Stand3-PLC_Knuckles_
 		dc.w PLC_Knuckles_Stand4-PLC_Knuckles_
 		dc.w PLC_Knuckles_Stand5-PLC_Knuckles_
@@ -182,6 +180,8 @@ PLC_Knuckles_:
 		dc.w PLC_Knuckles_Stand7-PLC_Knuckles_
 		dc.w PLC_Knuckles_Stand8-PLC_Knuckles_
 		dc.w PLC_Knuckles_Stand9-PLC_Knuckles_
+		dc.w PLC_Knuckles_StandA-PLC_Knuckles_
+		dc.w PLC_Knuckles_StandB-PLC_Knuckles_
 		dc.w PLC_Knuckles_Climb1-PLC_Knuckles_
 		dc.w PLC_Knuckles_Climb2-PLC_Knuckles_
 		dc.w PLC_Knuckles_Climb3-PLC_Knuckles_
@@ -234,10 +234,10 @@ PLC_Knuckles_:
 		dc.w PLC_Knuckles_Clear4-PLC_Knuckles_
 		dc.w PLC_Knuckles_Spring-PLC_Knuckles_
 		dc.w PLC_Knuckles_Transform1-PLC_Knuckles_
-		dc.w PLC_Knuckles_Transform2-PLC_Knuckles_
-		dc.w PLC_Knuckles_Transform3-PLC_Knuckles_
-		dc.w PLC_Knuckles_Idle1-PLC_Knuckles_
-		dc.w PLC_Knuckles_Idle2-PLC_Knuckles_
+		dc.w PLC_Knuckles_GlideLand1-PLC_Knuckles_
+		dc.w PLC_Knuckles_BalanceA-PLC_Knuckles_
+		dc.w PLC_Knuckles_BalanceB-PLC_Knuckles_
+		dc.w PLC_Knuckles_BalanceC-PLC_Knuckles_
 		dc.w PLC_Knuckles_Skid1-PLC_Knuckles_
 		dc.w PLC_Knuckles_Skid2-PLC_Knuckles_
 		dc.w PLC_Knuckles_Balance1-PLC_Knuckles_
@@ -249,10 +249,8 @@ PLC_Knuckles_:
 		dc.w PLC_Knuckles_Balance7-PLC_Knuckles_
 		dc.w PLC_Knuckles_Balance8-PLC_Knuckles_
 		dc.w PLC_Knuckles_Balance9-PLC_Knuckles_
-		dc.w PLC_Knuckles_BalanceA-PLC_Knuckles_
-		dc.w PLC_Knuckles_BalanceB-PLC_Knuckles_
-		dc.w PLC_Knuckles_BalanceC-PLC_Knuckles_
-		dc.w PLC_Knuckles_GlideLand1-PLC_Knuckles_
+		dc.w PLC_Knuckles_Transform2-PLC_Knuckles_
+		dc.w PLC_Knuckles_Transform3-PLC_Knuckles_
 PLC_Knuckles_Blank:
 		dc.w 0
 PLC_Knuckles_Walk1:
@@ -672,8 +670,8 @@ PLC_Knuckles_360Stand3:
 		dc.w $B6A1
 PLC_Knuckles_360Stand4:
 		dc.w 2
-		dc.w $B6AD
-		dc.w $26B9
+		dc.w $56AD
+		dc.w $86B3
 PLC_Knuckles_360Stand5:
 		dc.w 3
 		dc.w $26BC
@@ -865,8 +863,8 @@ PLC_Knuckles_Hang1:
 		dc.w $8969
 		dc.w $5972
 		dc.w $1978
-PLC_Knuckles_Hang2:
 PLC_Knuckles_360Hang2:
+PLC_Knuckles_Hang2:
 		dc.w 2
 		dc.w $B97A
 		dc.w $5986
@@ -975,120 +973,119 @@ PLC_Knuckles_360RunB:
 		dc.w $BADD
 		dc.w $2AE9
 PLC_Knuckles_360RunA:
-		dc.w 2
-		dc.w $BAEC
-		dc.w $0AF8
+		dc.w 3
+		dc.w $56AD
+		dc.w $5AEC
+		dc.w $0AF2
 PLC_Knuckles_360RunC:
 		dc.w 3
-		dc.w $1AF9
-		dc.w $BAFB
-		dc.w $1B07
+		dc.w $1AF3
+		dc.w $BAF5
+		dc.w $1B01
 PLC_Knuckles_PoleSwingRide:
 		dc.w 3
-		dc.w $3B09
-		dc.w $7B0D
-		dc.w $3B15
+		dc.w $3B03
+		dc.w $7B07
+		dc.w $3B0F
 PLC_Knuckles_PoleCurrent1:
 		dc.w 3
-		dc.w $2B19
-		dc.w $BB1C
-		dc.w $3B28
+		dc.w $2B13
+		dc.w $BB16
+		dc.w $3B22
 PLC_Knuckles_PoleCurrent2:
 		dc.w 3
-		dc.w $2B19
-		dc.w $BB2C
-		dc.w $3B38
+		dc.w $2B13
+		dc.w $BB26
+		dc.w $3B32
 PLC_Knuckles_Pulley:
 		dc.w 3
-		dc.w $1B3C
-		dc.w $BB3E
-		dc.w $1B4A
-PLC_Knuckles_BarCurrent1:
-		dc.w 3
-		dc.w $2B4C
-		dc.w $BB4F
-		dc.w $3B5B
-PLC_Knuckles_BarCurrent2:
-		dc.w 3
-		dc.w $2B4C
-		dc.w $BB5F
-		dc.w $3B6B
+		dc.w $1B36
+		dc.w $BB38
+		dc.w $1B44
 PLC_Knuckles_ClimbDash1:
 		dc.w 3
-		dc.w $2B6F
-		dc.w $7B72
-		dc.w $2B7A
+		dc.w $2B46
+		dc.w $7B49
+		dc.w $2B51
 PLC_Knuckles_ClimbDash2:
 		dc.w 3
-		dc.w $2B7D
-		dc.w $7B80
-		dc.w $2B88
+		dc.w $2B54
+		dc.w $7B57
+		dc.w $2B5F
 PLC_Knuckles_ClimbDash3:
 		dc.w 3
-		dc.w $2B7D
-		dc.w $7B8B
-		dc.w $2B93
+		dc.w $2B54
+		dc.w $7B62
+		dc.w $2B6A
 PLC_Knuckles_ClimbDash4:
 		dc.w 4
-		dc.w $2B96
-		dc.w $3B99
-		dc.w $3B9D
-		dc.w $2B93
+		dc.w $2B6D
+		dc.w $3B70
+		dc.w $3B74
+		dc.w $2B6A
 PLC_Knuckles_ClimbDash5:
 		dc.w 4
-		dc.w $2BA1
-		dc.w $3BA4
-		dc.w $3B9D
-		dc.w $2B93
+		dc.w $2B78
+		dc.w $3B7B
+		dc.w $3B74
+		dc.w $2B6A
 PLC_Knuckles_ClimbDash6:
 		dc.w 4
-		dc.w $2BA8
-		dc.w $3BAB
-		dc.w $3B9D
-		dc.w $2B93
+		dc.w $2B7F
+		dc.w $3B82
+		dc.w $3B74
+		dc.w $2B6A
 PLC_Knuckles_Stand1:
 		dc.w 2
-		dc.w $BBAF
+		dc.w $BB86
 		dc.w $3000
 PLC_Knuckles_Stand2:
 		dc.w 2
+		dc.w $BB86
+		dc.w $3B92
+PLC_Knuckles_Stand3:
+		dc.w 2
+		dc.w $BB96
+		dc.w $3000
+PLC_Knuckles_Stand4:
+		dc.w 2
 		dc.w $5019
 		dc.w $B01F
-PLC_Knuckles_Stand3:
+PLC_Knuckles_Stand5:
 		dc.w 4
 		dc.w $202B
 		dc.w $702E
 		dc.w $2036
 		dc.w $3039
-PLC_Knuckles_Stand4:
-		dc.w 4
-		dc.w $2BBB
-		dc.w $7BBE
-		dc.w $2BC6
-		dc.w $3039
-PLC_Knuckles_Stand5:
-		dc.w 4
-		dc.w $2BC9
-		dc.w $7BCC
-		dc.w $2BD4
-		dc.w $3BD7
 PLC_Knuckles_Stand6:
 		dc.w 4
-		dc.w $2BDB
-		dc.w $7BDE
-		dc.w $2BE6
-		dc.w $3BE9
+		dc.w $2BA2
+		dc.w $7BA5
+		dc.w $2BAD
+		dc.w $3039
 PLC_Knuckles_Stand7:
+		dc.w 4
+		dc.w $2BB0
+		dc.w $7BB3
+		dc.w $2BBB
+		dc.w $3BBE
+PLC_Knuckles_Stand8:
+		dc.w 4
+		dc.w $2BC2
+		dc.w $7BC5
+		dc.w $2BCD
+		dc.w $3BD0
+PLC_Knuckles_Stand9:
 		dc.w 3
 		dc.w $203D
 		dc.w $7040
 		dc.w $5048
-PLC_Knuckles_Stand8:
+PLC_Knuckles_StandA:
 		dc.w 3
-		dc.w $8BED
-		dc.w $3BF6
+		dc.w $8BD4
+		dc.w $3BDD
 		dc.w $5048
-PLC_Knuckles_Stand9:
+PLC_Knuckles_StandB:
 		dc.w 4
 		dc.w $B04E
 		dc.w $105A
@@ -1096,86 +1093,86 @@ PLC_Knuckles_Stand9:
 		dc.w $305F
 PLC_Knuckles_Climb1:
 		dc.w 2
-		dc.w $FBFA
-		dc.w $0C0A
+		dc.w $FBE1
+		dc.w $0BF1
 PLC_Knuckles_Climb2:
 		dc.w 1
-		dc.w $FC0B
+		dc.w $FBF2
 PLC_Knuckles_Climb3:
 		dc.w 2
-		dc.w $FC1B
-		dc.w $1C2B
+		dc.w $FC02
+		dc.w $1C12
 PLC_Knuckles_Climb4:
 		dc.w 3
-		dc.w $2C2D
-		dc.w $BC30
-		dc.w $1C3C
+		dc.w $2C14
+		dc.w $BC17
+		dc.w $1C23
 PLC_Knuckles_Climb5:
 		dc.w 1
-		dc.w $FC3E
+		dc.w $FC25
 PLC_Knuckles_Climb6:
 		dc.w 1
-		dc.w $FC4E
+		dc.w $FC35
 PLC_Knuckles_Climb7:
 		dc.w 4
-		dc.w $7C5E
-		dc.w $2C66
-		dc.w $1C69
-		dc.w $0C6B
+		dc.w $7C45
+		dc.w $2C4D
+		dc.w $1C50
+		dc.w $0C52
 PLC_Knuckles_Climb8:
 		dc.w 2
-		dc.w $BC6C
-		dc.w $3C78
+		dc.w $BC53
+		dc.w $3C5F
 PLC_Knuckles_Climb9:
 		dc.w 3
-		dc.w $1C7C
-		dc.w $FC7E
-		dc.w $0C8E
+		dc.w $1C63
+		dc.w $FC65
+		dc.w $0C75
 PLC_Knuckles_Glide1:
 PLC_Knuckles_Glide5:
 		dc.w 3
-		dc.w $3C8F
-		dc.w $7C93
-		dc.w $3C9B
+		dc.w $3C76
+		dc.w $7C7A
+		dc.w $3C82
 PLC_Knuckles_Glide2:
 PLC_Knuckles_Glide4:
 		dc.w 2
-		dc.w $BC9F
-		dc.w $1CAB
+		dc.w $BC86
+		dc.w $1C92
 PLC_Knuckles_Glide3:
 		dc.w 1
-		dc.w $BCAD
+		dc.w $BC94
 PLC_Knuckles_Glide6:
 PLC_Knuckles_GlideA:
 		dc.w 2
-		dc.w $BCB9
-		dc.w $5CC5
+		dc.w $BCA0
+		dc.w $5CAC
 PLC_Knuckles_Glide7:
 PLC_Knuckles_Glide9:
 		dc.w 3
-		dc.w $3CCB
-		dc.w $7CCF
-		dc.w $3CD7
+		dc.w $3CB2
+		dc.w $7CB6
+		dc.w $3CBE
 PLC_Knuckles_Glide8:
 		dc.w 1
-		dc.w $BCDB
+		dc.w $BCC2
 PLC_Knuckles_GlideFall1:
 		dc.w 4
-		dc.w $7CE7
-		dc.w $7CEF
-		dc.w $3CF7
-		dc.w $2CFB
+		dc.w $7CCE
+		dc.w $7CD6
+		dc.w $3CDE
+		dc.w $2CE2
 PLC_Knuckles_GlideFall2:
 		dc.w 4
-		dc.w $BCFE
-		dc.w $0D0A
-		dc.w $3D0B
-		dc.w $3D0F
+		dc.w $BCE5
+		dc.w $0CF1
+		dc.w $3CF2
+		dc.w $3CF6
 PLC_Knuckles_GlideLand2:
 		dc.w 3
-		dc.w $2D20
-		dc.w $BD23
-		dc.w $1D2F
+		dc.w $2CFA
+		dc.w $BCFD
+		dc.w $1D09
 PLC_Knuckles_Slide:
 		dc.w 3
 		dc.w $B9B6
@@ -1189,97 +1186,97 @@ PLC_Knuckles_Hurt:
 		dc.w $010D
 PLC_Knuckles_Bubble:
 		dc.w 3
-		dc.w $3D31
-		dc.w $FD35
-		dc.w $0D45
+		dc.w $3D0B
+		dc.w $FD0F
+		dc.w $0D1F
 PLC_Knuckles_Push1:
 		dc.w 4
-		dc.w $2D46
-		dc.w $3D49
-		dc.w $BD4D
-		dc.w $0D59
+		dc.w $2D20
+		dc.w $3D23
+		dc.w $BD27
+		dc.w $0D33
 PLC_Knuckles_Push2:
 		dc.w 4
-		dc.w $2D5A
-		dc.w $BD5D
-		dc.w $1D69
-		dc.w $2D6B
+		dc.w $2D34
+		dc.w $BD37
+		dc.w $1D43
+		dc.w $2D45
 PLC_Knuckles_Push3:
 		dc.w 4
-		dc.w $2D6E
-		dc.w $3D71
-		dc.w $BD75
-		dc.w $0D81
+		dc.w $2D48
+		dc.w $3D4B
+		dc.w $BD4F
+		dc.w $0D5B
 PLC_Knuckles_Push4:
 		dc.w 4
-		dc.w $2D5A
-		dc.w $BD82
-		dc.w $0D8E
-		dc.w $2D8F
+		dc.w $2D34
+		dc.w $BD5C
+		dc.w $0D68
+		dc.w $2D69
 PLC_Knuckles_Death:
 		dc.w 4
-		dc.w $7D92
-		dc.w $1D9A
-		dc.w $5D9C
-		dc.w $3DA2
+		dc.w $7D6C
+		dc.w $1D74
+		dc.w $5D76
+		dc.w $3D7C
 PLC_Knuckles_Drown:
 		dc.w 4
-		dc.w $7DA6
-		dc.w $1D9A
-		dc.w $5DAE
-		dc.w $3DA2
+		dc.w $7D80
+		dc.w $1D74
+		dc.w $5D88
+		dc.w $3D7C
 PLC_Knuckles_LookUp1:
 		dc.w 3
-		dc.w $5DB4
-		dc.w $3DBA
-		dc.w $7DBE
+		dc.w $5D8E
+		dc.w $3D94
+		dc.w $7D98
 PLC_Knuckles_LookUp2:
 		dc.w 3
-		dc.w $5DC6
-		dc.w $3DCC
-		dc.w $7DBE
+		dc.w $5DA0
+		dc.w $3DA6
+		dc.w $7D98
 PLC_Knuckles_Crouch1:
 		dc.w 2
-		dc.w $2DD0
-		dc.w $BDD3
+		dc.w $2DAA
+		dc.w $BDAD
 PLC_Knuckles_Crouch2:
 		dc.w 2
-		dc.w $2DDF
-		dc.w $7DE2
+		dc.w $2DB9
+		dc.w $7DBC
 PLC_Knuckles_SpinDash1:
 		dc.w 3
-		dc.w $2DEA
-		dc.w $7DED
-		dc.w $2DF5
+		dc.w $2DC4
+		dc.w $7DC7
+		dc.w $2DCF
 PLC_Knuckles_SpinDash2:
 		dc.w 4
-		dc.w $2DF8
-		dc.w $3DFB
-		dc.w $3DFF
-		dc.w $2E03
+		dc.w $2DD2
+		dc.w $3DD5
+		dc.w $3DD9
+		dc.w $2DDD
 PLC_Knuckles_SpinDash3:
 		dc.w 4
-		dc.w $2E06
-		dc.w $3E09
-		dc.w $3DFF
-		dc.w $2E03
+		dc.w $2DE0
+		dc.w $3DE3
+		dc.w $3DD9
+		dc.w $2DDD
 PLC_Knuckles_SpinDash4:
 		dc.w 4
-		dc.w $2E0D
-		dc.w $3E10
-		dc.w $3DFF
-		dc.w $2E03
+		dc.w $2DE7
+		dc.w $3DEA
+		dc.w $3DD9
+		dc.w $2DDD
 PLC_Knuckles_SpinDash5:
 		dc.w 4
-		dc.w $2E14
-		dc.w $3E17
-		dc.w $3DFF
-		dc.w $2E03
+		dc.w $2DEE
+		dc.w $3DF1
+		dc.w $3DD9
+		dc.w $2DDD
 PLC_Knuckles_SpinDash6:
 		dc.w 3
-		dc.w $2DF8
-		dc.w $7E1B
-		dc.w $2E03
+		dc.w $2DD2
+		dc.w $7DF5
+		dc.w $2DDD
 PLC_Knuckles_Spin1:
 		dc.w 1
 		dc.w $F0A8
@@ -1297,119 +1294,43 @@ PLC_Knuckles_Spin5:
 		dc.w $F0E8
 PLC_Knuckles_Clear1:
 		dc.w 4
-		dc.w $2E23
-		dc.w $3E26
-		dc.w $5E2A
-		dc.w $3E30
+		dc.w $2DFD
+		dc.w $3E00
+		dc.w $5E04
+		dc.w $3E0A
 PLC_Knuckles_Clear2:
 		dc.w 4
-		dc.w $1E34
-		dc.w $BE36
-		dc.w $1E42
-		dc.w $3E44
+		dc.w $1E0E
+		dc.w $BE10
+		dc.w $1E1C
+		dc.w $3E1E
 PLC_Knuckles_Clear3:
 		dc.w 3
-		dc.w $1E48
-		dc.w $BE4A
-		dc.w $3E44
+		dc.w $1E22
+		dc.w $BE24
+		dc.w $3E1E
 PLC_Knuckles_Clear4:
 		dc.w 4
-		dc.w $2E56
-		dc.w $BE59
-		dc.w $1E65
-		dc.w $3E44
+		dc.w $2E30
+		dc.w $BE33
+		dc.w $1E3F
+		dc.w $3E1E
 PLC_Knuckles_Spring:
 		dc.w 3
-		dc.w $1E67
-		dc.w $8E69
-		dc.w $3E72
+		dc.w $1E41
+		dc.w $8E43
+		dc.w $3E4C
 PLC_Knuckles_Transform1:
 		dc.w 3
-		dc.w $5F7B
-		dc.w $3F81
-		dc.w $5F85
-PLC_Knuckles_Transform2:
-		dc.w 3
-		dc.w $3F8B
-		dc.w $2F8F
-		dc.w $FF92
-PLC_Knuckles_Transform3:
-		dc.w 3
-		dc.w $3FA2
-		dc.w $FFA6
-		dc.w $3FB6
-PLC_Knuckles_Idle1:
-		dc.w 2
-		dc.w $BE76
-		dc.w $3000
-PLC_Knuckles_Idle2:
-		dc.w 2
-		dc.w $BE76
-		dc.w $3E82
-PLC_Knuckles_Skid1:
-		dc.w 2
-		dc.w $1E86
-		dc.w $FE88
-PLC_Knuckles_Skid2:
+		dc.w $5E50
+		dc.w $3E56
+		dc.w $5E5A
+PLC_Knuckles_GlideLand1:
 		dc.w 4
-		dc.w $2E98
-		dc.w $FE9B
-		dc.w $0EAB
-		dc.w $3EAC
-PLC_Knuckles_Balance1:
-		dc.w 4
-		dc.w $2EB0
-		dc.w $BEB3
-		dc.w $1EBF
-		dc.w $2EC1
-PLC_Knuckles_Balance2:
-		dc.w 4
-		dc.w $2EC4
-		dc.w $BEC7
-		dc.w $5ED3
-		dc.w $2ED9
-PLC_Knuckles_Balance3:
-		dc.w 4
-		dc.w $0EDC
-		dc.w $BEDD
-		dc.w $7EE9
-		dc.w $5EF1
-PLC_Knuckles_Balance4:
-		dc.w 4
-		dc.w $BEF7
-		dc.w $1F03
-		dc.w $1F05
-		dc.w $5F07
-PLC_Knuckles_Balance5:
-		dc.w 4
-		dc.w $0F0D
-		dc.w $BF0E
-		dc.w $3F1A
-		dc.w $5F1E
-PLC_Knuckles_Balance6:
-		dc.w 4
-		dc.w $BF24
-		dc.w $1F30
-		dc.w $2F32
-		dc.w $1F35
-PLC_Knuckles_Balance7:
-		dc.w 4
-		dc.w $1F37
-		dc.w $1F39
-		dc.w $BF3B
-		dc.w $5F47
-PLC_Knuckles_Balance8:
-		dc.w 4
-		dc.w $5F4D
-		dc.w $BF53
-		dc.w $2F5F
-		dc.w $2F62
-PLC_Knuckles_Balance9:
-		dc.w 4
-		dc.w $BF65
-		dc.w $1F71
-		dc.w $5F73
-		dc.w $1F79
+		dc.w $1E60
+		dc.w $3E62
+		dc.w $3E66
+		dc.w $2E6A
 PLC_Knuckles_BalanceA:
 		dc.w 4
 		dc.w $F063
@@ -1428,9 +1349,77 @@ PLC_Knuckles_BalanceC:
 		dc.w $00A1
 		dc.w $30A2
 		dc.w $10A6
-PLC_Knuckles_GlideLand1:
+PLC_Knuckles_Skid1:
+		dc.w 2
+		dc.w $1E6D
+		dc.w $FE6F
+PLC_Knuckles_Skid2:
 		dc.w 4
-		dc.w $1D13
-		dc.w $3D15
-		dc.w $3D19
-		dc.w $2D1D
+		dc.w $2E7F
+		dc.w $FE82
+		dc.w $0E92
+		dc.w $3E93
+PLC_Knuckles_Balance1:
+		dc.w 4
+		dc.w $2E97
+		dc.w $BE9A
+		dc.w $1EA6
+		dc.w $2EA8
+PLC_Knuckles_Balance2:
+		dc.w 4
+		dc.w $2EAB
+		dc.w $BEAE
+		dc.w $5EBA
+		dc.w $2EC0
+PLC_Knuckles_Balance3:
+		dc.w 4
+		dc.w $0EC3
+		dc.w $BEC4
+		dc.w $7ED0
+		dc.w $5ED8
+PLC_Knuckles_Balance4:
+		dc.w 4
+		dc.w $BEDE
+		dc.w $1EEA
+		dc.w $1EEC
+		dc.w $5EEE
+PLC_Knuckles_Balance5:
+		dc.w 4
+		dc.w $0EF4
+		dc.w $BEF5
+		dc.w $3F01
+		dc.w $5F05
+PLC_Knuckles_Balance6:
+		dc.w 4
+		dc.w $BF0B
+		dc.w $1F17
+		dc.w $2F19
+		dc.w $1F1C
+PLC_Knuckles_Balance7:
+		dc.w 4
+		dc.w $1F1E
+		dc.w $1F20
+		dc.w $BF22
+		dc.w $5F2E
+PLC_Knuckles_Balance8:
+		dc.w 4
+		dc.w $5F34
+		dc.w $BF3A
+		dc.w $2F46
+		dc.w $2F49
+PLC_Knuckles_Balance9:
+		dc.w 4
+		dc.w $BF4C
+		dc.w $1F58
+		dc.w $5F5A
+		dc.w $1F60
+PLC_Knuckles_Transform2:
+		dc.w 3
+		dc.w $3F62
+		dc.w $2F66
+		dc.w $FF69
+PLC_Knuckles_Transform3:
+		dc.w 3
+		dc.w $3F79
+		dc.w $FF7D
+		dc.w $3F8D

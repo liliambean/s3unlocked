@@ -1307,7 +1307,8 @@ ArtTile_Results_General               = $0520
 ArtTile_Results_ActGfx                = $0568
 ArtTile_Results_CharName              = $0578
 ArtTile_Results_CharName2             = $05A0
-ArtTile_SSResults_CharName            = $04F1
+ArtTile_SSResults_CharName            = $04EF	; Liliam: special stage - add extra characters
+;ArtTile_SSResults_CharName           = $04F1	;
 ArtTile_SSResults_SUPER               = $050F
 ArtTile_SSResults                     = $0523
 ArtTile_SSResults_General             = $05B8
@@ -1643,7 +1644,6 @@ ArtTile_StarPostStars                 = $05FA	; Liliam: HUD - barrier HUD
 ;ArtTile_StarPostStars                = $05EC	;
 
 ArtTile_Player_1                      = $0680
-ArtTile_SuperHint                     = $0697	; Liliam: HUD - barrier HUD
 ArtTile_SignpostStub                  = $05EE	; Liliam: extra skills - hammer attack
 ;ArtTile_SignpostStub                 = $069E	;
 ArtTile_Player_2                      = $06A0
