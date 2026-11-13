@@ -194839,7 +194839,6 @@ loc_8374C:
 ;		moveq	#signextendB(sfx_GroundSlide),d0	; Liliam: QOL - render sprite in debug mode
 ;		jsr	(Play_SFX).l				;
 ;		move.l	#Sprite_OnScreen_Test,(a0)		;
-		move.l	#loc_8375A,(a0)				;
 
 loc_8375A:
 		tst.w	(Debug_placement_mode).w		;
