@@ -1647,7 +1647,7 @@ ArtTile_StarPostStars                 = $05FA	; Liliam: HUD - barrier HUD
 ;ArtTile_StarPostStars                = $05EC	;
 
 ArtTile_Player_1                      = $0680
-ArtTile_SignpostStub                  = $05EE	; Liliam: extra skills - hammer attack
+ArtTile_SignpostStub                  = $05FE	; Liliam: extra skills - hammer attack
 ;ArtTile_SignpostStub                 = $069E	;
 ArtTile_Player_2                      = $06A0
 ArtTile_TailsTail                     = $06B0
