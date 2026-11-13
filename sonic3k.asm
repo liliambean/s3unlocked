@@ -34830,6 +34830,11 @@ loc_166F6:
 ;loc_1674A:
 		tst.b	object_control(a0)
 		bne.s	locret_166F4
+		cmpi.b	#1,double_jump_flag(a0)			; Liliam: bugfix - player speeds fix
+		bne.s	loc_16750				;
+		asr	ground_vel(a0)				;
+
+loc_16750:
 		asr	x_vel(a0)
 		asr	y_vel(a0)
 		asr	y_vel(a0)
