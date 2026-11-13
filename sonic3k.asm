@@ -22559,7 +22559,8 @@ loc_102A8:
 		move.w	a0,$3E(a1)
 
 loc_102DA:
-		andi.b	#~Status_shield_mask,status_secondary(a0)
+		andi.b	#~Status_shield_mask+(1<<Status_WaterSlide),status_secondary(a0)	; Liliam: extra skills - hammer rush
+;		andi.b	#~Status_shield_mask,status_secondary(a0)				;
 
 loc_102E0:
 		move.b	#State_Hurt,routine(a0)
