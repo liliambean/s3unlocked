@@ -75403,8 +75403,6 @@ Obj_CNZBalloon:
 		move.w	y_pos(a0),$32(a0)
 		move.b	subtype(a0),d0
 		bne.s	loc_3173A				; Liliam: bugfix - use safe colors for CNZ balloons
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_3173A				;
 		cmpi.w	#3,(Player_mode).w			;
 		bhi.s	loc_3173A				;
 		moveq	#1,d0					;
