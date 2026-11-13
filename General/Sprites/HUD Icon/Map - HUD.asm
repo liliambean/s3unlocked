@@ -81,11 +81,9 @@ Map_HUD_Barrier_Thunder:
 		dc.w 1
 		dc.b  $88,   5,   0, $2C, $FF, $F8
 Map_HUD_Barrier_Aqua:
-		dc.w 1
-		dc.b  $88,   5,   0, $30, $FF, $F8
 Map_HUD_Barrier_Aqua2:
 		dc.w 1
-		dc.b  $88,   5,   0, $18, $FF, $F8
+		dc.b  $88,   5,   0, $30, $FF, $F8
 Map_HUD_Barrier_DMA:
 		dc.w 1
 		dc.b  $88,   5,   1, $36, $FF, $F8

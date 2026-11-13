@@ -774,9 +774,10 @@ Pal_fade_delay			ds.w 1			; timer for palette fade routines
 Collision_addr			ds.l 1			; points to the primary or secondary collision data as appropriate
 			ds.b $10			; unused
 Boss_flag			ds.b 1			; set if a boss fight is going on
-Barrier_HUD_DMA_flag		ds.b 1		; Liliam: HUD - barrier HUD
+Aqua_barrier_DMA_flag		ds.b 1		; Liliam: bugfix - use safe colors for aqua barrier icon
 Barrier_HUD_frame		ds.w 1		; Liliam: HUD - barrier HUD
-Barrier_HUD_scroll		ds.w 1		; Liliam: HUD - barrier HUD
+Barrier_HUD_scroll		ds.b 1		; Liliam: HUD - barrier HUD
+Barrier_HUD_DMA_flag		ds.b 1		; Liliam: HUD - barrier HUD
 
 Corkscrew_flags			ds.b 4
 Primary_collision_addr		ds.l 1

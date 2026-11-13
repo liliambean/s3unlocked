@@ -4575,10 +4575,11 @@ SuperHyper_PalCycle_ApplyRevert:
 ;		move.b	#0,(Palette_frame).w				;
 		move.w	#0,(Palette_frame).w				;
 		move.w	#0,(Palette_frame_Tails).w			;
-		move.b	#0,(Super_palette_status).w	; 0 = off
+		move.b	#0,(Super_palette_status).w
+		move.b	#1,(Aqua_barrier_DMA_flag).w		; Liliam: bugfix - use safe colors for aqua barrier icon
 
 ;loc_381E:
-		bra.w	SuperHyper_PalCycle_Apply			;
+		bra.w	SuperHyper_PalCycle_Apply			; Liliam: animate super forms consistently
 ;		bra.s	SuperHyper_PalCycle_ApplyFadeIn			;
 ; ---------------------------------------------------------------------------
 
@@ -4591,7 +4592,7 @@ SuperHyper_PalCycle_RevertRay:
 		bhs.s	loc_384A					;
 		move.w	d0,(Palette_frame).w
 		move.w	d0,(Palette_frame_Tails).w			;
-		move.b	d0,(Super_palette_status).w	; 0 = off
+		move.b	d0,(Super_palette_status).w
 ;		move.b	d0,(Palette_frame_Tails).w			;
 ;		cmpi.w	#3,(Player_mode).w				;
 ;		bhs.s	loc_384A					;
@@ -7316,7 +7317,8 @@ loc_6404:
 		move.w	d0,(Monitors_broken_P2).w
 ;		move.w	d0,(Loser_time_left).w				; Liliam: HUD - barrier HUD
 		move.b	d0,(LRZ_rocks_routine).w
-		move.w	d0,(Barrier_HUD_frame).w			;
+		move.l	d0,(Barrier_HUD_frame).w			;
+		move.w	d0,(Boss_flag).w				;
 		move.w	d0,(Super_Sonic_Knux_flag).w			;
 ;		move.b	d0,(Super_Sonic_Knux_flag).w			;
 		bsr.w	OscillateNumInit
@@ -7408,7 +7410,7 @@ Level_NotLRZ:
 		bsr.w	Process_Nem_Queue_Init
 		jsr	(Process_Kos_Module_Queue).l
 		bsr.w	OscillateNumDo
-		bsr.w	ChangeRingFrame_ReadySuper			; Liliam: HUD - barrier HUD
+		bsr.w	ChangeRingFrame_BarrierHUD			; Liliam: HUD - barrier HUD
 ;		bsr.w	ChangeRingFrame					;
 		jsr	(Render_Sprites).l
 		cmpi.b	#$15,(Current_zone).w
@@ -9201,7 +9203,54 @@ Osc_Data2:
 Osc_Data2_end
 ; ---------------------------------------------------------------------------
 
-ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
+ChangeRingFrame_BarrierHUD:						; Liliam: HUD - barrier HUD
+		moveq	#0,d1
+		move.b	(Aqua_barrier_DMA_flag).w,d1
+		beq.s	.reloadAquaIcon
+		bmi.s	.checkSuperReady
+		st	(Aqua_barrier_DMA_flag).w
+		tst.b	(Boss_flag).w
+		bne.s	.checkSuperReady
+		tst.b	(Super_Tails_flag).w
+		bne.s	.queueAquaIcon
+		cmpi.w	#2,(Player_mode).w
+		blo.s	.queueAquaIcon
+		bhi.s	.checkSuperReady
+		cmpi.b	#1,d1
+		beq.s	.queueAquaIcon
+		bra.s	.checkSuperReady
+; ---------------------------------------------------------------------------
+
+	.reloadAquaIcon:
+		tst.l	(Nem_decomp_queue).w
+		bne.s	.checkSuperReady
+		st	(Aqua_barrier_DMA_flag).w
+		cmpi.w	#5,(Player_mode).w
+		bhs.s	.checkSuperReady
+		cmpi.w	#3,(Player_mode).w
+		bhs.s	.queueSafeIcon
+		move.b	(Super_palette_status).w,d0
+		beq.s	.checkSuperReady
+		tst.b	(Encore_mode).w
+		bne.s	.queueSafeIcon
+		tst.b	(Player_1+character_id).w
+		beq.s	.queueSafeIcon
+		tst.b	(Super_Tails_flag).w
+		bne.s	.queueSafeIcon
+		cmpi.b	#3,d0
+		bne.s	.checkSuperReady
+
+	.queueSafeIcon:
+		moveq	#3,d1
+
+	.queueAquaIcon:
+		lsl.w	#8,d1
+		addi.l	#ArtUnc_BarrierHUD+$200,d1
+		move.w	#tiles_to_bytes(ArtTile_Monitors+$30),d2
+		moveq	#$40,d3
+		bsr.w	Add_To_DMA_Queue
+
+	.checkSuperReady:
 		cmpi.b	#State_NoControl,(Player_1+routine).w
 		bhs.w	ChangeRingFrame
 		moveq	#0,d1
@@ -9274,8 +9323,6 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 
 	.clearHint:
 		clr.b	(Barrier_HUD_scroll).w
-
-	.setCombineRing:
 		addq.w	#4,d1
 		bra.s	.setSpecialIcon
 ; ---------------------------------------------------------------------------
@@ -9296,24 +9343,23 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		bne.s	.setIcon
 		addq.w	#2,d1
 		btst	#Status_BublShield,d0
-		beq.s	.setCombineRing
-		tst.b	(Encore_mode).w
-		bne.s	.useSafeColors
+		beq.s	.clearHint
+		cmpi.w	#5,(Player_mode).w
+		bhs.s	.setIcon
 		cmpi.w	#3,(Player_mode).w
-		beq.s	.useSafeColors
-		cmpi.w	#4,(Player_mode).w
-		beq.s	.useSafeColors
-		bhi.s	.setIcon
+		bhs.s	.setSafeIcon
 		move.b	(Super_palette_status).w,d0
 		beq.s	.setIcon
+		tst.b	(Encore_mode).w
+		bne.s	.setSafeIcon
 		tst.b	(Player_1+character_id).w
-		beq.s	.useSafeColors
+		beq.s	.setSafeIcon
 		tst.b	(Super_Tails_flag).w
-		bmi.s	.useSafeColors
+		bmi.s	.setSafeIcon
 		cmpi.b	#3,d0
 		bne.s	.setIcon
 
-	.useSafeColors:
+	.setSafeIcon:
 		addq.w	#4,d1
 
 	.setIcon:
@@ -9335,18 +9381,11 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		cmp.b	(Barrier_HUD_DMA_flag).w,d1
 		beq.s	ChangeRingFrame
 		move.b	d1,(Barrier_HUD_DMA_flag).w
-		tst.b	(Encore_mode).w
-		beq.s	.checkRay
-		cmpi.b	#$C,d1
-		bne.s	.queueDMA
-		subq.b	#2,d1
-
-	.checkRay:
 		cmpi.w	#6,(Player_mode).w
-		bne.s	.queueDMA
+		bne.s	.queueIcon
 		addq.b	#1,d1
 
-	.queueDMA:
+	.queueIcon:
 		lsl.w	#7,d1
 		addi.l	#ArtUnc_BarrierHUD-$300,d1
 		move.w	#tiles_to_bytes(ArtTile_StarPostStars),d2
@@ -9419,6 +9458,7 @@ locret_7810:
 ; ---------------------------------------------------------------------------
 
 Load_PLC_MonitorsSpikesSprings:					; Liliam: Encore mode - change character item
+		clr.b	(Aqua_barrier_DMA_flag).w
 		lea	(PLC_MonitorsSpikesSprings_Encore).l,a1
 		tst.b	(Encore_mode).w
 		bne.w	Load_PLC_Raw
@@ -26205,8 +26245,7 @@ locret_11A14:
 Sonic_Transform:
 		tst.b	character_id(a0)			; Liliam: add extra characters
 		bne.w	Knux_Transform				;
-
-		move.b	#1,(Super_palette_status).w	; set Super/Hyper palette status to 'fading'
+		move.b	#1,(Super_palette_status).w
 		move.b	#$F,(Palette_timer).w
 		move.w	#60,(Super_frame_count).w
 ;		move.l	#Map_SuperSonic,mappings(a0)		; Liliam: Encore mode - change character item
@@ -26216,9 +26255,9 @@ Sonic_Transform:
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
 
-		cmpi.b	#7,(Super_emerald_count).w		; does Sonic have all 7 Super Emeralds?
-		blo.s	.super					; if not, turn Super
-		move.b	#-1,(Super_Sonic_Knux_flag).w		; set flag to Hyper Sonic
+		cmpi.b	#7,(Super_emerald_count).w
+		blo.s	.super
+		move.b	#-1,(Super_Sonic_Knux_flag).w
 		move.l	#Obj_HyperSonic_Stars,(Invincibility_stars).w
 		move.l	#Obj_HyperSonicKnux_Trail,(Super_stars).w
 		move.b	#30,air_left(a0)				; Liliam: bugfix - replenish air on hyper transform
@@ -26239,6 +26278,7 @@ loc_11A6E:
 		move.w	#$100,Deceleration-Max_speed(a4)
 		move.b	#0,invincibility_timer(a0)
 		bset	#Status_Invincible,status_secondary(a0)
+		move.b	#3,(Aqua_barrier_DMA_flag).w		; Liliam: bugfix - use safe colors for aqua barrier icon
 		moveq	#signextendB(sfx_SuperTransform),d0
 		jsr	(Play_SFX).l
 		tst.b	(Boss_flag).w				; Liliam: bugfix - use correct music for bosses
@@ -32265,7 +32305,7 @@ locret_151A2:
 ; ---------------------------------------------------------------------------
 
 Tails_Transform:
-		move.b	#1,(Super_palette_status).w	; set Super/Hyper palette status to 'fading'
+		move.b	#1,(Super_palette_status).w
 		move.b	#$F,(Palette_timer).w
 		move.b	#1,(Super_Tails_flag).w			; set flag to Super Tails
 		move.w	#60,(Super_frame_count).w
@@ -32294,6 +32334,7 @@ loc_151D4:
 		move.w	#$C0,Deceleration-Max_speed(a4)
 		move.b	#0,invincibility_timer(a0)
 		bset	#Status_Invincible,status_secondary(a0)
+		move.b	#3,(Aqua_barrier_DMA_flag).w		; Liliam: bugfix - use safe colors for aqua barrier icon
 		moveq	#signextendB(sfx_SuperTransform),d0
 		jsr	(Play_SFX).l
 		tst.b	(Boss_flag).w				; Liliam: bugfix - use correct music for bosses
@@ -36993,7 +37034,7 @@ locret_178CC:
 ; ---------------------------------------------------------------------------
 
 Knux_Transform:
-		move.b	#1,(Super_palette_status).w	; set Super/Hyper palette status to 'fading'
+		move.b	#1,(Super_palette_status).w
 		move.b	#$F,(Palette_timer).w
 		move.w	#60,(Super_frame_count).w
 		move.b	#$81,object_control(a0)
@@ -37002,9 +37043,9 @@ Knux_Transform:
 		movea.l	a0,a1					; Liliam: bugfix - clear roll state
 		jsr	(Player_ClearRollHeight2).l		;
 
-		cmpi.b	#7,(Super_emerald_count).w		; does Knuckles have all 7 Super Emeralds?
-		blo.s	.super					; if not, turn Super
-		move.b	#-1,(Super_Sonic_Knux_flag).w		; set flag to Hyper Knuckles
+		cmpi.b	#7,(Super_emerald_count).w
+		blo.s	.super
+		move.b	#-1,(Super_Sonic_Knux_flag).w
 		move.l	#Obj_HyperSonicKnux_Trail,(Super_stars).w
 		move.b	#30,air_left(a0)				; Liliam: bugfix - replenish air on hyper transform
 
@@ -37039,6 +37080,7 @@ loc_17916:
 		move.w	#$C0,Deceleration-Max_speed(a4)
 		move.b	#0,invincibility_timer(a0)
 		bset	#Status_Invincible,status_secondary(a0)
+		move.b	#3,(Aqua_barrier_DMA_flag).w		; Liliam: bugfix - use safe colors for aqua barrier icon
 		moveq	#signextendB(sfx_SuperTransform),d0
 		jsr	(Play_SFX).l
 		tst.b	(Boss_flag).w				; Liliam: bugfix - use correct music for bosses
@@ -46914,41 +46956,11 @@ locret_1D564:
 
 ; ---------------------------------------------------------------------------
 
-Monitor_SetupAquaBarrier:					; Liliam: bugfix - use safe colors for aqua barrier icon
+Monitor_SetupEncoreRoulette:					; Liliam: Encore mode - item roulette monitor
 		move.b	#-1,character_id(a0)
 		move.b	subtype(a0),d0
 		tst.b	(Encore_mode).w
-		bne.s	Monitor_SetupEncoreRoulette
-		cmpi.b	#7,d0
-		bne.s	Monitor_SetContents
-		cmpi.w	#3,(Player_mode).w
 		beq.s	Monitor_SetContents
-		cmpi.w	#4,(Player_mode).w
-		beq.s	Monitor_SetContents
-		bhi.s	locret_1D564
-		move.l	#Obj_Monitor_CheckSuperPalette,(a0)
-		bra.s	Monitor_SetContents
-; ---------------------------------------------------------------------------
-
-Obj_Monitor_CheckSuperPalette:					; Liliam: bugfix - use safe colors for aqua barrier icon
-		cmpi.b	#4,routine(a0)
-		beq.s	Monitor_RemoveHandler
-		clr.w	anim(a0)
-		move.b	(Super_palette_status).w,d0
-		beq.w	Obj_Monitor
-		tst.b	(Player_1+character_id).w
-		beq.s	.useSafeColors
-		tst.b	(Super_Tails_flag).w
-		bmi.s	.useSafeColors
-		cmpi.b	#3,d0
-		bne.w	Obj_Monitor
-
-	.useSafeColors:
-		move.w	#$707,anim(a0)
-		bra.w	Obj_Monitor
-; ---------------------------------------------------------------------------
-
-Monitor_SetupEncoreRoulette:					; Liliam: Encore mode - item roulette monitor
 		cmpi.b	#1,d0
 		bne.s	Monitor_SetContents
 		moveq	#2,d0
@@ -47066,7 +47078,7 @@ Obj_MonitorInit:
 
 	.notbroken:
 		move.b	#$46,collision_flags(a0)
-		bsr.w	Monitor_SetupAquaBarrier		; Liliam: bugfix - use safe colors for aqua barrier icon
+		bsr.w	Monitor_SetupEncoreRoulette		; Liliam: Encore mode - item roulette monitor
 ;		move.b	subtype(a0),anim(a0)			;
 
 Obj_MonitorMain:
@@ -47624,6 +47636,7 @@ loc_1DA68:
 		move.w	d1,-(sp)				;
 		jsr	(Give_SuperSonic).l			;
 		move.w	(sp)+,d1				;
+		move.b	#3,(Aqua_barrier_DMA_flag).w		; Liliam: bugfix - use safe colors for aqua barrier icon
 		moveq	#signextendB(sfx_SuperTransform),d0
 		jsr	(Play_SFX).l
 		tst.b	(Boss_flag).w				; Liliam: bugfix - use correct music for bosses
@@ -47646,11 +47659,8 @@ loc_1DB26:
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_ChangeCharacter:
-		tst.b	(Encore_mode).w				; Liliam: bugfix - use safe colors for aqua barrier icon
-		beq.w	Monitor_Give_BubbleShield		;
-		addq.w	#1,(a2)					;
-
-		movea.w	parent(a0),a1				; Liliam: Encore mode - change character item
+		addq.w	#1,(a2)					; Liliam: Encore mode - change character item
+		movea.w	parent(a0),a1				;
 		cmpi.b	#State_Control,routine(a1)		;
 		beq.s	Encore_RotateStocks			;
 
@@ -149933,6 +149943,7 @@ loc_65998:
 ; ---------------------------------------------------------------------------
 
 Load_PLC_Monitors:						; Liliam: Encore mode - change character item
+		clr.b	(Aqua_barrier_DMA_flag).w
 		lea	(PLC_Monitors_Encore).l,a1
 		tst.b	(Encore_mode).w
 		bne.s	.loadPLC
@@ -191794,6 +191805,7 @@ loc_81624:
 		move.w	#$100,(Deceleration).w
 		move.b	#0,(Player_1+invincibility_timer).w
 		bset	#Status_Invincible,(Player_1+status_secondary).w
+		move.b	#3,(Aqua_barrier_DMA_flag).w		; Liliam: bugfix - use safe colors for aqua barrier icon
 		moveq	#signextendB(sfx_SuperTransform),d0	; Liliam: bugfix - use correct sound
 ;		moveq	#signextendB(sfx_Whistle),d0		;
 		jmp	(Play_SFX).l
@@ -194647,7 +194659,7 @@ loc_83760:
 		move.b	#4,$3C(a0)
 		move.w	#-$500,y_vel(a0)
 		andi.w	#drawing_mask,art_tile(a0)		; Liliam: QOL - render sprite in debug mode
-		jsr	(Monitor_SetupAquaBarrier).l		; Liliam: bugfix - use safe colors for aqua barrier icon
+		jsr	(Monitor_SetupEncoreRoulette).l		; Liliam: Encore mode - item roulette monitor
 		moveq	#signextendB(sfx_BubbleAttack),d0
 		jsr	(Play_SFX).l
 		bclr	#0,render_flags(a0)
@@ -198864,7 +198876,8 @@ Obj_EndSignControlDoSign:
 		jsr	CreateChild6_Simple(pc)
 
 loc_85BEC:
-		lea	PLC_EndSignStuff_Encore(pc),a1		; Liliam: Encore mode - special Robotnik icon for palette
+		clr.b	(Aqua_barrier_DMA_flag).w		; Liliam: Encore mode - special Robotnik icon for palette
+		lea	PLC_EndSignStuff_Encore(pc),a1		;
 		tst.b	(Encore_mode).w				;
 		bne.s	loc_85BF0				;
 		lea	PLC_EndSignStuff_Amy(pc),a1		;
