@@ -37619,7 +37619,7 @@ Encore_CheckRestart:						; Liliam: Encore mode - restart level
 
 	.clearPlayer:
 		bsr.w	Delete_Current_Sprite
-		clr.b	(Dust+$38).w
+		clr.w	(Dust+$38).w
 		cmpa.w	(Tails_tails+$30).w,a0
 		bne.s	.checkBoostMode
 		move.l	#Delete_Current_Sprite,(Tails_tails).w
@@ -147676,8 +147676,10 @@ loc_63EDA:
 		bhs.s	loc_63F00
 		cmpi.w	#$20,d2
 		bhs.s	loc_63F00
-		cmpi.b	#2,anim(a1)
-		bne.w	loc_63FF8
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.w	loc_63FF8				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.w	loc_63FF8				;
 
 loc_63F00:
 		subq.w	#1,$2E(a0)
@@ -150857,8 +150859,10 @@ loc_66102:
 loc_66112:
 		cmpi.w	#$10,d2
 		bhs.s	loc_66134
-		cmpi.b	#2,anim(a1)
-		beq.s	loc_6612A
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		bne.s	loc_6612A				;
+;		cmpi.b	#2,anim(a1)				;
+;		beq.s	loc_6612A				;
 		btst	#Status_Invincible,status_secondary(a1)
 		bne.w	loc_6429E
 
@@ -150870,8 +150874,10 @@ loc_6612A:
 ; ---------------------------------------------------------------------------
 
 loc_66134:
-		cmpi.b	#2,anim(a1)
-		beq.s	loc_66146
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		bne.s	loc_66146				;
+;		cmpi.b	#2,anim(a1)				;
+;		beq.s	loc_66146				;
 		btst	#Status_Invincible,status_secondary(a1)
 		bne.w	loc_6429E
 
@@ -162264,9 +162270,11 @@ CNZMinibossTop_CheckPlayerBounce:
 
 sub_6E1A8:
 		tst.w	y_vel(a1)
-		bpl.s	loc_6E210		; If player is moving downward, don't bother
-		cmpi.b	#2,anim(a1)
-		bne.s	loc_6E210		; If player is not in rolling animation, don't bother
+		bpl.s	loc_6E210
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.s	loc_6E210				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.s	loc_6E210				;
 		move.w	x_pos(a0),d0
 		move.w	y_pos(a0),d1
 		addi.w	#$C,d1
@@ -195218,9 +195226,11 @@ loc_83A6A:
 
 
 sub_83A70:
-		movea.w	d0,a1			; This can be done up to twice depending on who hit the signpost
-		cmpi.b	#2,anim(a1)
-		bne.s	locret_83ABC		; only go on if Player is currently jumping
+		movea.w	d0,a1
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		beq.s	locret_83ABC				;
+;		cmpi.b	#2,anim(a1)				;
+;		bne.s	locret_83ABC				;
 		tst.w	y_vel(a1)
 		bpl.s	locret_83ABC		; And if he's actually moving upwards
 		move.b	#$20,$20(a0)		; Set delay for when it checks for the next hit
@@ -207901,8 +207911,10 @@ sub_8AA38:
 loc_8AA46:
 		tst.w	y_vel(a3)
 		bmi.s	loc_8AA8A
-		cmpi.b	#2,anim(a3)
-		beq.s	loc_8AA5C
+		btst	#Status_Roll,status(a3)			; Liliam: simplify roll anim selection
+		bne.s	loc_8AA5C				;
+;		cmpi.b	#2,anim(a3)				;
+;		beq.s	loc_8AA5C				;
 		cmpi.b	#9,anim(a3)
 		bne.s	loc_8AA8A
 
@@ -210549,8 +210561,10 @@ sub_8C23C:
 		bhs.s	locret_8C254
 		cmpi.w	#$30,d3
 		bhs.s	locret_8C254
-		cmpi.b	#2,anim(a1)
-		beq.s	loc_8C256
+		btst	#Status_Roll,status(a1)			; Liliam: simplify roll anim selection
+		bne.s	loc_8C256				;
+;		cmpi.b	#2,anim(a1)				;
+;		beq.s	loc_8C256				;
 
 locret_8C254:
 		rts
@@ -216346,8 +216360,10 @@ sub_8FF8C:
 		lsl.w	#2,d0
 		lea	word_8FFD4-4(pc,d0.w),a1
 		movea.w	(a1)+,a2
-		cmpi.b	#2,anim(a2)
-		beq.w	locret_8FE24
+		btst	#Status_Roll,status(a2)			; Liliam: simplify roll anim selection
+		bne.w	locret_8FE24				;
+;		cmpi.b	#2,anim(a2)				;
+;		beq.w	locret_8FE24				;
 		btst	#Status_BublShield,status_secondary(a2)
 		bne.w	locret_8FE24
 		move.w	a2,$44(a0)
