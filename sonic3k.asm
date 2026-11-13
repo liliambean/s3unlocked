@@ -23310,7 +23310,8 @@ loc_10A50:
 		move.b	(Ctrl_1_pressed_logical).w,d0
 		andi.b	#button_ABC_mask,d0
 		beq.w	loc_10A80
-		move.w	#9<<8,anim(a0)	; and prev_anim
+		move.w	#(9<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#9<<8,anim(a0)				;
 		move.w	#signextendB(sfx_Spindash),d0
 		jsr	(Play_SFX).l
 		addi.w	#$200,spin_dash_counter(a0)
@@ -26652,7 +26653,8 @@ loc_11D2E:
 		move.b	(Ctrl_1_pressed_logical).w,d0
 		andi.b	#button_ABC_mask,d0
 		beq.w	loc_11D5E
-		move.w	#9<<8,anim(a0)	; and prev_anim
+		move.w	#(9<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#9<<8,anim(a0)				;
 		move.w	#signextendB(sfx_Spindash),d0
 		jsr	(Play_SFX).l
 		addi.w	#$200,spin_dash_counter(a0)
@@ -29323,7 +29325,8 @@ loc_13618:
 		move.b	(Ctrl_2_pressed_logical).w,d0
 		andi.b	#button_ABC_mask,d0
 		beq.w	loc_13648
-		move.w	#9<<8,anim(a0)	; and prev_anim
+		move.w	#(9<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#9<<8,anim(a0)				;
 		move.w	#signextendB(sfx_Spindash),d0
 		jsr	(Play_SFX).l
 		addi.w	#$200,spin_dash_counter(a0)
@@ -30967,7 +30970,7 @@ Tails_Carry_GrabPlayer:
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addi.w	#$1C,y_pos(a1)
-		move.w	#$14<<8|$FF,anim(a1)			; Liliam: simplify player anim selection
+		move.w	#($14<<8)|$FF,anim(a1)			; Liliam: simplify player anim selection
 ;		move.w	#$22<<8,anim(a1)			;
 		move.b	#0,anim_frame_timer(a1)
 		move.b	#0,anim_frame(a1)
@@ -32560,7 +32563,8 @@ loc_1534A:
 		move.b	(Ctrl_2_pressed_logical).w,d0
 		andi.b	#button_ABC_mask,d0
 		beq.w	loc_1537A
-		move.w	#9<<8,anim(a0)	; and prev_anim
+		move.w	#(9<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#9<<8,anim(a0)				;
 		move.w	#signextendB(sfx_Spindash),d0
 		jsr	(Play_SFX).l
 		addi.w	#$200,spin_dash_counter(a0)
@@ -36060,7 +36064,7 @@ Knuckles_ClimbDash:						; Liliam: extra skills - climb dash
 		move.b	(Ctrl_1_pressed_logical).w,d0
 		andi.b	#button_ABC_mask,d0
 		beq.w	.moveCamera
-		move.w	#$A<<8,anim(a0)
+		move.w	#($A<<8)|$FF,anim(a0)
 		move.w	#signextendB(sfx_Spindash),d0
 		jsr	(Play_SFX).l
 		addi.w	#$200,spin_dash_counter(a0)
@@ -45550,7 +45554,9 @@ loc_1C660:
 ; ---------------------------------------------------------------------------
 
 AIZ2_SonicResize1:
-		cmpi.w	#$A<<8,(Player_1+anim).w		; Liliam: extra skills - hammer drop
+		cmpi.w	#($A<<8)|$FF,(Player_1+anim).w		; Liliam: extra skills - hammer drop
+		beq.s	loc_1C66C				;
+		cmpi.w	#($A<<8)|$FF,(Player_2+anim).w		;
 		beq.s	loc_1C66C				;
 		cmpi.w	#$2E0,(Camera_X_pos).w
 		blo.s	locret_1C68E
@@ -51437,7 +51443,7 @@ Player_ResumeHammerDrop:
 		bset	#Status_Roll,status(a1)
 		bclr	#Status_OnObj,status(a1)
 		move.b	#Status_HammerDrop,double_jump_flag(a1)
-		move.w	#$A<<8,anim(a1)
+		move.w	#($A<<8)|$FF,anim(a1)
 		move.w	#$C00,y_vel(a1)
 
 Player_SetRollHeight:
@@ -54939,7 +54945,8 @@ loc_22F86:
 
 
 Spring_LaunchUp:
-		move.w	#1<<8,anim(a0)	; and prev_anim
+		move.w	#(1<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1<<8,anim(a0)				;
 		addq.w	#8,y_pos(a1)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	loc_22FAE
@@ -55104,7 +55111,8 @@ loc_2314E:
 
 
 sub_23160:
-		move.w	#3<<8,anim(a0)	; and prev_anim
+		move.w	#(3<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#3<<8,anim(a0)				;
 		move.w	$30(a0),x_vel(a1)
 		addq.w	#4,x_pos(a1)
 		bset	#Status_Facing,status(a1)
@@ -55123,7 +55131,8 @@ loc_2318E:
 
 
 Spring_LaunchHorizontal:
-		move.w	#3<<8,anim(a0)	; and prev_anim
+		move.w	#(3<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#3<<8,anim(a0)				;
 		move.w	$30(a0),x_vel(a1)
 		addq.w	#8,x_pos(a1)
 		bset	#Status_Facing,status(a1)
@@ -55339,7 +55348,8 @@ Spring_LaunchDown:
 		addi.w	#2*8,y_pos(a1)
 
 loc_233DA:
-		move.w	#1<<8,anim(a0)	; and prev_anim
+		move.w	#(1<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1<<8,anim(a0)				;
 		move.w	$30(a0),y_vel(a1)
 		neg.w	y_vel(a1)
 		cmpi.w	#$1000,y_vel(a1)
@@ -55451,7 +55461,8 @@ loc_234FC:
 ; ---------------------------------------------------------------------------
 
 loc_2350A:
-		move.w	#5<<8,anim(a0)	; and prev_anim
+		move.w	#(5<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#5<<8,anim(a0)				;
 		move.w	$30(a0),y_vel(a1)
 		move.w	$30(a0),x_vel(a1)
 		addq.w	#6,y_pos(a1)
@@ -55548,7 +55559,8 @@ loc_2360E:
 
 
 Spring_LaunchDownDiag:
-		move.w	#5<<8,anim(a0)	; and prev_anim
+		move.w	#(5<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#5<<8,anim(a0)				;
 		move.w	$30(a0),y_vel(a1)
 		neg.w	y_vel(a1)
 		move.w	$30(a0),x_vel(a1)
@@ -66110,7 +66122,8 @@ loc_2A2D6:
 		add.w	$34(a0),d0
 		and.w	$32(a0),d0
 		bne.w	loc_2A300
-		move.w	#(1<<8)|0,anim(a0)	; and prev_anim
+		move.w	#(1<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#(1<<8)|0,anim(a0)			;
 		move.b	#0,$36(a0)
 		tst.b	render_flags(a0)
 		bpl.s	loc_2A300
@@ -75790,7 +75803,8 @@ sub_31C0A:
 		andi.b	#standing_mask,d0
 		beq.s	loc_31C26
 		move.b	#1,$30(a0)
-		move.w	#1<<8,anim(a0)	; and prev_anim
+		move.w	#(1<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1<<8,anim(a0)				;
 
 loc_31C26:
 		tst.w	y_vel(a0)
@@ -75800,7 +75814,8 @@ loc_31C26:
 		tst.w	y_vel(a0)
 		bmi.s	locret_31C4A
 		move.w	#0,y_vel(a0)
-		move.w	#2<<8,anim(a0)	; and prev_anim
+		move.w	#(2<<8)|$FF,anim(a0)			;
+;		move.w	#2<<8,anim(a0)				;
 
 locret_31C4A:
 		rts
@@ -75821,7 +75836,8 @@ loc_31C6A:
 		bpl.s	locret_31C84
 		add.w	d1,y_pos(a0)
 		move.l	#loc_31BD2,(a0)
-		move.w	#2<<8,anim(a0)	; and prev_anim
+		move.w	#(2<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#2<<8,anim(a0)				;
 
 locret_31C84:
 		rts
@@ -78801,7 +78817,8 @@ loc_33A0E:
 		move.b	default_y_radius(a1),y_radius(a1)	;
 ;		move.b	#$13,y_radius(a1)			;
 ;		move.b	#9,x_radius(a1)				;
-		move.w	#1,anim(a1)	; and prev_anim
+		move.w	#(0<<8)|$FF,anim(a1)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1,anim(a1)				;
 		bclr	#Status_OnObj,status(a1)
 		bclr	d6,status(a0)
 		bclr	#6,object_control(a1)
@@ -78911,7 +78928,8 @@ loc_33B62:
 		move.b	default_y_radius(a1),y_radius(a1)	;
 ;		move.b	#$13,y_radius(a1)			;
 ;		move.b	#9,x_radius(a1)				;
-		move.w	#1,anim(a1)	; and prev_anim
+		move.w	#(0<<8)|$FF,anim(a1)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1,anim(a1)				;
 		bclr	#Status_OnObj,status(a1)
 		bclr	d6,status(a0)
 		bclr	#6,object_control(a1)
@@ -79193,7 +79211,8 @@ loc_33E88:
 		move.b	default_y_radius(a1),y_radius(a1)	;
 ;		move.b	#$13,y_radius(a1)			;
 ;		move.b	#9,x_radius(a1)				;
-		move.w	#1,anim(a1)	; and prev_anim
+		move.w	#(0<<8)|$FF,anim(a1)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1,anim(a1)				;
 		bclr	#Status_OnObj,status(a1)
 		bclr	d6,status(a0)
 		bclr	#6,object_control(a1)
@@ -79662,7 +79681,8 @@ loc_3438E:
 		bhs.s	loc_343C6
 		tst.b	anim(a0)
 		bne.s	loc_343C6
-		move.w	#1<<8,anim(a0)	; and prev_anim
+		move.w	#(1<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1<<8,anim(a0)				;
 
 loc_343C6:
 		tst.b	collision_flags(a0)
@@ -92547,7 +92567,8 @@ loc_3EE42:
 ; ---------------------------------------------------------------------------
 
 loc_3EE7A:
-		move.w	#$10<<8,anim(a1)	; and prev_anim
+		move.w	#($10<<8)|$FF,anim(a1)			; Liliam: bugfix - fix stuck animation
+;		move.w	#$10<<8,anim(a1)			;
 		move.w	(a3),d0
 		move.w	d0,d1
 		asr.w	#1,d1
@@ -96890,7 +96911,8 @@ loc_42368:
 		andi.b	#$81,status(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	d6,status(a0)
-		move.w	#1,anim(a1)	; and prev_anim
+		move.w	#(0<<8)|$FF,anim(a1)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1,anim(a1)				;
 		move.b	#0,object_control(a1)
 		neg.w	ground_vel(a1)
 		move.w	ground_vel(a1),x_vel(a1)
@@ -96904,7 +96926,8 @@ loc_42396:
 		andi.b	#$81,status(a1)
 		bset	#Status_Facing,status(a1)
 		bclr	d6,status(a0)
-		move.w	#1,anim(a1)	; and prev_anim
+		move.w	#(0<<8)|$FF,anim(a1)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1,anim(a1)				;
 		move.b	#0,object_control(a1)
 		neg.w	ground_vel(a1)
 		move.w	ground_vel(a1),x_vel(a1)
@@ -97136,7 +97159,8 @@ loc_426B6:
 
 loc_426DA:
 		bclr	d6,status(a0)
-		move.w	#1,anim(a1)	; and prev_anim
+		move.w	#(0<<8)|$FF,anim(a1)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1,anim(a1)				;
 		move.b	#0,object_control(a1)
 		move.w	ground_vel(a1),x_vel(a1)
 		move.w	#0,y_vel(a1)
@@ -99054,7 +99078,8 @@ loc_443C4:
 ;		move.w	#0,anim(a1)				;
 		tst.w	d0
 		bpl.s	loc_443FE
-		move.w	#$10<<8,anim(a1)	; and prev_anim
+		move.w	#($10<<8)|$FF,anim(a1)			;
+;		move.w	#$10<<8,anim(a1)			;
 		ori.w	#high_priority,art_tile(a1)
 
 loc_443FE:
@@ -103198,7 +103223,8 @@ loc_478CC:
 		moveq	#0,d0
 		move.b	subtype(a0),d0
 		move.w	d0,$30(a0)
-		move.w	#1,anim(a0)	; and prev_anim
+		move.w	#(0<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1,anim(a0)				;
 		move.l	#loc_478E2,(a0)
 
 loc_478E2:
@@ -105316,7 +105342,8 @@ DEZGravityHub_CheckPlayer:
 		move.w	#0,ground_vel(a1)
 		move.w	#0,angle(a1)	; and flip_angle
 		andi.b	#$FC,render_flags(a1)
-		move.w	#1,anim(a1)	; and prev_anim
+		move.w	#(0<<8)|$FF,anim(a1)			; Liliam: bugfix - fix stuck animation
+;		move.w	#1,anim(a1)				;
 		move.b	#$83,object_control(a1)
 		move.b	#1,(a2)
 
@@ -106167,7 +106194,7 @@ sub_49CFE:
 		btst	d6,status(a0)
 		beq.s	locret_49D3A
 		addq.b	#1,(a3)
-;		move.w	#2<<8,anim(a1)	; and prev_anim		; Liliam: bugfix - set correct player height
+;		move.w	#2<<8,anim(a1)				; Liliam: bugfix - set correct player height
 		move.b	#1,object_control(a1)
 		jsr	(Player_SetRollHeight).l		;
 ;		move.b	#$E,y_radius(a1)			;
@@ -135938,7 +135965,8 @@ loc_5C7B2:
 		move.w	#make_art_tile(ArtTile_Player_2,0,0),art_tile(a0)
 		move.w	#$280,priority(a0)
 		clr.b	(Player_prev_frame_P2).w
-		move.w	#5<<8,anim(a0)
+		move.w	#(5<<8)|$FF,anim(a0)			; Liliam: bugfix - fix stuck animation
+;		move.w	#5<<8,anim(a0)				;
 		move.w	#$BB<<8,mapping_frame(a0)		; Liliam: simplify player anim selection
 ;		move.w	#$AD<<8,mapping_frame(a0)		;
 		move.w	#40-1,$2E(a0)
@@ -186799,7 +186827,8 @@ loc_7E420:
 		lea	(Player_1).w,a1
 		bclr	#0,render_flags(a1)
 		bclr	#Status_Facing,status(a1)
-		move.w	#5<<8,anim(a1)	; and prev_anim
+		move.w	#(5<<8)|$FF,anim(a1)			; Liliam: bugfix - fix stuck animation
+;		move.w	#5<<8,anim(a1)				;
 
 loc_7E44C:
 		jsr	(MoveSprite).l
@@ -217213,7 +217242,8 @@ loc_908F4:
 		addq.w	#1,d0					;
 		add.w	d0,y_pos(a1)				;
 		move.b	#$81,object_control(a1)
-		move.w	#5<<8,anim(a1)	; and prev_anim
+		move.w	#(5<<8)|$FF,anim(a1)			; Liliam: bugfix - fix stuck animation
+;		move.w	#5<<8,anim(a1)				;
 
 loc_90920:
 		jmp	(Draw_Sprite).l
