@@ -7827,11 +7827,11 @@ loc_69E0:
 		lea	(Player_1).w,a1
 		move.b	(Saved_status_secondary).w,d0
 		clr.b	(Saved_status_secondary).w
-		andi.b	#(1<<Status_FireShield)|(1<<Status_LtngShield)|(1<<Status_BublShield),d0
+		andi.b	#Status_saved_mask,d0
 		bne.s	loc_6A02
 		move.b	(Saved2_status_secondary).w,d0
 		clr.b	(Saved2_status_secondary).w
-		andi.b	#(1<<Status_FireShield)|(1<<Status_LtngShield)|(1<<Status_BublShield),d0
+		andi.b	#Status_saved_mask,d0
 		bne.s	loc_6A02
 
 locret_6A00:
@@ -7841,7 +7841,7 @@ locret_6A00:
 loc_6A02:
 		btst	#Status_FireShield,d0
 		beq.s	loc_6A28
-		andi.b	#$8E,status_secondary(a1)
+		andi.b	#~Status_shield_mask,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_FireShield,status_secondary(a1)
 		move.l	#Obj_FireShield,(Shield).w
@@ -7852,7 +7852,7 @@ loc_6A02:
 loc_6A28:
 		btst	#Status_LtngShield,d0
 		beq.s	loc_6A4E
-		andi.b	#$8E,status_secondary(a1)
+		andi.b	#~Status_shield_mask,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_LtngShield,status_secondary(a1)
 		move.l	#Obj_LightningShield,(Shield).w
@@ -7863,7 +7863,7 @@ loc_6A28:
 loc_6A4E:
 		btst	#Status_BublShield,d0
 		beq.s	locret_6A74
-		andi.b	#$8E,status_secondary(a1)
+		andi.b	#~Status_shield_mask,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_BublShield,status_secondary(a1)
 		move.l	#Obj_BubbleShield,(Shield).w
@@ -9377,7 +9377,7 @@ ChangeRingFrame_BarrierHUD:						; Liliam: HUD - barrier HUD
 ; ---------------------------------------------------------------------------
 
 	.checkBarrier:
-		moveq	#1<<Status_CombineRing|1<<Status_FireShield|1<<Status_LtngShield|1<<Status_BublShield,d0
+		moveq	#Status_saved_mask|(1<<Status_CombineRing),d0
 		and.b	(Player_1+status_secondary).w,d0
 		beq.s	.setIcon
 		moveq	#$A,d1
@@ -22559,7 +22559,7 @@ loc_102A8:
 		move.w	a0,$3E(a1)
 
 loc_102DA:
-		andi.b	#$8E,status_secondary(a0)
+		andi.b	#~Status_shield_mask,status_secondary(a0)
 
 loc_102E0:
 		move.b	#State_Hurt,routine(a0)
@@ -22690,7 +22690,7 @@ Add_SpriteToCollisionResponseList:
 
 ShieldTouchResponse:
 		move.b	status_secondary(a0),d0
-		andi.b	#$71,d0				; Does the player have any shields?
+		andi.b	#Status_shield_mask,d0		; Does the player have any shields?
 		beq.s	locret_1045C
 		move.w	x_pos(a0),d2			; Get player's x_pos
 		move.w	y_pos(a0),d3			; Get player's y_pos
@@ -39799,7 +39799,7 @@ locret_19690:
 ; ---------------------------------------------------------------------------
 
 Obj_FireShield_DestroyUnderwater:
-		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~Status_shield_mask,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
 		jsr	(AllocateObject).l		; Set up for a new object
 		bne.w	Obj_FireShield_Destroy		; If that can't happen, branch
 		move.l	#Obj_FireShield_Dissipate,(a1)	; Create dissipate object
@@ -39807,7 +39807,7 @@ Obj_FireShield_DestroyUnderwater:
 		move.w	y_pos(a0),y_pos(a1)		; Put it at shields' y_pos
 
 Obj_FireShield_Destroy:
-		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~Status_shield_mask,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
 		move.l	#Obj_InstaShield,(a0)		; Replace the Fire Shield with the Insta-Shield
 		rts
 ; ---------------------------------------------------------------------------
@@ -39891,14 +39891,14 @@ Obj_LightningShield_DestroyUnderwater:
 		beq.s	Obj_LightningShield_FlashWater
 
 Obj_LightningShield_Destroy:
-		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~Status_shield_mask,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
 		move.l	#Obj_InstaShield,(a0)		; Replace the Lightning Shield with the Insta-Shield
 		rts
 ; ---------------------------------------------------------------------------
 
 Obj_LightningShield_FlashWater:
 		move.l	#Obj_LightningShield_DestroyUnderwater2,(a0)
-		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~Status_shield_mask,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
 
 		; Flashes the underwater palette white
 		lea	(Water_palette).w,a1
@@ -40040,7 +40040,7 @@ locret_1998A:
 ; ---------------------------------------------------------------------------
 
 Obj_BubbleShield_Destroy:
-		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~Status_shield_mask,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
 		move.l	#Obj_InstaShield,(a0)		; Replace the Bubble Shield with the Insta-Shield
 		rts
 
@@ -47667,7 +47667,7 @@ loc_1D94C:
 
 Monitor_Give_FireShield:
 		addq.w	#1,(a2)
-		andi.b	#$8E,status_secondary(a1)
+		andi.b	#~Status_shield_mask,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_FireShield,status_secondary(a1)
 		moveq	#signextendB(sfx_FireShield),d0
@@ -47688,7 +47688,7 @@ Monitor_Give_FireShield:
 
 Monitor_Give_LightningShield:
 		addq.w	#1,(a2)
-		andi.b	#$8E,status_secondary(a1)
+		andi.b	#~Status_shield_mask,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_LtngShield,status_secondary(a1)
 		moveq	#signextendB(sfx_LightningShield),d0
@@ -47709,7 +47709,7 @@ Monitor_Give_LightningShield:
 
 Monitor_Give_BubbleShield:
 		addq.w	#1,(a2)
-		andi.b	#$8E,status_secondary(a1)
+		andi.b	#~Status_shield_mask,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_BublShield,status_secondary(a1)
 		moveq	#signextendB(sfx_BubbleShield),d0
@@ -69927,7 +69927,7 @@ loc_2D4CA:
 		move.b	#0,(Last_star_post_hit).w
 		move.b	#1,(Restart_level_flag).w
 		move.b	(Player_1+status_secondary).w,d0
-		andi.b	#$71,d0
+		andi.b	#Status_shield_mask,d0
 		move.b	d0,(Saved2_status_secondary).w
 		move.b	d0,(Saved_status_secondary).w
 		move.b	#1,(Respawn_table_keep).w
@@ -106469,7 +106469,7 @@ loc_4A024:
 		move.w	(Ring_count).w,(Saved_ring_count).w
 		move.b	(Extra_life_flags).w,(Saved_extra_life_flags).w
 		move.b	(Player_1+status_secondary).w,d0
-		andi.b	#$71,d0
+		andi.b	#Status_shield_mask,d0
 		move.b	d0,(Saved_status_secondary).w
 
 locret_4A078:
@@ -143653,7 +143653,7 @@ loc_61076:
 		move.w	(Ring_count).w,(Saved_ring_count).w
 		move.b	(Extra_life_flags).w,(Saved_extra_life_flags).w
 		move.b	(Player_1+status_secondary).w,d0
-		andi.b	#$71,d0
+		andi.b	#Status_shield_mask,d0
 		move.b	d0,(Saved_status_secondary).w
 		rts
 ; ---------------------------------------------------------------------------
@@ -143797,7 +143797,7 @@ Gumball_Give_FireShield:
 		lea	(Player_1).w,a1
 		move.l	#Obj_FireShield,(Shield).w
 		move.w	a1,(Shield+parent).w
-		andi.b	#$8E,status_secondary(a1)
+		andi.b	#~Status_shield_mask,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		moveq	#Status_FireShield,d0
 		bsr.w	sub_61254
@@ -143810,7 +143810,7 @@ Gumball_Give_BubbleShield:
 		lea	(Player_1).w,a1
 		move.l	#Obj_BubbleShield,(Shield).w
 		move.w	a1,(Shield+parent).w
-		andi.b	#$8E,status_secondary(a1)
+		andi.b	#~Status_shield_mask,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		moveq	#Status_BublShield,d0
 		bsr.w	sub_61254
@@ -143823,7 +143823,7 @@ Gumball_Give_LightningShield:
 		lea	(Player_1).w,a1
 		move.l	#Obj_LightningShield,(Shield).w
 		move.w	a1,(Shield+parent).w
-		andi.b	#$8E,status_secondary(a1)
+		andi.b	#~Status_shield_mask,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		moveq	#Status_LtngShield,d0
 		bsr.w	sub_61254

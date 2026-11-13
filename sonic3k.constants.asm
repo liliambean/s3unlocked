@@ -191,7 +191,10 @@ Status_FireShield   = 4
 Status_LtngShield   = 5
 Status_BublShield   = 6
 Status_WaterSlide   = 7
-Status_HammerDrop = Status_WaterSlide		; Liliam: extra skills - hammer drop
+Status_HammerDrop   = Status_WaterSlide		; Liliam: extra skills - hammer drop
+
+Status_saved_mask   = (1<<Status_FireShield)|(1<<Status_LtngShield)|(1<<Status_BublShield)
+Status_shield_mask  = (1<<Status_Shield)|Status_saved_mask
 
 ; ---------------------------------------------------------------------------
 ; Player routines
