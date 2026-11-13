@@ -7827,11 +7827,13 @@ loc_69E0:
 		lea	(Player_1).w,a1
 		move.b	(Saved_status_secondary).w,d0
 		clr.b	(Saved_status_secondary).w
-		andi.b	#Status_saved_mask,d0
+		andi.b	#Status_saved_mask|(1<<Status_CombineRing),d0	; Liliam: Encore mode - combine ring
+;		andi.b	#Status_saved_mask,d0				;
 		bne.s	loc_6A02
 		move.b	(Saved2_status_secondary).w,d0
 		clr.b	(Saved2_status_secondary).w
-		andi.b	#Status_saved_mask,d0
+		andi.b	#Status_saved_mask|(1<<Status_CombineRing),d0	;
+;		andi.b	#Status_saved_mask,d0				;
 		bne.s	loc_6A02
 
 locret_6A00:
@@ -7846,7 +7848,8 @@ loc_6A02:
 		bset	#Status_FireShield,status_secondary(a1)
 		move.l	#Obj_FireShield,(Shield).w
 		move.w	a1,(Shield+parent).w
-		rts
+		bra.s	locret_6A74					; Liliam: Encore mode - combine ring
+;		rts							;
 ; ---------------------------------------------------------------------------
 
 loc_6A28:
@@ -7857,7 +7860,8 @@ loc_6A28:
 		bset	#Status_LtngShield,status_secondary(a1)
 		move.l	#Obj_LightningShield,(Shield).w
 		move.w	a1,(Shield+parent).w
-		rts
+		bra.s	locret_6A74					; Liliam: Encore mode - combine ring
+;		rts							;
 ; ---------------------------------------------------------------------------
 
 loc_6A4E:
@@ -7868,10 +7872,14 @@ loc_6A4E:
 		bset	#Status_BublShield,status_secondary(a1)
 		move.l	#Obj_BubbleShield,(Shield).w
 		move.w	a1,(Shield+parent).w
-		rts
-; ---------------------------------------------------------------------------
+;		rts							; Liliam: Encore mode - combine ring
 
 locret_6A74:
+		btst	#Status_CombineRing,d0				;
+		beq.s	.return						;
+		bset	#Status_CombineRing,status_secondary(a1)	;
+
+	.return:
 		rts
 ; End of function SpawnLevelMainSprites_SpawnPowerup
 
@@ -69928,7 +69936,7 @@ loc_2D4CA:
 		move.b	#0,(Last_star_post_hit).w
 		move.b	#1,(Restart_level_flag).w
 		move.b	(Player_1+status_secondary).w,d0
-		andi.b	#Status_shield_mask,d0
+;		andi.b	#Status_shield_mask,d0				; Liliam: Encore mode - combine ring
 		move.b	d0,(Saved2_status_secondary).w
 		move.b	d0,(Saved_status_secondary).w
 		move.b	#1,(Respawn_table_keep).w
@@ -106470,7 +106478,7 @@ loc_4A024:
 		move.w	(Ring_count).w,(Saved_ring_count).w
 		move.b	(Extra_life_flags).w,(Saved_extra_life_flags).w
 		move.b	(Player_1+status_secondary).w,d0
-		andi.b	#Status_shield_mask,d0
+;		andi.b	#Status_shield_mask,d0				; Liliam: Encore mode - combine ring
 		move.b	d0,(Saved_status_secondary).w
 
 locret_4A078:
@@ -143654,7 +143662,7 @@ loc_61076:
 		move.w	(Ring_count).w,(Saved_ring_count).w
 		move.b	(Extra_life_flags).w,(Saved_extra_life_flags).w
 		move.b	(Player_1+status_secondary).w,d0
-		andi.b	#Status_shield_mask,d0
+;		andi.b	#Status_shield_mask,d0				; Liliam: Encore mode - combine ring
 		move.b	d0,(Saved_status_secondary).w
 		rts
 ; ---------------------------------------------------------------------------
