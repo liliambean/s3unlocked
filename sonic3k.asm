@@ -9230,16 +9230,16 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		beq.s	.clearHint
 		tst.b	(Player_1+double_jump_flag).w
 		bne.s	.checkAmy
-		move.w	(Barrier_HUD_scroll).w,d0
+		move.b	(Barrier_HUD_scroll).w,d0
 		bne.s	.scrollHint
 		move.l	#ArtUnc_CutsceneSkip+$100,d1
 		move.w	#$90,d3
-		addq.w	#4,(Barrier_HUD_scroll).w
+		addq.b	#4,(Barrier_HUD_scroll).w
 		tst.b	(Dust+$39).w
 		bne.s	.loadAmyHint
 		move.w	#tiles_to_bytes(ArtTile_SuperHint),d2
 		bsr.w	Add_To_DMA_Queue
-		move.w	(Barrier_HUD_scroll).w,d0
+		move.b	(Barrier_HUD_scroll).w,d0
 		moveq	#2,d1
 		bra.s	.scrollHint
 ; ---------------------------------------------------------------------------
@@ -9255,13 +9255,13 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		ble.s	.clearHint
 
 	.setAmyHint:
-		move.w	(Barrier_HUD_scroll).w,d0
+		move.b	(Barrier_HUD_scroll).w,d0
 		moveq	#4,d1
 
 	.scrollHint:
 		cmpi.b	#$20,d0
 		bhs.s	.setSpecialIcon
-		addq.w	#7,(Barrier_HUD_scroll).w
+		addq.b	#7,(Barrier_HUD_scroll).w
 		bra.s	.setSpecialIcon
 ; ---------------------------------------------------------------------------
 
@@ -9273,7 +9273,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		moveq	#$A,d1
 
 	.clearHint:
-		clr.w	(Barrier_HUD_scroll).w
+		clr.b	(Barrier_HUD_scroll).w
 
 	.setCombineRing:
 		addq.w	#4,d1
@@ -9317,7 +9317,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		addq.w	#4,d1
 
 	.setIcon:
-		clr.w	(Barrier_HUD_scroll).w
+		clr.b	(Barrier_HUD_scroll).w
 
 	.setSpecialIcon:
 		move.w	d1,(Barrier_HUD_frame).w
@@ -18856,7 +18856,7 @@ loc_DB68:
 		move.w	#$100,d1					;
 		move.w	#make_art_tile(ArtTile_Monitors,0,1),d5		;
 		move.w	(Barrier_HUD_frame).w,d4			;
-		sub.w	(Barrier_HUD_scroll).w,d0			;
+		sub.b	(Barrier_HUD_scroll).w,d0			;
 		bsr.s	Render_HUD_Dynamic				;
 		moveq	#0,d4
 		btst	#3,(Level_frame_counter+1).w
@@ -24394,7 +24394,7 @@ Sonic_Control:
 		beq.s	loc_10BF0			; if not, branch
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		bne.s	loc_10BCE				;
-		tst.w	(Barrier_HUD_scroll).w			;
+		tst.b	(Barrier_HUD_scroll).w			;
 		bne.s	loc_10BCE				;
 		bclr	#button_A,(Ctrl_1_pressed).w	; is button A pressed?
 		beq.s	loc_10BCE			; if not, branch
@@ -29416,7 +29416,7 @@ Tails_Control:
 		beq.s	loc_13808
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		bne.s	loc_137E0				;
-		tst.w	(Barrier_HUD_scroll).w			;
+		tst.b	(Barrier_HUD_scroll).w			;
 		bne.s	loc_137E0				;
 		bclr	#button_A,(Ctrl_1_pressed).w
 		beq.s	loc_137E0
@@ -34485,7 +34485,7 @@ Knuckles_Control:
 		beq.s	loc_165A2
 		tst.b	(Disable_A_button_flag).w		; Liliam: Encore mode - disable A button
 		bne.s	loc_16580				;
-		tst.w	(Barrier_HUD_scroll).w			;
+		tst.b	(Barrier_HUD_scroll).w			;
 		bne.s	loc_16580				;
 		bclr	#button_A,(Ctrl_1_pressed).w
 		beq.s	loc_16580
