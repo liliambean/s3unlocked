@@ -9512,13 +9512,6 @@ locret_7810:
 
 Load_PLC_MonitorsSpikesSprings:					; Liliam: Encore mode - change character item
 		clr.b	(Aqua_barrier_DMA_flag).w
-		lea	(PLC_MonitorsSpikesSprings_Extra).l,a1
-		tst.b	(Encore_mode).w
-		bne.w	Load_PLC_Raw
-		cmpi.w	#4,(Player_mode).w
-		bhi.w	Load_PLC_Raw
-		lea	(PLC_MonitorsSpikesSprings_Amy).l,a1
-		beq.w	Load_PLC_Raw
 		lea	(PLC_MonitorsSpikesSprings).l,a1
 		bra.w	Load_PLC_Raw
 ; ---------------------------------------------------------------------------
@@ -150154,16 +150147,7 @@ loc_65998:
 
 Load_PLC_Monitors:						; Liliam: Encore mode - change character item
 		clr.b	(Aqua_barrier_DMA_flag).w
-		lea	(PLC_Monitors_Extra).l,a1
-		tst.b	(Encore_mode).w
-		bne.s	.loadPLC
-		cmpi.w	#4,(Player_mode).w
-		bhi.s	.loadPLC
-		lea	(PLC_Monitors_Amy).l,a1
-		beq.s	.loadPLC
 		lea	(PLC_Monitors).l,a1
-
-	.loadPLC:
 		jmp	(Load_PLC_Raw).l
 ; ---------------------------------------------------------------------------
 
@@ -195382,31 +195366,9 @@ PLC_MonitorsSpikesSprings: plrlistheader
 		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
 PLC_MonitorsSpikesSprings_End
 
-PLC_MonitorsSpikesSprings_Extra: plrlistheader			; Liliam: Encore mode - special Robotnik icon for palette
-		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
-		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
-PLC_MonitorsSpikesSprings_Extra_End
-
-PLC_MonitorsSpikesSprings_Amy: plrlistheader			; Liliam: Encore mode - special Robotnik icon for palette
-		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon_Amy
-		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
-PLC_MonitorsSpikesSprings_Amy_End
-
 PLC_Monitors: plrlistheader
 		plreq ArtTile_Monitors, ArtNem_Monitors
 PLC_Monitors_End
-
-PLC_Monitors_Extra: plrlistheader				; Liliam: Encore mode - special Robotnik icon for palette
-		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
-PLC_Monitors_Extra_End
-
-PLC_Monitors_Amy: plrlistheader					; Liliam: Encore mode - special Robotnik icon for palette
-		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon_Amy
-PLC_Monitors_Amy_End
 
 		; Liliam: removed unused data
 
@@ -199053,18 +199015,6 @@ PLC_EndSignStuff: plrlistheader
 		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
 		plreq ArtTile_Monitors, ArtNem_Monitors
 PLC_EndSignStuff_End
-
-PLC_EndSignStuff_Extra: plrlistheader				; Liliam: Encore mode - special Robotnik icon for palette
-		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
-		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
-PLC_EndSignStuff_Extra_End
-
-PLC_EndSignStuff_Amy: plrlistheader				; Liliam: Encore mode - special Robotnik icon for palette
-		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
-		plreq ArtTile_Monitors, ArtNem_Monitors
-		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon_Amy
-PLC_EndSignStuff_Amy_End
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlWait:
@@ -199079,16 +199029,7 @@ Obj_EndSignControlDoSign:
 
 loc_85BEC:
 		clr.b	(Aqua_barrier_DMA_flag).w		; Liliam: Encore mode - special Robotnik icon for palette
-		lea	PLC_EndSignStuff_Extra(pc),a1		;
-		tst.b	(Encore_mode).w				;
-		bne.s	loc_85BF0				;
-		cmpi.w	#4,(Player_mode).w			;
-		bhi.s	loc_85BF0				;
-		lea	PLC_EndSignStuff_Amy(pc),a1		;
-		beq.s	loc_85BF0				;
 		lea	PLC_EndSignStuff(pc),a1
-
-loc_85BF0:
 		jmp	(Load_PLC_Raw).l			; Liliam: remove AfterBoss_Cleanup
 ;		jsr	(Load_PLC_Raw).l			;
 ;		jmp	AfterBoss_Cleanup(pc)			;
