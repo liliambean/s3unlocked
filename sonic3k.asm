@@ -76360,7 +76360,7 @@ loc_3218A:
 		moveq	#p2_standing_bit,d6
 		move.w	(Ctrl_2_logical).w,d5
 		bsr.w	sub_324C0
-		move.b	(Player_1+double_jump_flag).w,$42(a0)	; Liliam: extra skills - hammer drop
+		move.b	(Player_1+double_jump_flag).w,$2D(a0)	; Liliam: extra skills - hammer drop
 		move.b	(Player_2+double_jump_flag).w,$43(a0)	;
 		move.w	#$2B,d1
 		move.w	#$20,d2
@@ -76412,7 +76412,7 @@ loc_32208:
 		cmp.w	d1,d0
 		beq.s	loc_32254
 		move.w	d0,$3C(a0)
-		cmpi.b	#Status_HammerDrop,$42(a0)		; Liliam: extra skills - hammer drop
+		cmpi.b	#Status_HammerDrop,$2D(a0)		; Liliam: extra skills - hammer drop
 		bne.s	.player2				;
 		bclr	#p1_standing_bit,status(a0)		;
 		bne.s	loc_32240				;
@@ -76764,7 +76764,7 @@ sub_324C0:
 		move.b	#$80,1(a2)
 
 loc_324E2:
-		addi.w	#$3E,d6					; Liliam: QOL - animate static CNZ barrels differently
+		addi.w	#$41-p1_standing_bit,d6			; Liliam: QOL - animate static CNZ barrels differently
 		move.b	1(a2),(a0,d6.w)				;
 		move.b	d0,2(a2)
 ;		move.w	#0,x_vel(a1)				; Liliam: bugfix - clear flags
