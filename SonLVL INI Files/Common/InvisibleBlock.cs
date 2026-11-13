@@ -80,7 +80,7 @@ namespace S3KObjectDefinitions.Common
 
 		public override void Init(ObjectData data)
 		{
-			BuildSprites("../General/Sprites/Monitors/Monitors.bin", 0x100);
+			BuildSprites("../General/Sprites/Monitors/Monitors.bin", -0x380);
 		}
 	}
 

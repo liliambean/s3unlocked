@@ -7935,7 +7935,7 @@ loc_6B22:
 
 		tst.b	(Debug_monitor_subtype).w		; Liliam: debug - allow selection of monitor contents
 		bne.s	locret_6B40				;
-		move.b	#9,(Debug_monitor_subtype).w		;
+		move.b	#$A,(Debug_monitor_subtype).w		;
 
 locret_6B40:
 		rts
@@ -9246,7 +9246,7 @@ ChangeRingFrame_BarrierHUD:						; Liliam: HUD - barrier HUD
 	.queueAquaIcon:
 		lsl.w	#8,d1
 		addi.l	#ArtUnc_BarrierHUD+$200,d1
-		move.w	#tiles_to_bytes(ArtTile_Monitors+$30),d2
+		move.w	#tiles_to_bytes(ArtTile_Monitors+$24),d2
 		moveq	#$40,d3
 		bsr.w	Add_To_DMA_Queue
 
@@ -9459,14 +9459,13 @@ locret_7810:
 
 Load_PLC_MonitorsSpikesSprings:					; Liliam: Encore mode - change character item
 		clr.b	(Aqua_barrier_DMA_flag).w
-		lea	(PLC_MonitorsSpikesSprings_Encore).l,a1
+		lea	(PLC_MonitorsSpikesSprings_Extra).l,a1
 		tst.b	(Encore_mode).w
 		bne.w	Load_PLC_Raw
-		lea	(PLC_MonitorsSpikesSprings_Amy).l,a1
 		cmpi.w	#4,(Player_mode).w
-		beq.w	Load_PLC_Raw
-		lea	(PLC_MonitorsSpikesSprings_Extra).l,a1
 		bhi.w	Load_PLC_Raw
+		lea	(PLC_MonitorsSpikesSprings_Amy).l,a1
+		beq.w	Load_PLC_Raw
 		lea	(PLC_MonitorsSpikesSprings).l,a1
 		bra.w	Load_PLC_Raw
 ; ---------------------------------------------------------------------------
@@ -46991,9 +46990,9 @@ Monitor_RemoveHandler:						; Liliam: Knuckles route fixup
 Obj_Monitor_EncoreRoulette:					; Liliam: Encore mode - item roulette monitor
 		cmpi.b	#4,routine(a0)
 		beq.s	Monitor_RemoveHandler
-		tst.b	mapping_frame(a0)
-		bne.s	Obj_Monitor
 		tst.b	anim_frame_timer(a0)
+		bne.s	Obj_Monitor
+		cmpi.b	#$C,mapping_frame(a0)
 		bne.s	Obj_Monitor
 		move.b	anim(a0),d0
 		bne.s	.nextItem
@@ -47014,9 +47013,9 @@ Obj_Monitor_EncoreRoulette:					; Liliam: Encore mode - item roulette monitor
 Obj_Monitor_EncoreStock:					; Liliam: Encore mode - character stock monitor
 		cmpi.b	#4,routine(a0)
 		beq.s	Monitor_RemoveHandler
-		tst.b	mapping_frame(a0)
-		bne.s	Obj_Monitor
 		tst.b	anim_frame_timer(a0)
+		bne.s	Obj_Monitor
+		cmpi.b	#$C,mapping_frame(a0)
 		bne.s	Obj_Monitor
 		move.b	(Encore_available_chars).w,d2
 		moveq	#0,d1
@@ -47049,15 +47048,15 @@ Obj_Monitor:
 		jmp	Monitor_Index(pc,d1.w)
 ; ---------------------------------------------------------------------------
 Monitor_Index:
-		dc.w Obj_MonitorInit-Monitor_Index
-		dc.w Obj_MonitorMain-Monitor_Index
-		dc.w Obj_MonitorBreak-Monitor_Index
-		dc.w Obj_MonitorAnimate-Monitor_Index
-		dc.w loc_1D61A-Monitor_Index
+		dc.w Monitor_Init-Monitor_Index
+		dc.w Monitor_Main-Monitor_Index
+		dc.w Monitor_Break-Monitor_Index
+;		dc.w Monitor_Animate-Monitor_Index		; Liliam: Knuckles route fixup
+		dc.w Monitor_CheckDelete-Monitor_Index
 ; ---------------------------------------------------------------------------
 
-Obj_MonitorInit:
-		addq.b	#2,routine(a0)	; => Obj_MonitorMain
+Monitor_Init:
+		addq.b	#2,routine(a0)
 		move.b	#$F,y_radius(a0)
 		move.b	#$F,x_radius(a0)
 		move.l	#Map_Monitor,mappings(a0)
@@ -47081,7 +47080,7 @@ Obj_MonitorInit:
 		bsr.w	Monitor_SetupEncoreRoulette		; Liliam: Encore mode - item roulette monitor
 ;		move.b	subtype(a0),anim(a0)			;
 
-Obj_MonitorMain:
+Monitor_Main:
 		bsr.s	Monitor_Fall
 		move.w	#$19,d1			; Monitor's width
 		move.w	#$10,d2
@@ -47100,7 +47099,7 @@ Obj_MonitorMain:
 		lea	(Ani_Monitor).l,a1
 		bsr.w	Animate_Sprite
 
-loc_1D61A:
+Monitor_CheckDelete:
 		tst.b	character_id(a0)			; Liliam: Encore mode - character stock monitor
 		bmi.w	Sprite_OnScreen_Test			;
 
@@ -47112,16 +47111,8 @@ loc_1D61A:
 ;		bra.w	Sprite_OnScreen_Test			;
 ; ---------------------------------------------------------------------------
 
-Obj_MonitorAnimate:
-		addq.b	#2,routine(a0)				; Liliam: Knuckles route fixup
-;		cmpi.b	#$B,mapping_frame(a0)			;
-;		bne.s	.notbroken				;
-;		move.l	#loc_1D61A,(a0)				;
-
-;	.notbroken:
-		lea	(Ani_Monitor).l,a1
-		bsr.w	Animate_Sprite
-		bra.w	Sprite_OnScreen_Test
+;Monitor_Animate:
+		; Liliam: Knuckles route fixup
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -47246,7 +47237,7 @@ Monitor_CharStandOn:
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_MonitorBreak:
+Monitor_Break:
 		move.b	status(a0),d0
 ;		andi.b	#standing_mask|pushing_mask,d0		; Liliam: bugfix - stop uncurling next to monitors
 ;		beq.s	Obj_MonitorSpawnIcon			;
@@ -47309,9 +47300,11 @@ Obj_MonitorSpawnIcon:
 		bset	#0,(a2)				; Mark monitor as destroyed
 
 	.notremembered:
-		move.b	#$A,anim(a0)			; Display 'broken' animation
-		addq.b	#2,routine(a0)				; Liliam: Knuckles route fixup
-;		move.l	#Obj_MonitorAnimate,(a0)		;
+;		move.b	#$A,anim(a0)				; Liliam: Knuckles route fixup
+;		move.l	#Monitor_Animate,(a0)			;
+		move.b	#$B,mapping_frame(a0)			;
+		move.b	#-1,character_id(a0)			;
+		addq.b	#2,routine(a0)				;
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
@@ -47341,7 +47334,7 @@ loc_1D7CE:
 loc_1D7FC:
 		moveq	#0,d0
 		move.b	anim(a0),d0
-		addq.b	#1,d0
+;		addq.b	#1,d0					; Liliam: Encore mode - change character item
 		move.b	d0,mapping_frame(a0)
 		movea.l	#Map_Monitor,a1
 		add.b	d0,d0
@@ -47395,7 +47388,7 @@ loc_1D86C:
 
 ; ---------------------------------------------------------------------------
 off_1D87C:
-		dc.w Monitor_Give_ChangeCharacter-off_1D87C	; Liliam: Encore mode - change character item
+		dc.w Monitor_ChangeCharacter-off_1D87C		; Liliam: Encore mode - change character item
 ;		dc.w Monitor_Give_Eggman-off_1D87C		;
 		dc.w Monitor_Give_1up-off_1D87C
 		dc.w Monitor_Give_Eggman-off_1D87C
@@ -47405,6 +47398,7 @@ off_1D87C:
 		dc.w Monitor_Give_LightningShield-off_1D87C
 		dc.w Monitor_Give_BubbleShield-off_1D87C
 		dc.w Monitor_Give_Invincibility-off_1D87C
+		dc.w Monitor_Give_CombineRing-off_1D87C			; Liliam: Encore mode - combine ring
 		dc.w Monitor_Give_SuperSonic-off_1D87C
 ; ---------------------------------------------------------------------------
 
@@ -47607,16 +47601,17 @@ locret_1DA5E:
 		rts
 ; ---------------------------------------------------------------------------
 
-Monitor_Give_SuperSonic:
+Monitor_Give_CombineRing:						; Liliam: Encore mode - combine ring
 		addq.w	#1,(a2)
-		tst.b	(Encore_mode).w					; Liliam: Encore mode - combine ring
-		beq.s	loc_1DA62					;
-		bset	#Status_CombineRing,status_secondary(a1)	;
-		moveq	#signextendB(sfx_CombineRing),d0		;
-		jmp	(Play_SFX).l					;
+		bset	#Status_CombineRing,status_secondary(a1)
+		moveq	#signextendB(sfx_CombineRing),d0
+		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
 
-loc_1DA62:
+Monitor_Give_SuperSonic:
+		addq.w	#1,(a2)
+		tst.b	(Encore_mode).w				; Liliam: Encore mode - no super forms allowed
+		bne.s	locret_1DA5E				;
 		moveq	#50,d0					; Liliam: bugfix - clamp ring count properly
 		jsr	(AddRings).l				;
 ;		addi.w	#50,(Ring_count).w			;
@@ -47658,7 +47653,7 @@ loc_1DB26:
 ;		jmp	(Play_Music).l				;
 ; ---------------------------------------------------------------------------
 
-Monitor_Give_ChangeCharacter:
+Monitor_ChangeCharacter:
 		addq.w	#1,(a2)					; Liliam: Encore mode - change character item
 		movea.w	parent(a0),a1				;
 		cmpi.b	#State_Control,routine(a1)		;
@@ -49422,7 +49417,7 @@ locret_1EB30:
 
 Obj_InvisibleBlock:
 		move.l	#Map_InvisibleBlock,mappings(a0)
-		move.w	#make_art_tile(ArtTile_Monitors-8,0,1),art_tile(a0)		; Liliam: use static icon for solid blocks
+		move.w	#make_art_tile(ArtTile_Monitors+$1C,0,1),art_tile(a0)		; Liliam: use static icon for solid blocks
 ;		move.w	#make_art_tile(ArtTile_Ring,0,1),art_tile(a0)			;
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
@@ -149944,14 +149939,13 @@ loc_65998:
 
 Load_PLC_Monitors:						; Liliam: Encore mode - change character item
 		clr.b	(Aqua_barrier_DMA_flag).w
-		lea	(PLC_Monitors_Encore).l,a1
+		lea	(PLC_Monitors_Extra).l,a1
 		tst.b	(Encore_mode).w
 		bne.s	.loadPLC
-		lea	(PLC_Monitors_Amy).l,a1
 		cmpi.w	#4,(Player_mode).w
-		beq.s	.loadPLC
-		lea	(PLC_Monitors_Extra).l,a1
 		bhi.s	.loadPLC
+		lea	(PLC_Monitors_Amy).l,a1
+		beq.s	.loadPLC
 		lea	(PLC_Monitors).l,a1
 
 	.loadPLC:
@@ -194602,7 +194596,6 @@ Obj_HiddenMonitor:
 ;		move.b	subtype(a0),anim(a0)			; Liliam: QOL - render sprite in debug mode
 		move.b	subtype(a0),d0				;
 		move.b	d0,anim(a0)				;
-		addq.b	#1,d0					;
 		move.b	d0,mapping_frame(a0)			;
 		rts
 ; ---------------------------------------------------------------------------
@@ -195166,12 +195159,6 @@ PLC_MonitorsSpikesSprings: plrlistheader
 		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
 PLC_MonitorsSpikesSprings_End
 
-PLC_MonitorsSpikesSprings_Encore: plrlistheader			; Liliam: Encore mode - change character item
-		plreq ArtTile_Monitors, ArtNem_Monitors_Encore
-		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
-		plreq ArtTile_SpikesSprings, ArtNem_SpikesSprings
-PLC_MonitorsSpikesSprings_Encore_End
-
 PLC_MonitorsSpikesSprings_Extra: plrlistheader			; Liliam: Encore mode - special Robotnik icon for palette
 		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
@@ -195187,11 +195174,6 @@ PLC_MonitorsSpikesSprings_Amy_End
 PLC_Monitors: plrlistheader
 		plreq ArtTile_Monitors, ArtNem_Monitors
 PLC_Monitors_End
-
-PLC_Monitors_Encore: plrlistheader				; Liliam: Encore mode - change character item
-		plreq ArtTile_Monitors, ArtNem_Monitors_Encore
-		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
-PLC_Monitors_Encore_End
 
 PLC_Monitors_Extra: plrlistheader				; Liliam: Encore mode - special Robotnik icon for palette
 		plreq ArtTile_Monitors, ArtNem_Monitors
@@ -198846,12 +198828,6 @@ PLC_EndSignStuff: plrlistheader
 		plreq ArtTile_Monitors, ArtNem_Monitors
 PLC_EndSignStuff_End
 
-PLC_EndSignStuff_Encore: plrlistheader				; Liliam: Encore mode - change character item
-		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
-		plreq ArtTile_Monitors, ArtNem_Monitors_Encore
-		plreq ArtTile_RobotnikLifeIcon, ArtNem_RobotnikLifeIcon
-PLC_EndSignStuff_Encore_End
-
 PLC_EndSignStuff_Extra: plrlistheader				; Liliam: Encore mode - special Robotnik icon for palette
 		plreq ArtTile_SignpostStub, ArtNem_SignpostStub
 		plreq ArtTile_Monitors, ArtNem_Monitors
@@ -198877,14 +198853,13 @@ Obj_EndSignControlDoSign:
 
 loc_85BEC:
 		clr.b	(Aqua_barrier_DMA_flag).w		; Liliam: Encore mode - special Robotnik icon for palette
-		lea	PLC_EndSignStuff_Encore(pc),a1		;
+		lea	PLC_EndSignStuff_Extra(pc),a1		;
 		tst.b	(Encore_mode).w				;
 		bne.s	loc_85BF0				;
-		lea	PLC_EndSignStuff_Amy(pc),a1		;
 		cmpi.w	#4,(Player_mode).w			;
-		beq.s	loc_85BF0				;
-		lea	PLC_EndSignStuff_Extra(pc),a1		;
 		bhi.s	loc_85BF0				;
+		lea	PLC_EndSignStuff_Amy(pc),a1		;
+		beq.s	loc_85BF0				;
 		lea	PLC_EndSignStuff(pc),a1
 
 loc_85BF0:
@@ -219304,7 +219279,7 @@ PLC_TailsLifeIcon_End
 		; Liliam: removed unused data
 
 PLC_EncoreMode: plrlistheader							; Liliam: Encore mode universal level graphics
-		plreq ArtTile_Monitors, ArtNem_Monitors_Encore
+		plreq ArtTile_Monitors, ArtNem_Monitors
 		plreq ArtTile_Ring, ArtNem_RingHUDText
 		plreq ArtTile_StarPost, ArtNem_StarPost
 		plreq ArtTile_EncoreCursor-1, ArtNem_EncoreCursor
@@ -219938,8 +219913,8 @@ loc_92B7A:
 		bne.w	locret_92C0A				;
 		move.b	(Debug_monitor_subtype).w,d0		;
 		addq.b	#1,d0					;
-		cmpi.b	#9,d0					;
-		bls.s	.done					;
+		cmpi.b	#$B,d0					;
+		blo.s	.done					;
 		moveq	#1,d0					;
 		tst.b	(Encore_mode).w				;
 		beq.s	.done					;
@@ -219947,7 +219922,6 @@ loc_92B7A:
 
 	.done:
 		move.b	d0,(Debug_monitor_subtype).w		;
-		addq.b	#1,d0					;
 		move.b	d0,(Player_prev_frame).w		;
 		move.b	d0,mapping_frame(a0)			;
 		rts						;
@@ -220125,7 +220099,6 @@ sub_92C88:
 		cmpi.l	#Map_Monitor,mappings(a0)		;
 		bne.s	loc_92CA2				;
 		move.b	(Debug_monitor_subtype).w,d0		;
-		addq.b	#1,d0					;
 
 loc_92CA2:
 		move.b	d0,(Player_prev_frame).w	; Liliam: bugfix - restore debug sprite if clobbered by object
@@ -223584,9 +223557,6 @@ ArtNem_RobotnikLifeIcon_Amy:					; Liliam: Encore mode - special Robotnik icon f
 ArtNem_Monitors = *+1						; Liliam: convert to 1P Ray palette
 		; Liliam: bugfix - use safe colors for aqua barrier icon
 		binclude "General/Sprites/Monitors/Monitors.bin"
-		even
-ArtNem_Monitors_Encore:						; Liliam: Encore mode - change character item
-		binclude "General/Sprites/Monitors/Monitors Encore.bin"
 		even
 ;ArtNem_S2Signpost:
 		; Liliam: removed unused data

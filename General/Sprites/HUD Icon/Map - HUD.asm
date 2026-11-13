@@ -64,26 +64,28 @@ word_DCB6:	dc.w 1
 		dc.b  $80,   9, $20, $36,   0, $30
 Map_HUD_Barrier_SuperHint:
 		dc.w 2
-		dc.b  $88,   5,   0, $38,   0,   3
+		dc.b  $88,   5,   0, $30,   0,   3
 		dc.b  $86,  $A,   1, $D3,   0, $18
 Map_HUD_Barrier_SuperHint2:
 		dc.w 2
-		dc.b  $88,   5,   0, $38,   0,   3
+		dc.b  $88,   5,   0, $30,   0,   3
 		dc.b  $86,  $A,   3, $2C,   0, $18
-Map_HUD_Barrier_Combine:
 Map_HUD_Barrier_Super:
 		dc.w 1
-		dc.b  $88,   5,   0, $38, $FF, $F8
+		dc.b  $88,   5,   0, $30, $FF, $F8
 Map_HUD_Barrier_Flame:
 		dc.w 1
-		dc.b  $88,   5,   0, $28, $FF, $F8
+		dc.b  $88,   5,   0, $1C, $FF, $F8
 Map_HUD_Barrier_Thunder:
 		dc.w 1
-		dc.b  $88,   5,   0, $2C, $FF, $F8
+		dc.b  $88,   5,   0, $20, $FF, $F8
 Map_HUD_Barrier_Aqua:
 Map_HUD_Barrier_Aqua2:
 		dc.w 1
-		dc.b  $88,   5,   0, $30, $FF, $F8
+		dc.b  $88,   5,   0, $24, $FF, $F8
+Map_HUD_Barrier_Combine:
+		dc.w 1
+		dc.b  $88,   5,   0, $14, $FF, $F8
 Map_HUD_Barrier_DMA:
 		dc.w 1
 		dc.b  $88,   5,   1, $36, $FF, $F8

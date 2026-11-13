@@ -66,7 +66,7 @@ namespace S3KObjectDefinitions.Common
 		{
 			var indexer = new MultiFileIndexer<byte>();
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
-				"../General/Sprites/Monitors/Monitors Encore.bin", CompressionType.Nemesis)), 0);
+				"../General/Sprites/Monitors/Monitors.bin", CompressionType.Nemesis)), 0);
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
 				"../General/Sprites/HUD Icon/Sonic Life Icon.bin", CompressionType.Nemesis)), 0x6200);
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
@@ -78,7 +78,7 @@ namespace S3KObjectDefinitions.Common
 
 			subtypeNames = new[]
 			{
-				"Rotate Stocks",
+				"Change",
 				"1-Up",
 				"Eggman",
 				"Rings",
@@ -88,16 +88,16 @@ namespace S3KObjectDefinitions.Common
 				"Aqua Barrier",
 				"Invincibility",
 				"Combine Ring",
+				"Super"
 			};
 
 			var subtypes = new byte[subtypeNames.Length];
 			sprites = new Sprite[subtypeNames.Length][];
 
-			var index = 0;
-			while (index < subtypeNames.Length)
+			for (var index = 0; index < subtypeNames.Length; index++)
 			{
 				subtypes[index] = (byte)index;
-				sprites[index++] = BuildFlippedSprites(ObjectHelper.MapToBmp(art, map, index, 0));
+				sprites[index] = BuildFlippedSprites(ObjectHelper.MapToBmp(art, map, index, 0));
 			}
 
 			unknownSprite = BuildFlippedSprites(ObjectHelper.UnknownObject);
