@@ -38675,6 +38675,8 @@ Obj_188E8:
 		movea.w	parent(a0),a1
 		btst	#Status_Invincible,status_secondary(a1)
 		beq.w	Delete_Current_Sprite
+		tst.w	(Debug_placement_mode).w		; Liliam: debug - stop player 2 endless jumping
+		bgt.w	locret_1899E				;
 		cmpi.b	#$1C,anim(a1)				; Liliam: Encore mode - use shield VRAM for SS entry ring
 		beq.w	locret_1899E				;
 		lea	(Pos_table_index).w,a5
@@ -40607,12 +40609,10 @@ loc_1A4AC:
 		move.l	#Obj_HyperSonicKnux_Trail_Main,(a0)
 
 Obj_HyperSonicKnux_Trail_Main:
-		tst.w	(Debug_placement_mode).w		; Liliam: bugfix - disable in debug mode
-		bne.w	locret_1A462				;
 		tst.b	(Super_Sonic_Knux_flag).w
-		beq.w	Delete_Current_Sprite		; If so, branch and delete
-
-loc_1A4D8:
+		beq.w	Delete_Current_Sprite
+		tst.w	(Debug_placement_mode).w		; Liliam: debug - stop player 2 endless jumping
+		bgt.w	locret_1A462				;
 		moveq	#$C,d1				; This will be subtracted from Pos_table_index, giving the object an older entry
 		btst	#0,(Level_frame_counter+1).w	; Even frame? (Think of it as 'every other number' logic)
 		beq.s	.evenframe			; If so, branch
@@ -40649,10 +40649,10 @@ Obj_HyperTails_Trail:							; Liliam: Hyper Tails
 		move.l	#Obj_HyperTails_Trail_Main,(a0)
 
 Obj_HyperTails_Trail_Main:
-		tst.w	(Debug_placement_mode).w
-		bne.w	locret_1A462
 		tst.b	(Super_Sonic_Knux_flag).w
 		beq.w	Delete_Current_Sprite
+		tst.w	(Debug_placement_mode).w
+		bgt.w	locret_1A462
 		moveq	#$C,d1
 		btst	#0,(Level_frame_counter+1).w
 		beq.s	.evenframe
