@@ -9270,7 +9270,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		bne.s	.checkBarrier
 		btst	#Status_CombineRing,(Player_1+status_secondary).w
 		beq.s	.setIcon
-		moveq	#$C,d1
+		moveq	#$A,d1
 
 	.clearHint:
 		clr.w	(Barrier_HUD_scroll).w
@@ -9314,7 +9314,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		bne.s	.setIcon
 
 	.useSafeColors:
-		addq.w	#2,d1
+		addq.w	#4,d1
 
 	.setIcon:
 		clr.w	(Barrier_HUD_scroll).w
@@ -9331,7 +9331,7 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 		moveq	#6,d1
 
 	.setDMAIcon:
-		move.b	d0,(Barrier_HUD_frame+1).w
+		move.w	d0,(Barrier_HUD_frame).w
 		cmp.b	(Barrier_HUD_DMA_flag).w,d1
 		beq.s	ChangeRingFrame
 		move.b	d1,(Barrier_HUD_DMA_flag).w
@@ -9344,11 +9344,11 @@ ChangeRingFrame_ReadySuper:						; Liliam: HUD - barrier HUD
 	.checkRay:
 		cmpi.w	#6,(Player_mode).w
 		bne.s	.queueDMA
-		addi.b	#$C,d1
+		addq.b	#1,d1
 
 	.queueDMA:
-		lsl.w	#6,d1
-		addi.l	#ArtUnc_BarrierHUD-$180,d1
+		lsl.w	#7,d1
+		addi.l	#ArtUnc_BarrierHUD-$300,d1
 		move.w	#tiles_to_bytes(ArtTile_StarPostStars),d2
 		moveq	#$40,d3
 		bsr.w	Add_To_DMA_Queue
@@ -221730,8 +221730,6 @@ ArtUnc_EncoreRespawn_Ray:					; Liliam: Encore mode - respawn partner character
 		binclude "General/Sprites/Encore Respawn/Ray.bin"
 ArtUnc_EncoreRespawn_MetalSonic:				; Liliam: Encore mode - respawn partner character
 		binclude "General/Sprites/Encore Respawn/Metal Sonic.bin"
-ArtUnc_PhotoPieceDigits:					; Liliam: museum - photo piece object
-		binclude "General/Sprites/Ring/Photo Piece Digits.bin"
 ArtUnc_CutsceneSkip:						; Liliam: cutscene skip object
 		binclude "General/Sprites/HUD Icon/Cutscene Skip Hint.bin"
 ArtUnc_BarrierHUD:							; Liliam: HUD - barrier HUD
@@ -221839,6 +221837,8 @@ ArtUnc_MetalSonic:						; Liliam: add extra characters
 		binclude "General/Sprites/Sonic/Art/Metal Sonic.bin"
 ArtUnc_CombineRing:							; Liliam: Encore mode - combine ring
 		binclude "General/Sprites/Ring/Combine Ring.bin"
+ArtUnc_PhotoPieceDigits:					; Liliam: museum - photo piece object
+		binclude "General/Sprites/Ring/Photo Piece Digits.bin"
 		include "strings.asm"				; Liliam: options menu
 		align $20000
 ; ---------------------------------------------------------------------------

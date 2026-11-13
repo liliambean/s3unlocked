@@ -12,9 +12,9 @@ Map_HUD_Barrier:
 		dc.w Map_HUD_Barrier_Super-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_Flame-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_Thunder-Map_HUD_Barrier
-		dc.w Map_HUD_Barrier_Aqua2-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_Aqua-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_Combine-Map_HUD_Barrier
+		dc.w Map_HUD_Barrier_Aqua2-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_DMA-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_DMAHint-Map_HUD_Barrier
 		dc.w Map_HUD_Barrier_DMAHint2-Map_HUD_Barrier
