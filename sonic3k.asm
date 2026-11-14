@@ -219968,6 +219968,9 @@ loc_92AA0:
 		move.b	#1,(Debug_camera_speed).w
 
 loc_92AB0:
+		cmpi.b	#$15,(Current_zone).w			; Liliam: bugfix - recenter camera during object control
+		beq.s	.done					;
+		jsr	(Debug_ResetScroll).l			;
 		jsr	(Debug_RecordPos).l			; Liliam: debug - stop player 2 endless jumping
 		tst.b	(Tails_CPU_pos_table_offset).w		;
 		bmi.s	.done					;
@@ -219975,7 +219978,6 @@ loc_92AB0:
 
 	.done:
 		bset	#Status_InAir,status(a0)		; Liliam: debug - set airborne flag for camera
-		jsr	(Debug_ResetScroll).l			; Liliam: bugfix - recenter camera during object control
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#1,d0
