@@ -485,72 +485,72 @@ MuseumText:
 .JP006:	str RE, I, dot, ZA, dot, FU, RA, I, N, GU, SU, KU, I, RE, RU
 .EN007:	str "METAL SONIC"
 .JP007:	str ME, TA, RU, SO, NI, xTU, KU
-.EN008:	str "DR. EGGMAN"
-.JP008:	str DO, KU, TA, dash, dot, E, xTU, GU, MA, N
-.EN009:	str "EGG ROBO"
-.JP009:	str E, xTU, GU, RO, BO
-.EN010:	str "MECHA SONIC"
-.JP010:	str ME, KA, SO, NI, xTU, KU
-.EN011:	str "FLICKY"
-.JP011:	str FU, RI, xTU, KI, dash
-.EN012:	str "CUCKY"
-.JP012:	str KU, xTU, KI, dash
-.EN013:	str "POCKY"
-.JP013:	str PO, xTU, KI, dash
-.EN014:	str "RICKY"
-.JP014:	str RI, xTU, KI, dash
-.EN015:	str "PECKY"
-.JP015:	str PE, xTU, KI, dash
-.EN016:	str "ROCKY"
-.JP016:	str RO, xTU, KI, dash
+.EN008:	str "SUPER SONIC"
+.JP008:	str SU, dash, PA, dash, SO, NI, xTU, KU
+.EN009:	str "DR. EGGMAN"
+.JP009:	str DO, KU, TA, dash, dot, E, xTU, GU, MA, N
+.EN010:	str "EGG ROBO"
+.JP010:	str E, xTU, GU, RO, BO
+.EN011:	str "MECHA SONIC"
+.JP011:	str ME, KA, SO, NI, xTU, KU
+.EN012:	str "SUPER MECHA SONIC"
+.JP012:	str SU, dash, PA, dash, ME, KA, SO, NI, xTU, KU
+.EN013:	str "FLICKY"
+.JP013:	str FU, RI, xTU, KI, dash
+.EN014:	str "POCKY"
+.JP014:	str PO, xTU, KI, dash
+.EN015:	str "RICKY"
+.JP015:	str RI, xTU, KI, dash
+.EN016:	str "CUCKY"
+.JP016:	str KU, xTU, KI, dash
 .EN017:	str "PICKY"
 .JP017:	str PI, xTU, KI, dash
-.EN018: str "DOLPHIN & SEAGULL"
-.JP018:	str I, RU, KA, to, KA, MO, ME
-.EN019:	str "SUPER SONIC"
-.JP019:	str SU, dash, PA, dash, SO, NI, xTU, KU
-.EN020:	str "RINGS"
-.JP020:	str RI, N, GU
-.EN021:	str "COMBINE RING"
-.JP021:	str KO, N, BA, I, N, RI, N, GU
+.EN018:	str "PECKY"
+.JP018:	str PE, xTU, KI, dash
+.EN019:	str "ROCKY"
+.JP019:	str RO, xTU, KI, dash
+.EN020: str "DOLPHIN & SEAGULL"
+.JP020:	str I, RU, KA, to, KA, MO, ME
+.EN021:	str "RINGS"
+.JP021:	str RI, N, GU
 .EN022:	str "SPECIAL RING"
 .JP022:	str SU, PE, SHI, xYA, RU, RI, N, GU
-.EN023:	str "BLUE SPHERES"
-.JP023:	str BU, RU, dash, SU, FU, xI, A
-.EN024:	str "COLOR BLOCKS"
-.JP024:	str KA, RA, dash, BU, RO, xTU, KU
-.EN025:	str "CHAOS EMERALDS"
-.JP025:	str KA, O, SU, E, ME, RA, RU, DO
-.EN026:	str "ITEM BALL"
-.JP026:	str A, I, TE, MU, BO, dash, RU
-.EN027:	str "ITEM BOX"
-.JP027:	str A, I, TE, MU, BO, xTU, KU, SU
-.EN028:	str "FLAME BARRIER"
-.JP028:	str FU, RE, I, MU, BA, RI, A
-.EN029:	str "THUNDER BARRIER"
-.JP029:	str SA, N, DA, dash, BA, RI, A
-.EN030:	str "AQUA BARRIER"
-.JP030:	str A, KU, A, BA, RI, A
-.EN031:	str "AIR BUBBLES"
-.JP031:	str KUU, KII, no, AWA
-.EN032:	str "PHOTO PIECE"
-.JP032:	str FU, xO, TO, PI, dash, SU
-.EN033:	str "BONUS PLATE"
-.JP033:	str BO, dash, NA, SU, PU, RE, dash, TO
-.EN034:	str "STAR POST"
-.JP034:	str PO, I, N, TO, MA, dash, KA, dash
-.EN035:	str "STAR BUMPER"
-.JP035:	str BO, BI, N
-.EN036:	str "SPRING"
-.JP036:	str SU, PU, RI, N, GU
+.EN023:	str "COMBINE RING"
+.JP023:	str KO, N, BA, I, N, RI, N, GU
+.EN024:	str "BLUE SPHERES"
+.JP024:	str BU, RU, dash, SU, FU, xI, A
+.EN025:	str "ITEM BALL"
+.JP025:	str A, I, TE, MU, BO, dash, RU
+.EN026:	str "STAR BUMPER"
+.JP026:	str BO, BI, N
+.EN027:	str "COLOR BLOCKS"
+.JP027:	str KA, RA, dash, BU, RO, xTU, KU
+.EN028:	str "CHAOS EMERALDS"
+.JP028:	str KA, O, SU, E, ME, RA, RU, DO
+.EN029:	str "BONUS PLATE"
+.JP029:	str BO, dash, NA, SU, PU, RE, dash, TO
+.EN030:	str "ITEM BOX"
+.JP030:	str A, I, TE, MU, BO, xTU, KU, SU
+.EN031:	str "FLAME BARRIER"
+.JP031:	str FU, RE, I, MU, BA, RI, A
+.EN032:	str "THUNDER BARRIER"
+.JP032:	str SA, N, DA, dash, BA, RI, A
+.EN033:	str "AQUA BARRIER"
+.JP033:	str A, KU, A, BA, RI, A
+.EN034:	str "AIR BUBBLES"
+.JP034:	str KUU, KII, no, AWA
+.EN035:	str "PHOTO PIECE"
+.JP035:	str FU, xO, TO, PI, dash, SU
+.EN036:	str "METAL SONIC HOLOGRAM"
+.JP036:	str ME, TA, RU, SO, NI, xTU, KU, no, HO, RO, GU, RA, MU
 .EN037:	str "SPIKES"
 .JP037:	str TO, GE
 .EN038:	str "SWITCH"
 .JP038:	str SU, I, xTU, CHI
-.EN039:	str "KNUCKLES BARRIER"
-.JP039:	str NA, xTU, KU, RU, ZU, no, BA, RI, A
-.EN040:	str "METAL SONIC HOLOGRAM"
-.JP040:	str ME, TA, RU, SO, NI, xTU, KU, no, HO, RO, GU, RA, MU
+.EN039:	str "SPRING"
+.JP039:	str SU, PU, RI, N, GU
+.EN040:	str "STAR POST"
+.JP040:	str PO, I, N, TO, MA, dash, KA, dash
 .EN041:	str "TORNADO"
 .JP041:	str TO, RU, NE, dash, DO
 .EN042:	str "EGG MOBILE"
