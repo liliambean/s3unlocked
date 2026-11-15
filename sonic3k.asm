@@ -132280,6 +132280,8 @@ LRZ3_BackgroundEvent_Index:
 ; ---------------------------------------------------------------------------
 		bra.w	LRZ3BGE_Normal
 ; ---------------------------------------------------------------------------
+		bra.w	LRZ3BGE_ChangeBottomUp			; Liliam: HPZ - add transition from LRZ3
+; ---------------------------------------------------------------------------
 		bra.w	LRZ3BGE_Transition			; Liliam: HPZ - add transition from LRZ3
 ; ---------------------------------------------------------------------------
 
@@ -132405,10 +132407,16 @@ LRZ3BGE_Normal:
 		moveq	#PLCID_HPZ,d0				;
 		jsr	(Load_PLC).l				;
 		jsr	(Load_PLC_MonitorsSpikesSprings).l	;
-		stopZ80						;
-		dmaFillVRAM 0,VRAM_Plane_B_Name_Table,$1000	;
-		startZ80					;
 		movem.l	(sp)+,d7-a0/a2-a3			;
+		move.w	#$F0,(Draw_delayed_position).w		;
+		move.w	#$F,(Draw_delayed_rowcount).w		;
+		addq.w	#4,(Events_routine_bg).w		;
+
+LRZ3BGE_ChangeBottomUp:
+		move.w	#$200,d1				;
+		moveq	#0,d2					;
+		jsr	(Draw_PlaneVertSingleBottomUp).l	;
+		bpl.s	LRZ3BGE_DeformTransition		;
 		addq.w	#4,(Events_routine_bg).w		;
 
 LRZ3BGE_DeformTransition:
