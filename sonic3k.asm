@@ -8353,9 +8353,9 @@ DynamicWaterHeight_LBZ2:
 
 ;loc_6EF2:
 		tst.b	(LBZ2_rising_water_flag).w
-		beq.s	locret_6F10					; Liliam: bugfix - set correct water level
-		bpl.s	loc_6F00					;
-;		bne.s	loc_6F00					;
+		beq.s	locret_6F10						; Liliam: bugfix - set correct water level
+		bpl.s	loc_6F00						;
+;		bne.s	loc_6F00						;
 		lea	(word_6F12).l,a1
 		bra.s	WaterHeight_CheckInRange
 ; ---------------------------------------------------------------------------
@@ -8364,17 +8364,17 @@ loc_6F00:
 		move.w	(Camera_Y_pos).w,d0
 		cmp.w	(Mean_water_level).w,d0
 		blo.s	locret_6F10
-		clr.b	(LBZ2_rising_water_flag).w			; Liliam: bugfix - set correct water level
-		move.w	#$65E,(Mean_water_level).w			;
-;		move.w	#$660,(Mean_water_level).w			;
+		clr.b	(LBZ2_rising_water_flag).w				; Liliam: bugfix - set correct water level
+		move.w	#$65E,(Mean_water_level).w				;
+;		move.w	#$660,(Mean_water_level).w				;
 
 locret_6F10:
 		rts
 ; ---------------------------------------------------------------------------
 word_6F12:
 		dc.w  $8FF0,  $D80
-		dc.w  $8B1C, $FFFF					; Liliam: bugfix - set correct water level
-;		dc.w  $8B20, $FFFF					;
+		dc.w  $8B1C, $FFFF						; Liliam: bugfix - set correct water level
+;		dc.w  $8B20, $FFFF						;
 ; ---------------------------------------------------------------------------
 
 DynamicWaterHeight_Null2:
@@ -61333,8 +61333,8 @@ loc_27508:
 		cmpi.b	#$1F,d1
 		bne.s	loc_27534
 		move.b	#1,(LBZ2_rising_water_flag).w
-		move.w	#$65E,(Target_water_level).w			; Liliam: bugfix - set correct water level
-;		move.w	#$660,(Target_water_level).w			;
+		move.w	#$65E,(Target_water_level).w				; Liliam: bugfix - set correct water level
+;		move.w	#$660,(Target_water_level).w				;
 		tst.b	(Super_Sonic_Knux_flag).w
 		beq.s	loc_2755E
 		move.b	#2,(Water_speed).w
@@ -69696,7 +69696,8 @@ Save_Level_Data:
 		move.w	(Camera_max_Y_pos).w,(Saved_camera_max_Y_pos).w
 		move.w	(Camera_X_pos).w,(Saved_camera_X_pos).w
 		move.w	(Camera_Y_pos).w,(Saved_camera_Y_pos).w
-		move.w	(Mean_water_level).w,(Saved_mean_water_level).w
+		move.w	(Target_water_level).w,(Saved_mean_water_level).w	; Liliam: bugfix - set correct water level
+;		move.w	(Mean_water_level).w,(Saved_mean_water_level).w		;
 		move.b	(Water_full_screen_flag).w,(Saved_water_full_screen_flag).w
 		tst.w	(Debug_placement_mode).w			; Liliam: debug - set correct priority
 		beq.s	locret_2D1CA					;
@@ -69725,7 +69726,8 @@ Save_Level_Data2:
 		move.w	(Camera_max_Y_pos).w,(Saved2_camera_max_Y_pos).w
 		move.w	(Camera_X_pos).w,(Saved2_camera_X_pos).w
 		move.w	(Camera_Y_pos).w,(Saved2_camera_Y_pos).w
-		move.w	(Mean_water_level).w,(Saved2_mean_water_level).w
+		move.w	(Target_water_level).w,(Saved2_mean_water_level).w	; Liliam: bugfix - set correct water level
+;		move.w	(Mean_water_level).w,(Saved2_mean_water_level).w	;
 		move.b	(Water_full_screen_flag).w,(Saved2_water_full_screen_flag).w
 		move.b	(Player_1+status_secondary).w,(Saved2_status_secondary).w
 		tst.w	(Debug_placement_mode).w			; Liliam: debug - set correct priority
@@ -69774,7 +69776,7 @@ loc_2D274:
 		tst.b	(Water_flag).w
 		beq.s	locret_2D2C0
 		move.w	(Saved_mean_water_level).w,(Mean_water_level).w
-		move.w	(Mean_water_level).w,(Target_water_level).w	; Liliam: bugfix - set correct water level
+		move.w	(Saved_mean_water_level).w,(Target_water_level).w	; Liliam: bugfix - set correct water level
 		move.b	(Saved_water_full_screen_flag).w,(Water_full_screen_flag).w
 
 locret_2D2C0:
@@ -69802,7 +69804,7 @@ loc_2D2C2:
 		tst.b	(Water_flag).w
 		beq.s	locret_2D336
 		move.w	(Saved2_mean_water_level).w,(Mean_water_level).w
-		move.w	(Mean_water_level).w,(Target_water_level).w	; Liliam: bugfix - set correct water level
+		move.w	(Saved2_mean_water_level).w,(Target_water_level).w	; Liliam: bugfix - set correct water level
 		move.b	(Saved2_water_full_screen_flag).w,(Water_full_screen_flag).w
 
 locret_2D336:
@@ -70922,9 +70924,9 @@ LevelResults2_ICZ1:						; Liliam: Encore mode - ICZ1 boss
 ; ---------------------------------------------------------------------------
 
 LevelResults2_LBZ2:
-		move.w	#$65E,d0					; Liliam: bugfix - set correct water level
-		move.w	d0,(Mean_water_level).w				;
-		move.w	d0,(Target_water_level).w			;
+		move.w	#$65E,d0						; Liliam: bugfix - set correct water level
+		move.w	d0,(Mean_water_level).w					;
+		move.w	d0,(Target_water_level).w				;
 
 		cmpi.w	#$148,(Camera_target_max_Y_pos).w	; Liliam: Encore mode - LBZ1 boss
 		beq.s	loc_2DD28				;
@@ -119579,6 +119581,8 @@ loc_52108:
 Adjust_CNZ2Layout:									; Liliam: Encore mode - FBZ level order
 		tst.b	(Encore_mode).w
 		beq.s	.return
+
+	.apply:
 		movea.w	(Level_layout_main+$40).w,a1
 		lea	$8E(a1),a1
 		move.w	(Level_layout_header).w,d0
@@ -119588,7 +119592,7 @@ Adjust_CNZ2Layout:									; Liliam: Encore mode - FBZ level order
 		adda.w	d0,a1
 		move.b	#$F,(a1)
 		adda.w	d0,a1
-		move.b	#$88,(a1)
+		move.b	#$F7,(a1)
 
 	.return:
 		rts
@@ -119613,6 +119617,7 @@ CNZ2_ScreenEvent:
 		tst.w	(Events_bg+$06).w
 		beq.s	loc_52146
 		clr.w	(Events_bg+$06).w
+		bsr.s	Adjust_CNZ2Layout.apply						; Liliam: bugfix - fix backwards tube
 		jmp	Refresh_PlaneScreenDirect(pc)
 ; ---------------------------------------------------------------------------
 
@@ -123792,16 +123797,16 @@ loc_5439E:
 
 
 LBZ2_KnuxLevelSizeAdjust:
-		move.w	#$65E,d0					; Liliam: bugfix - set correct water level
-		tst.b	(Alternate_start_flag).w			;
-		bne.s	loc_543A2					;
-		move.w	d0,(Mean_water_level).w				;
-		move.w	d0,(Target_water_level).w			;
-		move.w	#$3A0,(Camera_min_X_pos).w			;
+		move.w	#$65E,d0						; Liliam: bugfix - set correct water level
+		tst.b	(Alternate_start_flag).w				;
+		bne.s	loc_543A2						;
+		move.w	d0,(Mean_water_level).w					;
+		move.w	d0,(Target_water_level).w				;
+		move.w	#$3A0,(Camera_min_X_pos).w				;
 
 loc_543A2:
-		cmp.w	(Target_water_level).w,d0			;
-		sne	(LBZ2_rising_water_flag).w			;
+		cmp.w	(Target_water_level).w,d0				;
+		sne	(LBZ2_rising_water_flag).w				;
 		cmpi.w	#$60A,(Player_1+x_pos).w					; Liliam: start from actual act 2 start
 		blo.s	locret_543C0							;
 
@@ -145417,6 +145422,7 @@ loc_625E2:
 		bmi.w	locret_6206C
 		move.b	#$E,routine(a0)
 		clr.b	(Player_1+object_control).w
+		st	(Events_bg+$06).w						; Liliam: bugfix - fix backwards tube
 		lea	(Pal_CNZ).l,a1
 		jsr	(PalLoad_Line1).l
 		clr.b	(Boss_flag).w				; Liliam: bugfix - use correct music for cutscene
@@ -145429,15 +145435,17 @@ locret_62618:
 ; ---------------------------------------------------------------------------
 
 loc_6261A:
-		move.w	#(button_left_mask<<8)+button_left_mask,(Ctrl_1_logical).w
-		move.w	(Camera_Y_pos).w,d0
-		addi.w	#$160,d0
-		cmp.w	y_pos(a0),d0
-		blo.s	loc_62630
-		rts
-; ---------------------------------------------------------------------------
+		subq.w	#2,(Player_1+x_pos).w						; Liliam: bugfix - fix backwards tube
+		cmpi.w	#$4740,(Player_1+x_pos).w					;
+		bhi.s	locret_62618							;
+;		move.w	#(button_left_mask<<8)+button_left_mask,(Ctrl_1_logical).w	;
+;		cmp.w	y_pos(a0),d0							;
+;		move.w	(Camera_Y_pos).w,d0						;
+;		addi.w	#$160,d0							;
+;		blo.s	loc_62630							;
+;		rts									;
 
-loc_62630:
+;loc_62630:
 		clr.b	(Ctrl_1_locked).w
 		clr.b	(Ctrl_2_locked).w			; Liliam: bugfix - lock player 2 controls consistently
 		jsr	(Remove_From_TrackingSlot).l
@@ -150418,17 +150426,18 @@ locret_65CAA:
 ; ---------------------------------------------------------------------------
 
 loc_65CAC:
+		move.w	#$C40,(Target_water_level).w				; Liliam: bugfix - set correct water level
 		move.w	#$14,(Screen_shake_flag).w
-		movea.w	(Level_layout_main+$40).w,a1
-		lea	$8E(a1),a1
-		move.w	(Level_layout_header).w,d0
-		move.b	#$14,(a1)
-		adda.w	d0,a1
-		move.b	#$F,(a1)
-		adda.w	d0,a1
-		move.b	#$F,(a1)
-		adda.w	d0,a1
-		move.b	#$88,(a1)
+;		movea.w	(Level_layout_main+$40).w,a1					; Liliam: bugfix - fix backwards tube
+;		lea	$8E(a1),a1							;
+;		move.w	(Level_layout_header).w,d0					;
+;		move.b	#$14,(a1)							;
+;		adda.w	d0,a1								;
+;		move.b	#$F,(a1)							;
+;		adda.w	d0,a1								;
+;		move.b	#$F,(a1)							;
+;		adda.w	d0,a1								;
+;		move.b	#$88,(a1)							;
 		jsr	(AllocateObject).l
 		bne.s	loc_65CF4
 		move.l	#Obj_CNZVacuumTube,(a1)
@@ -150495,7 +150504,9 @@ loc_65D8C:
 		tst.b	(_unkFAA3).w
 		beq.s	loc_65DD0
 		clr.b	(_unkFAA3).w
-		move.w	#$A58,(Target_water_level).w
+		move.b	#2,(Water_speed).w					; Liliam: bugfix - set correct water level
+		move.w	#$C40,(Target_water_level).w				;
+;		move.w	#$A58,(Target_water_level).w				;
 		moveq	#signextendB(sfx_Geyser),d0
 		jsr	(Play_SFX).l
 		jsr	(AllocateObject).l
@@ -199474,7 +199485,7 @@ CutsceneSkip_CNZ2:						; Liliam: cutscene skip - CNZ level end
 		move.w	#$1DA0,x_pos(a0)
 		move.w	#$32C,y_pos(a0)
 		move.w	#$B20,(Camera_max_Y_pos).w
-		move.w	#$350,(Mean_water_level).w
+		move.w	#$350,(Target_water_level).w
 		bra.s	CutsceneSkip_RestartLevel
 ; ---------------------------------------------------------------------------
 
@@ -223927,6 +223938,7 @@ CNZ_8x8_KosM:							; Liliam: reinsert S3 data
 		binclude "Levels/CNZ/Tiles/Primary.bin"
 		even
 CNZ_128x128_Kos:						; Liliam: reinsert S3 data
+		; Liliam: bugfix - fix backwards tube
 		binclude "Levels/CNZ/Chunks/Primary.bin"
 		even
 FBZ_16x16_Primary_Kos:
