@@ -1,7 +1,7 @@
 Snd_EncoreBonus_Header:
 	smpsHeaderStartSong 3, 1
 	smpsHeaderVoice     Snd_EncoreBonus_Voices
-	smpsHeaderChan      $07, $03
+	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $55
 
 	smpsHeaderDAC       Snd_EncoreBonus_DAC
@@ -10,7 +10,7 @@ Snd_EncoreBonus_Header:
 	smpsHeaderFM        Snd_EncoreBonus_FM3,	$FC, $0A
 	smpsHeaderFM        Snd_EncoreBonus_FM4,	$00, $15
 	smpsHeaderFM        Snd_EncoreBonus_FM5,	$FC, $18
-	smpsHeaderFM        Snd_EncoreBonus_FM6,	$00, $1C
+;	smpsHeaderFM        Snd_EncoreBonus_FM6,	$00, $1C
 	smpsHeaderPSG       Snd_EncoreBonus_PSG1,	$E8, $01, $00, $00
 	smpsHeaderPSG       Snd_EncoreBonus_PSG2,	$E8, $02, $00, $00
 	smpsHeaderPSG       Snd_EncoreBonus_PSG3,	$23, $02, $00, $00
@@ -272,46 +272,46 @@ Snd_EncoreBonus_Loop7:
 	smpsFMAlterVol      $FD
 	smpsJump            Snd_EncoreBonus_Loop6
 
-Snd_EncoreBonus_FM6:
-	smpsPan             panCenter, $00
-	dc.b	nRst, $40, $40, $40, $40
-	smpsModSet          $01, $01, $02, $05
-	dc.b	nRst, $04
+;Snd_EncoreBonus_FM6:
+;	smpsPan             panCenter, $00
+;	dc.b	nRst, $40, $40, $40, $40
+;	smpsModSet          $01, $01, $02, $05
+;	dc.b	nRst, $04
 
-Snd_EncoreBonus_Loop8:
-	smpsSetvoice        $04
-	dc.b	nBb5, $03, nRst, $01, nBb5, $03, nRst, $01
-	dc.b	nBb5, $03, nRst, $01, nF5, $03, nRst, $01
-	dc.b	nBb5, $03, nRst, $01, nBb5, $03, nRst, $01
-	dc.b	nBb5, $03, nRst, $01, nF5, $03, nRst, $01
-	dc.b	nD5, $03, nRst, $01, nD5, $03, nRst, $01
-	dc.b	nD5, $03, nRst, $01, nF5, $03, nRst, $01
-	dc.b	nD5, $03, nRst, $01, nD5, $03, nRst, $01
-	dc.b	nD5, $03, nRst, $01, nF5, $03, nRst, $01
-	dc.b	nAb5, $03, nRst, $01, nAb5, $03, nRst, $01
-	dc.b	nAb5, $03, nRst, $01, nEb5, $03, nRst, $01
-	dc.b	nAb5, $03, nRst, $01, nAb5, $03, nRst, $01
-	dc.b	nAb5, $03, nRst, $01, nEb5, $03, nRst, $01
-	dc.b	nC5, $03, nRst, $01, nC5, $03, nRst, $01
-	dc.b	nC5, $03, nRst, $01, nEb5, $03, nRst, $01
-	dc.b	nC5, $03, nRst, $01, nC5, $03, nRst, $01
-	dc.b	nC5, $03, nRst, $01, nEb5, $03, nRst, $01
-	smpsLoop            $00, $04, Snd_EncoreBonus_Loop8
-	smpsSetvoice        $02
-	dc.b	nEb4, $08, nRst, nG4, nRst, nAb4, nRst, $04
-	dc.b	nBb4, $08, nRst, $04, nEb4, $08, nRst, nCs4
-	dc.b	nF4, nRst, nAb4, nRst, $04, nBb4, $08, nRst
-	dc.b	$04, nCs4, $08, nEb4, nRst, nG4, nRst, nAb4
-	dc.b	nRst, $04, nBb4, $08, nRst, $04, nEb4, $08
-	dc.b	nRst, nCs4, nF4, nRst, nAb4, nRst, $04, nBb4
-	dc.b	$08, nRst, $04, nCs4, $08, nEb4, nRst, nG4
-	dc.b	nRst, nAb4, nRst, $04, nBb4, $08, nRst, $04
-	dc.b	nEb5, $08, nRst, nCs4, nF4, nRst, nAb4, nRst
-	dc.b	$04, nBb4, $08, nRst, $04, nCs5, $08, nEb4
-	dc.b	nRst, nG4, nRst, nAb4, nRst, $04, nBb4, $08
-	dc.b	nRst, $04, nEb5, $08, nRst, nCs4, nF4, nRst
-	dc.b	nAb4, nRst, $04, nBb4, $08, nRst, $0C
-	smpsJump            Snd_EncoreBonus_Loop8
+;Snd_EncoreBonus_Loop8:
+;	smpsSetvoice        $04
+;	dc.b	nBb5, $03, nRst, $01, nBb5, $03, nRst, $01
+;	dc.b	nBb5, $03, nRst, $01, nF5, $03, nRst, $01
+;	dc.b	nBb5, $03, nRst, $01, nBb5, $03, nRst, $01
+;	dc.b	nBb5, $03, nRst, $01, nF5, $03, nRst, $01
+;	dc.b	nD5, $03, nRst, $01, nD5, $03, nRst, $01
+;	dc.b	nD5, $03, nRst, $01, nF5, $03, nRst, $01
+;	dc.b	nD5, $03, nRst, $01, nD5, $03, nRst, $01
+;	dc.b	nD5, $03, nRst, $01, nF5, $03, nRst, $01
+;	dc.b	nAb5, $03, nRst, $01, nAb5, $03, nRst, $01
+;	dc.b	nAb5, $03, nRst, $01, nEb5, $03, nRst, $01
+;	dc.b	nAb5, $03, nRst, $01, nAb5, $03, nRst, $01
+;	dc.b	nAb5, $03, nRst, $01, nEb5, $03, nRst, $01
+;	dc.b	nC5, $03, nRst, $01, nC5, $03, nRst, $01
+;	dc.b	nC5, $03, nRst, $01, nEb5, $03, nRst, $01
+;	dc.b	nC5, $03, nRst, $01, nC5, $03, nRst, $01
+;	dc.b	nC5, $03, nRst, $01, nEb5, $03, nRst, $01
+;	smpsLoop            $00, $04, Snd_EncoreBonus_Loop8
+;	smpsSetvoice        $02
+;	dc.b	nEb4, $08, nRst, nG4, nRst, nAb4, nRst, $04
+;	dc.b	nBb4, $08, nRst, $04, nEb4, $08, nRst, nCs4
+;	dc.b	nF4, nRst, nAb4, nRst, $04, nBb4, $08, nRst
+;	dc.b	$04, nCs4, $08, nEb4, nRst, nG4, nRst, nAb4
+;	dc.b	nRst, $04, nBb4, $08, nRst, $04, nEb4, $08
+;	dc.b	nRst, nCs4, nF4, nRst, nAb4, nRst, $04, nBb4
+;	dc.b	$08, nRst, $04, nCs4, $08, nEb4, nRst, nG4
+;	dc.b	nRst, nAb4, nRst, $04, nBb4, $08, nRst, $04
+;	dc.b	nEb5, $08, nRst, nCs4, nF4, nRst, nAb4, nRst
+;	dc.b	$04, nBb4, $08, nRst, $04, nCs5, $08, nEb4
+;	dc.b	nRst, nG4, nRst, nAb4, nRst, $04, nBb4, $08
+;	dc.b	nRst, $04, nEb5, $08, nRst, nCs4, nF4, nRst
+;	dc.b	nAb4, nRst, $04, nBb4, $08, nRst, $0C
+;	smpsJump            Snd_EncoreBonus_Loop8
 
 Snd_EncoreBonus_PSG1:
 	smpsPSGvoice        sTone_03
@@ -498,8 +498,35 @@ Snd_EncoreBonus_Loop16:
 ;	smpsJump            Snd_EncoreBonus_Loop20
 
 ;Snd_EncoreBonus_PWM4:
+;	smpsStop
+
 Snd_EncoreBonus_DAC:
-	smpsStop
+	dc.b	nRst, $40, $40, $40, $20
+	dc.b	dSnareS3, $04, $08, $04, $08, $08
+
+Snd_EncoreBonus_Jump2:
+	smpsCall            Snd_EncoreBonus_Call3
+	dc.b	dKickS3, $10, dSnareS3, $0C, $04, dKickS3, $04, dSnareS3
+	dc.b	$04, $08, $10, dKickS3, $10, dSnareS3, $0C, $04
+	dc.b	dKickS3, $04, dSnareS3, $04, $08, dSnareS3, $08, $04
+	dc.b	$04, dKickS3, $10, dSnareS3, $0C, $04, dKickS3, $04
+	dc.b	dSnareS3, $04, $08, $10, dKickS3, $10, dSnareS3, $0C
+	dc.b	$04, dSnareS3, $04, $08, $04, dSnareS3, $08, $08
+
+Snd_EncoreBonus_Loop19:
+	smpsCall            Snd_EncoreBonus_Call3
+	smpsLoop            $00, $02, Snd_EncoreBonus_Loop19
+	smpsJump            Snd_EncoreBonus_Jump2
+
+Snd_EncoreBonus_Call3:
+	dc.b	dKickS3, $10, dSnareS3, $0C, $04, dKickS3, $04, dSnareS3
+	dc.b	$04, $08, $10, dKickS3, $10, dSnareS3, $0C, $04
+	dc.b	dKickS3, $04, dSnareS3, $04, $08, $08, $04, $04
+	dc.b	dKickS3, $10, dSnareS3, $0C, $04, dKickS3, $04, dSnareS3
+	dc.b	$04, $08, $10, dKickS3, $10, dSnareS3, $0C, $04
+	dc.b	dKickS3, $04, dSnareS3, dSnareS3, dSnareS3, dSnareS3, $08, $04
+	dc.b	$04
+	smpsReturn
 
 Snd_EncoreBonus_Voices:
 ;	Voice $00
