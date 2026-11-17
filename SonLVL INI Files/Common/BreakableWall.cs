@@ -93,7 +93,7 @@ namespace S3KObjectDefinitions.CNZ
 		{
 			var indexer = new MultiFileIndexer<byte>();
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
-				"../Levels/CNZ/Nemesis Art/Misc Art.bin", CompressionType.Nemesis)), -6624);
+				"../Levels/CNZ/Nemesis Art/Misc Art.bin", CompressionType.Nemesis)), -6240);
 
 			BuildSpritesProperties(indexer.ToArray(),
 				"../Levels/CNZ/Misc Object Data/Map - (&SOZ) Breakable Wall.asm", 2,

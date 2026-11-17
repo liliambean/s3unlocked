@@ -19,7 +19,7 @@
     </ImageFromMappings>
     <ImageFromMappings id="red">
       <ArtFile filename="../Levels/CNZ/Nemesis Art/Misc Art.bin" />
-      <ArtFile filename="../Levels/CNZ/KosinskiM Art/Balloon.bin" compression="KosinskiM" offset="17504" />
+      <ArtFile filename="../Levels/CNZ/KosinskiM Art/Balloon.bin" compression="KosinskiM" offset="17120" />
       <MapFile type="ASM" filename="../Levels/CNZ/Misc Object Data/Map - Balloon.asm" frame="20" />
     </ImageFromMappings>
   </Images>

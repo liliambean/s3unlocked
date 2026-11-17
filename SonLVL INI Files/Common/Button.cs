@@ -16,22 +16,6 @@ namespace S3KObjectDefinitions.HCZ
 	}
 }
 
-namespace S3KObjectDefinitions.CNZ
-{
-	class Button : Common.Button
-	{
-		public override void Init(ObjectData data)
-		{
-			var indexer = new MultiFileIndexer<byte>();
-			indexer.AddFile(new List<byte>(LevelData.ReadFile(
-				"../Levels/CNZ/Nemesis Art/Misc Art.bin", CompressionType.Nemesis)), -6432);
-
-			BuildSpritesProperties(indexer.ToArray(),
-				"../Levels/CNZ/Misc Object Data/Map - Button.asm", null, 2);
-		}
-	}
-}
-
 namespace S3KObjectDefinitions.LRZ
 {
 	class ButtonHorizontal : Common.Button

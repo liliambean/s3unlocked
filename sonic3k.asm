@@ -52705,7 +52705,8 @@ loc_21428:
 		cmpi.b	#3,(Current_zone).w
 		bne.s	loc_2146A
 		move.l	#Map_CNZSOZBreakableWall,mappings(a0)
-		move.w	#make_art_tile(ArtTile_CNZMisc+$CF,2,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_CNZMisc+$C3,2,0),art_tile(a0)	; Liliam: expand CNZ level art
+;		move.w	#make_art_tile(ArtTile_CNZMisc+$CF,2,0),art_tile(a0)	;
 		move.b	#$10,width_pixels(a0)
 		move.b	#$20,height_pixels(a0)
 		move.l	#word_21A7A,$34(a0)
@@ -68648,12 +68649,12 @@ Obj_Button:
 		move.w	#make_art_tile(ArtTile_HCZButton,1,0),art_tile(a0)
 
 loc_2C544:
-		cmpi.b	#3,(Current_zone).w
-		bne.s	loc_2C55A
-		move.l	#Map_CNZButton,mappings(a0)
-		move.w	#make_art_tile(ArtTile_CNZMisc+$C9,2,0),art_tile(a0)
+;		cmpi.b	#3,(Current_zone).w					; Liliam: expand CNZ level art
+;		bne.s	loc_2C55A						;
+;		move.l	#Map_CNZButton,mappings(a0)				;
+;		move.w	#make_art_tile(ArtTile_CNZMisc+$C9,2,0),art_tile(a0)	;
 
-loc_2C55A:
+;loc_2C55A:
 		cmpi.b	#4,(Current_zone).w
 		bne.s	loc_2C568
 		move.w	#make_art_tile(ArtTile_FBZButton,0,0),art_tile(a0)
@@ -68814,8 +68815,6 @@ Map_Button:
 		include "General/Sprites/Buttons/Map - Button.asm"
 Map_HCZButton:							; Liliam: reinsert S3 data
 		include "Levels/HCZ/Misc Object Data/Map - Button.asm"
-Map_CNZButton:							; Liliam: reinsert S3 data
-		include "Levels/CNZ/Misc Object Data/Map - Button.asm"
 Map_LRZButton:
 		include "Levels/LRZ/Misc Object Data/Map - Button.asm"
 Map_2PButton:							; Liliam: reinsert S3 data
@@ -74644,7 +74643,8 @@ byte_30E18:
 		dc.b  $10, $20
 		dc.w make_art_tile(ArtTile_HCZMisc+$A,2,0)
 		dc.b    8, $20
-		dc.w make_art_tile(ArtTile_CNZMisc+$C5,2,0)
+		dc.w make_art_tile(ArtTile_CNZMisc+$BF,2,0)			; Liliam: expand CNZ level art
+;		dc.w make_art_tile(ArtTile_CNZMisc+$C5,2,0)			;
 		dc.b  $10, $20
 		dc.w make_art_tile(ArtTile_DEZMisc+$1E,1,0)
 ; ---------------------------------------------------------------------------
@@ -74801,7 +74801,8 @@ Map_HCZCNZDEZDoor:
 ; ---------------------------------------------------------------------------
 byte_30FCE:
 		dc.b  $20,   8
-		dc.w make_art_tile(ArtTile_CNZMisc+$C5,2,0)
+		dc.w make_art_tile(ArtTile_CNZMisc+$BF,2,0)			; Liliam: expand CNZ level art
+;		dc.w make_art_tile(ArtTile_CNZMisc+$C5,2,0)			;
 ; ---------------------------------------------------------------------------
 
 loc_30FD2:
@@ -75510,6 +75511,7 @@ byte_3185A:
 Ani_CNZBalloon:
 		include "Levels/CNZ/Misc Object Data/Anim - Balloon.asm"
 Map_CNZBalloon:							; Liliam: reinsert S3 data
+		; Liliam: expand CNZ level art
 		include "Levels/CNZ/Misc Object Data/Map - Balloon.asm"
 ; ---------------------------------------------------------------------------
 
@@ -75771,6 +75773,7 @@ locret_31B70:
 
 ; ---------------------------------------------------------------------------
 Map_CNZCannon:							; Liliam: reinsert S3 data
+		; Liliam: expand CNZ level art
 		include "Levels/CNZ/Misc Object Data/Map - Cannon.asm"
 DPLC_CNZCannon:
 		include "Levels/CNZ/Misc Object Data/DPLC - Cannon.asm"
@@ -75934,26 +75937,27 @@ Obj_CNZLightBulb:
 		move.w	#$280,priority(a0)
 		move.b	#$10,width_pixels(a0)
 		move.b	#$10,height_pixels(a0)
-		tst.b	(Water_flag).w
-		bne.s	loc_31D6E
-		move.l	#loc_31D8A,(a0)
-		bra.s	loc_31D8A
-; ---------------------------------------------------------------------------
+;		tst.b	(Water_flag).w						; Liliam: expand CNZ level art
+;		bne.s	loc_31D6E						;
+;		move.l	#loc_31D8A,(a0)						;
+;		bra.s	loc_31D8A						;
 
-loc_31D6E:
-		move.l	#loc_31D74,(a0)
+;loc_31D6E:
+;		move.l	#loc_31D74,(a0)						;
 
-loc_31D74:
-		move.w	(Water_level).w,d0
-		cmp.w	y_pos(a0),d0
-		bhs.s	loc_31D8A
-		move.b	#1,mapping_frame(a0)
-		move.l	#loc_31D8A,(a0)
+;loc_31D74:
+;		move.w	(Water_level).w,d0					;
+;		cmp.w	y_pos(a0),d0						;
+;		bhs.s	loc_31D8A						;
+;		move.b	#1,mapping_frame(a0)					;
+;		move.l	#loc_31D8A,(a0)						;
+		move.l	#Sprite_OnScreen_Test,(a0)
 
 loc_31D8A:
 		jmp	(Sprite_OnScreen_Test).l
 ; ---------------------------------------------------------------------------
 Map_CNZLightBulb:						; Liliam: reinsert S3 data
+		; Liliam: expand CNZ level art
 		include "Levels/CNZ/Misc Object Data/Map - Light Bulb.asm"
 ; ---------------------------------------------------------------------------
 
@@ -76097,6 +76101,7 @@ locret_31F2E:
 
 ; ---------------------------------------------------------------------------
 Map_CNZHoverFan:						; Liliam: reinsert S3 data
+		; Liliam: expand CNZ level art
 		include "Levels/CNZ/Misc Object Data/Map - Hover Fan.asm"
 ; ---------------------------------------------------------------------------
 
@@ -220356,7 +220361,7 @@ Debug_AIZ1:		dbglistinclude "Levels/AIZ/Debug/Act 1.asm"	; Liliam: QOL - use hig
 Debug_AIZ2:		dbglistinclude "Levels/AIZ/Debug/Act 2.asm"	; Liliam: QOL - use high precision sine tables for AIZ vines
 Debug_HCZ:		dbglistinclude "Levels/HCZ/Debug/Main.asm"
 Debug_MGZ:		dbglistinclude "Levels/MGZ/Debug/Main.asm"
-Debug_CNZ:		dbglistinclude "Levels/CNZ/Debug/Main.asm"
+Debug_CNZ:		dbglistinclude "Levels/CNZ/Debug/Main.asm"	; Liliam: expand CNZ level art
 Debug_FBZ1:		dbglistinclude "Levels/FBZ/Debug/Act 1.asm"	; Liliam: use main capsule art in FBZ
 Debug_FBZ2:		dbglistinclude "Levels/FBZ/Debug/Act 2.asm"	; Liliam: use main capsule art in FBZ
 Debug_ICZ1:		dbglistinclude "Levels/ICZ/Debug/Act 1.asm"	; Liliam: place ICZ1 teleporter in layout
@@ -221758,6 +221763,7 @@ ArtKosM_Batbot:							; Liliam: reinsert S3 data
 		binclude "General/Sprites/Batbot/Batbot.bin"
 		even
 ArtKosM_CNZBalloon:						; Liliam: reinsert S3 data
+		; Liliam: expand CNZ level art
 		binclude "Levels/CNZ/KosinskiM Art/Balloon.bin"
 		even
 		; Liliam: removed unused data
@@ -222191,6 +222197,7 @@ ArtNem_MGZSigns:						; Liliam: reinsert S3 data
 		binclude "Levels/MGZ/Nemesis Art/Direction Signs.bin"
 		even
 ArtNem_CNZMisc:							; Liliam: reinsert S3 data
+		; Liliam: expand CNZ level art
 		binclude "Levels/CNZ/Nemesis Art/Misc Art.bin"
 		even
 ArtNem_CNZPlatform:						; Liliam: reinsert S3 data
@@ -223932,9 +223939,11 @@ MGZ2_QuakeChunks:						; Liliam: reinsert S3 data
 		binclude "Levels/MGZ/Misc/Act 2 Quake Chunks.bin"
 		even
 CNZ_16x16_Kos:							; Liliam: reinsert S3 data
+		; Liliam: expand CNZ level art
 		binclude "Levels/CNZ/Blocks/Primary.bin"
 		even
 CNZ_8x8_KosM:							; Liliam: reinsert S3 data
+		; Liliam: expand CNZ level art
 		binclude "Levels/CNZ/Tiles/Primary.bin"
 		even
 CNZ_128x128_Kos:						; Liliam: reinsert S3 data

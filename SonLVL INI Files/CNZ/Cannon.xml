@@ -3,7 +3,7 @@
   <Images>
     <ImageFromMappings id="chamber">
       <ArtFile filename="../Levels/CNZ/Nemesis Art/Misc Art.bin" offset="-1120" />
-      <ArtFile filename="../Levels/CNZ/Uncompressed Art/Cannon.bin" compression="Uncompressed" offset="6784" />
+      <ArtFile filename="../Levels/CNZ/Uncompressed Art/Cannon.bin" compression="Uncompressed" offset="6400" />
       <MapFile type="ASM" filename="../Levels/CNZ/Misc Object Data/Map - Cannon.asm" frame="4" startpal="2" />
     </ImageFromMappings>
     <ImageFromMappings id="base">

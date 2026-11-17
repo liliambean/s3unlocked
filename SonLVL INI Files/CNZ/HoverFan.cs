@@ -100,7 +100,7 @@ namespace S3KObjectDefinitions.CNZ
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
 				"../Levels/CNZ/Animated Tiles/4.bin", CompressionType.Uncompressed)), 0);
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
-				"../Levels/CNZ/Nemesis Art/Misc Art.bin", CompressionType.Nemesis)), 2464);
+				"../Levels/CNZ/Nemesis Art/Misc Art.bin", CompressionType.Nemesis)), 2848);
 			var map = LevelData.ASMToBin(
 				"../Levels/CNZ/Misc Object Data/Map - Hover Fan.asm", LevelData.Game.MappingsVersion);
 			var art = indexer.ToArray();
@@ -118,7 +118,7 @@ namespace S3KObjectDefinitions.CNZ
 
 				while (offset < length)
 				{
-					var pattern = ((map[offset + 2] << 8) | map[offset + 3]) + 228;
+					var pattern = ((map[offset + 2] << 8) | map[offset + 3]) + 240;
 					map[offset + 2] = (byte)(pattern >> 8);
 					map[offset + 3] = (byte)(pattern);
 					offset = offset + 6;

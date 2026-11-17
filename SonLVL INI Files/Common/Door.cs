@@ -21,7 +21,7 @@ namespace S3KObjectDefinitions.CNZ
 	{
 		public override void Init(ObjectData data)
 		{
-			BuildSpritesSubtypes("../Levels/CNZ/Nemesis Art/Misc Art.bin", -6304, 1, 0, 2);
+			BuildSpritesSubtypes("../Levels/CNZ/Nemesis Art/Misc Art.bin", -6112, 1, 0, 2);
 			sprites[1][2] = sprites[1][0];
 			sprites[1][3] = sprites[1][1];
 		}

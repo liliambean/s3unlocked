@@ -1439,7 +1439,8 @@ ArtTile_MGZMiniboss                   = $054F
 ArtTile_Mantis                        = $054F
 ArtTile_MGZMiniBossDebris             = $0570
 
-ArtTile_CNZMisc                       = $0351
+ArtTile_CNZMisc                       = $035D	; Liliam: CNZ thing
+;ArtTile_CNZMisc                      = $0351	;
 ArtTile_CNZEndBoss                    = $0430
 ArtTile_CNZPlatform                   = $0430
 ArtTile_CNZCannon                     = $0448
