@@ -122653,7 +122653,7 @@ Pal_ICZ1BGOutdoors:						; Liliam: Encore mode - palette
 		binclude "Levels/ICZ/Palettes/Act 1 BG Outdoors.bin"
 		even
 Pal_ICZ1BGOutdoors_Encore:					; Liliam: Encore mode - palette
-		binclude "Levels/ICZ/Palettes/Act 1 BG Outdoors Encore.bin"
+		binclude "Levels/ICZ/Palettes/Encore BG Outdoors.bin"
 		even
 ; ---------------------------------------------------------------------------
 
@@ -123064,7 +123064,7 @@ Pal_ICZ2BGIndoors:						; Liliam: Encore mode - palette
 		binclude "Levels/ICZ/Palettes/Act 2 BG Indoors.bin"
 		even
 Pal_ICZ2BGIndoors_Encore:					; Liliam: Encore mode - palette
-		binclude "Levels/ICZ/Palettes/Act 2 BG Indoors Encore.bin"
+		binclude "Levels/ICZ/Palettes/Encore BG Indoors.bin"
 		even
 ; ---------------------------------------------------------------------------
 
@@ -125321,8 +125321,14 @@ MHZ2_BGDrawArray3:
 Pal_MHZ2Ship:
 		binclude "Levels/MHZ/Palettes/Act 2 Ship.bin"
 		even
+Pal_MHZ2Ship_Encore:						; Liliam: Encore mode - palette
+		binclude "Levels/MHZ/Palettes/Encore Ship.bin"
+		even
 Pal_MHZ2Gold:
 		binclude "Levels/MHZ/Palettes/Act 2 Gold.bin"
+		even
+Pal_MHZ2Gold_Encore:						; Liliam: Encore mode - palette
+		binclude "Levels/MHZ/Palettes/Encore Pink.bin"
 		even
 word_5513E:
 		dc.w   $420,  $4A0,  $640,  $6C0
@@ -151747,10 +151753,10 @@ Pal_CNZFlashWater:									; Liliam: bugfix - also darken CNZ water palette
 		binclude "Levels/CNZ/Palettes/Flash Water.bin"
 		even
 Pal_CNZFlash_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/CNZ/Palettes/Flash.bin"
+		binclude "Levels/CNZ/Palettes/Encore Flash.bin"
 		even
 Pal_CNZFlashWater_Encore:					; Liliam: Encore mode - palette
-		binclude "Levels/CNZ/Palettes/Flash Water.bin"
+		binclude "Levels/CNZ/Palettes/Encore Flash Water.bin"
 		even
 Pal_KnuxSSZEnd:
 		binclude "General/Sprites/Knuckles/Palettes/SSZ End.bin"
@@ -178697,6 +178703,9 @@ Pal_LRZMiniboss2:
 		; Liliam: start from actual act 2 start
 		binclude "Levels/LRZ/Palettes/Miniboss 2.bin"
 		even
+Pal_LRZMiniboss2_Encore:					; Liliam: Encore mode - palette
+		binclude "Levels/LRZ/Palettes/Encore Miniboss.bin"
+		even
 ;Pal_LRZMiniboss3:
 		; Liliam: Encore mode - palette
 word_78EAA:	palscriptptr .header, .data
@@ -179391,6 +179400,9 @@ byte_796B9:
 		; Liliam: removed unused data
 Pal_LRZBossFire:
 		binclude "Levels/LRZ/Palettes/Boss Act Fire.bin"
+		even
+Pal_LRZBossFire_Encore:						; Liliam: Encore mode - palette
+		binclude "Levels/LRZ/Palettes/Encore 3 Fire.bin"
 		even
 ; ---------------------------------------------------------------------------
 
@@ -220952,94 +220964,94 @@ Pal_DEZBoss:
 		binclude "Levels/DEZ/Palettes/Boss.bin"
 		even
 Pal_AIZIntro_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/AIZ/Palettes/Intro.bin"
+		binclude "Levels/AIZ/Palettes/Encore Intro.bin"
 		even
 Pal_AIZ_Encore:							; Liliam: Encore mode - palette
-		binclude "Levels/AIZ/Palettes/Main.bin"
+		binclude "Levels/AIZ/Palettes/Encore 1.bin"
 		even
 Pal_AIZFire_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/AIZ/Palettes/Fire.bin"
+		binclude "Levels/AIZ/Palettes/Encore 2.bin"
 		even
 Pal_AIZBoss_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/AIZ/Palettes/Boss.bin"
+		binclude "Levels/AIZ/Palettes/Encore Boss.bin"
 		even
 Pal_AIZ_Water_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/AIZ/Palettes/Water.bin"
+		binclude "Levels/AIZ/Palettes/Encore Water 1.bin"
 		even
 Pal_AIZ2_Water_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/AIZ/Palettes/Act 2 Water.bin"
+		binclude "Levels/AIZ/Palettes/Encore Water 2.bin"
 		even
 Pal_HCZ1_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/HCZ/Palettes/1.bin"
+		binclude "Levels/HCZ/Palettes/Encore 1.bin"
 		even
 Pal_HCZ2_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/HCZ/Palettes/2.bin"
+		binclude "Levels/HCZ/Palettes/Encore 2.bin"
 		even
 Pal_HCZ1_Water_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/HCZ/Palettes/Act 1 Water.bin"
+		binclude "Levels/HCZ/Palettes/Encore Water 1.bin"
 		even
 Pal_HCZ2_Water_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/HCZ/Palettes/Act 2 Water.bin"
+		binclude "Levels/HCZ/Palettes/Encore Water 2.bin"
 		even
 Pal_MGZ_Encore:							; Liliam: Encore mode - palette
-		binclude "Levels/MGZ/Palettes/Main.bin"
+		binclude "Levels/MGZ/Palettes/Encore.bin"
 		even
 Pal_CNZ_Encore:							; Liliam: Encore mode - palette
-		binclude "Levels/LBZ/Palettes/1.bin"
+		binclude "Levels/CNZ/Palettes/Encore.bin"
 		even
 Pal_CNZ_Water_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/CNZ/Palettes/Water.bin"
+		binclude "Levels/CNZ/Palettes/Encore Water.bin"
 		even
 Pal_FBZ_Encore:							; Liliam: Encore mode - palette
-		binclude "Levels/FBZ/Palettes/FBZ.bin"
+		binclude "Levels/FBZ/Palettes/Encore.bin"
 		even
 Pal_ICZ1_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/ICZ/Palettes/1.bin"
+		binclude "Levels/ICZ/Palettes/Encore 1.bin"
 		even
 Pal_ICZ2_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/ICZ/Palettes/2 Encore.bin"
+		binclude "Levels/ICZ/Palettes/Encore 2.bin"
 		even
 Pal_ICZ2_Water_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/ICZ/Palettes/Act 2 Water.bin"
+		binclude "Levels/ICZ/Palettes/Encore Water 2.bin"
 		even
 Pal_LBZ1_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/LBZ/Palettes/1.bin"
+		binclude "Levels/LBZ/Palettes/Encore 1.bin"
 		even
 Pal_LBZ2_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/LBZ/Palettes/2.bin"
+		binclude "Levels/LBZ/Palettes/Encore 2.bin"
 		even
 Pal_LBZ_Water_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/LBZ/Palettes/Act 2 Water.bin"
+		binclude "Levels/LBZ/Palettes/Encore Water.bin"
 		even
 Pal_MHZ1_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/MHZ/Palettes/Encore 2.bin"
+		binclude "Levels/MHZ/Palettes/Encore 1.bin"
 		even
 Pal_MHZ2_Encore:						; Liliam: Encore mode - palette
 		binclude "Levels/MHZ/Palettes/Encore 2.bin"
 		even
 Pal_SOZ1_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/SOZ/Palettes/1.bin"
+		binclude "Levels/SOZ/Palettes/Encore 1.bin"
 		even
 Pal_SOZ2_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/SOZ/Palettes/2.bin"
+		binclude "Levels/SOZ/Palettes/Encore 2.bin"
 		even
 Pal_LRZ1_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/LRZ/Palettes/1.bin"
+		binclude "Levels/LRZ/Palettes/Encore 1.bin"
 		even
 Pal_LRZ2_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/LRZ/Palettes/2.bin"
+		binclude "Levels/LRZ/Palettes/Encore 2.bin"
 		even
 Pal_SSZ1_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/SSZ/Palettes/Encore.bin"
+		binclude "Levels/SSZ/Palettes/Encore 1.bin"
 		even
 Pal_SSZ2_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/SSZ/Palettes/2.bin"
+		binclude "Levels/SSZ/Palettes/Encore 2.bin"
 		even
 Pal_DEZ1_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/DEZ/Palettes/1.bin"
+		binclude "Levels/DEZ/Palettes/Encore 1.bin"
 		even
 Pal_DEZ2_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/DEZ/Palettes/2.bin"
+		binclude "Levels/DEZ/Palettes/Encore 2.bin"
 		even
 Pal_DDZ_Encore:							; Liliam: Encore mode - palette
 		binclude "Levels/DDZ/Palettes/Main.bin"
@@ -221060,10 +221072,10 @@ Pal_EMZ_Encore:							; Liliam: Encore mode - palette
 		binclude "Levels/EMZ/Palettes/Main.bin"
 		even
 Pal_LRZBoss_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/LRZ/Palettes/Boss Act.bin"
+		binclude "Levels/LRZ/Palettes/Encore 3.bin"
 		even
 Pal_DEZBoss_Encore:						; Liliam: Encore mode - palette
-		binclude "Levels/DEZ/Palettes/Boss.bin"
+		binclude "Levels/DEZ/Palettes/Encore 3.bin"
 		even
 ArtUnc_CNZCannon:
 		binclude "Levels/CNZ/Uncompressed Art/Cannon.bin"
