@@ -45442,16 +45442,27 @@ loc_1C550:
 		lea	(word_1C60A).l,a1
 		bsr.w	Resize_MaxYFromX
 		move.w	#0,(Camera_min_Y_pos).w
-		move.w	#$20E,(Target_palette_line_3+$1E).w
+		move.w	(Pal_AIZ_Encore+$3E).l,d0		; Liliam: Encore mode - palette
+		tst.b	(Encore_flags).w			;
+		bmi.s	loc_1C560				;
+		move.w	(Pal_AIZ+$3E).l,d0			;
+
+loc_1C560:
+		move.w	d0,(Target_palette_line_3+$1E).w	;
+;		move.w	#$20E,(Target_palette_line_3+$1E).w	;
 		tst.b	(Game_mode).w
 		bmi.s	loc_1C578
 		tst.w	(Palette_fade_timer).w
 		bne.s	loc_1C578
-		move.w	#$20E,(Normal_palette_line_3+$1E).w
+		move.w	d0,(Normal_palette_line_3+$1E).w	;
+;		move.w	#$20E,(Normal_palette_line_3+$1E).w	;
 
 loc_1C578:
 		cmpi.w	#$2B00,(Camera_X_pos).w
 		blo.s	loc_1C586
+		move.w	#$442,(Normal_palette_line_3+$1E).w	;
+		tst.b	(Encore_flags).w			;
+		bmi.s	loc_1C586				;
 		move.w	#4,(Normal_palette_line_3+$1E).w
 
 loc_1C586:
@@ -45462,11 +45473,14 @@ loc_1C586:
 loc_1C594:
 		cmpi.w	#$2D80,(Camera_X_pos).w
 		blo.s	locret_1C5C4
-		move.w	#$C02,d0
+		move.w	(Pal_AIZ_Encore+$4C).l,d0		;
+		tst.b	(Encore_flags).w			;
+		bmi.s	loc_1C5AE				;
+		move.w	(Pal_AIZ+$4C).l,d0			;
+;		move.w	#$C02,d0				;
 		cmpi.w	#3,(Player_mode).w
 		bne.s	loc_1C5AE
 		move.w	(word_4FAEA).l,d0
-
 
 loc_1C5AE:
 		move.w	d0,(Normal_palette_line_3+$1E).w
@@ -115203,13 +115217,18 @@ Adjust_AIZ1Chunks:
 
 
 Adjust_AIZ1Chunks2:
-		lea	(Target_palette_line_4+$18).w,a1		; Liliam: bugfix - AIZ fire overlay palette assignment
-;		lea	(Target_palette_line_4+$10).w,a1		;
+
+		tst.b	(Encore_flags).w			; Liliam: Encore mode - palette
+		bmi.s	loc_4FA58				;
+;		lea	(Target_palette_line_4+$10).w,a1		; Liliam: bugfix - AIZ fire overlay palette assignment
+		lea	(Target_palette_line_4+$18).w,a1		;
 		lea	word_4FAE4(pc),a5
 		move.l	(a5)+,(a1)+
 		move.w	(a5)+,(a1)					;
 		move.w	(a5),-$10(a1)					;
 ;		move.l	(a5),(a1)					;
+
+loc_4FA58:
 		lea	($FF4C70).l,a1
 		bsr.s	sub_4FAD8
 		lea	($FF4CF0).l,a1
