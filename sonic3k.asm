@@ -45810,17 +45810,21 @@ loc_1C892:
 ;		bhs.s	locret_1C8B6				;
 		cmpi.w	#$3E0,(Camera_Y_pos).w
 		blo.s	locret_1C8B6
+		lea	(Pal_HCZ1_Water_Encore+$50).l,a0	; Liliam: Encore mode - palette
+		tst.b	(Encore_flags).w			;
+		bmi.s	loc_1C8A2				;
+		lea	(Pal_HCZ1_Water+$50).l,a0		;
+
+loc_1C8A2:
 		lea	(Normal_palette_line_4+$10).w,a1
-	if FixBugs
-		move.w	#$680,(a1)+
-	else
-		; Bug: this should be $680
-		move.w	#$B80,(a1)+
-	endif
-		move.w	#$240,(a1)+
-		move.w	#$220,(a1)+
+		move.l	(a0)+,(a1)+				;
+		move.w	(a0)+,(a1)+				;
+;		move.w	#$B80,(a1)+				;
+;		move.w	#$240,(a1)+				;
+;		move.w	#$220,(a1)+				;
+
 		addq.b	#2,(Dynamic_resize_routine).w
-		andi.w	#drawing_mask,(Wave_Splash+art_tile).w	;
+		andi.w	#drawing_mask,(Wave_Splash+art_tile).w	; Liliam: HCZ intro - use water transition table
 		move.l	#HInt3,(H_int_addr).w			;
 		cmpi.w	#$1000,(V_blank_cycles).w		;
 		blo.s	locret_1C8B6				;
@@ -45847,12 +45851,20 @@ loc_1C8CE:
 ;		blo.s	locret_1C8F2				;
 ;		addq.b	#2,(Dynamic_resize_routine).w		;
 
-;loc_1C8E2:
+		lea	(Pal_HCZ1_Encore+$50).l,a0		; Liliam: Encore mode - palette
+		tst.b	(Encore_flags).w			;
+		bmi.s	loc_1C8E2				;
+		lea	(Pal_HCZ1+$50).l,a0			;
+
+loc_1C8E2:
 		lea	(Normal_palette_line_4+$10).w,a1
-		move.w	#$CEE,(a1)+
-		move.w	#$ACE,(a1)+
-		move.w	#$8A,(a1)+
-		subq.b	#2,(Dynamic_resize_routine).w		;
+		move.l	(a0)+,(a1)+				;
+		move.w	(a0)+,(a1)+				;
+;		move.w	#$CEE,(a1)+				;
+;		move.w	#$ACE,(a1)+				;
+;		move.w	#$8A,(a1)+				;
+
+		subq.b	#2,(Dynamic_resize_routine).w		; Liliam: HCZ intro - use water transition table
 		ori.w	#high_priority,(Wave_Splash+art_tile).w	;
 		move.l	#HInt2,(H_int_addr).w			;
 
