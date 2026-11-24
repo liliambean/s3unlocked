@@ -47,7 +47,7 @@ Obj_LevelSelect_LeftPage:
 		move.w	#$90,x_pos(a0)
 		move.b	#6,routine(a0)
 		subq.b	#1,mapping_frame(a0)
-		subi.w	#8,(H_scroll_buffer).w
+		subq.w	#8,(H_scroll_buffer).w
 		moveq	#signextendB(sfx_Switch),d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ Obj_LevelSelect_RightPage:
 		move.w	#$1B8,x_pos(a0)
 		move.b	#2,routine(a0)
 		addq.b	#1,mapping_frame(a0)
-		addi.w	#8,(H_scroll_buffer).w
+		addq.w	#8,(H_scroll_buffer).w
 		moveq	#signextendB(sfx_Switch),d0
 		jmp	(Play_SFX).l
 ; ---------------------------------------------------------------------------
@@ -758,9 +758,9 @@ Obj_AIZSurfboardIntro_Init:
 		move.w	(Player_1+y_pos).w,y_pos(a0)
 		subi.w	#$20,x_pos(a0)
 		subi.w	#$10,y_pos(a0)
-		move.w	#0,x_vel(a0)
-		move.w	#0,y_vel(a0)
-;		clr.w	(Events_fg_1).w				; Liliam: ported from S3 - restore surfboard intro
+;		move.w	#0,x_vel(a0)				; Liliam: ported from S3 - restore surfboard intro
+;		move.w	#0,y_vel(a0)				;
+;		clr.w	(Events_fg_1).w				;
 ;		tst.b	subtype(a0)				;
 ;		bne.s	loc_220B78				;
 ;		lea	(Player_1).w,a1				;
@@ -1790,7 +1790,7 @@ Obj_HPZKnucklesCutsceneCameraLock:
 		cmp.w	(Camera_min_X_pos).w,d0
 		beq.s	.rumble
 		move.l	#.scroll,(a0)
-		subi.w	#8,d0
+		subq.w	#8,d0
 		move.w	d0,(Camera_X_pos).w
 		bra.s	.rumble
 ; ---------------------------------------------------------------------------
@@ -1879,6 +1879,7 @@ Obj_HPZEncoreCutscene:
 		jsr	(Restore_PlayerControl).l
 		lea	(Player_2).w,a1
 		jsr	(Restore_PlayerControl2).l
+		jsr	(Stop_LevelMusic).l
 		jsr	(AllocateObject).l
 		bne.s	.done
 		move.l	#Obj_HPZEncoreRobotnik,(a1)

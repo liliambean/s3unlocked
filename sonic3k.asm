@@ -1245,6 +1245,20 @@ Play_Music_Tempo:						; Liliam: bugfix - keep correct tempo
 		startZ80
 		rts
 ; ---------------------------------------------------------------------------
+
+Stop_LevelMusic:						; Liliam: stop resuming music after results
+		moveq	#0,d0
+		move.w	#bytesToWcnt(zTracksSaveEnd-zTracksSaveStart),d1
+		lea	(Z80_RAM+zTracksSaveStart).l,a1
+		stopZ80
+
+	.loop:
+		move.w	d0,(a1)+
+		dbf	d1,.loop
+		move.b	d0,(Z80_RAM+zDACEnableSave).l
+		startZ80
+		rts
+; ---------------------------------------------------------------------------
 		; Liliam: removed dead code
 ; ---------------------------------------------------------------------------
 
@@ -6880,10 +6894,8 @@ LSelect3CodeDat:
 Map_TitleScreenText:
 		; Liliam: title screen - expand options
 		include "General/Title/Map - S3 Screen Text.asm"
-ArtNem_TitleScreenText:
+;ArtNem_TitleScreenText:
 		; Liliam: title screen - expand options
-		binclude "General/Title/Nemesis Art/S3 Screen Text.bin"
-		even
 Map_TitleSonicAnim:
 		include "General/Title/Map - S3 Sonic Anim.asm"
 Map_TitleTailsPlane:
@@ -9635,8 +9647,8 @@ loc_78CA:
 
 loc_78F2:
 		move.b	#1,(Water_flag).w
-		move.w	#0,(Competition_mode).w
-;		tst.b	(Water_flag).w			; Liliam: ???
+;		move.w	#0,(Competition_mode).w		; Liliam: ???
+;		tst.b	(Water_flag).w			;
 ;		beq.s	LoadWaterPalette		;
 		move.w	#$4EF9,(H_int_jump).w
 		move.l	#HInt2,(H_int_addr).w
@@ -10784,11 +10796,9 @@ loc_8284:
 		bsr.w	sub_85B0
 		tst.b	(Special_stage_green_spheres).w		; Liliam: special stage - add green spheres
 		beq.s	loc_82BE				;
-		lea	(Target_palette_line_4+4).w,a1		;
-		move.l	#$4C800A0,d0				;
-		move.l	d0,(a1)+				;
-		move.l	#$600020,(a1)+				;
-		move.l	d0,(a1)+				;
+		lea	Pal_SStage_GreenSpheres(pc),a1		;
+		lea	(Target_palette_line_4+4).w,a2		;
+		bsr.w	SStage_LoadPalette			;
 
 loc_82BE:
 		lea	(RAM_start+$5500).l,a1
@@ -11388,6 +11398,8 @@ Pal_SStage_Main:
 		; Liliam: improve sphere palette
 		binclude "General/Special Stage/Palettes/Main.bin"
 		even
+Pal_SStage_GreenSpheres:					; Liliam: special stage - add green spheres
+		dc.w	$4C8, $0A0, $060, $020, $4C8, $0A0
 ;Pal_SStage_Knux:
 		; Liliam: special stage - add extra characters
 Pal_SStage_Layout:							; Liliam: Encore mode - special stage
@@ -12144,6 +12156,8 @@ Setup_SSPlayerObj:									; Liliam: special stage - add extra characters
 	.loadPalette:
 		lea	Pal_SStage_Players(pc,d0.w),a1
 		move.l	(a1)+,(a2)+
+
+SStage_LoadPalette:
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
@@ -93115,6 +93129,27 @@ Obj_SOZMushroomParachute_CheckDelete:							; Liliam: Encore mode - FBZ level or
 		jmp	(LoadPaletteLine1_Immediate).l
 ; ---------------------------------------------------------------------------
 
+Obj_MHZSOZMushroomParachute:
+		jsr	(AllocateObject).l						; Liliam: Encore mode - FBZ level order
+		bne.s	Obj_MHZMushroomParachute					;
+		move.l	#Obj_MHZSOZTransitionControl,(a1)				;
+		move.w	x_pos(a0),d1							;
+		move.w	y_pos(a0),d2							;
+		move.w	d1,x_pos(a1)							;
+		subi.w	#$20,d2								;
+		moveq	#4-1,d3								;
+		jsr	(CreateNewSprite4).l						;
+		bne.s	Obj_MHZMushroomParachute					;
+
+	.loop:
+		move.l	#Obj_StillSprite,(a1)						;
+		move.b	#$1D,subtype(a1)						;
+		move.w	d1,x_pos(a1)							;
+		move.w	d2,y_pos(a1)							;
+		subi.b	#$F,d2								;
+		jsr	(CreateNewSprite4).l						;
+		dbne	d3,.loop							;
+
 Obj_MHZMushroomParachute:
 		move.l	#Map_MHZMushroomParachute,mappings(a0)
 		move.w	#make_art_tile(ArtTile_MHZMisc+$86,2,1),art_tile(a0)
@@ -119730,7 +119765,8 @@ loc_521D2:
 		move.w	d0,(Camera_target_max_Y_pos).w		;
 
 loc_521EC:
-;		lea	(a2),a6					; Liliam: stop resuming music after act 2 results
+;		lea	(a2),a6					; Liliam: stop resuming music after results
+		jsr	(Stop_LevelMusic).l			;
 ;		jsr	(Restore_LevelMusic).l			;
 ;		lea	(a6),a2					;
 		jsr	(Restore_PlayerControl).l
@@ -128505,6 +128541,7 @@ loc_57308:
 		jsr	(Restore_PlayerControl).l
 		lea	(Player_2).w,a1
 		jsr	(Restore_PlayerControl2).l
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
 		st	(Ctrl_1_locked).w
 		st	(Ctrl_2_locked).w
 		clr.w	(Ctrl_1_logical).w
@@ -154976,7 +155013,8 @@ loc_694D4:
 		jsr	(Restore_PlayerControl).l
 		lea	(Player_2).w,a1
 		jsr	(Restore_PlayerControl2).l
-;		jsr	(Restore_LevelMusic).l			; Liliam: stop resuming music after act 2 results
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
+;		jsr	(Restore_LevelMusic).l			;
 		st	(Ctrl_1_locked).w
 		clr.w	(Ctrl_1_logical).w
 		jsr	(AllocateObject).l
@@ -157774,7 +157812,8 @@ loc_6B154:
 		jsr	(Restore_PlayerControl).l
 		lea	(Player_2).w,a1
 		jsr	(Restore_PlayerControl2).l
-;		jsr	(Restore_LevelMusic).l			; Liliam: stop resuming music after act 2 results
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
+;		jsr	(Restore_LevelMusic).l			;
 		jsr	(AllocateObject).l
 		bne.s	loc_6B19C
 		move.l	#loc_6B7BC,(a1)
@@ -159452,7 +159491,8 @@ loc_6C2EE:
 		bne.w	locret_6BF96
 		move.l	#locret_6C318,(a0)
 		bset	#4,$38(a0)
-;		jsr	(Restore_LevelMusic).l			; Liliam: stop resuming music after act 2 results
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
+;		jsr	(Restore_LevelMusic).l			;
 		jsr	(AllocateObject).l
 		bne.s	locret_6C316
 		move.l	#loc_6D104,(a1)
@@ -159945,7 +159985,8 @@ loc_6C8F4:
 		move.l	#loc_6C932,(a0)
 		clr.b	(Level_results_started).w
 		jsr	(Restore_PlayerControl).l
-;		jsr	(Restore_LevelMusic).l			; Liliam: stop resuming music after act 2 results
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
+;		jsr	(Restore_LevelMusic).l			;
 ;		clr.w	(Ctrl_1_logical).w			; Liliam: de-automate transition cutscene
 ;		st	(Ctrl_1_locked).w			;
 		lea	(Player_2).w,a1				;
@@ -162843,7 +162884,8 @@ loc_6E724:
 		jsr	(Restore_PlayerControl).l
 		lea	(Player_2).w,a1
 		jsr	(Restore_PlayerControl2).l
-;		jsr	(Restore_LevelMusic).l			; Liliam: stop resuming music after act 2 results
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
+;		jsr	(Restore_LevelMusic).l			;
 		move.w	#$200,(Camera_stored_min_Y_pos).w
 		lea	(Child6_DecLevY).l,a2
 		jsr	(CreateChild6_Simple).l
@@ -165964,7 +166006,8 @@ loc_708AA:
 		clr.w	$2E(a0)
 		lea	(Player_2).w,a1
 		jsr	(Restore_PlayerControl2).l
-;		jsr	(Restore_LevelMusic).l			; Liliam: stop resuming music after act 2 results
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
+;		jsr	(Restore_LevelMusic).l			;
 		jsr	(AllocateObject).l
 		bne.s	loc_708EE
 		move.l	#Obj_CutsceneLockPlayer2,(a1)
@@ -167820,7 +167863,8 @@ loc_71DE2:
 		jsr	(Restore_PlayerControl).l
 		lea	(Player_2).w,a1
 		jsr	(Restore_PlayerControl2).l
-;		jsr	(Restore_LevelMusic).l			; Liliam: stop resuming music after act 2 results
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
+;		jsr	(Restore_LevelMusic).l			;
 		move.w	(Camera_stored_max_Y_pos).w,(Camera_target_max_Y_pos).w
 		move.w	#$47C0,(Camera_stored_max_X_pos).w
 		lea	(Child6_IncLevX).l,a2
@@ -169333,9 +169377,10 @@ loc_72C68:
 ; ---------------------------------------------------------------------------
 
 loc_72C70:
-		jsr	(Make_CutsceneSkipObj).l		; Liliam: cutscene skip - LBZ level end
 		move.l	#loc_72C9E,(a0)
 		move.l	#loc_72CBE,$34(a0)
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
+		jsr	(Make_CutsceneSkipObj).l		; Liliam: cutscene skip - LBZ level end
 		lea	(Player_1).w,a1
 		bsr.w	sub_72C8E
 		lea	(Player_2).w,a1
@@ -169606,7 +169651,7 @@ word_72EE8:
 ; ---------------------------------------------------------------------------
 
 loc_72EF8:
-		jsr	(Random_Number).l			; Liliam: stop resuming music after act 2 results
+		jsr	(Random_Number).l			; Liliam: stop resuming music after results
 ;		move.b	(V_int_run_count+3).w,d0		;
 		andi.b	#$F,d0
 		bne.s	loc_72F2C
@@ -172171,6 +172216,7 @@ loc_7473A:
 		jsr	(Make_CutsceneSkipObj).l		; Liliam: cutscene skip - LBZ level end
 		bclr	#7,status(a0)
 		jsr	(Restore_PlayerControl).l
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
 		clr.w	(Ctrl_1_logical).w
 		st	(Ctrl_1_locked).w
 		lea	(Player_2).w,a1				; Liliam: bugfix - lock player 2 controls consistently
@@ -174845,35 +174891,15 @@ loc_76270:
 		jsr	(Restore_PlayerControl).l					;
 		lea	(Player_2).w,a1							;
 		jsr	(Restore_PlayerControl2).l					;
+		jsr	(Stop_LevelMusic).l						;
 		move.w	#$4720,(Camera_stored_max_X_pos).w				;
 		move.l	#Obj_IncLevEndXGradual,(a0)					;
 		clr.l	$30(a0)								;
 		jsr	(AllocateObject).l						;
-		bne.s	.return								;
-		move.w	#$47A8,d1							;
-		move.w	#$2D4,d2							;
-		move.w	d1,x_pos(a1)							;
-		move.w	d2,y_pos(a1)							;
-		move.l	#Obj_MHZMushroomParachute,(a1)					;
-		subi.b	#$20,d2								;
-		moveq	#4-1,d3								;
-		jsr	(CreateNewSprite4).l						;
-		bne.s	.return								;
-
-	.loop:
-		move.l	#Obj_StillSprite,(a1)						;
-		move.b	#$1D,subtype(a1)						;
-		move.w	d1,x_pos(a1)							;
-		move.w	d2,y_pos(a1)							;
-		subi.b	#$F,d2								;
-		jsr	(CreateNewSprite4).l						;
-		dbne	d3,.loop							;
-		tst.w	d3								;
-		bpl.s	.return								;
-		move.l	#Obj_MHZSOZTransitionControl,(a1)				;
-		move.w	d1,x_pos(a1)							;
-
-	.return:
+		bne.s	locret_7626E							;
+		move.l	#Obj_MHZSOZMushroomParachute,(a1)				;
+		move.w	#$47A8,x_pos(a1)						;
+		move.w	#$2D4,y_pos(a1)							;
 		rts									;
 ; ---------------------------------------------------------------------------
 
@@ -174891,7 +174917,8 @@ loc_76278:
 		lea	(Player_2).w,a1
 		bset	#7,art_tile(a1)
 		jsr	(Restore_PlayerControl2).l
-;		jsr	(Restore_LevelMusic).l			; Liliam: stop resuming music after act 2 results
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
+;		jsr	(Restore_LevelMusic).l			;
 		st	(Ctrl_1_locked).w
 		move.w	#(button_up_mask<<8)|button_up_mask,(Ctrl_1_logical).w
 		st	(Ctrl_2_locked).w
@@ -175958,6 +175985,7 @@ loc_76E5C:
 		move.l	#loc_76E94,(a0)
 		lea	ChildObjDat_773F4(pc),a2
 		jsr	(CreateChild1_Normal).l
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
 		st	(Ctrl_1_locked).w
 		jsr	(AllocateObject).l
 		bne.s	loc_76E86
@@ -176785,7 +176813,8 @@ loc_778F2:
 		bne.w	locret_77AF6
 		move.l	#loc_77966,(a0)
 		jsr	(Restore_PlayerControl).l
-;		jsr	(Restore_LevelMusic).l			; Liliam: stop resuming music after act 2 results
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
+;		jsr	(Restore_LevelMusic).l			;
 		bset	#7,(Disable_wall_grab).w		; Liliam: de-automate transition cutscene
 ;		clr.w	(Ctrl_1_logical).w			;
 ;		st	(Ctrl_1_locked).w			;
@@ -186757,6 +186786,7 @@ loc_7E26A:
 		tst.b	(Level_results_started).w
 		bne.w	locret_7DE44
 		move.l	#loc_7E298,(a0)
+		jsr	(Stop_LevelMusic).l			; Liliam: stop resuming music after results
 		st	(Ctrl_1_locked).w
 		jsr	(AllocateObject).l
 		bne.s	loc_7E28A
@@ -223760,6 +223790,9 @@ Map_S3TitleBanner:						; Liliam: reinsert S3 data
 ArtNem_Title_S3Banner:						; Liliam: reinsert S3 data
 		; Liliam: title screen - add 'Unlocked' branding
 		binclude "General/Title/Nemesis Art/S3 Banner.bin"
+		even
+ArtNem_TitleScreenText:						; Liliam: title screen - expand options
+		binclude "General/Title/Nemesis Art/S3 Screen Text.bin"
 		even
 ArtKos_S3TitleSonic1:						; Liliam: reinsert S3 data
 		binclude "General/Title/Kosinski Art/S3 Sonic 1.bin"
