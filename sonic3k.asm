@@ -145054,8 +145054,10 @@ loc_62242:
 		jsr	(Animate_Raw).l
 		tst.b	render_flags(a0)
 		bmi.w	locret_6206C
-		lea	(Pal_HCZ2).l,a1
-		jsr	(PalLoad_Line1).l
+;		lea	(Pal_HCZ2).l,a1				; Liliam: Encore mode - palette
+;		jsr	(PalLoad_Line1).l			;
+		moveq	#PalID_HCZ2,d0				;
+		jsr	(LoadPaletteLine1_Immediate).l		;
 		lea	ChildObjDat_62280(pc),a2
 		jsr	(CreateChild1_Normal).l
 		clr.b	(Boss_flag).w				; Liliam: bugfix - use correct music for cutscene
@@ -145465,8 +145467,10 @@ loc_625E2:
 		move.b	#$E,routine(a0)
 		clr.b	(Player_1+object_control).w
 		st	(Events_bg+$06).w						; Liliam: bugfix - fix backwards tube
-		lea	(Pal_CNZ).l,a1
-		jsr	(PalLoad_Line1).l
+;		lea	(Pal_CNZ).l,a1				; Liliam: Encore mode - palette
+;		jsr	(PalLoad_Line1).l			;
+		moveq	#PalID_CNZ2,d0				;
+		jsr	(LoadPaletteLine1_Immediate).l		;
 		clr.b	(Boss_flag).w				; Liliam: bugfix - use correct music for cutscene
 		jsr	(AllocateObject).l
 		bne.s	locret_62618
@@ -145635,8 +145639,10 @@ loc_6278A:
 		jsr	(CreateChild6_Simple).l
 ;		move.w	#$148,(Camera_target_max_Y_pos).w	;
 		jsr	(Remove_From_TrackingSlot).l
-		lea	(Pal_LBZ1).l,a1
-		jsr	(PalLoad_Line1).l
+;		lea	(Pal_LBZ1).l,a1				; Liliam: Encore mode - palette
+;		jsr	(PalLoad_Line1).l			;
+		moveq	#PalID_LBZ1,d0				;
+		jsr	(LoadPaletteLine1_Immediate).l		;
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -159394,8 +159400,10 @@ loc_6C200:
 		jsr	(Queue_Kos_Module).l
 ;		lea	(PLC_MonitorsSpikesSprings).l,a1	; Liliam: bugfix - stop clobbering level art
 ;		jsr	(Load_PLC_Raw).l			;
-		lea	(Pal_MGZ).l,a1
-		jsr	(PalLoad_Line1).l
+;		lea	(Pal_MGZ).l,a1				; Liliam: Encore mode - palette
+;		jsr	(PalLoad_Line1).l			;
+		moveq	#PalID_MGZ2,d0				;
+		jsr	(LoadPaletteLine1_Immediate).l		;
 ;		move.w	#$1DF,(Camera_min_Y_pos).w		; Liliam: camera - repurpose MGZ2 ceiling raiser
 		st	(Events_fg_2).w
 		btst	#0,render_flags(a0)
@@ -216699,8 +216707,10 @@ loc_90368:
 		lea	(ArtKosM_Iwamodoki).l,a1
 		move.w	#tiles_to_bytes(ArtTile_Iwamodoki),d2
 		jsr	(Queue_Kos_Module).l
-		lea	(Pal_LRZ1).l,a1
-		jsr	(PalLoad_Line1).l
+;		lea	(Pal_LRZ1).l,a1				; Liliam: Encore mode - palette
+;		jsr	(PalLoad_Line1).l			;
+		moveq	#PalID_LRZ1,d0				;
+		jsr	(LoadPaletteLine1_Immediate).l		;
 		jmp	(Go_Delete_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -221024,8 +221034,11 @@ Pal_HCZ1_Water_Encore:						; Liliam: Encore mode - palette
 Pal_HCZ2_Water_Encore:						; Liliam: Encore mode - palette
 		binclude "Levels/HCZ/Palettes/Encore Water 2.bin"
 		even
-Pal_MGZ_Encore:							; Liliam: Encore mode - palette
-		binclude "Levels/MGZ/Palettes/Encore.bin"
+Pal_MGZ1_Encore:						; Liliam: Encore mode - palette
+		binclude "Levels/MGZ/Palettes/Encore 1.bin"
+		even
+Pal_MGZ2_Encore:						; Liliam: Encore mode - palette
+		binclude "Levels/MGZ/Palettes/Encore 2.bin"
 		even
 Pal_CNZ_Encore:							; Liliam: Encore mode - palette
 		binclude "Levels/CNZ/Palettes/Encore.bin"

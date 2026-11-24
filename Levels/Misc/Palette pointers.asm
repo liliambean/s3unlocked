@@ -29,7 +29,7 @@ PalID_AIZIntro:		palptr Pal_AIZIntro,		Normal_palette_line_2,	$60
 PalID_AIZFire:		palptr Pal_AIZFire,		Normal_palette_line_2,	$60
 PalID_HCZ1:		palptr Pal_HCZ1,		Normal_palette_line_2,	$60
 PalID_HCZ2:		palptr Pal_HCZ2,		Normal_palette_line_2,	$60
-;PalID_MGZ1:		palptr Pal_MGZ,			Normal_palette_line_2,	$60
+PalID_MGZ1:		palptr Pal_MGZ,			Normal_palette_line_2,	$60
 PalID_MGZ2:		palptr Pal_MGZ,			Normal_palette_line_2,	$60
 ;PalID_CNZ1:		palptr Pal_CNZ,			Normal_palette_line_2,	$60
 PalID_CNZ2:		palptr Pal_CNZ,			Normal_palette_line_2,	$60
@@ -89,7 +89,6 @@ PalID_DEZBoss:		palptr Pal_DEZBoss,		Normal_palette_line_2,	$60
 PalID_HPZ:		palptr Pal_HPZ,			Normal_palette_line_2,	$60	; Liliam: bugfix - HPZ SS results palette screwery
 ;PalID_DEZBoss_2:	palptr Pal_DEZBoss,		Normal_palette_line_2,	$60
 
-PalID_MGZ1 = PalID_MGZ2
 PalID_CNZ1 = PalID_CNZ2
 PalID_FBZ1 = PalID_FBZ2
 PalID_DDZ1 = PalID_DDZ2

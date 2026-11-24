@@ -4,7 +4,8 @@ PalID2_AIZIntro:	palptr Pal_AIZIntro_Encore,	Normal_palette_line_2,	$60
 PalID2_AIZFire:		palptr Pal_AIZFire_Encore,	Normal_palette_line_2,	$60
 PalID2_HCZ1:		palptr Pal_HCZ1_Encore,		Normal_palette_line_2,	$60
 PalID2_HCZ2:		palptr Pal_HCZ2_Encore,		Normal_palette_line_2,	$60
-PalID2_MGZ:		palptr Pal_MGZ_Encore,		Normal_palette_line_2,	$60
+PalID2_MGZ1:		palptr Pal_MGZ1_Encore,		Normal_palette_line_2,	$60
+PalID2_MGZ2:		palptr Pal_MGZ2_Encore,		Normal_palette_line_2,	$60
 PalID2_CNZ:		palptr Pal_CNZ_Encore,		Normal_palette_line_2,	$60
 PalID2_FBZ:		palptr Pal_FBZ_Encore,		Normal_palette_line_2,	$60
 PalID2_ICZ1:		palptr Pal_ICZ1_Encore,		Normal_palette_line_2,	$60
